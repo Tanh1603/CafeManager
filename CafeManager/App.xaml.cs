@@ -2,7 +2,7 @@
 using System.Data;
 using System.Windows;
 
-namespace CafeManager
+namespace CafeManager.WPF
 {
     /// <summary>
     /// Interaction logic for App.xaml
@@ -10,5 +10,4 @@ namespace CafeManager
     public partial class App : Application
     {
     }
-
 }

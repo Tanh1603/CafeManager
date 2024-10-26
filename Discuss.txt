@@ -1,0 +1,129 @@
+﻿# đặt tên _camelCase đói với field
+# đặt tên viết hoa cho Property
+# database viết hoa chữ cái đầu
+
+
+
+# AppUser
+	AppUserId (Primary Key)
+	UserName
+	Password
+	Email
+	Role
+	DisplayName
+	Avatar
+	IsDeleted
+
+# Staff
+	StaffId (Primary Key)
+	DisplayName
+	Phone
+	Email
+	Sex
+	Birthday
+	StartWorking
+	Role
+	WorkingStatus
+	BasicSalary
+	WorkingHours
+	Salary
+	IsDeleted
+
+
+# FoodCategory
+	FoodCategoryId (Primary Key)
+	DisplayName
+	IsDeleted
+
+# Food
+	FoodId (Primary Key)
+	DisplayName
+	FoodCategoryId (Foreign Key - References FoodCategory)
+	Price
+	ImageFood
+	DiscountFood
+	IsDeleted
+            
+
+# Customer
+	CustomerId (Primary Key)
+	DisplayName
+	BuyDate
+	Type
+	TotalSpent
+	IsDeleted
+
+# Invoices
+	InvoiceId (Primary Key)
+	PaymentDate
+	PaymentStatus
+	DiscountInvoice
+	CoffeeTableId (Foreign Key - References CoffeeTable)
+	CustomerId (Foreign Key - References Customer)
+	IsDeleted
+
+#  InvoiceDetails
+	InvoiceDetailId (Primary Key)
+	InvoiceId (Foreign Key - References Invoices)
+	FoodId (Foreign Key - References Food)
+	Quantity
+	IsDeleted
+
+# CoffeeTable
+	CoffeeTableId (Primary Key)
+	StatusTable
+	IsDeleted
+
+
+# Supplier
+	SupplierId (Primary Key)
+	DisplayName
+	Phone
+	Email
+	Address
+	ContractDate
+	IsDeleted
+
+# Material
+	MaterialId (Primary Key)
+	DisplayName
+	Unit
+	ExpiryDate
+	Price
+	IsDeleted
+
+
+# ConsumedMaterials
+	ConsumedMaterialId (Primary Key)
+	MaterialId (Foreign Key - References Material)
+	Unit
+	Quantity
+	IsDeleted
+
+
+# Imports
+	ImportId (Primary Key)
+	SupplierId (Foreign Key - References Supplier)
+	ImportDate
+	IsDeleted        
+
+# ImportDetails
+	ImportDetailId (Primary Key)
+	ImportId (Foreign Key - References Imports)
+	MaterialId (Foreign Key - References Material)
+	Quantity
+	UnitPrice
+	TotalPrice      
+	
+# SupplierImportDetails
+	SupplierImportDetailId (Primary Key)
+	SupplierId (Foreign Key - References Supplier)
+	ImportDetailId (Foreign Key - References ImportDetails)
+	IsDeleted
+
+# MaterialSupplier
+	MaterialSupplierId (Primary Key)
+	MaterialId (Foreign Key - References Material)
+	SupplierId (Foreign Key - References Supplier)
+	SupplyDate
+	Price

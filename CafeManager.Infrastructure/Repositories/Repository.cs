@@ -66,7 +66,17 @@ namespace CafeManager.Infrastructure.Repositories
 
         public T Update(T entity)
         {
-            _cafeManagerContext.Set<T>().Update(entity);
+            var existingEntity = _cafeManagerContext.Set<T>().Local.FirstOrDefault(e => e == entity);
+
+            if (existingEntity != null)
+            {
+                _cafeManagerContext.Entry(existingEntity).CurrentValues.SetValues(entity);
+            }
+            else
+            {
+                _cafeManagerContext.Set<T>().Attach(entity);
+                _cafeManagerContext.Entry(entity).State = EntityState.Modified;
+            }
 
             return entity;
         }

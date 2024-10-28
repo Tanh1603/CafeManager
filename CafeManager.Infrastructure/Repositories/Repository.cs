@@ -16,9 +16,9 @@ namespace CafeManager.Infrastructure.Repositories
     {
         protected CafeManagerContext _cafeManagerContext;
 
-        public Repository(IServiceProvider provider)
+        public Repository(CafeManagerContext cafeManagerContext)
         {
-            _cafeManagerContext = provider.GetRequiredService<CafeManagerContextFactory>().CreateDbContext();
+            _cafeManagerContext = cafeManagerContext;
         }
 
         public async Task<T> Create(T entity)
@@ -42,14 +42,21 @@ namespace CafeManager.Infrastructure.Repositories
             return false;
         }
 
-        public async Task<IEnumerable<T>> FindAsync(Expression<Func<T, bool>> predicate)
-        {
-            return await _cafeManagerContext.Set<T>().Where(predicate).ToListAsync();
-        }
-
         public async Task<IEnumerable<T>> GetAllAsync()
         {
-            return await _cafeManagerContext.Set<T>().ToListAsync();
+            var allEntities = await _cafeManagerContext.Set<T>().ToListAsync();
+            return allEntities.Where(entity => IsEntityNotDeleted(entity));
+        }
+
+        private bool IsEntityNotDeleted(T entity)
+        {
+            var property = typeof(T).GetProperty("Isdeleted");
+            if (property != null)
+            {
+                var isDeletedValue = (bool)property.GetValue(entity);
+                return !isDeletedValue;
+            }
+            return true;
         }
 
         public async Task<T> GetById(int id)
@@ -57,32 +64,37 @@ namespace CafeManager.Infrastructure.Repositories
             return await _cafeManagerContext.Set<T>().FindAsync(id);
         }
 
-        public async Task<IEnumerable<T>> GetPagedAsync(int skip, int take)
-        {
-            return await _cafeManagerContext.Set<T>().Skip(skip).Take(take).ToListAsync();
-        }
-
-        public async Task<IEnumerable<T>> GetSortedAsync<TKey>(Expression<Func<T, TKey>> keySelector, bool ascending = true)
-        {
-            var query = _cafeManagerContext.Set<T>().AsQueryable();
-
-            query = ascending ? query.OrderBy(keySelector) : query.OrderByDescending(keySelector);
-
-            return await query.ToListAsync();
-        }
-
-        public async Task<IEnumerable<T>> SearchAndSortAsync(Expression<Func<T, bool>>? searchPredicate, Expression<Func<T, object>>? sortKeySelector, bool ascending, int skip, int take)
-        {
-            var query = _cafeManagerContext.Set<T>().Where(searchPredicate);
-            query = ascending ? query.OrderBy(sortKeySelector) : query.OrderByDescending(sortKeySelector);
-            return await query.Skip(skip).Take(take).ToListAsync();
-        }
-
-        public async Task<T> Update(T entity)
+        public T Update(T entity)
         {
             _cafeManagerContext.Set<T>().Update(entity);
 
             return entity;
         }
+
+        //public async Task<IEnumerable<T>> GetPagedAsync(int skip, int take)
+        //{
+        //    return await _cafeManagerContext.Set<T>().Skip(skip).Take(take).ToListAsync();
+        //}
+
+        //public async Task<IEnumerable<T>> GetSortedAsync<TKey>(Expression<Func<T, TKey>> keySelector, bool ascending = true)
+        //{
+        //    var query = _cafeManagerContext.Set<T>().AsQueryable();
+
+        //    query = ascending ? query.OrderBy(keySelector) : query.OrderByDescending(keySelector);
+
+        //    return await query.ToListAsync();
+        //}
+
+        //public async Task<IEnumerable<T>> FindAsync(Expression<Func<T, bool>> predicate)
+        //{
+        //    return await _cafeManagerContext.Set<T>().Where(predicate).ToListAsync();
+        //}
+
+        //public async Task<IEnumerable<T>> SearchAndSortAsync(Expression<Func<T, bool>>? searchPredicate, Expression<Func<T, object>>? sortKeySelector, bool ascending, int skip, int take)
+        //{
+        //    var query = _cafeManagerContext.Set<T>().Where(searchPredicate);
+        //    query = ascending ? query.OrderBy(sortKeySelector) : query.OrderByDescending(sortKeySelector);
+        //    return await query.Skip(skip).Take(take).ToListAsync();
+        //}
     }
 }

@@ -9,16 +9,11 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\CafeManager.Core\CafeManager.Core.csproj" />
     <ProjectReference Include="..\CafeManager.Infrastructure\CafeManager.Infrastructure.csproj" />
   </ItemGroup>
 
   <ItemGroup>
     <Folder Include="Stores\" />
-    <Folder Include="Styles\" />
-    <Folder Include="Services\" />
-    <Folder Include="ViewModels\" />
-    <Folder Include="Views\" />
   </ItemGroup>
 
   <ItemGroup>

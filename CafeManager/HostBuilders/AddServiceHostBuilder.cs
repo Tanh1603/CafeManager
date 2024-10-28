@@ -1,6 +1,8 @@
 ﻿using CafeManager.Core.Repositories;
+using CafeManager.Core.Services;
 using CafeManager.Infrastructure.Models;
 using CafeManager.Infrastructure.Repositories;
+using CafeManager.WPF.Services;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -19,6 +21,11 @@ namespace CafeManager.WPF.HostBuilders
             hostBuilder.ConfigureServices(services =>
             {
                 services.AddTransient(typeof(IRepository<>), typeof(Repository<>));
+                services.AddScoped<IUnitOfWork, UnitOfWork>(
+                        provider => new UnitOfWork(provider.GetRequiredService<CafeManagerContextFactory>().CreateDbContext())
+                    );
+
+                services.AddTransient<FoodServices>(provider => new FoodServices(provider));
             });
             return hostBuilder;
         }

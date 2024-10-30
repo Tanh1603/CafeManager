@@ -9,7 +9,9 @@ public partial class Supplier
 {
     public int Supplierid { get; set; }
 
-    public string Displayname { get; set; }
+    public string Suppliername { get; set; }
+
+    public string Representativesupplier { get; set; }
 
     public string Phone { get; set; }
 
@@ -17,11 +19,11 @@ public partial class Supplier
 
     public string Address { get; set; }
 
-    public DateOnly? Contractdate { get; set; }
+    public string Notes { get; set; }
 
     public bool? Isdeleted { get; set; }
 
     public virtual ICollection<Importdetail> Importdetails { get; set; } = new List<Importdetail>();
 
-    public virtual ICollection<Materialsupplier> Materialsuppliers { get; set; } = new List<Materialsupplier>();
+    public virtual Materialsupplier Materialsupplier { get; set; }
 }

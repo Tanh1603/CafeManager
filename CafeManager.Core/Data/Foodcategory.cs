@@ -9,7 +9,7 @@ public partial class Foodcategory
 {
     public int Foodcategoryid { get; set; }
 
-    public string Displayname { get; set; }
+    public string Foodcategoryname { get; set; }
 
     public bool? Isdeleted { get; set; }
 

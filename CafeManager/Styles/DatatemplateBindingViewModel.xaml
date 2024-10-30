@@ -3,7 +3,8 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:viewmodels="clr-namespace:CafeManager.WPF.ViewModels"
     xmlns:views="clr-namespace:CafeManager.WPF.Views">
-    <DataTemplate DataType="{x:Type viewmodels:FoodViewModel}">
-        <views:FoodView />
+
+    <DataTemplate DataType="{x:Type viewmodels:TestViewModel}">
+        <views:TestDb />
     </DataTemplate>
 </ResourceDictionary>

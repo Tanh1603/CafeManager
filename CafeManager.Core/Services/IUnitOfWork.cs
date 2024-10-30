@@ -12,6 +12,8 @@ namespace CafeManager.Core.Services
     {
         IRepository<Foodcategory> FoodCategorys { get; }
         IRepository<Food> Foods { get; }
+        IInvoicesRepository InvoiceRepository { get; }
+        IRepository<Invoicedetail> InvoiceDetail { get; }
 
         int Complete();
 

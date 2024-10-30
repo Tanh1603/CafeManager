@@ -7,7 +7,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace CafeManager.Infrastructure.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialCreate : Migration
+    public partial class Initial : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -22,7 +22,7 @@ namespace CafeManager.Infrastructure.Migrations
                     password = table.Column<string>(type: "character varying(255)", maxLength: 255, nullable: false),
                     email = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: true),
                     role = table.Column<int>(type: "integer", nullable: true, defaultValue: 0),
-                    displayname = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: true),
+                    displayname = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: true, defaultValueSql: "'Unkown'::character varying"),
                     avatar = table.Column<string>(type: "text", nullable: true),
                     isdeleted = table.Column<bool>(type: "boolean", nullable: true, defaultValue: false)
                 },
@@ -37,7 +37,8 @@ namespace CafeManager.Infrastructure.Migrations
                 {
                     coffeetableid = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    statustable = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: true),
+                    statustable = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: true, defaultValueSql: "'Trống'::character varying"),
+                    notes = table.Column<string>(type: "text", nullable: true),
                     isdeleted = table.Column<bool>(type: "boolean", nullable: true, defaultValue: false)
                 },
                 constraints: table =>
@@ -46,29 +47,12 @@ namespace CafeManager.Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "customer",
-                columns: table => new
-                {
-                    customerid = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    displayname = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: true),
-                    buydate = table.Column<DateTime>(type: "timestamp without time zone", nullable: true),
-                    type = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: true),
-                    totalspent = table.Column<decimal>(type: "numeric(10,2)", precision: 10, scale: 2, nullable: true),
-                    isdeleted = table.Column<bool>(type: "boolean", nullable: true, defaultValue: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("pk_customer", x => x.customerid);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "foodcategory",
                 columns: table => new
                 {
                     foodcategoryid = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    displayname = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
+                    foodcategoryname = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
                     isdeleted = table.Column<bool>(type: "boolean", nullable: true, defaultValue: false)
                 },
                 constraints: table =>
@@ -83,6 +67,8 @@ namespace CafeManager.Infrastructure.Migrations
                     importid = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     importdate = table.Column<DateOnly>(type: "date", nullable: true),
+                    deliveryrepresentative = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: false),
+                    phone = table.Column<string>(type: "character varying(20)", maxLength: 20, nullable: false),
                     isdeleted = table.Column<bool>(type: "boolean", nullable: true, defaultValue: false)
                 },
                 constraints: table =>
@@ -96,10 +82,10 @@ namespace CafeManager.Infrastructure.Migrations
                 {
                     materialid = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    displayname = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: true),
+                    materialname = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
                     unit = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: true),
                     expirydate = table.Column<DateOnly>(type: "date", nullable: true),
-                    price = table.Column<decimal>(type: "numeric(10,2)", precision: 10, scale: 2, nullable: true),
+                    price = table.Column<decimal>(type: "numeric(10,2)", precision: 10, scale: 2, nullable: true, defaultValueSql: "0"),
                     isdeleted = table.Column<bool>(type: "boolean", nullable: true, defaultValue: false)
                 },
                 constraints: table =>
@@ -113,8 +99,8 @@ namespace CafeManager.Infrastructure.Migrations
                 {
                     staffid = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    displayname = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: true),
-                    phone = table.Column<string>(type: "character varying(20)", maxLength: 20, nullable: true),
+                    staffname = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
+                    phone = table.Column<string>(type: "character varying(20)", maxLength: 20, nullable: false),
                     email = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: true),
                     sex = table.Column<char>(type: "character(1)", maxLength: 1, nullable: true),
                     birthday = table.Column<DateOnly>(type: "date", nullable: true),
@@ -123,7 +109,6 @@ namespace CafeManager.Infrastructure.Migrations
                     workingstatus = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: true),
                     basicsalary = table.Column<decimal>(type: "numeric(10,2)", precision: 10, scale: 2, nullable: true),
                     workinghours = table.Column<decimal>(type: "numeric(10,2)", precision: 10, scale: 2, nullable: true),
-                    salary = table.Column<decimal>(type: "numeric(10,2)", precision: 10, scale: 2, nullable: true),
                     isdeleted = table.Column<bool>(type: "boolean", nullable: true, defaultValue: false)
                 },
                 constraints: table =>
@@ -137,11 +122,12 @@ namespace CafeManager.Infrastructure.Migrations
                 {
                     supplierid = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    displayname = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: true),
-                    phone = table.Column<string>(type: "character varying(20)", maxLength: 20, nullable: true),
+                    suppliername = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
+                    representativesupplier = table.Column<string>(type: "character varying", nullable: false),
+                    phone = table.Column<string>(type: "character varying(20)", maxLength: 20, nullable: false),
                     email = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: true),
                     address = table.Column<string>(type: "character varying(255)", maxLength: 255, nullable: true),
-                    contractdate = table.Column<DateOnly>(type: "date", nullable: true),
+                    notes = table.Column<string>(type: "text", nullable: true),
                     isdeleted = table.Column<bool>(type: "boolean", nullable: true, defaultValue: false)
                 },
                 constraints: table =>
@@ -155,11 +141,12 @@ namespace CafeManager.Infrastructure.Migrations
                 {
                     invoiceid = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    paymentdate = table.Column<DateTime>(type: "timestamp without time zone", nullable: true),
-                    paymentstatus = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: true),
-                    discountinvoice = table.Column<decimal>(type: "numeric(5,2)", precision: 5, scale: 2, nullable: true),
+                    paymentstartdate = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
+                    paymentenddate = table.Column<DateTime>(type: "timestamp without time zone", nullable: true),
+                    paymentstatus = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: true, defaultValueSql: "'Chưa thanh toán'::character varying"),
+                    paymentmethod = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: true, defaultValueSql: "'Thanh toán tiền mặt'::character varying"),
+                    discountinvoice = table.Column<decimal>(type: "numeric(5,2)", precision: 5, scale: 2, nullable: true, defaultValueSql: "0"),
                     coffeetableid = table.Column<int>(type: "integer", nullable: true),
-                    customerid = table.Column<int>(type: "integer", nullable: true),
                     isdeleted = table.Column<bool>(type: "boolean", nullable: true, defaultValue: false)
                 },
                 constraints: table =>
@@ -170,11 +157,6 @@ namespace CafeManager.Infrastructure.Migrations
                         column: x => x.coffeetableid,
                         principalTable: "coffeetable",
                         principalColumn: "coffeetableid");
-                    table.ForeignKey(
-                        name: "fk_invoices_customer",
-                        column: x => x.customerid,
-                        principalTable: "customer",
-                        principalColumn: "customerid");
                 });
 
             migrationBuilder.CreateTable(
@@ -183,11 +165,11 @@ namespace CafeManager.Infrastructure.Migrations
                 {
                     foodid = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    displayname = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: true),
-                    foodcategoryid = table.Column<int>(type: "integer", nullable: true),
-                    price = table.Column<decimal>(type: "numeric(10,2)", precision: 10, scale: 2, nullable: true),
-                    imagefood = table.Column<byte[]>(type: "bytea", nullable: true),
-                    discountfood = table.Column<decimal>(type: "numeric(5,2)", precision: 5, scale: 2, nullable: true),
+                    foodname = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
+                    foodcategoryid = table.Column<int>(type: "integer", nullable: false),
+                    price = table.Column<decimal>(type: "numeric(10,2)", precision: 10, scale: 2, nullable: true, defaultValueSql: "0"),
+                    imagefood = table.Column<string>(type: "text", nullable: true),
+                    discountfood = table.Column<decimal>(type: "numeric(5,2)", precision: 5, scale: 2, nullable: true, defaultValueSql: "0"),
                     isdeleted = table.Column<bool>(type: "boolean", nullable: true, defaultValue: false)
                 },
                 constraints: table =>
@@ -230,9 +212,7 @@ namespace CafeManager.Infrastructure.Migrations
                     importid = table.Column<int>(type: "integer", nullable: false),
                     materialid = table.Column<int>(type: "integer", nullable: false),
                     supplierid = table.Column<int>(type: "integer", nullable: false),
-                    quantity = table.Column<int>(type: "integer", nullable: true, defaultValue: 0),
-                    unitprice = table.Column<decimal>(type: "numeric(10,2)", precision: 10, scale: 2, nullable: true, defaultValueSql: "0"),
-                    totalprice = table.Column<decimal>(type: "numeric(10,2)", precision: 10, scale: 2, nullable: true, defaultValueSql: "0")
+                    quantity = table.Column<int>(type: "integer", nullable: true, defaultValue: 0)
                 },
                 constraints: table =>
                 {
@@ -258,23 +238,21 @@ namespace CafeManager.Infrastructure.Migrations
                 name: "materialsupplier",
                 columns: table => new
                 {
+                    supplierid = table.Column<int>(type: "integer", nullable: false),
                     materialsupplierid = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    materialid = table.Column<int>(type: "integer", nullable: false),
-                    supplierid = table.Column<int>(type: "integer", nullable: false),
-                    supplydate = table.Column<DateOnly>(type: "date", nullable: true),
-                    price = table.Column<decimal>(type: "numeric(10,2)", precision: 10, scale: 2, nullable: true)
+                    materialid = table.Column<int>(type: "integer", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("materialsupplier_pkey", x => x.materialsupplierid);
+                    table.PrimaryKey("pk_materialsupplier", x => x.supplierid);
                     table.ForeignKey(
-                        name: "materialsupplier_materialid_fkey",
+                        name: "fk_material_supplier",
                         column: x => x.materialid,
                         principalTable: "material",
                         principalColumn: "materialid");
                     table.ForeignKey(
-                        name: "materialsupplier_supplierid_fkey",
+                        name: "fk_supplier_material",
                         column: x => x.supplierid,
                         principalTable: "supplier",
                         principalColumn: "supplierid");
@@ -287,7 +265,7 @@ namespace CafeManager.Infrastructure.Migrations
                     invoicedetailid = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     invoiceid = table.Column<int>(type: "integer", nullable: true),
-                    foodid = table.Column<int>(type: "integer", nullable: true),
+                    foodid = table.Column<int>(type: "integer", nullable: false),
                     quantity = table.Column<int>(type: "integer", nullable: true, defaultValue: 0),
                     isdeleted = table.Column<bool>(type: "boolean", nullable: true, defaultValue: false)
                 },
@@ -347,19 +325,9 @@ namespace CafeManager.Infrastructure.Migrations
                 column: "coffeetableid");
 
             migrationBuilder.CreateIndex(
-                name: "IX_invoices_customerid",
-                table: "invoices",
-                column: "customerid");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_materialsupplier_materialid",
                 table: "materialsupplier",
                 column: "materialid");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_materialsupplier_supplierid",
-                table: "materialsupplier",
-                column: "supplierid");
         }
 
         /// <inheritdoc />
@@ -403,9 +371,6 @@ namespace CafeManager.Infrastructure.Migrations
 
             migrationBuilder.DropTable(
                 name: "coffeetable");
-
-            migrationBuilder.DropTable(
-                name: "customer");
         }
     }
 }

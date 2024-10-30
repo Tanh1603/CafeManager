@@ -16,7 +16,7 @@ namespace CafeManager.WPF.HostBuilders
             hostBuilder.ConfigureServices(services =>
             {
                 services.AddTransient<MainViewModel>(provider => new MainViewModel(provider));
-                services.AddTransient<FoodViewModel>(provider => new FoodViewModel(provider));
+                services.AddTransient<TestViewModel>(provider => new TestViewModel(provider));
             });
             return hostBuilder;
         }

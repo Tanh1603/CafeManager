@@ -16,11 +16,17 @@ namespace CafeManager.Infrastructure.Models
         public IRepository<Foodcategory> FoodCategorys { get; private set; }
         public IRepository<Food> Foods { get; private set; }
 
+        public IInvoicesRepository InvoiceRepository { get; private set; }
+
+        public IRepository<Invoicedetail> InvoiceDetail { get; private set; }
+
         public UnitOfWork(CafeManagerContext context)
         {
             _context = context;
             FoodCategorys = new Repository<Foodcategory>(context);
             Foods = new Repository<Food>(context);
+
+            InvoiceDetail = new Repository<Invoicedetail>(context);
         }
 
         public int Complete()

@@ -11,6 +11,10 @@ public partial class Import
 
     public DateOnly? Importdate { get; set; }
 
+    public string Deliveryrepresentative { get; set; }
+
+    public string Phone { get; set; }
+
     public bool? Isdeleted { get; set; }
 
     public virtual ICollection<Importdetail> Importdetails { get; set; } = new List<Importdetail>();

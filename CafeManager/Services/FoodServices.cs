@@ -34,7 +34,7 @@ namespace CafeManager.WPF.Services
             var foodDtos = foodList.Where(x => x.Foodcategoryid == id)
                                 .Select(f => new FoodDTO()
                                 {
-                                    DisplayFoodName = f.Displayname,
+                                    DisplayFoodName = f.Foodname,
                                     FoodPrice = f.Price ?? 0,
                                     ImageFood = f.Imagefood,
                                     DiscountFood = f.Discountfood ?? 0,
@@ -55,7 +55,7 @@ namespace CafeManager.WPF.Services
 
             if (existingCategory != null)
             {
-                existingCategory.Displayname = obj.Displayname;
+                existingCategory.Foodcategoryname = obj.Foodcategoryname;
             }
             var res = _unitOfWork.FoodCategorys.Update(existingCategory);
             _unitOfWork.Complete();
@@ -87,7 +87,7 @@ namespace CafeManager.WPF.Services
 
             if (existingFood != null)
             {
-                existingFood.Displayname = obj.Displayname;
+                existingFood.Foodname = obj.Foodname;
                 existingFood.Price = obj.Price;
                 existingFood.Imagefood = obj.Imagefood;
                 existingFood.Discountfood = obj.Discountfood;

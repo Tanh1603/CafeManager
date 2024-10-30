@@ -11,6 +11,8 @@ public partial class Coffeetable
 
     public string Statustable { get; set; }
 
+    public string Notes { get; set; }
+
     public bool? Isdeleted { get; set; }
 
     public virtual ICollection<Invoice> Invoices { get; set; } = new List<Invoice>();

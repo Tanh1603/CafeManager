@@ -16,11 +16,11 @@ using System.Windows.Shapes;
 namespace CafeManager.WPF.Views
 {
     /// <summary>
-    /// Interaction logic for FoodView.xaml
+    /// Interaction logic for TestDb.xaml
     /// </summary>
-    public partial class FoodView : UserControl
+    public partial class TestDb : UserControl
     {
-        public FoodView()
+        public TestDb()
         {
             InitializeComponent();
         }

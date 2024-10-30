@@ -9,7 +9,7 @@ public partial class Material
 {
     public int Materialid { get; set; }
 
-    public string Displayname { get; set; }
+    public string Materialname { get; set; }
 
     public string Unit { get; set; }
 

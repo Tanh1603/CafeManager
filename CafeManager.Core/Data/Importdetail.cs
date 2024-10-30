@@ -17,10 +17,6 @@ public partial class Importdetail
 
     public int? Quantity { get; set; }
 
-    public decimal? Unitprice { get; set; }
-
-    public decimal? Totalprice { get; set; }
-
     public virtual Import Import { get; set; }
 
     public virtual Material Material { get; set; }

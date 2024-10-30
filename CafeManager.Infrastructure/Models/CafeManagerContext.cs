@@ -20,8 +20,6 @@ public partial class CafeManagerContext : DbContext
 
     public virtual DbSet<Consumedmaterial> Consumedmaterials { get; set; }
 
-    public virtual DbSet<Customer> Customers { get; set; }
-
     public virtual DbSet<Food> Foods { get; set; }
 
     public virtual DbSet<Foodcategory> Foodcategories { get; set; }
@@ -54,6 +52,7 @@ public partial class CafeManagerContext : DbContext
             entity.Property(e => e.Avatar).HasColumnName("avatar");
             entity.Property(e => e.Displayname)
                 .HasMaxLength(100)
+                .HasDefaultValueSql("'Unkown'::character varying")
                 .HasColumnName("displayname");
             entity.Property(e => e.Email)
                 .HasMaxLength(100)
@@ -84,8 +83,10 @@ public partial class CafeManagerContext : DbContext
             entity.Property(e => e.Isdeleted)
                 .HasDefaultValue(false)
                 .HasColumnName("isdeleted");
+            entity.Property(e => e.Notes).HasColumnName("notes");
             entity.Property(e => e.Statustable)
                 .HasMaxLength(50)
+                .HasDefaultValueSql("'Trống'::character varying")
                 .HasColumnName("statustable");
         });
 
@@ -113,30 +114,6 @@ public partial class CafeManagerContext : DbContext
                 .HasConstraintName("fk_consumedmaterials_material");
         });
 
-        modelBuilder.Entity<Customer>(entity =>
-        {
-            entity.HasKey(e => e.Customerid).HasName("pk_customer");
-
-            entity.ToTable("customer");
-
-            entity.Property(e => e.Customerid).HasColumnName("customerid");
-            entity.Property(e => e.Buydate)
-                .HasColumnType("timestamp without time zone")
-                .HasColumnName("buydate");
-            entity.Property(e => e.Displayname)
-                .HasMaxLength(100)
-                .HasColumnName("displayname");
-            entity.Property(e => e.Isdeleted)
-                .HasDefaultValue(false)
-                .HasColumnName("isdeleted");
-            entity.Property(e => e.Totalspent)
-                .HasPrecision(10, 2)
-                .HasColumnName("totalspent");
-            entity.Property(e => e.Type)
-                .HasMaxLength(50)
-                .HasColumnName("type");
-        });
-
         modelBuilder.Entity<Food>(entity =>
         {
             entity.HasKey(e => e.Foodid).HasName("pk_food");
@@ -146,21 +123,25 @@ public partial class CafeManagerContext : DbContext
             entity.Property(e => e.Foodid).HasColumnName("foodid");
             entity.Property(e => e.Discountfood)
                 .HasPrecision(5, 2)
+                .HasDefaultValueSql("0")
                 .HasColumnName("discountfood");
-            entity.Property(e => e.Displayname)
-                .HasMaxLength(100)
-                .HasColumnName("displayname");
             entity.Property(e => e.Foodcategoryid).HasColumnName("foodcategoryid");
+            entity.Property(e => e.Foodname)
+                .IsRequired()
+                .HasMaxLength(100)
+                .HasColumnName("foodname");
             entity.Property(e => e.Imagefood).HasColumnName("imagefood");
             entity.Property(e => e.Isdeleted)
                 .HasDefaultValue(false)
                 .HasColumnName("isdeleted");
             entity.Property(e => e.Price)
                 .HasPrecision(10, 2)
+                .HasDefaultValueSql("0")
                 .HasColumnName("price");
 
             entity.HasOne(d => d.Foodcategory).WithMany(p => p.Foods)
                 .HasForeignKey(d => d.Foodcategoryid)
+                .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("fk_food_foodcategory");
         });
 
@@ -171,10 +152,10 @@ public partial class CafeManagerContext : DbContext
             entity.ToTable("foodcategory");
 
             entity.Property(e => e.Foodcategoryid).HasColumnName("foodcategoryid");
-            entity.Property(e => e.Displayname)
+            entity.Property(e => e.Foodcategoryname)
                 .IsRequired()
                 .HasMaxLength(100)
-                .HasColumnName("displayname");
+                .HasColumnName("foodcategoryname");
             entity.Property(e => e.Isdeleted)
                 .HasDefaultValue(false)
                 .HasColumnName("isdeleted");
@@ -187,10 +168,18 @@ public partial class CafeManagerContext : DbContext
             entity.ToTable("imports");
 
             entity.Property(e => e.Importid).HasColumnName("importid");
+            entity.Property(e => e.Deliveryrepresentative)
+                .IsRequired()
+                .HasMaxLength(50)
+                .HasColumnName("deliveryrepresentative");
             entity.Property(e => e.Importdate).HasColumnName("importdate");
             entity.Property(e => e.Isdeleted)
                 .HasDefaultValue(false)
                 .HasColumnName("isdeleted");
+            entity.Property(e => e.Phone)
+                .IsRequired()
+                .HasMaxLength(20)
+                .HasColumnName("phone");
         });
 
         modelBuilder.Entity<Importdetail>(entity =>
@@ -206,14 +195,6 @@ public partial class CafeManagerContext : DbContext
                 .HasDefaultValue(0)
                 .HasColumnName("quantity");
             entity.Property(e => e.Supplierid).HasColumnName("supplierid");
-            entity.Property(e => e.Totalprice)
-                .HasPrecision(10, 2)
-                .HasDefaultValueSql("0")
-                .HasColumnName("totalprice");
-            entity.Property(e => e.Unitprice)
-                .HasPrecision(10, 2)
-                .HasDefaultValueSql("0")
-                .HasColumnName("unitprice");
 
             entity.HasOne(d => d.Import).WithMany(p => p.Importdetails)
                 .HasForeignKey(d => d.Importid)
@@ -239,27 +220,31 @@ public partial class CafeManagerContext : DbContext
 
             entity.Property(e => e.Invoiceid).HasColumnName("invoiceid");
             entity.Property(e => e.Coffeetableid).HasColumnName("coffeetableid");
-            entity.Property(e => e.Customerid).HasColumnName("customerid");
             entity.Property(e => e.Discountinvoice)
                 .HasPrecision(5, 2)
+                .HasDefaultValueSql("0")
                 .HasColumnName("discountinvoice");
             entity.Property(e => e.Isdeleted)
                 .HasDefaultValue(false)
                 .HasColumnName("isdeleted");
-            entity.Property(e => e.Paymentdate)
+            entity.Property(e => e.Paymentenddate)
                 .HasColumnType("timestamp without time zone")
-                .HasColumnName("paymentdate");
+                .HasColumnName("paymentenddate");
+            entity.Property(e => e.Paymentmethod)
+                .HasMaxLength(50)
+                .HasDefaultValueSql("'Thanh toán tiền mặt'::character varying")
+                .HasColumnName("paymentmethod");
+            entity.Property(e => e.Paymentstartdate)
+                .HasColumnType("timestamp without time zone")
+                .HasColumnName("paymentstartdate");
             entity.Property(e => e.Paymentstatus)
                 .HasMaxLength(50)
+                .HasDefaultValueSql("'Chưa thanh toán'::character varying")
                 .HasColumnName("paymentstatus");
 
             entity.HasOne(d => d.Coffeetable).WithMany(p => p.Invoices)
                 .HasForeignKey(d => d.Coffeetableid)
                 .HasConstraintName("fk_invoices_coffeetable");
-
-            entity.HasOne(d => d.Customer).WithMany(p => p.Invoices)
-                .HasForeignKey(d => d.Customerid)
-                .HasConstraintName("fk_invoices_customer");
         });
 
         modelBuilder.Entity<Invoicedetail>(entity =>
@@ -280,6 +265,7 @@ public partial class CafeManagerContext : DbContext
 
             entity.HasOne(d => d.Food).WithMany(p => p.Invoicedetails)
                 .HasForeignKey(d => d.Foodid)
+                .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("fk_invoicedetails_food");
 
             entity.HasOne(d => d.Invoice).WithMany(p => p.Invoicedetails)
@@ -294,15 +280,17 @@ public partial class CafeManagerContext : DbContext
             entity.ToTable("material");
 
             entity.Property(e => e.Materialid).HasColumnName("materialid");
-            entity.Property(e => e.Displayname)
-                .HasMaxLength(100)
-                .HasColumnName("displayname");
             entity.Property(e => e.Expirydate).HasColumnName("expirydate");
             entity.Property(e => e.Isdeleted)
                 .HasDefaultValue(false)
                 .HasColumnName("isdeleted");
+            entity.Property(e => e.Materialname)
+                .IsRequired()
+                .HasMaxLength(100)
+                .HasColumnName("materialname");
             entity.Property(e => e.Price)
                 .HasPrecision(10, 2)
+                .HasDefaultValueSql("0")
                 .HasColumnName("price");
             entity.Property(e => e.Unit)
                 .HasMaxLength(50)
@@ -311,27 +299,27 @@ public partial class CafeManagerContext : DbContext
 
         modelBuilder.Entity<Materialsupplier>(entity =>
         {
-            entity.HasKey(e => e.Materialsupplierid).HasName("materialsupplier_pkey");
+            entity.HasKey(e => e.Supplierid).HasName("pk_materialsupplier");
 
             entity.ToTable("materialsupplier");
 
-            entity.Property(e => e.Materialsupplierid).HasColumnName("materialsupplierid");
+            entity.Property(e => e.Supplierid)
+                .ValueGeneratedNever()
+                .HasColumnName("supplierid");
             entity.Property(e => e.Materialid).HasColumnName("materialid");
-            entity.Property(e => e.Price)
-                .HasPrecision(10, 2)
-                .HasColumnName("price");
-            entity.Property(e => e.Supplierid).HasColumnName("supplierid");
-            entity.Property(e => e.Supplydate).HasColumnName("supplydate");
+            entity.Property(e => e.Materialsupplierid)
+                .ValueGeneratedOnAdd()
+                .HasColumnName("materialsupplierid");
 
             entity.HasOne(d => d.Material).WithMany(p => p.Materialsuppliers)
                 .HasForeignKey(d => d.Materialid)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("materialsupplier_materialid_fkey");
+                .HasConstraintName("fk_material_supplier");
 
-            entity.HasOne(d => d.Supplier).WithMany(p => p.Materialsuppliers)
-                .HasForeignKey(d => d.Supplierid)
+            entity.HasOne(d => d.Supplier).WithOne(p => p.Materialsupplier)
+                .HasForeignKey<Materialsupplier>(d => d.Supplierid)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("materialsupplier_supplierid_fkey");
+                .HasConstraintName("fk_supplier_material");
         });
 
         modelBuilder.Entity<Staff>(entity =>
@@ -345,9 +333,6 @@ public partial class CafeManagerContext : DbContext
                 .HasPrecision(10, 2)
                 .HasColumnName("basicsalary");
             entity.Property(e => e.Birthday).HasColumnName("birthday");
-            entity.Property(e => e.Displayname)
-                .HasMaxLength(100)
-                .HasColumnName("displayname");
             entity.Property(e => e.Email)
                 .HasMaxLength(100)
                 .HasColumnName("email");
@@ -355,17 +340,19 @@ public partial class CafeManagerContext : DbContext
                 .HasDefaultValue(false)
                 .HasColumnName("isdeleted");
             entity.Property(e => e.Phone)
+                .IsRequired()
                 .HasMaxLength(20)
                 .HasColumnName("phone");
             entity.Property(e => e.Role)
                 .HasMaxLength(50)
                 .HasColumnName("role");
-            entity.Property(e => e.Salary)
-                .HasPrecision(10, 2)
-                .HasColumnName("salary");
             entity.Property(e => e.Sex)
                 .HasMaxLength(1)
                 .HasColumnName("sex");
+            entity.Property(e => e.Staffname)
+                .IsRequired()
+                .HasMaxLength(100)
+                .HasColumnName("staffname");
             entity.Property(e => e.Startworking).HasColumnName("startworking");
             entity.Property(e => e.Workinghours)
                 .HasPrecision(10, 2)
@@ -385,19 +372,25 @@ public partial class CafeManagerContext : DbContext
             entity.Property(e => e.Address)
                 .HasMaxLength(255)
                 .HasColumnName("address");
-            entity.Property(e => e.Contractdate).HasColumnName("contractdate");
-            entity.Property(e => e.Displayname)
-                .HasMaxLength(100)
-                .HasColumnName("displayname");
             entity.Property(e => e.Email)
                 .HasMaxLength(100)
                 .HasColumnName("email");
             entity.Property(e => e.Isdeleted)
                 .HasDefaultValue(false)
                 .HasColumnName("isdeleted");
+            entity.Property(e => e.Notes).HasColumnName("notes");
             entity.Property(e => e.Phone)
+                .IsRequired()
                 .HasMaxLength(20)
                 .HasColumnName("phone");
+            entity.Property(e => e.Representativesupplier)
+                .IsRequired()
+                .HasColumnType("character varying")
+                .HasColumnName("representativesupplier");
+            entity.Property(e => e.Suppliername)
+                .IsRequired()
+                .HasMaxLength(100)
+                .HasColumnName("suppliername");
         });
 
         OnModelCreatingPartial(modelBuilder);

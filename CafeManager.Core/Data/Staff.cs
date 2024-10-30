@@ -9,7 +9,7 @@ public partial class Staff
 {
     public int Staffid { get; set; }
 
-    public string Displayname { get; set; }
+    public string Staffname { get; set; }
 
     public string Phone { get; set; }
 
@@ -28,8 +28,6 @@ public partial class Staff
     public decimal? Basicsalary { get; set; }
 
     public decimal? Workinghours { get; set; }
-
-    public decimal? Salary { get; set; }
 
     public bool? Isdeleted { get; set; }
 }

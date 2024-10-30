@@ -38,22 +38,6 @@ namespace CafeManager.WPF
         {
             base.OnStartup(e);
             _host.Start();
-            //CafeManagerContextFactory cafeManagerContextFactory = _host.Services.GetRequiredService<CafeManagerContextFactory>();
-            //using (CafeManagerContext cafeManagerContext = cafeManagerContextFactory.CreateDbContext())
-            //{
-            //    cafeManagerContext.Database.Migrate();
-            //}
-            //using (UnitOfWork unitOfWork = _host.Services.GetRequiredService<IUnitOfWork>() as UnitOfWork)
-            //{
-            //    Task.Run(() =>
-            //    {
-            //        List<Food> test = new List<Food>(unitOfWork.Foods.GetAllAsync().GetAwaiter().GetResult());
-            //        foreach (Food user in test)
-            //        {
-            //            Console.WriteLine(user.Displayname);
-            //        }
-            //    }).Wait();
-            //}
 
             Window window = new MainWindow()
             {

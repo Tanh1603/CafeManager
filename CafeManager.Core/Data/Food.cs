@@ -9,9 +9,9 @@ public partial class Food
 {
     public int Foodid { get; set; }
 
-    public string Displayname { get; set; }
+    public string Foodname { get; set; }
 
-    public int? Foodcategoryid { get; set; }
+    public int Foodcategoryid { get; set; }
 
     public decimal? Price { get; set; }
 

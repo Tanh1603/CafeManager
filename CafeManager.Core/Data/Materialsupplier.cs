@@ -13,10 +13,6 @@ public partial class Materialsupplier
 
     public int Supplierid { get; set; }
 
-    public DateOnly? Supplydate { get; set; }
-
-    public decimal? Price { get; set; }
-
     public virtual Material Material { get; set; }
 
     public virtual Supplier Supplier { get; set; }

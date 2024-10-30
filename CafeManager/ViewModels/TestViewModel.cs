@@ -8,22 +8,19 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Net.WebSockets;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace CafeManager.WPF.ViewModels
 {
-    public partial class MainViewModel : ObservableObject
+    public partial class TestViewModel : ObservableObject
     {
-        private IServiceProvider _provider;
+        private readonly IServiceProvider _serviceProvider;
 
-        [ObservableProperty]
-        private ObservableObject _curentViewModel;
-
-        public MainViewModel(IServiceProvider provider)
+        public TestViewModel(IServiceProvider provider)
         {
-            _provider = provider;
-            CurentViewModel = _provider.GetRequiredService<TestViewModel>();
+            _serviceProvider = provider;
         }
     }
 }

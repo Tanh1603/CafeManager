@@ -11,7 +11,7 @@ public partial class Invoicedetail
 
     public int? Invoiceid { get; set; }
 
-    public int? Foodid { get; set; }
+    public int Foodid { get; set; }
 
     public int? Quantity { get; set; }
 

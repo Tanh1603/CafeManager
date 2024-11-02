@@ -135,11 +135,6 @@ namespace CafeManager.Infrastructure.Migrations
                         .HasColumnName("quantity")
                         .HasDefaultValueSql("0");
 
-                    b.Property<string>("Unit")
-                        .HasMaxLength(50)
-                        .HasColumnType("character varying(50)")
-                        .HasColumnName("unit");
-
                     b.HasKey("Consumedmaterialid")
                         .HasName("pk_consumedmaterials");
 
@@ -235,15 +230,11 @@ namespace CafeManager.Infrastructure.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Importid"));
 
-                    b.Property<string>("Deliveryrepresentative")
+                    b.Property<string>("Deliveryperson")
                         .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("character varying(50)")
-                        .HasColumnName("deliveryrepresentative");
-
-                    b.Property<DateOnly?>("Importdate")
-                        .HasColumnType("date")
-                        .HasColumnName("importdate");
+                        .HasColumnName("deliveryperson");
 
                     b.Property<bool?>("Isdeleted")
                         .ValueGeneratedOnAdd()
@@ -256,6 +247,21 @@ namespace CafeManager.Infrastructure.Migrations
                         .HasMaxLength(20)
                         .HasColumnType("character varying(20)")
                         .HasColumnName("phone");
+
+                    b.Property<DateTime>("Receiveddate")
+                        .HasColumnType("timestamp without time zone")
+                        .HasColumnName("receiveddate");
+
+                    b.Property<string>("Receiver")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)")
+                        .HasColumnName("receiver");
+
+                    b.Property<string>("Shippingcompany")
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)")
+                        .HasColumnName("shippingcompany");
 
                     b.HasKey("Importid")
                         .HasName("pk_imports");
@@ -276,9 +282,15 @@ namespace CafeManager.Infrastructure.Migrations
                         .HasColumnType("integer")
                         .HasColumnName("importid");
 
-                    b.Property<int>("Materialid")
+                    b.Property<bool?>("Isdeleted")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("boolean")
+                        .HasDefaultValue(false)
+                        .HasColumnName("isdeleted");
+
+                    b.Property<int>("Materialsupplierid")
                         .HasColumnType("integer")
-                        .HasColumnName("materialid");
+                        .HasColumnName("materialsupplierid");
 
                     b.Property<int?>("Quantity")
                         .ValueGeneratedOnAdd()
@@ -286,18 +298,12 @@ namespace CafeManager.Infrastructure.Migrations
                         .HasDefaultValue(0)
                         .HasColumnName("quantity");
 
-                    b.Property<int>("Supplierid")
-                        .HasColumnType("integer")
-                        .HasColumnName("supplierid");
-
                     b.HasKey("Importdetailid")
                         .HasName("pk_importdetails");
 
                     b.HasIndex("Importid");
 
-                    b.HasIndex("Materialid");
-
-                    b.HasIndex("Supplierid");
+                    b.HasIndex("Materialsupplierid");
 
                     b.ToTable("importdetails", (string)null);
                 });
@@ -406,10 +412,6 @@ namespace CafeManager.Infrastructure.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Materialid"));
 
-                    b.Property<DateOnly?>("Expirydate")
-                        .HasColumnType("date")
-                        .HasColumnName("expirydate");
-
                     b.Property<bool?>("Isdeleted")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("boolean")
@@ -422,14 +424,8 @@ namespace CafeManager.Infrastructure.Migrations
                         .HasColumnType("character varying(100)")
                         .HasColumnName("materialname");
 
-                    b.Property<decimal?>("Price")
-                        .ValueGeneratedOnAdd()
-                        .HasPrecision(10, 2)
-                        .HasColumnType("numeric(10,2)")
-                        .HasColumnName("price")
-                        .HasDefaultValueSql("0");
-
                     b.Property<string>("Unit")
+                        .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("character varying(50)")
                         .HasColumnName("unit");
@@ -437,19 +433,14 @@ namespace CafeManager.Infrastructure.Migrations
                     b.HasKey("Materialid")
                         .HasName("pk_material");
 
+                    b.HasIndex(new[] { "Materialname" }, "material_materialname_key")
+                        .IsUnique();
+
                     b.ToTable("material", (string)null);
                 });
 
             modelBuilder.Entity("CafeManager.Core.Data.Materialsupplier", b =>
                 {
-                    b.Property<int>("Supplierid")
-                        .HasColumnType("integer")
-                        .HasColumnName("supplierid");
-
-                    b.Property<int>("Materialid")
-                        .HasColumnType("integer")
-                        .HasColumnName("materialid");
-
                     b.Property<int>("Materialsupplierid")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("integer")
@@ -457,10 +448,53 @@ namespace CafeManager.Infrastructure.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Materialsupplierid"));
 
-                    b.HasKey("Supplierid")
+                    b.Property<DateTime?>("Expirationdate")
+                        .HasColumnType("timestamp without time zone")
+                        .HasColumnName("expirationdate");
+
+                    b.Property<bool?>("Isdeleted")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("boolean")
+                        .HasDefaultValue(false)
+                        .HasColumnName("isdeleted");
+
+                    b.Property<DateTime?>("Manufacturedate")
+                        .HasColumnType("timestamp without time zone")
+                        .HasColumnName("manufacturedate");
+
+                    b.Property<string>("Manufacturer")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("character varying(50)")
+                        .HasColumnName("manufacturer");
+
+                    b.Property<int>("Materialid")
+                        .HasColumnType("integer")
+                        .HasColumnName("materialid");
+
+                    b.Property<string>("Original")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("character varying(20)")
+                        .HasColumnName("original");
+
+                    b.Property<decimal?>("Price")
+                        .ValueGeneratedOnAdd()
+                        .HasPrecision(10, 2)
+                        .HasColumnType("numeric(10,2)")
+                        .HasColumnName("price")
+                        .HasDefaultValueSql("0");
+
+                    b.Property<int>("Supplierid")
+                        .HasColumnType("integer")
+                        .HasColumnName("supplierid");
+
+                    b.HasKey("Materialsupplierid")
                         .HasName("pk_materialsupplier");
 
                     b.HasIndex("Materialid");
+
+                    b.HasIndex("Supplierid");
 
                     b.ToTable("materialsupplier", (string)null);
                 });
@@ -617,23 +651,15 @@ namespace CafeManager.Infrastructure.Migrations
                         .IsRequired()
                         .HasConstraintName("fk_importdetails_imports");
 
-                    b.HasOne("CafeManager.Core.Data.Material", "Material")
+                    b.HasOne("CafeManager.Core.Data.Materialsupplier", "Materialsupplier")
                         .WithMany("Importdetails")
-                        .HasForeignKey("Materialid")
+                        .HasForeignKey("Materialsupplierid")
                         .IsRequired()
-                        .HasConstraintName("fk_importdetails_material");
-
-                    b.HasOne("CafeManager.Core.Data.Supplier", "Supplier")
-                        .WithMany("Importdetails")
-                        .HasForeignKey("Supplierid")
-                        .IsRequired()
-                        .HasConstraintName("fk_importdetails_supplier");
+                        .HasConstraintName("fk_importdetails_materialsupplier");
 
                     b.Navigation("Import");
 
-                    b.Navigation("Material");
-
-                    b.Navigation("Supplier");
+                    b.Navigation("Materialsupplier");
                 });
 
             modelBuilder.Entity("CafeManager.Core.Data.Invoice", b =>
@@ -673,8 +699,8 @@ namespace CafeManager.Infrastructure.Migrations
                         .HasConstraintName("fk_material_supplier");
 
                     b.HasOne("CafeManager.Core.Data.Supplier", "Supplier")
-                        .WithOne("Materialsupplier")
-                        .HasForeignKey("CafeManager.Core.Data.Materialsupplier", "Supplierid")
+                        .WithMany("Materialsuppliers")
+                        .HasForeignKey("Supplierid")
                         .IsRequired()
                         .HasConstraintName("fk_supplier_material");
 
@@ -712,16 +738,17 @@ namespace CafeManager.Infrastructure.Migrations
                 {
                     b.Navigation("Consumedmaterials");
 
-                    b.Navigation("Importdetails");
-
                     b.Navigation("Materialsuppliers");
+                });
+
+            modelBuilder.Entity("CafeManager.Core.Data.Materialsupplier", b =>
+                {
+                    b.Navigation("Importdetails");
                 });
 
             modelBuilder.Entity("CafeManager.Core.Data.Supplier", b =>
                 {
-                    b.Navigation("Importdetails");
-
-                    b.Navigation("Materialsupplier");
+                    b.Navigation("Materialsuppliers");
                 });
 #pragma warning restore 612, 618
         }

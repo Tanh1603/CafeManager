@@ -1,0 +1,57 @@
+﻿<UserControl
+    x:Class="CafeManager.WPF.Views.TestSupplierView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="clr-namespace:CafeManager.WPF.Views"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    d:DesignHeight="450"
+    d:DesignWidth="800"
+    mc:Ignorable="d">
+    <Grid Background="White">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <Grid Grid.Row="0">
+            <Button Content="Thêm" />
+        </Grid>
+
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="auto" />
+            </Grid.ColumnDefinitions>
+
+            <ListView Grid.Column="0" ItemsSource="{Binding AllSupplierList}">
+                <ListView.View>
+                    <GridView>
+                        <GridViewColumn DisplayMemberBinding="{Binding Suppliername}" Header="Tên nhà cung cấp" />
+                        <GridViewColumn DisplayMemberBinding="{Binding Representativesupplier}" Header="Người đại diện" />
+                        <GridViewColumn DisplayMemberBinding="{Binding Phone}" Header="Số điện thoại" />
+                        <GridViewColumn DisplayMemberBinding="{Binding Email}" Header="Email" />
+                        <GridViewColumn DisplayMemberBinding="{Binding Address}" Header="Địa chỉ" />
+                        <GridViewColumn DisplayMemberBinding="{Binding Notes}" Header="Thông tin khác" />
+                        <GridViewColumn Header="Options">
+                            <GridViewColumn.CellTemplate>
+                                <DataTemplate>
+                                    <ComboBox Width="100">
+                                        <ComboBoxItem>
+                                            <Button Content="Info" />
+                                        </ComboBoxItem>
+                                        <ComboBoxItem>
+                                            <Button Content="Xóa" />
+                                        </ComboBoxItem>
+                                        <ComboBoxItem>
+                                            <Button Content="Sửa" />
+                                        </ComboBoxItem>
+                                    </ComboBox>
+                                </DataTemplate>
+                            </GridViewColumn.CellTemplate>
+                        </GridViewColumn>
+                    </GridView>
+                </ListView.View>
+            </ListView>
+        </Grid>
+    </Grid>
+</UserControl>

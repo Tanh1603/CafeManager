@@ -18,12 +18,35 @@ namespace CafeManager.WPF.ViewModels
         private IServiceProvider _provider;
 
         [ObservableProperty]
-        private ObservableObject _curentViewModel;
+        private ObservableObject _currentViewModel;
 
         public MainViewModel(IServiceProvider provider)
         {
             _provider = provider;
-            CurentViewModel = _provider.GetRequiredService<TestViewModel>();
+
+            CurrentViewModel = _provider.GetRequiredService<TestImportViewModel>();
+        }
+
+        [RelayCommand]
+        private void TabSelectionChanged(string str)
+        {
+            switch (str)
+            {
+                case "Nhập kho":
+                    CurrentViewModel = _provider.GetRequiredService<TestImportViewModel>();
+                    break;
+
+                case "Tồn kho":
+                    CurrentViewModel = _provider.GetRequiredService<TestInventoryViewModel>();
+                    break;
+
+                case "Nhà cung cấp":
+                    CurrentViewModel = _provider.GetRequiredService<TestSupplierViewModel>();
+                    break;
+
+                default:
+                    break;
+            }
         }
     }
 }

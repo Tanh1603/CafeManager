@@ -9,11 +9,15 @@ public partial class Import
 {
     public int Importid { get; set; }
 
-    public DateOnly? Importdate { get; set; }
-
-    public string Deliveryrepresentative { get; set; }
+    public string Deliveryperson { get; set; }
 
     public string Phone { get; set; }
+
+    public string Shippingcompany { get; set; }
+
+    public DateTime Receiveddate { get; set; }
+
+    public string Receiver { get; set; }
 
     public bool? Isdeleted { get; set; }
 

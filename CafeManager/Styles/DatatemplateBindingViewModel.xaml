@@ -7,5 +7,15 @@
     <DataTemplate DataType="{x:Type viewmodels:TestViewModel}">
         <views:MainAdminView/>
     </DataTemplate>
+    <DataTemplate DataType="{x:Type viewmodels:TestImportViewModel}">
+        <views:TestImportView />
+    </DataTemplate>
 
+    <DataTemplate DataType="{x:Type viewmodels:TestInventoryViewModel}">
+        <views:TestInventoryView />
+    </DataTemplate>
+
+    <DataTemplate DataType="{x:Type viewmodels:TestSupplierViewModel}">
+        <views:TestSupplierView />
+    </DataTemplate>
 </ResourceDictionary>

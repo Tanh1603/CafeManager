@@ -13,7 +13,10 @@
                     BaseTheme="Light"
                     PrimaryColor="Brown"
                     SecondaryColor="Lime" />
-
+                <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Button.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Menu.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.ToolTip.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesign3.Defaults.xaml" />
                 <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesign2.Defaults.xaml" />
                 <ResourceDictionary Source="Styles/Image.xaml"/>
                 <ResourceDictionary Source="Styles/Textblock.xaml"/>
@@ -22,7 +25,6 @@
                 <ResourceDictionary Source="Styles/Icon.xaml"/>
                 <ResourceDictionary Source="Styles/DatePicker.xaml"/>
                 <ResourceDictionary Source="Styles/DataGrid.xaml"/>
-               
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Application.Resources>

@@ -99,14 +99,15 @@ CREATE TABLE Supplier (
 	
     CONSTRAINT PK_Supplier PRIMARY KEY (SupplierId)
 );
+
 ------------------- Tạo bảng Material -----------------------
 CREATE TABLE Material (
     MaterialId SERIAL,
-    MaterialName VARCHAR(100) NOT NULL,
-    Unit VARCHAR(50),
-    ExpiryDate DATE,
-    Price DECIMAL(10, 2) DEFAULT 0,
+    MaterialName VARCHAR(100) UNIQUE NOT NULL,
+    Unit VARCHAR(50) NOT NULL,
+	
     IsDeleted BOOLEAN DEFAULT FALSE,
+	
     CONSTRAINT PK_Material PRIMARY KEY (MaterialId)
 );
 ------------------- Tạo bảng Material_Supplier -----------------------
@@ -114,8 +115,14 @@ CREATE TABLE MaterialSupplier (
     MaterialSupplierId SERIAL,
     MaterialId INT NOT NULL,
     SupplierId INT NOT NULL,
-
-	CONSTRAINT PK_MaterialSupplier PRIMARY KEY (SupplierId),
+	ManufactureDate TIMESTAMP,
+	ExpirationDate TIMESTAMP,
+	Original VARCHAR(20) NOT NULL,
+	Manufacturer VARCHAR(50) NOT NULL,
+	Price DECIMAL(10, 2) DEFAULT 0,
+	IsDeleted BOOLEAN DEFAULT FALSE,
+	
+	CONSTRAINT PK_MaterialSupplier PRIMARY KEY (MaterialSupplierId),
     CONSTRAINT Fk_Material_Supplier FOREIGN KEY (MaterialId) REFERENCES Material(MaterialId),
     CONSTRAINT Fk_Supplier_Material FOREIGN KEY (SupplierId) REFERENCES Supplier(SupplierId)
 );
@@ -123,8 +130,7 @@ CREATE TABLE MaterialSupplier (
 CREATE TABLE ConsumedMaterials (
     ConsumedMaterialId SERIAL,
     MaterialId INT,
-    Quantity DECIMAL(10, 2) DEFAULT 0, -- Số lượng nguyên liệu đã tiêu thụ
-    Unit VARCHAR(50),
+    Quantity DECIMAL(10, 2) DEFAULT 0,
     IsDeleted BOOLEAN DEFAULT FALSE,
 
     CONSTRAINT PK_ConsumedMaterials PRIMARY KEY (ConsumedMaterialId),
@@ -133,25 +139,26 @@ CREATE TABLE ConsumedMaterials (
 ------------------- Tạo bảng Imports -----------------------
 CREATE TABLE Imports (
     ImportId SERIAL,
-    ImportDate DATE,
-	DeliveryRepresentative VARCHAR(50) NOT NULL, 
+	DeliveryPerson VARCHAR(50) NOT NULL, 
 	Phone VARCHAR(20) NOT NULL,
+	ShippingCompany VARCHAR(100),          
+    ReceivedDate TIMESTAMP NOT NULL,          
+    Receiver VARCHAR(100) NOT NULL, 
     IsDeleted BOOLEAN DEFAULT FALSE,
+	
     CONSTRAINT PK_Imports PRIMARY KEY (ImportId)
 );
 ------------------- Tạo bảng ImportDetails -----------------------
 CREATE TABLE ImportDetails (
     ImportDetailId SERIAL,
     ImportId INT NOT NULL,
-    MaterialId INT NOT NULL,
-	SupplierId INT NOT NULL,
-    Quantity INT DEFAULT 0,
+	MaterialSupplierId INT NOT NULL,
+	Quantity INT DEFAULT 0,
+	IsDeleted BOOLEAN DEFAULT FALSE,
 	
     CONSTRAINT PK_ImportDetails PRIMARY KEY (ImportDetailId),
     CONSTRAINT FK_ImportDetails_Imports FOREIGN KEY (ImportId) REFERENCES Imports(ImportId),
-    CONSTRAINT FK_ImportDetails_Material FOREIGN KEY (MaterialId) REFERENCES Material(MaterialId),
-	CONSTRAINT FK_ImportDetails_Supplier FOREIGN KEY (SupplierId) REFERENCES Supplier(SupplierId)
+    CONSTRAINT FK_ImportDetails_MaterialSupplier FOREIGN KEY (MaterialSupplierId) REFERENCES MaterialSupplier(MaterialSupplierId)
 );
-
 
 

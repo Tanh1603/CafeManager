@@ -10,13 +10,27 @@ namespace CafeManager.Core.Services
 {
     public interface IUnitOfWork : IDisposable
     {
-        IRepository<Foodcategory> FoodCategorys { get; }
-        IRepository<Food> Foods { get; }
-        IInvoicesRepository InvoiceRepository { get; }
+        IFoodCategoryRepository FoodCategoryList { get; }
+        IFoodRepository FoodList { get; }
+
+        ICoffeeTableRepository CoffeeTableList { get; }
+        IInvoicesRepository InvoiceList { get; }
         IRepository<Invoicedetail> InvoiceDetail { get; }
+
+        IImportRepository ImportList { get; }
+        IRepository<Importdetail> ImportDetailList { get; }
+        IMaterialRepository MaterialList { get; }
+        ISupplierRepository SupplierList { get; }
+        IRepository<Materialsupplier> MaterialSupplierList { get; }
 
         int Complete();
 
         Task<int> CompleteAsync();
+
+        Task BeginTransactionAsync();
+
+        Task CommitTransactionAsync();
+
+        Task RollbackTransactionAsync();
     }
 }

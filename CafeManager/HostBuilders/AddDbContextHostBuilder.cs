@@ -1,4 +1,5 @@
-﻿using CafeManager.Infrastructure.Models;
+﻿using CafeManager.Core.Services;
+using CafeManager.Infrastructure.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -17,11 +18,14 @@ namespace CafeManager.WPF.HostBuilders
         {
             hostBuilder.ConfigureServices((context, services) =>
             {
-                string connectionString = context.Configuration.GetConnectionString("postgreSql");
-
+                string? connectionString = context.Configuration.GetConnectionString("postgreSql");
                 Action<DbContextOptionsBuilder> configureDbContext = o => o.UseNpgsql(connectionString);
-                services.AddDbContext<CafeManagerContext>(configureDbContext);
-                services.AddSingleton<CafeManagerContextFactory>(new CafeManagerContextFactory(configureDbContext));
+
+                services.AddDbContextFactory<CafeManagerContext>(configureDbContext);
+
+                services.AddScoped<IUnitOfWork, UnitOfWork>(
+                                provider => new UnitOfWork(provider.GetRequiredService<IDbContextFactory<CafeManagerContext>>())
+                    );
             });
             return hostBuilder;
         }

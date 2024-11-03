@@ -21,50 +21,13 @@ namespace CafeManager.Infrastructure.Repositories
             _cafeManagerContext = cafeManagerContext;
         }
 
-        public async Task<T> Create(T entity)
+        public virtual async Task<T> Create(T entity)
         {
             EntityEntry<T> entityEntry = await _cafeManagerContext.Set<T>().AddAsync(entity);
             return entityEntry.Entity;
         }
 
-        public async Task<bool> Delete(int id)
-        {
-            var entity = await _cafeManagerContext.Set<T>().FindAsync(id);
-            if (entity != null)
-            {
-                var property = typeof(T).GetProperty("Isdeleted");
-                if (property != null)
-                {
-                    property.SetValue(entity, true);
-                    return true;
-                }
-            }
-            return false;
-        }
-
-        public async Task<IEnumerable<T>> GetAllAsync()
-        {
-            var allEntities = await _cafeManagerContext.Set<T>().ToListAsync();
-            return allEntities.Where(entity => IsEntityNotDeleted(entity));
-        }
-
-        private bool IsEntityNotDeleted(T entity)
-        {
-            var property = typeof(T).GetProperty("Isdeleted");
-            if (property != null)
-            {
-                var isDeletedValue = (bool)property.GetValue(entity);
-                return !isDeletedValue;
-            }
-            return true;
-        }
-
-        public async Task<T> GetById(int id)
-        {
-            return await _cafeManagerContext.Set<T>().FindAsync(id);
-        }
-
-        public T Update(T entity)
+        public virtual T? Update(T? entity)
         {
             var existingEntity = _cafeManagerContext.Set<T>().Local.FirstOrDefault(e => e == entity);
 
@@ -81,30 +44,44 @@ namespace CafeManager.Infrastructure.Repositories
             return entity;
         }
 
-        //public async Task<IEnumerable<T>> GetPagedAsync(int skip, int take)
-        //{
-        //    return await _cafeManagerContext.Set<T>().Skip(skip).Take(take).ToListAsync();
-        //}
+        public virtual async Task<bool> Delete(int id)
+        {
+            var entity = await _cafeManagerContext.Set<T>().FindAsync(id);
+            if (entity != null)
+            {
+                var property = typeof(T).GetProperty("Isdeleted");
+                if (property != null)
+                {
+                    property.SetValue(entity, true);
+                    return true;
+                }
+            }
+            return false;
+        }
 
-        //public async Task<IEnumerable<T>> GetSortedAsync<TKey>(Expression<Func<T, TKey>> keySelector, bool ascending = true)
-        //{
-        //    var query = _cafeManagerContext.Set<T>().AsQueryable();
+        private bool IsEntityNotDeleted(T entity)
+        {
+            var property = typeof(T).GetProperty("Isdeleted");
+            if (property != null)
+            {
+                var isDeletedValue = property.GetValue(entity) as bool?;
+                return isDeletedValue != true;
+            }
+            return true;
+        }
 
-        //    query = ascending ? query.OrderBy(keySelector) : query.OrderByDescending(keySelector);
+        public async Task<IEnumerable<T>> AddArange(IEnumerable<T> entities)
+        {
+            if (entities == null || !entities.Any())
+                return Enumerable.Empty<T>();
 
-        //    return await query.ToListAsync();
-        //}
+            await _cafeManagerContext.AddRangeAsync(entities);
+            return entities;
+        }
 
-        //public async Task<IEnumerable<T>> FindAsync(Expression<Func<T, bool>> predicate)
-        //{
-        //    return await _cafeManagerContext.Set<T>().Where(predicate).ToListAsync();
-        //}
-
-        //public async Task<IEnumerable<T>> SearchAndSortAsync(Expression<Func<T, bool>>? searchPredicate, Expression<Func<T, object>>? sortKeySelector, bool ascending, int skip, int take)
-        //{
-        //    var query = _cafeManagerContext.Set<T>().Where(searchPredicate);
-        //    query = ascending ? query.OrderBy(sortKeySelector) : query.OrderByDescending(sortKeySelector);
-        //    return await query.Skip(skip).Take(take).ToListAsync();
-        //}
+        public async Task<IEnumerable<T>> GetAll()
+        {
+            return await _cafeManagerContext.Set<T>().ToListAsync();
+        }
     }
 }

@@ -3,91 +3,104 @@ SELECT * FROM staff;
 
 SELECT * FROM foodcategory;
 SELECT * FROM food;
-SELECT * FROM customer;
 SELECT * FROM invoices;
 SELECT * FROM invoicedetails;
 SELECT * FROM coffeetable;
 
-SELECT * FROM supplier;
-SELECT * FROM material;
-SELECT * FROM consumedmaterials;
-SELECT * FROM materialsupplier;
 SELECT * FROM imports;
+ALTER SEQUENCE imports_ImportId_seq RESTART WITH 1;
+DELETE FROM imports;
+
+SELECT * FROM supplier;
+ALTER SEQUENCE supplier_supplierId_seq RESTART WITH 1;
+DELETE FROM supplier;
+
+SELECT * FROM material;
+ALTER SEQUENCE material_materialId_seq RESTART WITH 1;
+DELETE FROM material;
+
 SELECT * FROM importdetails;
+ALTER SEQUENCE importdetails_ImportDetailId_seq RESTART WITH 1;
+DELETE FROM importdetails;
 
-INSERT INTO foodcategory (displayname)
-VALUES ('Cafe'), ('Bánh ngọt'), ('Khác');
+SELECT * FROM materialsupplier;
+ALTER SEQUENCE materialsupplier_materialsupplierId_seq RESTART WITH 1;
+DELETE FROM materialsupplier;
 
-INSERT INTO food (displayname,price,imagefood,foodcategoryid) VALUES 
-('Trà sữa truyền thống',35000,'Trống', 7),
-('Trà sữa socola',35000,'Trống',7),
-('Cafe sữa',25000,'Trống',8),
-('Cafe đen',25000,'Trống',8),
-('Bánh kem bơ',35000,'Trống',9),
-('Bánh creep sầu riêng',45000,'Trống',9),
-('Bánh bông lan trứng muối',25000,'Trống',9),
-('Chưa biết 1', 1,'Trống',10),
-('Chưa biết 2',1,'Trống',10);
+SELECT * FROM consumedmaterials;
+ALTER SEQUENCE ConsumedMaterials_ConsumedMaterialId_seq RESTART WITH 1;
+DELETE FROM consumedmaterials;
 
-INSERT INTO customer (displayname, buydate, "type", totalspent) VALUES
-('Tanh 1', NOW(), 'Thường xuyên',0),
-('Tanh 2', NOW(), 'Vip',0),
-('Tanh 3', NOW(), 'Khách vãng lai',0),
-('Tanh 4', NOW(), 'Thường xuyên',0),
-('Tanh 5', NOW(), 'Vip',0);
+-- Tính tiền 1 bill
+SELECT ROUND(SUM(f.price * ivd.quantity * ((100 - f.discountfood)/100) * ((100 - iv.discountinvoice)/100)  ), 2) AS "Tổng tiền"
+FROM invoices iv JOIN invoicedetails ivd ON ivd.invoiceid = iv.invoiceid
+JOIN food f ON f.foodid = ivd.foodid
 
-INSERT INTO coffeetable (statustable) VALUES ('Trống'), ('Đã đặt'), ('Trống');
+SELECT ivd.invoiceid, f.foodname
+FROM invoicedetails ivd JOIN food f ON f.foodid = ivd.foodid
 
-INSERT INTO invoices (paymentdate, payementendate, paymentstatus, discountinvoice, coffeetableid, customerid) VALUES
-(Now(), Now(), 'Đã thanh toán', 0, 6, NULL),
-(Now(), Now(), 'Chưa thanh toán', 0, 6, NULL),
-(Now(), Now(), 'Chưa thanh toán', 0, NULL, 6),
-(Now(), Now(), 'Bị hủy', 0, NULL, 6),
-(Now(), Now(), 'Đã thanh toán', 0, NULL, 8),
-(Now(), Now(), 'Bị hủy', 0, NULL, 9),
-(Now(), Now(), 'Đã thanh toán', 0, 8, NULL);
+-- IMPORT ---
+INSERT INTO material(materialname, unit) VALUES
+('Muối', 'kg'),
+('Cafe', 'kg'),
+('Đường', 'kg'),
+('Ly', 'Thùng');
 
-INSERT INTO invoicedetails (invoiceid, foodid, quantity) VALUES
-(6, 6, 2),
-(6, 7, 5),
-(6, 8, 3),
-(7, 11, 5),
-(7, 12, 1),
-(8, 9, 2),
-(8, 10, 2),
-(8, 11, 2);
+INSERT INTO supplier(suppliername,representativesupplier,phone, email, address, notes) VALUES
+('Công ty A', 'Tanh A', '1111', '@gmail.com','VT','Chưa có'),
+('Công ty B', 'Tanh B', '2222', '@gmail.com','HCM','Chưa có'),
+('Công ty C', 'Tanh C', '3333', '@gmail.com','DN','Chưa có');
 
+INSERT INTO materialsupplier(
+	materialid, supplierid,manufacturer,original,manufacturedate,expirationdate,price
+) VALUES
+(1,1, 'Nhà máy A', 'Trung Quốc', NOW(), NOW(), 10000),
+(1,1, 'Nhà máy B', 'Hàn Quốc', NOW(), NOW(), 15000),
+(1,2, 'Nhà máy A', 'Trung Quốc', NOW(), NOW(), 11000),
+(2,3, 'Nhày máy cafe', 'Trung Quốc', NOW(), NOW(), 150000),
+(2,2, 'Nhà máy cafe 2', 'Việt Nam', NOW(), NOW(), 200000),
+(3,3, 'Nhà máy đương', 'Mĩ', NOW(), NOW(), 14000),
+(4,3, 'Nhà máy ly', 'Việt Nam', NOW(), NOW(), 20000);
 
-SELECT i.paymentdate, i.payementendate, i.paymentstatus, i.discountinvoice, c.statustable, f.displayname, ivd.quantity
-FROM invoices i JOIN coffeetable c ON i.coffeetableid = c.coffeetableid
-JOIN invoicedetails ivd ON ivd.invoiceid = i.invoiceid
-JOIN food f ON f.foodid= ivd.foodid;
+INSERT INTO imports(deliveryperson, phone, shippingcompany, receiveddate, receiver) VALUES
+( 'Người giao hàng 1', '1234', 'Shoppe', NOW(), 'Trần Văn A'),
+( 'Người giao hàng 2', '4321', 'Lazada', NOW(), 'Trần Văn B'),
+( 'Người giao hàng 3', '5678', 'Tiki', NOW(), 'Trần Văn C');
 
+INSERT INTO importdetails(importid,materialsupplierid, quantity) VALUES
+(1, 1, 20),
+(1, 3, 10),
+(1, 5, 5),
+(2, 1, 10),
+(2, 2, 5),
+(2, 3, 8),
+(3, 4, 2),
+(3, 6, 2),
+(3, 7, 2);
 
-SELECT c.displayname, c."type", C.buydate,
-ROUND( SUM(
-	COALESCE(IVD.QUANTITY, 0) * COALESCE(F.PRICE, 0) * (1 - COALESCE(F.DISCOUNTFOOD / 100, 0)) * (1 - COALESCE(IV.DISCOUNTINVOICE / 100, 0))
-) , 2) AS "Total spent"
-FROM
-	CUSTOMER C
-	JOIN INVOICES IV ON C.CUstomerid = iv.customerid
-LEFT JOIN invoicedetails ivd ON ivd.invoiceid = iv.invoiceid
-LEFT JOIN food f On f.foodid = ivd.foodid
-GROUP BY c.customerid;
+INSERT INTO consumedmaterials(materialid,quantity) VALUES
+(1,10),
+(2, 10);
 
-SELECT * from invoices i JOIN invoicedetails ivd ON i.invoiceid = ivd.invoiceid;
-SELECT * from imports i JOIN importdetails ON importdetails.importid = i.importid ;
+-- Material Detail
+SELECT m.materialname, m.unit, ms.manufacturer, ms.original, 
+ms.manufacturedate, ms.expirationdate, s.suppliername, ms.price,
+SUM(imd.quantity) as "Tổng số lượng"
+FROM material m LEFT JOIN MaterialSupplier ms ON ms.materialid = m.materialid
+JOIN Supplier s ON s.supplierid = ms.supplierid
+JOIN importdetails imd ON imd.materialsupplierid = ms.materialsupplierid
+GROUP BY m.materialname, m.unit, ms.original, 
+ms.manufacturedate, ms.expirationdate,ms.manufacturer, s.suppliername, ms.price;
 
-
-
-
-
-
-
-
-
-
-
+-- Used material
+SELECT m.materialname, m.unit, ms.manufacturer, ms.original, 
+ms.manufacturedate, ms.expirationdate, s.suppliername, ms.price, Sum(cs.quantity)
+FROM consumedmaterials cs JOIN material m ON m.materialid = cs.materialid
+JOIN materialsupplier ms ON ms.materialid = m.materialid
+JOIN supplier s ON s.supplierid = ms.supplierid
+JOIN importdetails imd ON imd.materialsupplierid = ms.materialsupplierid
+GROUP BY m.materialname, m.unit, ms.original, 
+ms.manufacturedate, ms.expirationdate,ms.manufacturer, s.suppliername, ms.price;
 
 
 

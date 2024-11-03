@@ -105,9 +105,6 @@ public partial class CafeManagerContext : DbContext
                 .HasPrecision(10, 2)
                 .HasDefaultValueSql("0")
                 .HasColumnName("quantity");
-            entity.Property(e => e.Unit)
-                .HasMaxLength(50)
-                .HasColumnName("unit");
 
             entity.HasOne(d => d.Material).WithMany(p => p.Consumedmaterials)
                 .HasForeignKey(d => d.Materialid)
@@ -168,11 +165,10 @@ public partial class CafeManagerContext : DbContext
             entity.ToTable("imports");
 
             entity.Property(e => e.Importid).HasColumnName("importid");
-            entity.Property(e => e.Deliveryrepresentative)
+            entity.Property(e => e.Deliveryperson)
                 .IsRequired()
                 .HasMaxLength(50)
-                .HasColumnName("deliveryrepresentative");
-            entity.Property(e => e.Importdate).HasColumnName("importdate");
+                .HasColumnName("deliveryperson");
             entity.Property(e => e.Isdeleted)
                 .HasDefaultValue(false)
                 .HasColumnName("isdeleted");
@@ -180,6 +176,16 @@ public partial class CafeManagerContext : DbContext
                 .IsRequired()
                 .HasMaxLength(20)
                 .HasColumnName("phone");
+            entity.Property(e => e.Receiveddate)
+                .HasColumnType("timestamp without time zone")
+                .HasColumnName("receiveddate");
+            entity.Property(e => e.Receiver)
+                .IsRequired()
+                .HasMaxLength(100)
+                .HasColumnName("receiver");
+            entity.Property(e => e.Shippingcompany)
+                .HasMaxLength(100)
+                .HasColumnName("shippingcompany");
         });
 
         modelBuilder.Entity<Importdetail>(entity =>
@@ -190,26 +196,23 @@ public partial class CafeManagerContext : DbContext
 
             entity.Property(e => e.Importdetailid).HasColumnName("importdetailid");
             entity.Property(e => e.Importid).HasColumnName("importid");
-            entity.Property(e => e.Materialid).HasColumnName("materialid");
+            entity.Property(e => e.Isdeleted)
+                .HasDefaultValue(false)
+                .HasColumnName("isdeleted");
+            entity.Property(e => e.Materialsupplierid).HasColumnName("materialsupplierid");
             entity.Property(e => e.Quantity)
                 .HasDefaultValue(0)
                 .HasColumnName("quantity");
-            entity.Property(e => e.Supplierid).HasColumnName("supplierid");
 
             entity.HasOne(d => d.Import).WithMany(p => p.Importdetails)
                 .HasForeignKey(d => d.Importid)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("fk_importdetails_imports");
 
-            entity.HasOne(d => d.Material).WithMany(p => p.Importdetails)
-                .HasForeignKey(d => d.Materialid)
+            entity.HasOne(d => d.Materialsupplier).WithMany(p => p.Importdetails)
+                .HasForeignKey(d => d.Materialsupplierid)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("fk_importdetails_material");
-
-            entity.HasOne(d => d.Supplier).WithMany(p => p.Importdetails)
-                .HasForeignKey(d => d.Supplierid)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("fk_importdetails_supplier");
+                .HasConstraintName("fk_importdetails_materialsupplier");
         });
 
         modelBuilder.Entity<Invoice>(entity =>
@@ -279,8 +282,9 @@ public partial class CafeManagerContext : DbContext
 
             entity.ToTable("material");
 
+            entity.HasIndex(e => e.Materialname, "material_materialname_key").IsUnique();
+
             entity.Property(e => e.Materialid).HasColumnName("materialid");
-            entity.Property(e => e.Expirydate).HasColumnName("expirydate");
             entity.Property(e => e.Isdeleted)
                 .HasDefaultValue(false)
                 .HasColumnName("isdeleted");
@@ -288,36 +292,50 @@ public partial class CafeManagerContext : DbContext
                 .IsRequired()
                 .HasMaxLength(100)
                 .HasColumnName("materialname");
-            entity.Property(e => e.Price)
-                .HasPrecision(10, 2)
-                .HasDefaultValueSql("0")
-                .HasColumnName("price");
             entity.Property(e => e.Unit)
+                .IsRequired()
                 .HasMaxLength(50)
                 .HasColumnName("unit");
         });
 
         modelBuilder.Entity<Materialsupplier>(entity =>
         {
-            entity.HasKey(e => e.Supplierid).HasName("pk_materialsupplier");
+            entity.HasKey(e => e.Materialsupplierid).HasName("pk_materialsupplier");
 
             entity.ToTable("materialsupplier");
 
-            entity.Property(e => e.Supplierid)
-                .ValueGeneratedNever()
-                .HasColumnName("supplierid");
+            entity.Property(e => e.Materialsupplierid).HasColumnName("materialsupplierid");
+            entity.Property(e => e.Expirationdate)
+                .HasColumnType("timestamp without time zone")
+                .HasColumnName("expirationdate");
+            entity.Property(e => e.Isdeleted)
+                .HasDefaultValue(false)
+                .HasColumnName("isdeleted");
+            entity.Property(e => e.Manufacturedate)
+                .HasColumnType("timestamp without time zone")
+                .HasColumnName("manufacturedate");
+            entity.Property(e => e.Manufacturer)
+                .IsRequired()
+                .HasMaxLength(50)
+                .HasColumnName("manufacturer");
             entity.Property(e => e.Materialid).HasColumnName("materialid");
-            entity.Property(e => e.Materialsupplierid)
-                .ValueGeneratedOnAdd()
-                .HasColumnName("materialsupplierid");
+            entity.Property(e => e.Original)
+                .IsRequired()
+                .HasMaxLength(20)
+                .HasColumnName("original");
+            entity.Property(e => e.Price)
+                .HasPrecision(10, 2)
+                .HasDefaultValueSql("0")
+                .HasColumnName("price");
+            entity.Property(e => e.Supplierid).HasColumnName("supplierid");
 
             entity.HasOne(d => d.Material).WithMany(p => p.Materialsuppliers)
                 .HasForeignKey(d => d.Materialid)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("fk_material_supplier");
 
-            entity.HasOne(d => d.Supplier).WithOne(p => p.Materialsupplier)
-                .HasForeignKey<Materialsupplier>(d => d.Supplierid)
+            entity.HasOne(d => d.Supplier).WithMany(p => p.Materialsuppliers)
+                .HasForeignKey(d => d.Supplierid)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("fk_supplier_material");
         });

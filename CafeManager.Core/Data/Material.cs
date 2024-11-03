@@ -13,15 +13,9 @@ public partial class Material
 
     public string Unit { get; set; }
 
-    public DateOnly? Expirydate { get; set; }
-
-    public decimal? Price { get; set; }
-
     public bool? Isdeleted { get; set; }
 
     public virtual ICollection<Consumedmaterial> Consumedmaterials { get; set; } = new List<Consumedmaterial>();
-
-    public virtual ICollection<Importdetail> Importdetails { get; set; } = new List<Importdetail>();
 
     public virtual ICollection<Materialsupplier> Materialsuppliers { get; set; } = new List<Materialsupplier>();
 }

@@ -13,8 +13,6 @@ public partial class Consumedmaterial
 
     public decimal? Quantity { get; set; }
 
-    public string Unit { get; set; }
-
     public bool? Isdeleted { get; set; }
 
     public virtual Material Material { get; set; }

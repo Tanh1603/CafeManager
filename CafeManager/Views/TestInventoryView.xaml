@@ -1,0 +1,62 @@
+﻿<UserControl
+    x:Class="CafeManager.WPF.Views.TestInventoryView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="clr-namespace:CafeManager.WPF.Views"
+    xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    d:DesignHeight="450"
+    mc:Ignorable="d">
+
+    <Grid Margin="16">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <GroupBox
+            Grid.Row="0"
+            Margin="0,10"
+            materialDesign:ElevationAssist.Elevation="Dp6"
+            Header="Số lượng đã sử dụng"
+            Style="{StaticResource MaterialDesignCardGroupBox}">
+            <ListView Grid.Column="0" ItemsSource="{Binding AllUsedMaterialList}">
+                <ListView.View>
+                    <GridView>
+                        <GridViewColumn DisplayMemberBinding="{Binding Materialname}" Header="Tên vật tư" />
+                        <GridViewColumn DisplayMemberBinding="{Binding Suppliername}" Header="Nhà cung cấp" />
+                        <GridViewColumn DisplayMemberBinding="{Binding Price}" Header="Giá" />
+                        <GridViewColumn DisplayMemberBinding="{Binding Unit}" Header="Đơn vị đo" />
+                        <GridViewColumn DisplayMemberBinding="{Binding Quantity}" Header="Số lượng đã sử dụng" />
+                        <GridViewColumn DisplayMemberBinding="{Binding Original}" Header="Xuất xứ" />
+                        <GridViewColumn DisplayMemberBinding="{Binding Manufacturer}" Header="Nhà sản xuất" />
+                        <GridViewColumn DisplayMemberBinding="{Binding Manufacturedate}" Header="Ngày sản xuất" />
+                        <GridViewColumn DisplayMemberBinding="{Binding Expirationdate}" Header="Ngày hết hạn" />
+                    </GridView>
+                </ListView.View>
+            </ListView>
+        </GroupBox>
+        <GroupBox
+            Grid.Row="1"
+            materialDesign:ElevationAssist.Elevation="Dp6"
+            Header="Số lượng tồn kho"
+            Style="{StaticResource MaterialDesignCardGroupBox}">
+            <ListView ItemsSource="{Binding AllInventoryList}">
+                <ListView.View>
+                    <GridView>
+                        <GridViewColumn DisplayMemberBinding="{Binding Materialname}" Header="Tên vật tư" />
+                        <GridViewColumn DisplayMemberBinding="{Binding Suppliername}" Header="Nhà cung cấp" />
+                        <GridViewColumn DisplayMemberBinding="{Binding Price}" Header="Giá" />
+                        <GridViewColumn DisplayMemberBinding="{Binding Unit}" Header="Đơn vị đo" />
+                        <GridViewColumn DisplayMemberBinding="{Binding Quantity}" Header="Số lượng tồn kho" />
+                        <GridViewColumn DisplayMemberBinding="{Binding Original}" Header="Xuất xứ" />
+                        <GridViewColumn DisplayMemberBinding="{Binding Manufacturer}" Header="Nhà sản xuất" />
+                        <GridViewColumn DisplayMemberBinding="{Binding Manufacturedate}" Header="Ngày sản xuất" />
+                        <GridViewColumn DisplayMemberBinding="{Binding Expirationdate}" Header="Ngày hết hạn" />
+                    </GridView>
+                </ListView.View>
+            </ListView>
+        </GroupBox>
+    </Grid>
+</UserControl>

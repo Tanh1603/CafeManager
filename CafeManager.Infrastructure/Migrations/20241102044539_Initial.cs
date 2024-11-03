@@ -66,9 +66,11 @@ namespace CafeManager.Infrastructure.Migrations
                 {
                     importid = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    importdate = table.Column<DateOnly>(type: "date", nullable: true),
-                    deliveryrepresentative = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: false),
+                    deliveryperson = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: false),
                     phone = table.Column<string>(type: "character varying(20)", maxLength: 20, nullable: false),
+                    shippingcompany = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: true),
+                    receiveddate = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
+                    receiver = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
                     isdeleted = table.Column<bool>(type: "boolean", nullable: true, defaultValue: false)
                 },
                 constraints: table =>
@@ -83,9 +85,7 @@ namespace CafeManager.Infrastructure.Migrations
                     materialid = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     materialname = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
-                    unit = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: true),
-                    expirydate = table.Column<DateOnly>(type: "date", nullable: true),
-                    price = table.Column<decimal>(type: "numeric(10,2)", precision: 10, scale: 2, nullable: true, defaultValueSql: "0"),
+                    unit = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: false),
                     isdeleted = table.Column<bool>(type: "boolean", nullable: true, defaultValue: false)
                 },
                 constraints: table =>
@@ -190,7 +190,6 @@ namespace CafeManager.Infrastructure.Migrations
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     materialid = table.Column<int>(type: "integer", nullable: true),
                     quantity = table.Column<decimal>(type: "numeric(10,2)", precision: 10, scale: 2, nullable: true, defaultValueSql: "0"),
-                    unit = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: true),
                     isdeleted = table.Column<bool>(type: "boolean", nullable: true, defaultValue: false)
                 },
                 constraints: table =>
@@ -204,48 +203,23 @@ namespace CafeManager.Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "importdetails",
-                columns: table => new
-                {
-                    importdetailid = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    importid = table.Column<int>(type: "integer", nullable: false),
-                    materialid = table.Column<int>(type: "integer", nullable: false),
-                    supplierid = table.Column<int>(type: "integer", nullable: false),
-                    quantity = table.Column<int>(type: "integer", nullable: true, defaultValue: 0)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("pk_importdetails", x => x.importdetailid);
-                    table.ForeignKey(
-                        name: "fk_importdetails_imports",
-                        column: x => x.importid,
-                        principalTable: "imports",
-                        principalColumn: "importid");
-                    table.ForeignKey(
-                        name: "fk_importdetails_material",
-                        column: x => x.materialid,
-                        principalTable: "material",
-                        principalColumn: "materialid");
-                    table.ForeignKey(
-                        name: "fk_importdetails_supplier",
-                        column: x => x.supplierid,
-                        principalTable: "supplier",
-                        principalColumn: "supplierid");
-                });
-
-            migrationBuilder.CreateTable(
                 name: "materialsupplier",
                 columns: table => new
                 {
-                    supplierid = table.Column<int>(type: "integer", nullable: false),
                     materialsupplierid = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    materialid = table.Column<int>(type: "integer", nullable: false)
+                    materialid = table.Column<int>(type: "integer", nullable: false),
+                    supplierid = table.Column<int>(type: "integer", nullable: false),
+                    manufacturedate = table.Column<DateTime>(type: "timestamp without time zone", nullable: true),
+                    expirationdate = table.Column<DateTime>(type: "timestamp without time zone", nullable: true),
+                    original = table.Column<string>(type: "character varying(20)", maxLength: 20, nullable: false),
+                    manufacturer = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: false),
+                    price = table.Column<decimal>(type: "numeric(10,2)", precision: 10, scale: 2, nullable: true, defaultValueSql: "0"),
+                    isdeleted = table.Column<bool>(type: "boolean", nullable: true, defaultValue: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("pk_materialsupplier", x => x.supplierid);
+                    table.PrimaryKey("pk_materialsupplier", x => x.materialsupplierid);
                     table.ForeignKey(
                         name: "fk_material_supplier",
                         column: x => x.materialid,
@@ -284,6 +258,32 @@ namespace CafeManager.Infrastructure.Migrations
                         principalColumn: "invoiceid");
                 });
 
+            migrationBuilder.CreateTable(
+                name: "importdetails",
+                columns: table => new
+                {
+                    importdetailid = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    importid = table.Column<int>(type: "integer", nullable: false),
+                    materialsupplierid = table.Column<int>(type: "integer", nullable: false),
+                    quantity = table.Column<int>(type: "integer", nullable: true, defaultValue: 0),
+                    isdeleted = table.Column<bool>(type: "boolean", nullable: true, defaultValue: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("pk_importdetails", x => x.importdetailid);
+                    table.ForeignKey(
+                        name: "fk_importdetails_imports",
+                        column: x => x.importid,
+                        principalTable: "imports",
+                        principalColumn: "importid");
+                    table.ForeignKey(
+                        name: "fk_importdetails_materialsupplier",
+                        column: x => x.materialsupplierid,
+                        principalTable: "materialsupplier",
+                        principalColumn: "materialsupplierid");
+                });
+
             migrationBuilder.CreateIndex(
                 name: "IX_consumedmaterials_materialid",
                 table: "consumedmaterials",
@@ -300,14 +300,9 @@ namespace CafeManager.Infrastructure.Migrations
                 column: "importid");
 
             migrationBuilder.CreateIndex(
-                name: "IX_importdetails_materialid",
+                name: "IX_importdetails_materialsupplierid",
                 table: "importdetails",
-                column: "materialid");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_importdetails_supplierid",
-                table: "importdetails",
-                column: "supplierid");
+                column: "materialsupplierid");
 
             migrationBuilder.CreateIndex(
                 name: "IX_invoicedetails_foodid",
@@ -325,9 +320,20 @@ namespace CafeManager.Infrastructure.Migrations
                 column: "coffeetableid");
 
             migrationBuilder.CreateIndex(
+                name: "material_materialname_key",
+                table: "material",
+                column: "materialname",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
                 name: "IX_materialsupplier_materialid",
                 table: "materialsupplier",
                 column: "materialid");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_materialsupplier_supplierid",
+                table: "materialsupplier",
+                column: "supplierid");
         }
 
         /// <inheritdoc />
@@ -346,13 +352,13 @@ namespace CafeManager.Infrastructure.Migrations
                 name: "invoicedetails");
 
             migrationBuilder.DropTable(
-                name: "materialsupplier");
-
-            migrationBuilder.DropTable(
                 name: "staff");
 
             migrationBuilder.DropTable(
                 name: "imports");
+
+            migrationBuilder.DropTable(
+                name: "materialsupplier");
 
             migrationBuilder.DropTable(
                 name: "food");

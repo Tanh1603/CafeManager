@@ -1,4 +1,5 @@
-﻿using CafeManager.Core.Repositories;
+﻿using CafeManager.Core.Data;
+using CafeManager.Core.Repositories;
 using CafeManager.Core.Services;
 using CafeManager.Infrastructure.Models;
 using CafeManager.Infrastructure.Repositories;
@@ -20,12 +21,16 @@ namespace CafeManager.WPF.HostBuilders
         {
             hostBuilder.ConfigureServices(services =>
             {
-                services.AddTransient(typeof(IRepository<>), typeof(Repository<>));
-                services.AddScoped<IUnitOfWork, UnitOfWork>(
-                        provider => new UnitOfWork(provider.GetRequiredService<CafeManagerContextFactory>().CreateDbContext())
-                    );
+                services.AddScoped<FoodServices>(provider => new FoodServices(provider));
+                services.AddScoped<FoodCategoryServices>(provider => new FoodCategoryServices(provider));
+                services.AddScoped<FoodServices>(provider => new FoodServices(provider));
+                services.AddScoped<CoffeTableServices>(provider => new CoffeTableServices(provider));
+                services.AddScoped<InvoiceServices>(provider => new InvoiceServices(provider));
 
-                services.AddTransient<FoodServices>(provider => new FoodServices(provider));
+                services.AddScoped<ImportServices>(provider => new ImportServices(provider));
+                services.AddScoped<ImportDetailServices>(provider => new ImportDetailServices(provider));
+
+                services.AddScoped<MaterialSupplierServices>(provider => new MaterialSupplierServices(provider));
             });
             return hostBuilder;
         }

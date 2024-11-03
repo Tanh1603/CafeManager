@@ -36,13 +36,10 @@ namespace CafeManager.WPF
 
         protected override void OnStartup(StartupEventArgs e)
         {
-            base.OnStartup(e);
             _host.Start();
-            Window window = new MainWindow()
-            {
-                DataContext = _host.Services.GetRequiredService<MainViewModel>()
-            };
+            Window window = _host.Services.GetRequiredService<MainWindow>();
             window.Show();
+            base.OnStartup(e);
         }
 
         protected override async void OnExit(ExitEventArgs e)

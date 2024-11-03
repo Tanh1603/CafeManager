@@ -168,12 +168,12 @@
                         x:Name="closeIcon"
                         Margin="0,8,15,0"
                         Kind="Minus"
-                        MouseLeftButtonUp="closeIcon_MouseLeftButtonUp"
+                        MouseLeftButtonUp="minimizeIcon_MouseLeftButtonUp"
                         Style="{StaticResource ìconApp}" />
                     <ma:PackIconMaterial
                         x:Name="minimizeIcon"
                         Kind="Close"
-                        MouseLeftButtonUp="minimizeIcon_MouseLeftButtonUp"
+                        MouseLeftButtonUp="closeIcon_MouseLeftButtonUp"
                         Style="{StaticResource ìconApp}" />
                 </StackPanel>
 

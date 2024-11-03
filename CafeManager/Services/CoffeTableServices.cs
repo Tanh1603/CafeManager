@@ -47,7 +47,7 @@ namespace CafeManager.WPF.Services
 
         public async Task<bool> DeleteCoffeeTable(int id)
         {
-            var res = await _unitOfWork.CoffeeTableList?.Delete(id);
+            var res = await _unitOfWork.CoffeeTableList.Delete(id);
             _unitOfWork.Complete();
             return res;
         }

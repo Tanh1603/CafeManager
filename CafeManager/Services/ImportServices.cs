@@ -21,12 +21,12 @@ namespace CafeManager.WPF.Services
             _unitOfWork = provider.GetRequiredService<IUnitOfWork>();
         }
 
-        public async Task<IEnumerable<Import>?> GetImportList()
+        public async Task<IEnumerable<Import>?> GetListImport()
         {
             return await _unitOfWork.ImportList.GetAllImportsAsync();
         }
 
-        public async Task<IEnumerable<MaterialDetailDTO>?> GetImportDetailByImportId(int id)
+        public async Task<IEnumerable<MaterialDetailDTO>?> GetListImportDetailByImportId(int id)
         {
             var listImport = await _unitOfWork.ImportList.GetAllImportsDetailsByImportIdAsync(id);
             return listImport.Where(x => x.Materialsupplier.Isdeleted == false)
@@ -47,7 +47,7 @@ namespace CafeManager.WPF.Services
 
         #region Tính toán dữ liệu
 
-        private decimal CaculatePriceOfImportdetailist(IEnumerable<Importdetail> importdetails)
+        private decimal CaculatePriceOfListImportdetai(IEnumerable<Importdetail> importdetails)
         {
             return importdetails.Sum(
                     x => (x.Quantity ?? 0) * (x.Materialsupplier?.Price ?? 0)
@@ -57,13 +57,13 @@ namespace CafeManager.WPF.Services
         public async Task<decimal> GetTotalPriceImports()
         {
             var listImport = await _unitOfWork.ImportList.GetAllImportsAsync();
-            return listImport.Sum(x => CaculatePriceOfImportdetailist(x.Importdetails));
+            return listImport.Sum(x => CaculatePriceOfListImportdetai(x.Importdetails));
         }
 
         public async Task<decimal> GetTotalPriceImportById(int id)
         {
             var listImportDetailById = await _unitOfWork.ImportList.GetAllImportsDetailsByImportIdAsync(id);
-            return CaculatePriceOfImportdetailist(listImportDetailById);
+            return CaculatePriceOfListImportdetai(listImportDetailById);
         }
 
         #endregion Tính toán dữ liệu

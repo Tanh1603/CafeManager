@@ -21,25 +21,25 @@ namespace CafeManager.WPF.Services
             _unitOfWork = provider.GetRequiredService<IUnitOfWork>();
         }
 
-        public async Task<IEnumerable<Material>> GetMaterialList()
+        public async Task<IEnumerable<Material>> GetListMaterial()
         {
             return await _unitOfWork.MaterialList.GetAllMaterialAsync();
         }
 
-        public async Task<IEnumerable<Supplier>> GetSupplierList()
+        public async Task<IEnumerable<Supplier>> GetListSupplier()
         {
             return await _unitOfWork.SupplierList.GetAllSupplierAsync();
         }
 
-        public async Task<IEnumerable<MaterialDetailDTO>?> GetConsumedMaterialList()
+        public async Task<IEnumerable<MaterialDetailDTO>?> GetListConsumedMaterial()
         {
             return await _unitOfWork.MaterialList.GetAllUsedMaterial();
         }
 
         public async Task<List<MaterialDetailDTO>> GetInventoryList()
         {
-            var totalList = await GetMaterialWithDetailList();
-            var usedList = await GetConsumedMaterialList();
+            var totalList = await GetListMaterialWithDetail();
+            var usedList = await GetListConsumedMaterial();
             List<MaterialDetailDTO> res = new List<MaterialDetailDTO>();
             if (totalList != null)
             {
@@ -68,7 +68,7 @@ namespace CafeManager.WPF.Services
             return res;
         }
 
-        public async Task<IEnumerable<MaterialDetailDTO>?> GetMaterialWithDetailList()
+        public async Task<IEnumerable<MaterialDetailDTO>?> GetListMaterialWithDetail()
         {
             return await _unitOfWork.MaterialList.GetAllMaterialWithDetail();
         }

@@ -14,7 +14,7 @@ using System.Threading.Tasks;
 
 namespace CafeManager.WPF.ViewModels
 {
-    public partial class TestViewModel : ObservableObject
+    public partial class SupplierViewModel : ObservableObject
     {
         private readonly IServiceProvider _serviceProvider;
         private readonly FoodCategoryServices _foodCategoryServices;
@@ -29,12 +29,13 @@ namespace CafeManager.WPF.ViewModels
         [ObservableProperty]
         private Foodcategory _selectedFoodCategory = new();
 
-        public TestViewModel(IServiceProvider provider)
+        public SupplierViewModel(IServiceProvider provider)
         {
             _serviceProvider = provider;
             _foodCategoryServices = provider.GetRequiredService<FoodCategoryServices>();
             _foodServices = provider.GetRequiredService<FoodServices>();
-            Task.Run(() => LoadData());
+
+            LoadData();
         }
 
         private async Task LoadData()

@@ -26,30 +26,6 @@ namespace CafeManager.WPF.Views
         public MainAdminView()
         {
             InitializeComponent();
-            //var converter = new BrushConverter();
-            //ObservableCollection<Supplier> suppliers = new ObservableCollection<Supplier>();
-
-            ////Demo hiển thị datagrid
-            //suppliers.Add(new Supplier { Number = "1", Character = "J", BgColor = (Brush)converter.ConvertFromString("#1098AD"), Name = "John Doe", Email = "john.doe@gmail.com", Phone = "415-954-1475", Address = "VietNam" });
-            //suppliers.Add(new Supplier { Number = "1", Character = "J", BgColor = (Brush)converter.ConvertFromString("#1098AD"), Name = "John Doe", Email = "john.doe@gmail.com", Phone = "415-954-1475", Address = "VietNam" });
-            //suppliers.Add(new Supplier { Number = "1", Character = "J", BgColor = (Brush)converter.ConvertFromString("#1098AD"), Name = "John Doe", Email = "john.doe@gmail.com", Phone = "415-954-1475", Address = "VietNam" });
-            //suppliers.Add(new Supplier { Number = "1", Character = "J", BgColor = (Brush)converter.ConvertFromString("#1098AD"), Name = "John Doe", Email = "john.doe@gmail.com", Phone = "415-954-1475", Address = "VietNam" });
-            //suppliers.Add(new Supplier { Number = "1", Character = "J", BgColor = (Brush)converter.ConvertFromString("#1098AD"), Name = "John Doe", Email = "john.doe@gmail.com", Phone = "415-954-1475", Address = "VietNam" });
-            //suppliers.Add(new Supplier { Number = "1", Character = "J", BgColor = (Brush)converter.ConvertFromString("#1098AD"), Name = "John Doe", Email = "john.doe@gmail.com", Phone = "415-954-1475", Address = "VietNam" });
-            //suppliers.Add(new Supplier { Number = "1", Character = "J", BgColor = (Brush)converter.ConvertFromString("#1098AD"), Name = "John Doe", Email = "john.doe@gmail.com", Phone = "415-954-1475", Address = "VietNam" });
-            //suppliers.Add(new Supplier { Number = "1", Character = "J", BgColor = (Brush)converter.ConvertFromString("#1098AD"), Name = "John Doe", Email = "john.doe@gmail.com", Phone = "415-954-1475", Address = "VietNam" });
-            //suppliers.Add(new Supplier { Number = "1", Character = "J", BgColor = (Brush)converter.ConvertFromString("#1098AD"), Name = "John Doe", Email = "john.doe@gmail.com", Phone = "415-954-1475", Address = "VietNam" });
-            //suppliers.Add(new Supplier { Number = "1", Character = "J", BgColor = (Brush)converter.ConvertFromString("#1098AD"), Name = "John Doe", Email = "john.doe@gmail.com", Phone = "415-954-1475", Address = "VietNam" });
-            //suppliers.Add(new Supplier { Number = "1", Character = "J", BgColor = (Brush)converter.ConvertFromString("#1098AD"), Name = "John Doe", Email = "john.doe@gmail.com", Phone = "415-954-1475", Address = "VietNam" });
-            //suppliers.Add(new Supplier { Number = "1", Character = "J", BgColor = (Brush)converter.ConvertFromString("#1098AD"), Name = "John Doe", Email = "john.doe@gmail.com", Phone = "415-954-1475", Address = "VietNam" });
-            //suppliers.Add(new Supplier { Number = "1", Character = "J", BgColor = (Brush)converter.ConvertFromString("#1098AD"), Name = "John Doe", Email = "john.doe@gmail.com", Phone = "415-954-1475", Address = "VietNam" });
-            //suppliers.Add(new Supplier { Number = "1", Character = "J", BgColor = (Brush)converter.ConvertFromString("#1098AD"), Name = "John Doe", Email = "john.doe@gmail.com", Phone = "415-954-1475", Address = "VietNam" });
-            //suppliers.Add(new Supplier { Number = "1", Character = "J", BgColor = (Brush)converter.ConvertFromString("#1098AD"), Name = "John Doe", Email = "john.doe@gmail.com", Phone = "415-954-1475", Address = "VietNam" });
-            //suppliers.Add(new Supplier { Number = "1", Character = "J", BgColor = (Brush)converter.ConvertFromString("#1098AD"), Name = "John Doe", Email = "john.doe@gmail.com", Phone = "415-954-1475", Address = "VietNam" });
-            //suppliers.Add(new Supplier { Number = "1", Character = "J", BgColor = (Brush)converter.ConvertFromString("#1098AD"), Name = "John Doe", Email = "john.doe@gmail.com", Phone = "415-954-1475", Address = "VietNam" });
-            //suppliers.Add(new Supplier { Number = "1", Character = "J", BgColor = (Brush)converter.ConvertFromString("#1098AD"), Name = "John Doe", Email = "john.doe@gmail.com", Phone = "415-954-1475", Address = "VietNam" });
-            //suppliers.Add(new Supplier { Number = "1", Character = "J", BgColor = (Brush)converter.ConvertFromString("#1098AD"), Name = "John Doe", Email = "john.doe@gmail.com", Phone = "415-954-1475", Address = "VietNam" });
-            //SuppliersDataGrid.ItemsSource = suppliers;
         }
 
         private void Border_MouseDown(object sender, MouseButtonEventArgs e)
@@ -63,28 +39,16 @@ namespace CafeManager.WPF.Views
 
         private void closeIcon_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
-            Window parentWindow = Window.GetWindow(this);
-            //this.Visibility = Visibility.Collapsed;
-            parentWindow?.Close();
+            if (MessageBox.Show("Bạn có chắc chắn muốn thoát chương trình?", "Xác nhận thoát", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
+            {
+                Application.Current.Shutdown(); // Shutdown the application
+            }
         }
 
         private void minimizeIcon_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
             Window parentWindow = Window.GetWindow(this);
-            //this.Visibility = Visibility.Hidden;
             parentWindow.WindowState = WindowState.Minimized;
         }
-
-        //public class Supplier
-        //{
-        //    public string Number { get; set; }
-        //    public string Character { get; set; }
-        //    public string Name { get; set; }
-        //    public string Email { get; set; }
-        //    public string Address { get; set; }
-
-        //    public string Phone { get; set; }
-        //    public Brush BgColor { get; set; }
-        //}
     }
 }

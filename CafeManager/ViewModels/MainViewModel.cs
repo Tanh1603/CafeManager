@@ -10,6 +10,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 
 namespace CafeManager.WPF.ViewModels
 {
@@ -24,7 +25,41 @@ namespace CafeManager.WPF.ViewModels
         {
             _provider = provider;
 
-            CurrentViewModel = _provider.GetRequiredService<SupplierViewModel>();
+            CurrentViewModel = _provider.GetRequiredService<MainAdminViewModel>();
         }
+
+        [RelayCommand]
+        private void ChangeCurrentViewModel(string model)
+        {
+        }
+
+        #region command handle window
+
+        [RelayCommand]
+        private void MiniMizeWindown()
+        {
+            Application.Current.MainWindow.WindowState = WindowState.Minimized;
+        }
+
+        [RelayCommand]
+        private void MaximizeWindown()
+        {
+            if (Application.Current.MainWindow.WindowState == WindowState.Normal)
+            {
+                Application.Current.MainWindow.WindowState = WindowState.Maximized;
+            }
+            else
+            {
+                Application.Current.MainWindow.WindowState = WindowState.Normal;
+            }
+        }
+
+        [RelayCommand]
+        private void CloseWindown()
+        {
+            Application.Current.Shutdown();
+        }
+
+        #endregion command handle window
     }
 }

@@ -24,30 +24,7 @@ namespace CafeManager.WPF.Views
     {
         public SupplierListView()
         {
-            var converter = new BrushConverter();
-            InitializeComponent(); ObservableCollection<Supplier> suppliers = new ObservableCollection<Supplier>();
-
-            //Demo hiển thị datagrid
-            suppliers.Add(new Supplier { Number = "1", Character = "J", BgColor = (Brush)converter.ConvertFromString("#1098AD"), Name = "John Doe", Email = "john.doe@gmail.com", Phone = "415-954-1475", Address ="VietNam" });
-            suppliers.Add(new Supplier { Number = "1", Character = "J", BgColor = (Brush)converter.ConvertFromString("#1098AD"), Name = "John Doe", Email = "john.doe@gmail.com", Phone = "415-954-1475", Address ="VietNam" });
-            suppliers.Add(new Supplier { Number = "1", Character = "J", BgColor = (Brush)converter.ConvertFromString("#1098AD"), Name = "John Doe", Email = "john.doe@gmail.com", Phone = "415-954-1475", Address ="VietNam" });
-            suppliers.Add(new Supplier { Number = "1", Character = "J", BgColor = (Brush)converter.ConvertFromString("#1098AD"), Name = "John Doe", Email = "john.doe@gmail.com", Phone = "415-954-1475", Address ="VietNam" });
-            suppliers.Add(new Supplier { Number = "1", Character = "J", BgColor = (Brush)converter.ConvertFromString("#1098AD"), Name = "John Doe", Email = "john.doe@gmail.com", Phone = "415-954-1475", Address ="VietNam" });
-            suppliers.Add(new Supplier { Number = "1", Character = "J", BgColor = (Brush)converter.ConvertFromString("#1098AD"), Name = "John Doe", Email = "john.doe@gmail.com", Phone = "415-954-1475", Address ="VietNam" });
-            suppliers.Add(new Supplier { Number = "1", Character = "J", BgColor = (Brush)converter.ConvertFromString("#1098AD"), Name = "John Doe", Email = "john.doe@gmail.com", Phone = "415-954-1475", Address ="VietNam" });
-            suppliers.Add(new Supplier { Number = "1", Character = "J", BgColor = (Brush)converter.ConvertFromString("#1098AD"), Name = "John Doe", Email = "john.doe@gmail.com", Phone = "415-954-1475", Address ="VietNam" });
+            InitializeComponent();
         }
-    }
-
-    public class Supplier
-    {
-        public string Number { get; set; }
-        public string Character { get; set; }
-        public string Name { get; set; }
-        public string Email { get; set; }
-        public string Address { get; set; }
-
-        public string Phone { get; set; }
-        public Brush BgColor { get; set; }
     }
 }

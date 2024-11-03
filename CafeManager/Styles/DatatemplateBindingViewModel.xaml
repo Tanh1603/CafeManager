@@ -4,7 +4,17 @@
     xmlns:viewmodels="clr-namespace:CafeManager.WPF.ViewModels"
     xmlns:views="clr-namespace:CafeManager.WPF.Views">
 
-    <DataTemplate DataType="{x:Type viewmodels:SupplierViewModel}">
+    <DataTemplate DataType="{x:Type viewmodels:MainAdminViewModel}">
         <views:MainAdminView />
+    </DataTemplate>
+
+    <DataTemplate DataType="{x:Type viewmodels:SupplierViewModel}">
+        <views:SupplierListView />
+    </DataTemplate>
+    <DataTemplate DataType="{x:Type viewmodels:FoodListViewModel}">
+        <views:FoodListView />
+    </DataTemplate>
+    <DataTemplate DataType="{x:Type viewmodels:HomeViewModel}">
+        <views:HomeAdminView />
     </DataTemplate>
 </ResourceDictionary>

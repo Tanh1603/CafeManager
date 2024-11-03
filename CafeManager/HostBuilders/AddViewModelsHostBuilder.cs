@@ -15,8 +15,12 @@ namespace CafeManager.WPF.HostBuilders
         {
             hostBuilder.ConfigureServices(services =>
             {
-                services.AddTransient<MainViewModel>(provider => new MainViewModel(provider));
-                services.AddTransient<SupplierViewModel>(provider => new SupplierViewModel(provider));
+                services.AddScoped<MainViewModel>(provider => new MainViewModel(provider));
+                services.AddScoped<SupplierViewModel>(provider => new SupplierViewModel(provider));
+                services.AddScoped<MainAdminViewModel>(provider => new MainAdminViewModel(provider));
+                services.AddScoped<FoodListViewModel>(provider => new FoodListViewModel(provider));
+                services.AddScoped<HomeViewModel>(provider => new HomeViewModel(provider));
+
                 services.AddSingleton<MainWindow>(provider => new MainWindow()
                 {
                     DataContext = provider.GetRequiredService<MainViewModel>()

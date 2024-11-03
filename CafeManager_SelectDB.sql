@@ -106,6 +106,3 @@ ms.manufacturedate, ms.expirationdate,ms.manufacturer, s.suppliername, ms.price;
 
 
 
-
-
-

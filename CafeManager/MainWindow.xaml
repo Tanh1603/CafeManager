@@ -9,7 +9,6 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
     Title="MainWindow"
-    Style="{StaticResource MaterialDesignWindow}"
     WindowStartupLocation="CenterScreen"
     WindowStyle="none"
     Background="Transparent"
@@ -17,6 +16,26 @@
     mc:Ignorable="d">
 
     <Grid>
-        <ContentControl Content="{Binding CurrentViewModel}" />
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <Grid Grid.Row="0" Background="White">
+            <StackPanel Orientation="Horizontal"  HorizontalAlignment="Right">
+                <Button Background="Transparent" BorderThickness="0"  Command="{Binding MiniMizeWindownCommand}">
+                    <materialDesign:PackIcon Kind="WindowMinimize" Foreground="Black" />
+                </Button>
+                <Button Background="Transparent" BorderThickness="0" Command="{Binding MaximizeWindownCommand}">
+                    <materialDesign:PackIcon Kind="WindowMaximize" Foreground="Black" />
+                </Button>
+                <Button Background="OrangeRed" Command="{Binding CloseWindownCommand}">
+                    <materialDesign:PackIcon Kind="Close" />
+                </Button>
+            </StackPanel>
+        </Grid>
+        <Grid Grid.Row="1">
+            <ContentControl Content="{Binding CurrentViewModel}" />
+        </Grid>
     </Grid>
 </Window>

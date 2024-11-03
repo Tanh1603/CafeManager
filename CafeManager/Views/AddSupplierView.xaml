@@ -1,69 +1,121 @@
-﻿<UserControl x:Class="CafeManager.WPF.Views.AddSupplierView"
-             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:uc="clr-namespace:CafeManager.WPF.Assets.UsersControls"
-             xmlns:ma="http://metro.mahapps.com/winfx/xaml/iconpacks"
-             mc:Ignorable="d" 
-             Height="450"
-             Width="500">
-    <Border CornerRadius="10" BorderThickness="4">
+﻿<UserControl
+    x:Class="CafeManager.WPF.Views.AddSupplierView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:ma="http://metro.mahapps.com/winfx/xaml/iconpacks"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:uc="clr-namespace:CafeManager.WPF.Assets.UsersControls"
+    Width="500"
+    Height="450"
+    mc:Ignorable="d">
+    <Border BorderThickness="4" CornerRadius="10">
         <Border.Background>
             <LinearGradientBrush StartPoint="0,0.5" EndPoint="1,0.5">
-                <GradientStop Color="#d4b096" Offset="0"/>
-                <GradientStop Color="#dac5b4" Offset="1"/>
+                <GradientStop Offset="0" Color="#d4b096" />
+                <GradientStop Offset="1" Color="#dac5b4" />
             </LinearGradientBrush>
         </Border.Background>
         <Border.BorderBrush>
             <LinearGradientBrush StartPoint="0,0.5">
-                <GradientStop Color="#5e2313" Offset="0"/>
-                <GradientStop Color="#65402e" Offset="0.5"/>
-                <GradientStop Color="#7c4e37" Offset="1"/>
+                <GradientStop Offset="0" Color="#5e2313" />
+                <GradientStop Offset="0.5" Color="#65402e" />
+                <GradientStop Offset="1" Color="#7c4e37" />
             </LinearGradientBrush>
         </Border.BorderBrush>
         <Grid>
-            
 
-            <TextBlock Text="Thông tin nhà cung cấp" HorizontalAlignment="Center" VerticalAlignment="Top" FontSize="32" FontWeight="Bold" Foreground="#5f2414" Margin="0 50 0 0"/>
-            <Grid  HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0 10 0 0">
+
+            <TextBlock
+                Margin="0,50,0,0"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Top"
+                FontSize="32"
+                FontWeight="Bold"
+                Foreground="#5f2414"
+                Text="Thông tin nhà cung cấp" />
+            <Grid
+                Margin="0,10,0,0"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center">
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="150"/>
-                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="150" />
+                    <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
 
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="auto"/>
-                    <RowDefinition Height="auto"/>
-                    <RowDefinition Height="auto"/>
-                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="auto" />
+                    <RowDefinition Height="auto" />
+                    <RowDefinition Height="auto" />
+                    <RowDefinition Height="auto" />
 
                 </Grid.RowDefinitions>
 
-                <TextBlock Grid.Row="0" Text="Tên " Style="{StaticResource infoText}"/>
-                <TextBlock Grid.Row="1" Text="Số điện thoại" Style="{StaticResource infoText}"/>
-                <TextBlock Grid.Row="2" Text="Email" Style="{StaticResource infoText}"/>
-                <TextBlock Grid.Row="3" Text="Địa chỉ" Style="{StaticResource infoText}"/>
+                <TextBlock
+                    Grid.Row="0"
+                    Style="{StaticResource infoText}"
+                    Text="Tên " />
+                <TextBlock
+                    Grid.Row="1"
+                    Style="{StaticResource infoText}"
+                    Text="Số điện thoại" />
+                <TextBlock
+                    Grid.Row="2"
+                    Style="{StaticResource infoText}"
+                    Text="Email" />
+                <TextBlock
+                    Grid.Row="3"
+                    Style="{StaticResource infoText}"
+                    Text="Địa chỉ" />
 
 
-                <uc:infoTextInput Grid.Column="1" Grid.Row="0" Hint="CTY TNHH..."/>
-                <uc:infoTextInput Grid.Column="1" Grid.Row="1" Hint="0377929994"/>
-                <uc:infoTextInput Grid.Column="1" Grid.Row="2" Hint="23520189@gmail.com"/>
-                <uc:infoTextInput Grid.Column="1" Grid.Row="3" Hint="KTX khu A"/>
+                <uc:infoTextInput
+                    Grid.Row="0"
+                    Grid.Column="1"
+                    Hint="CTY TNHH..." />
+                <uc:infoTextInput
+                    Grid.Row="1"
+                    Grid.Column="1"
+                    Hint="0377929994" />
+                <uc:infoTextInput
+                    Grid.Row="2"
+                    Grid.Column="1"
+                    Hint="23520189@gmail.com" />
+                <uc:infoTextInput
+                    Grid.Row="3"
+                    Grid.Column="1"
+                    Hint="KTX khu A" />
 
             </Grid>
 
-            <Button Style="{StaticResource adjustInfoButton}"  HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="20">
-                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                    <ma:PackIconMaterial Kind="Plus" VerticalAlignment="Center"/>
-                    <TextBlock Text="Thêm" Margin="10 0 0 0"/>
+            <Button
+                Margin="20"
+                HorizontalAlignment="Right"
+                VerticalAlignment="Bottom"
+                Style="{StaticResource adjustInfoButton}">
+                <StackPanel HorizontalAlignment="Center" Orientation="Horizontal">
+                    <ma:PackIconMaterial VerticalAlignment="Center" Kind="Plus" />
+                    <TextBlock Margin="10,0,0,0" Text="Thêm" />
                 </StackPanel>
             </Button>
 
-            <StackPanel  Orientation="Horizontal" VerticalAlignment="Top"  HorizontalAlignment="Right" Margin="0 10 20 0">
-                <ma:PackIconMaterial x:Name="closeIcon"  Kind="Minus" Margin="0 8 15 0 " Style="{StaticResource ìconApp}" Foreground="#844418" />
-                <ma:PackIconMaterial x:Name="minimizeIcon" Kind="Close" Style="{StaticResource ìconApp}" Foreground="#844418" />
+            <StackPanel
+                Margin="0,10,20,0"
+                HorizontalAlignment="Right"
+                VerticalAlignment="Top"
+                Orientation="Horizontal">
+                <ma:PackIconMaterial
+                    x:Name="closeIcon"
+                    Margin="0,8,15,0"
+                    Foreground="#844418"
+                    Kind="Minus"
+                    Style="{StaticResource ìconApp}" />
+                <ma:PackIconMaterial
+                    x:Name="minimizeIcon"
+                    Foreground="#844418"
+                    Kind="Close"
+                    Style="{StaticResource ìconApp}" />
             </StackPanel>
         </Grid>
-       </Border>
+    </Border>
 </UserControl>

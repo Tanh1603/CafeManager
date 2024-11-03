@@ -388,11 +388,12 @@
     </Style>
 
     <Style x:Key="gridEditButton" TargetType="Button">
-        <Setter Property="Background" Value="#512da8"/>
-        <Setter Property="Foreground" Value="#ffffff"/>
-        <Setter Property="BorderBrush" Value="#4a148c"/>
+        <Setter Property="Background" Value="#9f7454"/>
+        <Setter Property="Foreground" Value="#dac5b4"/>
+        <Setter Property="BorderBrush" Value="#cb925d"/>
         <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
         <Setter Property="VerticalAlignment" Value="Center"/>
+        <Setter Property="Cursor" Value="Hand"/>
 
         <Setter Property="Template">
             <Setter.Value>
@@ -406,7 +407,16 @@
         </Setter>
         <Style.Triggers>
             <Trigger Property="IsMouseOver" Value="True">
-                <Setter Property="Background" Value="#673ab7"/>
+                <Setter Property="Foreground" Value="#612e0f"/>
+                <Setter Property="Background">
+                    <Setter.Value>
+                        <LinearGradientBrush StartPoint="0,0.5" EndPoint="1,0.5">
+                            <GradientStop Color="#d5b096" Offset="0"/>
+                            <GradientStop Color="#d9c6b3" Offset="1"/>
+                        </LinearGradientBrush>
+                    </Setter.Value>
+                </Setter>
+
 
 
             </Trigger>
@@ -420,7 +430,7 @@
 
         <Style.Triggers>
             <Trigger Property="IsMouseOver" Value="True">
-                <Setter Property="Background" Value="#f44336"/>
+                <Setter Property="Foreground" Value="#f44336"/>
 
 
             </Trigger>

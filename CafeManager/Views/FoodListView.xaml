@@ -60,6 +60,8 @@
                          Panel.ZIndex="1" Text="Tìm kiếm..."
                          Visibility="{Binding ElementName=txtFilter, Path=Text.IsEmpty, Converter={StaticResource BoolToVis}}"/>
                     <TextBox x:Name="txtFilter" Style="{StaticResource textBoxFilter}"/>
+                    <ma:PackIconMaterial Kind="Magnify" Width="15" Height="15" VerticalAlignment="Center"
+        Margin="0 0 15 0" Foreground="#d5b096" HorizontalAlignment="Right"/>
 
                 </Grid>
 

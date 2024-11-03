@@ -130,15 +130,14 @@
                 </LinearGradientBrush>
             </Border.Background>
 
-            <Grid Margin="50 0 40 0">
+            <Grid Margin="50 0 40 40">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="100"/>
                     <RowDefinition Height="auto"/>
                     <RowDefinition Height="auto"/>
                     <RowDefinition Height="auto"/>
-                    <RowDefinition Height="auto"/>
-                    <RowDefinition Height="auto"/>
-                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="*"/>
+                   
 
                 </Grid.RowDefinitions>
 
@@ -178,57 +177,63 @@ HorizontalAlignment="Left" Foreground="#dac5b4"/>
      Foreground="#602414" HorizontalAlignment="Right" VerticalAlignment="Center"/>
 
                 <!--Filter Textbox-->
-                <Grid Width="200" HorizontalAlignment="Right" Grid.Row="3">
+                <Grid Width="200" HorizontalAlignment="Right" Grid.Row="3" Margin="0 20">
                     <TextBlock Margin="15 0" VerticalAlignment="Center" Foreground="#9c6d3f" IsHitTestVisible="False"
          Panel.ZIndex="1" Text="Search in Members..."
          Visibility="{Binding ElementName=txtFilter, Path=Text.IsEmpty, Converter={StaticResource BoolToVis}}"/>
                     <TextBox x:Name="txtFilter" Style="{StaticResource textBoxFilter}"/>
+                    <ma:PackIconMaterial Kind="Magnify" Width="15" Height="15" VerticalAlignment="Center"
+        Margin="0 0 15 0" Foreground="#d5b096" HorizontalAlignment="Right"/>
 
                 </Grid>
 
                 <!--Supplier Datagrid-->
-                <DataGrid Style="{DynamicResource DataGridStyle1}" CellStyle="{DynamicResource DataGridCellStyle1}" ColumnHeaderStyle="{DynamicResource DataGridColumnHeaderStyle1}"  Grid.Row="4" RowStyle="{DynamicResource DataGridRowStyle1}" x:Name="SupplierDataGrid" >
-                    <DataGrid.Columns>
-                        
-
-                        <DataGridTextColumn Header="#" IsReadOnly="True" CanUserResize="False" Width="auto" Binding="{Binding Number}"/>
-
-                        <DataGridTemplateColumn Header="Tên" IsReadOnly="True" Width="*">
-                            <DataGridTemplateColumn.CellTemplate>
-                                <DataTemplate>
-                                    <StackPanel Orientation="Horizontal">
-                                        <Border Width="25" Height="25" CornerRadius="50" Margin="0 0 10 0" Background="{Binding BgColor}">
-                                            <TextBlock Text="{Binding Character}" VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="#ffffff" Margin="0 0 0 1"/>
-                                        </Border>
-                                        <TextBlock Text="{Binding Name}" VerticalAlignment="Center"/>
-                                    </StackPanel>
-                                </DataTemplate>
-                            </DataGridTemplateColumn.CellTemplate>
-                        </DataGridTemplateColumn>
+                <Border Grid.Row="4"  CornerRadius="10" Margin="0 10 0 0" Padding="8 0 3 0" BorderThickness="2" BorderBrush="#602414">
 
 
-                        <DataGridTextColumn Header="SĐT" IsReadOnly="True" CanUserResize="False" Width="*" Binding="{Binding Phone}"/>
-                        <DataGridTextColumn Header="Email" IsReadOnly="True" CanUserResize="False" Width="*" Binding="{Binding Email}"/>
-                        <DataGridTextColumn Header="Địa chỉ" IsReadOnly="True" CanUserResize="False" Width="*" Binding="{Binding Address}"/>
-
-                        <DataGridTemplateColumn Header="Tùy chỉnh" IsReadOnly="True" Width="auto">
-                            <DataGridTemplateColumn.CellTemplate>
-                                <DataTemplate>
-                                    <StackPanel Orientation="Horizontal">
-                                        <Button Style="{StaticResource gridEditButton}">
-                                            <ma:PackIconMaterial Kind="PencilOutline" Style="{StaticResource gridButtonIcon}"/>
-                                        </Button>
-                                        <Button Style="{StaticResource gridRemoveButton}" Margin="5 0 0 0">
-                                            <ma:PackIconMaterial Kind="DeleteOutline" Style="{StaticResource gridButtonIcon}"/>
-                                        </Button>
-                                    </StackPanel>
-                                </DataTemplate>
-                            </DataGridTemplateColumn.CellTemplate>
-                        </DataGridTemplateColumn>
+                    <DataGrid Style="{DynamicResource DataGridStyle1}" CellStyle="{DynamicResource DataGridCellStyle1}" ColumnHeaderStyle="{DynamicResource DataGridColumnHeaderStyle1}"  Grid.Row="4" RowStyle="{DynamicResource DataGridRowStyle1}" x:Name="SuppliersDataGrid"  VerticalAlignment="Top">
+                        <DataGrid.Columns>
 
 
-                    </DataGrid.Columns>
-                </DataGrid>
+                            <DataGridTextColumn Header="#" IsReadOnly="True" CanUserResize="False" Width="auto" Binding="{Binding Number}"/>
+
+                            <DataGridTemplateColumn Header="Tên" IsReadOnly="True" Width="*">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <StackPanel Orientation="Horizontal">
+                                            <Border Width="25" Height="25" CornerRadius="50" Margin="0 0 10 0" Background="{Binding BgColor}">
+                                                <TextBlock Text="{Binding Character}" VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="#612e0f" Margin="0 0 0 1"/>
+                                            </Border>
+                                            <TextBlock Text="{Binding Name}" VerticalAlignment="Center"/>
+                                        </StackPanel>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+
+
+                            <DataGridTextColumn Header="SĐT" IsReadOnly="True" CanUserResize="False" Width="*" Binding="{Binding Phone}"/>
+                            <DataGridTextColumn Header="Email" IsReadOnly="True" CanUserResize="False" Width="*" Binding="{Binding Email}"/>
+                            <DataGridTextColumn Header="Địa chỉ" IsReadOnly="True" CanUserResize="False" Width="*" Binding="{Binding Address}"/>
+
+                            <DataGridTemplateColumn Header="Tùy chỉnh" IsReadOnly="True" Width="auto">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <StackPanel Orientation="Horizontal">
+                                            <Button Style="{StaticResource gridEditButton}">
+                                                <ma:PackIconMaterial Kind="PencilOutline" Style="{StaticResource gridButtonIcon}"/>
+                                            </Button>
+                                            <Button Style="{StaticResource gridRemoveButton}" Margin="5 0 0 0">
+                                                <ma:PackIconMaterial Kind="DeleteOutline" Style="{StaticResource gridButtonIcon}"/>
+                                            </Button>
+                                        </StackPanel>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+
+
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </Border>
 
               
 

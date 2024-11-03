@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -25,7 +26,32 @@ namespace CafeManager.WPF.Views
         public MainAdminView()
         {
             InitializeComponent();
+            var converter = new BrushConverter();
+            InitializeComponent(); ObservableCollection<Supplier> suppliers = new ObservableCollection<Supplier>();
+
+            //Demo hiển thị datagrid
+            suppliers.Add(new Supplier { Number = "1", Character = "J", BgColor = (Brush)converter.ConvertFromString("#1098AD"), Name = "John Doe", Email = "john.doe@gmail.com", Phone = "415-954-1475", Address = "VietNam" });
+            suppliers.Add(new Supplier { Number = "1", Character = "J", BgColor = (Brush)converter.ConvertFromString("#1098AD"), Name = "John Doe", Email = "john.doe@gmail.com", Phone = "415-954-1475", Address = "VietNam" });
+            suppliers.Add(new Supplier { Number = "1", Character = "J", BgColor = (Brush)converter.ConvertFromString("#1098AD"), Name = "John Doe", Email = "john.doe@gmail.com", Phone = "415-954-1475", Address = "VietNam" });
+            suppliers.Add(new Supplier { Number = "1", Character = "J", BgColor = (Brush)converter.ConvertFromString("#1098AD"), Name = "John Doe", Email = "john.doe@gmail.com", Phone = "415-954-1475", Address = "VietNam" });
+            suppliers.Add(new Supplier { Number = "1", Character = "J", BgColor = (Brush)converter.ConvertFromString("#1098AD"), Name = "John Doe", Email = "john.doe@gmail.com", Phone = "415-954-1475", Address = "VietNam" });
+            suppliers.Add(new Supplier { Number = "1", Character = "J", BgColor = (Brush)converter.ConvertFromString("#1098AD"), Name = "John Doe", Email = "john.doe@gmail.com", Phone = "415-954-1475", Address = "VietNam" });
+            suppliers.Add(new Supplier { Number = "1", Character = "J", BgColor = (Brush)converter.ConvertFromString("#1098AD"), Name = "John Doe", Email = "john.doe@gmail.com", Phone = "415-954-1475", Address = "VietNam" });
+            suppliers.Add(new Supplier { Number = "1", Character = "J", BgColor = (Brush)converter.ConvertFromString("#1098AD"), Name = "John Doe", Email = "john.doe@gmail.com", Phone = "415-954-1475", Address = "VietNam" });
+            suppliers.Add(new Supplier { Number = "1", Character = "J", BgColor = (Brush)converter.ConvertFromString("#1098AD"), Name = "John Doe", Email = "john.doe@gmail.com", Phone = "415-954-1475", Address = "VietNam" });
+            suppliers.Add(new Supplier { Number = "1", Character = "J", BgColor = (Brush)converter.ConvertFromString("#1098AD"), Name = "John Doe", Email = "john.doe@gmail.com", Phone = "415-954-1475", Address = "VietNam" });
+            suppliers.Add(new Supplier { Number = "1", Character = "J", BgColor = (Brush)converter.ConvertFromString("#1098AD"), Name = "John Doe", Email = "john.doe@gmail.com", Phone = "415-954-1475", Address = "VietNam" });
+            suppliers.Add(new Supplier { Number = "1", Character = "J", BgColor = (Brush)converter.ConvertFromString("#1098AD"), Name = "John Doe", Email = "john.doe@gmail.com", Phone = "415-954-1475", Address = "VietNam" });
+            suppliers.Add(new Supplier { Number = "1", Character = "J", BgColor = (Brush)converter.ConvertFromString("#1098AD"), Name = "John Doe", Email = "john.doe@gmail.com", Phone = "415-954-1475", Address = "VietNam" });
+            suppliers.Add(new Supplier { Number = "1", Character = "J", BgColor = (Brush)converter.ConvertFromString("#1098AD"), Name = "John Doe", Email = "john.doe@gmail.com", Phone = "415-954-1475", Address = "VietNam" });
+            suppliers.Add(new Supplier { Number = "1", Character = "J", BgColor = (Brush)converter.ConvertFromString("#1098AD"), Name = "John Doe", Email = "john.doe@gmail.com", Phone = "415-954-1475", Address = "VietNam" });
+            suppliers.Add(new Supplier { Number = "1", Character = "J", BgColor = (Brush)converter.ConvertFromString("#1098AD"), Name = "John Doe", Email = "john.doe@gmail.com", Phone = "415-954-1475", Address = "VietNam" });
+            suppliers.Add(new Supplier { Number = "1", Character = "J", BgColor = (Brush)converter.ConvertFromString("#1098AD"), Name = "John Doe", Email = "john.doe@gmail.com", Phone = "415-954-1475", Address = "VietNam" });
+            suppliers.Add(new Supplier { Number = "1", Character = "J", BgColor = (Brush)converter.ConvertFromString("#1098AD"), Name = "John Doe", Email = "john.doe@gmail.com", Phone = "415-954-1475", Address = "VietNam" });
+            suppliers.Add(new Supplier { Number = "1", Character = "J", BgColor = (Brush)converter.ConvertFromString("#1098AD"), Name = "John Doe", Email = "john.doe@gmail.com", Phone = "415-954-1475", Address = "VietNam" });
+            SuppliersDataGrid.ItemsSource = suppliers;
         }
+
 
         private void Border_MouseDown(object sender, MouseButtonEventArgs e)
         {
@@ -57,6 +83,17 @@ namespace CafeManager.WPF.Views
             parentWindow.WindowState = WindowState.Minimized;
         }
 
-        
+        public class Supplier
+        {
+            public string Number { get; set; }
+            public string Character { get; set; }
+            public string Name { get; set; }
+            public string Email { get; set; }
+            public string Address { get; set; }
+
+            public string Phone { get; set; }
+            public Brush BgColor { get; set; }
+        }
+
     }
 }

@@ -9,6 +9,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="MessageBox\Icons\Error.png" />
+    <None Remove="MessageBox\Icons\Information.png" />
+    <None Remove="MessageBox\Icons\Question.png" />
+    <None Remove="MessageBox\Icons\Warning.png" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\CafeManager.Infrastructure\CafeManager.Infrastructure.csproj" />
   </ItemGroup>
 
@@ -29,6 +36,13 @@
     <PackageReference Include="Microsoft.Extensions.Hosting" Version="8.0.1" />
     <PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" Version="8.0.1" />
     <PackageReference Include="Microsoft.Xaml.Behaviors.Wpf" Version="1.1.135" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="MessageBox\Icons\Error.png" />
+    <Resource Include="MessageBox\Icons\Information.png" />
+    <Resource Include="MessageBox\Icons\Question.png" />
+    <Resource Include="MessageBox\Icons\Warning.png" />
   </ItemGroup>
 
   <ItemGroup>

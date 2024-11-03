@@ -1,0 +1,83 @@
+﻿<UserControl x:Class="CafeManager.WPF.Views.InfoMaterialView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:uc="clr-namespace:CafeManager.WPF.Assets.UsersControls"
+             xmlns:ma="http://metro.mahapps.com/winfx/xaml/iconpacks"
+             mc:Ignorable="d" 
+             Height="450"
+             Width="500">
+    <Border CornerRadius="10" BorderThickness="4">
+        <Border.Background>
+            <LinearGradientBrush StartPoint="0,0.5" EndPoint="1,0.5">
+                <GradientStop Color="#d4b096" Offset="0"/>
+                <GradientStop Color="#dac5b4" Offset="1"/>
+            </LinearGradientBrush>
+        </Border.Background>
+        <Border.BorderBrush>
+            <LinearGradientBrush StartPoint="0,0.5">
+                <GradientStop Color="#5e2313" Offset="0"/>
+                <GradientStop Color="#65402e" Offset="0.5"/>
+                <GradientStop Color="#7c4e37" Offset="1"/>
+            </LinearGradientBrush>
+        </Border.BorderBrush>
+        <Grid>
+
+
+            <TextBlock  Text="Thông tin vật liệu" HorizontalAlignment="Center" VerticalAlignment="Top" FontSize="32" FontWeight="Bold" Foreground="#5f2414" Margin="0 50 0 0"/>
+            <Grid  HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0 10 0 0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="150"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="auto"/>
+
+                </Grid.RowDefinitions>
+
+                <TextBlock Grid.Row="0" Text="Tên " Style="{StaticResource infoText}"/>
+                <TextBlock Grid.Row="1" Text="Loại" Style="{StaticResource infoText}"/>
+                <TextBlock Grid.Row="2" Text="Giá" Style="{StaticResource infoText}"/>
+                <TextBlock Grid.Row="3" Text="Ngày hết hạn" Style="{StaticResource infoText}"/>
+
+
+                <uc:infoTextInput Grid.Column="1" Grid.Row="0" Hint="đường, sữa,..."/>
+                <uc:infoTextInput Grid.Column="1" Grid.Row="1" Hint="..,.."/>
+                <uc:infoTextInput Grid.Column="1" Grid.Row="2" Hint="20000,..."/>
+                <Grid Grid.Column="1" Grid.Row="3">
+
+                    <DatePicker x:Name="datePicker" Style="{StaticResource DatePicker}"
+                         SelectedDate="{Binding Path=SelectedDate, StringFormat='{}{0:dd/MM/yyyy}'}"
+                         Tag="2/11/2024">
+
+                    </DatePicker>
+                    <TextBlock Text="{Binding ElementName=datePicker, Path=SelectedDate, StringFormat='{}{0:dd/MM/yyyy}'}"
+                            VerticalAlignment="Center"
+                            HorizontalAlignment="Left"
+                            Foreground="#844418"
+                            FontSize="14"
+                            Margin="15 0 0 0"/>
+
+                </Grid>
+
+            </Grid>
+
+            <Button Style="{StaticResource adjustInfoButton}"  HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="20">
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                    <ma:PackIconMaterial Kind="Plus" VerticalAlignment="Center"/>
+                    <TextBlock Text="Thêm" Margin="10 0 0 0"/>
+                </StackPanel>
+            </Button>
+
+            <StackPanel  Orientation="Horizontal" VerticalAlignment="Top"  HorizontalAlignment="Right" Margin="0 10 20 0">
+                <ma:PackIconMaterial x:Name="closeIcon"  Kind="Minus" Margin="0 8 15 0 " Style="{StaticResource ìconApp}" Foreground="#844418" />
+                <ma:PackIconMaterial x:Name="minimizeIcon" Kind="Close" Style="{StaticResource ìconApp}" Foreground="#844418" />
+            </StackPanel>
+        </Grid>
+    </Border>
+</UserControl>

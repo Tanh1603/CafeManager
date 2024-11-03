@@ -5,9 +5,8 @@
     xmlns:views="clr-namespace:CafeManager.WPF.Views">
 
     <DataTemplate DataType="{x:Type viewmodels:TestViewModel}">
-        <views:TestDb />
+        <views:MainAdminView/>
     </DataTemplate>
-
     <DataTemplate DataType="{x:Type viewmodels:TestImportViewModel}">
         <views:TestImportView />
     </DataTemplate>

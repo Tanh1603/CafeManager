@@ -5,7 +5,7 @@
     xmlns:views="clr-namespace:CafeManager.WPF.Views">
 
     <DataTemplate DataType="{x:Type viewmodels:TestViewModel}">
-        <views:AddMaterialView/>
+        <views:MainAdminView/>
     </DataTemplate>
 
 </ResourceDictionary>

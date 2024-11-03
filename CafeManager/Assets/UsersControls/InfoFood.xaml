@@ -1,0 +1,65 @@
+﻿<UserControl x:Class="CafeManager.WPF.Assets.UsersControls.InfoFood"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:ma="http://metro.mahapps.com/winfx/xaml/iconpacks"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:CafeManager.WPF.Assets.UsersControls"
+             mc:Ignorable="d" 
+             Width="225"
+             Height="185"
+             Name="infofood">
+    <UserControl.Resources>
+        <local:Utf8Converter x:Key="Utf8Converter"/>
+        <local:StringToImageSourceConverter x:Key="StringToImageSourceConverter"/>
+    </UserControl.Resources>
+    <Border CornerRadius="5" BorderThickness="3" Margin="0 10 10 0">
+        <Border.BorderBrush>
+            <LinearGradientBrush StartPoint="0, 0.5">
+                <GradientStop Color="#c69a5d" Offset="0"/>
+                <GradientStop Color="#cb925d" Offset="0.5"/>
+
+                <GradientStop Color="#d4b096" Offset="1"/>
+            </LinearGradientBrush>
+        </Border.BorderBrush>
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="130"/>
+                <RowDefinition Height="*"/>
+
+            </Grid.RowDefinitions>
+
+
+            <Image Source="{Binding ElementName=infofood, Path=SourceImage, Converter={StaticResource StringToImageSourceConverter}, FallbackValue='/Assets/Images/defaultImage'}" RenderOptions.BitmapScalingMode="HighQuality" />
+
+
+            <Border Grid.Row="1" CornerRadius="0 0 3 3">
+                <Border.Style>
+                    <Style TargetType="Border">
+                        <Setter Property="Background">
+                            <Setter.Value>
+                                <LinearGradientBrush StartPoint="0,0.5" EndPoint="1,0.5">
+                                    <GradientStop Color="#d5b096" Offset="0"/>
+                                    <GradientStop Color="#d9c6b3" Offset="1"/>
+                                </LinearGradientBrush>
+                            </Setter.Value>
+                        </Setter>
+                    </Style>
+                </Border.Style>
+                <Grid>
+
+                    <TextBlock Text="{Binding ElementName=infofood, Path=Text, Converter={StaticResource Utf8Converter}}" Style="{StaticResource infoFoodText}" FontSize="18" Margin="0 0 0 20"/>
+
+                    <TextBlock Text="{Binding ElementName=infofood, Path=Price}" Style="{StaticResource infoFoodText}" Margin="0 20 0 0"/>
+
+                    <ma:PackIconMaterial Kind="TrashCan" Style="{StaticResource infoFoodIcon}"/>
+                    <ma:PackIconMaterial Kind="Pencil" Style="{StaticResource infoFoodIcon}" Margin="0 0 25 0"/>
+
+                </Grid>
+            </Border>
+
+
+
+        </Grid>
+    </Border>
+</UserControl>

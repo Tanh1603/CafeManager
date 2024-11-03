@@ -38,7 +38,6 @@ namespace CafeManager.WPF
         {
             base.OnStartup(e);
             _host.Start();
-
             Window window = new MainWindow()
             {
                 DataContext = _host.Services.GetRequiredService<MainViewModel>()

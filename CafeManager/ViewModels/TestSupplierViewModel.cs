@@ -23,13 +23,18 @@ namespace CafeManager.WPF.ViewModels
         {
             _provider = provider;
             _materialSupplierServices = provider.GetRequiredService<MaterialSupplierServices>();
-            Task.Run(() => LoadData()).Wait();
+            _ = InitializeAsync();
+        }
+
+        private async Task InitializeAsync()
+        {
+            await LoadData();
         }
 
         private async Task LoadData()
         {
             AllSupplierList = new ObservableCollection<Supplier>(
-                await _materialSupplierServices.GetSupplierList()
+                await _materialSupplierServices.GetSupplierList() ?? Enumerable.Empty<Supplier>()
                 );
             return;
         }

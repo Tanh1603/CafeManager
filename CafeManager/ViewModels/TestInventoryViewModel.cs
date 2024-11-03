@@ -27,7 +27,7 @@ namespace CafeManager.WPF.ViewModels
         {
             _provider = provider;
             _materialSupplierServices = provider.GetRequiredService<MaterialSupplierServices>();
-            _ = InitializeAsync();
+            Task.Run(async () => await InitializeAsync());
         }
 
         private async Task InitializeAsync()

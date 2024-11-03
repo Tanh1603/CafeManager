@@ -20,8 +20,6 @@ namespace CafeManager.WPF.HostBuilders
             {
                 string? connectionString = context.Configuration.GetConnectionString("postgreSql");
                 Action<DbContextOptionsBuilder> configureDbContext = o => o.UseNpgsql(connectionString);
-                //services.AddDbContext<CafeManagerContext>(configureDbContext);
-                //services.AddSingleton<CafeManagerContextFactory>(new CafeManagerContextFactory(configureDbContext));
 
                 services.AddDbContextFactory<CafeManagerContext>(configureDbContext);
 

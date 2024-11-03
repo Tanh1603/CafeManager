@@ -89,7 +89,7 @@ namespace CafeManager.Infrastructure.Models
             {
                 await _transaction.CommitAsync();
                 await _transaction.DisposeAsync();
-                _transaction = null;
+                _transaction.Dispose();
             }
         }
 
@@ -99,7 +99,7 @@ namespace CafeManager.Infrastructure.Models
             {
                 await _transaction.RollbackAsync();
                 await _transaction.DisposeAsync();
-                _transaction = null;
+                _transaction.Dispose();
             }
         }
     }

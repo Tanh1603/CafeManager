@@ -15,6 +15,5 @@
 
     <Grid>
         <ContentControl Content="{Binding CurentViewModel}" />
-        
     </Grid>
 </Window>

@@ -1,247 +1,361 @@
-﻿<UserControl x:Class="CafeManager.WPF.Views.MainAdminView"
-             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:fa="http://schemas.awesome.incremented/wpf/xaml/fontawesome.sharp"
-             xmlns:ma="http://metro.mahapps.com/winfx/xaml/iconpacks"
-             xmlns:uc="clr-namespace:CafeManager.WPF.Assets.UsersControls"
-             xmlns:lvc="clr-namespace:LiveCharts.Wpf;assembly=LiveCharts.Wpf"
-       
-             mc:Ignorable="d" 
-             Height="740" Width="1280">
+﻿<UserControl
+    x:Class="CafeManager.WPF.Views.MainAdminView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:fa="http://schemas.awesome.incremented/wpf/xaml/fontawesome.sharp"
+    xmlns:lvc="clr-namespace:LiveCharts.Wpf;assembly=LiveCharts.Wpf"
+    xmlns:ma="http://metro.mahapps.com/winfx/xaml/iconpacks"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:uc="clr-namespace:CafeManager.WPF.Assets.UsersControls"
+    mc:Ignorable="d">
     <UserControl.Resources>
-        <BooleanToVisibilityConverter x:Key="BoolToVis"/>
+        <BooleanToVisibilityConverter x:Key="BoolToVis" />
     </UserControl.Resources>
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="250"/>
-            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="250" />
+            <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
         <Grid.Effect>
-            <DropShadowEffect BlurRadius="30"
-                       ShadowDepth="1"
-                       Opacity="0.4"/>
+            <DropShadowEffect
+                BlurRadius="30"
+                Opacity="0.4"
+                ShadowDepth="1" />
         </Grid.Effect>
-        <!--left menu-->
+        <!--  left menu  -->
         <Border CornerRadius="10 0 0 10">
             <Border.Background>
                 <LinearGradientBrush StartPoint="0.5,0" EndPoint="0.5,1">
-                    <GradientStop Color="#824618" Offset="0"/>
-                    <GradientStop Color="#844518" Offset="1"/>
-
+                    <GradientStop Offset="0" Color="#824618" />
+                    <GradientStop Offset="1" Color="#844518" />
                 </LinearGradientBrush>
             </Border.Background>
 
             <StackPanel>
-                <!--username-->
-                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin=" -10 35 0 0">
-                    <Border  CornerRadius="50" Width="45" Height="44" >
+                <!--  username  -->
+                <StackPanel
+                    Margin="-10,35,0,0"
+                    HorizontalAlignment="Center"
+                    Orientation="Horizontal">
+                    <Border
+                        Width="45"
+                        Height="44"
+                        CornerRadius="50">
                         <Border.Background>
                             <LinearGradientBrush StartPoint="0,0" EndPoint="1,2">
-                                <GradientStop Color="#d5b096" Offset="0"/>
-                                <GradientStop Color="#d3b7ff" Offset="1"/>
+                                <GradientStop Offset="0" Color="#d5b096" />
+                                <GradientStop Offset="1" Color="#d3b7ff" />
                             </LinearGradientBrush>
                         </Border.Background>
-                        <Image Source="/Assets/Images/coffee.png" Width="30" Height="30" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality"/>
-
+                        <Image
+                            Width="30"
+                            Height="30"
+                            RenderOptions.BitmapScalingMode="HighQuality"
+                            SnapsToDevicePixels="True"
+                            Source="/Assets/Images/coffee.png" />
                     </Border>
 
-                    <StackPanel Margin="10 0 0 0 " VerticalAlignment="Center">
-                        <TextBlock Text="Quách Vĩnh Cơ" FontSize="15" Margin="0 0 0 5" Foreground="#f9f9f9"/>
-                        <TextBlock Text="Admin" FontSize="15" Foreground="#ffffff" FontWeight="SemiBold"/>
+                    <StackPanel Margin="10,0,0,0" VerticalAlignment="Center">
+                        <TextBlock
+                            Margin="0,0,0,5"
+                            FontSize="15"
+                            Foreground="#f9f9f9"
+                            Text="Quách Vĩnh Cơ" />
+                        <TextBlock
+                            FontSize="15"
+                            FontWeight="SemiBold"
+                            Foreground="#ffffff"
+                            Text="Admin" />
                     </StackPanel>
                 </StackPanel>
-                <Separator Height="0.8" Margin="20 30 " Background="#ffffff"/>
+                <Separator
+                    Height="0.8"
+                    Margin="20,30"
+                    Background="#ffffff" />
 
-                <!--menu buttons-->
+                <!--  menu buttons  -->
                 <RadioButton Style="{StaticResource menuButton}">
                     <StackPanel Orientation="Horizontal">
-                        <fa:IconImage Icon="ChartColumn" Style="{StaticResource menuButtonIcon}"/>
-                        <TextBlock Text="Thống kê" Style="{StaticResource menuButtonText}"/>
+                        <fa:IconImage Icon="ChartColumn" Style="{StaticResource menuButtonIcon}" />
+                        <TextBlock Style="{StaticResource menuButtonText}" Text="Thống kê" />
                     </StackPanel>
                 </RadioButton>
 
                 <RadioButton Style="{StaticResource menuButton}">
                     <StackPanel Orientation="Horizontal">
-                        <fa:IconImage Icon="MartiniGlassCitrus" Style="{StaticResource menuButtonIcon}"/>
-                        <TextBlock Text="Nước uống" Style="{StaticResource menuButtonText}"/>
+                        <fa:IconImage Icon="MartiniGlassCitrus" Style="{StaticResource menuButtonIcon}" />
+                        <TextBlock Style="{StaticResource menuButtonText}" Text="Nước uống" />
                     </StackPanel>
                 </RadioButton>
 
                 <RadioButton Style="{StaticResource menuButton}">
                     <StackPanel Orientation="Horizontal">
-                        <fa:IconImage Icon="FileInvoice" Style="{StaticResource menuButtonIcon}"/>
-                        <TextBlock Text="Hóa đơn" Style="{StaticResource menuButtonText}"/>
+                        <fa:IconImage Icon="FileInvoice" Style="{StaticResource menuButtonIcon}" />
+                        <TextBlock Style="{StaticResource menuButtonText}" Text="Hóa đơn" />
                     </StackPanel>
                 </RadioButton>
 
                 <RadioButton Style="{StaticResource menuButton}">
                     <StackPanel Orientation="Horizontal">
-                        <fa:IconImage Icon="TableCells" Style="{StaticResource menuButtonIcon}"/>
-                        <TextBlock Text="Bàn" Style="{StaticResource menuButtonText}"/>
+                        <fa:IconImage Icon="TableCells" Style="{StaticResource menuButtonIcon}" />
+                        <TextBlock Style="{StaticResource menuButtonText}" Text="Bàn" />
                     </StackPanel>
                 </RadioButton>
 
                 <RadioButton Style="{StaticResource menuButton}">
                     <StackPanel Orientation="Horizontal">
-                        <fa:IconImage Icon="ShoppingCart" Style="{StaticResource menuButtonIcon}"/>
-                        <TextBlock Text="Nhập kho" Style="{StaticResource menuButtonText}"/>
+                        <fa:IconImage Icon="ShoppingCart" Style="{StaticResource menuButtonIcon}" />
+                        <TextBlock Style="{StaticResource menuButtonText}" Text="Nhập kho" />
                     </StackPanel>
                 </RadioButton>
 
                 <RadioButton Style="{StaticResource menuButton}">
                     <StackPanel Orientation="Horizontal">
-                        <fa:IconImage Icon="Warehouse" Style="{StaticResource menuButtonIcon}"/>
-                        <TextBlock Text="Tồn kho" Style="{StaticResource menuButtonText}"/>
+                        <fa:IconImage Icon="Warehouse" Style="{StaticResource menuButtonIcon}" />
+                        <TextBlock Style="{StaticResource menuButtonText}" Text="Tồn kho" />
                     </StackPanel>
                 </RadioButton>
 
                 <RadioButton Style="{StaticResource menuButton}">
                     <StackPanel Orientation="Horizontal">
-                        <fa:IconImage Icon="Truck" Style="{StaticResource menuButtonIcon}"/>
-                        <TextBlock Text="Nhà cung cấp" Style="{StaticResource menuButtonText}"/>
+                        <fa:IconImage Icon="Truck" Style="{StaticResource menuButtonIcon}" />
+                        <TextBlock Style="{StaticResource menuButtonText}" Text="Nhà cung cấp" />
                     </StackPanel>
                 </RadioButton>
 
                 <RadioButton Style="{StaticResource menuButton}">
                     <StackPanel Orientation="Horizontal">
-                        <fa:IconImage Icon="Cog" Style="{StaticResource menuButtonIcon}"/>
-                        <TextBlock Text="Cài đặt" Style="{StaticResource menuButtonText}"/>
+                        <fa:IconImage Icon="Cog" Style="{StaticResource menuButtonIcon}" />
+                        <TextBlock Style="{StaticResource menuButtonText}" Text="Cài đặt" />
                     </StackPanel>
                 </RadioButton>
 
                 <RadioButton Style="{StaticResource menuButton}">
                     <StackPanel Orientation="Horizontal">
-                        <fa:IconImage Icon="PowerOff" Style="{StaticResource menuButtonIcon}"/>
-                        <TextBlock Text="Đăng xuất" Style="{StaticResource menuButtonText}"/>
+                        <fa:IconImage Icon="PowerOff" Style="{StaticResource menuButtonIcon}" />
+                        <TextBlock Style="{StaticResource menuButtonText}" Text="Đăng xuất" />
                     </StackPanel>
                 </RadioButton>
-
             </StackPanel>
         </Border>
 
-        <!--main section-->
-        <Border Grid.Column="1"  CornerRadius="0 10 10 0" >
+        <!--  main section  -->
+        <Border Grid.Column="1" CornerRadius="0 10 10 0">
             <Border.Background>
                 <LinearGradientBrush StartPoint="0,0.5" EndPoint="1,0.5">
-                    <GradientStop Color="#9c6d3f" Offset="0"/>
-                    <GradientStop Color="#cb925d" Offset="1"/>
+                    <GradientStop Offset="0" Color="#9c6d3f" />
+                    <GradientStop Offset="1" Color="#cb925d" />
                 </LinearGradientBrush>
             </Border.Background>
 
-            <Grid Margin="50 0 40 40">
+            <Grid Margin="50,0,40,40">
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="100"/>
-                    <RowDefinition Height="auto"/>
-                    <RowDefinition Height="auto"/>
-                    <RowDefinition Height="auto"/>
-                    <RowDefinition Height="*"/>
-                   
-
+                    <RowDefinition Height="100" />
+                    <RowDefinition Height="auto" />
+                    <RowDefinition Height="auto" />
+                    <RowDefinition Height="auto" />
+                    <RowDefinition Height="*" />
                 </Grid.RowDefinitions>
 
-                <!--icon app-->
-                <StackPanel Orientation="Horizontal" VerticalAlignment="Top"  HorizontalAlignment="Right" Margin="0 10 -20 0">
-                    <ma:PackIconMaterial x:Name="closeIcon"  Kind="Minus" Margin="0 8 15 0 " Style="{StaticResource ìconApp}" MouseLeftButtonUp="closeIcon_MouseLeftButtonUp"/>
-                    <ma:PackIconMaterial x:Name="minimizeIcon" Kind="Close" Style="{StaticResource ìconApp}" MouseLeftButtonUp="minimizeIcon_MouseLeftButtonUp"/>
+                <!--  icon app  -->
+                <StackPanel
+                    Margin="0,10,-20,0"
+                    HorizontalAlignment="Right"
+                    VerticalAlignment="Top"
+                    Orientation="Horizontal">
+                    <ma:PackIconMaterial
+                        x:Name="closeIcon"
+                        Margin="0,8,15,0"
+                        Kind="Minus"
+                        MouseLeftButtonUp="closeIcon_MouseLeftButtonUp"
+                        Style="{StaticResource ìconApp}" />
+                    <ma:PackIconMaterial
+                        x:Name="minimizeIcon"
+                        Kind="Close"
+                        MouseLeftButtonUp="minimizeIcon_MouseLeftButtonUp"
+                        Style="{StaticResource ìconApp}" />
                 </StackPanel>
 
-                <!--textbox search-->
+                <!--  textbox search  -->
                 <Grid Width="300" HorizontalAlignment="Left">
-                    <TextBlock Margin="20 0" VerticalAlignment="Center" Foreground="#9c6d3f" IsHitTestVisible="False" 
-                                Panel.ZIndex="1" Text="Tìm kiếm ở đây..."
-                            Visibility="{Binding ElementName=txtSearch, Path=Text.IsEmpty, Converter={StaticResource BoolToVis}}"/>
-                    <TextBox x:Name="txtSearch" Style="{StaticResource textBoxSearch}"/>
-                    <ma:PackIconMaterial Kind="Magnify" Width="15" Height="15" VerticalAlignment="Center"
-                            Margin="0 0 15 0" Foreground="#d5b096" HorizontalAlignment="Right"/>
+                    <TextBlock
+                        Margin="20,0"
+                        VerticalAlignment="Center"
+                        Panel.ZIndex="1"
+                        Foreground="#9c6d3f"
+                        IsHitTestVisible="False"
+                        Text="Tìm kiếm ở đây..."
+                        Visibility="{Binding ElementName=txtSearch, Path=Text.IsEmpty, Converter={StaticResource BoolToVis}}" />
+                    <TextBox x:Name="txtSearch" Style="{StaticResource textBoxSearch}" />
+                    <ma:PackIconMaterial
+                        Width="15"
+                        Height="15"
+                        Margin="0,0,15,0"
+                        HorizontalAlignment="Right"
+                        VerticalAlignment="Center"
+                        Foreground="#d5b096"
+                        Kind="Magnify" />
                 </Grid>
 
-                <!--Page Title-->
-                <TextBlock Text="Nhà cung cấp" Grid.Row="1" FontSize="32" FontWeight="SemiBold" Margin="0 20 0 0"
-HorizontalAlignment="Left" Foreground="#dac5b4"/>
+                <!--  Page Title  -->
+                <TextBlock
+                    Grid.Row="1"
+                    Margin="0,20,0,0"
+                    HorizontalAlignment="Left"
+                    FontSize="32"
+                    FontWeight="SemiBold"
+                    Foreground="#dac5b4"
+                    Text="Nhà cung cấp" />
 
-                <!--Add Button-->
+                <!--  Add Button  -->
                 <Button Style="{StaticResource addButton}">
                     <StackPanel Orientation="Horizontal">
-                        <ma:PackIconMaterial Kind="Plus" VerticalAlignment="Center" Width="11" Height="11" Margin="0 1 8 0" />
-                        <TextBlock Text="Thêm nhà cung cấp"/>
+                        <ma:PackIconMaterial
+                            Width="11"
+                            Height="11"
+                            Margin="0,1,8,0"
+                            VerticalAlignment="Center"
+                            Kind="Plus" />
+                        <TextBlock Text="Thêm nhà cung cấp" />
                     </StackPanel>
                 </Button>
 
-                <Separator Height="1" Width="200" HorizontalAlignment="Left" Grid.Row="2" Margin="0 10 0 0" Background="#f5f5f5" />
+                <Separator
+                    Grid.Row="2"
+                    Width="200"
+                    Height="1"
+                    Margin="0,10,0,0"
+                    HorizontalAlignment="Left"
+                    Background="#f5f5f5" />
 
-               
+                <TextBlock
+                    Grid.Row="3"
+                    Margin="0,0,215,0"
+                    HorizontalAlignment="Right"
+                    VerticalAlignment="Center"
+                    FontSize="13"
+                    FontWeight="SemiBold"
+                    Foreground="#602414"
+                    Text="Filter by" />
 
-                <TextBlock Text="Filter by" Grid.Row="3" FontSize="13" FontWeight="SemiBold" Margin="0 0 215 0"
-     Foreground="#602414" HorizontalAlignment="Right" VerticalAlignment="Center"/>
-
-                <!--Filter Textbox-->
-                <Grid Width="200" HorizontalAlignment="Right" Grid.Row="3" Margin="0 20">
-                    <TextBlock Margin="15 0" VerticalAlignment="Center" Foreground="#9c6d3f" IsHitTestVisible="False"
-         Panel.ZIndex="1" Text="Search in Members..."
-         Visibility="{Binding ElementName=txtFilter, Path=Text.IsEmpty, Converter={StaticResource BoolToVis}}"/>
-                    <TextBox x:Name="txtFilter" Style="{StaticResource textBoxFilter}"/>
-                    <ma:PackIconMaterial Kind="Magnify" Width="15" Height="15" VerticalAlignment="Center"
-        Margin="0 0 15 0" Foreground="#d5b096" HorizontalAlignment="Right"/>
-
+                <!--  Filter Textbox  -->
+                <Grid
+                    Grid.Row="3"
+                    Width="200"
+                    Margin="0,20"
+                    HorizontalAlignment="Right">
+                    <TextBlock
+                        Margin="15,0"
+                        VerticalAlignment="Center"
+                        Panel.ZIndex="1"
+                        Foreground="#9c6d3f"
+                        IsHitTestVisible="False"
+                        Text="Search in Members..."
+                        Visibility="{Binding ElementName=txtFilter, Path=Text.IsEmpty, Converter={StaticResource BoolToVis}}" />
+                    <TextBox x:Name="txtFilter" Style="{StaticResource textBoxFilter}" />
+                    <ma:PackIconMaterial
+                        Width="15"
+                        Height="15"
+                        Margin="0,0,15,0"
+                        HorizontalAlignment="Right"
+                        VerticalAlignment="Center"
+                        Foreground="#d5b096"
+                        Kind="Magnify" />
                 </Grid>
 
-                <!--Supplier Datagrid-->
-                <Border Grid.Row="4"  CornerRadius="10" Margin="0 10 0 0" Padding="8 0 3 0" BorderThickness="2" BorderBrush="#602414">
+                <!--  Supplier Datagrid  -->
+                <Border
+                    Grid.Row="4"
+                    Margin="0,10,0,0"
+                    Padding="8,0,3,0"
+                    BorderBrush="#602414"
+                    BorderThickness="2"
+                    CornerRadius="10">
 
-
-                    <DataGrid Style="{DynamicResource DataGridStyle1}" CellStyle="{DynamicResource DataGridCellStyle1}" ColumnHeaderStyle="{DynamicResource DataGridColumnHeaderStyle1}"  Grid.Row="4" RowStyle="{DynamicResource DataGridRowStyle1}" x:Name="SuppliersDataGrid"  VerticalAlignment="Top">
+                    <DataGrid
+                        x:Name="SuppliersDataGrid"
+                        Grid.Row="4"
+                        VerticalAlignment="Top"
+                        CellStyle="{DynamicResource DataGridCellStyle1}"
+                        ColumnHeaderStyle="{DynamicResource DataGridColumnHeaderStyle1}"
+                        RowStyle="{DynamicResource DataGridRowStyle1}"
+                        Style="{DynamicResource DataGridStyle1}">
                         <DataGrid.Columns>
 
+                            <DataGridTextColumn
+                                Width="auto"
+                                Binding="{Binding Number}"
+                                CanUserResize="False"
+                                Header="#"
+                                IsReadOnly="True" />
 
-                            <DataGridTextColumn Header="#" IsReadOnly="True" CanUserResize="False" Width="auto" Binding="{Binding Number}"/>
-
-                            <DataGridTemplateColumn Header="Tên" IsReadOnly="True" Width="*">
+                            <DataGridTemplateColumn
+                                Width="*"
+                                Header="Tên"
+                                IsReadOnly="True">
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
                                         <StackPanel Orientation="Horizontal">
-                                            <Border Width="25" Height="25" CornerRadius="50" Margin="0 0 10 0" Background="{Binding BgColor}">
-                                                <TextBlock Text="{Binding Character}" VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="#612e0f" Margin="0 0 0 1"/>
+                                            <Border
+                                                Width="25"
+                                                Height="25"
+                                                Margin="0,0,10,0"
+                                                Background="{Binding BgColor}"
+                                                CornerRadius="50">
+                                                <TextBlock
+                                                    Margin="0,0,0,1"
+                                                    HorizontalAlignment="Center"
+                                                    VerticalAlignment="Center"
+                                                    Foreground="#612e0f"
+                                                    Text="{Binding Character}" />
                                             </Border>
-                                            <TextBlock Text="{Binding Name}" VerticalAlignment="Center"/>
+                                            <TextBlock VerticalAlignment="Center" Text="{Binding Name}" />
                                         </StackPanel>
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
                             </DataGridTemplateColumn>
 
+                            <DataGridTextColumn
+                                Width="*"
+                                Binding="{Binding Phone}"
+                                CanUserResize="False"
+                                Header="SĐT"
+                                IsReadOnly="True" />
+                            <DataGridTextColumn
+                                Width="*"
+                                Binding="{Binding Email}"
+                                CanUserResize="False"
+                                Header="Email"
+                                IsReadOnly="True" />
+                            <DataGridTextColumn
+                                Width="*"
+                                Binding="{Binding Address}"
+                                CanUserResize="False"
+                                Header="Địa chỉ"
+                                IsReadOnly="True" />
 
-                            <DataGridTextColumn Header="SĐT" IsReadOnly="True" CanUserResize="False" Width="*" Binding="{Binding Phone}"/>
-                            <DataGridTextColumn Header="Email" IsReadOnly="True" CanUserResize="False" Width="*" Binding="{Binding Email}"/>
-                            <DataGridTextColumn Header="Địa chỉ" IsReadOnly="True" CanUserResize="False" Width="*" Binding="{Binding Address}"/>
-
-                            <DataGridTemplateColumn Header="Tùy chỉnh" IsReadOnly="True" Width="auto">
+                            <DataGridTemplateColumn
+                                Width="auto"
+                                Header="Tùy chỉnh"
+                                IsReadOnly="True">
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
                                         <StackPanel Orientation="Horizontal">
                                             <Button Style="{StaticResource gridEditButton}">
-                                                <ma:PackIconMaterial Kind="PencilOutline" Style="{StaticResource gridButtonIcon}"/>
+                                                <ma:PackIconMaterial Kind="PencilOutline" Style="{StaticResource gridButtonIcon}" />
                                             </Button>
-                                            <Button Style="{StaticResource gridRemoveButton}" Margin="5 0 0 0">
-                                                <ma:PackIconMaterial Kind="DeleteOutline" Style="{StaticResource gridButtonIcon}"/>
+                                            <Button Margin="5,0,0,0" Style="{StaticResource gridRemoveButton}">
+                                                <ma:PackIconMaterial Kind="DeleteOutline" Style="{StaticResource gridButtonIcon}" />
                                             </Button>
                                         </StackPanel>
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
                             </DataGridTemplateColumn>
-
-
                         </DataGrid.Columns>
                     </DataGrid>
                 </Border>
-
-              
-
-
-
-
             </Grid>
-
         </Border>
     </Grid>
 </UserControl>

@@ -127,8 +127,8 @@
 
                 <!--  Supplier Datagrid  -->
                 <Border
-                    Width="auto"
                     Grid.Row="4"
+                    Width="auto"
                     Margin="0,10,0,0"
                     Padding="8,0,3,0"
                     BorderBrush="#602414"
@@ -138,9 +138,9 @@
                     <DataGrid
                         x:Name="SuppliersDataGrid"
                         VerticalAlignment="Top"
+                        AlternationCount="{Binding ListSupplier.Count}"
                         CellStyle="{DynamicResource DataGridCellStyle1}"
                         ColumnHeaderStyle="{DynamicResource DataGridColumnHeaderStyle1}"
-                        AlternationCount="{Binding ListSupplier.Count}"
                         ItemsSource="{Binding ListSupplier}"
                         RowStyle="{DynamicResource DataGridRowStyle1}"
                         Style="{DynamicResource DataGridStyle1}">
@@ -160,7 +160,7 @@
 
                             <DataGridTextColumn
                                 Width="*"
-                                Binding ="{Binding Suppliername}"
+                                Binding="{Binding Suppliername}"
                                 CanUserResize="False"
                                 Header="Nhà cung cấp"
                                 IsReadOnly="True" />
@@ -204,10 +204,15 @@
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
                                         <StackPanel Orientation="Horizontal">
-                                            <Button Style="{StaticResource gridEditButton}">
+                                            <Button Style="{StaticResource gridEditButton}"
+                                                    Command="{Binding DataContext.UpdateSupplierCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                                    CommandParameter="{Binding}">
                                                 <ma:PackIconMaterial Kind="PencilOutline" Style="{StaticResource gridButtonIcon}" />
                                             </Button>
-                                            <Button Margin="5,0,0,0" Style="{StaticResource gridRemoveButton}">
+                                            <Button Margin="5,0,0,0"
+                                                    Command="{Binding DataContext.DeleteSupplierCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                                    CommandParameter="{Binding}"
+                                                    Style="{StaticResource gridRemoveButton}">
                                                 <ma:PackIconMaterial Kind="DeleteOutline" Style="{StaticResource gridButtonIcon}" />
                                             </Button>
                                         </StackPanel>
@@ -219,6 +224,7 @@
                 </Border>
             </Grid>
         </Border>
+
         <materialDesign:DialogHost
             Background="Transparent"
             CloseOnClickAway="True"
@@ -227,9 +233,8 @@
             OverlayBackground="{DynamicResource PrimaryHueDarkBrush}"
             Placement="Mouse"
             Style="{StaticResource MaterialDesignEmbeddedDialogHost}">
-
             <materialDesign:DialogHost.DialogContent>
-                <view:AddSupplierView />
+                <ContentControl Content="{Binding AddSupplierVM}" />
             </materialDesign:DialogHost.DialogContent>
         </materialDesign:DialogHost>
     </Grid>

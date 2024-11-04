@@ -60,6 +60,12 @@ namespace CafeManager.WPF.ViewModels
             Application.Current.Shutdown();
         }
 
+        [RelayCommand]
+        private void DragMove()
+        {
+            Application.Current.MainWindow.DragMove();
+        }
+
         #endregion command handle window
     }
 }

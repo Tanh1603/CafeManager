@@ -1,6 +1,7 @@
 ﻿<ResourceDictionary
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:addviewmodels="clr-namespace:CafeManager.WPF.ViewModels.AddViewModel"
     xmlns:viewmodels="clr-namespace:CafeManager.WPF.ViewModels"
     xmlns:views="clr-namespace:CafeManager.WPF.Views">
 
@@ -16,5 +17,9 @@
     </DataTemplate>
     <DataTemplate DataType="{x:Type viewmodels:HomeViewModel}">
         <views:HomeAdminView />
+    </DataTemplate>
+
+    <DataTemplate DataType="{x:Type addviewmodels:AddSuppierViewModel}">
+        <views:AddSupplierView />
     </DataTemplate>
 </ResourceDictionary>

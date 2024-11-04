@@ -22,9 +22,9 @@
                 </LinearGradientBrush>
             </Border.Background>
 
-            <Grid Margin="50,0,40,0">
+            <Grid Margin="50,20,40,0">
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="100" />
+                    <RowDefinition Height="auto" />
                     <RowDefinition Height="auto" />
                     <RowDefinition Height="auto" />
                     <RowDefinition Height="auto" />

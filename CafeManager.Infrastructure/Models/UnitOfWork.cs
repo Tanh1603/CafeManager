@@ -16,8 +16,11 @@ namespace CafeManager.Infrastructure.Models
     public class UnitOfWork : IUnitOfWork
     {
         private readonly CafeManagerContext _context;
-        private IDbContextTransaction _transaction;
         private IDbContextFactory<CafeManagerContext> dbContextFactory;
+
+        private IDbContextTransaction _transaction;
+        private bool _isTransactionActive;
+        private int _transactionDepth = 0;
 
         #region food
 
@@ -81,26 +84,34 @@ namespace CafeManager.Infrastructure.Models
 
         public async Task BeginTransactionAsync()
         {
-            _transaction = await _context.Database.BeginTransactionAsync();
+            if (!_isTransactionActive)
+            {
+                _transaction = await _context.Database.BeginTransactionAsync();
+                _isTransactionActive = true;
+            }
+            _transactionDepth++;
         }
 
         public async Task CommitTransactionAsync()
         {
-            if (_transaction != null)
+            if (_isTransactionActive && --_transactionDepth == 0)
             {
-                await _transaction.CommitAsync();
+                await _transaction!.CommitAsync();
                 await _transaction.DisposeAsync();
-                _transaction.Dispose();
+                _transaction = null;
+                _isTransactionActive = false;
             }
         }
 
         public async Task RollbackTransactionAsync()
         {
-            if (_transaction != null)
+            if (_isTransactionActive)
             {
                 await _transaction.RollbackAsync();
                 await _transaction.DisposeAsync();
-                _transaction.Dispose();
+                _transaction = null;
+                _isTransactionActive = false;
+                _transactionDepth = 0;
             }
         }
     }

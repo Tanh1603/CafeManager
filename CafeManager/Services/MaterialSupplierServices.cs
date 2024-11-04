@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 
 namespace CafeManager.WPF.Services
 {
@@ -71,6 +72,68 @@ namespace CafeManager.WPF.Services
         public async Task<IEnumerable<MaterialDetailDTO>?> GetListMaterialWithDetail()
         {
             return await _unitOfWork.MaterialList.GetAllMaterialWithDetail();
+        }
+
+        public async Task<Supplier> AddSupplier(Supplier supplier)
+        {
+            try
+            {
+                await _unitOfWork.BeginTransactionAsync();
+
+                var list = await _unitOfWork.SupplierList.Create(supplier);
+
+                if (list == null)
+                {
+                    throw new InvalidOperationException("Lỗi.");
+                }
+
+                await _unitOfWork.CompleteAsync();
+
+                await _unitOfWork.CommitTransactionAsync();
+                return list;
+            }
+            catch (Exception ex)
+            {
+                await _unitOfWork.RollbackTransactionAsync();
+                throw new InvalidOperationException("Thêm nhà cung cấp thất bại.", ex);
+            }
+        }
+
+        public Supplier? UpdateSupplier(Supplier supplier)
+        {
+            var res = _unitOfWork.SupplierList.Update(supplier);
+            if (res != null)
+            {
+                _unitOfWork.Complete();
+            }
+            return res;
+        }
+
+        public async Task<Supplier> GetSupplierById(int id)
+        {
+            return await _unitOfWork.SupplierList.GetSupplierById(id);
+        }
+
+        public async Task<bool> DeleteSupplier(int id)
+        {
+            try
+            {
+                await _unitOfWork.BeginTransactionAsync();
+
+                var deleted = await _unitOfWork.SupplierList.Delete(id);
+                if (deleted == false)
+                {
+                    throw new InvalidOperationException("Lỗi.");
+                }
+                await _unitOfWork.CompleteAsync();
+                await _unitOfWork.CommitTransactionAsync();
+                return deleted;
+            }
+            catch (Exception ex)
+            {
+                await _unitOfWork.RollbackTransactionAsync();
+                throw new InvalidOperationException("Thêm nhà cung cấp thất bại.", ex);
+            }
         }
     }
 }

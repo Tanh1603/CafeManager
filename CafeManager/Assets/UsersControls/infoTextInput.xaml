@@ -19,6 +19,9 @@
             IsHitTestVisible="False"
             Text="{Binding ElementName=InfoTextInput, Path=Hint}"
             Visibility="{Binding ElementName=textBox, Path=Text.IsEmpty, Converter={StaticResource boolToVis}}" />
-        <TextBox x:Name="textBox" Style="{StaticResource textbox}" />
+        <TextBox
+            x:Name="textBox"
+            Style="{StaticResource textbox}"
+            Text="{Binding ElementName=InfoTextInput, Path=Text, Mode=TwoWay}" />
     </Grid>
 </UserControl>

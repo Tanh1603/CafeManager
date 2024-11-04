@@ -1,4 +1,5 @@
 ﻿using CafeManager.WPF.ViewModels;
+using CafeManager.WPF.ViewModels.AddViewModel;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using System;
@@ -20,6 +21,8 @@ namespace CafeManager.WPF.HostBuilders
                 services.AddScoped<MainAdminViewModel>(provider => new MainAdminViewModel(provider));
                 services.AddScoped<FoodListViewModel>(provider => new FoodListViewModel(provider));
                 services.AddScoped<HomeViewModel>(provider => new HomeViewModel(provider));
+
+                services.AddScoped<AddSuppierViewModel>(provider => new AddSuppierViewModel(provider));
 
                 services.AddSingleton<MainWindow>(provider => new MainWindow()
                 {

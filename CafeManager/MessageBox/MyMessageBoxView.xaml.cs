@@ -90,7 +90,7 @@ namespace CafeManager.WPF.MessageBox
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            Height = (txbText.LineCount * 27) + gBar.Height + 60;
+            Height = (txbText.LineCount * 27) + gBar.Height + 50;
         }
 
         private void bntReturnValue_Click(object sender, RoutedEventArgs e)

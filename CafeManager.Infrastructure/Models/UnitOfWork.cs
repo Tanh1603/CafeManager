@@ -16,7 +16,7 @@ namespace CafeManager.Infrastructure.Models
     public class UnitOfWork : IUnitOfWork
     {
         private readonly CafeManagerContext _context;
-        private IDbContextFactory<CafeManagerContext> dbContextFactory;
+        private readonly IDbContextFactory<CafeManagerContext> dbContextFactory;
 
         private IDbContextTransaction _transaction;
         private bool _isTransactionActive;
@@ -80,6 +80,7 @@ namespace CafeManager.Infrastructure.Models
         {
             _context.Dispose();
             _transaction?.Dispose();
+            GC.SuppressFinalize(this);
         }
 
         public async Task BeginTransactionAsync()

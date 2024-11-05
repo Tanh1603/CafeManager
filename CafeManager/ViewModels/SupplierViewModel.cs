@@ -18,7 +18,7 @@ namespace CafeManager.WPF.ViewModels
         private bool _isOpenAddSupplier;
 
         [ObservableProperty]
-        private ObservableCollection<Supplier> _listSupplier = new();
+        private ObservableCollection<Supplier> _listSupplier = [];
 
         [ObservableProperty]
         private AddSuppierViewModel _addSupplierVM;
@@ -164,6 +164,7 @@ namespace CafeManager.WPF.ViewModels
                     }
                 };
                 AddSupplierVM.Close -= () => IsOpenAddSupplier = false;
+                GC.SuppressFinalize(this);
             }
         }
     }

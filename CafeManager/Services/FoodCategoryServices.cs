@@ -20,7 +20,7 @@ namespace CafeManager.WPF.Services
             _unitOfWork = provider.GetRequiredService<IUnitOfWork>();
         }
 
-        public async Task<IEnumerable<Foodcategory>> GetListCategory()
+        public async Task<IEnumerable<Foodcategory>> GetListFoodCategory()
         {
             return await _unitOfWork.FoodCategoryList.GetAllFoodCategoryAsync();
         }

@@ -115,5 +115,10 @@ namespace CafeManager.Infrastructure.Models
                 _transactionDepth = 0;
             }
         }
+
+        public void ClearChangeTracker()
+        {
+            _context.ChangeTracker.Clear();
+        }
     }
 }

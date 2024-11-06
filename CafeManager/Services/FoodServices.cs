@@ -22,31 +22,79 @@ namespace CafeManager.WPF.Services
             _unitOfWork = _serviceProvider.GetRequiredService<IUnitOfWork>();
         }
 
+        public async Task<IEnumerable<Food>> GetAllListFood()
+        {
+            return await _unitOfWork.FoodList.GetAllListFood();
+        }
+
+        public async Task<Food> GetFoodById(int id)
+        {
+            return await _unitOfWork.FoodList.GetFoodById(id);
+        }
+
         public async Task<Food> AddFood(Food food)
         {
-            var entity = await _unitOfWork.FoodList.Create(food);
-            _unitOfWork.Complete();
-            return entity;
+            try
+            {
+                await _unitOfWork.BeginTransactionAsync();
+
+                var list = await _unitOfWork.FoodList.Create(food);
+
+                if (list == null)
+                {
+                    throw new InvalidOperationException("Lỗi.");
+                }
+
+                await _unitOfWork.CompleteAsync();
+                await _unitOfWork.CommitTransactionAsync();
+                return list;
+            }
+            catch (Exception)
+            {
+                await _unitOfWork.RollbackTransactionAsync();
+                _unitOfWork.ClearChangeTracker();
+                throw new InvalidOperationException("Thêm thức ăn thất bại.");
+            }
         }
 
         public Food? UpdatFood(Food? obj)
         {
-            var res = _unitOfWork.FoodList.Update(obj);
-            if (res != null)
+            try
             {
-                _unitOfWork.Complete();
+                var res = _unitOfWork.FoodList.Update(obj);
+                if (res != null)
+                {
+                    _unitOfWork.Complete();
+                }
+                return res;
             }
-            return res;
+            catch (Exception)
+            {
+                _unitOfWork.ClearChangeTracker();
+                throw new InvalidOperationException("Sửa thức ăn thất bại.");
+            }
         }
 
         public async Task<bool> DeletFood(int id)
         {
-            var res = await _unitOfWork.FoodList.Delete(id);
-            if (res)
+            try
             {
-                _unitOfWork.Complete();
+                await _unitOfWork.BeginTransactionAsync();
+
+                bool isdeleted = await _unitOfWork.FoodList.Delete(id);
+                if (isdeleted)
+                {
+                    await _unitOfWork.CompleteAsync();
+                }
+                await _unitOfWork.CommitTransactionAsync();
+                return isdeleted;
             }
-            return res;
+            catch (Exception)
+            {
+                await _unitOfWork.RollbackTransactionAsync();
+                _unitOfWork.ClearChangeTracker();
+                throw new InvalidOperationException("Xóa thức ăn thất bại.");
+            }
         }
     }
 }

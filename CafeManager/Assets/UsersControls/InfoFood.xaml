@@ -8,16 +8,12 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     Name="infofood"
     Width="225"
-    Height="185"
     mc:Ignorable="d">
     <UserControl.Resources>
         <local:Utf8Converter x:Key="Utf8Converter" />
         <local:StringToImageSourceConverter x:Key="StringToImageSourceConverter" />
     </UserControl.Resources>
-    <Border
-        Margin="0,10,10,0"
-        BorderThickness="3"
-        CornerRadius="5">
+    <Border BorderThickness="3" CornerRadius="5">
         <Border.BorderBrush>
             <LinearGradientBrush StartPoint="0, 0.5">
                 <GradientStop Offset="0" Color="#c69a5d" />
@@ -30,12 +26,9 @@
             <Grid.RowDefinitions>
                 <RowDefinition Height="130" />
                 <RowDefinition Height="*" />
-
             </Grid.RowDefinitions>
 
-
-            <Image RenderOptions.BitmapScalingMode="HighQuality" Source="{Binding ElementName=infofood, Path=SourceImage, Converter={StaticResource StringToImageSourceConverter}, FallbackValue='/Assets/Images/defaultImage'}" />
-
+            <Image RenderOptions.BitmapScalingMode="HighQuality" Source="{Binding ElementName=infofood, Path=SourceImage, Converter={StaticResource StringToImageSourceConverter}, Mode=TwoWay}" />
 
             <Border Grid.Row="1" CornerRadius="0 0 3 3">
                 <Border.Style>
@@ -52,28 +45,41 @@
                 </Border.Style>
                 <Grid>
 
-                    <TextBlock
-                        Margin="0,0,0,20"
-                        FontSize="18"
-                        Style="{StaticResource infoFoodText}"
-                        Text="{Binding ElementName=infofood, Path=Text, Converter={StaticResource Utf8Converter}}" />
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="auto" />
+                    </Grid.ColumnDefinitions>
 
-                    <TextBlock
-                        Margin="0,20,0,0"
-                        Style="{StaticResource infoFoodText}"
-                        Text="{Binding ElementName=infofood, Path=Price}" />
+                    <StackPanel Grid.Column="0">
+                        <TextBlock
+                            FontSize="18"
+                            Style="{StaticResource infoFoodText}"
+                            Text="{Binding ElementName=infofood, Path=Text, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay, Converter={StaticResource Utf8Converter}}" />
 
-                    <ma:PackIconMaterial Kind="TrashCan" Style="{StaticResource infoFoodIcon}" />
-                    <ma:PackIconMaterial
-                        Margin="0,0,25,0"
-                        Kind="Pencil"
-                        Style="{StaticResource infoFoodIcon}" />
+                        <TextBlock Style="{StaticResource infoFoodText}" Text="{Binding ElementName=infofood, UpdateSourceTrigger=PropertyChanged, Path=Price, Mode=TwoWay}" />
+                    </StackPanel>
 
+                    <StackPanel Grid.Column="1" Orientation="Horizontal">
+
+                        <Button
+                            x:Name="BtnDelete"
+                            Padding="2"
+                            HorizontalAlignment="Center"
+                            Background="Transparent"
+                            Click="BtnDelete_Click">
+                            <ma:PackIconMaterial Kind="TrashCan" Style="{StaticResource infoFoodIcon}" />
+                        </Button>
+                        <Button
+                            x:Name="BtnUpdate"
+                            Padding="2"
+                            HorizontalAlignment="Center"
+                            Background="Transparent"
+                            Click="BtnUpdate_Click">
+                            <ma:PackIconMaterial Kind="Pencil" Style="{StaticResource infoFoodIcon}" />
+                        </Button>
+                    </StackPanel>
                 </Grid>
             </Border>
-
-
-
         </Grid>
     </Border>
 </UserControl>

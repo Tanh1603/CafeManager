@@ -26,17 +26,15 @@ namespace CafeManager.WPF.Assets.UsersControls
             InitializeComponent();
         }
 
-
-
-        public string SourceImage
+        public BitmapImage SourceImage
         {
-            get { return (string)GetValue(SourceImageProperty); }
+            get { return (BitmapImage)GetValue(SourceImageProperty); }
             set { SetValue(SourceImageProperty, value); }
         }
 
         // Using a DependencyProperty as the backing store for SourceImage.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty SourceImageProperty =
-            DependencyProperty.Register("SourceImage", typeof(string), typeof(InfoFood));
+            DependencyProperty.Register("SourceImage", typeof(BitmapImage), typeof(InfoFood));
 
         public string Text
         {
@@ -48,7 +46,7 @@ namespace CafeManager.WPF.Assets.UsersControls
         public static readonly DependencyProperty TextProperty =
             DependencyProperty.Register("Text", typeof(string), typeof(InfoFood));
 
-        public int Price
+        public decimal? Price
         {
             get { return (int)GetValue(PriceProperty); }
             set { SetValue(PriceProperty, value); }
@@ -56,11 +54,35 @@ namespace CafeManager.WPF.Assets.UsersControls
 
         // Using a DependencyProperty as the backing store for SourceImage.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty PriceProperty =
-            DependencyProperty.Register("Price", typeof(int), typeof(InfoFood));
+            DependencyProperty.Register("Price", typeof(decimal?), typeof(InfoFood));
 
+        public static readonly RoutedEvent UpdateFoodEvent = EventManager.RegisterRoutedEvent("UpdateFood", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(InfoFood));
 
-  
+        public event RoutedEventHandler UpdateFood
+        {
+            add { AddHandler(UpdateFoodEvent, value); }
+            remove { RemoveHandler(UpdateFoodEvent, value); }
+        }
+
+        private void BtnUpdate_Click(object sender, RoutedEventArgs e)
+        {
+            RaiseEvent(new RoutedEventArgs(UpdateFoodEvent));
+        }
+
+        public static readonly RoutedEvent DeleteFoodEvent = EventManager.RegisterRoutedEvent("DeleteFood", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(InfoFood));
+
+        public event RoutedEventHandler DeleteFood
+        {
+            add { AddHandler(DeleteFoodEvent, value); }
+            remove { RemoveHandler(DeleteFoodEvent, value); }
+        }
+
+        private void BtnDelete_Click(object sender, RoutedEventArgs e)
+        {
+            RaiseEvent(new RoutedEventArgs(DeleteFoodEvent));
+        }
     }
+
     public class Utf8Converter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
@@ -78,27 +100,21 @@ namespace CafeManager.WPF.Assets.UsersControls
             return value;
         }
     }
+
     public class StringToImageSourceConverter : IValueConverter
     {
-        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        public object? Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            if (value is string imagePath && !string.IsNullOrEmpty(imagePath))
+            if (value is BitmapImage bitmapImage)
             {
-                try
-                {
-                    return new BitmapImage(new Uri(imagePath, UriKind.RelativeOrAbsolute));
-                }
-                catch
-                {
-                    return null; // Trả về null nếu không tìm thấy ảnh
-                }
+                return bitmapImage;
             }
-            return null; // Trả về null nếu giá trị không phải là chuỗi hợp lệ
+            return new BitmapImage(new Uri("pack://application:,,,/Assets/Images/defaultImage.png"));
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            return value; // Không cần xử lý ConvertBack
+            return value;
         }
     }
 }

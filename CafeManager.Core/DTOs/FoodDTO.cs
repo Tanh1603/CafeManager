@@ -1,25 +1,24 @@
-﻿using System;
+﻿using CafeManager.Core.Data;
+using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Media.Imaging;
 
 namespace CafeManager.Core.DTOs
 {
     public class FoodDTO
     {
-        //public FoodDTO(string displayFoodName, decimal? foodPrice, decimal? discountFood, string imageFood)
-        //{
-        //    DisplayFoodName = displayFoodName;
-        //    FoodPrice = foodPrice;
-        //    DiscountFood = discountFood;
-        //    ImageFood = imageFood;
-        //}
+        public int Id { get; set; }
+        public string Foodname { get; set; }
+        public decimal? Price { get; set; }
+        public decimal? Discountfood { get; set; }
+        public BitmapImage? Imagefood { get; set; }
+        public Foodcategory Foodcategory { get; set; }
 
-        public string DisplayFoodName { get; set; }
-        public decimal? FoodPrice { get; set; }
-        public decimal? DiscountFood { get; set; }
-        public string ImageFood { get; set; }
-        public decimal? PriceDiscount => FoodPrice * DiscountFood;
+        [NotMapped]
+        public decimal? PriceDiscount => Price * Discountfood;
     }
 }

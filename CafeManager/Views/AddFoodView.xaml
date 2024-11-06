@@ -3,7 +3,9 @@
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
     xmlns:ma="http://metro.mahapps.com/winfx/xaml/iconpacks"
+    xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:uc="clr-namespace:CafeManager.WPF.Assets.UsersControls"
     Width="800"
@@ -30,22 +32,27 @@
             </Grid.ColumnDefinitions>
 
             <StackPanel VerticalAlignment="Center">
-                <Ellipse
+                <Grid>
+
+                    <Ellipse
                     Width="200"
                     Height="200"
                     HorizontalAlignment="Center"
                     VerticalAlignment="Bottom"
                     Fill="#ffffff"
                     StrokeThickness="4">
-                    <Ellipse.Stroke>
-                        <LinearGradientBrush>
-                            <GradientStop Offset="0" Color="#cea48c" />
-                            <GradientStop Offset="1" Color="#b79c8b" />
+                        <Ellipse.Stroke>
+                            <LinearGradientBrush>
+                                <GradientStop Offset="0" Color="#cea48c" />
+                                <GradientStop Offset="1" Color="#b79c8b" />
+                            </LinearGradientBrush>
+                        </Ellipse.Stroke>
+                    </Ellipse>
 
-                        </LinearGradientBrush>
-                    </Ellipse.Stroke>
-                </Ellipse>
-                <Button Margin="0,20,0,0" Style="{StaticResource upLoadButton}">
+                    <Image RenderOptions.BitmapScalingMode="HighQuality"
+                           Source="{Binding Imagefood, UpdateSourceTrigger=PropertyChanged}" />
+                </Grid>
+                <Button Margin="0,20,0,0" Style="{StaticResource upLoadButton}" Command="{Binding OpenUploadImageCommand}">
                     <StackPanel Orientation="Horizontal">
                         <ma:PackIconMaterial VerticalAlignment="Center" Kind="Upload" />
                         <TextBlock Margin="10,0,0,0" Text="Tải ảnh lên" />
@@ -77,13 +84,12 @@
                     <RowDefinition Height="auto" />
                     <RowDefinition Height="auto" />
                     <RowDefinition Height="auto" />
-
                 </Grid.RowDefinitions>
 
                 <TextBlock
                     Grid.Row="0"
                     Style="{StaticResource infoText}"
-                    Text="Tên " />
+                    Text="Tên" />
                 <TextBlock
                     Grid.Row="1"
                     Style="{StaticResource infoText}"
@@ -97,24 +103,38 @@
                     Style="{StaticResource infoText}"
                     Text="Mã giảm giá" />
 
-
                 <uc:infoTextInput
                     Grid.Row="0"
                     Grid.Column="1"
+                    Text="{Binding Foodname, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
                     Hint="trà sữa, trà chanh,..." />
-                <uc:infoTextInput
+
+                <ComboBox
+                    Name="cbFoodCategory"
                     Grid.Row="1"
                     Grid.Column="1"
-                    Hint="nước, bánh,.." />
+                    materialDesign:HintAssist.Hint="Danh mục thức ăn"
+                    ItemsSource="{Binding ListFoodCategory}"
+                    SelectedItem="{Binding SelectedFoodCategory}"
+                    Style="{StaticResource MaterialDesignOutlinedComboBox}">
+
+                    <ComboBox.ItemTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding Foodcategoryname}" />
+                        </DataTemplate>
+                    </ComboBox.ItemTemplate>
+                </ComboBox>
+
                 <uc:infoTextInput
                     Grid.Row="2"
+                    Text="{Binding Price, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
                     Grid.Column="1"
                     Hint="20000,..." />
                 <uc:infoTextInput
                     Grid.Row="3"
                     Grid.Column="1"
+                    Text="{Binding DiscountFood, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
                     Hint="15%" />
-
             </Grid>
 
             <Button
@@ -122,11 +142,9 @@
                 Margin="20"
                 HorizontalAlignment="Right"
                 VerticalAlignment="Bottom"
+                Content="Xác nhận"
+                Command="{Binding SubmitCommand}"
                 Style="{StaticResource adjustInfoButton}">
-                <StackPanel HorizontalAlignment="Center" Orientation="Horizontal">
-                    <ma:PackIconMaterial VerticalAlignment="Center" Kind="Plus" />
-                    <TextBlock Margin="10,0,0,0" Text="Thêm" />
-                </StackPanel>
             </Button>
 
             <StackPanel
@@ -135,17 +153,13 @@
                 HorizontalAlignment="Right"
                 VerticalAlignment="Top"
                 Orientation="Horizontal">
-                <ma:PackIconMaterial
-                    x:Name="closeIcon"
-                    Margin="0,8,15,0"
-                    Foreground="#844418"
-                    Kind="Minus"
-                    Style="{StaticResource ìconApp}" />
-                <ma:PackIconMaterial
-                    x:Name="minimizeIcon"
-                    Foreground="#844418"
-                    Kind="Close"
-                    Style="{StaticResource ìconApp}" />
+                <Button Background="OrangeRed" Command="{Binding CloseCommand}">
+                    <ma:PackIconMaterial
+                        x:Name="minimizeIcon"
+                        Foreground="#844418"
+                        Kind="Close"
+                        Style="{StaticResource ìconApp}" />
+                </Button>
             </StackPanel>
         </Grid>
     </Border>

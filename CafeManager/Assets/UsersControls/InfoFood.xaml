@@ -8,72 +8,85 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     Name="infofood"
     Width="225"
-    Height="185"
     mc:Ignorable="d">
     <UserControl.Resources>
         <local:Utf8Converter x:Key="Utf8Converter" />
         <local:StringToImageSourceConverter x:Key="StringToImageSourceConverter" />
     </UserControl.Resources>
-    <Border
-        Margin="0,10,10,0"
-        BorderThickness="3"
-        CornerRadius="5">
-        <Border.BorderBrush>
-            <LinearGradientBrush StartPoint="0, 0.5">
-                <GradientStop Offset="0" Color="#c69a5d" />
-                <GradientStop Offset="0.5" Color="#cb925d" />
+    <Grid>
+        <Border BorderThickness="3" CornerRadius="5">
+            <Border.BorderBrush>
+                <LinearGradientBrush StartPoint="0, 0.5">
+                    <GradientStop Offset="0" Color="#c69a5d" />
+                    <GradientStop Offset="0.5" Color="#cb925d" />
 
-                <GradientStop Offset="1" Color="#d4b096" />
-            </LinearGradientBrush>
-        </Border.BorderBrush>
-        <Grid>
-            <Grid.RowDefinitions>
-                <RowDefinition Height="130" />
-                <RowDefinition Height="*" />
+                    <GradientStop Offset="1" Color="#d4b096" />
+                </LinearGradientBrush>
+            </Border.BorderBrush>
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="130" />
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
 
-            </Grid.RowDefinitions>
+                <Image RenderOptions.BitmapScalingMode="HighQuality" Source="{Binding ElementName=infofood, Path=SourceImage, Converter={StaticResource StringToImageSourceConverter}, Mode=TwoWay}" />
 
+                <Border Grid.Row="1" CornerRadius="0 0 3 3">
+                    <Border.Style>
+                        <Style TargetType="Border">
+                            <Setter Property="Background">
+                                <Setter.Value>
+                                    <LinearGradientBrush StartPoint="0,0.5" EndPoint="1,0.5">
+                                        <GradientStop Offset="0" Color="#d5b096" />
+                                        <GradientStop Offset="1" Color="#d9c6b3" />
+                                    </LinearGradientBrush>
+                                </Setter.Value>
+                            </Setter>
+                        </Style>
+                    </Border.Style>
+                    <Grid>
 
-            <Image RenderOptions.BitmapScalingMode="HighQuality" Source="{Binding ElementName=infofood, Path=SourceImage, Converter={StaticResource StringToImageSourceConverter}, FallbackValue='/Assets/Images/defaultImage'}" />
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="auto" />
+                        </Grid.ColumnDefinitions>
 
+                        <StackPanel Grid.Column="0">
+                            <TextBlock
+                            FontSize="18"
+                            Style="{StaticResource infoFoodText}"
+                            Text="{Binding ElementName=infofood, Path=Text, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay, Converter={StaticResource Utf8Converter}}" />
 
-            <Border Grid.Row="1" CornerRadius="0 0 3 3">
-                <Border.Style>
-                    <Style TargetType="Border">
-                        <Setter Property="Background">
-                            <Setter.Value>
-                                <LinearGradientBrush StartPoint="0,0.5" EndPoint="1,0.5">
-                                    <GradientStop Offset="0" Color="#d5b096" />
-                                    <GradientStop Offset="1" Color="#d9c6b3" />
-                                </LinearGradientBrush>
-                            </Setter.Value>
-                        </Setter>
-                    </Style>
-                </Border.Style>
-                <Grid>
+                            <TextBlock Style="{StaticResource infoFoodText}" Text="{Binding ElementName=infofood, UpdateSourceTrigger=PropertyChanged, Path=Price, Mode=TwoWay}" />
+                        </StackPanel>
 
-                    <TextBlock
-                        Margin="0,0,0,20"
-                        FontSize="18"
-                        Style="{StaticResource infoFoodText}"
-                        Text="{Binding ElementName=infofood, Path=Text, Converter={StaticResource Utf8Converter}}" />
+                        <StackPanel Grid.Column="1" Orientation="Horizontal">
 
-                    <TextBlock
-                        Margin="0,20,0,0"
-                        Style="{StaticResource infoFoodText}"
-                        Text="{Binding ElementName=infofood, Path=Price}" />
+                            <Button
+                            x:Name="BtnDelete"
+                            Padding="2"
+                            HorizontalAlignment="Center"
+                            Background="Transparent"
+                            Click="BtnDelete_Click">
+                                <ma:PackIconMaterial Kind="TrashCan" Style="{StaticResource infoFoodIcon}" />
+                            </Button>
+                            <Button
+                            x:Name="BtnUpdate"
+                            Padding="2"
+                            HorizontalAlignment="Center"
+                            Background="Transparent"
+                            Click="BtnUpdate_Click">
+                                <ma:PackIconMaterial Kind="Pencil" Style="{StaticResource infoFoodIcon}" />
+                            </Button>
+                        </StackPanel>
+                    </Grid>
+                </Border>
+            </Grid>
+        </Border>
 
-                    <ma:PackIconMaterial Kind="TrashCan" Style="{StaticResource infoFoodIcon}" />
-                    <ma:PackIconMaterial
-                        Margin="0,0,25,0"
-                        Kind="Pencil"
-                        Style="{StaticResource infoFoodIcon}" />
-
-                </Grid>
-            </Border>
-
-
-
-        </Grid>
-    </Border>
+        <StackPanel Background="Yellow" Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Top">
+            <Label Content="Giảm giá:" Foreground="Red" HorizontalAlignment="Right" />
+            <TextBlock TextAlignment="Center" VerticalAlignment="Center" Foreground="OrangeRed" MinWidth="50" Text="{Binding ElementName=infofood, Path=Discountfood, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" HorizontalAlignment="Right" />
+        </StackPanel>
+    </Grid>
 </UserControl>

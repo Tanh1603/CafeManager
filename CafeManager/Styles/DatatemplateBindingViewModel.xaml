@@ -22,4 +22,8 @@
     <DataTemplate DataType="{x:Type addviewmodels:AddSuppierViewModel}">
         <views:AddSupplierView />
     </DataTemplate>
+
+    <DataTemplate DataType="{x:Type addviewmodels:AddUpdateFoodViewModel}">
+        <views:AddFoodView />
+    </DataTemplate>
 </ResourceDictionary>

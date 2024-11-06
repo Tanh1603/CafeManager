@@ -23,6 +23,7 @@ namespace CafeManager.WPF.HostBuilders
                 services.AddScoped<HomeViewModel>(provider => new HomeViewModel(provider));
 
                 services.AddScoped<AddSuppierViewModel>(provider => new AddSuppierViewModel(provider));
+                services.AddScoped<AddUpdateFoodViewModel>(provider => new AddUpdateFoodViewModel(provider));
 
                 services.AddSingleton<MainWindow>(provider => new MainWindow()
                 {

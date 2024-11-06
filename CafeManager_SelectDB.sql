@@ -2,9 +2,14 @@ SELECT * FROM appuser;
 SELECT * FROM staff;
 
 SELECT * FROM foodcategory;
-SELECT * FROM food;
+SELECT foodid, foodname, isdeleted, discountfood FROM food;
+ALTER SEQUENCE food_foodid_seq RESTART WITH 1;
+DELETE FROM food;
+
 SELECT * FROM invoices;
+DELETE FROM invoices;
 SELECT * FROM invoicedetails;
+DELETE FROM invoicedetails;
 SELECT * FROM coffeetable;
 
 SELECT * FROM imports;

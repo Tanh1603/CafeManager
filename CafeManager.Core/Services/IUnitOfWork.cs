@@ -32,5 +32,7 @@ namespace CafeManager.Core.Services
         Task CommitTransactionAsync();
 
         Task RollbackTransactionAsync();
+
+        void ClearChangeTracker();
     }
 }

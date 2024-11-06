@@ -13,14 +13,14 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace CafeManager.WPF.Views
+namespace CafeManager.WPF.Views.AdminView
 {
     /// <summary>
-    /// Interaction logic for loginView.xaml
+    /// Interaction logic for InventoryView.xaml
     /// </summary>
-    public partial class LoginView : UserControl
+    public partial class InventoryView : UserControl
     {
-        public LoginView()
+        public InventoryView()
         {
             InitializeComponent();
         }

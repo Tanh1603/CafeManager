@@ -1,6 +1,7 @@
 ﻿using CafeManager.Core.Data;
 using CafeManager.Core.DTOs;
 using CafeManager.WPF.Services;
+using CafeManager.WPF.Stores;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Microsoft.Extensions.DependencyInjection;
@@ -14,9 +15,10 @@ using System.Windows;
 
 namespace CafeManager.WPF.ViewModels
 {
-    public partial class MainViewModel : ObservableObject
+    public partial class MainViewModel : ObservableObject, IDisposable
     {
-        private IServiceProvider _provider;
+        private readonly IServiceProvider _provider;
+        private readonly NavigationStore _navigationStore;
 
         [ObservableProperty]
         private ObservableObject _currentViewModel;
@@ -25,12 +27,16 @@ namespace CafeManager.WPF.ViewModels
         {
             _provider = provider;
 
-            CurrentViewModel = _provider.GetRequiredService<MainAdminViewModel>();
+            _navigationStore = _provider.GetRequiredService<NavigationStore>();
+            _navigationStore.Navigation = CurrentViewModel;
+
+            CurrentViewModel = _provider.GetRequiredService<LoginViewModel>();
+            _navigationStore.NavigationStoreChanged += _navigationStore_NavigationStoreChanged;
         }
 
-        [RelayCommand]
-        private void ChangeCurrentViewModel(string model)
+        private void _navigationStore_NavigationStoreChanged()
         {
+            CurrentViewModel = _navigationStore.Navigation;
         }
 
         #region command handle window
@@ -67,5 +73,10 @@ namespace CafeManager.WPF.ViewModels
         }
 
         #endregion command handle window
+
+        public void Dispose()
+        {
+            _navigationStore.NavigationStoreChanged -= _navigationStore_NavigationStoreChanged;
+        }
     }
 }

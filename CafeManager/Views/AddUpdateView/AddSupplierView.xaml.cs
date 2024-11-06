@@ -13,14 +13,14 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace CafeManager.WPF.Views
+namespace CafeManager.WPF.Views.AddUpdateView
 {
     /// <summary>
-    /// Interaction logic for loginView.xaml
+    /// Interaction logic for AddSupplierView.xaml
     /// </summary>
-    public partial class LoginView : UserControl
+    public partial class AddSupplierView : UserControl
     {
-        public LoginView()
+        public AddSupplierView()
         {
             InitializeComponent();
         }

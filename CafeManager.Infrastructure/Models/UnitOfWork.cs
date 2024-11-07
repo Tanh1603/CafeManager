@@ -49,6 +49,10 @@ namespace CafeManager.Infrastructure.Models
 
         #endregion Import
 
+        public IRepository<Staff> StaffList { get; private set; }
+
+        public IAppUserRepository AppUserList { get; private set; }
+
         public UnitOfWork(IDbContextFactory<CafeManagerContext> dbContextFactory)
         {
             _context = dbContextFactory.CreateDbContext();
@@ -64,6 +68,9 @@ namespace CafeManager.Infrastructure.Models
             MaterialList = new MaterialRepository(_context);
             SupplierList = new SupplierRepository(_context);
             MaterialSupplierList = new Repository<Materialsupplier>(_context);
+
+            StaffList = new Repository<Staff>(_context);
+            AppUserList = new AppUserRepository(_context);
         }
 
         public int Complete()

@@ -29,52 +29,61 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
             _materialSupplierServices = provider.GetRequiredService<MaterialSupplierServices>();
 
             AddSupplierVM = _serviceProvider.GetRequiredService<AddSuppierViewModel>();
-            AddSupplierVM.AddSupplierChanged += async (supplier) =>
-            {
-                try
-                {
-                    IsOpenAddSupplier = false;
-                    var addedSupplier = await _materialSupplierServices.AddSupplier(supplier);
-                    ListSupplier.Add(addedSupplier);
-
-                    MessageBox.Show("Thêm nhà cung cấp thành công");
-                }
-                catch (InvalidOperationException ex)
-                {
-                    MessageBox.Show(ex.Message);
-                }
-            };
-            AddSupplierVM.UpdateSupplierNameChanged += async (supplier) =>
-            {
-                try
-                {
-                    IsOpenAddSupplier = false;
-                    Supplier oldSupplier = await _materialSupplierServices.GetSupplierById(supplier.Supplierid);
-                    Supplier? tmp = ListSupplier.FirstOrDefault(x => x.Supplierid == supplier.Supplierid);
-
-                    oldSupplier.Suppliername = supplier.Suppliername;
-                    oldSupplier.Representativesupplier = supplier.Representativesupplier;
-                    oldSupplier.Address = supplier.Address;
-                    oldSupplier.Email = supplier.Email;
-                    oldSupplier.Phone = supplier.Phone;
-                    oldSupplier.Notes = supplier.Notes;
-
-                    var newSupplier = _materialSupplierServices.UpdateSupplier(oldSupplier);
-                    if (newSupplier != null)
-                    {
-                        tmp = newSupplier;
-                        ListSupplier = new(ListSupplier);
-                        MessageBox.Show("Cập nhật nhà cung cấp thành công");
-                    }
-                }
-                catch (InvalidOperationException ex)
-                {
-                    MessageBox.Show(ex.Message);
-                }
-            };
-            AddSupplierVM.Close += () => IsOpenAddSupplier = false;
+            AddSupplierVM.AddSupplierChanged += AddSupplierVM_AddSupplierChanged;
+            AddSupplierVM.UpdateSupplierNameChanged += AddSupplierVM_UpdateSupplierNameChanged;
+            AddSupplierVM.Close += AddSupplierVM_Close; ;
 
             _ = LoadData();
+        }
+
+        private void AddSupplierVM_Close()
+        {
+            IsOpenAddSupplier = false;
+        }
+
+        private async void AddSupplierVM_UpdateSupplierNameChanged(Supplier obj)
+        {
+            try
+            {
+                IsOpenAddSupplier = false;
+                Supplier oldSupplier = await _materialSupplierServices.GetSupplierById(obj.Supplierid);
+                Supplier? tmp = ListSupplier.FirstOrDefault(x => x.Supplierid == obj.Supplierid);
+
+                oldSupplier.Suppliername = obj.Suppliername;
+                oldSupplier.Representativesupplier = obj.Representativesupplier;
+                oldSupplier.Address = obj.Address;
+                oldSupplier.Email = obj.Email;
+                oldSupplier.Phone = obj.Phone;
+                oldSupplier.Notes = obj.Notes;
+
+                var newSupplier = _materialSupplierServices.UpdateSupplier(oldSupplier);
+                if (newSupplier != null)
+                {
+                    tmp = newSupplier;
+                    ListSupplier = new(ListSupplier);
+                    MessageBox.Show("Cập nhật nhà cung cấp thành công");
+                }
+            }
+            catch (InvalidOperationException ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+        }
+
+        private async void AddSupplierVM_AddSupplierChanged(Supplier obj)
+        {
+            try
+            {
+                IsOpenAddSupplier = false;
+                var addedSupplier = await _materialSupplierServices.AddSupplier(obj);
+                ListSupplier.Add(addedSupplier);
+
+                MessageBox.Show("Thêm nhà cung cấp thành công");
+            }
+            catch (InvalidOperationException ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
         }
 
         private async Task LoadData()
@@ -130,43 +139,11 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
         {
             if (AddSupplierVM != null)
             {
-                AddSupplierVM.AddSupplierChanged -= async (supplier) =>
-                {
-                    try
-                    {
-                        IsOpenAddSupplier = false;
-                        var addedSupplier = await _materialSupplierServices.AddSupplier(supplier);
-                        ListSupplier.Add(addedSupplier);
-                        MessageBox.Show("Thêm nhà cung cấp thành công");
-                    }
-                    catch (InvalidOperationException ex)
-                    {
-                        MessageBox.Show(ex.Message);
-                    }
-                };
-                AddSupplierVM.UpdateSupplierNameChanged -= async (supplier) =>
-                {
-                    try
-                    {
-                        IsOpenAddSupplier = false;
-                        Supplier oldSupplier = await _materialSupplierServices.GetSupplierById(supplier.Supplierid);
-                        oldSupplier.Suppliername = supplier.Suppliername;
-                        oldSupplier.Representativesupplier = supplier.Representativesupplier;
-                        oldSupplier.Address = supplier.Address;
-                        oldSupplier.Email = supplier.Email;
-                        oldSupplier.Phone = supplier.Phone;
-
-                        var newSupplier = _materialSupplierServices.UpdateSupplier(oldSupplier);
-                        MessageBox.Show("Cập nhật nhà cung cấp thành công");
-                    }
-                    catch (InvalidOperationException ex)
-                    {
-                        MessageBox.Show(ex.Message);
-                    }
-                };
-                AddSupplierVM.Close -= () => IsOpenAddSupplier = false;
-                GC.SuppressFinalize(this);
+                AddSupplierVM.AddSupplierChanged -= AddSupplierVM_AddSupplierChanged;
+                AddSupplierVM.UpdateSupplierNameChanged -= AddSupplierVM_UpdateSupplierNameChanged;
+                AddSupplierVM.Close -= AddSupplierVM_Close;
             }
+            GC.SuppressFinalize(this);
         }
     }
 }

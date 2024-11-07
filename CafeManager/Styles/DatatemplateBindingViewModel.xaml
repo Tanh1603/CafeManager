@@ -11,6 +11,9 @@
     <DataTemplate DataType="{x:Type viewmodels:MainAdminViewModel}">
         <views:MainAdminView />
     </DataTemplate>
+    <DataTemplate DataType="{x:Type viewmodels:MainUserViewModel}">
+        <views:MainUserView />
+    </DataTemplate>
     <DataTemplate DataType="{x:Type viewmodels:LoginViewModel}">
         <views:LoginView />
     </DataTemplate>

@@ -18,24 +18,25 @@ namespace CafeManager.WPF.HostBuilders
         {
             hostBuilder.ConfigureServices(services =>
             {
-                services.AddScoped<MainViewModel>(provider => new MainViewModel(provider));
-                services.AddScoped<MainAdminViewModel>(provider => new MainAdminViewModel(provider));
+                services.AddTransient<MainViewModel>(provider => new MainViewModel(provider));
+                services.AddTransient<MainAdminViewModel>(provider => new MainAdminViewModel(provider));
+                services.AddTransient<MainUserViewModel>(provider => new MainUserViewModel(provider));
 
-                services.AddScoped<AppUserViewModel>(provider => new AppUserViewModel(provider));
-                services.AddScoped<FoodViewModel>(provider => new FoodViewModel(provider));
-                services.AddScoped<HomeViewModel>(provider => new HomeViewModel(provider));
-                services.AddScoped<ImportViewModel>(provider => new ImportViewModel(provider));
-                services.AddScoped<InventoryViewModel>(provider => new InventoryViewModel(provider));
-                services.AddScoped<InvoiceViewModel>(provider => new InvoiceViewModel(provider));
+                services.AddTransient<AppUserViewModel>(provider => new AppUserViewModel(provider));
+                services.AddTransient<FoodViewModel>(provider => new FoodViewModel(provider));
+                services.AddTransient<HomeViewModel>(provider => new HomeViewModel(provider));
+                services.AddTransient<ImportViewModel>(provider => new ImportViewModel(provider));
+                services.AddTransient<InventoryViewModel>(provider => new InventoryViewModel(provider));
+                services.AddTransient<InvoiceViewModel>(provider => new InvoiceViewModel(provider));
                 services.AddScoped<StaffViewModel>(provider => new StaffViewModel(provider));
-                services.AddScoped<SupplierViewModel>(provider => new SupplierViewModel(provider));
-                services.AddScoped<TableViewModel>(provider => new TableViewModel(provider));
+                services.AddTransient<SupplierViewModel>(provider => new SupplierViewModel(provider));
+                services.AddTransient<TableViewModel>(provider => new TableViewModel(provider));
 
-                services.AddScoped<LoginViewModel>(provider => new LoginViewModel(provider));
-                services.AddScoped<RegisterViewModel>(provider => new RegisterViewModel(provider));
+                services.AddTransient<LoginViewModel>(provider => new LoginViewModel(provider));
+                services.AddTransient<RegisterViewModel>(provider => new RegisterViewModel(provider));
 
-                services.AddScoped<AddSuppierViewModel>(provider => new AddSuppierViewModel(provider));
-                services.AddScoped<AddUpdateFoodViewModel>(provider => new AddUpdateFoodViewModel(provider));
+                services.AddTransient<AddSuppierViewModel>(provider => new AddSuppierViewModel(provider));
+                services.AddTransient<AddUpdateFoodViewModel>(provider => new AddUpdateFoodViewModel(provider));
 
                 services.AddSingleton<NavigationStore>(provider => new NavigationStore(provider));
                 services.AddSingleton<MainWindow>(provider => new MainWindow()

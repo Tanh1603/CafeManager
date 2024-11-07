@@ -23,6 +23,9 @@ namespace CafeManager.Core.Services
         ISupplierRepository SupplierList { get; }
         IRepository<Materialsupplier> MaterialSupplierList { get; }
 
+        IRepository<Staff> StaffList { get; }
+        IAppUserRepository AppUserList { get; }
+
         int Complete();
 
         Task<int> CompleteAsync();

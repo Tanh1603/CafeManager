@@ -33,6 +33,7 @@ namespace CafeManager.WPF.HostBuilders
                 services.AddScoped<FileDialogService>();
 
                 services.AddScoped<MaterialSupplierServices>(provider => new MaterialSupplierServices(provider));
+                services.AddScoped<AppUserServices>(provider => new AppUserServices(provider));
             });
             return hostBuilder;
         }

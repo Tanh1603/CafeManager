@@ -3,6 +3,7 @@ using CafeManager.Core.Repositories;
 using CafeManager.Core.Services;
 using CafeManager.Infrastructure.Models;
 using CafeManager.WPF.HostBuilders;
+using CafeManager.WPF.Services;
 using CafeManager.WPF.ViewModels;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
@@ -38,6 +39,7 @@ namespace CafeManager.WPF
         {
             _host.Start();
             Window window = _host.Services.GetRequiredService<MainWindow>();
+            var res = _host.Services.GetRequiredService<AppUserServices>();
             window.Show();
             base.OnStartup(e);
         }

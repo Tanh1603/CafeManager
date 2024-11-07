@@ -4,31 +4,124 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:local="clr-namespace:CafeManager.WPF.Views"
+    xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     d:DesignHeight="450"
     d:DesignWidth="800"
     mc:Ignorable="d">
-    <Grid Background="White">
-        <Grid.RowDefinitions>
-            <RowDefinition Height="*" />
-            <RowDefinition Height="auto" />
-        </Grid.RowDefinitions>
+    <Grid>
 
-        <TextBlock
-            Grid.Row="0"
-            HorizontalAlignment="Center"
-            VerticalAlignment="Center"
-            FontSize="50"
-            Foreground="Black"
-            Text="Register" />
+        <Grid Background="White">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*" />
+                <RowDefinition Height="auto" />
+            </Grid.RowDefinitions>
 
-        <StackPanel
-            Grid.Row="1"
-            Margin="20"
-            HorizontalAlignment="Center"
-            Orientation="Horizontal">
-            <Button Margin="0,0,20,0" Content="Quay về đăng nhập" Command="{Binding RegisterCommand}" />
-            <Button Content="Đăng Kí" Command="{Binding NavigateToLoginCommand}" />
-        </StackPanel>
+            <StackPanel
+                Grid.Row="0"
+                Margin="10"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center">
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="Tài khoản" />
+                    <TextBox
+                        MinWidth="400"
+                        Margin="10,0,0,0"
+                        Text="{Binding Username}" />
+                </StackPanel>
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="Tên đăng nhập" />
+                    <TextBox
+                        MinWidth="400"
+                        Margin="10,0,0,0"
+                        Text="{Binding Displayname}" />
+                </StackPanel>
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="Email" />
+                    <TextBox
+                        MinWidth="400"
+                        Margin="10,0,0,0"
+                        Text="{Binding Email}" />
+                </StackPanel>
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="Vai trò" />
+                    <ComboBox
+                        MinWidth="400"
+                        Margin="10,0,0,0"
+                        SelectedValue="{Binding Role}"
+                        SelectedValuePath="Content">
+                        <ComboBoxItem Content="Admin" />
+                        <ComboBoxItem Content="User" />
+                    </ComboBox>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="Mật khẩu" />
+                    <TextBox
+                        MinWidth="400"
+                        Margin="10,0,0,0"
+                        Text="{Binding Password}" />
+                </StackPanel>
+                <StackPanel>
+                    <TextBlock Text="Avata" />
+                    <Button
+                        Width="100"
+                        Command="{Binding SetAvataCommand}"
+                        Content="Thêm ảnh" />
+                    <Image
+                        Width="80"
+                        Height="60"
+                        Margin="10"
+                        Source="{Binding Avata}" />
+                </StackPanel>
+            </StackPanel>
+
+            <StackPanel
+                Grid.Row="1"
+                Margin="20"
+                HorizontalAlignment="Center"
+                Orientation="Horizontal">
+                <Button
+                    Margin="0,0,20,0"
+                    Command="{Binding NavigateToLoginCommand}"
+                    Content="Quay về đăng nhập" />
+                <Button Command="{Binding RegisterCommand}" Content="Đăng Kí" />
+            </StackPanel>
+        </Grid>
+
+        <materialDesign:DialogHost
+            Background="Transparent"
+            CloseOnClickAway="True"
+            DialogTheme="Inherit"
+            IsOpen="{Binding IsOpenVerificationEmail}"
+            OverlayBackground="{DynamicResource PrimaryHueDarkBrush}"
+            Placement="Mouse"
+            Style="{StaticResource MaterialDesignEmbeddedDialogHost}">
+            <materialDesign:DialogHost.DialogContent>
+                <StackPanel>
+                    <Button
+                        Margin="10"
+                        HorizontalAlignment="Right"
+                        Background="OrangeRed"
+                        Command="{Binding CloseOpenVerificationEmailCommand}">
+                        <materialDesign:PackIcon Kind="Close" />
+                    </Button>
+                    <StackPanel Margin="0,20" Orientation="Horizontal">
+                        <TextBlock
+                            Margin="0,0,20,0"
+                            FontSize="20"
+                            Text="Mã xác thực" />
+                        <TextBox
+                            MinWidth="400"
+                            FontSize="20"
+                            Text="{Binding VertificationCode}" />
+                    </StackPanel>
+                    <Button
+                        Margin="10,20"
+                        HorizontalAlignment="Right"
+                        Command="{Binding SubmitRegisterCommand}"
+                        Content="Submit" />
+                </StackPanel>
+            </materialDesign:DialogHost.DialogContent>
+        </materialDesign:DialogHost>
     </Grid>
 </UserControl>

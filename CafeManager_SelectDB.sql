@@ -1,4 +1,7 @@
 SELECT * FROM appuser;
+ALTER SEQUENCE appuser_appuserid_seq RESTART WITH 1;
+DELETE FROM appuser;
+
 SELECT * FROM staff;
 
 SELECT * FROM foodcategory;

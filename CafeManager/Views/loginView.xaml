@@ -4,34 +4,99 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:local="clr-namespace:CafeManager.WPF.Views.AdminView"
+    xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     d:DesignHeight="450"
     d:DesignWidth="800"
     mc:Ignorable="d">
-    <Grid Background="White">
-        <Grid.RowDefinitions>
-            <RowDefinition Height="*" />
-            <RowDefinition Height="auto" />
-        </Grid.RowDefinitions>
+    <Grid>
+        <Grid Background="White">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*" />
+                <RowDefinition Height="auto" />
+            </Grid.RowDefinitions>
 
-        <TextBlock
-            Grid.Row="0"
-            HorizontalAlignment="Center"
-            VerticalAlignment="Center"
-            FontSize="50"
-            Foreground="Black"
-            Text="Login" />
+            <StackPanel
+                Grid.Row="0"
+                Margin="10"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center">
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="Tài khoản" />
+                    <TextBox
+                        MinWidth="400"
+                        Margin="10,0,0,0"
+                        Text="{Binding Username}" />
+                </StackPanel>
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="Mật khẩu" />
+                    <TextBox
+                        MinWidth="400"
+                        Margin="10,0,0,0"
+                        Text="{Binding Password}" />
+                </StackPanel>
+            </StackPanel>
 
-        <StackPanel
-            Grid.Row="1"
-            Margin="20"
-            HorizontalAlignment="Center"
-            Orientation="Horizontal">
-            <Button
-                Margin="0,0,20,0"
-                Command="{Binding LoginCommand}"
-                Content="Đăng nhập" />
-            <Button Command="{Binding NavigateToRegisterCommand}" Content="Đến trang đăng Kí" />
-        </StackPanel>
+            <StackPanel
+                Grid.Row="1"
+                Margin="20"
+                HorizontalAlignment="Center"
+                Orientation="Horizontal">
+                <Button
+                    Margin="0,0,20,0"
+                    Command="{Binding LoginCommand}"
+                    Content="Đăng nhập" />
+                <Button
+                    Margin="0,0,20,0"
+                    Command="{Binding NavigateToRegisterCommand}"
+                    Content="Đến trang đăng Kí" />
+                <Button Command="{Binding OpenResetPassWordCommand}" Content="Quên mật khẩu" />
+            </StackPanel>
+        </Grid>
+        <materialDesign:DialogHost
+            Background="Transparent"
+            CloseOnClickAway="True"
+            DialogTheme="Inherit"
+            IsOpen="{Binding IsOpenResetPassWord}"
+            OverlayBackground="{DynamicResource PrimaryHueDarkBrush}"
+            Placement="Mouse"
+            Style="{StaticResource MaterialDesignEmbeddedDialogHost}">
+            <materialDesign:DialogHost.DialogContent>
+                <StackPanel Margin="10">
+                    <Button
+                        Margin="10"
+                        HorizontalAlignment="Right"
+                        Background="OrangeRed"
+                        Command="{Binding CloseOpenResetPassWordCommand}">
+                        <materialDesign:PackIcon Kind="Close" />
+                    </Button>
+                    <StackPanel Margin="0,20" Orientation="Horizontal">
+                        <TextBlock
+                            Margin="0,0,20,0"
+                            FontSize="20"
+                            Text="Tài khoản" />
+                        <TextBox
+                            MinWidth="400"
+                            FontSize="20"
+                            Text="{Binding ResetUser}" />
+                    </StackPanel>
+                    <StackPanel Margin="0,20" Orientation="Horizontal">
+                        <TextBlock
+                            Margin="0,0,20,0"
+                            FontSize="20"
+                            Text="Email" />
+                        <TextBox
+                            MinWidth="400"
+                            FontSize="20"
+                            Text="{Binding ResetEmail}" />
+                    </StackPanel>
+                    <Button
+                        Margin="10,20"
+                        HorizontalAlignment="Right"
+                        Command="{Binding SubmitResetPassWordCommand}"
+                        Content="Submit" />
+                </StackPanel>
+            </materialDesign:DialogHost.DialogContent>
+        </materialDesign:DialogHost>
     </Grid>
 </UserControl>

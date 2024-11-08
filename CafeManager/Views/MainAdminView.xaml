@@ -12,187 +12,190 @@
     <UserControl.Resources>
         <BooleanToVisibilityConverter x:Key="BoolToVis" />
     </UserControl.Resources>
-    <Grid>
+    <Border CornerRadius="0,0, 10 ,10">
+        <Border.Background>
+            <LinearGradientBrush StartPoint="0.5,0" EndPoint="0.5,1">
+                <GradientStop Offset="0" Color="#824618" />
+                <GradientStop Offset="1" Color="#844518" />
+            </LinearGradientBrush>
+        </Border.Background>
+        <Grid>
 
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="auto" MinWidth="180" />
-            <ColumnDefinition Width="*" />
-        </Grid.ColumnDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="auto" MinWidth="180" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
 
-        <Grid.Effect>
-            <DropShadowEffect
-                BlurRadius="30"
-                Opacity="0.4"
-                ShadowDepth="1" />
-        </Grid.Effect>
 
-        <!--  left menu  -->
-        <Grid Grid.Column="0">
-            <Border CornerRadius="10 0 0 10">
-                <Border.Background>
-                    <LinearGradientBrush StartPoint="0.5,0" EndPoint="0.5,1">
-                        <GradientStop Offset="0" Color="#824618" />
-                        <GradientStop Offset="1" Color="#844518" />
-                    </LinearGradientBrush>
-                </Border.Background>
 
-                <StackPanel VerticalAlignment="Center">
-                    <!--  username  -->
-                    <StackPanel
-                        Margin="0,20,0,0"
-                        HorizontalAlignment="Center"
-                        Orientation="Horizontal">
-                        <Border
-                            Width="45"
-                            Height="45"
-                            CornerRadius="50">
-                            <Border.Background>
-                                <LinearGradientBrush StartPoint="0,0" EndPoint="1,2">
-                                    <GradientStop Offset="0" Color="#d5b096" />
-                                    <GradientStop Offset="1" Color="#d3b7ff" />
-                                </LinearGradientBrush>
-                            </Border.Background>
-                            <Image
-                                Width="30"
-                                Height="30"
-                                RenderOptions.BitmapScalingMode="HighQuality"
-                                SnapsToDevicePixels="True"
-                                Source="/Assets/Images/coffee.png" />
-                        </Border>
+            <!--  left menu  -->
+            <Grid Grid.Column="0">
+                <Border CornerRadius="10 0 0 10">
+                    <Border.Background>
+                        <LinearGradientBrush StartPoint="0.5,0" EndPoint="0.5,1">
+                            <GradientStop Offset="0" Color="#824618" />
+                            <GradientStop Offset="1" Color="#844518" />
+                        </LinearGradientBrush>
+                    </Border.Background>
 
-                        <StackPanel Margin="10,0,0,0" VerticalAlignment="Center">
-                            <TextBlock
-                                Margin="0,0,0,5"
-                                FontSize="15"
-                                Foreground="#f9f9f9"
-                                Text="Quách Vĩnh Cơ" />
-                            <TextBlock
-                                FontSize="15"
-                                FontWeight="SemiBold"
-                                Foreground="#ffffff"
-                                Text="Admin" />
+                    <StackPanel VerticalAlignment="Center">
+                        <!--  username  -->
+                        <StackPanel
+                            Margin="0,20,0,0"
+                            HorizontalAlignment="Center"
+                            Orientation="Horizontal">
+                            <Border
+                                Width="45"
+                                Height="45"
+                                CornerRadius="50">
+                                <Border.Background>
+                                    <LinearGradientBrush StartPoint="0,0" EndPoint="1,2">
+                                        <GradientStop Offset="0" Color="#d5b096" />
+                                        <GradientStop Offset="1" Color="#d3b7ff" />
+                                    </LinearGradientBrush>
+                                </Border.Background>
+                                <Image
+                                    Width="30"
+                                    Height="30"
+                                    RenderOptions.BitmapScalingMode="HighQuality"
+                                    SnapsToDevicePixels="True"
+                                    Source="/Assets/Images/coffee.png" />
+                            </Border>
+
+                            <StackPanel Margin="10,0,0,0" VerticalAlignment="Center">
+                                <TextBlock
+                                    Margin="0,0,0,5"
+                                    FontSize="15"
+                                    Foreground="#f9f9f9"
+                                    Text="Quách Vĩnh Cơ" />
+                                <TextBlock
+                                    FontSize="15"
+                                    FontWeight="SemiBold"
+                                    Foreground="#ffffff"
+                                    Text="Admin" />
+                            </StackPanel>
                         </StackPanel>
+                        <Separator
+                            Height="0.8"
+                            Margin="20,30"
+                            Background="#ffffff" />
+
+                        <!--  menu buttons  -->
+                        <RadioButton
+                            Command="{Binding ChangeCurrentViewModelCommand}"
+                            CommandParameter="Home"
+                            IsChecked="True"
+                            Style="{StaticResource menuButton}">
+                            <StackPanel Orientation="Horizontal">
+                                <fa:IconImage Icon="ChartColumn" Style="{StaticResource menuButtonIcon}" />
+                                <TextBlock Style="{StaticResource menuButtonText}" Text="Thống kê" />
+                            </StackPanel>
+                        </RadioButton>
+
+                        <RadioButton
+                            Command="{Binding ChangeCurrentViewModelCommand}"
+                            CommandParameter="Food"
+                            Style="{StaticResource menuButton}">
+                            <StackPanel Orientation="Horizontal">
+                                <fa:IconImage Icon="MartiniGlassCitrus" Style="{StaticResource menuButtonIcon}" />
+                                <TextBlock Style="{StaticResource menuButtonText}" Text="Nước uống" />
+                            </StackPanel>
+                        </RadioButton>
+
+                        <RadioButton
+                            Command="{Binding ChangeCurrentViewModelCommand}"
+                            CommandParameter="Invoice"
+                            Style="{StaticResource menuButton}">
+                            <StackPanel Orientation="Horizontal">
+                                <fa:IconImage Icon="FileInvoice" Style="{StaticResource menuButtonIcon}" />
+                                <TextBlock Style="{StaticResource menuButtonText}" Text="Hóa đơn" />
+                            </StackPanel>
+                        </RadioButton>
+
+                        <RadioButton
+                            Command="{Binding ChangeCurrentViewModelCommand}"
+                            CommandParameter="Table"
+                            Style="{StaticResource menuButton}">
+                            <StackPanel Orientation="Horizontal">
+                                <fa:IconImage Icon="TableCells" Style="{StaticResource menuButtonIcon}" />
+                                <TextBlock Style="{StaticResource menuButtonText}" Text="Bàn" />
+                            </StackPanel>
+                        </RadioButton>
+
+                        <RadioButton
+                            Command="{Binding ChangeCurrentViewModelCommand}"
+                            CommandParameter="Import"
+                            Style="{StaticResource menuButton}">
+                            <StackPanel Orientation="Horizontal">
+                                <fa:IconImage Icon="ShoppingCart" Style="{StaticResource menuButtonIcon}" />
+                                <TextBlock Style="{StaticResource menuButtonText}" Text="Nhập kho" />
+                            </StackPanel>
+                        </RadioButton>
+
+                        <RadioButton
+                            Command="{Binding ChangeCurrentViewModelCommand}"
+                            CommandParameter="Inventory"
+                            Style="{StaticResource menuButton}">
+                            <StackPanel Orientation="Horizontal">
+                                <fa:IconImage Icon="Warehouse" Style="{StaticResource menuButtonIcon}" />
+                                <TextBlock Style="{StaticResource menuButtonText}" Text="Tồn kho" />
+                            </StackPanel>
+                        </RadioButton>
+
+                        <RadioButton
+                            Command="{Binding ChangeCurrentViewModelCommand}"
+                            CommandParameter="Supplier"
+                            Style="{StaticResource menuButton}">
+                            <StackPanel Orientation="Horizontal">
+                                <fa:IconImage Icon="Truck" Style="{StaticResource menuButtonIcon}" />
+                                <TextBlock Style="{StaticResource menuButtonText}" Text="Nhà cung cấp" />
+                            </StackPanel>
+                        </RadioButton>
+
+                        <RadioButton
+                            Command="{Binding ChangeCurrentViewModelCommand}"
+                            CommandParameter="Staff"
+                            Style="{StaticResource menuButton}">
+                            <StackPanel Orientation="Horizontal">
+                                <fa:IconImage Icon="Person" Style="{StaticResource menuButtonIcon}" />
+                                <TextBlock Style="{StaticResource menuButtonText}" Text="Nhân viên" />
+                            </StackPanel>
+                        </RadioButton>
+
+                        <RadioButton
+                            Command="{Binding ChangeCurrentViewModelCommand}"
+                            CommandParameter="AppUser"
+                            Style="{StaticResource menuButton}">
+                            <StackPanel Orientation="Horizontal">
+                                <fa:IconImage Icon="UserAlt" Style="{StaticResource menuButtonIcon}" />
+                                <TextBlock Style="{StaticResource menuButtonText}" Text="Tài khoản" />
+                            </StackPanel>
+                        </RadioButton>
+
+                        <RadioButton
+                            Command="{Binding ChangeCurrentViewModelCommand}"
+                            CommandParameter="Setting"
+                            Style="{StaticResource menuButton}">
+                            <StackPanel Orientation="Horizontal">
+                                <fa:IconImage Icon="Cog" Style="{StaticResource menuButtonIcon}" />
+                                <TextBlock Style="{StaticResource menuButtonText}" Text="Cài đặt" />
+                            </StackPanel>
+                        </RadioButton>
+
+                        <RadioButton Command="{Binding SignOutCommand}" Style="{StaticResource menuButton}">
+                            <StackPanel Orientation="Horizontal">
+                                <fa:IconImage Icon="PowerOff" Style="{StaticResource menuButtonIcon}" />
+                                <TextBlock Style="{StaticResource menuButtonText}" Text="Đăng xuất" />
+                            </StackPanel>
+                        </RadioButton>
                     </StackPanel>
-                    <Separator
-                        Height="0.8"
-                        Margin="20,30"
-                        Background="#ffffff" />
+                </Border>
+            </Grid>
 
-                    <!--  menu buttons  -->
-                    <RadioButton
-                        Command="{Binding ChangeCurrentViewModelCommand}"
-                        CommandParameter="Home"
-                        IsChecked="True"
-                        Style="{StaticResource menuButton}">
-                        <StackPanel Orientation="Horizontal">
-                            <fa:IconImage Icon="ChartColumn" Style="{StaticResource menuButtonIcon}" />
-                            <TextBlock Style="{StaticResource menuButtonText}" Text="Thống kê" />
-                        </StackPanel>
-                    </RadioButton>
-
-                    <RadioButton
-                        Command="{Binding ChangeCurrentViewModelCommand}"
-                        CommandParameter="Food"
-                        Style="{StaticResource menuButton}">
-                        <StackPanel Orientation="Horizontal">
-                            <fa:IconImage Icon="MartiniGlassCitrus" Style="{StaticResource menuButtonIcon}" />
-                            <TextBlock Style="{StaticResource menuButtonText}" Text="Nước uống" />
-                        </StackPanel>
-                    </RadioButton>
-
-                    <RadioButton
-                        Command="{Binding ChangeCurrentViewModelCommand}"
-                        CommandParameter="Invoice"
-                        Style="{StaticResource menuButton}">
-                        <StackPanel Orientation="Horizontal">
-                            <fa:IconImage Icon="FileInvoice" Style="{StaticResource menuButtonIcon}" />
-                            <TextBlock Style="{StaticResource menuButtonText}" Text="Hóa đơn" />
-                        </StackPanel>
-                    </RadioButton>
-
-                    <RadioButton
-                        Command="{Binding ChangeCurrentViewModelCommand}"
-                        CommandParameter="Table"
-                        Style="{StaticResource menuButton}">
-                        <StackPanel Orientation="Horizontal">
-                            <fa:IconImage Icon="TableCells" Style="{StaticResource menuButtonIcon}" />
-                            <TextBlock Style="{StaticResource menuButtonText}" Text="Bàn" />
-                        </StackPanel>
-                    </RadioButton>
-
-                    <RadioButton
-                        Command="{Binding ChangeCurrentViewModelCommand}"
-                        CommandParameter="Import"
-                        Style="{StaticResource menuButton}">
-                        <StackPanel Orientation="Horizontal">
-                            <fa:IconImage Icon="ShoppingCart" Style="{StaticResource menuButtonIcon}" />
-                            <TextBlock Style="{StaticResource menuButtonText}" Text="Nhập kho" />
-                        </StackPanel>
-                    </RadioButton>
-
-                    <RadioButton
-                        Command="{Binding ChangeCurrentViewModelCommand}"
-                        CommandParameter="Inventory"
-                        Style="{StaticResource menuButton}">
-                        <StackPanel Orientation="Horizontal">
-                            <fa:IconImage Icon="Warehouse" Style="{StaticResource menuButtonIcon}" />
-                            <TextBlock Style="{StaticResource menuButtonText}" Text="Tồn kho" />
-                        </StackPanel>
-                    </RadioButton>
-
-                    <RadioButton
-                        Command="{Binding ChangeCurrentViewModelCommand}"
-                        CommandParameter="Supplier"
-                        Style="{StaticResource menuButton}">
-                        <StackPanel Orientation="Horizontal">
-                            <fa:IconImage Icon="Truck" Style="{StaticResource menuButtonIcon}" />
-                            <TextBlock Style="{StaticResource menuButtonText}" Text="Nhà cung cấp" />
-                        </StackPanel>
-                    </RadioButton>
-
-                    <RadioButton
-                        Command="{Binding ChangeCurrentViewModelCommand}"
-                        CommandParameter="Staff"
-                        Style="{StaticResource menuButton}">
-                        <StackPanel Orientation="Horizontal">
-                            <fa:IconImage Icon="Person" Style="{StaticResource menuButtonIcon}" />
-                            <TextBlock Style="{StaticResource menuButtonText}" Text="Nhân viên" />
-                        </StackPanel>
-                    </RadioButton>
-
-                    <RadioButton
-                        Command="{Binding ChangeCurrentViewModelCommand}"
-                        CommandParameter="AppUser"
-                        Style="{StaticResource menuButton}">
-                        <StackPanel Orientation="Horizontal">
-                            <fa:IconImage Icon="UserAlt" Style="{StaticResource menuButtonIcon}" />
-                            <TextBlock Style="{StaticResource menuButtonText}" Text="Tài khoản" />
-                        </StackPanel>
-                    </RadioButton>
-
-                    <RadioButton
-                        Command="{Binding ChangeCurrentViewModelCommand}"
-                        CommandParameter="Setting"
-                        Style="{StaticResource menuButton}">
-                        <StackPanel Orientation="Horizontal">
-                            <fa:IconImage Icon="Cog" Style="{StaticResource menuButtonIcon}" />
-                            <TextBlock Style="{StaticResource menuButtonText}" Text="Cài đặt" />
-                        </StackPanel>
-                    </RadioButton>
-
-                    <RadioButton Command="{Binding SignOutCommand}" Style="{StaticResource menuButton}">
-                        <StackPanel Orientation="Horizontal">
-                            <fa:IconImage Icon="PowerOff" Style="{StaticResource menuButtonIcon}" />
-                            <TextBlock Style="{StaticResource menuButtonText}" Text="Đăng xuất" />
-                        </StackPanel>
-                    </RadioButton>
-                </StackPanel>
-            </Border>
+            <!--  main section  -->
+            <Grid Grid.Column="1">
+                <ContentControl Content="{Binding CurrentViewModel}" />
+            </Grid>
         </Grid>
-
-        <!--  main section  -->
-        <Grid Grid.Column="1">
-            <ContentControl Content="{Binding CurrentViewModel}" />
-        </Grid>
-    </Grid>
+    </Border>
 </UserControl>

@@ -61,107 +61,115 @@
                     </StackPanel>
                 </Button>
             </StackPanel>
-
-            <TextBlock
-                Grid.Column="1"
-                Margin="0,50,0,0"
-                HorizontalAlignment="Center"
-                VerticalAlignment="Top"
-                FontSize="32"
-                FontWeight="Bold"
-                Foreground="#5f2414"
-                Text="Thông tin chi tiết" />
-            <Grid
-                Grid.Column="1"
-                Margin="0,10,0,0"
-                HorizontalAlignment="Center"
-                VerticalAlignment="Center">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="150" />
-                    <ColumnDefinition Width="*" />
-                </Grid.ColumnDefinitions>
-
+            <Grid Grid.Column="1">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="auto" />
                     <RowDefinition Height="auto" />
-                    <RowDefinition Height="auto" />
+                    <RowDefinition Height="*" />
                     <RowDefinition Height="auto" />
                 </Grid.RowDefinitions>
-
-                <TextBlock
+                <Button
                     Grid.Row="0"
-                    Style="{StaticResource infoText}"
-                    Text="Tên" />
-                <TextBlock
-                    Grid.Row="1"
-                    Style="{StaticResource infoText}"
-                    Text="Loại" />
-                <TextBlock
-                    Grid.Row="2"
-                    Style="{StaticResource infoText}"
-                    Text="Giá" />
-                <TextBlock
-                    Grid.Row="3"
-                    Style="{StaticResource infoText}"
-                    Text="Mã giảm giá" />
-
-                <uc:infoTextInput
-                    Grid.Row="0"
-                    Grid.Column="1"
-                    Hint="trà sữa, trà chanh,..."
-                    Text="{Binding Foodname, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" />
-
-                <ComboBox
-                    Name="cbFoodCategory"
-                    Grid.Row="1"
-                    Grid.Column="1"
-                    materialDesign:HintAssist.Hint="Danh mục thức ăn"
-                    ItemsSource="{Binding ListFoodCategory}"
-                    SelectedItem="{Binding SelectedFoodCategory}"
-                    Style="{StaticResource MaterialDesignOutlinedComboBox}">
-
-                    <ComboBox.ItemTemplate>
-                        <DataTemplate>
-                            <TextBlock Text="{Binding Foodcategoryname}" />
-                        </DataTemplate>
-                    </ComboBox.ItemTemplate>
-                </ComboBox>
-
-                <uc:infoTextInput
-                    Grid.Row="2"
-                    Grid.Column="1"
-                    Hint="20000,..."
-                    Text="{Binding Price, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" />
-                <uc:infoTextInput
-                    Grid.Row="3"
-                    Grid.Column="1"
-                    Hint="15%"
-                    Text="{Binding DiscountFood, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" />
-            </Grid>
-
-            <Button
-                Grid.Column="1"
-                Margin="20"
-                HorizontalAlignment="Right"
-                VerticalAlignment="Bottom"
-                Command="{Binding SubmitCommand}"
-                Content="Xác nhận"
-                Style="{StaticResource adjustInfoButton}" />
-
-            <StackPanel
-                Grid.Column="1"
-                Margin="0,10,20,0"
-                HorizontalAlignment="Right"
-                VerticalAlignment="Top"
-                Orientation="Horizontal">
-                <Button Background="OrangeRed" Command="{Binding CloseCommand}">
-                    <ma:PackIconMaterial
-                        x:Name="minimizeIcon"
-                        Foreground="#844418"
-                        Kind="Close"
-                        Style="{StaticResource ìconApp}" />
+                    Margin="20,10"
+                    HorizontalAlignment="Right"
+                    Command="{Binding CloseUserControlCommand}"
+                    Style="{StaticResource closeButton}">
+                    <ma:PackIconMaterial Kind="Close" Style="{StaticResource iconApp}" />
                 </Button>
-            </StackPanel>
+                <TextBlock
+                    Grid.Row="1"
+                    
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Top"
+                    FontSize="32"
+                    FontWeight="Bold"
+                    Foreground="#5f2414"
+                    Text="Thông tin thực đơn" />
+                <Grid
+                    Grid.Row="2"
+                    Margin="0,10,0,0"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="150" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="auto" />
+                        <RowDefinition Height="auto" />
+                        <RowDefinition Height="auto" />
+                        <RowDefinition Height="auto" />
+                    </Grid.RowDefinitions>
+
+                    <TextBlock
+                        Grid.Row="0"
+                        Style="{StaticResource infoText}"
+                        Text="Tên" />
+                    <TextBlock
+                        Grid.Row="1"
+                        Style="{StaticResource infoText}"
+                        Text="Loại" />
+                    <TextBlock
+                        Grid.Row="2"
+                        Style="{StaticResource infoText}"
+                        Text="Giá" />
+                    <TextBlock
+                        Grid.Row="3"
+                        Style="{StaticResource infoText}"
+                        Text="Mã giảm giá" />
+
+                    <uc:infoTextInput
+                        Grid.Row="0"
+                        Grid.Column="1"
+                        Hint="trà sữa, trà chanh,..."
+                        Text="{Binding Foodname, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" />
+
+                    <ComboBox
+                        Name="cbFoodCategory"
+                        Grid.Row="1"
+                        Grid.Column="1"
+                        materialDesign:HintAssist.Hint="Danh mục thức ăn"
+                        ItemsSource="{Binding ListFoodCategory}"
+                        SelectedItem="{Binding SelectedFoodCategory}"
+                        Style="{StaticResource MaterialDesignOutlinedComboBox}">
+
+                        <ComboBox.ItemTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding Foodcategoryname}" />
+                            </DataTemplate>
+                        </ComboBox.ItemTemplate>
+                    </ComboBox>
+
+                    <uc:infoTextInput
+                        Grid.Row="2"
+                        Grid.Column="1"
+                        Hint="20000,..."
+                        Text="{Binding Price, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" />
+                    <uc:infoTextInput
+                        Grid.Row="3"
+                        Grid.Column="1"
+                        Hint="15%"
+                        Text="{Binding DiscountFood, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" />
+                </Grid>
+
+
+                <Button
+                    Grid.Row="3"
+                    Margin="20"
+                    HorizontalAlignment="Right"
+                    VerticalAlignment="Bottom"
+                    Command="{Binding SubmitCommand}"
+                    Style="{StaticResource confirmInfoButton}">
+                    <StackPanel HorizontalAlignment="Center" Orientation="Horizontal">
+                        <ma:PackIconMaterial VerticalAlignment="Center" Kind="CheckBold" />
+                        <TextBlock
+                            Margin="10,0,0,0"
+                            FontWeight="SemiBold"
+                            Text="Xác nhận" />
+                    </StackPanel>
+                </Button>
+            </Grid>
         </Grid>
     </Border>
 </UserControl>

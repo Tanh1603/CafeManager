@@ -8,6 +8,7 @@
     xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:uc="clr-namespace:CafeManager.WPF.Views"
+    xmlns:ma="http://metro.mahapps.com/winfx/xaml/iconpacks"
     Title="MainWindow"
     Width="1350"
     MinHeight="700"
@@ -17,39 +18,47 @@
     WindowStyle="none"
     mc:Ignorable="d">
 
-    <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="auto" />
-            <RowDefinition Height="*" />
-        </Grid.RowDefinitions>
+    <Border CornerRadius="10">
+        <Border.Background>
+            <LinearGradientBrush StartPoint="0.5,0" EndPoint="0.5,1">
+                <GradientStop Offset="0" Color="#824618" />
+                <GradientStop Offset="1" Color="#844518" />
+            </LinearGradientBrush>
+        </Border.Background>
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="auto" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
 
-        <Grid Background="White">
-            <i:Interaction.Triggers>
-                <i:EventTrigger EventName="MouseDown">
-                    <i:InvokeCommandAction Command="{Binding DragMoveCommand}" />
-                </i:EventTrigger>
-            </i:Interaction.Triggers>
+            <Grid>
+                
+                <i:Interaction.Triggers>
+                    <i:EventTrigger EventName="MouseDown">
+                        <i:InvokeCommandAction Command="{Binding DragMoveCommand}" />
+                    </i:EventTrigger>
+                </i:Interaction.Triggers>
 
-            <StackPanel HorizontalAlignment="Right" Orientation="Horizontal">
-                <Button
-                    Background="Transparent"
-                    BorderThickness="0"
-                    Command="{Binding MiniMizeWindownCommand}">
-                    <materialDesign:PackIcon Foreground="Black" Kind="WindowMinimize" />
-                </Button>
-                <Button
-                    Background="Transparent"
-                    BorderThickness="0"
-                    Command="{Binding MaximizeWindownCommand}">
-                    <materialDesign:PackIcon Foreground="Black" Kind="WindowMaximize" />
-                </Button>
-                <Button Background="OrangeRed" Command="{Binding CloseWindownCommand}">
-                    <materialDesign:PackIcon Kind="Close" />
-                </Button>
-            </StackPanel>
+                <StackPanel HorizontalAlignment="Right" Orientation="Horizontal">
+                    <Button
+                        Style="{StaticResource closeButton}"
+                        Command="{Binding MiniMizeWindownCommand}">
+                        <ma:PackIconMaterial Kind="WindowMinimize" Style="{StaticResource iconApp}" Margin="0, 20, 0, 0"/>
+                    </Button>
+                    <Button
+                         Style="{StaticResource closeButton}"
+                        Command="{Binding MaximizeWindownCommand}"
+                        Margin="10,0">
+                        <ma:PackIconMaterial Kind="WindowMaximize" Style="{StaticResource iconApp}"/>
+                    </Button>
+                    <Button Style="{StaticResource closeButton}" Command="{Binding CloseWindownCommand}" >
+                        <ma:PackIconMaterial Kind="close" Style="{StaticResource iconApp}"/>
+                    </Button>
+                </StackPanel>
+            </Grid>
+            <Grid Grid.Row="1">
+                <ContentControl Content="{Binding CurrentViewModel}" />
+            </Grid>
         </Grid>
-        <Grid Grid.Row="1">
-            <ContentControl Content="{Binding CurrentViewModel}" />
-        </Grid>
-    </Grid>
+    </Border>
 </Window>

@@ -13,7 +13,7 @@
     d:DesignWidth="1030"
     mc:Ignorable="d">
     <Grid>
-        <Border CornerRadius="0 10 10 0">
+        <Border CornerRadius="10 0 10 0">
             <Border.Background>
                 <LinearGradientBrush StartPoint="0,0.5" EndPoint="1,0.5">
                     <GradientStop Offset="0" Color="#9c6d3f" />

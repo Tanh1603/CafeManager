@@ -212,7 +212,7 @@
         <Setter Property="HorizontalAlignment" Value="Right" />
         <Setter Property="Margin" Value="0,20,0,0" />
         <Setter Property="FontSize" Value="13" />
-        <Setter Property="Grid.Row" Value="1" />
+      
         <Setter Property="Cursor" Value="Hand" />
         <Setter Property="Template">
             <Setter.Value>
@@ -341,11 +341,19 @@
         </Style.Triggers>
     </Style>
     <Style
-        x:Key="adjustInfoButton"
-        BasedOn="{StaticResource upLoadButton}"
-        TargetType="Button">
+    x:Key="adjustInfoButton"
+    BasedOn="{StaticResource upLoadButton}"
+    TargetType="Button">
         <Setter Property="Width" Value="100" />
         <Setter Property="Height" Value="45" />
+    </Style>
+    <Style
+        x:Key="confirmInfoButton"
+        BasedOn="{StaticResource upLoadButton}"
+        TargetType="Button">
+        <Setter Property="Width" Value="120" />
+        <Setter Property="Height" Value="45" />
+
     </Style>
 
     <Style x:Key="datePickerButton" TargetType="Button">
@@ -392,37 +400,7 @@
 
 
 
-    <Style x:Key="pagingButton" TargetType="Button">
-        <Setter Property="Background" Value="Transparent" />
-        <Setter Property="Foreground" Value="#6c7682" />
-        <Setter Property="FocusVisualStyle" Value="{x:Null}" />
-        <Setter Property="Margin" Value="1,0" />
-        <Setter Property="FontSize" Value="13" />
-
-        <Setter Property="Template">
-            <Setter.Value>
-                <ControlTemplate TargetType="Button">
-                    <Border
-                        Padding="10,5"
-                        Background="{TemplateBinding Background}"
-                        CornerRadius="5">
-                        <ContentPresenter
-                            Margin="0,0,0,1"
-                            HorizontalAlignment="Center"
-                            VerticalAlignment="Center" />
-                    </Border>
-                </ControlTemplate>
-            </Setter.Value>
-
-        </Setter>
-        <Style.Triggers>
-            <Trigger Property="IsMouseOver" Value="True">
-                <Setter Property="Background" Value="#7950f2" />
-                <Setter Property="Foreground" Value="#ffffff" />
-
-            </Trigger>
-        </Style.Triggers>
-    </Style>
+   
 
     <Style x:Key="gridEditButton" TargetType="Button">
         <Setter Property="Background" Value="#9f7454" />
@@ -479,6 +457,55 @@
 
 
             </Trigger>
+        </Style.Triggers>
+    </Style>
+
+    <Style x:Key="closeButton" TargetType="Button">
+        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="Foreground" Value="#66171a" />
+        <Setter Property="BorderBrush" Value="Transparent" />
+        <Setter Property="BorderThickness" Value="0" />
+        <Setter Property="Width" Value="40"/>
+        <Setter Property="Height" Value="40"/>
+        <Setter Property="FocusVisualStyle" Value="{x:Null}" />
+          <Setter Property="Cursor" Value="Hand" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Button">
+                    <Border
+                        x:Name="border"
+                        Background="{TemplateBinding Background}"
+                        BorderBrush="{TemplateBinding BorderBrush}"
+                        BorderThickness="{TemplateBinding BorderThickness}"
+                        CornerRadius="5">
+                        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter TargetName="border" Property="Background" Value="#b47e66" />
+                        </Trigger>
+                        <Trigger Property="IsPressed" Value="True">
+                            <Setter TargetName="border" Property="Background" Value="#b47e66" />
+
+
+
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+        <Style.Triggers>
+            
+                <Trigger Property="IsMouseOver" Value="True">
+                    
+                    <Setter Property="Foreground" Value="#d4b096"/>
+                </Trigger>
+            
+            
+                <Trigger Property="IsPressed" Value="True">
+                    <Setter Property="Foreground" Value="#d4b096"/>
+                </Trigger>
+            
         </Style.Triggers>
     </Style>
 </ResourceDictionary>

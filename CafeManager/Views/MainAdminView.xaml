@@ -8,9 +8,11 @@
     xmlns:ma="http://metro.mahapps.com/winfx/xaml/iconpacks"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:uc="clr-namespace:CafeManager.WPF.Assets.UsersControls"
+    xmlns:coverter="clr-namespace:CafeManager.WPF.Services.Converter"
     mc:Ignorable="d">
     <UserControl.Resources>
         <BooleanToVisibilityConverter x:Key="BoolToVis" />
+        <coverter:DefaultAccountImageConverter x:Key="DefaultAccountImageConverter" />
     </UserControl.Resources>
     <Grid>
 
@@ -36,12 +38,9 @@
                     </LinearGradientBrush>
                 </Border.Background>
 
-                <StackPanel VerticalAlignment="Center">
+                <StackPanel Margin="0,15,0,10" VerticalAlignment="Center">
                     <!--  username  -->
-                    <StackPanel
-                        Margin="0,20,0,0"
-                        HorizontalAlignment="Center"
-                        Orientation="Horizontal">
+                    <StackPanel HorizontalAlignment="Center" Orientation="Horizontal">
                         <Border
                             Width="45"
                             Height="45"
@@ -57,7 +56,7 @@
                                 Height="30"
                                 RenderOptions.BitmapScalingMode="HighQuality"
                                 SnapsToDevicePixels="True"
-                                Source="/Assets/Images/coffee.png" />
+                                Source="{Binding ImageAccount, Converter={StaticResource DefaultAccountImageConverter}}" />
                         </Border>
 
                         <StackPanel Margin="10,0,0,0" VerticalAlignment="Center">
@@ -65,12 +64,12 @@
                                 Margin="0,0,0,5"
                                 FontSize="15"
                                 Foreground="#f9f9f9"
-                                Text="Quách Vĩnh Cơ" />
+                                Text="{Binding Displayname}" />
                             <TextBlock
                                 FontSize="15"
                                 FontWeight="SemiBold"
                                 Foreground="#ffffff"
-                                Text="Admin" />
+                                Text="{Binding Role}" />
                         </StackPanel>
                     </StackPanel>
                     <Separator

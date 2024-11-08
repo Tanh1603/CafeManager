@@ -1,4 +1,5 @@
-﻿using CafeManager.WPF.Stores;
+﻿using CafeManager.WPF.Services;
+using CafeManager.WPF.Stores;
 using CafeManager.WPF.ViewModels;
 using CafeManager.WPF.ViewModels.AddViewModel;
 using CafeManager.WPF.ViewModels.AdminViewModel;
@@ -10,6 +11,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Media.Imaging;
 
 namespace CafeManager.WPF.ViewModels
 {
@@ -17,15 +19,31 @@ namespace CafeManager.WPF.ViewModels
     {
         private readonly IServiceProvider _provider;
         private readonly NavigationStore _navigationStore;
+        private readonly AccountStore _accountStore;
 
         [ObservableProperty]
         private ObservableObject _currentViewModel;
+
+        [ObservableProperty]
+        private string _displayname;
+
+        [ObservableProperty]
+        private string _role;
+
+        [ObservableProperty]
+        private BitmapImage? _imageAccount;
 
         public MainAdminViewModel(IServiceProvider provider)
         {
             _provider = provider;
             _navigationStore = _provider.GetRequiredService<NavigationStore>();
+            _accountStore = provider.GetRequiredService<AccountStore>();
             CurrentViewModel = _provider.GetRequiredService<HomeViewModel>();
+
+            Displayname = _accountStore.Account?.Displayname ?? "No name";
+            Role = (_accountStore.Account?.Role == 1) ? "Admin" : "User";
+            ImageAccount =
+                provider.GetRequiredService<FileDialogService>().Base64ToBitmapImage(_accountStore.Account?.Avatar ?? string.Empty);
         }
 
         [RelayCommand]
@@ -69,6 +87,10 @@ namespace CafeManager.WPF.ViewModels
                     CurrentViewModel = _provider.GetRequiredService<AppUserViewModel>();
                     break;
 
+                case "Setting":
+                    CurrentViewModel = _provider.GetRequiredService<SettingAccountViewModel>();
+                    break;
+
                 default:
                     break;
             }
@@ -78,6 +100,7 @@ namespace CafeManager.WPF.ViewModels
         private void SignOut()
         {
             _navigationStore.Navigation = _provider.GetRequiredService<LoginViewModel>();
+            _accountStore.ClearAccount();
         }
     }
 }

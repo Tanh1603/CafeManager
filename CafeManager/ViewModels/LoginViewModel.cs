@@ -1,4 +1,5 @@
-﻿using CafeManager.WPF.Services;
+﻿using CafeManager.Core.Data;
+using CafeManager.WPF.Services;
 using CafeManager.WPF.Stores;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
@@ -45,7 +46,7 @@ namespace CafeManager.WPF.ViewModels
             _navigationStore = _provider.GetRequiredService<NavigationStore>();
             _appUserServices = provider.GetRequiredService<AppUserServices>();
 
-            if (!string.IsNullOrEmpty(Properties.Settings.Default.UserName))
+            if (Properties.Settings.Default.RememberAccount)
             {
                 Username = Properties.Settings.Default.UserName;
                 Password = _provider.GetRequiredService<EncryptionHelper>().DecryptAES(Properties.Settings.Default.PassWord);
@@ -58,12 +59,13 @@ namespace CafeManager.WPF.ViewModels
         {
             try
             {
-                (bool isSuccessLogin, int? role) = await _appUserServices.Login(Username, Password);
-                if (isSuccessLogin && role != null)
+                (Appuser? appuser, bool isSuccessLogin, int? role) = await _appUserServices.Login(Username, Password);
+                if (isSuccessLogin && role != null && appuser != null)
                 {
                     MessageBoxResult dialogResult = MessageBox.Show("Đăng nhập thành công", "Thông báo", MessageBoxButton.YesNo);
                     if (dialogResult == MessageBoxResult.Yes)
                     {
+                        _provider.GetRequiredService<AccountStore>().SetAccount(appuser);
                         _navigationStore.Navigation = role == 1 ? _provider.GetRequiredService<MainAdminViewModel>() : _provider.GetRequiredService<MainUserViewModel>();
                     }
                     if (IsRememberAccount)
@@ -75,8 +77,6 @@ namespace CafeManager.WPF.ViewModels
                     }
                     else
                     {
-                        Properties.Settings.Default.UserName = string.Empty;
-                        Properties.Settings.Default.PassWord = string.Empty;
                         Properties.Settings.Default.RememberAccount = false;
                         Properties.Settings.Default.Save();
                     }

@@ -10,7 +10,7 @@
     xmlns:uc="clr-namespace:CafeManager.WPF.Views"
     Title="MainWindow"
     Width="1350"
-    MinHeight="700"
+    MinHeight="750"
     AllowsTransparency="True"
     Background="Transparent"
     WindowStartupLocation="CenterScreen"

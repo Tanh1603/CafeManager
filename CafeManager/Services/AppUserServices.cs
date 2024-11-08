@@ -126,12 +126,12 @@ namespace CafeManager.WPF.Services
                 using (SmtpClient smtpClient = new SmtpClient("smtp.gmail.com"))
                 {
                     smtpClient.Port = 587;
-                    smtpClient.Credentials = new NetworkCredential(configuration["Email:AddminAccount"], configuration["Email:PassWord"]);
+                    smtpClient.Credentials = new NetworkCredential(configuration["Email:AdminAccount"], configuration["Email:PassWord"]);
                     smtpClient.EnableSsl = true;
 
                     MailMessage mailMessage = new MailMessage
                     {
-                        From = new MailAddress(configuration["Email:AddminAccount"], "Cafe Manager App"),
+                        From = new MailAddress(configuration["Email:AdminAccount"], "Cafe Manager App"),
                         Subject = "Xác thực tài khoản",
                         Body = emailBody,
                         IsBodyHtml = true,

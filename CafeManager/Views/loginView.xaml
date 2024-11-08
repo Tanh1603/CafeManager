@@ -35,6 +35,11 @@
                         Margin="10,0,0,0"
                         Text="{Binding Password}" />
                 </StackPanel>
+                <CheckBox
+                    Margin="0,10,0,0"
+                    Content="Nhớ tài khoản"
+                    IsChecked="{Binding IsRememberAccount}"
+                    Style="{StaticResource MaterialDesignCheckBox}" />
             </StackPanel>
 
             <StackPanel

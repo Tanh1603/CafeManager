@@ -4,6 +4,7 @@ using CafeManager.Core.Services;
 using CafeManager.Infrastructure.Models;
 using CafeManager.Infrastructure.Repositories;
 using CafeManager.WPF.Services;
+using CafeManager.WPF.Stores;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -34,6 +35,8 @@ namespace CafeManager.WPF.HostBuilders
 
                 services.AddScoped<MaterialSupplierServices>(provider => new MaterialSupplierServices(provider));
                 services.AddScoped<AppUserServices>(provider => new AppUserServices(provider));
+
+                services.AddSingleton<EncryptionHelper>(provider => new EncryptionHelper(provider));
             });
             return hostBuilder;
         }

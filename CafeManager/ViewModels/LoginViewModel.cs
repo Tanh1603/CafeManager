@@ -36,11 +36,21 @@ namespace CafeManager.WPF.ViewModels
         [ObservableProperty]
         private bool _isOpenResetPassWord;
 
+        [ObservableProperty]
+        private bool _isRememberAccount;
+
         public LoginViewModel(IServiceProvider provider)
         {
             _provider = provider;
             _navigationStore = _provider.GetRequiredService<NavigationStore>();
             _appUserServices = provider.GetRequiredService<AppUserServices>();
+
+            if (!string.IsNullOrEmpty(Properties.Settings.Default.UserName))
+            {
+                Username = Properties.Settings.Default.UserName;
+                Password = _provider.GetRequiredService<EncryptionHelper>().DecryptAES(Properties.Settings.Default.PassWord);
+                IsRememberAccount = Properties.Settings.Default.RememberAccount;
+            }
         }
 
         [RelayCommand]
@@ -55,6 +65,20 @@ namespace CafeManager.WPF.ViewModels
                     if (dialogResult == MessageBoxResult.Yes)
                     {
                         _navigationStore.Navigation = role == 1 ? _provider.GetRequiredService<MainAdminViewModel>() : _provider.GetRequiredService<MainUserViewModel>();
+                    }
+                    if (IsRememberAccount)
+                    {
+                        Properties.Settings.Default.UserName = Username;
+                        Properties.Settings.Default.PassWord = _provider.GetRequiredService<EncryptionHelper>().EncryptAES(Password);
+                        Properties.Settings.Default.RememberAccount = true;
+                        Properties.Settings.Default.Save();
+                    }
+                    else
+                    {
+                        Properties.Settings.Default.UserName = string.Empty;
+                        Properties.Settings.Default.PassWord = string.Empty;
+                        Properties.Settings.Default.RememberAccount = false;
+                        Properties.Settings.Default.Save();
                     }
                 }
                 else if (isSuccessLogin == false && role == null)

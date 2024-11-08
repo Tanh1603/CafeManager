@@ -16,6 +16,8 @@ using System.Net;
 using System.Reflection;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement.ListView;
 using Microsoft.Extensions.Configuration;
+using System.Security.Cryptography;
+using CafeManager.WPF.Stores;
 
 namespace CafeManager.WPF.Services
 {
@@ -45,6 +47,7 @@ namespace CafeManager.WPF.Services
                 {
                     throw new InvalidOperationException("Tài khoản đã tồn tại ");
                 }
+                appuser.Password = _provider.GetRequiredService<EncryptionHelper>().EncryptAES(appuser.Password);
                 Appuser newAppuser = await _unitOfWork.AppUserList.Create(appuser);
                 await _unitOfWork.CompleteAsync();
                 await _unitOfWork.CommitTransactionAsync();
@@ -67,7 +70,7 @@ namespace CafeManager.WPF.Services
                 {
                     return (false, null);
                 }
-                bool isPasswordMatch = exisiting?.Password?.Equals(password) ?? false;
+                bool isPasswordMatch = _provider.GetRequiredService<EncryptionHelper>().DecryptAES(exisiting.Password ?? string.Empty)?.Equals(password) ?? false;
                 return (isPasswordMatch, exisiting?.Role);
             }
             catch
@@ -208,7 +211,7 @@ namespace CafeManager.WPF.Services
                 {
                     return false;
                 }
-                res.Password = NewPassWord;
+                res.Password = _provider.GetRequiredService<EncryptionHelper>().EncryptAES(NewPassWord);
                 _unitOfWork.AppUserList.Update(res);
                 await _unitOfWork.CompleteAsync();
                 await _unitOfWork.CommitTransactionAsync();

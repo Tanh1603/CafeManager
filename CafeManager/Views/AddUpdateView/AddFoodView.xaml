@@ -11,7 +11,7 @@
     Width="800"
     Height="450"
     mc:Ignorable="d">
-    <Border BorderThickness="4" CornerRadius="10">
+    <Border BorderThickness="4" CornerRadius="0">
         <Border.Background>
             <LinearGradientBrush StartPoint="0,0.5" EndPoint="1,0.5">
                 <GradientStop Offset="0" Color="#d4b096" />
@@ -72,13 +72,12 @@
                     Grid.Row="0"
                     Margin="20,10"
                     HorizontalAlignment="Right"
-                    Command="{Binding CloseUserControlCommand}"
+                    Command="{Binding CloseCommand}"
                     Style="{StaticResource closeButton}">
                     <ma:PackIconMaterial Kind="Close" Style="{StaticResource iconApp}" />
                 </Button>
                 <TextBlock
                     Grid.Row="1"
-                    
                     HorizontalAlignment="Center"
                     VerticalAlignment="Top"
                     FontSize="32"

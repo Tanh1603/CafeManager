@@ -25,7 +25,7 @@
                 <GradientStop Offset="1" Color="#7c4e37" />
             </LinearGradientBrush>
         </Border.BorderBrush>
-        <Grid Margin="20,0">
+        <Grid Margin="30,0">
             <Grid.RowDefinitions>
                 <RowDefinition Height="auto" />
                 <RowDefinition Height="auto" />
@@ -49,7 +49,7 @@
              FontSize="32"
              FontWeight="Bold"
              Foreground="#5f2414"
-             Text="Thông tin nhà cung cấp" />
+             Text="Thông tin nhà hóa đơn" />
 
             <Grid
              Grid.Row="2"
@@ -73,27 +73,27 @@
                 <TextBlock
                  Grid.Row="0"
                  Style="{StaticResource infoText}"
-                 Text="Công ty" />
+                 Text="Ngày tạo" />
                 <TextBlock
                  Grid.Row="1"
                  Style="{StaticResource infoText}"
-                 Text="Người đại diện" />
+                 Text="Ngày thanh toán" />
                 <TextBlock
                  Grid.Row="2"
                  Style="{StaticResource infoText}"
-                 Text="Số điện thoại" />
+                 Text="Tình trạng" />
                 <TextBlock
                  Grid.Row="3"
                  Style="{StaticResource infoText}"
-                 Text="Email" />
+                 Text="Phương thức" />
                 <TextBlock
                  Grid.Row="4"
                  Style="{StaticResource infoText}"
-                 Text="Địa chỉ" />
+                 Text="Mã giảm" />
                 <TextBlock
                  Grid.Row="5"
                  Style="{StaticResource infoText}"
-                 Text="Thông tin khác" />
+                 Text="Bàn đặt" />
 
                 <uc:infoTextInput
                  Grid.Row="0"
@@ -129,7 +129,7 @@
 
             <Button
              Grid.Row="3"
-             Margin="20"
+             Margin="10, 20"
              HorizontalAlignment="Right"
              VerticalAlignment="Bottom"
              Command="{Binding SubmitCommand}"

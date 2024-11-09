@@ -468,7 +468,7 @@
         <Setter Property="Width" Value="40"/>
         <Setter Property="Height" Value="40"/>
         <Setter Property="FocusVisualStyle" Value="{x:Null}" />
-          <Setter Property="Cursor" Value="Hand" />
+        <Setter Property="Cursor" Value="Hand" />
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="Button">
@@ -495,17 +495,23 @@
             </Setter.Value>
         </Setter>
         <Style.Triggers>
-            
-                <Trigger Property="IsMouseOver" Value="True">
-                    
-                    <Setter Property="Foreground" Value="#d4b096"/>
-                </Trigger>
-            
-            
-                <Trigger Property="IsPressed" Value="True">
-                    <Setter Property="Foreground" Value="#d4b096"/>
-                </Trigger>
-            
+
+            <Trigger Property="IsMouseOver" Value="True">
+
+                <Setter Property="Foreground" Value="#d4b096"/>
+            </Trigger>
+
+
+            <Trigger Property="IsPressed" Value="True">
+                <Setter Property="Foreground" Value="#d4b096"/>
+            </Trigger>
+
         </Style.Triggers>
+    </Style>
+    <Style x:Key="closeInfoFoodBtn" TargetType="Button" BasedOn="{StaticResource gridEditButton}">
+        <Setter Property="Width" Value="40"/>
+        <Setter Property="Height" Value="40"/>
+        <Setter Property="Background" Value="Transparent"/>
+        <Setter Property="BorderBrush" Value="Transparent"/>
     </Style>
 </ResourceDictionary>

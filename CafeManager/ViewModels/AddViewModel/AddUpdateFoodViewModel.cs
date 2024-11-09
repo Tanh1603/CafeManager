@@ -123,5 +123,6 @@ namespace CafeManager.WPF.ViewModels.AddViewModel
                 Imagefood = new BitmapImage(new Uri(filePath));
             }
         }
+        
     }
 }

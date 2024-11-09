@@ -29,7 +29,7 @@
                 </LinearGradientBrush>
             </Border.Background>
 
-            <Grid Margin="50,0,40,40">
+            <Grid Margin="50,10,40,40">
                 <Grid.RowDefinitions>
                    
                     <RowDefinition Height="auto" />
@@ -62,7 +62,7 @@
                 <!--  Page Title  -->
                 <TextBlock
                     Grid.Row="0"
-                    Margin="0,20,0,0"
+                    Margin="0,20,0,5"
                     HorizontalAlignment="Left"
                     FontSize="32"
                     FontWeight="SemiBold"

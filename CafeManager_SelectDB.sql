@@ -5,14 +5,19 @@ DELETE FROM appuser;
 SELECT * FROM staff;
 
 SELECT * FROM foodcategory;
+SELECT * FROM food;
 SELECT foodid, foodname, isdeleted, discountfood FROM food;
 ALTER SEQUENCE food_foodid_seq RESTART WITH 1;
 DELETE FROM food;
 
 SELECT * FROM invoices;
+ALTER SEQUENCE invoices_invoiceid_seq RESTART WITH 1;
 DELETE FROM invoices;
+
 SELECT * FROM invoicedetails;
+ALTER SEQUENCE invoicedetails_invoicedetailid_seq RESTART WITH 1;
 DELETE FROM invoicedetails;
+
 SELECT * FROM coffeetable;
 
 SELECT * FROM imports;
@@ -110,7 +115,14 @@ JOIN importdetails imd ON imd.materialsupplierid = ms.materialsupplierid
 GROUP BY m.materialname, m.unit, ms.original, 
 ms.manufacturedate, ms.expirationdate,ms.manufacturer, s.suppliername, ms.price;
 
+INSERT INTO appuser (username, "password", email, "role", displayname)
+VALUES ('ad', '1', 'tanh@gm.com', 1, 'Tanh');
 
+INSERT INTO invoices (paymentstartdate, paymentenddate, paymentstatus, paymentmethod, discountinvoice)
+VALUES (NOW(), NOW(), 'Trống', 'Tiền mặt', 20)
 
-
-
+INSERT INTO invoicedetails(invoiceid, foodid, quantity) VALUES 
+(1, 3, 5),
+(1, 4, 5),
+(1, 5, 5),
+(1, 6, 5);

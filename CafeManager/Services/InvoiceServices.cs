@@ -27,6 +27,16 @@ namespace CafeManager.WPF.Services
             return await _unitOfWork.InvoiceList.GetAllInvoiceAsync();
         }
 
+        public async Task<Invoice?> GetInvoiceById(int id)
+        {
+            return await _unitOfWork.InvoiceList.GetInvoicesByIdAsync(id);
+        }
+
+        public async Task<IEnumerable<Invoicedetail>?> GetListIvoiceDetailByInvoiceId(int id)
+        {
+            return await _unitOfWork.InvoiceList.GetAllInvoiceDetailByInvoiceIdAsync(id);
+        }
+
         #region Thêm xóa, sửa, tìm kiếm, sắp sếp, phân trang
 
         public async Task<Invoice?> AddInvoice(Invoice invoice)

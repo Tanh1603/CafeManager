@@ -9,16 +9,14 @@
     mc:Ignorable="d">
     <Grid>
 
-
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="400" />
+            <ColumnDefinition Width="600" />
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
 
         <!--  left section  -->
         <Border
             Grid.Column="0"
-            Height="auto"
             ClipToBounds="True"
             CornerRadius="10 0 0 10">
             <Border.Background>
@@ -27,24 +25,21 @@
                     <GradientStop Offset="0" Color="#844518" />
                 </LinearGradientBrush>
             </Border.Background>
-            <Border.Clip>
+            <!--<Border.Clip>
 
                 <RectangleGeometry
                     RadiusX="10"
                     RadiusY="10"
                     Rect="0, 0, 400, 800" />
-            </Border.Clip>
-
+            </Border.Clip>-->
 
             <Grid>
                 <!--  titles  -->
-                <Grid.RowDefinitions>
+                <!--<Grid.RowDefinitions>
                     <RowDefinition Height="auto" />
                     <RowDefinition Height="*" />
-
-                </Grid.RowDefinitions>
-
-                <StackPanel Margin="0,60,0,0" VerticalAlignment="Top">
+                </Grid.RowDefinitions>-->
+                <StackPanel Margin="20" VerticalAlignment="Top">
                     <TextBlock
                         FontSize="46"
                         FontWeight="SemiBold"
@@ -69,36 +64,27 @@
                             SnapsToDevicePixels="True"
                             Source="/Assets/Images/coffee.png" />
                     </Border>
-
-
-
-
-
-
-
-
                 </StackPanel>
-                <Grid Grid.Row="1">
-
+                <Grid>
                     <!--  ellipse  -->
                     <Ellipse
                         Width="500"
                         Height="500"
-                        Margin="50,0,0,-200"
+                        Margin="165,0,-65,-195"
                         VerticalAlignment="Bottom"
                         Fill="#d5b096"
                         Opacity="0.5" />
                     <Ellipse
                         Width="300"
                         Height="300"
-                        Margin="-450,0,0,40"
+                        Margin="-30,0,330,115"
                         VerticalAlignment="Bottom"
                         Fill="#d5b096"
                         Opacity="0.3" />
                     <Ellipse
                         Width="400"
                         Height="400"
-                        Margin="-320,0,0,-120"
+                        Margin="5,0,195,-120"
                         VerticalAlignment="Bottom"
                         Fill="#d5b096"
                         Opacity="0.3" />
@@ -112,7 +98,7 @@
                     <Ellipse
                         Width="400"
                         Height="400"
-                        Margin="280,0,0,0"
+                        Margin="365,0,-165,60"
                         VerticalAlignment="Bottom"
                         Fill="#d5b096"
                         Opacity="0.6" />
@@ -146,7 +132,6 @@
                                         <GradientStop Offset="0.9" Color="#6e94de" />
                                     </LinearGradientBrush>
                                 </materialDesign:PackIcon.Foreground>
-
                             </materialDesign:PackIcon>
                             <Ellipse
                                 Width="100"
@@ -164,17 +149,11 @@
                                         <GradientStop Offset="0.9" Color="#6e94de" />
                                     </LinearGradientBrush>
                                 </Ellipse.Stroke>
-
                             </Ellipse>
                         </Grid>
-
                     </Border>
                 </Grid>
-
-
-
             </Grid>
-
         </Border>
         <!--  right section  -->
 
@@ -183,12 +162,11 @@
             Background="#ffffff"
             CornerRadius="10 0 10 0">
 
-            <Grid>
+            <Grid VerticalAlignment="Center" Margin="0 -20 0 0 ">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="auto" />
                     <RowDefinition Height="*" />
                     <RowDefinition Height="auto" />
-
                 </Grid.RowDefinitions>
                 <TextBlock
                     Grid.Row="0"
@@ -223,7 +201,6 @@
                             BorderThickness="0,0,0,1.5"
                             Style="{StaticResource MaterialDesignFloatingHintTextBox}" />
                     </Grid>
-
 
                     <Grid Margin="0,10">
                         <Grid.ColumnDefinitions>
@@ -262,28 +239,27 @@
                         <Button
                             Width="120"
                             Height="45"
-                            
+
                             materialDesign:ButtonAssist.CornerRadius="5"
-                            
+
                             Background="#844518"
                             BorderBrush="Transparent"
                             Content="Đăng nhập"
                             FontSize="15"
-                            Foreground="#ffffff" 
-                            Command="{Binding LoginCommand}"/>
+                            Foreground="#ffffff"
+                            Command="{Binding LoginCommand}" />
                         <Button
                             Width="120"
                             Height="45"
                             Margin="5,0,0,0"
                             materialDesign:ButtonAssist.CornerRadius="5"
-                           
+
                             Content="Hoặc đăng kí"
                             Command="{Binding NavigateToRegisterCommand}"
                             Foreground="#844518"
                             Style="{StaticResource MaterialDesignFlatButton}" />
                     </StackPanel>
                 </StackPanel>
-
             </Grid>
         </Border>
     </Grid>

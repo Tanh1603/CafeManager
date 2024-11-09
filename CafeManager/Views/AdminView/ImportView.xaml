@@ -8,11 +8,13 @@
     d:DesignHeight="450"
     d:DesignWidth="800"
     mc:Ignorable="d">
-    <Grid Background="White">
-        <TextBlock
+    <Border BorderBrush="White" CornerRadius="0 0 10 0">
+        <Grid Background="Transparent">
+            <TextBlock
             HorizontalAlignment="Center"
             VerticalAlignment="Center"
             FontSize="50"
             Text="Import" />
-    </Grid>
+        </Grid>
+    </Border>
 </UserControl>

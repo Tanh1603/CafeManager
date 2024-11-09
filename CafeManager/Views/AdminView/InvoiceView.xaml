@@ -21,7 +21,7 @@
     </UserControl.Resources>
 
     <Grid>
-        <Border Grid.Column="1" CornerRadius="0 10 10 0">
+        <Border Grid.Column="1" CornerRadius="0 0 10 0">
             <Border.Background>
                 <LinearGradientBrush StartPoint="0,0.5" EndPoint="1,0.5">
                     <GradientStop Offset="0" Color="#9c6d3f" />
@@ -68,8 +68,6 @@
                   FontWeight="SemiBold"
                   Foreground="#ddd1c3"
                   Text="Hóa đơn" />
-
-                
 
                 <Separator
                   Grid.Row="0"

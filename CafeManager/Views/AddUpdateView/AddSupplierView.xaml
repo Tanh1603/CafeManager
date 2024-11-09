@@ -8,8 +8,8 @@
     xmlns:uc="clr-namespace:CafeManager.WPF.Assets.UsersControls"
     mc:Ignorable="d">
     <Border
-        Height="auto"
         BorderThickness="4"
+        ClipToBounds="True"
         CornerRadius="10">
         <Border.Background>
             <LinearGradientBrush StartPoint="0,0.5" EndPoint="1,0.5">
@@ -24,7 +24,7 @@
                 <GradientStop Offset="1" Color="#7c4e37" />
             </LinearGradientBrush>
         </Border.BorderBrush>
-        <Grid Margin="20,0">
+        <Grid Margin="20,0" Background="Transparent">
             <Grid.RowDefinitions>
                 <RowDefinition Height="auto" />
                 <RowDefinition Height="auto" />

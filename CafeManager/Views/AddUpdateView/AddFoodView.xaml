@@ -11,7 +11,7 @@
     Width="800"
     Height="450"
     mc:Ignorable="d">
-    <Border BorderThickness="4" CornerRadius="0">
+    <Border BorderThickness="4" CornerRadius="10">
         <Border.Background>
             <LinearGradientBrush StartPoint="0,0.5" EndPoint="1,0.5">
                 <GradientStop Offset="0" Color="#d4b096" />
@@ -151,7 +151,6 @@
                         Hint="15%"
                         Text="{Binding DiscountFood, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" />
                 </Grid>
-
 
                 <Button
                     Grid.Row="3"

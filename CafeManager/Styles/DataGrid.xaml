@@ -50,7 +50,7 @@
         <Setter Property="Stylus.IsFlicksEnabled" Value="False" />
         <Setter Property="AutoGenerateColumns" Value="False" />
         <Setter Property="HeadersVisibility" Value="Column" />
-        <Setter Property="HorizontalScrollBarVisibility" Value="Auto"/>
+        <Setter Property="HorizontalScrollBarVisibility" Value="Auto" />
         <Setter Property="SelectionMode" Value="Single" />
         <Setter Property="CanUserAddRows" Value="False" />
         <Setter Property="CanUserDeleteRows" Value="False" />
@@ -296,5 +296,5 @@
             </MultiTrigger>
         </Style.Triggers>
     </Style>
-    
+
 </ResourceDictionary>

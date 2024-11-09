@@ -12,25 +12,22 @@
     <UserControl.Resources>
         <BooleanToVisibilityConverter x:Key="BoolToVis" />
     </UserControl.Resources>
-    <Border CornerRadius="0,0, 10 ,10">
+    <Border CornerRadius="10">
         <Border.Background>
             <LinearGradientBrush StartPoint="0.5,0" EndPoint="0.5,1">
                 <GradientStop Offset="0" Color="#824618" />
                 <GradientStop Offset="1" Color="#844518" />
             </LinearGradientBrush>
         </Border.Background>
-        <Grid>
-
+        <Grid Background="Transparent">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="auto" MinWidth="180" />
+                <ColumnDefinition Width="auto" />
                 <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
 
-
-
             <!--  left menu  -->
-            <Grid Grid.Column="0">
-                <Border CornerRadius="10 0 0 10">
+            <Grid Grid.Column="0" Background="Transparent">
+                <Border CornerRadius="0 0 0 10">
                     <Border.Background>
                         <LinearGradientBrush StartPoint="0.5,0" EndPoint="0.5,1">
                             <GradientStop Offset="0" Color="#824618" />
@@ -38,11 +35,12 @@
                         </LinearGradientBrush>
                     </Border.Background>
 
-                    <StackPanel VerticalAlignment="Center">
+                    <StackPanel HorizontalAlignment="Center">
                         <!--  username  -->
                         <StackPanel
-                            Margin="0,20,0,0"
-                            HorizontalAlignment="Center"
+                            MinWidth="200"
+                            Margin="20 0 0 0"
+                            VerticalAlignment="Center"
                             Orientation="Horizontal">
                             <Border
                                 Width="45"
@@ -62,7 +60,7 @@
                                     Source="/Assets/Images/coffee.png" />
                             </Border>
 
-                            <StackPanel Margin="10,0,0,0" VerticalAlignment="Center">
+                            <StackPanel Margin="10,0,0,0" HorizontalAlignment="Center" VerticalAlignment="Center">
                                 <TextBlock
                                     Margin="0,0,0,5"
                                     FontSize="15"
@@ -77,11 +75,12 @@
                         </StackPanel>
                         <Separator
                             Height="0.8"
-                            Margin="20,30"
+                            Margin="20"
                             Background="#ffffff" />
 
                         <!--  menu buttons  -->
                         <RadioButton
+                            MinWidth="200"
                             Command="{Binding ChangeCurrentViewModelCommand}"
                             CommandParameter="Home"
                             IsChecked="True"

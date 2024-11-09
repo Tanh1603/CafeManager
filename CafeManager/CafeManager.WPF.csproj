@@ -9,13 +9,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="Assets\Fonts\**" />
-    <EmbeddedResource Remove="Assets\Fonts\**" />
-    <None Remove="Assets\Fonts\**" />
-    <Page Remove="Assets\Fonts\**" />
-  </ItemGroup>
-
-  <ItemGroup>
     <None Remove="Assets\Images\close.png" />
     <None Remove="Assets\Images\coffee.png" />
     <None Remove="Assets\Images\defaultImage.png" />
@@ -29,6 +22,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Assets\Fonts\" />
     <Folder Include="Views\UserView\" />
   </ItemGroup>
 

@@ -10,14 +10,14 @@
     xmlns:uc="clr-namespace:CafeManager.WPF.Views"
     xmlns:ma="http://metro.mahapps.com/winfx/xaml/iconpacks"
     Title="MainWindow"
-    Width="1350"
-    MinHeight="700"
+ 
     AllowsTransparency="True"
     Background="Transparent"
     WindowStartupLocation="CenterScreen"
     WindowStyle="none"
     mc:Ignorable="d">
-
+    
+        
     <Border CornerRadius="10">
         <Border.Background>
             <LinearGradientBrush StartPoint="0.5,0" EndPoint="0.5,1">
@@ -25,7 +25,7 @@
                 <GradientStop Offset="1" Color="#844518" />
             </LinearGradientBrush>
         </Border.Background>
-        <Grid>
+        <Grid Width="auto">
             <Grid.RowDefinitions>
                 <RowDefinition Height="auto" />
                 <RowDefinition Height="*" />
@@ -61,4 +61,5 @@
             </Grid>
         </Grid>
     </Border>
+    
 </Window>

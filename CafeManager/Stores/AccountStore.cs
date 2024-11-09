@@ -14,12 +14,12 @@ namespace CafeManager.WPF.Stores
             _provider = provider;
         }
 
+        public event Action ChangeAccount;
+
         public void SetAccount(Appuser account)
         {
-            if (Account == null)
-            {
-                Account = account;
-            }
+            Account = account;
+            ChangeAccount?.Invoke();
         }
 
         public void ClearAccount()

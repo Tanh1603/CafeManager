@@ -40,10 +40,13 @@ namespace CafeManager.WPF.ViewModels
             _accountStore = provider.GetRequiredService<AccountStore>();
             CurrentViewModel = _provider.GetRequiredService<HomeViewModel>();
 
-            Displayname = _accountStore.Account?.Displayname ?? "No name";
-            Role = (_accountStore.Account?.Role == 1) ? "Admin" : "User";
-            ImageAccount =
-                provider.GetRequiredService<FileDialogService>().Base64ToBitmapImage(_accountStore.Account?.Avatar ?? string.Empty);
+            LoadAccount();
+            _accountStore.ChangeAccount += _accountStore_ChangeAccount;
+        }
+
+        private void _accountStore_ChangeAccount()
+        {
+            LoadAccount();
         }
 
         [RelayCommand]
@@ -101,6 +104,14 @@ namespace CafeManager.WPF.ViewModels
         {
             _navigationStore.Navigation = _provider.GetRequiredService<LoginViewModel>();
             _accountStore.ClearAccount();
+        }
+
+        private void LoadAccount()
+        {
+            Displayname = _accountStore.Account?.Displayname ?? "No name";
+            Role = (_accountStore.Account?.Role == 1) ? "Admin" : "User";
+            ImageAccount =
+                _provider.GetRequiredService<FileDialogService>().Base64ToBitmapImage(_accountStore.Account?.Avatar ?? string.Empty);
         }
     }
 }

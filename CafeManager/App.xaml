@@ -25,6 +25,7 @@
                 <ResourceDictionary Source="Styles/Icon.xaml" />
                 <ResourceDictionary Source="Styles/DatePicker.xaml" />
                 <ResourceDictionary Source="Styles/DataGrid.xaml" />
+                <ResourceDictionary Source="Styles/TabControl.xaml" />
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Application.Resources>

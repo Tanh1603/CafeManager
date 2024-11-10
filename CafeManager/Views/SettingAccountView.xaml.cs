@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -18,11 +16,11 @@ using System.Windows.Shapes;
 namespace CafeManager.WPF.Views
 {
     /// <summary>
-    /// Interaction logic for MainAdminView.xaml
+    /// Interaction logic for SettingAccountView.xaml
     /// </summary>
-    public partial class MainAdminView : UserControl
+    public partial class SettingAccountView : UserControl
     {
-        public MainAdminView()
+        public SettingAccountView()
         {
             InitializeComponent();
         }

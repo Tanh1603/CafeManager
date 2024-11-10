@@ -21,7 +21,7 @@
     </UserControl.Resources>
 
     <Grid>
-        <Border Grid.Column="1" CornerRadius="0 10 10 0">
+        <Border Grid.Column="1" CornerRadius="0 0 10 0">
             <Border.Background>
                 <LinearGradientBrush StartPoint="0,0.5" EndPoint="1,0.5">
                     <GradientStop Offset="0" Color="#9c6d3f" />
@@ -29,9 +29,9 @@
                 </LinearGradientBrush>
             </Border.Background>
 
-            <Grid Margin="50,0,40,40">
+            <Grid Margin="50,10,40,40">
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="100" />
+
                     <RowDefinition Height="auto" />
                     <RowDefinition Height="auto" />
                     <RowDefinition Height="auto" />
@@ -39,7 +39,7 @@
                 </Grid.RowDefinitions>
 
                 <!--  textbox search  -->
-                <Grid Width="300" HorizontalAlignment="Left">
+                <!--<Grid Width="300" HorizontalAlignment="Left">
                     <TextBlock
                         Margin="20,0"
                         VerticalAlignment="Center"
@@ -57,16 +57,16 @@
                         VerticalAlignment="Center"
                         Foreground="#d5b096"
                         Kind="Magnify" />
-                </Grid>
+                </Grid>-->
 
                 <!--  Page Title  -->
                 <TextBlock
-                    Grid.Row="1"
-                    Margin="0,20,0,0"
+                    Grid.Row="0"
+                    Margin="0,20,0,5"
                     HorizontalAlignment="Left"
                     FontSize="32"
                     FontWeight="SemiBold"
-                    Foreground="#dac5b4"
+                    Foreground="#ddd1c3"
                     Text="Nhà cung cấp" />
 
                 <!--  Add Button  -->
@@ -83,15 +83,16 @@
                 </Button>
 
                 <Separator
-                    Grid.Row="2"
+                    Grid.Row="0"
                     Width="200"
                     Height="1"
                     Margin="0,10,0,0"
                     HorizontalAlignment="Left"
+                    VerticalAlignment="Bottom"
                     Background="#f5f5f5" />
 
                 <TextBlock
-                    Grid.Row="3"
+                    Grid.Row="1"
                     Margin="0,0,215,0"
                     HorizontalAlignment="Right"
                     VerticalAlignment="Center"
@@ -102,7 +103,7 @@
 
                 <!--  Filter Textbox  -->
                 <Grid
-                    Grid.Row="3"
+                    Grid.Row="1"
                     Width="200"
                     Margin="0,20"
                     HorizontalAlignment="Right">
@@ -127,7 +128,7 @@
 
                 <!--  Supplier Datagrid  -->
                 <Border
-                    Grid.Row="4"
+                    Grid.Row="3"
                     Width="auto"
                     Margin="0,10,0,0"
                     Padding="8,0,3,0"
@@ -227,14 +228,11 @@
             </Grid>
         </Border>
 
-        <materialDesign:DialogHost
-            Background="Transparent"
-            CloseOnClickAway="True"
-            DialogTheme="Inherit"
-            IsOpen="{Binding IsOpenAddSupplier}"
-            OverlayBackground="{DynamicResource PrimaryHueDarkBrush}"
-            Placement="Mouse"
-            Style="{StaticResource MaterialDesignEmbeddedDialogHost}">
+        <materialDesign:DialogHost ClipToBounds="False" IsOpen="{Binding IsOpenAddSupplier}">
+            <materialDesign:DialogHost.DialogBackground>
+                <SolidColorBrush Color="Transparent" />
+            </materialDesign:DialogHost.DialogBackground>
+
             <materialDesign:DialogHost.DialogContent>
                 <ContentControl Content="{Binding AddSupplierVM}" />
             </materialDesign:DialogHost.DialogContent>

@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -15,14 +13,14 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace CafeManager.WPF.Views
+namespace CafeManager.WPF.Views.AddUpdateView
 {
     /// <summary>
-    /// Interaction logic for MainAdminView.xaml
+    /// Interaction logic for AddInvoiceView.xaml
     /// </summary>
-    public partial class MainAdminView : UserControl
+    public partial class AddInvoiceView : UserControl
     {
-        public MainAdminView()
+        public AddInvoiceView()
         {
             InitializeComponent();
         }

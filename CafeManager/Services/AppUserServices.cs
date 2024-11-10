@@ -61,17 +61,17 @@ namespace CafeManager.WPF.Services
             }
         }
 
-        public async Task<(bool, int?)> Login(string username, string password)
+        public async Task<(Appuser?, bool, int?)> Login(string username, string password)
         {
             try
             {
                 Appuser? exisiting = await _unitOfWork.AppUserList.GetAppUserByUserName(username);
                 if (exisiting == null)
                 {
-                    return (false, null);
+                    return (null, false, null);
                 }
                 bool isPasswordMatch = _provider.GetRequiredService<EncryptionHelper>().DecryptAES(exisiting.Password ?? string.Empty)?.Equals(password) ?? false;
-                return (isPasswordMatch, exisiting?.Role);
+                return (exisiting, isPasswordMatch, exisiting?.Role);
             }
             catch
             {
@@ -129,12 +129,12 @@ namespace CafeManager.WPF.Services
                 using (SmtpClient smtpClient = new SmtpClient("smtp.gmail.com"))
                 {
                     smtpClient.Port = 587;
-                    smtpClient.Credentials = new NetworkCredential(configuration["Email:AddminAccount"], configuration["Email:PassWord"]);
+                    smtpClient.Credentials = new NetworkCredential(configuration["Email:AdminAccount"], configuration["Email:PassWord"]);
                     smtpClient.EnableSsl = true;
 
                     MailMessage mailMessage = new MailMessage
                     {
-                        From = new MailAddress(configuration["Email:AddminAccount"], "Cafe Manager App"),
+                        From = new MailAddress(configuration["Email:AdminAccount"], "Cafe Manager App"),
                         Subject = "Xác thực tài khoản",
                         Body = emailBody,
                         IsBodyHtml = true,
@@ -216,6 +216,30 @@ namespace CafeManager.WPF.Services
                 await _unitOfWork.CompleteAsync();
                 await _unitOfWork.CommitTransactionAsync();
                 return true;
+            }
+            catch (Exception)
+            {
+                await _unitOfWork.RollbackTransactionAsync();
+                _unitOfWork.ClearChangeTracker();
+                throw new InvalidOperationException("Lỗi");
+            }
+        }
+
+        public async Task<Appuser?> GetAppUserByUserName(string userName)
+        {
+            return await _unitOfWork.AppUserList.GetAppUserByUserName(userName);
+        }
+
+        public async Task<Appuser?> UpdateAppUser(Appuser user)
+        {
+            try
+            {
+                await _unitOfWork.BeginTransactionAsync();
+
+                var res = _unitOfWork.AppUserList.Update(user);
+                await _unitOfWork.CompleteAsync();
+                await _unitOfWork.CommitTransactionAsync();
+                return res;
             }
             catch (Exception)
             {

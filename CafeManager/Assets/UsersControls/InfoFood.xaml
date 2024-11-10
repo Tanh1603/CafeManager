@@ -98,7 +98,7 @@
                     <Label
                         HorizontalAlignment="Right"
                         Content="Giảm giá:"
-                        FontWeight="SemiBold"
+                        FontWeight="Bold"
                         Foreground="#ed0a09" />
                     <TextBlock
                         MinWidth="50"

@@ -18,7 +18,7 @@
             </Grid.ColumnDefinitions>
 
             <!--  left section  -->
-            <Border Grid.Column="0" CornerRadius="10 0 0 10">
+            <Border Grid.Column="0" CornerRadius="0 0 0 10">
                 <Border.Background>
                     <LinearGradientBrush StartPoint="0.5,0" EndPoint="0.5,1">
                         <GradientStop Offset="1" Color="#824618" />
@@ -266,7 +266,7 @@
                                     VerticalAlignment="Center"
                                     FontSize="18"
                                     IsChecked="{Binding IsRememberAccount}">
-                                    <TextBlock Margin="0,0,0,5">
+                                    <TextBlock Margin="0,0,0,3">
 
                                         <Run FontWeight="Bold" Foreground="#844518">Nhớ tài khoản</Run>
 

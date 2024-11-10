@@ -5,112 +5,221 @@
     xmlns:coverter="clr-namespace:CafeManager.WPF.Services.Converter"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:local="clr-namespace:CafeManager.WPF.Views"
+    xmlns:ma="http://metro.mahapps.com/winfx/xaml/iconpacks"
     xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:uc="clr-namespace:CafeManager.WPF.Assets.UsersControls"
     mc:Ignorable="d">
     <UserControl.Resources>
         <BooleanToVisibilityConverter x:Key="BoolToVis" />
         <coverter:DefaultAccountImageConverter x:Key="DefaultAccountImageConverter" />
     </UserControl.Resources>
-    <Grid>
-        <Grid Background="White">
-            <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
-                <TextBox
-                    MinWidth="400"
-                    Margin="10"
-                    VerticalAlignment="Top"
-                    materialDesign:HintAssist.Hint="Tài khoản"
-                    Style="{StaticResource MaterialDesignOutlinedTextBox}"
-                    Text="{Binding Username}" />
-                <TextBox
-                    MinWidth="400"
-                    Margin="10"
-                    VerticalAlignment="Top"
-                    materialDesign:HintAssist.Hint="Tên đăng nhập"
-                    Style="{StaticResource MaterialDesignOutlinedTextBox}"
-                    Text="{Binding Displayname}" />
-                <TextBox
-                    MinWidth="400"
-                    Margin="10"
-                    VerticalAlignment="Top"
-                    materialDesign:HintAssist.Hint="Email"
-                    Style="{StaticResource MaterialDesignOutlinedTextBox}"
-                    Text="{Binding Email}" />
-                <TextBox
-                    MinWidth="400"
-                    Margin="10"
-                    VerticalAlignment="Top"
-                    materialDesign:HintAssist.Hint="Vai trò"
-                    IsReadOnly="True"
-                    Style="{StaticResource MaterialDesignOutlinedTextBox}"
-                    Text="{Binding Role}" />
-                <TextBox
-                    MinWidth="400"
-                    Margin="10"
-                    VerticalAlignment="Top"
-                    materialDesign:HintAssist.Hint="Mật khẩu"
-                    IsReadOnly="True"
-                    Style="{StaticResource MaterialDesignOutlinedTextBox}"
-                    Text="{Binding Password}" />
-                <Image
-                    Width="50"
-                    Height="50"
-                    RenderOptions.BitmapScalingMode="HighQuality"
-                    SnapsToDevicePixels="True"
-                    Source="{Binding Image, Converter={StaticResource DefaultAccountImageConverter}}" />
-                <StackPanel HorizontalAlignment="Right" Orientation="Horizontal">
-                    <Button
-                        MinWidth="100"
-                        Margin="10"
-                        Command="{Binding OpenChangePassWordCommand}"
-                        Content="Đổi mật khẩu" />
-                    <Button
-                        MinWidth="100"
-                        Margin="10"
-                        HorizontalAlignment="Right"
-                        Command="{Binding UpdateAccountCommand}"
-                        Content="Cập nhật tài khoản" />
-                </StackPanel>
-            </StackPanel>
-        </Grid>
+    <Border CornerRadius="10 0 10 0">
+        <Border.Background>
+            <LinearGradientBrush StartPoint="0,0.5" EndPoint="1,0.5">
+                <GradientStop Offset="0" Color="#9c6d3f" />
+                <GradientStop Offset="1" Color="#cb925d" />
+            </LinearGradientBrush>
+        </Border.Background>
+        <Grid>
+            <Grid Margin="50,10,40,0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="auto" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="auto" />
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="auto" />
+                </Grid.RowDefinitions>
 
-        <materialDesign:DialogHost
-            Background="Transparent"
-            CloseOnClickAway="True"
-            DialogTheme="Inherit"
-            IsOpen="{Binding IsOpenChangePassWord}"
-            OverlayBackground="{DynamicResource PrimaryHueDarkBrush}"
-            Placement="Mouse"
-            Style="{StaticResource MaterialDesignEmbeddedDialogHost}">
-            <materialDesign:DialogHost.DialogContent>
-                <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
+
+                <TextBlock
+                    Grid.Row="0"
+                    Margin="0,0,0,11"
+                    HorizontalAlignment="Left"
+                    VerticalAlignment="Center"
+                    FontSize="32"
+                    FontWeight="SemiBold"
+                    Foreground="#ddd1c3"
+                    Text="Cài đặt tài khoản" />
+
+
+
+
+                <Separator
+                    Grid.Row="0"
+                    Grid.RowSpan="1"
+                    Width="250"
+                    Height="1"
+                    HorizontalAlignment="Left"
+                    VerticalAlignment="Bottom"
+                    Background="#f5f5f5" />
+
+
+
+
+
+                <Grid Grid.Row="1" Margin="10,10,10,0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="150" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="auto" />
+                        <RowDefinition Height="auto" />
+                        <RowDefinition Height="auto" />
+                        <RowDefinition Height="auto" />
+                        <RowDefinition Height="auto" />
+                        <RowDefinition Height="auto" />
+                    </Grid.RowDefinitions>
+
+                    <TextBlock
+                        Grid.Row="0"
+                        FontWeight="bold"
+                        Style="{StaticResource infoText}"
+                        Text="Tên đăng nhập" />
+                    <TextBlock
+                        Grid.Row="1"
+                        Style="{StaticResource infoText}"
+                        Text="Mật khẩu" />
+                    <TextBlock
+                        Grid.Row="2"
+                        Style="{StaticResource infoText}"
+                        Text="Email" />
+                    <TextBlock
+                        Grid.Row="3"
+                        Style="{StaticResource infoText}"
+                        Text="Tên hiển thị" />
+                    <TextBlock
+                        Grid.Row="4"
+                        Style="{StaticResource infoText}"
+                        Text="Vai trò" />
+                    <TextBlock
+                        Grid.Row="5"
+                        Style="{StaticResource infoText}"
+                        Text="Ảnh đại diện" />
+
+                    <uc:infoTextInput
+                        Grid.Row="0"
+                        Grid.Column="1"
+                        Text="{Binding Username}" />
+                    <uc:infoTextInput
+                        Grid.Row="1"
+                        Grid.Column="1"
+                        Text="{Binding Password}" />
+                    <uc:infoTextInput
+                        Grid.Row="2"
+                        Grid.Column="1"
+                        Text="{Binding Email}" />
+                    <uc:infoTextInput
+                        Grid.Row="3"
+                        Grid.Column="1"
+                        Text="{Binding Displayname}" />
+                    <ComboBox
+                        Grid.Row="4"
+                        Grid.Column="1"
+                        MinWidth="170"
+                        MinHeight="38"
+                        Background="#ddd1c3"
+                        Style="{StaticResource MaterialDesignComboBox}" />
+                    <Grid Grid.Row="5" Grid.Column="1">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="auto" />
+                        </Grid.ColumnDefinitions>
+                        <uc:infoTextInput />
+                        <Button
+                            Grid.Column="1"
+                            Command="{Binding SetAvataCommand}"
+                            Style="{StaticResource addImageResBtn}">
+
+                            <materialDesign:PackIcon
+                                MinWidth="35"
+                                MinHeight="35"
+                                Kind="AddCircle" />
+                        </Button>
+                    </Grid>
+
+                </Grid>
+                <StackPanel
+                    Grid.Row="2"
+                    HorizontalAlignment="Center"
+                    Orientation="Horizontal">
                     <Button
+                        Grid.Row="3"
+                        Margin="10,20"
                         HorizontalAlignment="Right"
-                        Background="OrangeRed"
-                        Command="{Binding CloseChangePassWordCommand}">
-                        <materialDesign:PackIcon Kind="Close" />
+                        VerticalAlignment="Bottom"
+                        Command="{Binding OpenChangePassWordCommand}"
+                        Style="{StaticResource confirmInfoButton}">
+                        <StackPanel HorizontalAlignment="Center" Orientation="Horizontal">
+                            <ma:PackIconMaterial VerticalAlignment="Center" Kind="Lock" />
+                            <TextBlock
+                                Margin="5,0,0,0"
+                                FontWeight="SemiBold"
+                                Text="Thay đổi mật khẩu" />
+                        </StackPanel>
                     </Button>
-                    <TextBox
-                        MinWidth="400"
-                        Margin="10"
-                        VerticalAlignment="Top"
-                        materialDesign:HintAssist.Hint="Mật khẩu cũ"
-                        Style="{StaticResource MaterialDesignOutlinedTextBox}"
-                        Text="{Binding Oldpassword}" />
-                    <TextBox
-                        MinWidth="400"
-                        Margin="10"
-                        VerticalAlignment="Top"
-                        materialDesign:HintAssist.Hint="Mật khẩu mới"
-                        Style="{StaticResource MaterialDesignOutlinedTextBox}"
-                        Text="{Binding Newpassword}" />
                     <Button
-                        Margin="10"
+                        Grid.Row="3"
+                        Margin="10,20"
                         HorizontalAlignment="Right"
-                        Command="{Binding SubmitChangePassWordCommand}"
-                        Content="Xác nhận" />
+                        VerticalAlignment="Bottom"
+                        Command="{Binding UpdateAccountCommand}"
+                        Style="{StaticResource confirmInfoButton}">
+                        <StackPanel HorizontalAlignment="Center" Orientation="Horizontal">
+                            <ma:PackIconMaterial VerticalAlignment="Center" Kind="Pencil" />
+                            <TextBlock
+                                Margin="10,0,0,0"
+                                FontWeight="SemiBold"
+                                Text="Cập nhật" />
+                        </StackPanel>
+                    </Button>
                 </StackPanel>
-            </materialDesign:DialogHost.DialogContent>
-        </materialDesign:DialogHost>
-    </Grid>
+
+            </Grid>
+       
+
+            <!--<materialDesign:DialogHost
+                Background="Transparent"
+                CloseOnClickAway="True"
+                DialogTheme="Inherit"
+                IsOpen="{Binding IsOpenChangePassWord}"
+                OverlayBackground="{DynamicResource PrimaryHueDarkBrush}"
+                Placement="Mouse"
+                Style="{StaticResource MaterialDesignEmbeddedDialogHost}">
+                <materialDesign:DialogHost.DialogContent>
+                    <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
+                        <Button
+                            HorizontalAlignment="Right"
+                            Background="OrangeRed"
+                            Command="{Binding CloseChangePassWordCommand}">
+                            <materialDesign:PackIcon Kind="Close" />
+                        </Button>
+                        <TextBox
+                            MinWidth="400"
+                            Margin="10"
+                            VerticalAlignment="Top"
+                            materialDesign:HintAssist.Hint="Mật khẩu cũ"
+                            Style="{StaticResource MaterialDesignOutlinedTextBox}"
+                            Text="{Binding Oldpassword}" />
+                        <TextBox
+                            MinWidth="400"
+                            Margin="10"
+                            VerticalAlignment="Top"
+                            materialDesign:HintAssist.Hint="Mật khẩu mới"
+                            Style="{StaticResource MaterialDesignOutlinedTextBox}"
+                            Text="{Binding Newpassword}" />
+                        <Button
+                            Margin="10"
+                            HorizontalAlignment="Right"
+                            Command="{Binding SubmitChangePassWordCommand}"
+                            Content="Xác nhận" />
+                    </StackPanel>
+                </materialDesign:DialogHost.DialogContent>
+            </materialDesign:DialogHost>-->
+        </Grid>
+    </Border>
 </UserControl>

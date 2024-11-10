@@ -147,7 +147,7 @@
 
             </Grid>
 
-        </Border>
+       
         <!--  right section  -->
         <Grid Grid.Column="1">
 
@@ -196,6 +196,7 @@
                                 BorderBrush="Transparent"
                                 BorderThickness="0,0,0,1.5"
                                 FontSize="20"
+								Text="{Binding Username}"
                                 Style="{StaticResource MaterialDesignFloatingHintTextBox}" />
                         </Grid>
 
@@ -220,6 +221,7 @@
                                 materialDesign:HintAssist.Hint="Password"
                                 BorderBrush="Transparent"
                                 BorderThickness="0,0,0,1.5"
+								Password="{Binding Password}"
                                 FontSize="20"
                                 Style="{StaticResource MaterialDesignFloatingHintRevealPasswordBox}" />
                         </Grid>
@@ -229,7 +231,8 @@
                                 Margin="0,10,0,20"
                                 HorizontalAlignment="Left"
                                 Background="Transparent"
-                                BorderBrush="Transparent">
+                                BorderBrush="Transparent"
+								 Command="{Binding OpenResetPassWordCommand}">
                                 <TextBlock
                                     FontSize="18"
                                     Foreground="#844418"
@@ -240,7 +243,8 @@
                                 Margin="0,10,0,20"
                                 HorizontalAlignment="Right"
                                 VerticalAlignment="Center"
-                                FontSize="18">
+                                FontSize="18"
+								 IsChecked="{Binding IsRememberAccount}">
                                 <TextBlock Margin="0,0,0,5">
 
                                     <Run FontWeight="Bold" Foreground="#844518">Nhớ tài khoản</Run>
@@ -314,5 +318,50 @@
                 Fill="#d5b096"
                 Opacity="0.2" />
         </Grid>
+		<materialDesign:DialogHost
+		   Background="Transparent"
+		   CloseOnClickAway="True"
+		   DialogTheme="Inherit"
+		   IsOpen="{Binding IsOpenResetPassWord}"
+		   OverlayBackground="{DynamicResource PrimaryHueDarkBrush}"
+		   Placement="Mouse"
+		   Style="{StaticResource MaterialDesignEmbeddedDialogHost}">
+			<materialDesign:DialogHost.DialogContent>
+				<StackPanel Margin="10">
+					<Button
+                        Margin="10"
+                        HorizontalAlignment="Right"
+                        Background="OrangeRed"
+                        Command="{Binding CloseOpenResetPassWordCommand}">
+						<materialDesign:PackIcon Kind="Close" />
+					</Button>
+					<StackPanel Margin="0,20" Orientation="Horizontal">
+						<TextBlock
+                            Margin="0,0,20,0"
+                            FontSize="20"
+                            Text="Tài khoản" />
+						<TextBox
+                            MinWidth="400"
+                            FontSize="20"
+                            Text="{Binding ResetUser}" />
+					</StackPanel>
+					<StackPanel Margin="0,20" Orientation="Horizontal">
+						<TextBlock
+                            Margin="0,0,20,0"
+                            FontSize="20"
+                            Text="Email" />
+						<TextBox
+                            MinWidth="400"
+                            FontSize="20"
+                            Text="{Binding ResetEmail}" />
+					</StackPanel>
+					<Button
+                        Margin="10,20"
+                        HorizontalAlignment="Right"
+                        Command="{Binding SubmitResetPassWordCommand}"
+                        Content="Submit" />
+				</StackPanel>
+			</materialDesign:DialogHost.DialogContent>
+		</materialDesign:DialogHost>
     </Grid>
 </UserControl>

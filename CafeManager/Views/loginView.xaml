@@ -16,92 +16,303 @@
                 <RowDefinition Height="auto" />
             </Grid.RowDefinitions>
 
-            <StackPanel
-                Grid.Row="0"
-                Margin="10"
-                HorizontalAlignment="Center"
-                VerticalAlignment="Center">
-                <StackPanel Orientation="Horizontal">
-                    <TextBlock Text="Tài khoản" />
-                    <TextBox
-                        MinWidth="400"
-                        Margin="10,0,0,0"
-                        Text="{Binding Username}" />
-                </StackPanel>
-                <StackPanel Orientation="Horizontal">
-                    <TextBlock Text="Mật khẩu" />
-                    <TextBox
-                        MinWidth="400"
-                        Margin="10,0,0,0"
-                        Text="{Binding Password}" />
-                </StackPanel>
-                <CheckBox
-                    Margin="0,10,0,0"
-                    Content="Nhớ tài khoản"
-                    IsChecked="{Binding IsRememberAccount}"
-                    Style="{StaticResource MaterialDesignCheckBox}" />
-            </StackPanel>
+                <StackPanel Margin="0,60,0,0" VerticalAlignment="Top">
+                    <TextBlock
+                        FontSize="46"
+                        FontWeight="SemiBold"
+                        Foreground="#ffffff"
+                        Text="Đăng nhập "
+                        TextAlignment="Center" />
+                    <Border
+                        Width="100"
+                        Height="100"
+                        Margin="0,30,0,0"
+                        CornerRadius="50">
+                        <Border.Background>
+                            <LinearGradientBrush StartPoint="0,0" EndPoint="1,2">
+                                <GradientStop Offset="0" Color="#d5b096" />
+                                <GradientStop Offset="1" Color="#d3b7ff" />
+                            </LinearGradientBrush>
+                        </Border.Background>
+                        <Image
+                            Width="70"
+                            Height="70"
+                            RenderOptions.BitmapScalingMode="HighQuality"
+                            SnapsToDevicePixels="True"
+                            Source="/Assets/Images/coffee.png" />
+                    </Border>
 
-            <StackPanel
-                Grid.Row="1"
-                Margin="20"
-                HorizontalAlignment="Center"
-                Orientation="Horizontal">
-                <Button
-                    Margin="0,0,20,0"
-                    Command="{Binding LoginCommand}"
-                    Content="Đăng nhập" />
-                <Button
-                    Margin="0,0,20,0"
-                    Command="{Binding NavigateToRegisterCommand}"
-                    Content="Đến trang đăng Kí" />
-                <Button Command="{Binding OpenResetPassWordCommand}" Content="Quên mật khẩu" />
-            </StackPanel>
-        </Grid>
-        <materialDesign:DialogHost
-            Background="Transparent"
-            CloseOnClickAway="True"
-            DialogTheme="Inherit"
-            IsOpen="{Binding IsOpenResetPassWord}"
-            OverlayBackground="{DynamicResource PrimaryHueDarkBrush}"
-            Placement="Mouse"
-            Style="{StaticResource MaterialDesignEmbeddedDialogHost}">
-            <materialDesign:DialogHost.DialogContent>
-                <StackPanel Margin="10">
-                    <Button
-                        Margin="10"
-                        HorizontalAlignment="Right"
-                        Background="OrangeRed"
-                        Command="{Binding CloseOpenResetPassWordCommand}">
-                        <materialDesign:PackIcon Kind="Close" />
-                    </Button>
-                    <StackPanel Margin="0,20" Orientation="Horizontal">
-                        <TextBlock
-                            Margin="0,0,20,0"
-                            FontSize="20"
-                            Text="Tài khoản" />
-                        <TextBox
-                            MinWidth="400"
-                            FontSize="20"
-                            Text="{Binding ResetUser}" />
-                    </StackPanel>
-                    <StackPanel Margin="0,20" Orientation="Horizontal">
-                        <TextBlock
-                            Margin="0,0,20,0"
-                            FontSize="20"
-                            Text="Email" />
-                        <TextBox
-                            MinWidth="400"
-                            FontSize="20"
-                            Text="{Binding ResetEmail}" />
-                    </StackPanel>
-                    <Button
-                        Margin="10,20"
-                        HorizontalAlignment="Right"
-                        Command="{Binding SubmitResetPassWordCommand}"
-                        Content="Submit" />
+
+
+
+
+
+
+
                 </StackPanel>
-            </materialDesign:DialogHost.DialogContent>
-        </materialDesign:DialogHost>
+                <Grid Grid.Row="1">
+
+                    <!--  ellipse  -->
+                    <Ellipse
+                        Width="500"
+                        Height="500"
+                        Margin="50,0,0,-200"
+                        VerticalAlignment="Bottom"
+                        Fill="#d5b096"
+                        Opacity="0.5" />
+                    <Ellipse
+                        Width="300"
+                        Height="300"
+                        Margin="-450,0,0,40"
+                        VerticalAlignment="Bottom"
+                        Fill="#d5b096"
+                        Opacity="0.3" />
+                    <Ellipse
+                        Width="400"
+                        Height="400"
+                        Margin="-320,0,0,-120"
+                        VerticalAlignment="Bottom"
+                        Fill="#d5b096"
+                        Opacity="0.3" />
+                    <Ellipse
+                        Width="250"
+                        Height="250"
+                        Margin="-140,0,0,-200"
+                        VerticalAlignment="Bottom"
+                        Fill="#d5b096"
+                        Opacity="0.7" />
+                    <Ellipse
+                        Width="400"
+                        Height="400"
+                        Margin="280,0,0,0"
+                        VerticalAlignment="Bottom"
+                        Fill="#d5b096"
+                        Opacity="0.6" />
+                    <Border
+                        Width="110"
+                        Height="110"
+                        Margin="0,0,0,80"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Bottom"
+                        Background="#fdfdfd"
+                        CornerRadius="100">
+
+                        <Grid>
+                            <!--  color tick icon  -->
+
+                            <materialDesign:PackIcon
+                                Width="70"
+                                Height="70"
+                                HorizontalAlignment="Center"
+                                VerticalAlignment="Center"
+                                Kind="Tick">
+                                <materialDesign:PackIcon.Foreground>
+                                    <LinearGradientBrush StartPoint="0, 1">
+                                        <GradientStop Offset="0.1" Color="#e27c53" />
+                                        <GradientStop Offset="0.2" Color="#dca530" />
+                                        <GradientStop Offset="0.3" Color="#8bb356" />
+                                        <GradientStop Offset="0.4" Color="#3bb356" />
+                                        <GradientStop Offset="0.5" Color="#67cbee" />
+                                        <GradientStop Offset="0.6" Color="#3698db" />
+                                        <GradientStop Offset="0.8" Color="#9264aa" />
+                                        <GradientStop Offset="0.9" Color="#6e94de" />
+                                    </LinearGradientBrush>
+                                </materialDesign:PackIcon.Foreground>
+
+                            </materialDesign:PackIcon>
+                            <Ellipse
+                                Width="100"
+                                Height="100"
+                                StrokeThickness="4">
+                                <Ellipse.Stroke>
+                                    <LinearGradientBrush>
+                                        <GradientStop Offset="0.1" Color="#e27c53" />
+                                        <GradientStop Offset="0.2" Color="#dca530" />
+                                        <GradientStop Offset="0.3" Color="#8bb356" />
+                                        <GradientStop Offset="0.4" Color="#3bb356" />
+                                        <GradientStop Offset="0.5" Color="#67cbee" />
+                                        <GradientStop Offset="0.6" Color="#3698db" />
+                                        <GradientStop Offset="0.8" Color="#9264aa" />
+                                        <GradientStop Offset="0.9" Color="#6e94de" />
+                                    </LinearGradientBrush>
+                                </Ellipse.Stroke>
+
+                            </Ellipse>
+                        </Grid>
+
+                    </Border>
+                </Grid>
+
+
+
+            </Grid>
+
+        </Border>
+        <!--  right section  -->
+        <Grid Grid.Column="1">
+
+            <Border CornerRadius="10 0 10 0">
+                <Border.Background>
+                    <LinearGradientBrush StartPoint="0,0.5" EndPoint="1,0.5">
+                        <GradientStop Offset="1" Color="#fee3d4" />
+                        <GradientStop Offset="0" Color="#f2ccb7" />
+                    </LinearGradientBrush>
+                </Border.Background>
+                <Grid VerticalAlignment="Center">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="auto" />
+                        <RowDefinition Height="*" />
+
+
+                    </Grid.RowDefinitions>
+                    <TextBlock
+                        Grid.Row="0"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center"
+                        FontSize="32"
+                        FontWeight="Bold"
+                        Foreground="#cb925d"
+                        Text="Đăng nhập vào phần mềm" />
+                    <!--  inputs  -->
+                    <StackPanel Grid.Row="1" Margin="50,20">
+                        <Grid Margin="0,10">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="auto" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+                            <materialDesign:PackIcon
+                                MinWidth="40"
+                                MinHeight="40"
+                                HorizontalAlignment="Center"
+                                VerticalAlignment="Center"
+                                Foreground="#9b442a"
+                                Kind="User" />
+                            <TextBox
+                                Grid.Column="1"
+                                MinHeight="70"
+                                Margin="5,0,0,10"
+                                materialDesign:HintAssist.FloatingOffset="0,-20"
+                                materialDesign:HintAssist.Hint="Username"
+                                BorderBrush="Transparent"
+                                BorderThickness="0,0,0,1.5"
+                                FontSize="20"
+                                Style="{StaticResource MaterialDesignFloatingHintTextBox}" />
+                        </Grid>
+
+
+                        <Grid Margin="0,10">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="auto" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+                            <materialDesign:PackIcon
+                                MinWidth="40"
+                                MinHeight="40"
+                                HorizontalAlignment="Center"
+                                VerticalAlignment="Center"
+                                Foreground="#9b442a"
+                                Kind="Lock" />
+                            <PasswordBox
+                                Grid.Column="1"
+                                MinHeight="70"
+                                Margin="5,0,0,10"
+                                materialDesign:HintAssist.FloatingOffset="0, -18"
+                                materialDesign:HintAssist.Hint="Password"
+                                BorderBrush="Transparent"
+                                BorderThickness="0,0,0,1.5"
+                                FontSize="20"
+                                Style="{StaticResource MaterialDesignFloatingHintRevealPasswordBox}" />
+                        </Grid>
+                        <Grid>
+
+                            <Button
+                                Margin="0,10,0,20"
+                                HorizontalAlignment="Left"
+                                Background="Transparent"
+                                BorderBrush="Transparent">
+                                <TextBlock
+                                    FontSize="18"
+                                    Foreground="#844418"
+                                    Text="Quên mật khẩu"
+                                    TextDecorations="Underline" />
+                            </Button>
+                            <CheckBox
+                                Margin="0,10,0,20"
+                                HorizontalAlignment="Right"
+                                VerticalAlignment="Center"
+                                FontSize="18">
+                                <TextBlock Margin="0,0,0,5">
+
+                                    <Run FontWeight="Bold" Foreground="#844518">Nhớ tài khoản</Run>
+
+                                </TextBlock>
+                            </CheckBox>
+                        </Grid>
+
+                        <Button
+                            Width="300"
+                            Height="70"
+                            HorizontalAlignment="Center"
+                            materialDesign:ButtonAssist.CornerRadius="15"
+                            Background="#844518"
+                            BorderBrush="Transparent"
+                            Command="{Binding LoginCommand}"
+                            Content="Đăng nhập"
+                            FontSize="18"
+                            FontWeight="Bold"
+                            Foreground="#ffffff" />
+
+                        <TextBlock
+                            Margin="0,20,0,0"
+                            HorizontalAlignment="Center"
+                            FontSize="18"
+                            FontWeight="SemiBold">
+                            <Run Foreground="#000000" Text="Nếu bạn chưa có tài khoản? " />
+                            <Hyperlink Command="{Binding NavigateToRegisterCommand}" Foreground="#844518">
+                                <Run Foreground="#844518" Text="Hãy đăng kí" />
+                            </Hyperlink>
+                        </TextBlock>
+                    </StackPanel>
+
+                </Grid>
+            </Border>
+            <!--  ellipse  -->
+            <Ellipse
+                Width="200"
+                Height="200"
+                Margin="417,0,163,418"
+                VerticalAlignment="Bottom"
+                Fill="#d5b096"
+                Opacity="0.3" />
+            <Ellipse
+                Width="300"
+                Height="300"
+                Margin="-47,0,527,-64"
+                VerticalAlignment="Bottom"
+                Fill="#d5b096"
+                Opacity="0.2" />
+            <Ellipse
+                Width="80"
+                Height="80"
+                Margin="90,0,540,532"
+                VerticalAlignment="Bottom"
+                Fill="#d5b096"
+                Opacity="0.2"
+                RenderTransformOrigin="2.4,-12.184" />
+            <Ellipse
+                Width="250"
+                Height="250"
+                Margin="481,0,49,-108"
+                VerticalAlignment="Bottom"
+                Fill="#d5b096"
+                Opacity="0.2" />
+            <Ellipse
+                Width="150"
+                Height="150"
+                Margin="656,221,-26,0"
+                VerticalAlignment="Top"
+                Fill="#d5b096"
+                Opacity="0.2" />
+        </Grid>
     </Grid>
 </UserControl>

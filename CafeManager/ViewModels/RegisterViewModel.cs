@@ -107,6 +107,7 @@ namespace CafeManager.WPF.ViewModels
             if (!string.IsNullOrEmpty(filePath))
             {
                 Avata = new BitmapImage(new Uri(filePath));
+                TextBoxImageText = filePath;
             }
         }
 
@@ -121,6 +122,26 @@ namespace CafeManager.WPF.ViewModels
         {
             IsOpenVerificationEmail = false;
             VertificationCode = string.Empty;
+        }
+
+        private string _textBoxImageText;
+        public string TextBoxImageText
+        {
+            get => _textBoxImageText;
+            set
+            {
+                if (_textBoxImageText != value)
+                {
+                    _textBoxImageText = value;
+                    OnPropertyChanged();
+
+                    
+                    if (!string.IsNullOrEmpty(_textBoxImageText) && System.IO.File.Exists(_textBoxImageText))
+                    {
+                        Avata = new BitmapImage(new Uri(_textBoxImageText, UriKind.RelativeOrAbsolute));
+                    }
+                }
+            }
         }
     }
 }

@@ -114,55 +114,69 @@
                             <Grid>
                                 <!--  color tick icon  -->
 
-                                <materialDesign:PackIcon
-                                    Width="70"
-                                    Height="70"
-                                    HorizontalAlignment="Center"
-                                    VerticalAlignment="Center"
-                                    Kind="Tick">
-                                    <materialDesign:PackIcon.Foreground>
-                                        <LinearGradientBrush StartPoint="0, 1">
-                                            <GradientStop Offset="0.1" Color="#e27c53" />
-                                            <GradientStop Offset="0.2" Color="#dca530" />
-                                            <GradientStop Offset="0.3" Color="#8bb356" />
-                                            <GradientStop Offset="0.4" Color="#3bb356" />
-                                            <GradientStop Offset="0.5" Color="#67cbee" />
-                                            <GradientStop Offset="0.6" Color="#3698db" />
-                                            <GradientStop Offset="0.8" Color="#9264aa" />
-                                            <GradientStop Offset="0.9" Color="#6e94de" />
-                                        </LinearGradientBrush>
-                                    </materialDesign:PackIcon.Foreground>
-                                </materialDesign:PackIcon>
-                                <Ellipse
-                                    Width="100"
-                                    Height="100"
-                                    StrokeThickness="4">
-                                    <Ellipse.Stroke>
-                                        <LinearGradientBrush>
-                                            <GradientStop Offset="0.1" Color="#e27c53" />
-                                            <GradientStop Offset="0.2" Color="#dca530" />
-                                            <GradientStop Offset="0.3" Color="#8bb356" />
-                                            <GradientStop Offset="0.4" Color="#3bb356" />
-                                            <GradientStop Offset="0.5" Color="#67cbee" />
-                                            <GradientStop Offset="0.6" Color="#3698db" />
-                                            <GradientStop Offset="0.8" Color="#9264aa" />
-                                            <GradientStop Offset="0.9" Color="#6e94de" />
-                                        </LinearGradientBrush>
-                                    </Ellipse.Stroke>
-                                </Ellipse>
-                            </Grid>
-                        </Border>
-                    </Grid>
+                            <materialDesign:PackIcon
+                                Width="70"
+                                Height="70"
+                                HorizontalAlignment="Center"
+                                VerticalAlignment="Center"
+                                Kind="Tick">
+                                <materialDesign:PackIcon.Foreground>
+                                    <LinearGradientBrush StartPoint="0, 1">
+                                        <GradientStop Offset="0.1" Color="#e27c53" />
+                                        <GradientStop Offset="0.2" Color="#dca530" />
+                                        <GradientStop Offset="0.3" Color="#8bb356" />
+                                        <GradientStop Offset="0.4" Color="#3bb356" />
+                                        <GradientStop Offset="0.5" Color="#67cbee" />
+                                        <GradientStop Offset="0.6" Color="#3698db" />
+                                        <GradientStop Offset="0.8" Color="#9264aa" />
+                                        <GradientStop Offset="0.9" Color="#6e94de" />
+                                    </LinearGradientBrush>
+                                </materialDesign:PackIcon.Foreground>
+
+                            </materialDesign:PackIcon>
+                            <Ellipse
+                                Width="100"
+                                Height="100"
+                                StrokeThickness="4">
+                                <Ellipse.Stroke>
+                                    <LinearGradientBrush>
+                                        <GradientStop Offset="0.1" Color="#e27c53" />
+                                        <GradientStop Offset="0.2" Color="#dca530" />
+                                        <GradientStop Offset="0.3" Color="#8bb356" />
+                                        <GradientStop Offset="0.4" Color="#3bb356" />
+                                        <GradientStop Offset="0.5" Color="#67cbee" />
+                                        <GradientStop Offset="0.6" Color="#3698db" />
+                                        <GradientStop Offset="0.8" Color="#9264aa" />
+                                        <GradientStop Offset="0.9" Color="#6e94de" />
+                                    </LinearGradientBrush>
+                                </Ellipse.Stroke>
+
+                            </Ellipse>
+                        </Grid>
+
+                    </Border>
                 </Grid>
-            </Border>
-            <!--  right section  -->
+
+
+
+            </Grid>
+
+       
+        <!--  right section  -->
+        <Grid Grid.Column="1">
 
             <Border
                 Grid.Column="1"
-                Background="#ffffff"
+                
                 CornerRadius="10 0 10 0">
+                        <Border.Background>
+                            <LinearGradientBrush StartPoint="0,0.5" EndPoint="1,0.5">
+                                <GradientStop Offset="1" Color="#fee3d4" />
+                                <GradientStop Offset="0" Color="#f2ccb7" />
+                            </LinearGradientBrush>
+                        </Border.Background>
 
-                <Grid Margin="0,-20,0,0" VerticalAlignment="Center">
+                        <Grid Margin="0,-20,0,0" VerticalAlignment="Center">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="auto" />
                         <RowDefinition Height="*" />
@@ -197,10 +211,11 @@
                                 Margin="5,0"
                                 materialDesign:HintAssist.FloatingOffset="0,-20"
                                 materialDesign:HintAssist.Hint="Username"
-                                BorderBrush="#c5c8cc"
+                                BorderBrush="#Transparent"
                                 BorderThickness="0,0,0,1.5"
-                                Style="{StaticResource MaterialDesignFloatingHintTextBox}"
-                                Text="{Binding Username}" />
+                                FontSize="20"
+								Text="{Binding Username}"
+                                Style="{StaticResource MaterialDesignFloatingHintTextBox}" />
                         </Grid>
 
                         <Grid Margin="0,10">
@@ -222,42 +237,62 @@
                                 materialDesign:HintAssist.FloatingOffset="0, -18"
                                 materialDesign:HintAssist.Hint="Password"
                                 materialDesign:PasswordBoxAssist.Password="{Binding Path=Password, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, ValidatesOnExceptions=True}"
-                                BorderBrush="#c5c8cc"
+                                BorderBrush="#Transparent"
                                 BorderThickness="0,0,0,1.5"
+								Password="{Binding Password}"
+                                FontSize="20"
                                 Style="{StaticResource MaterialDesignFloatingHintRevealPasswordBox}" />
                         </Grid>
 
-                        <Button
-                            Margin="0,0,0,10"
-                            HorizontalAlignment="Left"
-                            Background="Transparent"
-                            BorderBrush="Transparent">
-                            <TextBlock
-                                Foreground="#844418"
-                                Text="Quên mật khẩu"
-                                TextDecorations="Underline" />
-                        </Button>
-                        <StackPanel HorizontalAlignment="Right" Orientation="Horizontal">
                             <Button
-                                Width="120"
-                                Height="45"
-                                materialDesign:ButtonAssist.CornerRadius="5"
-                                Background="#844518"
+                                Margin="0,10,0,20"
+                                HorizontalAlignment="Left"
+                                Background="Transparent"
                                 BorderBrush="Transparent"
-                                Command="{Binding LoginCommand}"
-                                Content="Đăng nhập"
-                                FontSize="15"
-                                Foreground="#ffffff" />
-                            <Button
-                                Width="120"
-                                Height="45"
-                                Margin="5,0,0,0"
-                                materialDesign:ButtonAssist.CornerRadius="5"
-                                Command="{Binding NavigateToRegisterCommand}"
-                                Content="Hoặc đăng kí"
-                                Foreground="#844518"
-                                Style="{StaticResource MaterialDesignFlatButton}" />
-                        </StackPanel>
+								 Command="{Binding OpenResetPassWordCommand}">
+                                <TextBlock
+                                    FontSize="18"
+                                    Foreground="#844418"
+                                    Text="Quên mật khẩu"
+                                    TextDecorations="Underline" />
+                            </Button>
+                            <CheckBox
+                                Margin="0,10,0,20"
+                                HorizontalAlignment="Right"
+                                VerticalAlignment="Center"
+                                FontSize="18"
+								 IsChecked="{Binding IsRememberAccount}">
+                                <TextBlock Margin="0,0,0,5">
+
+                                    <Run FontWeight="Bold" Foreground="#844518">Nhớ tài khoản</Run>
+
+                                </TextBlock>
+                            </CheckBox>
+                        </Grid>
+
+                        <Button
+                            Width="300"
+                            Height="70"
+                            HorizontalAlignment="Center"
+                            materialDesign:ButtonAssist.CornerRadius="15"
+                            Background="#844518"
+                            BorderBrush="Transparent"
+                            Command="{Binding LoginCommand}"
+                            Content="Đăng nhập"
+                            FontSize="18"
+                            FontWeight="Bold"
+                            Foreground="#ffffff" />
+
+                        <TextBlock
+                            Margin="0,20,0,0"
+                            HorizontalAlignment="Center"
+                            FontSize="18"
+                            FontWeight="SemiBold">
+                            <Run Foreground="#000000" Text="Nếu bạn chưa có tài khoản? " />
+                            <Hyperlink Command="{Binding NavigateToRegisterCommand}" Foreground="#844518">
+                                <Run Foreground="#844518" Text="Hãy đăng kí" />
+                            </Hyperlink>
+                        </TextBlock>
                     </StackPanel>
                 </Grid>
             </Border>

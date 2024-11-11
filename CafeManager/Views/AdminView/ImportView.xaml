@@ -191,7 +191,6 @@
                                     Header="Người nhận"
                                     IsReadOnly="True" />
 
-
                                 <DataGridTemplateColumn
                                     Width="auto"
                                     Header="Tùy chỉnh"
@@ -232,6 +231,10 @@
             OverlayBackground="{DynamicResource PrimaryHueDarkBrush}"
             Placement="Mouse"
             Style="{StaticResource MaterialDesignEmbeddedDialogHost}">
+            <materialDesign:DialogHost.DialogBackground>
+                <SolidColorBrush Color="Transparent" />
+            </materialDesign:DialogHost.DialogBackground>
+
             <materialDesign:DialogHost.DialogContent>
                 <ContentControl Content="{Binding AddImportVM}" />
             </materialDesign:DialogHost.DialogContent>

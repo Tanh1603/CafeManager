@@ -48,7 +48,6 @@
                     <RowDefinition Height="Auto" />
                 </Grid.RowDefinitions>
 
-
                 <!--  Add Button  -->
                 <!--<Button Command="{Binding OpenAddImportCommand}" Style="{StaticResource addButton}">
                     <StackPanel Orientation="Horizontal">
@@ -61,7 +60,6 @@
                         <TextBlock Text="Thêm phiếu nhập" />
                     </StackPanel>
                 </Button>-->
-
 
                 <!--  Thông tin nhập hàng  -->
                 <Grid Grid.Row="1">
@@ -190,10 +188,8 @@
                                                 VerticalAlignment="Center"
                                                 Kind="Plus" />
                                             <TextBlock FontSize="11" Text="Xác nhận" />
-
                                         </StackPanel>
                                     </Button>-->
-
                                 </Grid>
                             </Grid>
                         </Grid>
@@ -386,9 +382,7 @@
                                         VerticalAlignment="Center"
                                         Text="{Binding Quantity, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" />
                                 </Grid>
-
                             </Grid>
-
 
                             <Button
                                 Grid.Row="3"
@@ -410,11 +404,10 @@
                                     <TextBlock FontSize="11" Text="Xác nhận" />
                                 </StackPanel>
                             </Button>
-
                         </Grid>
                     </Border>
                 </Grid>
-                
+
                 <ScrollViewer Grid.Row="2" Margin="0,10,0,0">
                     <DataGrid
                         x:Name="ImportDetailsDataGrid"
@@ -551,6 +544,9 @@
             OverlayBackground="{DynamicResource PrimaryHueDarkBrush}"
             Placement="Mouse"
             Style="{StaticResource MaterialDesignEmbeddedDialogHost}">
+            <materialDesign:DialogHost.DialogBackground>
+                <SolidColorBrush Color="Transparent" />
+            </materialDesign:DialogHost.DialogBackground>
             <materialDesign:DialogHost.DialogContent>
                 <ContentControl Content="{Binding SelectedViewModel}" />
             </materialDesign:DialogHost.DialogContent>

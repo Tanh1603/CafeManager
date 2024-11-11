@@ -95,5 +95,13 @@ namespace CafeManager.Infrastructure.Repositories
             ).ToListAsync();
             return result;
         }
+
+        public async Task<Material> GetMaterialById(int id)
+        {
+            return await _cafeManagerContext.Materials.Where(x => x.Isdeleted == false)
+                .Include(m => m.Materialsuppliers)
+                .ThenInclude(x => x.Supplier)
+                .FirstOrDefaultAsync(x => x.Materialid == id);
+        }
     }
 }

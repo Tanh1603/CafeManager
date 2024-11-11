@@ -16,11 +16,11 @@ using System.Windows.Shapes;
 namespace CafeManager.WPF.Views.AddUpdateView
 {
     /// <summary>
-    /// Interaction logic for AddMaterialView.xaml
+    /// Interaction logic for AddImportView.xaml
     /// </summary>
-    public partial class AddMaterialView : UserControl
+    public partial class AddImportView : UserControl
     {
-        public AddMaterialView()
+        public AddImportView()
         {
             InitializeComponent();
         }

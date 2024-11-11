@@ -1,4 +1,5 @@
-﻿using CafeManager.WPF.Stores;
+﻿using CafeManager.WPF.Services;
+using CafeManager.WPF.Stores;
 using CafeManager.WPF.ViewModels;
 using CafeManager.WPF.ViewModels.AddViewModel;
 using CafeManager.WPF.ViewModels.AdminViewModel;
@@ -36,7 +37,9 @@ namespace CafeManager.WPF.HostBuilders
                 services.AddTransient<RegisterViewModel>(provider => new RegisterViewModel(provider));
 
                 services.AddTransient<AddSuppierViewModel>(provider => new AddSuppierViewModel(provider));
+                services.AddTransient<AddMaterialViewModel>(provider => new AddMaterialViewModel(provider));
                 services.AddTransient<AddUpdateFoodViewModel>(provider => new AddUpdateFoodViewModel(provider));
+                services.AddTransient<AddImportViewModel>(provider => new AddImportViewModel(provider));
 
                 services.AddSingleton<NavigationStore>(provider => new NavigationStore(provider));
                 services.AddSingleton<MainWindow>(provider => new MainWindow()

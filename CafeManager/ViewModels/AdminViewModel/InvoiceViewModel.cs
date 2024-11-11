@@ -125,9 +125,9 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
                     MessageBox.Show("Lỗi");
                 }
             }
-            catch (Exception)
+            catch (InvalidOperationException ioe)
             {
-                throw;
+                MessageBox.Show(ioe.Message);
             }
         }
 

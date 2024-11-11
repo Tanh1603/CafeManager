@@ -116,13 +116,13 @@ GROUP BY m.materialname, m.unit, ms.original,
 ms.manufacturedate, ms.expirationdate,ms.manufacturer, s.suppliername, ms.price;
 
 INSERT INTO appuser (username, "password", email, "role", displayname)
-VALUES ('ad', '1', 'tanh@gm.com', 1, 'Tanh');
+VALUES ('us', '1', 'tanh@gm.com', 0, 'Tanh');
 
 INSERT INTO invoices (paymentstartdate, paymentenddate, paymentstatus, paymentmethod, discountinvoice)
-VALUES (NOW(), NOW(), 'Trống', 'Tiền mặt', 20)
+VALUES (NOW(), NOW(), 'Có người', 'Tiền mặt', 10);
 
 INSERT INTO invoicedetails(invoiceid, foodid, quantity) VALUES 
-(1, 3, 5),
-(1, 4, 5),
-(1, 5, 5),
-(1, 6, 5);
+(2, 5, 5),
+(2, 4, 5),
+(2, 6, 5),
+(2, 7, 5);

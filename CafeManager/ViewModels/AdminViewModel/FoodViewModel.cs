@@ -104,7 +104,7 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
                     {
                         FoodDTO updateFoodDTO = ListFoodByFoodCategoryId.FirstOrDefault(x => x.Id == res.Foodid);
 
-                        if (updateFoodDTO != null && updateFoodDTO.Foodcategory?.Foodcategoryid == res.Foodcategoryid)
+                        if (updateFoodDTO != null && updateFoodDTO.Foodcategory?.Foodcategoryid == res.Foodcategoryid || SelectedFoodCategory.Foodcategoryname.Equals("Tất cả"))
                         {
                             updateFoodDTO.Price = res.Price ?? decimal.Zero;
                             updateFoodDTO.Foodname = res.Foodname;

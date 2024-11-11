@@ -19,6 +19,6 @@ namespace CafeManager.Core.DTOs
         public Foodcategory Foodcategory { get; set; }
 
         [NotMapped]
-        public decimal? PriceDiscount => Price * Discountfood;
+        public decimal? PriceDiscount => Price * (100 - Discountfood) / 100;
     }
 }

@@ -13,6 +13,7 @@
     <UserControl.Resources>
         <BooleanToVisibilityConverter x:Key="BoolToVis" />
         <converter:RowIndexConverter x:Key="RowIndexConverter" />
+        <converter:CurrencyConverter x:Key="CurrencyConverter" />
     </UserControl.Resources>
     <Grid Background="White">
         <Grid>
@@ -85,7 +86,7 @@
                         </Grid>
                     </StackPanel>
 
-                    <!--  Supplier Datagrid  -->
+                    <!--  Invoice Datagrid  -->
                     <Border
                         Grid.Row="3"
                         Width="auto"
@@ -145,7 +146,7 @@
 
                                 <DataGridTextColumn
                                     Width="*"
-                                    Binding="{Binding Discountinvoice}"
+                                    Binding="{Binding Discountinvoice, StringFormat='{}{0:0}%'}"
                                     CanUserResize="False"
                                     Header="Giảm giá"
                                     IsReadOnly="True" />
@@ -207,60 +208,108 @@
                                 Header="Thông tin hóa đơn"
                                 Style="{StaticResource MaterialDesignCardGroupBox}">
 
-                                <StackPanel MinWidth="400">
-                                    <StackPanel Orientation="Horizontal">
-                                        <DatePicker
-                                            MinWidth="140"
-                                            Margin="5"
-                                            materialDesign:HintAssist.Hint="Ngày bắt đầu"
-                                            BorderThickness="2"
-                                            SelectedDate="{Binding Paymentstartdate}"
-                                            Style="{StaticResource MaterialDesignOutlinedDatePicker}" />
-                                        <materialDesign:TimePicker
-                                            MinWidth="140"
-                                            Margin="5"
-                                            materialDesign:HintAssist.Hint="Giờ bắt đầu"
-                                            Is24Hours="True"
-                                            SelectedTime="{Binding Paymentstartdate}"
-                                            Style="{StaticResource MaterialDesignOutlinedTimePicker}" />
-                                    </StackPanel>
+                                <Grid MinWidth="400">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="150" />
+                                        <ColumnDefinition Width="*" />
+                                        <ColumnDefinition Width="*" />
+                                    </Grid.ColumnDefinitions>
 
-                                    <StackPanel Orientation="Horizontal">
-                                        <DatePicker
-                                            MinWidth="140"
-                                            Margin="5"
-                                            materialDesign:HintAssist.Hint="Ngày thanh toán"
-                                            BorderThickness="2"
-                                            SelectedDate="{Binding Paymentenddate}"
-                                            Style="{StaticResource MaterialDesignOutlinedDatePicker}" />
-                                        <materialDesign:TimePicker
-                                            Width="140"
-                                            Margin="5"
-                                            materialDesign:HintAssist.Hint="Giờ thanh toán"
-                                            Is24Hours="True"
-                                            SelectedTime="{Binding Paymentenddate}"
-                                            Style="{StaticResource MaterialDesignOutlinedTimePicker}" />
-                                    </StackPanel>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="auto" />
+                                        <RowDefinition Height="auto" />
+                                        <RowDefinition Height="auto" />
+                                        <RowDefinition Height="auto" />
+                                        <RowDefinition Height="auto" />
+                                    </Grid.RowDefinitions>
 
+                                    <TextBlock
+                                        Grid.Row="0"
+                                        Grid.Column="0"
+                                        VerticalAlignment="Center"
+                                        Text="Ngày bắt đầu hóa đơn" />
+                                    <DatePicker
+                                        Grid.Row="0"
+                                        Grid.Column="1"
+                                        MinWidth="140"
+                                        Margin="5"
+                                        BorderThickness="2"
+                                        SelectedDate="{Binding Paymentstartdate, StringFormat=dd-MM-yyyy}"
+                                        Style="{StaticResource MaterialDesignOutlinedDatePicker}" />
+
+                                    <materialDesign:TimePicker
+                                        Grid.Row="0"
+                                        Grid.Column="2"
+                                        MinWidth="140"
+                                        Margin="5"
+                                        Is24Hours="True"
+                                        SelectedTime="{Binding Paymentstartdate}"
+                                        Style="{StaticResource MaterialDesignOutlinedTimePicker}" />
+
+                                    <TextBlock
+                                        Grid.Row="1"
+                                        Grid.Column="0"
+                                        VerticalAlignment="Center"
+                                        Text="Ngày thanh toán hóa đơn" />
+                                    <DatePicker
+                                        Grid.Row="1"
+                                        Grid.Column="1"
+                                        MinWidth="140"
+                                        Margin="5"
+                                        BorderThickness="2"
+                                        SelectedDate="{Binding Paymentenddate}"
+                                        Style="{StaticResource MaterialDesignOutlinedDatePicker}" />
+                                    <materialDesign:TimePicker
+                                        Grid.Row="1"
+                                        Grid.Column="2"
+                                        MinWidth="140"
+                                        Margin="5"
+                                        Is24Hours="True"
+                                        SelectedTime="{Binding Paymentenddate}"
+                                        Style="{StaticResource MaterialDesignOutlinedTimePicker}" />
+
+                                    <TextBlock
+                                        Grid.Row="2"
+                                        Grid.Column="0"
+                                        VerticalAlignment="Center"
+                                        Text="Trạng thái hóa đơn" />
                                     <TextBox
-                                        Margin="10"
-                                        VerticalAlignment="Top"
-                                        materialDesign:HintAssist.Hint="Trạng thái hóa đơn"
+                                        Grid.Row="2"
+                                        Grid.Column="1"
+                                        Grid.ColumnSpan="2"
+                                        MinWidth="300"
+                                        Margin="5"
                                         Style="{StaticResource MaterialDesignOutlinedTextBox}"
                                         Text="{Binding Paymentstatus}" />
+
+                                    <TextBlock
+                                        Grid.Row="3"
+                                        Grid.Column="0"
+                                        VerticalAlignment="Center"
+                                        Text="Phương thức thanh toán" />
                                     <TextBox
-                                        Margin="10"
+                                        Grid.Row="3"
+                                        Grid.Column="1"
+                                        Grid.ColumnSpan="2"
+                                        Margin="5"
                                         VerticalAlignment="Top"
-                                        materialDesign:HintAssist.Hint="Phương thức thanh toán"
                                         Style="{StaticResource MaterialDesignOutlinedTextBox}"
                                         Text="{Binding Paymentmethod}" />
+
+                                    <TextBlock
+                                        Grid.Row="4"
+                                        Grid.Column="0"
+                                        VerticalAlignment="Center"
+                                        Text="Giảm giá(%)" />
                                     <TextBox
-                                        Margin="10"
+                                        Grid.Row="4"
+                                        Grid.Column="1"
+                                        Grid.ColumnSpan="2"
+                                        Margin="5"
                                         VerticalAlignment="Top"
-                                        materialDesign:HintAssist.Hint="Giảm giá"
                                         Style="{StaticResource MaterialDesignOutlinedTextBox}"
-                                        Text="{Binding Discountinvoice}" />
-                                </StackPanel>
+                                        Text="{Binding Discountinvoice, StringFormat='{}{0:0}'}" />
+                                </Grid>
                             </GroupBox>
                             <GroupBox
                                 Grid.Column="1"
@@ -273,20 +322,32 @@
                                         <RowDefinition Height="*" />
                                         <RowDefinition Height="auto" />
                                     </Grid.RowDefinitions>
-                                    <ListView ItemsSource="{Binding ListInvoiceDetails}" Grid.Row="0">
+                                    <ListView Grid.Row="0" ItemsSource="{Binding ListInvoiceDetails}">
                                         <ListView.View>
                                             <GridView>
-                                                <GridViewColumn Header="Món ăn" DisplayMemberBinding="{Binding Food.Foodname}" />
-                                                <GridViewColumn Header="Giá món ăn" DisplayMemberBinding="{Binding Food.Price}" />
-                                                <GridViewColumn Header="Giảm giá món ăn" DisplayMemberBinding="{Binding Food.Discountfood}" />
-                                                <GridViewColumn Header="Số lượng" DisplayMemberBinding="{Binding Quantity}" />
+                                                <GridViewColumn DisplayMemberBinding="{Binding Food.Foodname}" Header="Món ăn" />
+                                                <GridViewColumn DisplayMemberBinding="{Binding Food.Price, Converter={StaticResource CurrencyConverter}}" Header="Giá món ăn" />
+                                                <GridViewColumn DisplayMemberBinding="{Binding Food.Discountfood, StringFormat='{}{0:0}%'}" Header="Giảm giá món ăn" />
+                                                <GridViewColumn DisplayMemberBinding="{Binding Quantity}" Header="Số lượng" />
                                             </GridView>
                                         </ListView.View>
                                     </ListView>
 
-                                    <StackPanel Orientation="Horizontal" Grid.Row="1" HorizontalAlignment="Right">
-                                        <Button Content="Thành tiền" IsEnabled="False" />
-                                        <Button Content="{Binding TotalPrice}" />
+                                    <StackPanel
+                                        Grid.Row="1"
+                                        HorizontalAlignment="Right"
+                                        Orientation="Horizontal">
+                                        <TextBlock
+                                            Margin="0,0,20,0"
+                                            VerticalAlignment="Center"
+                                            FontSize="20"
+                                            FontWeight="Bold"
+                                            Text="Thành tiền:" />
+                                        <TextBlock
+                                            VerticalAlignment="Center"
+                                            FontSize="20"
+                                            FontWeight="Bold"
+                                            Text="{Binding TotalPrice, Converter={StaticResource CurrencyConverter}}" />
                                     </StackPanel>
                                 </Grid>
                             </GroupBox>

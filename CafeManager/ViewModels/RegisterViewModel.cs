@@ -4,7 +4,7 @@ using CafeManager.WPF.Stores;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Microsoft.Extensions.DependencyInjection;
-using System.Windows;
+using CafeManager.WPF.MessageBox;
 using System.Windows.Media.Imaging;
 
 namespace CafeManager.WPF.ViewModels
@@ -55,11 +55,11 @@ namespace CafeManager.WPF.ViewModels
             {
                 _appUserServices.SendVerificationEmail(Email, Username);
                 IsOpenVerificationEmail = true;
-                MessageBox.Show("Kiểm tra tài khoản email");
+                MyMessageBox.Show("Kiểm tra tài khoản email", MyMessageBox.Buttons.OK, MyMessageBox.Icons.Information);
             }
             catch (InvalidOperationException ioe)
             {
-                MessageBox.Show(ioe.Message);
+                MyMessageBox.Show(ioe.Message, MyMessageBox.Buttons.OK, MyMessageBox.Icons.Warning);
             }
         }
 
@@ -82,19 +82,19 @@ namespace CafeManager.WPF.ViewModels
                     Appuser res = await _appUserServices.Register(appuser);
                     if (res == null)
                     {
-                        MessageBox.Show("Đăng kí tài khoản thất bại");
+                        MyMessageBox.Show("Đăng kí tài khoản thất bại", MyMessageBox.Buttons.OK, MyMessageBox.Icons.Error);
                     }
-                    MessageBox.Show("Đăng kí tài khoản thành công");
+                    MyMessageBox.Show("Đăng kí tài khoản thành công", MyMessageBox.Buttons.OK, MyMessageBox.Icons.Information);
                     _navigationStore.Navigation = _provider.GetRequiredService<LoginViewModel>();
                 }
                 else
                 {
-                    MessageBox.Show("Mã xác nhận nhập sai vui lòng nhập lại");
+                    MyMessageBox.Show("Mã xác nhận nhập sai vui lòng nhập lại", MyMessageBox.Buttons.OK, MyMessageBox.Icons.Error);
                 }
             }
             catch (InvalidOperationException ioe)
             {
-                MessageBox.Show(ioe.Message);
+                MyMessageBox.Show(ioe.Message, MyMessageBox.Buttons.OK, MyMessageBox.Icons.Warning);
             }
         }
 

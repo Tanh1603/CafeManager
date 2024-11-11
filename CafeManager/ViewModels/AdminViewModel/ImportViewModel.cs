@@ -11,7 +11,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using System.Windows;
+using CafeManager.WPF.MessageBox;
 
 namespace CafeManager.WPF.ViewModels.AdminViewModel
 {
@@ -85,11 +85,11 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
                 IsOpenAddImport = false;
                 await _importDetailServices.AddImportDetailArange(materialdetailDTOs, addimport, addmaterial, addsupplier);
                 ListImport.Add(addimport);
-                MessageBox.Show("Thêm chi tiết phiếu nhập cấp thành công");
+                MyMessageBox.Show("Thêm chi tiết phiếu nhập cấp thành công", MyMessageBox.Buttons.OK, MyMessageBox.Icons.Information);
             }
             catch (InvalidOperationException ex)
             {
-                MessageBox.Show(ex.Message);
+                MyMessageBox.Show(ex.Message, MyMessageBox.Buttons.OK, MyMessageBox.Icons.Warning);
             }
         }
 
@@ -144,7 +144,7 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
             }
             catch (InvalidOperationException ivd)
             {
-                MessageBox.Show(ivd.Message);
+                MyMessageBox.Show(ivd.Message, MyMessageBox.Buttons.OK, MyMessageBox.Icons.Warning);
             }
         }
 

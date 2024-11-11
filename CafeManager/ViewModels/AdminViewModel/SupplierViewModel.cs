@@ -5,7 +5,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Microsoft.Extensions.DependencyInjection;
 using System.Collections.ObjectModel;
-using System.Windows;
+using CafeManager.WPF.MessageBox;
 
 namespace CafeManager.WPF.ViewModels.AdminViewModel
 {
@@ -61,12 +61,12 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
                 {
                     tmp = newSupplier;
                     ListSupplier = new(ListSupplier);
-                    MessageBox.Show("Cập nhật nhà cung cấp thành công");
+                    MyMessageBox.Show("Cập nhật nhà cung cấp thành công", MyMessageBox.Buttons.OK, MyMessageBox.Icons.Information);
                 }
             }
             catch (InvalidOperationException ex)
             {
-                MessageBox.Show(ex.Message);
+                MyMessageBox.Show(ex.Message, MyMessageBox.Buttons.OK,MyMessageBox.Icons.Warning);
             }
         }
 
@@ -78,11 +78,11 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
                 var addedSupplier = await _materialSupplierServices.AddSupplier(obj);
                 ListSupplier.Add(addedSupplier);
 
-                MessageBox.Show("Thêm nhà cung cấp thành công");
+                MyMessageBox.Show("Thêm nhà cung cấp thành công",MyMessageBox.Buttons.OK,MyMessageBox.Icons.Information);
             }
             catch (InvalidOperationException ex)
             {
-                MessageBox.Show(ex.Message);
+                MyMessageBox.Show(ex.Message, MyMessageBox.Buttons.OK, MyMessageBox.Icons.Warning);
             }
         }
 
@@ -131,7 +131,7 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
             }
             catch (InvalidOperationException ivd)
             {
-                MessageBox.Show(ivd.Message);
+                MyMessageBox.Show(ivd.Message, MyMessageBox.Buttons.OK, MyMessageBox.Icons.Warning);
             }
         }
 

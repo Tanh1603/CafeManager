@@ -15,5 +15,7 @@ namespace CafeManager.Core.Repositories
         Task<IEnumerable<MaterialDetailDTO>> GetAllMaterialWithDetail();
 
         Task<IEnumerable<MaterialDetailDTO>> GetAllUsedMaterial();
+
+        Task<Material> GetMaterialById(int id);
     }
 }

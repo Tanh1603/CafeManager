@@ -9,6 +9,7 @@ namespace CafeManager.Core.Repositories
 {
     public interface IImportRepository : IRepository<Import>
     {
+        Task<Import> GetImportById(int id);
         Task<IEnumerable<Import>> GetAllImportsAsync();
 
         Task<IEnumerable<Importdetail>> GetAllImportsDetailsByImportIdAsync(int id);

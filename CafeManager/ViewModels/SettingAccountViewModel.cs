@@ -94,7 +94,7 @@ namespace CafeManager.WPF.ViewModels
                 var res = await _appUserServices.UpdateAppUser(appuser);
                 if (res != null)
                 {
-                    MessageBox.Show("Cập nhật tài khoản thành công");
+                    //MessageBox.Show("Cập nhật tài khoản thành công");
                     Properties.Settings.Default.UserName = string.Empty;
                     Properties.Settings.Default.PassWord = string.Empty;
                     Properties.Settings.Default.RememberAccount = false;
@@ -103,7 +103,7 @@ namespace CafeManager.WPF.ViewModels
                 }
                 else
                 {
-                    MessageBox.Show("Lỗi");
+                    //MessageBox.Show("Lỗi");
                 }
             }
             catch (Exception)
@@ -119,7 +119,7 @@ namespace CafeManager.WPF.ViewModels
             {
                 if (Oldpassword.Equals(Newpassword))
                 {
-                    MessageBox.Show("Mật khẩu mới và cũn trùng nhau");
+                    //MessageBox.Show("Mật khẩu mới và cũn trùng nhau");
                     return;
                 }
                 Appuser? appuser = await _appUserServices.GetAppUserByUserName(_accountStore.Account.Username);
@@ -128,7 +128,7 @@ namespace CafeManager.WPF.ViewModels
                     string oldHash = _encryptionHelper.DecryptAES(appuser.Password);
                     if (!oldHash.Equals(Oldpassword))
                     {
-                        MessageBox.Show("Mật khẩu cũ không khớp");
+                        //MessageBox.Show("Mật khẩu cũ không khớp");
                         return;
                     }
                     appuser.Password = _encryptionHelper.EncryptAES(Newpassword);
@@ -141,14 +141,14 @@ namespace CafeManager.WPF.ViewModels
                         Properties.Settings.Default.RememberAccount = false;
                         Properties.Settings.Default.Save();
 
-                        MessageBox.Show("Mật khẩu đổi thành công");
+                        //MessageBox.Show("Mật khẩu đổi thành công");
                         IsOpenChangePassWord = false;
                     }
                 }
             }
             catch (InvalidOperationException ioe)
             {
-                MessageBox.Show(ioe.Message);
+                //MessageBox.Show(ioe.Message);
             }
         }
 

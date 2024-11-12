@@ -11,6 +11,13 @@ namespace CafeManager.Infrastructure.Repositories
         {
         }
 
+        public async Task<Import> GetImportById(int id)
+        {
+            return await _cafeManagerContext.Imports
+                        .Where(x => x.Isdeleted == false)
+                        .FirstOrDefaultAsync(x => x.Importid == id);
+        }
+
         public async Task<IEnumerable<Import>> GetAllImportsAsync()
         {
             return await _cafeManagerContext.Imports.Where(x => x.Isdeleted == false)
@@ -37,12 +44,24 @@ namespace CafeManager.Infrastructure.Repositories
             var importDeleted = await _cafeManagerContext.Imports.FirstOrDefaultAsync(x => x.Importid == id);
             if (importDeleted != null)
             {
+
                 var listImporDetailtDeleted = await GetAllImportsDetailsByImportIdAsync(importDeleted.Importid);
                 foreach (var item in listImporDetailtDeleted)
                 {
                     item.Isdeleted = true;
                     item.Materialsupplier.Isdeleted = true;
                 }
+
+                var entity = await _cafeManagerContext.Set<Import>().FindAsync(id);
+                if (entity != null)
+                {
+                    var property = typeof(Import).GetProperty("Isdeleted");
+                    if (property != null)
+                    {
+                        property.SetValue(entity, true);
+                    }
+                }
+
                 return true;
             }
 

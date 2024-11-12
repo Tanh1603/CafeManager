@@ -15,7 +15,10 @@
     <None Remove="Assets\Images\milktea.png" />
     <None Remove="Assets\Images\minus.png" />
     <None Remove="Assets\Images\squares.png" />
-    <None Remove="Assets\Images\table.png" />
+    <None Remove="MessageBox\Icons\Error.png" />
+    <None Remove="MessageBox\Icons\Information.png" />
+    <None Remove="MessageBox\Icons\Question.png" />
+    <None Remove="MessageBox\Icons\Warning.png" />
     <None Remove="Stores\email_template.html" />
     <None Remove="Stores\reset_email_template.html" />
   </ItemGroup>
@@ -76,9 +79,6 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
     <Resource Include="Assets\Images\squares.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Resource>
-    <Resource Include="Assets\Images\table.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
   </ItemGroup>

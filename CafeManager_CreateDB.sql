@@ -2,10 +2,10 @@
 CREATE TABLE AppUser (
     AppUserId SERIAL,
     UserName VARCHAR(50) NOT NULL,
+    DisplayName VARCHAR(100) DEFAULT 'Unkown',
     Password VARCHAR(255) NOT NULL,
     Email VARCHAR(100),
     Role INT DEFAULT 0, -- 1 = Admin, 0 = Staff
-    DisplayName VARCHAR(100) DEFAULT 'Unkown',
     Avatar TEXT,
     IsDeleted BOOLEAN DEFAULT FALSE,
 
@@ -53,7 +53,8 @@ CREATE TABLE Food (
 ------------------- Tạo bảng Table -----------------------
 CREATE TABLE CoffeeTable (
     CoffeeTableId SERIAL,
-    StatusTable VARCHAR(50) DEFAULT 'Trống', -- "Available", "Occupied"
+	SeatingCapacity INT DEFAULT 4,
+	StatusTable VARCHAR(50) DEFAULT 'Đang sử dụng', -- "Hư", "Xóa"
 	NOTES TEXT,
     IsDeleted BOOLEAN DEFAULT FALSE,
 	
@@ -68,9 +69,11 @@ CREATE TABLE Invoices (
 	PaymentMethod VARCHAR(50) DEFAULT 'Thanh toán tiền mặt',
     DiscountInvoice DECIMAL(5, 2) DEFAULT 0,
     CoffeeTableId INT,
+	StaffId INT NOT NULL,
     IsDeleted BOOLEAN DEFAULT FALSE,
 	
     CONSTRAINT PK_Invoices PRIMARY KEY (InvoiceId),
+	CONSTRAINT FK_Invoices_Staff FOREIGN KEY (StaffId) REFERENCES Staff(StaffId),
     CONSTRAINT FK_Invoices_CoffeeTable FOREIGN KEY (CoffeeTableId) REFERENCES CoffeeTable(CoffeeTableId)
 );
 ------------------- Tạo bảng InvoiceDetails -----------------------
@@ -115,8 +118,8 @@ CREATE TABLE MaterialSupplier (
     MaterialSupplierId SERIAL,
     MaterialId INT NOT NULL,
     SupplierId INT NOT NULL,
-	ManufactureDate TIMESTAMP,
-	ExpirationDate TIMESTAMP,
+	ManufactureDate TIMESTAMP NOT NULL,
+	ExpirationDate TIMESTAMP NOT NULL,
 	Original VARCHAR(20) NOT NULL,
 	Manufacturer VARCHAR(50) NOT NULL,
 	Price DECIMAL(10, 2) DEFAULT 0,
@@ -133,32 +136,33 @@ CREATE TABLE ConsumedMaterials (
     Quantity DECIMAL(10, 2) DEFAULT 0,
     IsDeleted BOOLEAN DEFAULT FALSE,
 
-    CONSTRAINT PK_ConsumedMaterials PRIMARY KEY (ConsumedMaterialId),
-    CONSTRAINT FK_ConsumedMaterials_Material FOREIGN KEY (MaterialId) REFERENCES Material(MaterialId)
+    CONSTRAINT PK_ConsumedMaterials PRIMARY KEY (ConsumedMaterialId)
 );
 ------------------- Tạo bảng Imports -----------------------
 CREATE TABLE Imports (
     ImportId SERIAL,
-	DeliveryPerson VARCHAR(50) NOT NULL, 
+	DeliveryPerson VARCHAR(50) NOT NULL, ---
 	Phone VARCHAR(20) NOT NULL,
 	ShippingCompany VARCHAR(100),          
     ReceivedDate TIMESTAMP NOT NULL,          
-    Receiver VARCHAR(100) NOT NULL, 
+    StaffId INT NOT NULL, 
+	SupplierId INT NOT NULL,
     IsDeleted BOOLEAN DEFAULT FALSE,
 	
-    CONSTRAINT PK_Imports PRIMARY KEY (ImportId)
+    CONSTRAINT PK_Imports PRIMARY KEY (ImportId),
+    CONSTRAINT FK_Imports_Staff FOREIGN KEY (StaffId) REFERENCES Staff(StaffId),
+    CONSTRAINT FK_Imports_Supplier FOREIGN KEY (SupplierId) REFERENCES Supplier(SupplierId)
 );
 ------------------- Tạo bảng ImportDetails -----------------------
 CREATE TABLE ImportDetails (
     ImportDetailId SERIAL,
     ImportId INT NOT NULL,
-	MaterialSupplierId INT NOT NULL,
-	Quantity INT DEFAULT 0,
+	MaterialId INT NOT NULL,
+	Quantity DECIMAL(10, 2) DEFAULT 0,
 	IsDeleted BOOLEAN DEFAULT FALSE,
 	
     CONSTRAINT PK_ImportDetails PRIMARY KEY (ImportDetailId),
     CONSTRAINT FK_ImportDetails_Imports FOREIGN KEY (ImportId) REFERENCES Imports(ImportId),
-    CONSTRAINT FK_ImportDetails_MaterialSupplier FOREIGN KEY (MaterialSupplierId) REFERENCES MaterialSupplier(MaterialSupplierId)
+    CONSTRAINT FK_ImportDetails_Material FOREIGN KEY (MaterialId) REFERENCES Material(MaterialId)
 );
-
 

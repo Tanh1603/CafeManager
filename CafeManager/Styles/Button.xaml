@@ -82,16 +82,14 @@
         <Setter Property="FontSize" Value="13" />
         <Setter Property="VerticalAlignment" Value="Center" />
         <Setter Property="Foreground" Value="{Binding Path=Foreground, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type RadioButton}}}" />
-
     </Style>
     <Style x:Key="menuButtonIcon" TargetType="fa:IconImage">
         <Setter Property="Width" Value="23" />
         <Setter Property="Height" Value="23" />
-        <Setter Property="Margin" Value="35,0,20,0" />
+        <Setter Property="Margin" Value="20,0,20,0" />
         <Setter Property="Foreground" Value="{Binding Path=Tag, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type RadioButton}}}" />
     </Style>
     <!--#endregion-->
-
 
     <Style x:Key="topMenuButton" TargetType="RadioButton">
         <Setter Property="Background" Value="Transparent" />
@@ -126,7 +124,6 @@
                         </LinearGradientBrush>
                     </Setter.Value>
                 </Setter>
-
             </Trigger>
 
             <Trigger Property="IsChecked" Value="True">
@@ -141,10 +138,8 @@
                         </LinearGradientBrush>
                     </Setter.Value>
                 </Setter>
-
             </Trigger>
         </Style.Triggers>
-
     </Style>
 
     <!--#region buttonOrder-->
@@ -179,16 +174,13 @@
                         </LinearGradientBrush>
                     </Setter.Value>
                 </Setter>
-
             </Trigger>
-
         </Style.Triggers>
     </Style>
 
     <Style x:Key="orderText" TargetType="TextBlock">
 
         <Setter Property="Foreground" Value="{Binding Path=Foreground, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Button}}}" />
-
     </Style>
     <Style x:Key="orderButtonIcon" TargetType="fa:IconImage">
         <Setter Property="Width" Value="25" />
@@ -202,7 +194,6 @@
     </Style>
     <!--#endregion-->
 
-
     <Style x:Key="addButton" TargetType="Button">
         <Setter Property="Background" Value="#612e0f" />
         <Setter Property="Foreground" Value="#dac5b4" />
@@ -212,7 +203,7 @@
         <Setter Property="HorizontalAlignment" Value="Right" />
         <Setter Property="Margin" Value="0,20,0,0" />
         <Setter Property="FontSize" Value="13" />
-        <Setter Property="Grid.Row" Value="1" />
+
         <Setter Property="Cursor" Value="Hand" />
         <Setter Property="Template">
             <Setter.Value>
@@ -222,7 +213,6 @@
                     </Border>
                 </ControlTemplate>
             </Setter.Value>
-
         </Setter>
         <Style.Triggers>
             <Trigger Property="IsMouseOver" Value="True">
@@ -231,7 +221,6 @@
             </Trigger>
         </Style.Triggers>
     </Style>
-
 
     <Style x:Key="filterButton" TargetType="RadioButton">
         <Setter Property="Background" Value="Transparent" />
@@ -288,7 +277,6 @@
                         </LinearGradientBrush>
                     </Setter.Value>
                 </Setter>
-
             </Trigger>
         </Style.Triggers>
     </Style>
@@ -319,7 +307,6 @@
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
-
             </Setter.Value>
         </Setter>
         <Style.Triggers>
@@ -335,9 +322,7 @@
                         </LinearGradientBrush>
                     </Setter.Value>
                 </Setter>
-
             </Trigger>
-
         </Style.Triggers>
     </Style>
     <Style
@@ -345,6 +330,13 @@
         BasedOn="{StaticResource upLoadButton}"
         TargetType="Button">
         <Setter Property="Width" Value="100" />
+        <Setter Property="Height" Value="45" />
+    </Style>
+    <Style
+        x:Key="confirmInfoButton"
+        BasedOn="{StaticResource upLoadButton}"
+        TargetType="Button">
+        <Setter Property="Width" Value="120" />
         <Setter Property="Height" Value="45" />
     </Style>
 
@@ -372,54 +364,13 @@
                         CornerRadius="5">
                         <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
                     </Border>
-
                 </ControlTemplate>
-
             </Setter.Value>
         </Setter>
         <Style.Triggers>
             <Trigger Property="IsMouseOver" Value="True">
 
                 <Setter Property="Foreground" Value="#612e0f" />
-
-
-
-            </Trigger>
-
-        </Style.Triggers>
-    </Style>
-
-
-
-
-    <Style x:Key="pagingButton" TargetType="Button">
-        <Setter Property="Background" Value="Transparent" />
-        <Setter Property="Foreground" Value="#6c7682" />
-        <Setter Property="FocusVisualStyle" Value="{x:Null}" />
-        <Setter Property="Margin" Value="1,0" />
-        <Setter Property="FontSize" Value="13" />
-
-        <Setter Property="Template">
-            <Setter.Value>
-                <ControlTemplate TargetType="Button">
-                    <Border
-                        Padding="10,5"
-                        Background="{TemplateBinding Background}"
-                        CornerRadius="5">
-                        <ContentPresenter
-                            Margin="0,0,0,1"
-                            HorizontalAlignment="Center"
-                            VerticalAlignment="Center" />
-                    </Border>
-                </ControlTemplate>
-            </Setter.Value>
-
-        </Setter>
-        <Style.Triggers>
-            <Trigger Property="IsMouseOver" Value="True">
-                <Setter Property="Background" Value="#7950f2" />
-                <Setter Property="Foreground" Value="#ffffff" />
-
             </Trigger>
         </Style.Triggers>
     </Style>
@@ -445,7 +396,6 @@
                     </Border>
                 </ControlTemplate>
             </Setter.Value>
-
         </Setter>
         <Style.Triggers>
             <Trigger Property="IsMouseOver" Value="True">
@@ -458,9 +408,6 @@
                         </LinearGradientBrush>
                     </Setter.Value>
                 </Setter>
-
-
-
             </Trigger>
         </Style.Triggers>
     </Style>
@@ -476,9 +423,97 @@
         <Style.Triggers>
             <Trigger Property="IsMouseOver" Value="True">
                 <Setter Property="Foreground" Value="#f44336" />
-
-
             </Trigger>
         </Style.Triggers>
     </Style>
+
+    <Style x:Key="closeButton" TargetType="Button">
+        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="Foreground" Value="#66171a" />
+        <Setter Property="BorderBrush" Value="Transparent" />
+        <Setter Property="BorderThickness" Value="0" />
+        <Setter Property="Width" Value="40" />
+        <Setter Property="Height" Value="40" />
+        <Setter Property="FocusVisualStyle" Value="{x:Null}" />
+        <Setter Property="Cursor" Value="Hand" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Button">
+                    <Border
+                        x:Name="border"
+                        Background="{TemplateBinding Background}"
+                        BorderBrush="{TemplateBinding BorderBrush}"
+                        BorderThickness="{TemplateBinding BorderThickness}"
+                        CornerRadius="5">
+                        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter TargetName="border" Property="Background" Value="#b47e66" />
+                        </Trigger>
+                        <Trigger Property="IsPressed" Value="True">
+                            <Setter TargetName="border" Property="Background" Value="#b47e66" />
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+        <Style.Triggers>
+
+            <Trigger Property="IsMouseOver" Value="True">
+
+                <Setter Property="Foreground" Value="#d4b096" />
+            </Trigger>
+
+            <Trigger Property="IsPressed" Value="True">
+                <Setter Property="Foreground" Value="#d4b096" />
+            </Trigger>
+        </Style.Triggers>
+    </Style>
+    <Style
+        x:Key="closeInfoFoodBtn"
+        BasedOn="{StaticResource gridEditButton}"
+        TargetType="Button">
+        <Setter Property="Width" Value="40" />
+        <Setter Property="Height" Value="40" />
+        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="BorderBrush" Value="Transparent" />
+    </Style>
+
+    <Style x:Key="backLoginBtn" TargetType="Button" BasedOn="{StaticResource closeButton}">
+        <Setter Property="Width" Value="150"/>
+        <Setter Property="Height" Value="150"/>
+        <Setter Property="Padding" Value="0"/>
+        <Setter Property="Foreground" Value="#d5b096"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Button">
+                    <Border
+                 x:Name="border"
+                 Background="{TemplateBinding Background}"
+                 BorderBrush="{TemplateBinding BorderBrush}"
+                 BorderThickness="{TemplateBinding BorderThickness}"
+                 CornerRadius="100">
+                        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
+                    </Border>
+                    
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+        <Style.Triggers>
+
+            <Trigger Property="IsMouseOver" Value="True">
+
+                <Setter Property="Foreground" Value="#b27e68" />
+            </Trigger>
+
+            <Trigger Property="IsPressed" Value="True">
+                <Setter Property="Foreground" Value="#b27e68" />
+            </Trigger>
+        </Style.Triggers>
+    </Style>
+        <Style x:Key="addImageResBtn" TargetType="Button" BasedOn="{StaticResource backLoginBtn}">
+            <Setter Property="Height" Value="35"/>
+            <Setter Property="Width" Value="35"/>
+        </Style>
 </ResourceDictionary>

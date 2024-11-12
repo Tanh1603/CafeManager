@@ -13,7 +13,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace CafeManager.Views.AddUpdateView
+namespace CafeManager.WPF.Views.AddUpdateView
 {
     /// <summary>
     /// Interaction logic for AddMaterialView.xaml

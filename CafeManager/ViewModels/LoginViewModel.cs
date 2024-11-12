@@ -1,4 +1,5 @@
-﻿using CafeManager.WPF.Services;
+﻿using CafeManager.Core.Data;
+using CafeManager.WPF.Services;
 using CafeManager.WPF.Stores;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
@@ -8,7 +9,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using System.Windows;
+using CafeManager.WPF.MessageBox;
 
 namespace CafeManager.WPF.ViewModels
 {
@@ -36,11 +37,21 @@ namespace CafeManager.WPF.ViewModels
         [ObservableProperty]
         private bool _isOpenResetPassWord;
 
+        [ObservableProperty]
+        private bool _isRememberAccount;
+
         public LoginViewModel(IServiceProvider provider)
         {
             _provider = provider;
             _navigationStore = _provider.GetRequiredService<NavigationStore>();
             _appUserServices = provider.GetRequiredService<AppUserServices>();
+
+            if (Properties.Settings.Default.RememberAccount)
+            {
+                Username = Properties.Settings.Default.UserName;
+                Password = _provider.GetRequiredService<EncryptionHelper>().DecryptAES(Properties.Settings.Default.PassWord);
+                IsRememberAccount = Properties.Settings.Default.RememberAccount;
+            }
         }
 
         [RelayCommand]
@@ -48,27 +59,40 @@ namespace CafeManager.WPF.ViewModels
         {
             try
             {
-                (bool isSuccessLogin, int? role) = await _appUserServices.Login(Username, Password);
-                if (isSuccessLogin && role != null)
+                (Appuser? appuser, bool isSuccessLogin, int? role) = await _appUserServices.Login(Username, Password);
+                if (isSuccessLogin && role != null && appuser != null)
                 {
-                    MessageBoxResult dialogResult = MessageBox.Show("Đăng nhập thành công", "Thông báo", MessageBoxButton.YesNo);
-                    if (dialogResult == MessageBoxResult.Yes)
+                    string dialogResult = MyMessageBox.ShowDialog("Đăng nhập thành công", MyMessageBox.Buttons.Yes_No, MyMessageBox.Icons.Information);
+                    if (dialogResult == "1")
                     {
+                        _provider.GetRequiredService<AccountStore>().SetAccount(appuser);
                         _navigationStore.Navigation = role == 1 ? _provider.GetRequiredService<MainAdminViewModel>() : _provider.GetRequiredService<MainUserViewModel>();
+                    }
+                    if (IsRememberAccount)
+                    {
+                        Properties.Settings.Default.UserName = Username;
+                        Properties.Settings.Default.PassWord = _provider.GetRequiredService<EncryptionHelper>().EncryptAES(Password);
+                        Properties.Settings.Default.RememberAccount = true;
+                        Properties.Settings.Default.Save();
+                    }
+                    else
+                    {
+                        Properties.Settings.Default.RememberAccount = false;
+                        Properties.Settings.Default.Save();
                     }
                 }
                 else if (isSuccessLogin == false && role == null)
                 {
-                    MessageBox.Show("Tài khoản không tồn tại");
+                    MyMessageBox.ShowDialog("Tài khoản không tồn tại", MyMessageBox.Buttons.OK, MyMessageBox.Icons.Error);
                 }
                 else
                 {
-                    MessageBox.Show("Đăng nhập thất bại");
+                    MyMessageBox.ShowDialog("Đăng nhập thất bại", MyMessageBox.Buttons.OK, MyMessageBox.Icons.Error);
                 }
             }
             catch (InvalidOperationException ioe)
             {
-                MessageBox.Show(ioe.Message);
+                MyMessageBox.ShowDialog(ioe.Message, MyMessageBox.Buttons.OK, MyMessageBox.Icons.Warning);
             }
         }
 
@@ -93,18 +117,18 @@ namespace CafeManager.WPF.ViewModels
             {
                 if (await _appUserServices.HasAppUser(ResetUser, ResetEmail) == false)
                 {
-                    MessageBox.Show("Tài khoản không tồn tại");
+                    MyMessageBox.ShowDialog("Tài khoản không tồn tại", MyMessageBox.Buttons.OK, MyMessageBox.Icons.Information);
                     return;
                 }
                 _appUserServices.SendResetPassWord(ResetEmail, ResetUser);
                 bool isSuccessResetPassWord = await _appUserServices.ResetPassWord(ResetUser);
                 if (isSuccessResetPassWord)
                 {
-                    MessageBox.Show($"Mật khẩu tài khoản {ResetUser} đã đổi thành công");
+                    MyMessageBox.ShowDialog($"Mật khẩu tài khoản {ResetUser} đã đổi thành công");
                 }
                 else
                 {
-                    MessageBox.Show($"Mật khẩu tài khoản {ResetUser} đổi thất bại");
+                    MyMessageBox.ShowDialog($"Mật khẩu tài khoản {ResetUser} đổi thất bại");
                 }
                 IsOpenResetPassWord = false;
                 ResetUser = string.Empty;
@@ -112,7 +136,7 @@ namespace CafeManager.WPF.ViewModels
             }
             catch (InvalidOperationException ioe)
             {
-                MessageBox.Show(ioe.Message);
+                MyMessageBox.ShowDialog(ioe.Message, MyMessageBox.Buttons.OK, MyMessageBox.Icons.Warning);
             }
         }
 

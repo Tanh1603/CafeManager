@@ -16,6 +16,8 @@ using System.Net;
 using System.Reflection;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement.ListView;
 using Microsoft.Extensions.Configuration;
+using System.Security.Cryptography;
+using CafeManager.WPF.Stores;
 
 namespace CafeManager.WPF.Services
 {
@@ -45,6 +47,7 @@ namespace CafeManager.WPF.Services
                 {
                     throw new InvalidOperationException("Tài khoản đã tồn tại ");
                 }
+                appuser.Password = _provider.GetRequiredService<EncryptionHelper>().EncryptAES(appuser.Password);
                 Appuser newAppuser = await _unitOfWork.AppUserList.Create(appuser);
                 await _unitOfWork.CompleteAsync();
                 await _unitOfWork.CommitTransactionAsync();
@@ -58,17 +61,17 @@ namespace CafeManager.WPF.Services
             }
         }
 
-        public async Task<(bool, int?)> Login(string username, string password)
+        public async Task<(Appuser?, bool, int?)> Login(string username, string password)
         {
             try
             {
                 Appuser? exisiting = await _unitOfWork.AppUserList.GetAppUserByUserName(username);
                 if (exisiting == null)
                 {
-                    return (false, null);
+                    return (null, false, null);
                 }
-                bool isPasswordMatch = exisiting?.Password?.Equals(password) ?? false;
-                return (isPasswordMatch, exisiting?.Role);
+                bool isPasswordMatch = _provider.GetRequiredService<EncryptionHelper>().DecryptAES(exisiting.Password ?? string.Empty)?.Equals(password) ?? false;
+                return (exisiting, isPasswordMatch, exisiting?.Role);
             }
             catch
             {
@@ -208,11 +211,35 @@ namespace CafeManager.WPF.Services
                 {
                     return false;
                 }
-                res.Password = NewPassWord;
+                res.Password = _provider.GetRequiredService<EncryptionHelper>().EncryptAES(NewPassWord);
                 _unitOfWork.AppUserList.Update(res);
                 await _unitOfWork.CompleteAsync();
                 await _unitOfWork.CommitTransactionAsync();
                 return true;
+            }
+            catch (Exception)
+            {
+                await _unitOfWork.RollbackTransactionAsync();
+                _unitOfWork.ClearChangeTracker();
+                throw new InvalidOperationException("Lỗi");
+            }
+        }
+
+        public async Task<Appuser?> GetAppUserByUserName(string userName)
+        {
+            return await _unitOfWork.AppUserList.GetAppUserByUserName(userName);
+        }
+
+        public async Task<Appuser?> UpdateAppUser(Appuser user)
+        {
+            try
+            {
+                await _unitOfWork.BeginTransactionAsync();
+
+                var res = _unitOfWork.AppUserList.Update(user);
+                await _unitOfWork.CompleteAsync();
+                await _unitOfWork.CommitTransactionAsync();
+                return res;
             }
             catch (Exception)
             {

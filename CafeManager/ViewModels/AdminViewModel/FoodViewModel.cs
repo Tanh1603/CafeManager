@@ -11,7 +11,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using System.Windows;
+using CafeManager.WPF.MessageBox;
 
 namespace CafeManager.WPF.ViewModels.AdminViewModel
 {
@@ -118,11 +118,11 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
                             ListFoodByFoodCategoryId.Remove(updateFoodDTO);
                         }
 
-                        MessageBox.Show("Sửa thành công");
+                        MyMessageBox.Show("Sửa thành công", MyMessageBox.Buttons.OK, MyMessageBox.Icons.Information);
                     }
                     else
                     {
-                        MessageBox.Show("Lỗi");
+                        MyMessageBox.Show("Lỗi", MyMessageBox.Buttons.OK, MyMessageBox.Icons.Error);
                     }
                     IsOpenAddFoodVM = false;
                     AddUpdateFoodVM.IsUpdating = false;
@@ -131,7 +131,7 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
             }
             catch (InvalidOperationException ioe)
             {
-                MessageBox.Show(ioe.Message);
+                MyMessageBox.Show(ioe.Message, MyMessageBox.Buttons.OK, MyMessageBox.Icons.Warning);
             }
         }
 
@@ -142,7 +142,7 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
                 Food res = await _foodServices.AddFood(obj);
                 if (res == null)
                 {
-                    MessageBox.Show("Không thêm được");
+                    MyMessageBox.Show("Không thêm được", MyMessageBox.Buttons.OK, MyMessageBox.Icons.Error);
                     return;
                 }
                 if (res.Foodcategoryid == SelectedFoodCategory.Foodcategoryid || SelectedFoodCategory.Foodcategoryname.Equals("Tất cả"))
@@ -157,14 +157,14 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
                         Foodcategory = obj.Foodcategory,
                     });
                 }
-                MessageBox.Show("Thêm thành công");
+                MyMessageBox.Show("Thêm thành công", MyMessageBox.Buttons.OK, MyMessageBox.Icons.Information);
                 AddUpdateFoodVM.ClearValueOfForm();
                 IsOpenAddFoodVM = false;
                 AddUpdateFoodVM.IsAdding = false;
             }
             catch (InvalidOperationException ivd)
             {
-                MessageBox.Show(ivd.Message);
+                MyMessageBox.Show(ivd.Message, MyMessageBox.Buttons.OK, MyMessageBox.Icons.Information);
             }
         }
 
@@ -230,14 +230,14 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
                 bool isdeleted = await _foodServices.DeletFood(foodDTO.Id);
                 if (isdeleted)
                 {
-                    MessageBox.Show("Xóa thành công thức ăn");
+                    MyMessageBox.Show("Xóa thành công thức ăn", MyMessageBox.Buttons.OK, MyMessageBox.Icons.Information);
                 }
 
                 ListFoodByFoodCategoryId.Remove(foodDTO);
             }
             catch (InvalidOperationException ivd)
             {
-                MessageBox.Show(ivd.Message);
+                MyMessageBox.Show(ivd.Message, MyMessageBox.Buttons.OK, MyMessageBox.Icons.Warning);
                 throw;
             }
         }

@@ -135,5 +135,94 @@ namespace CafeManager.WPF.Services
                 throw new InvalidOperationException("Thêm nhà cung cấp thất bại.", ex);
             }
         }
+
+        //Material
+        public async Task<Material> AddMaterial(Material material)
+        {
+            try
+            {
+                await _unitOfWork.BeginTransactionAsync();
+
+                var list = await _unitOfWork.MaterialList.Create(material);
+
+                if (list == null)
+                {
+                    throw new InvalidOperationException("Lỗi.");
+                }
+
+                await _unitOfWork.CompleteAsync();
+
+                await _unitOfWork.CommitTransactionAsync();
+                return list;
+            }
+            catch (Exception ex)
+            {
+                await _unitOfWork.RollbackTransactionAsync();
+                throw new InvalidOperationException("Xoá vật liệu liệu thất bại.", ex);
+            }
+        }
+
+        public Material? UpdateMaterial(Material material)
+        {
+            var res = _unitOfWork.MaterialList.Update(material);
+            if (res != null)
+            {
+                _unitOfWork.Complete();
+            }
+            return res;
+        }
+
+        public async Task<Material> GetMaterialById(int id)
+        {
+            return await _unitOfWork.MaterialList.GetMaterialById(id);
+        }
+
+        public async Task<bool> DeleteMaterial(int id)
+        {
+            try
+            {
+                await _unitOfWork.BeginTransactionAsync();
+
+                var deleted = await _unitOfWork.MaterialList.Delete(id);
+                if (deleted == false)
+                {
+                    throw new InvalidOperationException("Lỗi.");
+                }
+                await _unitOfWork.CompleteAsync();
+                await _unitOfWork.CommitTransactionAsync();
+                return deleted;
+            }
+            catch (Exception ex)
+            {
+                await _unitOfWork.RollbackTransactionAsync();
+                throw new InvalidOperationException("Xoá vật liệu thất bại.", ex);
+            }
+        }
+
+        //Add Material Supplier
+        public async Task<Materialsupplier> AddMaterialsupplier(Materialsupplier materialsupplier)
+        {
+            try
+            {
+                await _unitOfWork.BeginTransactionAsync();
+
+                var list = await _unitOfWork.MaterialSupplierList.Create(materialsupplier);
+
+                if (list == null)
+                {
+                    throw new InvalidOperationException("Lỗi.");
+                }
+
+                await _unitOfWork.CompleteAsync();
+
+                await _unitOfWork.CommitTransactionAsync();
+                return list;
+            }
+            catch (Exception ex)
+            {
+                await _unitOfWork.RollbackTransactionAsync();
+                throw new InvalidOperationException("Xoá vật liệu liệu thất bại.", ex);
+            }
+        }
     }
 }

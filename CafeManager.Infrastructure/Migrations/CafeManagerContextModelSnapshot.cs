@@ -96,15 +96,28 @@ namespace CafeManager.Infrastructure.Migrations
                         .HasColumnType("text")
                         .HasColumnName("notes");
 
+                    b.Property<int?>("Seatingcapacity")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasDefaultValue(4)
+                        .HasColumnName("seatingcapacity");
+
                     b.Property<string>("Statustable")
                         .ValueGeneratedOnAdd()
                         .HasMaxLength(50)
                         .HasColumnType("character varying(50)")
                         .HasColumnName("statustable")
-                        .HasDefaultValueSql("'Trống'::character varying");
+                        .HasDefaultValueSql("'Đang sử dụng'::character varying");
+
+                    b.Property<int>("Tablenumber")
+                        .HasColumnType("integer")
+                        .HasColumnName("tablenumber");
 
                     b.HasKey("Coffeetableid")
                         .HasName("pk_coffeetable");
+
+                    b.HasIndex(new[] { "Tablenumber" }, "coffeetable_tablenumber_key")
+                        .IsUnique();
 
                     b.ToTable("coffeetable", (string)null);
                 });
@@ -252,19 +265,25 @@ namespace CafeManager.Infrastructure.Migrations
                         .HasColumnType("timestamp without time zone")
                         .HasColumnName("receiveddate");
 
-                    b.Property<string>("Receiver")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("character varying(100)")
-                        .HasColumnName("receiver");
-
                     b.Property<string>("Shippingcompany")
                         .HasMaxLength(100)
                         .HasColumnType("character varying(100)")
                         .HasColumnName("shippingcompany");
 
+                    b.Property<int>("Staffid")
+                        .HasColumnType("integer")
+                        .HasColumnName("staffid");
+
+                    b.Property<int>("Supplierid")
+                        .HasColumnType("integer")
+                        .HasColumnName("supplierid");
+
                     b.HasKey("Importid")
                         .HasName("pk_imports");
+
+                    b.HasIndex("Staffid");
+
+                    b.HasIndex("Supplierid");
 
                     b.ToTable("imports", (string)null);
                 });
@@ -288,22 +307,23 @@ namespace CafeManager.Infrastructure.Migrations
                         .HasDefaultValue(false)
                         .HasColumnName("isdeleted");
 
-                    b.Property<int>("Materialsupplierid")
+                    b.Property<int>("Materialid")
                         .HasColumnType("integer")
-                        .HasColumnName("materialsupplierid");
+                        .HasColumnName("materialid");
 
-                    b.Property<int?>("Quantity")
+                    b.Property<decimal?>("Quantity")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasDefaultValue(0)
-                        .HasColumnName("quantity");
+                        .HasPrecision(10, 2)
+                        .HasColumnType("numeric(10,2)")
+                        .HasColumnName("quantity")
+                        .HasDefaultValueSql("0");
 
                     b.HasKey("Importdetailid")
                         .HasName("pk_importdetails");
 
                     b.HasIndex("Importid");
 
-                    b.HasIndex("Materialsupplierid");
+                    b.HasIndex("Materialid");
 
                     b.ToTable("importdetails", (string)null);
                 });
@@ -356,10 +376,16 @@ namespace CafeManager.Infrastructure.Migrations
                         .HasColumnName("paymentstatus")
                         .HasDefaultValueSql("'Chưa thanh toán'::character varying");
 
+                    b.Property<int>("Staffid")
+                        .HasColumnType("integer")
+                        .HasColumnName("staffid");
+
                     b.HasKey("Invoiceid")
                         .HasName("pk_invoices");
 
                     b.HasIndex("Coffeetableid");
+
+                    b.HasIndex("Staffid");
 
                     b.ToTable("invoices", (string)null);
                 });
@@ -448,7 +474,7 @@ namespace CafeManager.Infrastructure.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Materialsupplierid"));
 
-                    b.Property<DateTime?>("Expirationdate")
+                    b.Property<DateTime>("Expirationdate")
                         .HasColumnType("timestamp without time zone")
                         .HasColumnName("expirationdate");
 
@@ -458,7 +484,7 @@ namespace CafeManager.Infrastructure.Migrations
                         .HasDefaultValue(false)
                         .HasColumnName("isdeleted");
 
-                    b.Property<DateTime?>("Manufacturedate")
+                    b.Property<DateTime>("Manufacturedate")
                         .HasColumnType("timestamp without time zone")
                         .HasColumnName("manufacturedate");
 
@@ -627,7 +653,7 @@ namespace CafeManager.Infrastructure.Migrations
                     b.HasOne("CafeManager.Core.Data.Material", "Material")
                         .WithMany("Consumedmaterials")
                         .HasForeignKey("Materialid")
-                        .HasConstraintName("fk_consumedmaterials_material");
+                        .HasConstraintName("pk_consumedmaterials_material");
 
                     b.Navigation("Material");
                 });
@@ -643,6 +669,25 @@ namespace CafeManager.Infrastructure.Migrations
                     b.Navigation("Foodcategory");
                 });
 
+            modelBuilder.Entity("CafeManager.Core.Data.Import", b =>
+                {
+                    b.HasOne("CafeManager.Core.Data.Staff", "Staff")
+                        .WithMany("Imports")
+                        .HasForeignKey("Staffid")
+                        .IsRequired()
+                        .HasConstraintName("fk_imports_staff");
+
+                    b.HasOne("CafeManager.Core.Data.Supplier", "Supplier")
+                        .WithMany("Imports")
+                        .HasForeignKey("Supplierid")
+                        .IsRequired()
+                        .HasConstraintName("fk_imports_supplier");
+
+                    b.Navigation("Staff");
+
+                    b.Navigation("Supplier");
+                });
+
             modelBuilder.Entity("CafeManager.Core.Data.Importdetail", b =>
                 {
                     b.HasOne("CafeManager.Core.Data.Import", "Import")
@@ -651,15 +696,15 @@ namespace CafeManager.Infrastructure.Migrations
                         .IsRequired()
                         .HasConstraintName("fk_importdetails_imports");
 
-                    b.HasOne("CafeManager.Core.Data.Materialsupplier", "Materialsupplier")
+                    b.HasOne("CafeManager.Core.Data.Material", "Material")
                         .WithMany("Importdetails")
-                        .HasForeignKey("Materialsupplierid")
+                        .HasForeignKey("Materialid")
                         .IsRequired()
-                        .HasConstraintName("fk_importdetails_materialsupplier");
+                        .HasConstraintName("fk_importdetails_material");
 
                     b.Navigation("Import");
 
-                    b.Navigation("Materialsupplier");
+                    b.Navigation("Material");
                 });
 
             modelBuilder.Entity("CafeManager.Core.Data.Invoice", b =>
@@ -669,7 +714,15 @@ namespace CafeManager.Infrastructure.Migrations
                         .HasForeignKey("Coffeetableid")
                         .HasConstraintName("fk_invoices_coffeetable");
 
+                    b.HasOne("CafeManager.Core.Data.Staff", "Staff")
+                        .WithMany("Invoices")
+                        .HasForeignKey("Staffid")
+                        .IsRequired()
+                        .HasConstraintName("fk_invoices_staff");
+
                     b.Navigation("Coffeetable");
+
+                    b.Navigation("Staff");
                 });
 
             modelBuilder.Entity("CafeManager.Core.Data.Invoicedetail", b =>
@@ -738,16 +791,22 @@ namespace CafeManager.Infrastructure.Migrations
                 {
                     b.Navigation("Consumedmaterials");
 
+                    b.Navigation("Importdetails");
+
                     b.Navigation("Materialsuppliers");
                 });
 
-            modelBuilder.Entity("CafeManager.Core.Data.Materialsupplier", b =>
+            modelBuilder.Entity("CafeManager.Core.Data.Staff", b =>
                 {
-                    b.Navigation("Importdetails");
+                    b.Navigation("Imports");
+
+                    b.Navigation("Invoices");
                 });
 
             modelBuilder.Entity("CafeManager.Core.Data.Supplier", b =>
                 {
+                    b.Navigation("Imports");
+
                     b.Navigation("Materialsuppliers");
                 });
 #pragma warning restore 612, 618

@@ -53,6 +53,7 @@ CREATE TABLE Food (
 ------------------- Tạo bảng Table -----------------------
 CREATE TABLE CoffeeTable (
     CoffeeTableId SERIAL,
+	TableNumber INT UNIQUE NOT NULL,
 	SeatingCapacity INT DEFAULT 4,
 	StatusTable VARCHAR(50) DEFAULT 'Đang sử dụng', -- "Hư", "Xóa"
 	NOTES TEXT,

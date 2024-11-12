@@ -26,61 +26,65 @@ namespace CafeManager.WPF.Services
             return await _unitOfWork.ImportList.GetAllImportsAsync();
         }
 
+        //public async Task<IEnumerable<MaterialDetailDTO>?> GetListImportDetailByImportId(int id)
+        //{
+        //    var listImport = await _unitOfWork.ImportList.GetAllImportsDetailsByImportIdAsync(id);
+        //    var res = listImport.Where(x => x.Isdeleted == false)
+        //        .Select(x => new MaterialDetailDTO
+        //        {
+        //            Materialname = x.Material?.Materialname,
+
+        //            Suppliername = x.Import.Supplier?.Suppliername,
+        //            Unit = x.Material?.Unit,
+        //            Quantity = x.Quantity ?? 0,
+        //            Price = x.Material?.Materialsuppliers.FirstOrDefault(f => f.Supplierid == x.Import.Supplierid && f.Materialid == x.Materialid)?.Price ?? 0,
+        //            Original = x.Material?.Materialsuppliers.FirstOrDefault(f => f.Supplierid == x.Import.Supplierid && f.Materialid == x.Materialid)?.Original,
+
+        //            Manufacturer = x.Material?.Materialsuppliers.FirstOrDefault(f => f.Supplierid == x.Import.Supplierid && f.Materialid == x.Materialid)?.Manufacturer,
+
+        //            Manufacturedate =
+        //            (DateTime)(x.Material?.Materialsuppliers.FirstOrDefault(f => f.Supplierid == x.Import.Supplierid && f.Materialid == x.Materialid)?.Manufacturedate),
+
+        //            Expirationdate =
+        //            (DateTime)(x.Material?.Materialsuppliers.FirstOrDefault(f => f.Supplierid == x.Import.Supplierid && f.Materialid == x.Materialid)?.Expirationdate),
+        //        });
+        //    return res;
+        //}
         public async Task<IEnumerable<MaterialDetailDTO>?> GetListImportDetailByImportId(int id)
         {
             var listImport = await _unitOfWork.ImportList.GetAllImportsDetailsByImportIdAsync(id);
-            var res = listImport.Where(x => x.Isdeleted == false)
-                .Select(x => new MaterialDetailDTO
-                {
-                    Materialname = x.Materialsupplier.Material?.Materialname,
 
-                    Suppliername = x.Materialsupplier.Supplier?.Suppliername,
-                    Unit = x.Materialsupplier.Material?.Unit,
-                    Quantity = x.Quantity ?? 0,
-                    Price = x.Materialsupplier.Price ?? 0,
-                    Original = x.Materialsupplier.Original,
-                    Manufacturer = x.Materialsupplier.Manufacturer,
-                    Manufacturedate = x.Materialsupplier.Manufacturedate,
-                    Expirationdate = x.Materialsupplier.Expirationdate,
+            var res = listImport
+                .Select(x =>
+                {
+                    // Lấy đối tượng MaterialSupplier đầu tiên phù hợp để tái sử dụng
+                    var materialSupplier = x.Material?.Materialsuppliers
+                        .FirstOrDefault(f => f.Supplierid == x.Import.Supplierid && f.Materialid == x.Materialid);
+
+                    return new MaterialDetailDTO
+                    {
+                        Materialname = x.Material?.Materialname,
+                        Suppliername = x.Import.Supplier?.Suppliername,
+                        Unit = x.Material?.Unit,
+                        Quantity = x.Quantity ?? 0,
+                        Price = materialSupplier?.Price ?? 0,
+                        Original = materialSupplier?.Original,
+                        Manufacturer = materialSupplier?.Manufacturer,
+                        Manufacturedate = materialSupplier?.Manufacturedate ?? DateTime.Now,
+                        Expirationdate = materialSupplier?.Expirationdate ?? DateTime.Now
+                    };
                 });
+
             return res;
         }
-
-        //public async Task<List<MaterialDetailDTO>?> GetListImportDetailByImportId(int id)
-        //{
-        //    var listImport = await _unitOfWork.ImportList.GetAllImportsDetailsByImportIdAsync(id);
-        //    List<MaterialDetailDTO> res = new List<MaterialDetailDTO>();
-        //    if (listImport != null)
-        //    {
-        //        foreach (var item in listImport)
-        //        {
-        //            if(item.Isdeleted == false)
-        //            {
-        //                res.Add(new MaterialDetailDTO()
-        //                {
-        //                    Materialname = item.Materialsupplier.Material.Materialname,
-
-        //                    Suppliername = item.Materialsupplier.Supplier.Suppliername,
-
-        //                    Quantity = item.Quantity ?? 0,
-        //                    Price = item.Materialsupplier.Price ?? 0,
-        //                    Original = item.Materialsupplier.Original,
-        //                    Manufacturer = item.Materialsupplier.Manufacturer,
-        //                    Manufacturedate = item.Materialsupplier.Manufacturedate,
-        //                    Expirationdate = item.Materialsupplier.Expirationdate,
-        //                });
-        //            }
-        //        }
-        //    }
-        //    return res;
-        //}
 
         #region Tính toán dữ liệu
 
         private decimal CaculatePriceOfListImportdetai(IEnumerable<Importdetail> importdetails)
         {
             return importdetails.Sum(
-                    x => (x.Quantity ?? 0) * (x.Materialsupplier?.Price ?? 0)
+                    x => (x.Quantity ?? 0) * (x.Material?.Materialsuppliers
+                        .FirstOrDefault(f => f.Supplierid == x.Import.Supplierid && f.Materialid == x.Materialid)?.Price ?? 0)
                 );
         }
 

@@ -79,15 +79,21 @@ public partial class CafeManagerContext : DbContext
 
             entity.ToTable("coffeetable");
 
+            entity.HasIndex(e => e.Tablenumber, "coffeetable_tablenumber_key").IsUnique();
+
             entity.Property(e => e.Coffeetableid).HasColumnName("coffeetableid");
             entity.Property(e => e.Isdeleted)
                 .HasDefaultValue(false)
                 .HasColumnName("isdeleted");
             entity.Property(e => e.Notes).HasColumnName("notes");
+            entity.Property(e => e.Seatingcapacity)
+                .HasDefaultValue(4)
+                .HasColumnName("seatingcapacity");
             entity.Property(e => e.Statustable)
                 .HasMaxLength(50)
-                .HasDefaultValueSql("'Trống'::character varying")
+                .HasDefaultValueSql("'Đang sử dụng'::character varying")
                 .HasColumnName("statustable");
+            entity.Property(e => e.Tablenumber).HasColumnName("tablenumber");
         });
 
         modelBuilder.Entity<Consumedmaterial>(entity =>
@@ -108,7 +114,7 @@ public partial class CafeManagerContext : DbContext
 
             entity.HasOne(d => d.Material).WithMany(p => p.Consumedmaterials)
                 .HasForeignKey(d => d.Materialid)
-                .HasConstraintName("fk_consumedmaterials_material");
+                .HasConstraintName("pk_consumedmaterials_material");
         });
 
         modelBuilder.Entity<Food>(entity =>
@@ -179,13 +185,21 @@ public partial class CafeManagerContext : DbContext
             entity.Property(e => e.Receiveddate)
                 .HasColumnType("timestamp without time zone")
                 .HasColumnName("receiveddate");
-            entity.Property(e => e.Receiver)
-                .IsRequired()
-                .HasMaxLength(100)
-                .HasColumnName("receiver");
             entity.Property(e => e.Shippingcompany)
                 .HasMaxLength(100)
                 .HasColumnName("shippingcompany");
+            entity.Property(e => e.Staffid).HasColumnName("staffid");
+            entity.Property(e => e.Supplierid).HasColumnName("supplierid");
+
+            entity.HasOne(d => d.Staff).WithMany(p => p.Imports)
+                .HasForeignKey(d => d.Staffid)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("fk_imports_staff");
+
+            entity.HasOne(d => d.Supplier).WithMany(p => p.Imports)
+                .HasForeignKey(d => d.Supplierid)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("fk_imports_supplier");
         });
 
         modelBuilder.Entity<Importdetail>(entity =>
@@ -199,9 +213,10 @@ public partial class CafeManagerContext : DbContext
             entity.Property(e => e.Isdeleted)
                 .HasDefaultValue(false)
                 .HasColumnName("isdeleted");
-            entity.Property(e => e.Materialsupplierid).HasColumnName("materialsupplierid");
+            entity.Property(e => e.Materialid).HasColumnName("materialid");
             entity.Property(e => e.Quantity)
-                .HasDefaultValue(0)
+                .HasPrecision(10, 2)
+                .HasDefaultValueSql("0")
                 .HasColumnName("quantity");
 
             entity.HasOne(d => d.Import).WithMany(p => p.Importdetails)
@@ -209,10 +224,10 @@ public partial class CafeManagerContext : DbContext
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("fk_importdetails_imports");
 
-            entity.HasOne(d => d.Materialsupplier).WithMany(p => p.Importdetails)
-                .HasForeignKey(d => d.Materialsupplierid)
+            entity.HasOne(d => d.Material).WithMany(p => p.Importdetails)
+                .HasForeignKey(d => d.Materialid)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("fk_importdetails_materialsupplier");
+                .HasConstraintName("fk_importdetails_material");
         });
 
         modelBuilder.Entity<Invoice>(entity =>
@@ -244,10 +259,16 @@ public partial class CafeManagerContext : DbContext
                 .HasMaxLength(50)
                 .HasDefaultValueSql("'Chưa thanh toán'::character varying")
                 .HasColumnName("paymentstatus");
+            entity.Property(e => e.Staffid).HasColumnName("staffid");
 
             entity.HasOne(d => d.Coffeetable).WithMany(p => p.Invoices)
                 .HasForeignKey(d => d.Coffeetableid)
                 .HasConstraintName("fk_invoices_coffeetable");
+
+            entity.HasOne(d => d.Staff).WithMany(p => p.Invoices)
+                .HasForeignKey(d => d.Staffid)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("fk_invoices_staff");
         });
 
         modelBuilder.Entity<Invoicedetail>(entity =>

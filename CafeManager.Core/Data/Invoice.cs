@@ -21,9 +21,13 @@ public partial class Invoice
 
     public int? Coffeetableid { get; set; }
 
+    public int Staffid { get; set; }
+
     public bool? Isdeleted { get; set; }
 
     public virtual Coffeetable Coffeetable { get; set; }
 
     public virtual ICollection<Invoicedetail> Invoicedetails { get; set; } = new List<Invoicedetail>();
+
+    public virtual Staff Staff { get; set; }
 }

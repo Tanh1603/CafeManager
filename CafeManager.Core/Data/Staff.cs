@@ -30,4 +30,8 @@ public partial class Staff
     public decimal? Workinghours { get; set; }
 
     public bool? Isdeleted { get; set; }
+
+    public virtual ICollection<Import> Imports { get; set; } = new List<Import>();
+
+    public virtual ICollection<Invoice> Invoices { get; set; } = new List<Invoice>();
 }

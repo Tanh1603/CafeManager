@@ -32,7 +32,11 @@
     </UserControl.Resources>
 
     <Grid>
-        <Border Grid.Column="1" CornerRadius="10 10 10 10">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="175*" />
+            <ColumnDefinition Width="109*" />
+        </Grid.ColumnDefinitions>
+        <Border CornerRadius="10 10 10 10" Grid.ColumnSpan="2">
             <Border.Background>
                 <LinearGradientBrush StartPoint="0,0.5" EndPoint="1,0.5">
                     <GradientStop Offset="0" Color="#d4b096" />
@@ -543,7 +547,7 @@
             IsOpen="{Binding IsOpenAddMaterialSupplier}"
             OverlayBackground="{DynamicResource PrimaryHueDarkBrush}"
             Placement="Mouse"
-            Style="{StaticResource MaterialDesignEmbeddedDialogHost}">
+            Style="{StaticResource MaterialDesignEmbeddedDialogHost}" Grid.ColumnSpan="2">
             <materialDesign:DialogHost.DialogBackground>
                 <SolidColorBrush Color="Transparent" />
             </materialDesign:DialogHost.DialogBackground>

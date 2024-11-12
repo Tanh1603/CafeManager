@@ -14,7 +14,7 @@ namespace CafeManager.WPF.Stores
             _provider = provider;
         }
 
-        public event Action ChangeAccount;
+        public event Action? ChangeAccount;
 
         public void SetAccount(Appuser account)
         {

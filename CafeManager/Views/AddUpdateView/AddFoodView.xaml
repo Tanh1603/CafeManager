@@ -52,12 +52,14 @@
                     <Border
                         Width="200"
                         Height="200"
-                        ClipToBounds="True"
                         CornerRadius="100">
-                        <Border.Clip>
-                            <EllipseGeometry Center="100,100" RadiusX="100" RadiusY="100" />
-                        </Border.Clip>
-                        <Image Stretch="UniformToFill" RenderOptions.BitmapScalingMode="HighQuality" Source="{Binding Imagefood, UpdateSourceTrigger=PropertyChanged}" />
+
+                        <Border.Background>
+                            <ImageBrush
+                                Stretch="UniformToFill"
+                                RenderOptions.BitmapScalingMode="HighQuality"
+                                ImageSource="{Binding Imagefood, UpdateSourceTrigger=PropertyChanged}"/>
+                        </Border.Background>
                     </Border>
                 </Grid>
                 <Button

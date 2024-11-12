@@ -22,7 +22,7 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
         private readonly CoffeTableServices _coffeTableServices;
 
         [ObservableProperty]
-        private ObservableCollection<Coffeetable> _listTable = new();
+        private ObservableCollection<object> _listTable = new();
 
         public TableViewModel(IServiceProvider provider)
         {
@@ -33,16 +33,16 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
 
         private async Task LoadData()
         {
-            List<Coffeetable> list = new(await _coffeTableServices.GetListCoffeTable());
-            for (int i = 0; i < list.Count; i++)
+            var coffeeTables = await _coffeTableServices.GetListCoffeTable();
+            foreach (var x in coffeeTables)
             {
-                ListTable.Add(new Coffeetable()
+                ListTable.Add(new
                 {
-                    Tablename = $"Bàn {i + 1}",
-                    Statustable = list[i].Statustable,
-                    Notes = list[i].Notes,
-                    Coffeetableid = list[i].Coffeetableid,
-                    Invoices = list[i].Invoices,
+                    Tablename = $"Bàn {x.Tablenumber}",
+                    Statustable = x.Statustable,
+                    Notes = x.Notes,
+                    Coffeetableid = x.Coffeetableid,
+                    Invoices = x.Invoices
                 });
             }
         }
@@ -52,13 +52,16 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
         {
             try
             {
-                var res = await _coffeTableServices.AddCoffeTable(new Coffeetable());
+                var res = await _coffeTableServices.AddCoffeTable(new Coffeetable()
+                {
+                    Tablenumber = ListTable.Count + 1,
+                });
                 if (res != null)
                 {
-                    MyMessageBox.Show("Thêm bàn thành công");
-                    ListTable.Add(new Coffeetable()
+                    MyMessageBox.ShowDialog("Thêm bàn thành công", MyMessageBox.Buttons.OK, MyMessageBox.Icons.Information);
+                    ListTable.Add(new
                     {
-                        Tablename = $"Bàn {ListTable.Count + 1}"
+                        Tablename = $"Bàn {ListTable.Count + 1}",
                     });
                 }
             }

@@ -38,33 +38,39 @@
                         </LinearGradientBrush>
                     </Border.Background>
 
-                    <StackPanel VerticalAlignment="Center">
+                    <StackPanel HorizontalAlignment="Left" VerticalAlignment="Center">
                         <!--  username  -->
-                        <StackPanel HorizontalAlignment="Center" Orientation="Horizontal">
-                            <Border
-                                Width="50"
-                                Height="50"
-                                CornerRadius="50">
-                                <Border.Background>
-                                    <LinearGradientBrush StartPoint="0,0" EndPoint="1,2">
-                                        <GradientStop Offset="0" Color="#d5b096" />
-                                        <GradientStop Offset="1" Color="#d3b7ff" />
-                                    </LinearGradientBrush>
-                                </Border.Background>
-                                <Border.Clip>
-                                    <EllipseGeometry
-                                        Center="25,25"
-                                        RadiusX="24"
-                                        RadiusY="24" />
-                                </Border.Clip>
-                                <Image
-                                    RenderOptions.BitmapScalingMode="HighQuality"
-                                    SnapsToDevicePixels="True"
-                                    Source="{Binding ImageAccount, Converter={StaticResource DefaultAccountImageConverter}}"
-                                    Stretch="UniformToFill" />
-                            </Border>
+                        <Grid Margin="10,0,0,5" HorizontalAlignment="Left">
 
-                            <StackPanel Margin="10,0,0,0" VerticalAlignment="Center">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="auto" />
+                            </Grid.ColumnDefinitions>
+
+                            <Grid Grid.Column="0">
+                                <Border
+                                    Width="50"
+                                    Height="50"
+                                    CornerRadius="10">
+                                    <Border.Background>
+                                        <LinearGradientBrush StartPoint="0,0" EndPoint="1,2">
+                                            <GradientStop Offset="0" Color="#d5b096" />
+                                            <GradientStop Offset="1" Color="#d3b7ff" />
+                                        </LinearGradientBrush>
+                                    </Border.Background>
+                                    <Image
+                                        RenderOptions.BitmapScalingMode="HighQuality"
+                                        SnapsToDevicePixels="True"
+                                        Source="{Binding ImageAccount, Converter={StaticResource DefaultAccountImageConverter}}"
+                                        Stretch="Uniform"
+                                        StretchDirection="DownOnly" />
+                                </Border>
+                            </Grid>
+
+                            <StackPanel
+                                Grid.Column="1"
+                                Margin="10,0,0,0"
+                                VerticalAlignment="Center">
                                 <TextBlock
                                     Margin="0,0,0,5"
                                     FontSize="15"
@@ -76,7 +82,7 @@
                                     Foreground="#ffffff"
                                     Text="{Binding Role}" />
                             </StackPanel>
-                        </StackPanel>
+                        </Grid>
                         <Separator
                             Height="0.8"
                             Margin="10"

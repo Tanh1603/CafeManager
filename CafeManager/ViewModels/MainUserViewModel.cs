@@ -22,7 +22,7 @@ namespace CafeManager.WPF.ViewModels
         private readonly InvoiceServices _invoiceServices;
 
         [ObservableProperty]
-        private ObservableCollection<Coffeetable> _listTable = [];
+        private ObservableCollection<object> _listTable = [];
 
         [ObservableProperty]
         private Coffeetable? _selectedTable;
@@ -105,9 +105,9 @@ namespace CafeManager.WPF.ViewModels
             List<Coffeetable> list = new(await _coffeTableServices.GetListCoffeTable());
             for (int i = 0; i < list.Count; i++)
             {
-                ListTable.Add(new Coffeetable()
+                ListTable.Add(new
                 {
-                    Tablename = $"Bàn {i + 1}",
+                    Tablename = $"Bàn {list[i].Tablenumber}",
                     Statustable = list[i].Statustable,
                     Notes = list[i].Notes,
                     Coffeetableid = list[i].Coffeetableid,
@@ -179,7 +179,7 @@ namespace CafeManager.WPF.ViewModels
                 }
                 else
                 {
-                    string messageBox = MyMessageBox.ShowDialog($"Bạn muốn tạo hóa đơn cho {table.Tablename} ?", MyMessageBox.Buttons.Yes_No, MyMessageBox.Icons.Question);
+                    string messageBox = MyMessageBox.ShowDialog($"Bạn muốn tạo hóa đơn cho bàn {table.Tablenumber} ?", MyMessageBox.Buttons.Yes_No, MyMessageBox.Icons.Question);
                     if (messageBox == "1")
                     {
                         CurrentInvoice = new InvoiceDTO

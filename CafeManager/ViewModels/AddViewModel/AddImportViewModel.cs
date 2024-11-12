@@ -85,7 +85,6 @@ namespace CafeManager.WPF.ViewModels.AddViewModel
         [ObservableProperty]
         public bool _isAdding = false;
 
-
         public event Action<Import> UpdateImportNameChanged;
 
         public event Action<List<MaterialDetailDTO>, Import, Material, Supplier> AddImportChanged;
@@ -122,7 +121,7 @@ namespace CafeManager.WPF.ViewModels.AddViewModel
             Phone = import.Phone;
             Shippingcompany = import.Shippingcompany;
             Receiveddate = import.Receiveddate;
-            Receiver = import.Receiver;
+            //Receiver = import.Receiver;
         }
 
         private void AddMaterialSupplierVM_Close()
@@ -163,8 +162,6 @@ namespace CafeManager.WPF.ViewModels.AddViewModel
                 MyMessageBox.Show(ex.Message, MyMessageBox.Buttons.OK, MyMessageBox.Icons.Warning);
             }
         }
-
-
 
         //[RelayCommand]
         //private void SubmitImport()
@@ -211,13 +208,14 @@ namespace CafeManager.WPF.ViewModels.AddViewModel
                 Phone = this.Phone,
                 Shippingcompany = this.Shippingcompany,
                 Receiveddate = this.Receiveddate,
-                Receiver = this.Receiver
+                //Receiver = this.Receiver
             };
 
             AddImportChanged?.Invoke(ListAddMaterialDetailDTOs, newImport, SelectedMaterial, SelectedSupplier);
         }
 
         #region Open View
+
         [RelayCommand]
         private void OpenAddMaterial()
         {
@@ -247,7 +245,8 @@ namespace CafeManager.WPF.ViewModels.AddViewModel
             AddSupplierVM.Phone = string.Empty;
             AddSupplierVM.Notes = string.Empty;
         }
-        #endregion
+
+        #endregion Open View
 
         [RelayCommand]
         private void DeleteImportDetail(MaterialDetailDTO materialDetailDTO)

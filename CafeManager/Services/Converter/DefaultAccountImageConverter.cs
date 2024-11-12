@@ -11,11 +11,11 @@ namespace CafeManager.WPF.Services.Converter
 {
     internal class DefaultAccountImageConverter : IValueConverter
     {
-        public string DefaultImagePath { get; set; } = "/Assets/Images/coffee.png";
+        public string DefaultImagePath { get; set; } = "pack://application:,,,/Assets/Images/coffee.png";
 
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            return value == null ? new BitmapImage(new Uri(DefaultImagePath, UriKind.Relative)) : value;
+            return value ?? new BitmapImage(new Uri(DefaultImagePath));
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)

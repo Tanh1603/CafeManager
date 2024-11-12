@@ -2,6 +2,7 @@
     x:Class="CafeManager.WPF.Views.AdminView.TableView"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:converter="clr-namespace:CafeManager.WPF.Services.Converter"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
     xmlns:local="clr-namespace:CafeManager.WPF.Views.AdminView"
@@ -9,10 +10,9 @@
     xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:uc="clr-namespace:CafeManager.WPF.Assets.UsersControls"
-    xmlns:converter="clr-namespace:CafeManager.WPF.Services.Converter"
+    Name="tableview"
     d:DesignHeight="740"
     d:DesignWidth="1080"
-    Name="tableview"
     mc:Ignorable="d">
     <Grid Background="White">
         <Grid.RowDefinitions>
@@ -48,7 +48,10 @@
                 <ItemsControl ItemsSource="{Binding ListTable}">
                     <ItemsControl.ItemsPanel>
                         <ItemsPanelTemplate>
-                            <WrapPanel MinHeight="555" MaxWidth="1200" />
+                            <WrapPanel
+                                MinWidth="990"
+                                MinHeight="555"
+                                MaxWidth="1100" />
                         </ItemsPanelTemplate>
                     </ItemsControl.ItemsPanel>
                     <ItemsControl.ItemTemplate>

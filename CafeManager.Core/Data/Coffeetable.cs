@@ -2,16 +2,16 @@
 #nullable disable
 using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations.Schema;
 
 namespace CafeManager.Core.Data;
 
 public partial class Coffeetable
 {
-    [NotMapped]
-    public string Tablename { get; set; }
-
     public int Coffeetableid { get; set; }
+
+    public int Tablenumber { get; set; }
+
+    public int? Seatingcapacity { get; set; }
 
     public string Statustable { get; set; }
 

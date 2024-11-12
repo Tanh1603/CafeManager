@@ -14,167 +14,90 @@
     d:DesignWidth="1080"
     Name="tableview"
     mc:Ignorable="d">
-    <UserControl.Resources>
-        <BooleanToVisibilityConverter x:Key="BoolToVis" />
-        <converter:ResponsiveWidthConverter x:Key="ResponsiveWidthConverter" />
-    </UserControl.Resources>
-    <Grid>
-        <Border CornerRadius="0 0 10 0">
-            <Border.Background>
-                <LinearGradientBrush StartPoint="0,0.5" EndPoint="1,0.5">
-                    <GradientStop Offset="0" Color="#9c6d3f" />
-                    <GradientStop Offset="1" Color="#cb925d" />
+    <Grid Background="White">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <Button
+            Grid.Row="0"
+            Margin="0,20,10,0"
+            HorizontalAlignment="Right"
+            VerticalAlignment="Center"
+            Command="{Binding AddTableCommand}"
+            Content="Thêm bàn mới" />
+        <Border
+            Grid.Row="1"
+            HorizontalAlignment="Center"
+            VerticalAlignment="Center"
+            BorderThickness="5"
+            CornerRadius="10">
+            <Border.BorderBrush>
+                <LinearGradientBrush StartPoint="0, 0.5">
+                    <GradientStop Offset="0" Color="#c69a5d" />
+                    <GradientStop Offset="0.5" Color="#cb925d" />
+
+                    <GradientStop Offset="1" Color="#d4b096" />
                 </LinearGradientBrush>
-            </Border.Background>
+            </Border.BorderBrush>
+            <ScrollViewer
+                VerticalAlignment="Top"
+                HorizontalScrollBarVisibility="Hidden"
+                VerticalScrollBarVisibility="Auto">
+                <ItemsControl ItemsSource="{Binding ListTable}">
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <WrapPanel MinHeight="555" MaxWidth="1200" />
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <Border
+                                Margin="10"
+                                Padding="10"
+                                BorderBrush="Wheat"
+                                BorderThickness="2"
+                                CornerRadius="10">
+                                <StackPanel Width="120">
+                                    <Border>
+                                        <Image
+                                            Height="auto"
+                                            RenderOptions.BitmapScalingMode="HighQuality"
+                                            SnapsToDevicePixels="True"
+                                            Source="/Assets/Images/coffee.png"
+                                            Stretch="UniformToFill" />
+                                    </Border>
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*" />
+                                            <ColumnDefinition Width="*" />
+                                        </Grid.ColumnDefinitions>
 
-            <Grid Margin="50,10,40,0">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="auto" />
-                    <ColumnDefinition Width="*" />
-                </Grid.ColumnDefinitions>
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="auto" />
-                    <RowDefinition Height="auto" />
-                    <RowDefinition Height="*" />
-                </Grid.RowDefinitions>
-
-                <!--  Page Title  -->
-                <TextBlock
-                    Grid.Row="0"
-                    Margin="0,0,0,11"
-                    HorizontalAlignment="Left"
-                    VerticalAlignment="Center"
-                    FontSize="32"
-                    FontWeight="SemiBold"
-                    Foreground="#ddd1c3"
-                    Text="Bàn" />
-
-                <!--  Add Button  -->
-                <Button
-                    Grid.Row="0"
-                    Grid.Column="1"
-                    Margin="0,24,0,4"
-                    Command=""
-                    Style="{StaticResource addButton}">
-                    <StackPanel Orientation="Horizontal">
-                        <ma:PackIconMaterial
-                            Width="11"
-                            Height="11"
-                            Margin="0,1,8,0"
-                            VerticalAlignment="Center"
-                            Kind="Plus" />
-                        <TextBlock Text="Thêm bàn" />
-                    </StackPanel>
-                </Button>
-
-                <Separator
-                    Grid.Row="0"
-                    Grid.RowSpan="1"
-                    Width="80"
-                    Height="1"
-                    HorizontalAlignment="Left"
-                    VerticalAlignment="Bottom"
-                    Background="#f5f5f5" />
-
-                <Grid
-                    Grid.Row="1"
-                    Grid.ColumnSpan="2"
-                    Margin="0,10,0,10">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="auto" />
-                        <ColumnDefinition Width="*" />
-                    </Grid.ColumnDefinitions>
-
-                    <ComboBox
-                        Name="cbFoodCategory"
-                        MinWidth="256"
-                        materialDesign:HintAssist.Hint="Trạng thái bàn"
-                        Style="{StaticResource MaterialDesignOutlinedComboBox}">
-                        <!--ItemsSource="{Binding ListFoodCategory}"
-                        SelectedItem="{Binding SelectedFoodCategory}"-->
-
-                        <i:Interaction.Triggers>
-                            <i:EventTrigger EventName="SelectionChanged">
-                                <i:InvokeCommandAction Command="{Binding SelectedFoodCategoryChangeCommand}" CommandParameter="{Binding ElementName=cbFoodCategory, Path=SelectedItem, UpdateSourceTrigger=PropertyChanged}" />
-                            </i:EventTrigger>
-                        </i:Interaction.Triggers>
-
-                        <ComboBox.ItemTemplate>
-                            <DataTemplate>
-                                <TextBlock Text="{Binding Foodcategoryname}" />
-                            </DataTemplate>
-                        </ComboBox.ItemTemplate>
-                    </ComboBox>
-
-                    <StackPanel
-                        Grid.Column="1"
-                        HorizontalAlignment="Right"
-                        Orientation="Horizontal">
-                        <TextBlock
-                            Margin="10,0,20,0"
-                            VerticalAlignment="Center"
-                            FontSize="13"
-                            FontWeight="SemiBold"
-                            Foreground="#602414"
-                            Text="Filter by" />
-
-                        <!--  Filter Textbox  -->
-                        <Grid Width="200">
-                            <TextBlock
-                                Margin="15,0"
-                                VerticalAlignment="Center"
-                                Panel.ZIndex="1"
-                                Foreground="#9c6d3f"
-                                IsHitTestVisible="False"
-                                Text="Tìm kiếm..."
-                                Visibility="{Binding ElementName=txtFilter, Path=Text.IsEmpty, Converter={StaticResource BoolToVis}}" />
-                            <TextBox x:Name="txtFilter" Style="{StaticResource textBoxFilter}" />
-                            <ma:PackIconMaterial
-                                Width="15"
-                                Height="15"
-                                Margin="0,0,15,0"
-                                HorizontalAlignment="Right"
-                                VerticalAlignment="Center"
-                                Foreground="#d5b096"
-                                Kind="Magnify" />
-                        </Grid>
-                    </StackPanel>
-                </Grid>
-
-                <!--  table list  -->
-                
-                
-                    <ScrollViewer Grid.Row="4" HorizontalScrollBarVisibility="Hidden" VerticalScrollBarVisibility="Auto" Margin="0 20">
-                        <ItemsControl ItemsSource="{Binding ListFoodByFoodCategoryId}">
-                            <ItemsControl.ItemsPanel>
-                                <ItemsPanelTemplate>
-                                    <WrapPanel MaxWidth="{Binding ElementName=tableview, Path=ActualWidth, Converter={StaticResource ResponsiveWidthConverter}}" />
-                                </ItemsPanelTemplate>
-                            </ItemsControl.ItemsPanel>
-                            <ItemsControl.ItemTemplate>
-                                <DataTemplate>
-                                <uc:InfoTable/>
-                            </DataTemplate>
-                            </ItemsControl.ItemTemplate>
-                        </ItemsControl>
-                    </ScrollViewer>
-                
-            </Grid>
+                                        <TextBlock
+                                            Grid.Column="0"
+                                            HorizontalAlignment="Center"
+                                            VerticalAlignment="Center"
+                                            FontSize="16"
+                                            Text="{Binding Tablename}"
+                                            TextWrapping="WrapWithOverflow" />
+                                        <materialDesign:PopupBox
+                                            Grid.Column="1"
+                                            HorizontalAlignment="Right"
+                                            PopupUniformCornerRadius="10"
+                                            StaysOpen="True">
+                                            <StackPanel>
+                                                <Button Content="Xóa" />
+                                                <Button Content="Thông tin chi tiết" />
+                                            </StackPanel>
+                                        </materialDesign:PopupBox>
+                                    </Grid>
+                                </StackPanel>
+                            </Border>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </ScrollViewer>
         </Border>
-        <!--<materialDesign:DialogHost
-            Background="Transparent"
-            DialogTheme="Inherit"
-            IsOpen="{Binding IsOpenAddFoodVM}"
-            OverlayBackground="{DynamicResource PrimaryHueDarkBrush}"
-            Placement="Mouse"
-            Style="{StaticResource MaterialDesignEmbeddedDialogHost}">
-            <materialDesign:DialogHost.DialogBackground>
-                <SolidColorBrush Color="Transparent" />
-            </materialDesign:DialogHost.DialogBackground>
-
-            <materialDesign:DialogHost.DialogContent>
-                <ContentControl Content="{Binding AddUpdateFoodVM}" />
-            </materialDesign:DialogHost.DialogContent>
-        </materialDesign:DialogHost>-->
     </Grid>
 </UserControl>

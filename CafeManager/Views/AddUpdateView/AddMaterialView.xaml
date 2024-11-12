@@ -74,12 +74,12 @@
                     Grid.Row="0"
                     Grid.Column="1"
                     Hint="đường, sữa,..."
-                    Text="{Binding Materialname, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
+                    Text="{Binding Materialname, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" />
                 <uc:infoTextInput
                     Grid.Row="1"
                     Grid.Column="1"
-                    Hint="kg, gói" 
-                    Text="{Binding Unit, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
+                    Hint="kg, gói"
+                    Text="{Binding Unit, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" />
             </Grid>
 
             <Button
@@ -93,24 +93,6 @@
                     <TextBlock Margin="10,0,0,0" Text="Sửa" />
                 </StackPanel>
             </Button>
-
-            <StackPanel
-                Margin="0,10,20,0"
-                HorizontalAlignment="Right"
-                VerticalAlignment="Top"
-                Orientation="Horizontal">
-                <ma:PackIconMaterial
-                    x:Name="closeIcon"
-                    Margin="0,8,15,0"
-                    Foreground="#844418"
-                    Kind="Minus"
-                    Style="{StaticResource ìconApp}" />
-                <ma:PackIconMaterial
-                    x:Name="minimizeIcon"
-                    Foreground="#844418"
-                    Kind="Close"
-                    Style="{StaticResource ìconApp}" />
-            </StackPanel>
         </Grid>
     </Border>
 </UserControl>

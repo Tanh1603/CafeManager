@@ -84,6 +84,7 @@ namespace CafeManager.WPF.Services
             catch
             {
                 await _unitOfWork.RollbackTransactionAsync();
+                _unitOfWork.ClearChangeTracker();
                 throw;
             }
         }

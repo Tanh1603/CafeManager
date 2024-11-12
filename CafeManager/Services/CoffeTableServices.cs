@@ -33,9 +33,21 @@ namespace CafeManager.WPF.Services
 
         public async Task<Coffeetable?> AddCoffeTable(Coffeetable coffeetable)
         {
-            var res = await _unitOfWork.CoffeeTableList.Create(coffeetable);
-            _unitOfWork.Complete();
-            return res;
+            try
+            {
+                await _unitOfWork.BeginTransactionAsync();
+
+                var res = await _unitOfWork.CoffeeTableList.Create(coffeetable);
+                await _unitOfWork.CompleteAsync();
+                await _unitOfWork.CommitTransactionAsync();
+                return res;
+            }
+            catch (Exception)
+            {
+                await _unitOfWork.RollbackTransactionAsync();
+                _unitOfWork.ClearChangeTracker();
+                throw;
+            }
         }
 
         public Coffeetable? UpdateCoffeeTable(Coffeetable coffeetable)

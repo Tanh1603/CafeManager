@@ -4,12 +4,6 @@ using CafeManager.Core.Services;
 using CafeManager.Infrastructure.Repositories;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
-using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace CafeManager.Infrastructure.Models
 {
@@ -49,9 +43,11 @@ namespace CafeManager.Infrastructure.Models
 
         #endregion Import
 
-        public IRepository<Staff> StaffList { get; private set; }
+        public IStaffRepository StaffList { get; private set; }
 
         public IAppUserRepository AppUserList { get; private set; }
+
+        public IRepository<Staffsalaryhistory> StaffSalaryHistoryList { get; private set; }
 
         public UnitOfWork(IDbContextFactory<CafeManagerContext> dbContextFactory)
         {
@@ -69,8 +65,9 @@ namespace CafeManager.Infrastructure.Models
             SupplierList = new SupplierRepository(_context);
             MaterialSupplierList = new Repository<Materialsupplier>(_context);
 
-            StaffList = new Repository<Staff>(_context);
+            StaffList = new StaffRepository(_context);
             AppUserList = new AppUserRepository(_context);
+            StaffSalaryHistoryList = new Repository<Staffsalaryhistory>(_context);
         }
 
         public int Complete()
@@ -87,6 +84,7 @@ namespace CafeManager.Infrastructure.Models
         {
             _context.Dispose();
             _transaction?.Dispose();
+
             GC.SuppressFinalize(this);
         }
 

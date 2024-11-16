@@ -81,7 +81,7 @@
         <Setter Property="BorderThickness" Value="2" />
         <Setter Property="BorderBrush" Value="#9e7555" />
         <Setter Property="MinWidth" Value="170" />
-        <Setter Property="MinHeight" Value="38"/>
+        <Setter Property="MinHeight" Value="38" />
         <Setter Property="FontSize" Value="12" />
         <Setter Property="Padding" Value="10" />
         <Setter Property="Margin" Value="0,10" />

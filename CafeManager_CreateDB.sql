@@ -16,20 +16,28 @@ CREATE TABLE Staff (
     StaffId SERIAL,
     StaffName VARCHAR(100) NOT NULL,
     Phone VARCHAR(20) NOT NULL,
-    Email VARCHAR(100),
-    Sex CHAR(1),
-    Birthday DATE,
-    StartWorking DATE,
+    Sex BOOLEAN,
+    Birthday DATE NOT NULL,
+	Address VARCHAR(50) NOT NULL,
+    StartWorkingDate DATE NOT NULL,
+	EndWorkingDate DATE,
     Role VARCHAR(50),
-    WorkingStatus VARCHAR(50),
-    BasicSalary DECIMAL(10, 2),
-    WorkingHours DECIMAL(10,2),
-	
     IsDeleted BOOLEAN DEFAULT FALSE,
 	
-    CONSTRAINT PK_Staff PRIMARY KEY (StaffId)
+    CONSTRAINT PK_Staff PRIMARY KEY (StaffId),
+	CONSTRAINT CK_Staff_WorkingDate CHECK (EndWorkingDate IS NULL OR StartWorkingDate <= EndWorkingDate)
 );
-------------------- Tạo bảng FoodCategory -----------------------
+CREATE TABLE StaffSalaryHistory (
+	StaffSalaryHistoryId SERIAL,
+	StaffId INT NOT NULL,
+	Salary DECIMAL(10,2) DEFAULT 0 NOT NULL ,
+	EffectiveDate DATE NOT NULL,
+	IsDeleted BOOLEAN DEFAULT FALSE,
+
+	CONSTRAINT PK_StaffSalaryHistory PRIMARY KEY (StaffSalaryHistoryId),
+	CONSTRAINT FK_StaffSalaryHistory_Staff FOREIGN KEY (StaffId) REFERENCES Staff(StaffId)
+);
+----------------- Tạo bảng FoodCategory -----------------------
 CREATE TABLE FoodCategory (
     FoodCategoryId SERIAL,
     FoodCategoryName VARCHAR(100) NOT NULL,
@@ -137,7 +145,8 @@ CREATE TABLE ConsumedMaterials (
     Quantity DECIMAL(10, 2) DEFAULT 0,
     IsDeleted BOOLEAN DEFAULT FALSE,
 
-    CONSTRAINT PK_ConsumedMaterials PRIMARY KEY (ConsumedMaterialId)
+    CONSTRAINT PK_ConsumedMaterials PRIMARY KEY (ConsumedMaterialId),
+    CONSTRAINT PK_ConsumedMaterials_Material FOREIGN KEY (MaterialId) REFERENCES Material(MaterialId)
 );
 ------------------- Tạo bảng Imports -----------------------
 CREATE TABLE Imports (
@@ -166,4 +175,11 @@ CREATE TABLE ImportDetails (
     CONSTRAINT FK_ImportDetails_Imports FOREIGN KEY (ImportId) REFERENCES Imports(ImportId),
     CONSTRAINT FK_ImportDetails_Material FOREIGN KEY (MaterialId) REFERENCES Material(MaterialId)
 );
+
+DROP TABLE importdetails;
+DROP TABLE imports;
+DROP TABLE invoicedetails;
+DROP TABLE invoices;
+DROP TABLE staff;
+DROP TABLE staffsalaryhistory;
 

@@ -85,14 +85,12 @@ namespace CafeManager.Infrastructure.Migrations
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     staffname = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
                     phone = table.Column<string>(type: "character varying(20)", maxLength: 20, nullable: false),
-                    email = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: true),
-                    sex = table.Column<char>(type: "character(1)", maxLength: 1, nullable: true),
-                    birthday = table.Column<DateOnly>(type: "date", nullable: true),
-                    startworking = table.Column<DateOnly>(type: "date", nullable: true),
+                    sex = table.Column<bool>(type: "boolean", nullable: true),
+                    birthday = table.Column<DateOnly>(type: "date", nullable: false),
+                    address = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: false),
+                    startworkingdate = table.Column<DateOnly>(type: "date", nullable: false),
+                    endworkingdate = table.Column<DateOnly>(type: "date", nullable: true),
                     role = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: true),
-                    workingstatus = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: true),
-                    basicsalary = table.Column<decimal>(type: "numeric(10,2)", precision: 10, scale: 2, nullable: true),
-                    workinghours = table.Column<decimal>(type: "numeric(10,2)", precision: 10, scale: 2, nullable: true),
                     isdeleted = table.Column<bool>(type: "boolean", nullable: true, defaultValue: false)
                 },
                 constraints: table =>
@@ -187,6 +185,26 @@ namespace CafeManager.Infrastructure.Migrations
                         principalColumn: "coffeetableid");
                     table.ForeignKey(
                         name: "fk_invoices_staff",
+                        column: x => x.staffid,
+                        principalTable: "staff",
+                        principalColumn: "staffid");
+                });
+
+            migrationBuilder.CreateTable(
+                name: "staffsalaryhistory",
+                columns: table => new
+                {
+                    staffsalaryhistoryid = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    staffid = table.Column<int>(type: "integer", nullable: true),
+                    salary = table.Column<decimal>(type: "numeric(10,2)", precision: 10, scale: 2, nullable: true, defaultValueSql: "0"),
+                    effectivedate = table.Column<DateOnly>(type: "date", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("pk_staffsalaryhistory", x => x.staffsalaryhistoryid);
+                    table.ForeignKey(
+                        name: "fk_staffsalaryhistory_staff",
                         column: x => x.staffid,
                         principalTable: "staff",
                         principalColumn: "staffid");
@@ -374,6 +392,11 @@ namespace CafeManager.Infrastructure.Migrations
                 name: "IX_materialsupplier_supplierid",
                 table: "materialsupplier",
                 column: "supplierid");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_staffsalaryhistory_staffid",
+                table: "staffsalaryhistory",
+                column: "staffid");
         }
 
         /// <inheritdoc />
@@ -393,6 +416,9 @@ namespace CafeManager.Infrastructure.Migrations
 
             migrationBuilder.DropTable(
                 name: "materialsupplier");
+
+            migrationBuilder.DropTable(
+                name: "staffsalaryhistory");
 
             migrationBuilder.DropTable(
                 name: "imports");

@@ -27,6 +27,7 @@ namespace CafeManager.WPF.HostBuilders
                 services.AddScoped<FoodServices>(provider => new FoodServices(provider));
                 services.AddScoped<CoffeTableServices>(provider => new CoffeTableServices(provider));
                 services.AddScoped<InvoiceServices>(provider => new InvoiceServices(provider));
+                services.AddScoped<StaffServices>(provider => new StaffServices(provider));
 
                 services.AddScoped<ImportServices>(provider => new ImportServices(provider));
                 services.AddScoped<ImportDetailServices>(provider => new ImportDetailServices(provider));

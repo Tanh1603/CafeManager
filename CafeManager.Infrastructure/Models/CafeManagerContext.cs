@@ -38,6 +38,8 @@ public partial class CafeManagerContext : DbContext
 
     public virtual DbSet<Staff> Staff { get; set; }
 
+    public virtual DbSet<Staffsalaryhistory> Staffsalaryhistories { get; set; }
+
     public virtual DbSet<Supplier> Suppliers { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -368,13 +370,12 @@ public partial class CafeManagerContext : DbContext
             entity.ToTable("staff");
 
             entity.Property(e => e.Staffid).HasColumnName("staffid");
-            entity.Property(e => e.Basicsalary)
-                .HasPrecision(10, 2)
-                .HasColumnName("basicsalary");
+            entity.Property(e => e.Address)
+                .IsRequired()
+                .HasMaxLength(50)
+                .HasColumnName("address");
             entity.Property(e => e.Birthday).HasColumnName("birthday");
-            entity.Property(e => e.Email)
-                .HasMaxLength(100)
-                .HasColumnName("email");
+            entity.Property(e => e.Endworkingdate).HasColumnName("endworkingdate");
             entity.Property(e => e.Isdeleted)
                 .HasDefaultValue(false)
                 .HasColumnName("isdeleted");
@@ -385,20 +386,34 @@ public partial class CafeManagerContext : DbContext
             entity.Property(e => e.Role)
                 .HasMaxLength(50)
                 .HasColumnName("role");
-            entity.Property(e => e.Sex)
-                .HasMaxLength(1)
-                .HasColumnName("sex");
+            entity.Property(e => e.Sex).HasColumnName("sex");
             entity.Property(e => e.Staffname)
                 .IsRequired()
                 .HasMaxLength(100)
                 .HasColumnName("staffname");
-            entity.Property(e => e.Startworking).HasColumnName("startworking");
-            entity.Property(e => e.Workinghours)
+            entity.Property(e => e.Startworkingdate).HasColumnName("startworkingdate");
+        });
+
+        modelBuilder.Entity<Staffsalaryhistory>(entity =>
+        {
+            entity.HasKey(e => e.Staffsalaryhistoryid).HasName("pk_staffsalaryhistory");
+
+            entity.ToTable("staffsalaryhistory");
+
+            entity.Property(e => e.Staffsalaryhistoryid).HasColumnName("staffsalaryhistoryid");
+            entity.Property(e => e.Effectivedate).HasColumnName("effectivedate");
+            entity.Property(e => e.Isdeleted)
+                .HasDefaultValue(false)
+                .HasColumnName("isdeleted");
+            entity.Property(e => e.Salary)
                 .HasPrecision(10, 2)
-                .HasColumnName("workinghours");
-            entity.Property(e => e.Workingstatus)
-                .HasMaxLength(50)
-                .HasColumnName("workingstatus");
+                .HasColumnName("salary");
+            entity.Property(e => e.Staffid).HasColumnName("staffid");
+
+            entity.HasOne(d => d.Staff).WithMany(p => p.Staffsalaryhistories)
+                .HasForeignKey(d => d.Staffid)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("fk_staffsalaryhistory_staff");
         });
 
         modelBuilder.Entity<Supplier>(entity =>

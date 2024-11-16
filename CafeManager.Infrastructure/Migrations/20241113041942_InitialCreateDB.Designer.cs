@@ -12,7 +12,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace CafeManager.Infrastructure.Migrations
 {
     [DbContext(typeof(CafeManagerContext))]
-    [Migration("20241112094851_InitialCreateDB")]
+    [Migration("20241113041942_InitialCreateDB")]
     partial class InitialCreateDB
     {
         /// <inheritdoc />
@@ -537,19 +537,19 @@ namespace CafeManager.Infrastructure.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Staffid"));
 
-                    b.Property<decimal?>("Basicsalary")
-                        .HasPrecision(10, 2)
-                        .HasColumnType("numeric(10,2)")
-                        .HasColumnName("basicsalary");
+                    b.Property<string>("Address")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("character varying(50)")
+                        .HasColumnName("address");
 
-                    b.Property<DateOnly?>("Birthday")
+                    b.Property<DateOnly>("Birthday")
                         .HasColumnType("date")
                         .HasColumnName("birthday");
 
-                    b.Property<string>("Email")
-                        .HasMaxLength(100)
-                        .HasColumnType("character varying(100)")
-                        .HasColumnName("email");
+                    b.Property<DateOnly?>("Endworkingdate")
+                        .HasColumnType("date")
+                        .HasColumnName("endworkingdate");
 
                     b.Property<bool?>("Isdeleted")
                         .ValueGeneratedOnAdd()
@@ -568,9 +568,8 @@ namespace CafeManager.Infrastructure.Migrations
                         .HasColumnType("character varying(50)")
                         .HasColumnName("role");
 
-                    b.Property<char?>("Sex")
-                        .HasMaxLength(1)
-                        .HasColumnType("character(1)")
+                    b.Property<bool?>("Sex")
+                        .HasColumnType("boolean")
                         .HasColumnName("sex");
 
                     b.Property<string>("Staffname")
@@ -579,24 +578,46 @@ namespace CafeManager.Infrastructure.Migrations
                         .HasColumnType("character varying(100)")
                         .HasColumnName("staffname");
 
-                    b.Property<DateOnly?>("Startworking")
+                    b.Property<DateOnly>("Startworkingdate")
                         .HasColumnType("date")
-                        .HasColumnName("startworking");
-
-                    b.Property<decimal?>("Workinghours")
-                        .HasPrecision(10, 2)
-                        .HasColumnType("numeric(10,2)")
-                        .HasColumnName("workinghours");
-
-                    b.Property<string>("Workingstatus")
-                        .HasMaxLength(50)
-                        .HasColumnType("character varying(50)")
-                        .HasColumnName("workingstatus");
+                        .HasColumnName("startworkingdate");
 
                     b.HasKey("Staffid")
                         .HasName("pk_staff");
 
                     b.ToTable("staff", (string)null);
+                });
+
+            modelBuilder.Entity("CafeManager.Core.Data.Staffsalaryhistory", b =>
+                {
+                    b.Property<int>("Staffsalaryhistoryid")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasColumnName("staffsalaryhistoryid");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Staffsalaryhistoryid"));
+
+                    b.Property<DateOnly>("Effectivedate")
+                        .HasColumnType("date")
+                        .HasColumnName("effectivedate");
+
+                    b.Property<decimal?>("Salary")
+                        .ValueGeneratedOnAdd()
+                        .HasPrecision(10, 2)
+                        .HasColumnType("numeric(10,2)")
+                        .HasColumnName("salary")
+                        .HasDefaultValueSql("0");
+
+                    b.Property<int?>("Staffid")
+                        .HasColumnType("integer")
+                        .HasColumnName("staffid");
+
+                    b.HasKey("Staffsalaryhistoryid")
+                        .HasName("pk_staffsalaryhistory");
+
+                    b.HasIndex("Staffid");
+
+                    b.ToTable("staffsalaryhistory", (string)null);
                 });
 
             modelBuilder.Entity("CafeManager.Core.Data.Supplier", b =>
@@ -765,6 +786,16 @@ namespace CafeManager.Infrastructure.Migrations
                     b.Navigation("Supplier");
                 });
 
+            modelBuilder.Entity("CafeManager.Core.Data.Staffsalaryhistory", b =>
+                {
+                    b.HasOne("CafeManager.Core.Data.Staff", "Staff")
+                        .WithMany("Staffsalaryhistories")
+                        .HasForeignKey("Staffid")
+                        .HasConstraintName("fk_staffsalaryhistory_staff");
+
+                    b.Navigation("Staff");
+                });
+
             modelBuilder.Entity("CafeManager.Core.Data.Coffeetable", b =>
                 {
                     b.Navigation("Invoices");
@@ -804,6 +835,8 @@ namespace CafeManager.Infrastructure.Migrations
                     b.Navigation("Imports");
 
                     b.Navigation("Invoices");
+
+                    b.Navigation("Staffsalaryhistories");
                 });
 
             modelBuilder.Entity("CafeManager.Core.Data.Supplier", b =>

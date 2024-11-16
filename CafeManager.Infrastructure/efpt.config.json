@@ -27,10 +27,6 @@
          "ObjectType": 0
       },
       {
-         "Name": "public.customer",
-         "ObjectType": 0
-      },
-      {
          "Name": "public.food",
          "ObjectType": 0
       },
@@ -67,6 +63,10 @@
          "ObjectType": 0
       },
       {
+         "Name": "public.staffsalaryhistory",
+         "ObjectType": 0
+      },
+      {
          "Name": "public.supplier",
          "ObjectType": 0
       }
@@ -76,7 +76,7 @@
    "UseAsyncStoredProcedureCalls": true,
    "UseBoolPropertiesWithoutDefaultSql": false,
    "UseDatabaseNames": false,
-   "UseDateOnlyTimeOnly": true,
+   "UseDateOnlyTimeOnly": false,
    "UseDbContextSplitting": false,
    "UseDecimalDataAnnotationForSprocResult": true,
    "UseFluentApiOnly": true,

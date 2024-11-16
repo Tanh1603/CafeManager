@@ -83,5 +83,10 @@ namespace CafeManager.Infrastructure.Repositories
         {
             return await _cafeManagerContext.Set<T>().ToListAsync();
         }
+
+        public async Task<T?> GetById(int id)
+        {
+            return await _cafeManagerContext.Set<T>().FindAsync(id);
+        }
     }
 }

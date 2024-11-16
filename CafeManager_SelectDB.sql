@@ -3,6 +3,13 @@ ALTER SEQUENCE appuser_appuserid_seq RESTART WITH 1;
 DELETE FROM appuser;
 
 SELECT * FROM staff;
+ALTER SEQUENCE staff_staffid_seq RESTART WITH 1;
+DELETE FROM staff;
+
+SELECT * FROM staffsalaryhistory;
+ALTER SEQUENCE staffsalaryhistory_staffsalaryhistoryid_seq RESTART WITH 1;
+DELETE FROM staffsalaryhistory;
+
 
 SELECT * FROM foodcategory;
 SELECT * FROM food;
@@ -19,6 +26,8 @@ ALTER SEQUENCE invoicedetails_invoicedetailid_seq RESTART WITH 1;
 DELETE FROM invoicedetails;
 
 SELECT * FROM coffeetable;
+ALTER SEQUENCE coffeetable_coffeetableId_seq RESTART WITH 1;
+DELETE FROM coffeetable;
 
 SELECT * FROM imports;
 ALTER SEQUENCE imports_ImportId_seq RESTART WITH 1;

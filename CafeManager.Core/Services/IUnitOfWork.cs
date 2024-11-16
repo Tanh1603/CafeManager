@@ -23,8 +23,9 @@ namespace CafeManager.Core.Services
         ISupplierRepository SupplierList { get; }
         IRepository<Materialsupplier> MaterialSupplierList { get; }
 
-        IRepository<Staff> StaffList { get; }
+        IStaffRepository StaffList { get; }
         IAppUserRepository AppUserList { get; }
+        IRepository<Staffsalaryhistory> StaffSalaryHistoryList { get; }
 
         int Complete();
 

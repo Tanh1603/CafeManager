@@ -13,25 +13,23 @@ public partial class Staff
 
     public string Phone { get; set; }
 
-    public string Email { get; set; }
+    public bool? Sex { get; set; }
 
-    public char? Sex { get; set; }
+    public DateOnly Birthday { get; set; }
 
-    public DateOnly? Birthday { get; set; }
+    public string Address { get; set; }
 
-    public DateOnly? Startworking { get; set; }
+    public DateOnly Startworkingdate { get; set; }
+
+    public DateOnly? Endworkingdate { get; set; }
 
     public string Role { get; set; }
-
-    public string Workingstatus { get; set; }
-
-    public decimal? Basicsalary { get; set; }
-
-    public decimal? Workinghours { get; set; }
 
     public bool? Isdeleted { get; set; }
 
     public virtual ICollection<Import> Imports { get; set; } = new List<Import>();
 
     public virtual ICollection<Invoice> Invoices { get; set; } = new List<Invoice>();
+
+    public virtual ICollection<Staffsalaryhistory> Staffsalaryhistories { get; set; } = new List<Staffsalaryhistory>();
 }

@@ -22,10 +22,10 @@ namespace CafeManager.WPF.ViewModels
         private readonly InvoiceServices _invoiceServices;
 
         [ObservableProperty]
-        private ObservableCollection<object> _listTable = [];
+        private ObservableCollection<Coffeetable> _listTable = [];
 
         [ObservableProperty]
-        private Coffeetable? _selectedTable;
+        private Coffeetable _selectedTable;
 
         [ObservableProperty]
         private ObservableCollection<Foodcategory> _listFoodCategory = [];
@@ -102,18 +102,7 @@ namespace CafeManager.WPF.ViewModels
 
         private async Task LoadTableData()
         {
-            List<Coffeetable> list = new(await _coffeTableServices.GetListCoffeTable());
-            for (int i = 0; i < list.Count; i++)
-            {
-                ListTable.Add(new
-                {
-                    Tablename = $"Bàn {list[i].Tablenumber}",
-                    Statustable = list[i].Statustable,
-                    Notes = list[i].Notes,
-                    Coffeetableid = list[i].Coffeetableid,
-                    Invoices = list[i].Invoices,
-                });
-            }
+            ListTable = new(await _coffeTableServices.GetListCoffeTable());
         }
 
         private async Task LoadFoodData(int id)
@@ -169,7 +158,7 @@ namespace CafeManager.WPF.ViewModels
         {
             try
             {
-                if (SelectedTable != null && SelectedTable.Coffeetableid == table.Coffeetableid)
+                if (SelectedTable != null && SelectedTable?.Coffeetableid == table.Coffeetableid)
                     return;
                 var existingInvoice = _currentListInvoice.FirstOrDefault(x => x.Coffeetableid == table.Coffeetableid);
 
@@ -196,6 +185,7 @@ namespace CafeManager.WPF.ViewModels
                     }
                 }
                 TotalPrice = CurrentInvoice.CaculateTotalPrice() ?? 0;
+
                 SelectedTable = table;
             }
             catch (Exception ex)

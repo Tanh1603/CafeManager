@@ -29,7 +29,7 @@
                 </LinearGradientBrush>
             </Border.Background>
 
-            <Grid Margin="50,10,40,40">
+            <Grid Margin="20,10">
                 <Grid.RowDefinitions>
 
                     <RowDefinition Height="auto" />
@@ -38,31 +38,9 @@
                     <RowDefinition Height="*" />
                 </Grid.RowDefinitions>
 
-                <!--  textbox search  -->
-                <!--<Grid Width="300" HorizontalAlignment="Left">
-                   <TextBlock
-                       Margin="20,0"
-                       VerticalAlignment="Center"
-                       Panel.ZIndex="1"
-                       Foreground="#9c6d3f"
-                       IsHitTestVisible="False"
-                       Text="Tìm kiếm ở đây..."
-                       Visibility="{Binding ElementName=txtSearch, Path=Text.IsEmpty, Converter={StaticResource BoolToVis}}" />
-                   <TextBox x:Name="txtSearch" Style="{StaticResource textBoxSearch}" />
-                   <ma:PackIconMaterial
-                       Width="15"
-                       Height="15"
-                       Margin="0,0,15,0"
-                       HorizontalAlignment="Right"
-                       VerticalAlignment="Center"
-                       Foreground="#d5b096"
-                       Kind="Magnify" />
-               </Grid>-->
-
                 <!--  Page Title  -->
                 <TextBlock
                     Grid.Row="0"
-                    Margin="0,20,0,5"
                     HorizontalAlignment="Left"
                     FontSize="32"
                     FontWeight="SemiBold"
@@ -92,7 +70,6 @@
                 <Grid
                     Grid.Row="1"
                     Width="200"
-                    Margin="0,20"
                     HorizontalAlignment="Right">
                     <TextBlock
                         Margin="15,0"

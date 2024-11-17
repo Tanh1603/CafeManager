@@ -27,7 +27,7 @@
                 </LinearGradientBrush>
             </Border.Background>
 
-            <Grid Margin="50,10,40,0">
+            <Grid Margin="20,0,20,10">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="auto" />
                     <ColumnDefinition Width="*" />
@@ -74,10 +74,7 @@
                     VerticalAlignment="Bottom"
                     Background="#f5f5f5" />
 
-                <Grid
-                    Grid.Row="1"
-                    Grid.ColumnSpan="2"
-                    Margin="0,10,0,10">
+                <Grid Grid.Row="1" Grid.ColumnSpan="2">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="auto" />
                         <ColumnDefinition Width="auto" />
@@ -89,7 +86,6 @@
                         MinWidth="150"
                         MinHeight="35"
                         VerticalAlignment="Center"
-                        materialDesign:ComboBoxAssist.ShowSelectedItem="True"
                         materialDesign:HintAssist.Hint="Danh mục món ăn"
                         materialDesign:TextBlockAssist.AutoToolTip="True"
                         BorderBrush="#602414"
@@ -106,41 +102,11 @@
 
                             <DataTemplate>
                                 <Grid>
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="*" />
-                                        <ColumnDefinition Width="auto" />
-                                    </Grid.ColumnDefinitions>
                                     <TextBlock
                                         Margin="0,0,10,0"
                                         VerticalAlignment="Center"
                                         Text="{Binding Foodcategoryname}"
                                         TextWrapping="Wrap" />
-                                    <StackPanel Grid.Column="1" Orientation="Horizontal">
-                                        <StackPanel.Style>
-                                            <Style TargetType="StackPanel">
-                                                <Style.Triggers>
-                                                    <DataTrigger Binding="{Binding Foodcategoryname}" Value="Tất cả">
-                                                        <Setter Property="Visibility" Value="Collapsed" />
-                                                    </DataTrigger>
-                                                </Style.Triggers>
-                                            </Style>
-                                        </StackPanel.Style>
-
-                                        <Button
-                                            x:Name="BtnDelete"
-                                            Padding="2"
-                                            HorizontalAlignment="Center"
-                                            Background="Transparent">
-                                            <ma:PackIconMaterial Kind="TrashCan" Style="{StaticResource infoFoodIcon}" />
-                                        </Button>
-                                        <Button
-                                            x:Name="BtnUpdate"
-                                            Padding="2"
-                                            HorizontalAlignment="Center"
-                                            Background="Transparent">
-                                            <ma:PackIconMaterial Kind="Pencil" Style="{StaticResource infoFoodIcon}" />
-                                        </Button>
-                                    </StackPanel>
                                 </Grid>
                             </DataTemplate>
                         </ComboBox.ItemTemplate>
@@ -148,26 +114,48 @@
 
                     <Button
                         Grid.Column="1"
-                        Margin="20,0,0,0"
-                        Command="{Binding OpenModifyFoodCategory}"
-                        Style="{StaticResource addButton}">
-                        <StackPanel Orientation="Horizontal">
-                            <ma:PackIconMaterial
-                                Width="11"
-                                Height="11"
-                                Margin="0,1,8,0"
-                                VerticalAlignment="Center"
-                                Kind="Plus" />
-                            <TextBlock Text="Thêm danh mục" />
-                        </StackPanel>
+                        Width="60"
+                        Height="35"
+                        HorizontalAlignment="Left"
+                        Command="{Binding OpenPopupFoodCategoryViewCommand}"
+                        Style="{StaticResource confirmInfoButton}">
+                        <materialDesign:PopupBox
+                            Grid.Row="2"
+                            Margin="4"
+                            IsPopupOpen="{Binding IsOpenModifyFCView, Mode=OneWay}"
+                            PopupElevation="Dp4"
+                            PopupHorizontalOffset="40"
+                            PopupUniformCornerRadius="10"
+                            StaysOpen="True">
+                            <materialDesign:PopupBox.ToggleContent>
+                                <Button
+                                    HorizontalAlignment="Center"
+                                    VerticalAlignment="Center"
+                                    Background="Transparent"
+                                    Command="{Binding DataContext.OpenPopupFoodCategoryViewCommand, RelativeSource={RelativeSource AncestorType=local:FoodView}}"
+                                    Style="{StaticResource confirmInfoButton}">
+                                    <materialDesign:PackIcon
+                                        Width="30"
+                                        Height="30"
+                                        Foreground="White"
+                                        Kind="Plus" />
+                                </Button>
+                            </materialDesign:PopupBox.ToggleContent>
+                            <StackPanel>
+                                <Button Content="Thêm danh mục" Style="{StaticResource confirmInfoButton}" />
+                                <Button Content="Ẩn danh mục" Style="{StaticResource confirmInfoButton}" />
+                                <Button Content="Sửa danh mục" Style="{StaticResource confirmInfoButton}" />
+                            </StackPanel>
+                        </materialDesign:PopupBox>
                     </Button>
 
                     <StackPanel
                         Grid.Column="2"
+                        Margin="0,10"
                         HorizontalAlignment="Right"
                         Orientation="Horizontal">
                         <TextBlock
-                            Margin="10,0,20,0"
+                            Margin="0,0,20,0"
                             VerticalAlignment="Center"
                             FontSize="13"
                             FontWeight="SemiBold"
@@ -199,9 +187,9 @@
 
                 <!--  food list  -->
                 <Border
-                    Grid.Row="4"
+                    Grid.Row="2"
                     Grid.ColumnSpan="2"
-                    Margin="0,20,0,20"
+                    Margin="0,10"
                     BorderBrush="#602414"
                     BorderThickness="2"
                     CornerRadius="10">
@@ -217,6 +205,7 @@
                                     <uc:InfoFood
                                         Margin="10"
                                         Discountfood="{Binding Discountfood}"
+                                        Isdeleted="{Binding Isdeleted}"
                                         Price="{Binding Price}"
                                         SourceImage="{Binding Imagefood, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
                                         Text="{Binding Foodname}">
@@ -228,6 +217,10 @@
 
                                             <i:EventTrigger EventName="DeleteFood">
                                                 <i:InvokeCommandAction Command="{Binding DataContext.DeleteFoodCommand, RelativeSource={RelativeSource AncestorType=local:FoodView}}" CommandParameter="{Binding}" />
+                                            </i:EventTrigger>
+
+                                            <i:EventTrigger EventName="RestoreFood">
+                                                <i:InvokeCommandAction Command="{Binding DataContext.RestoreFoodCommand, RelativeSource={RelativeSource AncestorType=local:FoodView}}" CommandParameter="{Binding}" />
                                             </i:EventTrigger>
                                         </i:Interaction.Triggers>
                                     </uc:InfoFood>
@@ -241,7 +234,7 @@
         <materialDesign:DialogHost
             Background="Transparent"
             DialogTheme="Inherit"
-            IsOpen="{Binding IsOpenAddFoodVM}"
+            IsOpen="{Binding IsOpenModifyFoodView}"
             OverlayBackground="{DynamicResource PrimaryHueDarkBrush}"
             Placement="Mouse"
             Style="{StaticResource MaterialDesignEmbeddedDialogHost}">
@@ -250,7 +243,7 @@
             </materialDesign:DialogHost.DialogBackground>
 
             <materialDesign:DialogHost.DialogContent>
-                <ContentControl Content="{Binding AddUpdateFoodVM}" />
+                <ContentControl Content="{Binding ModifyFoodVM}" />
             </materialDesign:DialogHost.DialogContent>
         </materialDesign:DialogHost>
     </Grid>

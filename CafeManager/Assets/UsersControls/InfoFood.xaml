@@ -15,14 +15,31 @@
     </UserControl.Resources>
     <Grid>
         <Border BorderThickness="3" CornerRadius="10">
-            <Border.BorderBrush>
-                <LinearGradientBrush StartPoint="0, 0.5">
-                    <GradientStop Offset="0" Color="#c69a5d" />
-                    <GradientStop Offset="0.5" Color="#cb925d" />
+            <Border.Style>
+                <Style TargetType="Border">
+                    <Setter Property="BorderBrush">
+                        <Setter.Value>
+                            <LinearGradientBrush StartPoint="0, 0.5">
+                                <GradientStop Offset="0" Color="#c69a5d" />
+                                <GradientStop Offset="0.5" Color="#cb925d" />
 
-                    <GradientStop Offset="1" Color="#d4b096" />
-                </LinearGradientBrush>
-            </Border.BorderBrush>
+                                <GradientStop Offset="1" Color="#d4b096" />
+                            </LinearGradientBrush>
+                        </Setter.Value>
+                    </Setter>
+                    <Setter Property="BorderThickness" Value="3" />
+                    <Setter Property="CornerRadius" Value="10" />
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding Isdeleted}" Value="True">
+                            <Setter Property="BorderBrush">
+                                <Setter.Value>
+                                    <SolidColorBrush Color="Red" />
+                                </Setter.Value>
+                            </Setter>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </Border.Style>
             <Grid>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="160" />
@@ -64,30 +81,66 @@
                             <TextBlock
                                 FontSize="18"
                                 Style="{StaticResource infoFoodText}"
-                                Text="{Binding ElementName=infofood, Path=Text, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay, Converter={StaticResource Utf8Converter}}" />
+                                Text="{Binding ElementName=infofood, Path=Text, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay, Converter={StaticResource Utf8Converter}}"
+                                TextWrapping="WrapWithOverflow" />
 
-                            <TextBlock Style="{StaticResource infoFoodText}" Text="{Binding ElementName=infofood, UpdateSourceTrigger=PropertyChanged, Path=Price, Mode=TwoWay}" />
+                            <TextBlock
+                                Style="{StaticResource infoFoodText}"
+                                Text="{Binding ElementName=infofood, UpdateSourceTrigger=PropertyChanged, Path=Price, Mode=TwoWay}"
+                                TextWrapping="WrapWithOverflow" />
                         </StackPanel>
 
-                        <StackPanel Grid.Column="1" Orientation="Horizontal">
+                        <Grid Grid.Column="1">
+                            <StackPanel HorizontalAlignment="Right" Orientation="Horizontal">
+                                <StackPanel.Style>
+                                    <Style TargetType="StackPanel">
+                                        <Setter Property="Visibility" Value="Visible" />
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding ElementName=infofood, Path=Isdeleted, Mode=TwoWay}" Value="True">
+                                                <Setter Property="Visibility" Value="Collapsed" />
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </StackPanel.Style>
+                                <Button
+                                    x:Name="BtnDelete"
+                                    Padding="2"
+                                    HorizontalAlignment="Center"
+                                    Background="Transparent"
+                                    Click="BtnDelete_Click">
+                                    <ma:PackIconMaterial Kind="TrashCan" Style="{StaticResource infoFoodIcon}" />
+                                </Button>
+                                <Button
+                                    x:Name="BtnUpdate"
+                                    Padding="2"
+                                    HorizontalAlignment="Center"
+                                    Background="Transparent"
+                                    Click="BtnUpdate_Click">
+                                    <ma:PackIconMaterial Kind="Pencil" Style="{StaticResource infoFoodIcon}" />
+                                </Button>
+                            </StackPanel>
 
-                            <Button
-                                x:Name="BtnDelete"
-                                Padding="2"
-                                HorizontalAlignment="Center"
-                                Background="Transparent"
-                                Click="BtnDelete_Click">
-                                <ma:PackIconMaterial Kind="TrashCan" Style="{StaticResource infoFoodIcon}" />
-                            </Button>
-                            <Button
-                                x:Name="BtnUpdate"
-                                Padding="2"
-                                HorizontalAlignment="Center"
-                                Background="Transparent"
-                                Click="BtnUpdate_Click">
-                                <ma:PackIconMaterial Kind="Pencil" Style="{StaticResource infoFoodIcon}" />
-                            </Button>
-                        </StackPanel>
+                            <Grid>
+                                <Grid.Style>
+                                    <Style TargetType="Grid">
+                                        <Setter Property="Visibility" Value="Collapsed" />
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding ElementName=infofood, Path=Isdeleted, Mode=TwoWay}" Value="True">
+                                                <Setter Property="Visibility" Value="Visible" />
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </Grid.Style>
+                                <Button
+                                    x:Name="BtnRestore"
+                                    Click="BtnRestore_Click"
+                                    Padding="2"
+                                    HorizontalAlignment="Right"
+                                    Background="Transparent">
+                                    <ma:PackIconMaterial Kind="Restore" Style="{StaticResource infoFoodIcon}" />
+                                </Button>
+                            </Grid>
+                        </Grid>
                     </Grid>
                 </Border>
             </Grid>

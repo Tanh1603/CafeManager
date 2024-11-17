@@ -30,6 +30,11 @@ namespace CafeManager.WPF.Services
             return await _unitOfWork.FoodCategoryList.GetAllFoodByFoodCatgoryIdAsync(id);
         }
 
+        public async Task<IEnumerable<Foodcategory>> GetAllListFoodCategory()
+        {
+            return await _unitOfWork.FoodCategoryList.GetAll();
+        }
+
         public async Task<Foodcategory?> AddFoodCategory(Foodcategory foodcategory)
         {
             var res = await _unitOfWork.FoodCategoryList.Create(foodcategory);

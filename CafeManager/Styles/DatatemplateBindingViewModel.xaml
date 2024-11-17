@@ -55,8 +55,8 @@
     <DataTemplate DataType="{x:Type addviewmodels:AddSuppierViewModel}">
         <addupdateview:AddSupplierView />
     </DataTemplate>
-    <DataTemplate DataType="{x:Type addviewmodels:AddUpdateFoodViewModel}">
-        <addupdateview:AddFoodView />
+    <DataTemplate DataType="{x:Type addviewmodels:ModifyFoodViewModel}">
+        <addupdateview:ModifyFoodView />
     </DataTemplate>
 
     <DataTemplate DataType="{x:Type addviewmodels:ModifyStaffViewModel}">

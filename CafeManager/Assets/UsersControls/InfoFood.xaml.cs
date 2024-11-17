@@ -91,6 +91,29 @@ namespace CafeManager.WPF.Assets.UsersControls
         {
             RaiseEvent(new RoutedEventArgs(DeleteFoodEvent));
         }
+
+        public bool Isdeleted
+        {
+            get { return (bool)GetValue(IsdeletedProperty); }
+            set { SetValue(IsdeletedProperty, value); }
+        }
+
+        // Using a DependencyProperty as the backing store for Isdeleted.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty IsdeletedProperty =
+            DependencyProperty.Register("Isdeleted", typeof(bool), typeof(InfoFood));
+
+        public static readonly RoutedEvent RestoreFoodEvent = EventManager.RegisterRoutedEvent("RestoreFood", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(InfoFood));
+
+        public event RoutedEventHandler RestoreFood
+        {
+            add { AddHandler(RestoreFoodEvent, value); }
+            remove { RemoveHandler(RestoreFoodEvent, value); }
+        }
+
+        private void BtnRestore_Click(object sender, RoutedEventArgs e)
+        {
+            RaiseEvent(new RoutedEventArgs(RestoreFoodEvent));
+        }
     }
 
     public class Utf8Converter : IValueConverter

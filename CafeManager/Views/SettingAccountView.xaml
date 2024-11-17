@@ -22,7 +22,7 @@
             </LinearGradientBrush>
         </Border.Background>
         <Grid>
-            <Grid Margin="50,10,40,0">
+            <Grid Margin="20 10">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="auto" />
                     <ColumnDefinition Width="*" />

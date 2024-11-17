@@ -18,9 +18,9 @@ namespace CafeManager.WPF.Views.AddUpdateView
     /// <summary>
     /// Interaction logic for AddFoodView.xaml
     /// </summary>
-    public partial class AddFoodView : UserControl
+    public partial class ModifyFoodView : UserControl
     {
-        public AddFoodView()
+        public ModifyFoodView()
         {
             InitializeComponent();
         }

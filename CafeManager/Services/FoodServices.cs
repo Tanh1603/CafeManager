@@ -22,32 +22,31 @@ namespace CafeManager.WPF.Services
             _unitOfWork = _serviceProvider.GetRequiredService<IUnitOfWork>();
         }
 
-        public async Task<IEnumerable<Food>> GetAllListFood()
-        {
-            return await _unitOfWork.FoodList.GetAllListFood();
-        }
-
         public async Task<Food> GetFoodById(int id)
         {
             return await _unitOfWork.FoodList.GetFoodById(id);
         }
 
-        public async Task<Food> AddFood(Food food)
+        public async Task<Food?> GetDeletedFoodById(int id)
+        {
+            return (await _unitOfWork.FoodList.GetAll()).FirstOrDefault(x => x.Foodid == id);
+        }
+
+        public async Task<IEnumerable<Food>> GetAllListFoodByFoodCategoryId(int id)
+        {
+            return (await _unitOfWork.FoodList.GetAll()).Where(x => x.Foodcategoryid == id);
+        }
+
+        public async Task<Food> CreateFood(Food food)
         {
             try
             {
                 await _unitOfWork.BeginTransactionAsync();
-
-                var list = await _unitOfWork.FoodList.Create(food);
-
-                if (list == null)
-                {
-                    throw new InvalidOperationException("Lỗi.");
-                }
+                var res = await _unitOfWork.FoodList.Create(food);
 
                 await _unitOfWork.CompleteAsync();
                 await _unitOfWork.CommitTransactionAsync();
-                return list;
+                return res;
             }
             catch (Exception)
             {

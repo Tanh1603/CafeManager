@@ -31,5 +31,14 @@ namespace CafeManager.Infrastructure.Repositories
                 .Include(x => x.Staffsalaryhistories.Where(s => s.Isdeleted == false))
                 .ToListAsync();
         }
+
+        public async Task<IEnumerable<Staff>> GetAllStaffDeletedAsync()
+        {
+            return await _cafeManagerContext.Staff
+                .Where(x => x.Isdeleted == true)
+                .Include(x => x.Staffsalaryhistories
+                .Where(s => s.Isdeleted == false))
+                .ToListAsync();
+        }
     }
 }

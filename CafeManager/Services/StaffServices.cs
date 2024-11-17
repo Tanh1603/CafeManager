@@ -25,6 +25,11 @@ namespace CafeManager.WPF.Services
             return await _unitOfWork.StaffList.GetAllStaffAsync();
         }
 
+        public async Task<IEnumerable<Staff>> GetListStaffDeleted()
+        {
+            return await _unitOfWork.StaffList.GetAllStaffDeletedAsync();
+        }
+
         public async Task<Staff?> GetStaffById(int id)
         {
             return await _unitOfWork.StaffList.GetStaffById(id);
@@ -55,37 +60,45 @@ namespace CafeManager.WPF.Services
             {
                 await _unitOfWork.BeginTransactionAsync();
                 var res = _unitOfWork.StaffList.Update(staff);
-                if (updateStaffSalaryHitory != null)
+                List<Staffsalaryhistory> existingHistories = (await _unitOfWork.StaffSalaryHistoryList.GetAll())
+                                        .Where(x => x.Isdeleted == false && x.Staffid == staff.Staffid).ToList();
+                if (updateStaffSalaryHitory != null && updateStaffSalaryHitory.Count > 0)
                 {
-                    updateStaffSalaryHitory.ForEach(async x =>
+                    var newHistoryIds = updateStaffSalaryHitory.Where(x => x.Staffsalaryhistoryid != 0)
+                        .Select(x => x.Staffsalaryhistoryid).ToHashSet();
+                    foreach (var existingHistory in existingHistories)
                     {
-                        if (x.Staffsalaryhistoryid == 0)
+                        if (!newHistoryIds.Contains(existingHistory.Staffsalaryhistoryid))
+                        {
+                            existingHistory.Isdeleted = true;
+                        }
+                    }
+                    foreach (var newHistory in updateStaffSalaryHitory)
+                    {
+                        if (newHistory.Staffsalaryhistoryid == 0)
                         {
                             await _unitOfWork.StaffSalaryHistoryList.Create(new()
                             {
                                 Staffid = staff.Staffid,
-                                Salary = x.Salary,
-                                Effectivedate = x.Effectivedate,
+                                Salary = newHistory.Salary,
+                                Effectivedate = newHistory.Effectivedate,
                             });
                         }
                         else
                         {
-                            var existingHistory = await _unitOfWork.StaffSalaryHistoryList.GetById(x.Staffsalaryhistoryid);
-
-                            if (existingHistory != null && existingHistory.Isdeleted == false)
+                            var existingHistory = existingHistories
+                                .FirstOrDefault(x => x.Isdeleted == false && x.Staffsalaryhistoryid == newHistory.Staffsalaryhistoryid);
+                            if (existingHistory != null && existingHistory != newHistory)
                             {
-                                if (x.Isdeleted == true)
-                                {
-                                    existingHistory.Isdeleted = true;
-                                }
-                                else
-                                {
-                                    existingHistory.Salary = x.Salary;
-                                    existingHistory.Effectivedate = x.Effectivedate;
-                                }
+                                existingHistory.Salary = newHistory.Salary;
+                                existingHistory.Effectivedate = newHistory.Effectivedate;
                             }
                         }
-                    });
+                    }
+                }
+                else
+                {
+                    existingHistories.ForEach(x => x.Isdeleted = true);
                 }
                 await _unitOfWork.CompleteAsync();
                 await _unitOfWork.CommitTransactionAsync();
@@ -99,11 +112,16 @@ namespace CafeManager.WPF.Services
             }
         }
 
-        public async Task<bool> DeleteStaff(int id)
+        public async Task<bool> DeleteStaff(int id, DateOnly? dateOnly)
         {
             try
             {
                 await _unitOfWork.BeginTransactionAsync();
+                var deletedStaff = await _unitOfWork.StaffList.GetStaffById(id);
+                if (deletedStaff != null)
+                {
+                    deletedStaff.Endworkingdate = dateOnly;
+                }
                 bool res = await _unitOfWork.StaffList.Delete(id);
                 await _unitOfWork.CompleteAsync();
                 await _unitOfWork.CommitTransactionAsync();

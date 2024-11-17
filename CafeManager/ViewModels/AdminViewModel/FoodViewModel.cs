@@ -1,17 +1,13 @@
 ﻿using CafeManager.Core.Data;
 using CafeManager.Core.DTOs;
+using CafeManager.Core.Services;
+using CafeManager.WPF.MessageBox;
 using CafeManager.WPF.Services;
 using CafeManager.WPF.ViewModels.AddViewModel;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Microsoft.Extensions.DependencyInjection;
-using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using CafeManager.WPF.MessageBox;
 
 namespace CafeManager.WPF.ViewModels.AdminViewModel
 {
@@ -23,19 +19,22 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
         private readonly FileDialogService _fileDialogService;
 
         [ObservableProperty]
-        private ObservableCollection<Foodcategory> _listFoodCategory = [];
+        private ObservableCollection<FoodCategoryDTO> _listFoodCategory = [];
 
         [ObservableProperty]
         private ObservableCollection<FoodDTO> _listFoodByFoodCategoryId = [];
 
         [ObservableProperty]
-        private Foodcategory _selectedFoodCategory;
+        private FoodCategoryDTO _selectedFoodCategory;
 
         [ObservableProperty]
-        private bool _isOpenAddFoodVM;
+        private bool _isOpenModifyFoodView;
 
         [ObservableProperty]
-        private AddUpdateFoodViewModel _addUpdateFoodVM;
+        private ModifyFoodViewModel _modifyFoodVM;
+
+        [ObservableProperty]
+        private bool _isOpenModifyFCView;
 
         public FoodViewModel(IServiceProvider provider)
         {
@@ -43,183 +42,113 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
             _foodCategoryServices = provider.GetRequiredService<FoodCategoryServices>();
             _foodServices = provider.GetRequiredService<FoodServices>();
             _fileDialogService = provider.GetRequiredService<FileDialogService>();
-
-            AddUpdateFoodVM = provider.GetRequiredService<AddUpdateFoodViewModel>();
-            AddUpdateFoodVM.CloseVM += AddUpdateFoodVM_CloseVM;
-            AddUpdateFoodVM.AddFoodChanged += AddUpdateFoodVM_AddFoodChanged;
-            AddUpdateFoodVM.UpdateFoodChanged += AddUpdateFoodVM_UpdateFoodChangedAsync;
-
-            _ = LoadData();
+            ModifyFoodVM = provider.GetRequiredService<ModifyFoodViewModel>();
+            ModifyFoodVM.ModifyFoodChanged += ModifyFoodVM_ModifyFoodChanged;
+            Task.Run(LoadData);
         }
 
         private async Task LoadData()
         {
-            try
-            {
-                ListFoodCategory.Add(new Foodcategory()
-                {
-                    Foodcategoryname = "Tất cả"
-                });
+            var dbListFoodCategory = await _foodCategoryServices.GetAllListFoodCategory();
+            ListFoodCategory = [.. dbListFoodCategory.Select(fc => FoodCategoryMapper.ToDTO(fc))];
 
-                IEnumerable<Foodcategory> listFoodCategory = await _foodCategoryServices.GetListFoodCategory();
-                IEnumerable<Food> listFood = await _foodServices.GetAllListFood();
-
-                AddUpdateFoodVM.ReceiveListFoodCategory(listFoodCategory.ToList());
-                foreach (var item in listFoodCategory)
-                {
-                    ListFoodCategory.Add(item);
-                }
-
-                ListFoodByFoodCategoryId = new(listFood.Select(x => new FoodDTO()
-                {
-                    Id = x.Foodid,
-                    Foodname = x.Foodname,
-                    Price = x.Price,
-                    Imagefood = _fileDialogService.Base64ToBitmapImage(x.Imagefood),
-                    Discountfood = x.Discountfood,
-                    Foodcategory = x.Foodcategory,
-                }));
-                SelectedFoodCategory = ListFoodCategory[0];
-            }
-            catch (Exception)
-            {
-            }
+            SelectedFoodCategory = ListFoodCategory[0];
+            var dbListFoodByFoodCategoryId =
+                await _foodServices.GetAllListFoodByFoodCategoryId(SelectedFoodCategory.Foodcategoryid);
+            ListFoodByFoodCategoryId = [.. dbListFoodByFoodCategoryId.Select(f => FoodMapper.ToDTO(f))];
+            ModifyFoodVM.ReceiveListFoodCategory(ListFoodCategory.ToList());
         }
 
-        private async void AddUpdateFoodVM_UpdateFoodChangedAsync(Food obj)
+        private async void ModifyFoodVM_ModifyFoodChanged(FoodDTO foodDTO)
         {
             try
             {
-                Food updateFood = await _foodServices.GetFoodById(obj.Foodid);
-                if (updateFood != null)
+                if (ModifyFoodVM.IsAdding)
                 {
-                    updateFood.Price = obj.Price ?? decimal.Zero;
-                    updateFood.Foodname = obj.Foodname;
-                    updateFood.Discountfood = obj.Discountfood;
-                    updateFood.Imagefood = obj.Imagefood;
-                    updateFood.Foodcategoryid = obj.Foodcategoryid;
+                    Food addFood = await _foodServices.CreateFood(FoodMapper.ToEntity(foodDTO));
+                    if (addFood != null)
+                    {
+                        FoodDTO addFoodDTO = FoodMapper.ToDTO(addFood);
+                        if (addFoodDTO.Foodcategoryid == SelectedFoodCategory.Foodcategoryid)
+                        {
+                            ListFoodByFoodCategoryId.Add(addFoodDTO);
+                        }
+                        MyMessageBox.Show("Thêm thức ăn thành công");
+                    }
+                }
+                if (ModifyFoodVM.IsUpdating)
+                {
+                    var updateFood = await _foodServices.GetFoodById(foodDTO.Foodid);
+                    Food updateFoodEntity = FoodMapper.ToEntity(foodDTO);
 
-                    Food res = _foodServices.UpdatFood(updateFood);
+                    updateFood.Foodname = updateFoodEntity.Foodname;
+                    updateFood.Foodcategoryid = updateFoodEntity.Foodcategoryid;
+                    updateFood.Price = updateFoodEntity.Price;
+                    updateFood.Imagefood = updateFoodEntity.Imagefood;
+                    updateFood.Discountfood = updateFoodEntity.Discountfood;
+                    var res = _foodServices.UpdatFood(updateFood);
+
                     if (res != null)
                     {
-                        FoodDTO updateFoodDTO = ListFoodByFoodCategoryId.FirstOrDefault(x => x.Id == res.Foodid);
-
-                        if (updateFoodDTO != null && updateFoodDTO.Foodcategory?.Foodcategoryid == res.Foodcategoryid || SelectedFoodCategory.Foodcategoryname.Equals("Tất cả"))
+                        var updateFoodDTO = ListFoodByFoodCategoryId
+                                            .FirstOrDefault(f => f.Foodid == res.Foodid);
+                        if (updateFoodDTO != null)
                         {
-                            updateFoodDTO.Price = res.Price ?? decimal.Zero;
-                            updateFoodDTO.Foodname = res.Foodname;
-                            updateFoodDTO.Discountfood = res.Discountfood;
-                            updateFoodDTO.Imagefood = _fileDialogService.Base64ToBitmapImage(res.Imagefood);
-                            updateFoodDTO.Foodcategory = res.Foodcategory;
-                            ListFoodByFoodCategoryId = new(ListFoodByFoodCategoryId);
+                            FoodDTO foodMapper = FoodMapper.ToDTO(res);
+                            if (foodMapper.Foodcategoryid == SelectedFoodCategory.Foodcategoryid)
+                            {
+                                updateFoodDTO.Foodid = foodMapper.Foodid;
+                                updateFoodDTO.Foodname = foodMapper.Foodname;
+                                updateFoodDTO.Foodcategoryid = foodMapper.Foodcategoryid;
+                                updateFoodDTO.Price = foodMapper.Price;
+                                updateFoodDTO.Discountfood = foodMapper.Discountfood;
+                                updateFoodDTO.Imagefood = foodMapper.Imagefood;
+                            }
+                            else
+                            {
+                                ListFoodByFoodCategoryId.Remove(updateFoodDTO);
+                            }
+                            MyMessageBox.Show("Sửa thức ăn thành công");
                         }
-                        else
-                        {
-                            ListFoodByFoodCategoryId.Remove(updateFoodDTO);
-                        }
-
-                        MyMessageBox.Show("Sửa thành công", MyMessageBox.Buttons.OK, MyMessageBox.Icons.Information);
                     }
-                    else
-                    {
-                        MyMessageBox.Show("Lỗi", MyMessageBox.Buttons.OK, MyMessageBox.Icons.Error);
-                    }
-                    IsOpenAddFoodVM = false;
-                    AddUpdateFoodVM.IsUpdating = false;
-                    AddUpdateFoodVM.ClearValueOfForm();
                 }
+                IsOpenModifyFoodView = false;
+                ModifyFoodVM.ClearValueOfForm();
             }
             catch (InvalidOperationException ioe)
             {
-                MyMessageBox.Show(ioe.Message, MyMessageBox.Buttons.OK, MyMessageBox.Icons.Warning);
+                MyMessageBox.Show(ioe.Message);
             }
-        }
-
-        private async void AddUpdateFoodVM_AddFoodChanged(Food obj)
-        {
-            try
-            {
-                Food res = await _foodServices.AddFood(obj);
-                if (res == null)
-                {
-                    MyMessageBox.Show("Không thêm được", MyMessageBox.Buttons.OK, MyMessageBox.Icons.Error);
-                    return;
-                }
-                if (res.Foodcategoryid == SelectedFoodCategory.Foodcategoryid || SelectedFoodCategory.Foodcategoryname.Equals("Tất cả"))
-                {
-                    ListFoodByFoodCategoryId.Add(new FoodDTO()
-                    {
-                        Id = obj.Foodid,
-                        Foodname = obj.Foodname,
-                        Price = obj.Price ?? decimal.Zero,
-                        Imagefood = _fileDialogService.Base64ToBitmapImage(obj.Imagefood),
-                        Discountfood = obj.Discountfood,
-                        Foodcategory = obj.Foodcategory,
-                    });
-                }
-                MyMessageBox.Show("Thêm thành công", MyMessageBox.Buttons.OK, MyMessageBox.Icons.Information);
-                AddUpdateFoodVM.ClearValueOfForm();
-                IsOpenAddFoodVM = false;
-                AddUpdateFoodVM.IsAdding = false;
-            }
-            catch (InvalidOperationException ivd)
-            {
-                MyMessageBox.Show(ivd.Message, MyMessageBox.Buttons.OK, MyMessageBox.Icons.Information);
-            }
-        }
-
-        private void AddUpdateFoodVM_CloseVM()
-        {
-            IsOpenAddFoodVM = false;
         }
 
         [RelayCommand]
-        private async Task SelectedFoodCategoryChange(Foodcategory foodcategory)
+        private async Task SelectedFoodCategoryChange(FoodCategoryDTO foodcategory)
         {
             if (foodcategory == null) return;
-            if (foodcategory.Foodcategoryname.Equals("Tất cả"))
-            {
-                var listAllFood = await _foodServices.GetAllListFood();
+            var dbListFoodByFoodCategoryId = await _foodServices.GetAllListFoodByFoodCategoryId(foodcategory.Foodcategoryid);
+            ListFoodByFoodCategoryId = [.. dbListFoodByFoodCategoryId.Select(f => FoodMapper.ToDTO(f)).ToList()];
+        }
 
-                ListFoodByFoodCategoryId = new(listAllFood.Select(x => new FoodDTO()
-                {
-                    Id = x.Foodid,
-                    Foodname = x.Foodname,
-                    Price = x.Price,
-                    Imagefood = _fileDialogService.Base64ToBitmapImage(x.Imagefood),
-                    Foodcategory = x.Foodcategory,
-                    Discountfood = x.Discountfood,
-                }));
-            }
-            else
-            {
-                var listFoodById = await _foodCategoryServices.GetListFoodByFoodCatgoryId(foodcategory.Foodcategoryid);
-
-                ListFoodByFoodCategoryId = new(listFoodById.Select(x => new FoodDTO()
-                {
-                    Id = x.Foodid,
-                    Foodname = x.Foodname,
-                    Price = x.Price,
-                    Imagefood = _fileDialogService.Base64ToBitmapImage(x.Imagefood),
-                    Discountfood = x.Discountfood,
-                    Foodcategory = x.Foodcategory
-                }));
-            }
+        [RelayCommand]
+        private void CloseModifyFoodView()
+        {
+            IsOpenModifyFoodView = false;
+            ModifyFoodVM.ClearValueOfForm();
         }
 
         [RelayCommand]
         private void OpenAddFood()
         {
-            AddUpdateFoodVM.IsAdding = true;
-            IsOpenAddFoodVM = true;
+            ModifyFoodVM.IsAdding = true;
+            IsOpenModifyFoodView = true;
         }
 
         [RelayCommand]
         private void OpenUpdateFood(FoodDTO foodDTO)
         {
-            AddUpdateFoodVM.IsUpdating = true;
-            AddUpdateFoodVM.ReceiveFood(foodDTO);
-            IsOpenAddFoodVM = true;
+            ModifyFoodVM.IsUpdating = true;
+            ModifyFoodVM.ReceiveFood(foodDTO);
+            IsOpenModifyFoodView = true;
         }
 
         [RelayCommand]
@@ -227,29 +156,65 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
         {
             try
             {
-                bool isdeleted = await _foodServices.DeletFood(foodDTO.Id);
-                if (isdeleted)
+                string res = MyMessageBox.ShowDialog("Bạn muốn ẩn món ăn này trên menu không", MyMessageBox.Buttons.Yes_No, MyMessageBox.Icons.Warning);
+                if (res.Equals("1"))
                 {
-                    MyMessageBox.Show("Xóa thành công thức ăn", MyMessageBox.Buttons.OK, MyMessageBox.Icons.Information);
+                    bool isdeleted = await _foodServices.DeletFood(foodDTO.Foodid);
+                    if (isdeleted)
+                    {
+                        MyMessageBox.Show("Ẩn món ăn thành công");
+                        var deletedFoodDTO = ListFoodByFoodCategoryId.FirstOrDefault(x => x.Foodid == foodDTO.Foodid);
+                        if (deletedFoodDTO != null)
+                        {
+                            deletedFoodDTO.Isdeleted = true;
+                        }
+                    }
                 }
-
-                ListFoodByFoodCategoryId.Remove(foodDTO);
             }
             catch (InvalidOperationException ivd)
             {
-                MyMessageBox.Show(ivd.Message, MyMessageBox.Buttons.OK, MyMessageBox.Icons.Warning);
-                throw;
+                MyMessageBox.Show(ivd.Message, MyMessageBox.Buttons.OK, MyMessageBox.Icons.Error);
             }
+        }
+
+        [RelayCommand]
+        private async Task RestoreFood(FoodDTO foodDTO)
+        {
+            try
+            {
+                string res = MyMessageBox.ShowDialog("Bạn muốn hiện món ăn này trên menu không", MyMessageBox.Buttons.Yes_No, MyMessageBox.Icons.Warning);
+                if (res.Equals("1"))
+                {
+                    var showFood = await _foodServices.GetDeletedFoodById(foodDTO.Foodid);
+                    if (showFood != null)
+                    {
+                        showFood.Isdeleted = false;
+                        _foodServices.UpdatFood(showFood);
+
+                        var showFoodDTO = ListFoodByFoodCategoryId.FirstOrDefault(x => x.Foodid == foodDTO.Foodid);
+                        if (showFoodDTO != null)
+                        {
+                            showFoodDTO.Isdeleted = false;
+                        }
+                        MyMessageBox.Show("Hiện món ăn thành công");
+                    }
+                }
+            }
+            catch (InvalidOperationException ivd)
+            {
+                MyMessageBox.Show(ivd.Message, MyMessageBox.Buttons.OK, MyMessageBox.Icons.Error);
+            }
+        }
+
+        [RelayCommand]
+        private void OpenPopupFoodCategoryView()
+        {
+            IsOpenModifyFCView = true;
         }
 
         public void Dispose()
         {
-            if (AddUpdateFoodVM != null)
-            {
-                AddUpdateFoodVM.CloseVM -= AddUpdateFoodVM_CloseVM;
-                AddUpdateFoodVM.AddFoodChanged -= AddUpdateFoodVM_AddFoodChanged;
-                AddUpdateFoodVM.UpdateFoodChanged -= AddUpdateFoodVM_UpdateFoodChangedAsync;
-            }
+            ModifyFoodVM.ModifyFoodChanged -= ModifyFoodVM_ModifyFoodChanged;
             GC.SuppressFinalize(this);
         }
     }

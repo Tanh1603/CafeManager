@@ -11,6 +11,8 @@ namespace CafeManager.Core.Repositories
     {
         Task<IEnumerable<Staff>> GetAllStaffAsync();
 
+        Task<IEnumerable<Staff>> GetAllStaffDeletedAsync();
+
         Task<Staff?> GetStaffById(int id);
     }
 }

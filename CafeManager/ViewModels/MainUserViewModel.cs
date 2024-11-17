@@ -110,27 +110,27 @@ namespace CafeManager.WPF.ViewModels
             var list = await _foodCategoryServices.GetListFoodByFoodCatgoryId(id);
             ListFoodByFoodCategoryId = new(list.Select(x => new FoodDTO()
             {
-                Id = x.Foodid,
-                Foodname = x.Foodname,
-                Price = x.Price,
-                Imagefood = _fileDialogService.Base64ToBitmapImage(x.Imagefood),
-                Discountfood = x.Discountfood,
-                Foodcategory = x.Foodcategory,
+                //Id = x.Foodid,
+                //Foodname = x.Foodname,
+                //Price = x.Price,
+                //Imagefood = _fileDialogService.Base64ToBitmapImage(x.Imagefood),
+                //Discountfood = x.Discountfood,
+                //Foodcategory = x.Foodcategory,
             }));
         }
 
         private async Task LoadAllFoodData()
         {
-            var list = await _foodServices.GetAllListFood();
-            ListFoodByFoodCategoryId = new(list.Select(x => new FoodDTO()
-            {
-                Id = x.Foodid,
-                Foodname = x.Foodname,
-                Price = x.Price,
-                Imagefood = _fileDialogService.Base64ToBitmapImage(x.Imagefood),
-                Discountfood = x.Discountfood,
-                Foodcategory = x.Foodcategory,
-            }));
+            //var list = await _foodServices.GetAllListFood();
+            //ListFoodByFoodCategoryId = new(list.Select(x => new FoodDTO()
+            //{
+            //Id = x.Foodid,
+            //Foodname = x.Foodname,
+            //Price = x.Price,
+            //Imagefood = _fileDialogService.Base64ToBitmapImage(x.Imagefood),
+            //Discountfood = x.Discountfood,
+            //Foodcategory = x.Foodcategory,
+            //}));
         }
 
         private async Task LoadFoodCategoryData()
@@ -197,35 +197,35 @@ namespace CafeManager.WPF.ViewModels
         [RelayCommand]
         private void ChooseFood(FoodDTO food)
         {
-            if (SelectedTable != null)
-            {
-                var existingInvoiceDetail = CurrentInvoice.ListInvoiceDTO.FirstOrDefault(x => x.FoodId == food.Id);
+            //if (SelectedTable != null)
+            //{
+            //    var existingInvoiceDetail = CurrentInvoice.ListInvoiceDTO.FirstOrDefault(x => x.FoodId == food.Id);
 
-                if (existingInvoiceDetail != null)
-                {
-                    existingInvoiceDetail.Quantity += 1;
-                }
-                else
-                {
-                    CurrentInvoice.ListInvoiceDTO.Add(new InvoiceDetailDTO()
-                    {
-                        FoodId = food.Id,
-                        Quantity = 1,
-                        FoodName = food.Foodname,
-                        Price = food.PriceDiscount,
-                    });
-                }
-                var tmpListInvoiceDTO = CurrentInvoice.ListInvoiceDTO.Select(x => new Invoicedetail()
-                {
-                });
-                TotalPrice = CurrentInvoice.CaculateTotalPrice() ?? 0;
-                OnPropertyChanged(nameof(CurrentInvoice));
-                UpdateValueCurrentListInvoice();
-            }
-            else
-            {
-                MyMessageBox.Show("Vui lòng chọn bàn hoặc tạo hóa đơn mới");
-            }
+            //    if (existingInvoiceDetail != null)
+            //    {
+            //        existingInvoiceDetail.Quantity += 1;
+            //    }
+            //    else
+            //    {
+            //        CurrentInvoice.ListInvoiceDTO.Add(new InvoiceDetailDTO()
+            //        {
+            //            //FoodId = food.Id,
+            //            Quantity = 1,
+            //            FoodName = food.Foodname,
+            //            Price = food.PriceDiscount,
+            //        });
+            //    }
+            //    var tmpListInvoiceDTO = CurrentInvoice.ListInvoiceDTO.Select(x => new Invoicedetail()
+            //    {
+            //    });
+            //    TotalPrice = CurrentInvoice.CaculateTotalPrice() ?? 0;
+            //    OnPropertyChanged(nameof(CurrentInvoice));
+            //    UpdateValueCurrentListInvoice();
+            //}
+            //else
+            //{
+            //    MyMessageBox.Show("Vui lòng chọn bàn hoặc tạo hóa đơn mới");
+            //}
         }
 
         private void UpdateValueCurrentListInvoice()

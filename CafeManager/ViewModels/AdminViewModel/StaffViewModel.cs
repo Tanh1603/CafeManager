@@ -18,6 +18,15 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
         private readonly StaffServices _staffServices;
 
         [ObservableProperty]
+        private DateOnly? _endWorkingDate = new DateOnly?(DateOnly.FromDateTime(DateTime.Now));
+
+        [ObservableProperty]
+        private DateOnly _startWorkingDate = DateOnly.FromDateTime(DateTime.Now);
+
+        [ObservableProperty]
+        private bool _isOpenDeleteStaffView = false;
+
+        [ObservableProperty]
         private bool _isOpenModifyStaffView;
 
         [ObservableProperty]
@@ -25,6 +34,37 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
 
         [ObservableProperty]
         private ObservableCollection<StaffDTO> _listStaff = [];
+
+        [ObservableProperty]
+        private ObservableCollection<StaffDTO> _listStaffDeleted = [];
+
+        [ObservableProperty]
+        private ObservableCollection<StaffDTO> _currentListStaff = [];
+
+        private int _statusStaffIndex = 0;
+
+        [ObservableProperty]
+        [NotifyCanExecuteChangedFor(nameof(OpenModifyStaffCommand))]
+        private bool _isListStaffDeleted = false;
+
+        public int StatusStaffIndex
+        {
+            get => _statusStaffIndex;
+            set
+            {
+                _statusStaffIndex = value;
+                if (value == 0)
+                {
+                    CurrentListStaff = [.. ListStaff];
+                    IsListStaffDeleted = false;
+                }
+                else
+                {
+                    CurrentListStaff = [.. ListStaffDeleted];
+                    IsListStaffDeleted = true;
+                }
+            }
+        }
 
         public StaffViewModel(IServiceProvider provider)
         {
@@ -95,6 +135,7 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
                     }
                 }
                 IsOpenModifyStaffView = false;
+                CurrentListStaff = [.. ListStaff];
                 ModifyStaffVM.ClearValueOfViewModel();
             }
             catch (Exception)
@@ -107,13 +148,22 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
         {
             var dbListStaff = await _staffServices.GetListStaff();
             ListStaff = [.. dbListStaff.ToList().Select(x => StaffMapper.ToDTO(x))];
+            var dbListStaffDeleted = await _staffServices.GetListStaffDeleted();
+            ListStaffDeleted = [.. dbListStaffDeleted.ToList().Select(x => StaffMapper.ToDTO(x))];
+            CurrentListStaff = [.. ListStaff];
         }
 
-        [RelayCommand]
-        private void OpenModifyStaff()
+        [RelayCommand(CanExecute = nameof(CanExcuteOpenModifyStaff))]
+        private void OpenModifyStaff(StaffDTO staffDTO)
         {
             IsOpenModifyStaffView = true;
             ModifyStaffVM.IsAdding = true;
+            ModifyStaffVM.IsStaffDeleted = IsListStaffDeleted;
+        }
+
+        private bool CanExcuteOpenModifyStaff()
+        {
+            return IsListStaffDeleted == false;
         }
 
         [RelayCommand]
@@ -129,11 +179,66 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
             ModifyStaffVM.RecieveStaff(staffDTO.Clone());
             IsOpenModifyStaffView = true;
             ModifyStaffVM.IsUpdating = true;
+            ModifyStaffVM.IsStaffDeleted = IsListStaffDeleted;
+        }
+
+        private StaffDTO TempDeleteStaff = new();
+
+        [RelayCommand(CanExecute = nameof(CanExcuteOpenModifyStaff))]
+        private void OpenDeleteStaffView(StaffDTO staffDTO)
+        {
+            IsOpenDeleteStaffView = true;
+            StartWorkingDate = staffDTO.Startworkingdate;
+            TempDeleteStaff = staffDTO;
         }
 
         [RelayCommand]
-        private void DeleteStaff(StaffDTO staff)
+        private async Task SubmitDeleteStaff()
         {
+            try
+            {
+                if (TempDeleteStaff.Startworkingdate >= EndWorkingDate)
+                {
+                    MyMessageBox.Show("Ngày nghỉ việc phải lớn hơn ngày vào làm");
+                    return;
+                }
+                bool isSuccessDelete = await _staffServices.DeleteStaff(TempDeleteStaff.Staffid, EndWorkingDate);
+                if (isSuccessDelete)
+                {
+                    var res = ListStaff.FirstOrDefault(x => x.Staffid == TempDeleteStaff.Staffid);
+                    if (res != null)
+                    {
+                        ListStaff.Remove(res);
+                    }
+                    TempDeleteStaff.Endworkingdate = EndWorkingDate;
+                    ListStaffDeleted.Add(TempDeleteStaff);
+                    if (IsListStaffDeleted == false)
+                    {
+                        CurrentListStaff = [.. ListStaff];
+                    }
+                    else
+                    {
+                        CurrentListStaff = [.. ListStaffDeleted];
+                    }
+                    MyMessageBox.Show("Xóa nhân viên thành công (Nhân viên nghỉ việc)");
+                }
+                else
+                {
+                    MyMessageBox.Show("Xóa nhân viên thất bại (Nhân viên nghỉ việc)");
+                }
+                IsOpenDeleteStaffView = false;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        [RelayCommand]
+        private void CloseDeleteStaffView()
+        {
+            IsOpenDeleteStaffView = false;
+            EndWorkingDate = null;
         }
 
         public void Dispose()

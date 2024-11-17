@@ -3,6 +3,7 @@ using CafeManager.WPF.Stores;
 using CafeManager.WPF.ViewModels;
 using CafeManager.WPF.ViewModels.AddViewModel;
 using CafeManager.WPF.ViewModels.AdminViewModel;
+using CafeManager.WPF.ViewModels.UserViewModel;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using System;
@@ -36,6 +37,7 @@ namespace CafeManager.WPF.HostBuilders
                 services.AddTransient<LoginViewModel>(provider => new LoginViewModel(provider));
                 services.AddTransient<RegisterViewModel>(provider => new RegisterViewModel(provider));
                 services.AddTransient<SettingAccountViewModel>(provider => new SettingAccountViewModel(provider));
+                services.AddTransient<OrderViewModel>(provider => new OrderViewModel(provider));
 
                 services.AddTransient<AddSuppierViewModel>(provider => new AddSuppierViewModel(provider));
                 services.AddTransient<AddMaterialViewModel>(provider => new AddMaterialViewModel(provider));

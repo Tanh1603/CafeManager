@@ -17,7 +17,7 @@
     <UserControl.Resources>
         <converter:CurrencyConverter x:Key="CurrencyConverter" />
     </UserControl.Resources>
-    <Grid Background="White">
+    <!--<Grid Background="White">
         <Grid.RowDefinitions>
             <RowDefinition Height="*" />
             <RowDefinition Height="auto" />
@@ -222,7 +222,6 @@
                         <ColumnDefinition Width="auto" />
                     </Grid.ColumnDefinitions>
 
-
                     <Border
                         Grid.Column="0"
                         MinWidth="100"
@@ -238,7 +237,7 @@
                                 Margin="5,0,0,0"
                                 VerticalAlignment="Center"
                                 FontSize="20"
-                                Text="{Binding SelectedTable.Tablename}" />
+                                Text="{Binding SelectedTable}" />
                         </StackPanel>
                     </Border>
 
@@ -406,5 +405,7 @@
             VerticalAlignment="Bottom"
             Command="{Binding SignOutCommand}"
             Content="Đăng xuất" />
-    </Grid>
+    </Grid>-->
+
+    <ContentControl Margin="10" Content="{Binding OrderVM}" />
 </UserControl>

@@ -5,6 +5,8 @@
     xmlns:addviewmodels="clr-namespace:CafeManager.WPF.ViewModels.AddViewModel"
     xmlns:admdinviewmodels="clr-namespace:CafeManager.WPF.ViewModels.AdminViewModel"
     xmlns:adminviews="clr-namespace:CafeManager.WPF.Views.AdminView"
+    xmlns:userviewmodels="clr-namespace:CafeManager.WPF.ViewModels.UserViewModel"
+    xmlns:userviews="clr-namespace:CafeManager.WPF.Views.UserView"
     xmlns:viewmodels="clr-namespace:CafeManager.WPF.ViewModels"
     xmlns:views="clr-namespace:CafeManager.WPF.Views">
 
@@ -22,6 +24,10 @@
     </DataTemplate>
     <DataTemplate DataType="{x:Type viewmodels:SettingAccountViewModel}">
         <views:SettingAccountView />
+    </DataTemplate>
+
+    <DataTemplate DataType="{x:Type userviewmodels:OrderViewModel}">
+        <userviews:OrderView />
     </DataTemplate>
 
     <DataTemplate DataType="{x:Type admdinviewmodels:AppUserViewModel}">

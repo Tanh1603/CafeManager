@@ -166,7 +166,7 @@
                     HorizontalAlignment="Right"
                     VerticalAlignment="Bottom"
                     Command="{Binding SubmitCommand}"
-                    Style="{StaticResource confirmInfoButton}">
+                    Style="{StaticResource confirmInfoButton}" >
                     <StackPanel HorizontalAlignment="Center" Orientation="Horizontal">
                         <ma:PackIconMaterial VerticalAlignment="Center" Kind="CheckBold" />
                         <TextBlock

@@ -40,7 +40,27 @@
                     </i:EventTrigger>
                 </i:Interaction.Triggers>
                 <StackPanel HorizontalAlignment="Right" Orientation="Horizontal">
-                    <Button Command="{Binding MiniMizeWindownCommand}" Style="{StaticResource closeButton}">
+                    <Border
+                        Width="35"
+                        Height="35"
+                        Margin="10,5,10,5"
+                        CornerRadius="50">
+                        <Border.Background>
+                            <LinearGradientBrush StartPoint="0,0" EndPoint="1,2">
+                                <GradientStop Offset="0" Color="#d5b096" />
+                                <GradientStop Offset="1" Color="#d3b7ff" />
+                            </LinearGradientBrush>
+                        </Border.Background>
+                        <Image
+                            Width="15"
+                            Height="15"
+                            HorizontalAlignment="Center"
+                            RenderOptions.BitmapScalingMode="HighQuality"
+                            SnapsToDevicePixels="True"
+                            Source="/Assets/Images/coffee.png"
+                            Stretch="Uniform" />
+                    </Border>
+                    <Button Command="{Binding MiniMizeWindownCommand}" Style="{StaticResource windowButton}">
                         <ma:PackIconMaterial
                             Margin="0,20,0,0"
                             Kind="WindowMinimize"
@@ -49,16 +69,18 @@
                     <Button
                         Margin="10,0"
                         Command="{Binding MaximizeWindownCommand}"
-                        Style="{StaticResource closeButton}">
+                        Style="{StaticResource windowButton}">
                         <ma:PackIconMaterial Kind="WindowMaximize" Style="{StaticResource iconApp}" />
                     </Button>
                     <Button
                         Background="Transparent"
                         Command="{Binding CloseWindownCommand}"
-                        Style="{StaticResource closeButton}">
+                        Style="{StaticResource closeWDBtn}">
                         <ma:PackIconMaterial Kind="close" Style="{StaticResource iconApp}" />
                     </Button>
                 </StackPanel>
+
+
             </Grid>
             <Grid Grid.Row="1">
                 <ContentControl Content="{Binding CurrentViewModel}" />

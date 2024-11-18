@@ -10,7 +10,6 @@
     xmlns:ma="http://metro.mahapps.com/winfx/xaml/iconpacks"
     xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:service="clr-namespace:CafeManager.WPF.Services.Converter"
     xmlns:uc="clr-namespace:CafeManager.WPF.Assets.UsersControls"
     xmlns:view="clr-namespace:CafeManager.WPF.Views"
     d:DesignHeight="450"
@@ -21,346 +20,187 @@
         <converter:RowIndexConverter x:Key="RowIndexConverter" />
         <converter:CurrencyConverter x:Key="CurrencyConverter" />
     </UserControl.Resources>
-    <Grid Background="Transparent">
-        <Border Grid.Column="1" CornerRadius="0 0 10 0">
-            <Border.Background>
-                <LinearGradientBrush StartPoint="0,0.5" EndPoint="1,0.5">
-                    <GradientStop Offset="0" Color="#9c6d3f" />
-                    <GradientStop Offset="1" Color="#cb925d" />
-                </LinearGradientBrush>
-            </Border.Background>
+    <Grid>
 
-            <Grid Margin="20,10">
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="auto" />
-                    <RowDefinition Height="auto" />
-                    <RowDefinition Height="auto" />
-                    <RowDefinition Height="*" />
-                </Grid.RowDefinitions>
+        <Grid Margin="20,10">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="auto" />
+                <RowDefinition Height="auto" />
+                <RowDefinition Height="auto" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
 
-                <!--  Page Title  -->
+            <!--  Page Title  -->
+            <TextBlock
+                Grid.Row="0"
+                HorizontalAlignment="Left"
+                FontSize="32"
+                FontWeight="SemiBold"
+                Foreground="#dac5b4"
+                Text="Hóa đơn" />
+
+            <Separator
+                Grid.Row="1"
+                Width="200"
+                Height="1"
+                Margin="0,10,0,0"
+                HorizontalAlignment="Left"
+                Background="#f5f5f5" />
+
+            <StackPanel
+                Grid.Row="2"
+                Margin="0,10"
+                HorizontalAlignment="Right"
+                Orientation="Horizontal">
                 <TextBlock
-                    Grid.Row="0"
-                    HorizontalAlignment="Left"
-                    FontSize="32"
+                    Margin="0,0,10,0"
+                    VerticalAlignment="Center"
+                    FontSize="13"
                     FontWeight="SemiBold"
-                    Foreground="#dac5b4"
-                    Text="Hóa đơn" />
+                    Foreground="#602414"
+                    Text="Filter by" />
 
-                <Separator
-                    Grid.Row="1"
-                    Width="200"
-                    Height="1"
-                    Margin="0,10,0,0"
-                    HorizontalAlignment="Left"
-                    Background="#f5f5f5" />
-
-                <StackPanel
-                    Grid.Row="2"
-                    Margin="0,10"
-                    HorizontalAlignment="Right"
-                    Orientation="Horizontal">
+                <!--  Filter Textbox  -->
+                <Grid MinWidth="200">
                     <TextBlock
-                        Margin="0,0,10,0"
+                        Margin="15,0"
                         VerticalAlignment="Center"
-                        FontSize="13"
-                        FontWeight="SemiBold"
-                        Foreground="#602414"
-                        Text="Filter by" />
+                        Panel.ZIndex="1"
+                        Foreground="#9c6d3f"
+                        IsHitTestVisible="False"
+                        Text="Search in Members..."
+                        Visibility="{Binding ElementName=txtFilter, Path=Text.IsEmpty, Converter={StaticResource BoolToVis}}" />
+                    <TextBox x:Name="txtFilter" Style="{StaticResource textBoxFilter}" />
+                    <ma:PackIconMaterial
+                        Width="15"
+                        Height="15"
+                        Margin="0,0,15,0"
+                        HorizontalAlignment="Right"
+                        VerticalAlignment="Center"
+                        Foreground="#d5b096"
+                        Kind="Magnify" />
+                </Grid>
+            </StackPanel>
 
-                    <!--  Filter Textbox  -->
-                    <Grid MinWidth="200">
-                        <TextBlock
-                            Margin="15,0"
-                            VerticalAlignment="Center"
-                            Panel.ZIndex="1"
-                            Foreground="#9c6d3f"
-                            IsHitTestVisible="False"
-                            Text="Search in Members..."
-                            Visibility="{Binding ElementName=txtFilter, Path=Text.IsEmpty, Converter={StaticResource BoolToVis}}" />
-                        <TextBox x:Name="txtFilter" Style="{StaticResource textBoxFilter}" />
-                        <ma:PackIconMaterial
-                            Width="15"
-                            Height="15"
-                            Margin="0,0,15,0"
-                            HorizontalAlignment="Right"
-                            VerticalAlignment="Center"
-                            Foreground="#d5b096"
-                            Kind="Magnify" />
-                    </Grid>
-                </StackPanel>
+            <!--  Invoice Datagrid  -->
+            <Border
+                Grid.Row="3"
+                Width="auto"
+                Margin="0,10,0,0"
+                BorderBrush="#602414"
+                BorderThickness="2"
+                CornerRadius="10">
 
-                <!--  Invoice Datagrid  -->
-                <Border
-                    Grid.Row="3"
-                    Width="auto"
-                    Margin="0,10,0,0"
-                    BorderBrush="#602414"
-                    BorderThickness="2"
-                    CornerRadius="10">
+                <DataGrid
+                    x:Name="SuppliersDataGrid"
+                    VerticalAlignment="Top"
+                    AlternationCount="{Binding ListInvoiceDTO.Count}"
+                    CellStyle="{DynamicResource DataGridCellStyle1}"
+                    ColumnHeaderStyle="{DynamicResource DataGridColumnHeaderStyle1}"
+                    ItemsSource="{Binding ListInvoiceDTO}"
+                    RowStyle="{DynamicResource DataGridRowStyle1}"
+                    Style="{DynamicResource DataGridStyle1}">
+                    <DataGrid.Columns>
 
-                    <DataGrid
-                        x:Name="SuppliersDataGrid"
-                        VerticalAlignment="Top"
-                        AlternationCount="{Binding ListInvoice.Count}"
-                        CellStyle="{DynamicResource DataGridCellStyle1}"
-                        ColumnHeaderStyle="{DynamicResource DataGridColumnHeaderStyle1}"
-                        ItemsSource="{Binding ListInvoice}"
-                        RowStyle="{DynamicResource DataGridRowStyle1}"
-                        Style="{DynamicResource DataGridStyle1}">
-                        <DataGrid.Columns>
+                        <DataGridTextColumn
+                            Width="auto"
+                            Header="STT"
+                            IsReadOnly="True">
+                            <DataGridTextColumn.Binding>
+                                <Binding
+                                    Converter="{StaticResource RowIndexConverter}"
+                                    Path="(ItemsControl.AlternationIndex)"
+                                    RelativeSource="{RelativeSource AncestorType=DataGridRow}" />
+                            </DataGridTextColumn.Binding>
+                        </DataGridTextColumn>
+                        <DataGridTextColumn
+                            Width="*"
+                            Binding="{Binding Paymentstartdate, StringFormat=dd/MM/yyyy HH:mm}"
+                            CanUserResize="False"
+                            Header="Ngày tạo hóa đơn"
+                            IsReadOnly="True" />
+                        <DataGridTextColumn
+                            Width="*"
+                            Binding="{Binding Paymentenddate, StringFormat=dd/MM/yyyy HH:mm}"
+                            CanUserResize="False"
+                            Header="Ngày thanh toán"
+                            IsReadOnly="True" />
+                        <DataGridTextColumn
+                            Width="*"
+                            Binding="{Binding Paymentstatus}"
+                            CanUserResize="False"
+                            Header="Trạng thái"
+                            IsReadOnly="True" />
+                        <DataGridTextColumn
+                            Width="*"
+                            Binding="{Binding Paymentmethod}"
+                            CanUserResize="False"
+                            Header="Phương thức"
+                            IsReadOnly="True" />
+                        <DataGridTextColumn
+                            Width="auto"
+                            Binding="{Binding Discountinvoice, StringFormat='{}{0:0}%'}"
+                            CanUserResize="False"
+                            Header="Giảm giá"
+                            IsReadOnly="True" />
 
-                            <DataGridTextColumn
-                                Width="auto"
-                                Header="STT"
-                                IsReadOnly="True">
-                                <DataGridTextColumn.Binding>
-                                    <Binding
-                                        Converter="{StaticResource RowIndexConverter}"
-                                        Path="(ItemsControl.AlternationIndex)"
-                                        RelativeSource="{RelativeSource AncestorType=DataGridRow}" />
-                                </DataGridTextColumn.Binding>
-                            </DataGridTextColumn>
+                        <DataGridTextColumn
+                            Width="auto"
+                            Binding="{Binding StaffDTO.Staffname}"
+                            CanUserResize="False"
+                            Header="Người tạo hóa đơn"
+                            IsReadOnly="True" />
 
-                            <DataGridTextColumn
-                                Width="*"
-                                Binding="{Binding Paymentstartdate, StringFormat=dd/MM/yyyy HH:mm}"
-                                CanUserResize="False"
-                                Header="Ngày lập hóa đơn"
-                                IsReadOnly="True" />
-                            <DataGridTextColumn
-                                Width="*"
-                                Binding="{Binding Paymentenddate, StringFormat=dd/MM/yyyy HH:mm}"
-                                CanUserResize="False"
-                                Header="Ngày thanh toán hóa đơn"
-                                IsReadOnly="True" />
-                            <DataGridTextColumn
-                                Width="*"
-                                Binding="{Binding Paymentstatus}"
-                                CanUserResize="False"
-                                Header="Trạng thái"
-                                IsReadOnly="True" />
-                            <DataGridTextColumn
-                                Width="*"
-                                Binding="{Binding Paymentmethod}"
-                                CanUserResize="False"
-                                Header="Phương thức thanh toán"
-                                IsReadOnly="True" />
+                        <DataGridTextColumn
+                            Width="auto"
+                            Binding="{Binding CustomerOrTable, Mode=OneWay}"
+                            CanUserResize="False"
+                            Header="Bàn(Khách)"
+                            IsReadOnly="True" />
 
-                            <DataGridTextColumn
-                                Width="*"
-                                Binding="{Binding Discountinvoice, StringFormat='{}{0:0}%'}"
-                                CanUserResize="False"
-                                Header="Giảm giá"
-                                IsReadOnly="True" />
-
-                            <DataGridTemplateColumn
-                                Width="auto"
-                                Header="Tùy chỉnh"
-                                IsReadOnly="True">
-                                <DataGridTemplateColumn.CellTemplate>
-                                    <DataTemplate>
-                                        <StackPanel Orientation="Horizontal">
-                                            <Button
-                                                Command="{Binding DataContext.UpdateInvoiceCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
-                                                CommandParameter="{Binding}"
-                                                Style="{StaticResource gridEditButton}">
-                                                <ma:PackIconMaterial Kind="PencilOutline" Style="{StaticResource gridButtonIcon}" />
-                                            </Button>
-                                            <Button
-                                                Margin="5,0,0,0"
-                                                Command="{Binding DataContext.DeleteInvoiceCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
-                                                CommandParameter="{Binding}"
-                                                Style="{StaticResource gridRemoveButton}">
-                                                <ma:PackIconMaterial Kind="DeleteOutline" Style="{StaticResource gridButtonIcon}" />
-                                            </Button>
-                                        </StackPanel>
-                                    </DataTemplate>
-                                </DataGridTemplateColumn.CellTemplate>
-                            </DataGridTemplateColumn>
-                        </DataGrid.Columns>
-                    </DataGrid>
-                </Border>
-            </Grid>
-        </Border>
+                        <DataGridTemplateColumn
+                            Width="auto"
+                            Header="Tùy chỉnh"
+                            IsReadOnly="True">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <StackPanel Orientation="Horizontal">
+                                        <Button
+                                            Command="{Binding DataContext.UpdateInvoiceCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                            CommandParameter="{Binding}"
+                                            Style="{StaticResource gridEditButton}">
+                                            <ma:PackIconMaterial Kind="PencilOutline" Style="{StaticResource gridButtonIcon}" />
+                                        </Button>
+                                        <Button
+                                            Margin="5,0,0,0"
+                                            Command="{Binding DataContext.DeleteInvoiceCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                            CommandParameter="{Binding}"
+                                            Style="{StaticResource gridRemoveButton}">
+                                            <ma:PackIconMaterial Kind="DeleteOutline" Style="{StaticResource gridButtonIcon}" />
+                                        </Button>
+                                    </StackPanel>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                    </DataGrid.Columns>
+                </DataGrid>
+            </Border>
+        </Grid>
 
         <materialDesign:DialogHost
             Background="Transparent"
             DialogTheme="Inherit"
-            IsOpen="{Binding IsOpenUpdateInvoice}"
+            IsOpen="{Binding IsOpenModifyInvoiceVM}"
             OverlayBackground="{DynamicResource PrimaryHueDarkBrush}"
             Placement="Mouse"
             Style="{StaticResource MaterialDesignEmbeddedDialogHost}">
+
+            <materialDesign:DialogHost.DialogBackground>
+                <SolidColorBrush Color="Transparent" />
+            </materialDesign:DialogHost.DialogBackground>
+
             <materialDesign:DialogHost.DialogContent>
-                <StackPanel>
-                    <Button
-                        HorizontalAlignment="Right"
-                        Background="OrangeRed"
-                        Command="{Binding CloseUpdateInvoiceCommand}">
-                        <materialDesign:PackIcon Kind="Close" />
-                    </Button>
-                    <Grid>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="auto" />
-                            <ColumnDefinition Width="*" />
-                        </Grid.ColumnDefinitions>
-                        <GroupBox
-                            Grid.Column="0"
-                            Margin="10"
-                            materialDesign:ElevationAssist.Elevation="Dp6"
-                            Header="Thông tin hóa đơn"
-                            Style="{StaticResource MaterialDesignCardGroupBox}">
-
-                            <Grid MinWidth="400">
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="150" />
-                                    <ColumnDefinition Width="*" />
-                                    <ColumnDefinition Width="*" />
-                                </Grid.ColumnDefinitions>
-
-                                <Grid.RowDefinitions>
-                                    <RowDefinition Height="auto" />
-                                    <RowDefinition Height="auto" />
-                                    <RowDefinition Height="auto" />
-                                    <RowDefinition Height="auto" />
-                                    <RowDefinition Height="auto" />
-                                </Grid.RowDefinitions>
-
-                                <TextBlock
-                                    Grid.Row="0"
-                                    Grid.Column="0"
-                                    VerticalAlignment="Center"
-                                    Text="Ngày bắt đầu hóa đơn" />
-                                <DatePicker
-                                    Grid.Row="0"
-                                    Grid.Column="1"
-                                    MinWidth="140"
-                                    Margin="5"
-                                    BorderThickness="2"
-                                    SelectedDate="{Binding Paymentstartdate, StringFormat=dd-MM-yyyy}"
-                                    Style="{StaticResource MaterialDesignOutlinedDatePicker}" />
-
-                                <materialDesign:TimePicker
-                                    Grid.Row="0"
-                                    Grid.Column="2"
-                                    MinWidth="140"
-                                    Margin="5"
-                                    Is24Hours="True"
-                                    SelectedTime="{Binding Paymentstartdate}"
-                                    Style="{StaticResource MaterialDesignOutlinedTimePicker}" />
-
-                                <TextBlock
-                                    Grid.Row="1"
-                                    Grid.Column="0"
-                                    VerticalAlignment="Center"
-                                    Text="Ngày thanh toán hóa đơn" />
-                                <DatePicker
-                                    Grid.Row="1"
-                                    Grid.Column="1"
-                                    MinWidth="140"
-                                    Margin="5"
-                                    BorderThickness="2"
-                                    SelectedDate="{Binding Paymentenddate}"
-                                    Style="{StaticResource MaterialDesignOutlinedDatePicker}" />
-                                <materialDesign:TimePicker
-                                    Grid.Row="1"
-                                    Grid.Column="2"
-                                    MinWidth="140"
-                                    Margin="5"
-                                    Is24Hours="True"
-                                    SelectedTime="{Binding Paymentenddate}"
-                                    Style="{StaticResource MaterialDesignOutlinedTimePicker}" />
-
-                                <TextBlock
-                                    Grid.Row="2"
-                                    Grid.Column="0"
-                                    VerticalAlignment="Center"
-                                    Text="Trạng thái hóa đơn" />
-                                <TextBox
-                                    Grid.Row="2"
-                                    Grid.Column="1"
-                                    Grid.ColumnSpan="2"
-                                    MinWidth="300"
-                                    Margin="5"
-                                    Style="{StaticResource MaterialDesignOutlinedTextBox}"
-                                    Text="{Binding Paymentstatus}" />
-
-                                <TextBlock
-                                    Grid.Row="3"
-                                    Grid.Column="0"
-                                    VerticalAlignment="Center"
-                                    Text="Phương thức thanh toán" />
-                                <TextBox
-                                    Grid.Row="3"
-                                    Grid.Column="1"
-                                    Grid.ColumnSpan="2"
-                                    Margin="5"
-                                    VerticalAlignment="Top"
-                                    Style="{StaticResource MaterialDesignOutlinedTextBox}"
-                                    Text="{Binding Paymentmethod}" />
-
-                                <TextBlock
-                                    Grid.Row="4"
-                                    Grid.Column="0"
-                                    VerticalAlignment="Center"
-                                    Text="Giảm giá(%)" />
-                                <TextBox
-                                    Grid.Row="4"
-                                    Grid.Column="1"
-                                    Grid.ColumnSpan="2"
-                                    Margin="5"
-                                    VerticalAlignment="Top"
-                                    Style="{StaticResource MaterialDesignOutlinedTextBox}"
-                                    Text="{Binding Discountinvoice, StringFormat='{}{0:0}'}" />
-                            </Grid>
-                        </GroupBox>
-                        <GroupBox
-                            Grid.Column="1"
-                            Margin="10"
-                            materialDesign:ElevationAssist.Elevation="Dp6"
-                            Header="Chi tiết hóa đơn"
-                            Style="{StaticResource MaterialDesignCardGroupBox}">
-                            <Grid VerticalAlignment="Stretch">
-                                <Grid.RowDefinitions>
-                                    <RowDefinition Height="*" />
-                                    <RowDefinition Height="auto" />
-                                </Grid.RowDefinitions>
-                                <ListView Grid.Row="0" ItemsSource="{Binding ListInvoiceDetails}">
-                                    <ListView.View>
-                                        <GridView>
-                                            <GridViewColumn DisplayMemberBinding="{Binding Food.Foodname}" Header="Món ăn" />
-                                            <GridViewColumn DisplayMemberBinding="{Binding Food.Price, Converter={StaticResource CurrencyConverter}}" Header="Giá món ăn" />
-                                            <GridViewColumn DisplayMemberBinding="{Binding Food.Discountfood, StringFormat='{}{0:0}%'}" Header="Giảm giá món ăn" />
-                                            <GridViewColumn DisplayMemberBinding="{Binding Quantity}" Header="Số lượng" />
-                                        </GridView>
-                                    </ListView.View>
-                                </ListView>
-
-                                <StackPanel
-                                    Grid.Row="1"
-                                    HorizontalAlignment="Right"
-                                    Orientation="Horizontal">
-                                    <TextBlock
-                                        Margin="0,0,20,0"
-                                        VerticalAlignment="Center"
-                                        FontSize="20"
-                                        FontWeight="Bold"
-                                        Text="Thành tiền:" />
-                                    <TextBlock
-                                        VerticalAlignment="Center"
-                                        FontSize="20"
-                                        FontWeight="Bold"
-                                        Text="{Binding TotalPrice, Converter={StaticResource CurrencyConverter}}" />
-                                </StackPanel>
-                            </Grid>
-                        </GroupBox>
-                    </Grid>
-                    <Button
-                        Margin="10"
-                        HorizontalAlignment="Right"
-                        Command="{Binding SubmitCommand}"
-                        Content="Xác nhận" />
-                </StackPanel>
+                <ContentControl Content="{Binding ModifyInvoiceVM}" />
             </materialDesign:DialogHost.DialogContent>
         </materialDesign:DialogHost>
     </Grid>

@@ -18,9 +18,9 @@ namespace CafeManager.WPF.Views.AddUpdateView
     /// <summary>
     /// Interaction logic for AddInvoiceView.xaml
     /// </summary>
-    public partial class AddInvoiceView : UserControl
+    public partial class ModifyInvoiceView : UserControl
     {
-        public AddInvoiceView()
+        public ModifyInvoiceView()
         {
             InitializeComponent();
         }

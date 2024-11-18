@@ -12,287 +12,277 @@
     d:DesignHeight="740"
     d:DesignWidth="1030"
     mc:Ignorable="d">
+
     <Grid>
-        <Border CornerRadius="0 0 10 0">
-            <Border.Background>
-                <LinearGradientBrush StartPoint="0,0.5" EndPoint="1,0.5">
-                    <GradientStop Offset="0" Color="#9c6d3f" />
-                    <GradientStop Offset="1" Color="#cb925d" />
-                </LinearGradientBrush>
-            </Border.Background>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto" />
+            <RowDefinition Height="auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
 
-            <Grid>
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="auto" />
-                    <RowDefinition Height="auto" />
-                    <RowDefinition Height="*" />
-                </Grid.RowDefinitions>
+        <!--  top menu  -->
+        <StackPanel
+            Grid.Row="0"
+            Margin="0,10,40,10"
+            HorizontalAlignment="Right"
+            VerticalAlignment="Bottom"
+            Orientation="Horizontal">
+            <RadioButton Content="Today" Style="{StaticResource topMenuButton}" />
+            <RadioButton Content="Week" Style="{StaticResource topMenuButton}" />
+            <RadioButton Content="Month" Style="{StaticResource topMenuButton}" />
+            <RadioButton Content="Year" Style="{StaticResource topMenuButton}" />
+        </StackPanel>
 
-                <!--  top menu  -->
-                <StackPanel
-                    Grid.Row="0"
-                    Margin="0,10,40,10"
-                    HorizontalAlignment="Right"
-                    VerticalAlignment="Bottom"
-                    Orientation="Horizontal">
-                    <RadioButton Content="Today" Style="{StaticResource topMenuButton}" />
-                    <RadioButton Content="Week" Style="{StaticResource topMenuButton}" />
-                    <RadioButton Content="Month" Style="{StaticResource topMenuButton}" />
-                    <RadioButton Content="Year" Style="{StaticResource topMenuButton}" />
-                </StackPanel>
+        <!--  info card  -->
+        <Grid Grid.Row="1" Margin="50,10,10,20">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
 
-                <!--  info card  -->
-                <Grid Grid.Row="1" Margin="50,10,10,20">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*" />
-                        <ColumnDefinition Width="*" />
-                        <ColumnDefinition Width="*" />
-                    </Grid.ColumnDefinitions>
+            <uc:InfoCard
+                Title="Tổng nước tiêu thụ"
+                Grid.Column="0"
+                Background1="#0044ff"
+                Background2="#69c6ff"
+                EllipseBackground1="#9cdaff"
+                EllipseBackground2="#02a0ff"
+                Icon="GlassMartini"
+                Number="886,947" />
+            <uc:InfoCard
+                Title="Tổng số hóa đơn"
+                Grid.Column="1"
+                Background1="#fd8a87"
+                Background2="#f3ab92"
+                EllipseBackground1="#fbd5a8"
+                EllipseBackground2="#fdb89b"
+                Icon="ShoppingCart"
+                Number="83,947" />
+            <uc:InfoCard
+                Title="Tổng doanh thu"
+                Grid.Column="2"
+                Background1="#efb606"
+                Background2="#fcfe72"
+                EllipseBackground1="#eddb53"
+                EllipseBackground2="#fbf5a1"
+                Icon="Coins"
+                Number="$123,947" />
+        </Grid>
 
-                    <uc:InfoCard
-                        Title="Tổng nước tiêu thụ"
-                        Grid.Column="0"
-                        Background1="#0044ff"
-                        Background2="#69c6ff"
-                        EllipseBackground1="#9cdaff"
-                        EllipseBackground2="#02a0ff"
-                        Icon="GlassMartini"
-                        Number="886,947" />
-                    <uc:InfoCard
-                        Title="Tổng số hóa đơn"
-                        Grid.Column="1"
-                        Background1="#fd8a87"
-                        Background2="#f3ab92"
-                        EllipseBackground1="#fbd5a8"
-                        EllipseBackground2="#fdb89b"
-                        Icon="ShoppingCart"
-                        Number="83,947" />
-                    <uc:InfoCard
-                        Title="Tổng doanh thu"
-                        Grid.Column="2"
-                        Background1="#efb606"
-                        Background2="#fcfe72"
-                        EllipseBackground1="#eddb53"
-                        EllipseBackground2="#fbf5a1"
-                        Icon="Coins"
-                        Number="$123,947" />
-                </Grid>
+        <Grid Grid.Row="2">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="auto" />
+            </Grid.ColumnDefinitions>
 
-                <Grid Grid.Row="2">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*" />
-                        <ColumnDefinition Width="auto" />
-                    </Grid.ColumnDefinitions>
+            <!--  chart section  -->
+            <Border
+                Margin="50,0,10,10"
+                Padding="35,25"
+                Background="#9b432b"
+                CornerRadius="20">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="auto" />
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
 
-                    <!--  chart section  -->
-                    <Border
-                        Margin="50,0,10,10"
-                        Padding="35,25"
-                        Background="#9b432b"
-                        CornerRadius="20">
-                        <Grid>
-                            <Grid.RowDefinitions>
-                                <RowDefinition Height="auto" />
-                                <RowDefinition Height="*" />
-                            </Grid.RowDefinitions>
+                    <StackPanel Margin="20,0,0,15" Orientation="Horizontal">
+                        <fa:IconImage Icon="Circle" Style="{StaticResource titleIcon}" />
+                        <TextBlock Style="{StaticResource titleText}" Text="Profit" />
+                    </StackPanel>
 
-                            <StackPanel Margin="20,0,0,15" Orientation="Horizontal">
-                                <fa:IconImage Icon="Circle" Style="{StaticResource titleIcon}" />
-                                <TextBlock Style="{StaticResource titleText}" Text="Profit" />
-                            </StackPanel>
+                    <StackPanel
+                        Grid.Row="1"
+                        Margin="0,0,0,25"
+                        HorizontalAlignment="Left"
+                        VerticalAlignment="Bottom">
+                        <TextBlock
+                            Margin="0,0,0,25"
+                            Foreground="#dac5b4"
+                            Text="700000" />
+                        <TextBlock
+                            Margin="0,0,0,25"
+                            Foreground="#dac5b4"
+                            Text="600000" />
+                        <TextBlock
+                            Margin="0,0,0,25"
+                            Foreground="#dac5b4"
+                            Text="500000" />
+                        <TextBlock
+                            Margin="0,0,0,25"
+                            Foreground="#dac5b4"
+                            Text="400000" />
+                        <TextBlock
+                            Margin="0,0,0,25"
+                            Foreground="#dac5b4"
+                            Text="300000" />
+                        <TextBlock
+                            Margin="0,0,0,25"
+                            Foreground="#dac5b4"
+                            Text="200000" />
+                        <TextBlock
+                            Margin="0,0,0,25"
+                            Foreground="#dac5b4"
+                            Text="100000" />
+                        <TextBlock
+                            HorizontalAlignment="Right"
+                            Foreground="#dac5b4"
+                            Text="0" />
+                    </StackPanel>
 
-                            <StackPanel
-                                Grid.Row="1"
-                                Margin="0,0,0,25"
-                                HorizontalAlignment="Left"
-                                VerticalAlignment="Bottom">
-                                <TextBlock
-                                    Margin="0,0,0,25"
-                                    Foreground="#dac5b4"
-                                    Text="700000" />
-                                <TextBlock
-                                    Margin="0,0,0,25"
-                                    Foreground="#dac5b4"
-                                    Text="600000" />
-                                <TextBlock
-                                    Margin="0,0,0,25"
-                                    Foreground="#dac5b4"
-                                    Text="500000" />
-                                <TextBlock
-                                    Margin="0,0,0,25"
-                                    Foreground="#dac5b4"
-                                    Text="400000" />
-                                <TextBlock
-                                    Margin="0,0,0,25"
-                                    Foreground="#dac5b4"
-                                    Text="300000" />
-                                <TextBlock
-                                    Margin="0,0,0,25"
-                                    Foreground="#dac5b4"
-                                    Text="200000" />
-                                <TextBlock
-                                    Margin="0,0,0,25"
-                                    Foreground="#dac5b4"
-                                    Text="100000" />
-                                <TextBlock
-                                    HorizontalAlignment="Right"
-                                    Foreground="#dac5b4"
-                                    Text="0" />
-                            </StackPanel>
+                    <StackPanel
+                        Grid.Row="1"
+                        Margin="50,0,0,0"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Bottom"
+                        Orientation="Horizontal">
+                        <TextBlock Foreground="#dac5b4" Text="1" />
+                        <TextBlock
+                            Margin="41,0,0,0"
+                            Foreground="#dac5b4"
+                            Text="2" />
+                        <TextBlock
+                            Margin="41,0,0,0"
+                            Foreground="#dac5b4"
+                            Text="3" />
+                        <TextBlock
+                            Margin="41,0,0,0"
+                            Foreground="#dac5b4"
+                            Text="4" />
+                        <TextBlock
+                            Margin="41,0,0,0"
+                            Foreground="#dac5b4"
+                            Text="5" />
+                        <TextBlock
+                            Margin="41,0,0,0"
+                            Foreground="#dac5b4"
+                            Text="6" />
+                        <TextBlock
+                            Margin="41,0,0,0"
+                            Foreground="#dac5b4"
+                            Text="7" />
+                        <TextBlock
+                            Margin="41,0,0,0"
+                            Foreground="#dac5b4"
+                            Text="8" />
+                        <TextBlock
+                            Margin="41,0,0,0"
+                            Foreground="#dac5b4"
+                            Text="9" />
+                        <TextBlock
+                            Margin="41,0,0,0"
+                            Foreground="#dac5b4"
+                            Text="10" />
+                        <TextBlock
+                            Margin="41,0,0,0"
+                            Foreground="#dac5b4"
+                            Text="11" />
+                        <TextBlock
+                            Margin="41,0,0,0"
+                            Foreground="#dac5b4"
+                            Text="12" />
+                    </StackPanel>
 
-                            <StackPanel
-                                Grid.Row="1"
-                                Margin="50,0,0,0"
-                                HorizontalAlignment="Center"
-                                VerticalAlignment="Bottom"
-                                Orientation="Horizontal">
-                                <TextBlock Foreground="#dac5b4" Text="1" />
-                                <TextBlock
-                                    Margin="41,0,0,0"
-                                    Foreground="#dac5b4"
-                                    Text="2" />
-                                <TextBlock
-                                    Margin="41,0,0,0"
-                                    Foreground="#dac5b4"
-                                    Text="3" />
-                                <TextBlock
-                                    Margin="41,0,0,0"
-                                    Foreground="#dac5b4"
-                                    Text="4" />
-                                <TextBlock
-                                    Margin="41,0,0,0"
-                                    Foreground="#dac5b4"
-                                    Text="5" />
-                                <TextBlock
-                                    Margin="41,0,0,0"
-                                    Foreground="#dac5b4"
-                                    Text="6" />
-                                <TextBlock
-                                    Margin="41,0,0,0"
-                                    Foreground="#dac5b4"
-                                    Text="7" />
-                                <TextBlock
-                                    Margin="41,0,0,0"
-                                    Foreground="#dac5b4"
-                                    Text="8" />
-                                <TextBlock
-                                    Margin="41,0,0,0"
-                                    Foreground="#dac5b4"
-                                    Text="9" />
-                                <TextBlock
-                                    Margin="41,0,0,0"
-                                    Foreground="#dac5b4"
-                                    Text="10" />
-                                <TextBlock
-                                    Margin="41,0,0,0"
-                                    Foreground="#dac5b4"
-                                    Text="11" />
-                                <TextBlock
-                                    Margin="41,0,0,0"
-                                    Foreground="#dac5b4"
-                                    Text="12" />
-                            </StackPanel>
+                    <!--  chart  -->
+                    <lvc:CartesianChart Grid.Row="1" Margin="45,0,0,25">
+                        <lvc:CartesianChart.Background>
+                            <LinearGradientBrush StartPoint="0.5,0" EndPoint="0.5,1">
+                                <GradientStop Offset="0" Color="#9b442a" />
+                                <GradientStop Offset="1" Color="#d5b096" />
+                            </LinearGradientBrush>
+                        </lvc:CartesianChart.Background>
 
-                            <!--  chart  -->
-                            <lvc:CartesianChart Grid.Row="1" Margin="45,0,0,25">
-                                <lvc:CartesianChart.Background>
+                        <lvc:CartesianChart.DataTooltip>
+                            <lvc:DefaultTooltip Background="#844518" Foreground="#dac5b4" />
+                        </lvc:CartesianChart.DataTooltip>
+
+                        <lvc:CartesianChart.AxisX>
+                            <lvc:Axis
+                                Foreground="#dac5b4"
+                                MaxValue="5"
+                                MinValue="0"
+                                ShowLabels="False">
+                                <lvc:Axis.Separator>
+                                    <lvc:Separator StrokeThickness="0" />
+                                </lvc:Axis.Separator>
+                            </lvc:Axis>
+                        </lvc:CartesianChart.AxisX>
+
+                        <lvc:CartesianChart.AxisY>
+                            <lvc:Axis
+                                Foreground="#dac5b4"
+                                MaxValue="60000"
+                                MinValue="0"
+                                ShowLabels="False">
+                                <lvc:Axis.Separator>
+                                    <lvc:Separator StrokeThickness="0" />
+                                </lvc:Axis.Separator>
+                            </lvc:Axis>
+                        </lvc:CartesianChart.AxisY>
+
+                        <lvc:CartesianChart.Series>
+                            <lvc:LineSeries
+                                PointGeometrySize="0"
+                                Stroke="#9b442a"
+                                StrokeThickness="0"
+                                Values="20000, 17000, 30000, 15000, 50000, 30000, 20000">
+                                <lvc:LineSeries.Fill>
                                     <LinearGradientBrush StartPoint="0.5,0" EndPoint="0.5,1">
-                                        <GradientStop Offset="0" Color="#9b442a" />
-                                        <GradientStop Offset="1" Color="#d5b096" />
+                                        <GradientStop Offset="0.5" Color="#d5b096" />
+                                        <GradientStop Offset="1" Color="#dcd1c3" />
                                     </LinearGradientBrush>
-                                </lvc:CartesianChart.Background>
-
-                                <lvc:CartesianChart.DataTooltip>
-                                    <lvc:DefaultTooltip Background="#844518" Foreground="#dac5b4" />
-                                </lvc:CartesianChart.DataTooltip>
-
-                                <lvc:CartesianChart.AxisX>
-                                    <lvc:Axis
-                                        Foreground="#dac5b4"
-                                        MaxValue="5"
-                                        MinValue="0"
-                                        ShowLabels="False">
-                                        <lvc:Axis.Separator>
-                                            <lvc:Separator StrokeThickness="0" />
-                                        </lvc:Axis.Separator>
-                                    </lvc:Axis>
-                                </lvc:CartesianChart.AxisX>
-
-                                <lvc:CartesianChart.AxisY>
-                                    <lvc:Axis
-                                        Foreground="#dac5b4"
-                                        MaxValue="60000"
-                                        MinValue="0"
-                                        ShowLabels="False">
-                                        <lvc:Axis.Separator>
-                                            <lvc:Separator StrokeThickness="0" />
-                                        </lvc:Axis.Separator>
-                                    </lvc:Axis>
-                                </lvc:CartesianChart.AxisY>
-
-                                <lvc:CartesianChart.Series>
-                                    <lvc:LineSeries
-                                        PointGeometrySize="0"
-                                        Stroke="#9b442a"
-                                        StrokeThickness="0"
-                                        Values="20000, 17000, 30000, 15000, 50000, 30000, 20000">
-                                        <lvc:LineSeries.Fill>
-                                            <LinearGradientBrush StartPoint="0.5,0" EndPoint="0.5,1">
-                                                <GradientStop Offset="0.5" Color="#d5b096" />
-                                                <GradientStop Offset="1" Color="#dcd1c3" />
-                                            </LinearGradientBrush>
-                                        </lvc:LineSeries.Fill>
-                                    </lvc:LineSeries>
-                                </lvc:CartesianChart.Series>
-                            </lvc:CartesianChart>
-                        </Grid>
-                    </Border>
-
-                    <!--  orders section  -->
-                    <Border
-                        Grid.Column="1"
-                        Margin="15,0,40,10"
-                        Padding="0,15"
-                        Background="#9b432b"
-                        CornerRadius="20">
-                        <Grid>
-                            <Grid.RowDefinitions>
-                                <RowDefinition Height="auto" />
-                                <RowDefinition Height="*" />
-                            </Grid.RowDefinitions>
-
-                            <StackPanel Margin="20,0,0,15" Orientation="Horizontal">
-                                <fa:IconImage Icon="Circle" Style="{StaticResource titleIcon}" />
-                                <TextBlock Style="{StaticResource titleText}" Text="Last Orders" />
-                            </StackPanel>
-
-                            <!--  orders  -->
-                            <StackPanel Grid.Row="1" Margin="0,0,0,-15">
-                                <uc:Order
-                                    Title="T-shirt"
-                                    Desc="qvc1 - 10:30"
-                                    Icon="Tshirt" />
-                                <uc:Order
-                                    Title="Shoes Kaomin"
-                                    Desc="qvc2 - 12:30"
-                                    Icon="ShoePrints" />
-                                <uc:Order
-                                    Title="Socks Besaze"
-                                    Desc="qvc3 - 13:45"
-                                    Icon="Socks" />
-                                <uc:Order
-                                    Title="T-shirt Argok"
-                                    Desc="qvc3 - 14:30"
-                                    Icon="Tshirt" />
-                                <uc:Order
-                                    Title="Hat Bill"
-                                    Desc="qvc4 - 15:30"
-                                    Icon="HardHat" />
-                            </StackPanel>
-                        </Grid>
-                    </Border>
+                                </lvc:LineSeries.Fill>
+                            </lvc:LineSeries>
+                        </lvc:CartesianChart.Series>
+                    </lvc:CartesianChart>
                 </Grid>
-            </Grid>
-        </Border>
+            </Border>
+
+            <!--  orders section  -->
+            <Border
+                Grid.Column="1"
+                Margin="15,0,40,10"
+                Padding="0,15"
+                Background="#9b432b"
+                CornerRadius="20">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="auto" />
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
+
+                    <StackPanel Margin="20,0,0,15" Orientation="Horizontal">
+                        <fa:IconImage Icon="Circle" Style="{StaticResource titleIcon}" />
+                        <TextBlock Style="{StaticResource titleText}" Text="Last Orders" />
+                    </StackPanel>
+
+                    <!--  orders  -->
+                    <StackPanel Grid.Row="1" Margin="0,0,0,-15">
+                        <uc:Order
+                            Title="T-shirt"
+                            Desc="qvc1 - 10:30"
+                            Icon="Tshirt" />
+                        <uc:Order
+                            Title="Shoes Kaomin"
+                            Desc="qvc2 - 12:30"
+                            Icon="ShoePrints" />
+                        <uc:Order
+                            Title="Socks Besaze"
+                            Desc="qvc3 - 13:45"
+                            Icon="Socks" />
+                        <uc:Order
+                            Title="T-shirt Argok"
+                            Desc="qvc3 - 14:30"
+                            Icon="Tshirt" />
+                        <uc:Order
+                            Title="Hat Bill"
+                            Desc="qvc4 - 15:30"
+                            Icon="HardHat" />
+                    </StackPanel>
+                </Grid>
+            </Border>
+        </Grid>
     </Grid>
 </UserControl>

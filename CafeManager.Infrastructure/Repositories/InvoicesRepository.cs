@@ -23,12 +23,14 @@ namespace CafeManager.Infrastructure.Repositories
                 .Include(x => x.Coffeetable)
                 .Include(x => x.Invoicedetails)
                 .ThenInclude(x => x.Food)
+                .Include(x => x.Staff)
                 .ToListAsync();
         }
 
         public async Task<IEnumerable<Invoicedetail>?> GetAllInvoiceDetailByInvoiceIdAsync(int id)
         {
             var res = await _cafeManagerContext.Invoices.Where(x => x.Isdeleted == false)
+                .Include(x => x.Coffeetable)
                 .Include(x => x.Invoicedetails).ThenInclude(x => x.Food)
                 .Include(x => x.Staff)
                 .FirstOrDefaultAsync(x => x.Invoiceid == id);

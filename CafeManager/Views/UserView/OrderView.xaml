@@ -8,8 +8,6 @@
     xmlns:local="clr-namespace:CafeManager.WPF.Views.UserView"
     xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    d:DesignHeight="450"
-    d:DesignWidth="800"
     mc:Ignorable="d">
     <UserControl.Resources>
         <converter:CurrencyConverter x:Key="CurrencyConverter" />
@@ -26,10 +24,7 @@
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
 
-        <materialDesign:Card
-            Grid.Column="0"
-            materialDesign:ElevationAssist.Elevation="Dp24"
-            UniformCornerRadius="10">
+        <materialDesign:Card Grid.Column="0" UniformCornerRadius="10">
             <TabControl
                 HorizontalContentAlignment="Left"
                 Background="Transparent"
@@ -49,11 +44,11 @@
                                         BorderBrush="Wheat"
                                         BorderThickness="2"
                                         CornerRadius="10">
-                                        <!--<i:Interaction.Triggers>
-                                                <i:EventTrigger EventName="MouseLeftButtonDown">
-                                                    <i:InvokeCommandAction Command="{Binding DataContext.ChooseTableCommand, RelativeSource={RelativeSource AncestorType=local:MainUserView}}" CommandParameter="{Binding}" />
-                                                </i:EventTrigger>
-                                            </i:Interaction.Triggers>-->
+                                        <i:Interaction.Triggers>
+                                            <i:EventTrigger EventName="MouseLeftButtonDown">
+                                                <i:InvokeCommandAction Command="{Binding DataContext.ChooseTableCommand, RelativeSource={RelativeSource AncestorType=local:OrderView}}" CommandParameter="{Binding}" />
+                                            </i:EventTrigger>
+                                        </i:Interaction.Triggers>
 
                                         <Grid Background="Transparent">
                                             <Grid.RowDefinitions>
@@ -100,16 +95,14 @@
                                 FontSize="16"
                                 Text="Danh mục món ăn:   " />
                             <ComboBox
-                                Width="150"
                                 Name="cbFoodCategory"
+                                Width="150"
                                 ItemsSource="{Binding ListFoodCategoryDTO}"
                                 SelectedItem="{Binding SelectedFoodCategory}"
                                 Style="{StaticResource MaterialDesignOutlinedComboBox}">
                                 <i:Interaction.Triggers>
                                     <i:EventTrigger EventName="SelectionChanged">
-                                        <i:InvokeCommandAction
-                                            Command="{Binding DataContext.SeletedFoodCategoryChangedCommand, RelativeSource={RelativeSource AncestorType=local:OrderView}}"
-                                            CommandParameter="{Binding ElementName=cbFoodCategory, Path=SelectedItem}" />
+                                        <i:InvokeCommandAction Command="{Binding DataContext.SeletedFoodCategoryChangedCommand, RelativeSource={RelativeSource AncestorType=local:OrderView}}" CommandParameter="{Binding ElementName=cbFoodCategory, Path=SelectedItem}" />
                                     </i:EventTrigger>
                                 </i:Interaction.Triggers>
                                 <ComboBox.ItemTemplate>
@@ -136,11 +129,11 @@
                                             BorderBrush="Wheat"
                                             BorderThickness="2"
                                             CornerRadius="10">
-                                            <!--<i:Interaction.Triggers>
-                                                    <i:EventTrigger EventName="MouseLeftButtonDown">
-                                                        <i:InvokeCommandAction Command="{Binding DataContext.ChooseFoodCommand, RelativeSource={RelativeSource AncestorType=local:MainUserView}}" CommandParameter="{Binding}" />
-                                                    </i:EventTrigger>
-                                                </i:Interaction.Triggers>-->
+                                            <i:Interaction.Triggers>
+                                                <i:EventTrigger EventName="MouseLeftButtonDown">
+                                                    <i:InvokeCommandAction Command="{Binding DataContext.ChooseFoodCommand, RelativeSource={RelativeSource AncestorType=local:OrderView}}" CommandParameter="{Binding}" />
+                                                </i:EventTrigger>
+                                            </i:Interaction.Triggers>
 
                                             <Grid>
                                                 <Grid Background="Transparent">
@@ -198,7 +191,6 @@
         <materialDesign:Card
             Grid.Column="1"
             Margin="10,0,0,0"
-            materialDesign:ElevationAssist.Elevation="Dp24"
             UniformCornerRadius="10">
             <Grid>
                 <Grid.RowDefinitions>
@@ -248,17 +240,28 @@
                                     Margin="5,0,0,0"
                                     VerticalAlignment="Center"
                                     FontSize="20"
-                                    Text="{Binding SelectedTable}" />
+                                    Text="{Binding SelectedInvoiceDTO.CoffeetableDTO.TableName}" />
                             </StackPanel>
                         </Border>
 
                         <StackPanel Grid.Column="2" VerticalAlignment="Center">
                             <ComboBox
-                                MinWidth="150"
+                                MinWidth="120"
                                 Margin="5,0,0,0"
                                 VerticalAlignment="Center"
                                 materialDesign:HintAssist.Hint="Nhân viên tạo hóa đơn"
-                                FontSize="16" />
+                                FontSize="16"
+                                ItemsSource="{Binding ListStaffDTO}"
+                                SelectedItem="{Binding SelectedStaffDTO}">
+                                <ComboBox.ItemTemplate>
+                                    <DataTemplate>
+                                        <TextBlock
+                                            VerticalAlignment="Center"
+                                            FontSize="14"
+                                            Text="{Binding Staffname}" />
+                                    </DataTemplate>
+                                </ComboBox.ItemTemplate>
+                            </ComboBox>
                         </StackPanel>
 
                         <Button
@@ -275,10 +278,10 @@
                         BorderThickness="2"
                         CornerRadius="10">
                         <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
-                            <ListView HorizontalAlignment="Stretch" ItemsSource="{Binding CurrentInvoice.ListInvoiceDTO}">
+                            <ListView HorizontalAlignment="Stretch" ItemsSource="{Binding SelectedInvoiceDTO.ListInvoiceDetailDTO}">
                                 <ListView.View>
                                     <GridView>
-                                        <GridViewColumn DisplayMemberBinding="{Binding FoodName}" Header="Tên món" />
+                                        <GridViewColumn DisplayMemberBinding="{Binding FoodDTO.Foodname}" Header="Tên món" />
                                         <GridViewColumn Header="Số lượng">
                                             <GridViewColumn.CellTemplate>
                                                 <DataTemplate>
@@ -305,18 +308,18 @@
                                                 </DataTemplate>
                                             </GridViewColumn.CellTemplate>
                                         </GridViewColumn>
-                                        <GridViewColumn DisplayMemberBinding="{Binding Price, StringFormat={}{0:00}}" Header="Đơn giá" />
+                                        <GridViewColumn DisplayMemberBinding="{Binding FoodDTO.PriceDiscount, StringFormat={}{0:00}}" Header="Đơn giá" />
                                         <GridViewColumn Header="Options">
                                             <GridViewColumn.CellTemplate>
                                                 <DataTemplate>
-                                                    <!--<Button
-                                                    Background="Transparent"
-                                                    BorderBrush="Transparent"
-                                                    BorderThickness="0"
-                                                    Command="{Binding DataContext.DeleteFoodCommand, RelativeSource={RelativeSource AncestorType=local:MainUserView}}"
-                                                    CommandParameter="{Binding}">
+                                                    <Button
+                                                        Background="Transparent"
+                                                        BorderBrush="Transparent"
+                                                        BorderThickness="0"
+                                                        Command="{Binding DataContext.DeleteFoodCommand, RelativeSource={RelativeSource AncestorType=local:OrderView}}"
+                                                        CommandParameter="{Binding}">
                                                         <materialDesign:PackIcon Foreground="Brown" Kind="Delete" />
-                                                    </Button>-->
+                                                    </Button>
                                                 </DataTemplate>
                                             </GridViewColumn.CellTemplate>
                                         </GridViewColumn>
@@ -338,7 +341,10 @@
                                 VerticalAlignment="Center"
                                 FontSize="16"
                                 Text="Giảm giá:  " />
-                            <TextBox MinWidth="60" FontSize="16" />
+                            <TextBox
+                                MinWidth="60"
+                                FontSize="16"
+                                Text="{Binding SelectedInvoiceDTO.Discountinvoice}" />
                         </StackPanel>
 
                         <StackPanel
@@ -354,6 +360,7 @@
                                 FontSize="16"
                                 IsReadOnly="True"
                                 SelectedIndex="0"
+                                SelectedValue="{Binding SelectedPaymentMethod}"
                                 SelectedValuePath="Content">
                                 <ComboBoxItem Content="Tiền mặt" />
                                 <ComboBoxItem Content="Chuyển khoản" />
@@ -372,7 +379,7 @@
                                 MinWidth="60"
                                 FontSize="16"
                                 IsReadOnly="True"
-                                Text="{Binding TotalPrice, Converter={StaticResource CurrencyConverter}}" />
+                                Text="{Binding SelectedInvoiceDTO.TotalPrice, Mode=OneWay, Converter={StaticResource CurrencyConverter}}" />
                         </StackPanel>
                     </Grid>
 
@@ -400,13 +407,13 @@
                         <Button
                             Grid.Column="2"
                             Width="120"
-                            Command="{Binding CompleteInvoicePaymentCommand}"
-                            Content="Thanh toán" />
+                            Command="{Binding CancelInvoicePaymentCommand}"
+                            Content="Hủy hóa đơn" />
                         <Button
                             Grid.Column="3"
                             Width="120"
-                            Command="{Binding CancelInvoicePaymentCommand}"
-                            Content="Hủy hóa đơn" />
+                            Command="{Binding CompleteInvoicePaymentCommand}"
+                            Content="Thanh toán" />
                     </Grid>
                 </Grid>
             </Grid>

@@ -39,12 +39,11 @@ namespace CafeManager.WPF.Services
 
         #region Thêm xóa, sửa, tìm kiếm, sắp sếp, phân trang
 
-        public async Task<Invoice?> AddInvoice(Invoice invoice)
+        public async Task<Invoice?> CreateInvoice(Invoice invoice)
         {
             try
             {
                 await _unitOfWork.BeginTransactionAsync();
-
                 var res = await _unitOfWork.InvoiceList.Create(invoice);
                 await _unitOfWork.CompleteAsync();
                 await _unitOfWork.CommitTransactionAsync();
@@ -130,7 +129,7 @@ namespace CafeManager.WPF.Services
 
         #endregion tính toán doanh thu của bill
 
-        public async Task<IEnumerable<Invoicedetail>> AddArangeListInvoice(IEnumerable<Invoicedetail> invoicedetail)
+        public async Task<IEnumerable<Invoicedetail>> AddArangeListInvoiceDetail(IEnumerable<Invoicedetail> invoicedetail)
         {
             try
             {

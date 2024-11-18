@@ -63,10 +63,12 @@ namespace CafeManager.Core.DTOs
                 {
                     _quantity = value;
                     OnPropertyChanged();
-                    UpdateTotalPriceAction?.Invoke();
+                    QuantityChanged?.Invoke();
                 }
             }
         }
+
+        public event Action? QuantityChanged;
 
         public FoodDTO FoodDTO
         {
@@ -90,8 +92,6 @@ namespace CafeManager.Core.DTOs
                 FoodDTO = this.FoodDTO,
             };
         }
-
-        public static Action? UpdateTotalPriceAction { get; set; }
 
         public event PropertyChangedEventHandler? PropertyChanged;
 

@@ -14,7 +14,7 @@
     d:DesignHeight="740"
     d:DesignWidth="1080"
     mc:Ignorable="d">
-    <Grid Background="White">
+    <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="auto" />
             <RowDefinition Height="*" />

@@ -32,7 +32,6 @@ namespace CafeManager.Core.Services
                 Foodid = invoicedetailDTO.Foodid,
                 Quantity = invoicedetailDTO.Quantity,
                 Isdeleted = invoicedetailDTO.Isdeleted,
-                Food = FoodMapper.ToEntity(invoicedetailDTO.FoodDTO),
             };
         }
     }

@@ -68,4 +68,8 @@
     <DataTemplate DataType="{x:Type addviewmodels:ModifyStaffViewModel}">
         <addupdateview:ModifyStaffView />
     </DataTemplate>
+
+    <DataTemplate DataType="{x:Type addviewmodels:ModifyInvoiceViewModel}">
+        <addupdateview:ModifyInvoiceView />
+    </DataTemplate>
 </ResourceDictionary>

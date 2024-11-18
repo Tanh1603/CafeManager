@@ -105,16 +105,16 @@ namespace CafeManager.Core.DTOs
             }
         }
 
-        private ObservableCollection<InvoiceDetailDTO> _listInvoiceDTO = [];
+        private ObservableCollection<InvoiceDetailDTO> _listInvoiceDetailDTO = [];
 
-        public ObservableCollection<InvoiceDetailDTO> ListInvoiceDTO
+        public ObservableCollection<InvoiceDetailDTO> ListInvoiceDetailDTO
         {
-            get => _listInvoiceDTO;
+            get => _listInvoiceDetailDTO;
             set
             {
-                _listInvoiceDTO = value;
+                _listInvoiceDetailDTO = value;
                 OnPropertyChanged();
-                OnPropertyChanged(nameof(CaculateTotalPrice));
+                OnPropertyChanged(nameof(TotalPrice));
             }
         }
 
@@ -127,6 +127,19 @@ namespace CafeManager.Core.DTOs
             {
                 _staffDTO = value;
                 OnPropertyChanged();
+            }
+        }
+
+        private CoffeetableDTO _coffeetableDTO;
+
+        public CoffeetableDTO CoffeetableDTO
+        {
+            get => _coffeetableDTO;
+            set
+            {
+                _coffeetableDTO = value;
+                OnPropertyChanged();
+                OnPropertyChanged(nameof(CustomerOrTable));
             }
         }
 
@@ -157,19 +170,30 @@ namespace CafeManager.Core.DTOs
                 Staffid = this.Staffid,
 
                 StaffDTO = this.StaffDTO,
+                CoffeetableDTO = this.CoffeetableDTO,
+                ListInvoiceDetailDTO = this.ListInvoiceDetailDTO,
             };
         }
 
         public event PropertyChangedEventHandler? PropertyChanged;
+
+        private bool _isCoffeeTable = false;
+        private bool _isCustomer = false;
+        public bool IsCoffeeTable { get => _isCoffeeTable; set => _isCoffeeTable = value; }
+        public bool IsCustomer { get => _isCustomer; set => _isCustomer = value; }
 
         protected void OnPropertyChanged([CallerMemberName] string? propertyName = null)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
+        public decimal TotalPrice => CaculateTotalPrice();
+
+        public string CustomerOrTable => CoffeetableDTO != null ? CoffeetableDTO.TableName : "Khác vãng lai";
+
         public decimal CaculateTotalPrice()
         {
-            return ListInvoiceDTO?.Sum(x =>
+            return ListInvoiceDetailDTO?.Sum(x =>
             {
                 decimal? discountInvoice = (100 - Discountinvoice) / 100;
                 decimal foodPrice = x.FoodDTO.Price;

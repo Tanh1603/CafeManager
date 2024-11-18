@@ -44,6 +44,7 @@ namespace CafeManager.WPF.HostBuilders
                 services.AddTransient<ModifyFoodViewModel>(provider => new ModifyFoodViewModel(provider));
                 services.AddTransient<AddImportViewModel>(provider => new AddImportViewModel(provider));
                 services.AddTransient<ModifyStaffViewModel>(provider => new ModifyStaffViewModel(provider));
+                services.AddTransient<ModifyInvoiceViewModel>(provider => new ModifyInvoiceViewModel(provider));
 
                 services.AddSingleton<NavigationStore>(provider => new NavigationStore(provider));
                 services.AddSingleton<AccountStore>(provider => new AccountStore(provider));

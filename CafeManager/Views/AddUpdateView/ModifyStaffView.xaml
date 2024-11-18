@@ -53,7 +53,7 @@
                 <RowDefinition Height="auto" />
             </Grid.RowDefinitions>
 
-            <Border CornerRadius="10" Margin="10">
+            <Border Margin="10" CornerRadius="10">
                 <Button
                     Grid.Row="0"
                     HorizontalAlignment="Right"

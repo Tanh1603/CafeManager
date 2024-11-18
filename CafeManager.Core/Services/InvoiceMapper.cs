@@ -25,7 +25,8 @@ namespace CafeManager.Core.Services
                 Staffid = invoice.Staffid,
 
                 StaffDTO = StaffMapper.ToDTO(invoice.Staff),
-                ListInvoiceDTO = [.. invoice.Invoicedetails.Select(x => InvoiceDetailMapper.ToDTO(x))]
+                ListInvoiceDetailDTO = [.. invoice.Invoicedetails.Select(x => InvoiceDetailMapper.ToDTO(x))],
+                CoffeetableDTO = CoffeeTableMapper.ToDTO(invoice.Coffeetable)
             };
         }
 
@@ -42,9 +43,6 @@ namespace CafeManager.Core.Services
                 Discountinvoice = invoiceDTO?.Discountinvoice,
                 Isdeleted = invoiceDTO?.Isdeleted,
                 Staffid = invoiceDTO.Staffid,
-
-                Staff = StaffMapper.ToEntity(invoiceDTO.StaffDTO),
-                Invoicedetails = [.. invoiceDTO.ListInvoiceDTO.Select(x => InvoiceDetailMapper.ToEntity(x))]
             };
         }
     }

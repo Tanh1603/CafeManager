@@ -4,6 +4,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:converter="clr-namespace:CafeManager.WPF.Services.Converter"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:fa="http://schemas.awesome.incremented/wpf/xaml/fontawesome.sharp"
     xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
     xmlns:local="clr-namespace:CafeManager.WPF.Views"
     xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
@@ -16,396 +17,131 @@
 
     <UserControl.Resources>
         <converter:CurrencyConverter x:Key="CurrencyConverter" />
+        <converter:DefaultAccountImageConverter x:Key="DefaultAccountImageConverter" />
+        <converter:CornerRadiusClippingConverter x:Key="CornerRadiusClippingConverter" />
     </UserControl.Resources>
-    <!--<Grid Background="White">
-        <Grid.RowDefinitions>
-            <RowDefinition Height="*" />
-            <RowDefinition Height="auto" />
-        </Grid.RowDefinitions>
 
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="1.*" />
-            <ColumnDefinition Width="*" />
-        </Grid.ColumnDefinitions>
+    <Grid>
+        <materialDesign:DialogHost
+            Margin="5,0"
+            Background="Transparent"
+            DialogMargin="10">
 
-        <materialDesign:Card
-            Grid.Row="0"
-            Grid.Column="0"
-            Margin="10,0,5,0"
-            materialDesign:ElevationAssist.Elevation="Dp24"
-            UniformCornerRadius="10">
-            <TabControl
-                HorizontalContentAlignment="Left"
-                Background="Transparent"
-                Style="{StaticResource MaterialDesignFilledTabControl}">
-                <TabItem Header="Bàn">
-                    <ScrollViewer HorizontalScrollBarVisibility="Hidden" VerticalScrollBarVisibility="Auto">
-                        <ItemsControl ItemsSource="{Binding ListTable}">
-                            <ItemsControl.ItemsPanel>
-                                <ItemsPanelTemplate>
-                                    <WrapPanel MaxWidth="620" Orientation="Horizontal" />
-                                </ItemsPanelTemplate>
-                            </ItemsControl.ItemsPanel>
-                            <ItemsControl.ItemTemplate>
-                                <DataTemplate>
-                                    <Border
-                                        Margin="10"
-                                        BorderBrush="Wheat"
-                                        BorderThickness="2"
-                                        CornerRadius="10">
-                                        <i:Interaction.Triggers>
-                                            <i:EventTrigger EventName="MouseLeftButtonDown">
-                                                <i:InvokeCommandAction Command="{Binding DataContext.ChooseTableCommand, RelativeSource={RelativeSource AncestorType=local:MainUserView}}" CommandParameter="{Binding}" />
-                                            </i:EventTrigger>
-                                        </i:Interaction.Triggers>
+            <materialDesign:DrawerHost
+                IsLeftDrawerOpen="{Binding ElementName=btnMenu, Path=IsChecked}"
+                LeftDrawerBackground="{DynamicResource SecondaryHueLightBrush}"
+                LeftDrawerCornerRadius="0 0 0 0"
+                OverlayBackground="Transparent">
+                <materialDesign:DrawerHost.LeftDrawerContent>
+                    <Grid Background="Transparent">
+                        <Border CornerRadius="0 0 10 10">
+                            <Border.Background>
+                                <LinearGradientBrush StartPoint="0.5,0" EndPoint="0.5,1">
+                                    <GradientStop Offset="0" Color="#824618" />
+                                    <GradientStop Offset="1" Color="#844518" />
+                                </LinearGradientBrush>
+                            </Border.Background>
+                            <StackPanel HorizontalAlignment="Left" VerticalAlignment="Top">
+                                <!--  username  -->
+                                <Grid Margin="10,0,0,5" HorizontalAlignment="Left">
 
-                                        <Grid Background="Transparent">
-                                            <Grid.RowDefinitions>
-                                                <RowDefinition Height="*" />
-                                                <RowDefinition Height="auto" />
-                                            </Grid.RowDefinitions>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*" />
+                                        <ColumnDefinition Width="auto" />
+                                    </Grid.ColumnDefinitions>
 
-                                            <Border
-                                                Grid.Row="0"
-                                                Grid.Column="0"
-                                                Width="130"
-                                                Height="110"
-                                                CornerRadius="10 10 0 0">
-                                                <Border.Background>
-                                                    <ImageBrush
-                                                        ImageSource="/Assets/Images/coffee.png"
-                                                        RenderOptions.BitmapScalingMode="HighQuality"
-                                                        Stretch="Uniform" />
-                                                </Border.Background>
-                                            </Border>
-                                            <TextBlock
-                                                Grid.Row="1"
-                                                Margin="5,0,0,0"
-                                                HorizontalAlignment="Center"
-                                                VerticalAlignment="Center"
-                                                FontSize="16"
-                                                Text="{Binding Tablename}" />
-                                        </Grid>
-                                    </Border>
-                                </DataTemplate>
-                            </ItemsControl.ItemTemplate>
-                        </ItemsControl>
-                    </ScrollViewer>
-                </TabItem>
-                <TabItem Header="Menu">
-                    <Grid Margin="10">
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="auto" />
-                            <RowDefinition Height="*" />
-                        </Grid.RowDefinitions>
-                        <StackPanel Grid.Row="0" Orientation="Horizontal">
-                            <TextBlock
-                                VerticalAlignment="Center"
-                                FontSize="16"
-                                Text="Danh mục món ăn:   " />
-                            <ComboBox
-                                Width="150"
-                                ItemsSource="{Binding ListFoodCategory}"
-                                SelectedItem="{Binding SelectedFoodCategory}"
-                                Style="{StaticResource MaterialDesignOutlinedComboBox}">
-                                <ComboBox.ItemTemplate>
-                                    <DataTemplate>
-                                        <TextBlock FontSize="16" Text="{Binding Foodcategoryname}" />
-                                    </DataTemplate>
-                                </ComboBox.ItemTemplate>
-                            </ComboBox>
-                        </StackPanel>
-                        <ScrollViewer
-                            Grid.Row="1"
-                            HorizontalScrollBarVisibility="Hidden"
-                            VerticalScrollBarVisibility="Auto">
-                            <ItemsControl Height="auto" ItemsSource="{Binding ListFoodByFoodCategoryId}">
-                                <ItemsControl.ItemsPanel>
-                                    <ItemsPanelTemplate>
-                                        <WrapPanel MaxWidth="800" Orientation="Horizontal" />
-                                    </ItemsPanelTemplate>
-                                </ItemsControl.ItemsPanel>
-                                <ItemsControl.ItemTemplate>
-                                    <DataTemplate>
+                                    <Grid Grid.Column="0">
                                         <Border
-                                            Margin="10"
-                                            BorderBrush="Wheat"
-                                            BorderThickness="2"
+                                            Width="50"
+                                            Height="50"
                                             CornerRadius="10">
-                                            <i:Interaction.Triggers>
-                                                <i:EventTrigger EventName="MouseLeftButtonDown">
-                                                    <i:InvokeCommandAction Command="{Binding DataContext.ChooseFoodCommand, RelativeSource={RelativeSource AncestorType=local:MainUserView}}" CommandParameter="{Binding}" />
-                                                </i:EventTrigger>
-                                            </i:Interaction.Triggers>
-
-                                            <Grid>
-                                                <Grid Background="Transparent">
-                                                    <Grid.RowDefinitions>
-                                                        <RowDefinition Height="*" />
-                                                        <RowDefinition Height="auto" />
-                                                        <RowDefinition Height="auto" />
-                                                    </Grid.RowDefinitions>
-                                                    <Border
-                                                        Width="165"
-                                                        Height="100"
-                                                        BorderBrush="Black"
-                                                        BorderThickness="2"
-                                                        CornerRadius="10,10,0,0">
-                                                        <Border.Background>
-                                                            <ImageBrush ImageSource="{Binding Imagefood}" Stretch="UniformToFill" />
-                                                        </Border.Background>
-                                                    </Border>
-
-                                                    <StackPanel Grid.Row="1">
-                                                        <TextBlock
-                                                            Margin="5,0,0,0"
-                                                            HorizontalAlignment="Left"
-                                                            VerticalAlignment="Center"
-                                                            FontSize="16"
-                                                            Text="{Binding Foodname}" />
-                                                        <TextBlock
-                                                            Margin="5,0,0,0"
-                                                            HorizontalAlignment="Left"
-                                                            VerticalAlignment="Center"
-                                                            FontSize="16"
-                                                            Text="{Binding Price}" />
-                                                    </StackPanel>
-                                                </Grid>
-
-                                                <StackPanel
-                                                    HorizontalAlignment="Right"
-                                                    VerticalAlignment="Top"
-                                                    Background="Yellow"
-                                                    Orientation="Horizontal">
-                                                    <TextBlock FontSize="14" Text="Giảm giá:  " />
-                                                    <TextBlock FontSize="14" Text="{Binding Discountfood, StringFormat={}{0:0}%}" />
-                                                </StackPanel>
-                                            </Grid>
+                                            <Border.Background>
+                                                <LinearGradientBrush StartPoint="0,0" EndPoint="1,2">
+                                                    <GradientStop Offset="0" Color="#d5b096" />
+                                                    <GradientStop Offset="1" Color="#d3b7ff" />
+                                                </LinearGradientBrush>
+                                            </Border.Background>
+                                            <Image
+                                                RenderOptions.BitmapScalingMode="HighQuality"
+                                                SnapsToDevicePixels="True"
+                                                Source="{Binding ImageAccount, Converter={StaticResource DefaultAccountImageConverter}}"
+                                                Stretch="Uniform"
+                                                StretchDirection="DownOnly" />
                                         </Border>
-                                    </DataTemplate>
-                                </ItemsControl.ItemTemplate>
-                            </ItemsControl>
-                        </ScrollViewer>
+                                    </Grid>
+
+                                    <StackPanel
+                                        Grid.Column="1"
+                                        Margin="10,0,0,0"
+                                        VerticalAlignment="Center">
+                                        <TextBlock
+                                            Margin="0,0,0,5"
+                                            FontSize="15"
+                                            Foreground="#f9f9f9"
+                                            Text="{Binding Displayname}" />
+                                        <TextBlock
+                                            FontSize="15"
+                                            FontWeight="SemiBold"
+                                            Foreground="#ffffff"
+                                            Text="{Binding Role}" />
+                                    </StackPanel>
+                                </Grid>
+                                <Separator
+                                    Height="0.8"
+                                    Margin="10"
+                                    Background="#ffffff" />
+
+                                <!--  menu buttons  -->
+                                <RadioButton
+                                    MinWidth="200"
+                                    Command="{Binding ChangeCurrentViewModelCommand}"
+                                    CommandParameter="OrderFood"
+                                    IsChecked="True"
+                                    Style="{StaticResource menuButton}">
+                                    <StackPanel Orientation="Horizontal">
+                                        <fa:IconImage Icon="ChartColumn" Style="{StaticResource menuButtonIcon}" />
+                                        <TextBlock Style="{StaticResource menuButtonText}" Text="Đặt món" />
+                                    </StackPanel>
+                                </RadioButton>
+
+                                <RadioButton
+                                    Command="{Binding ChangeCurrentViewModelCommand}"
+                                    CommandParameter="Setting"
+                                    Style="{StaticResource menuButton}">
+                                    <StackPanel Orientation="Horizontal">
+                                        <fa:IconImage Icon="Cog" Style="{StaticResource menuButtonIcon}" />
+                                        <TextBlock Style="{StaticResource menuButtonText}" Text="Cài đặt" />
+                                    </StackPanel>
+                                </RadioButton>
+
+                                <RadioButton Command="{Binding SignOutCommand}" Style="{StaticResource menuButton}">
+                                    <StackPanel Orientation="Horizontal">
+                                        <fa:IconImage Icon="PowerOff" Style="{StaticResource menuButtonIcon}" />
+                                        <TextBlock Style="{StaticResource menuButtonText}" Text="Đăng xuất" />
+                                    </StackPanel>
+                                </RadioButton>
+                            </StackPanel>
+                        </Border>
                     </Grid>
-                </TabItem>
-            </TabControl>
-        </materialDesign:Card>
-
-        <GroupBox
-            Grid.Row="0"
-            Grid.Column="1"
-            Margin="5,0,10,0"
-            materialDesign:ElevationAssist.Elevation="Dp24"
-            Style="{StaticResource MaterialDesignCardGroupBox}">
-            <GroupBox.Header>
-                <TextBlock
-                    Height="30"
-                    FontSize="20"
-                    Foreground="White"
-                    Text="Chi tiết hóa đơn" />
-            </GroupBox.Header>
-            <Grid>
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="auto" />
-                    <RowDefinition Height="*" />
-                    <RowDefinition Height="auto" />
-                    <RowDefinition Height="auto" />
-                </Grid.RowDefinitions>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*" />
-                </Grid.ColumnDefinitions>
-
-                <Grid Grid.Row="0" Margin="10,0,5,0">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="auto" />
-                        <ColumnDefinition Width="auto" />
-                        <ColumnDefinition Width="auto" />
-                    </Grid.ColumnDefinitions>
-
-                    <Border
-                        Grid.Column="0"
-                        MinWidth="100"
-                        BorderBrush="SandyBrown"
-                        BorderThickness="2"
-                        CornerRadius="5">
-                        <StackPanel Grid.Column="0" Orientation="Horizontal">
-                            <materialDesign:PackIcon
-                                Width="30"
-                                Height="30"
-                                Kind="TableFurniture" />
-                            <TextBlock
-                                Margin="5,0,0,0"
-                                VerticalAlignment="Center"
-                                FontSize="20"
-                                Text="{Binding SelectedTable}" />
-                        </StackPanel>
-                    </Border>
-
-                    <StackPanel Grid.Column="2" VerticalAlignment="Center">
-                        <ComboBox
-                            MinWidth="150"
-                            Margin="5,0,0,0"
-                            VerticalAlignment="Center"
-                            materialDesign:HintAssist.Hint="Nhân viên tạo hóa đơn"
-                            FontSize="16" />
-                    </StackPanel>
-
-                    <Button
-                        Grid.Column="1"
-                        MinWidth="150"
-                        Margin="20,0"
-                        Command="{Binding CreateTakeAwayInvoiceCommand}"
-                        Content="Mang về" />
+                </materialDesign:DrawerHost.LeftDrawerContent>
+                <Grid Background="Transparent">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="auto" />
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
+                    <Grid Grid.Row="0">
+                        <ToggleButton
+                            x:Name="btnMenu"
+                            HorizontalAlignment="Left"
+                            Command="{Binding OpenMenuCommand}"
+                            IsChecked="{Binding IsLeftDrawerOpen}"
+                            Style="{StaticResource MaterialDesignHamburgerToggleButton}" />
+                    </Grid>
+                    <Grid Grid.Row="1" Background="Transparent">
+                        <ContentControl Margin="10" Content="{Binding CurrentVM}" />
+                    </Grid>
                 </Grid>
-
-                <Border
-                    Grid.Row="1"
-                    Grid.Column="0"
-                    Margin="10"
-                    BorderBrush="Wheat"
-                    BorderThickness="2"
-                    CornerRadius="10">
-                    <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
-                        <ListView HorizontalAlignment="Stretch" ItemsSource="{Binding CurrentInvoice.ListInvoiceDTO}">
-                            <ListView.View>
-                                <GridView>
-                                    <GridViewColumn DisplayMemberBinding="{Binding FoodName}" Header="Tên món" />
-                                    <GridViewColumn Header="Số lượng">
-                                        <GridViewColumn.CellTemplate>
-                                            <DataTemplate>
-                                                <Grid>
-                                                    <materialDesign:NumericUpDown Minimum="1" Value="{Binding Quantity}">
-                                                        <materialDesign:NumericUpDown.IncreaseContent>
-                                                            <Border
-                                                                BorderBrush="{DynamicResource MaterialDesign.Brush.Foreground}"
-                                                                BorderThickness="1"
-                                                                CornerRadius="20">
-                                                                <materialDesign:PackIcon Kind="ArrowUp" />
-                                                            </Border>
-                                                        </materialDesign:NumericUpDown.IncreaseContent>
-                                                        <materialDesign:NumericUpDown.DecreaseContent>
-                                                            <Border
-                                                                BorderBrush="{DynamicResource MaterialDesign.Brush.Foreground}"
-                                                                BorderThickness="1"
-                                                                CornerRadius="20">
-                                                                <materialDesign:PackIcon Kind="ArrowDown" />
-                                                            </Border>
-                                                        </materialDesign:NumericUpDown.DecreaseContent>
-                                                    </materialDesign:NumericUpDown>
-                                                </Grid>
-                                            </DataTemplate>
-                                        </GridViewColumn.CellTemplate>
-                                    </GridViewColumn>
-                                    <GridViewColumn DisplayMemberBinding="{Binding Price, StringFormat={}{0:00}}" Header="Đơn giá" />
-                                    <GridViewColumn Header="Options">
-                                        <GridViewColumn.CellTemplate>
-                                            <DataTemplate>
-                                                <Button
-                                                    Background="Transparent"
-                                                    BorderBrush="Transparent"
-                                                    BorderThickness="0"
-                                                    Command="{Binding DataContext.DeleteFoodCommand, RelativeSource={RelativeSource AncestorType=local:MainUserView}}"
-                                                    CommandParameter="{Binding}">
-                                                    <materialDesign:PackIcon Foreground="Brown" Kind="Delete" />
-                                                </Button>
-                                            </DataTemplate>
-                                        </GridViewColumn.CellTemplate>
-                                    </GridViewColumn>
-                                </GridView>
-                            </ListView.View>
-                        </ListView>
-                    </ScrollViewer>
-                </Border>
-
-                <Grid Grid.Row="2">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="auto" />
-                        <ColumnDefinition Width="*" />
-                        <ColumnDefinition Width="auto" />
-                    </Grid.ColumnDefinitions>
-
-                    <StackPanel Grid.Column="0" Margin="10">
-                        <TextBlock
-                            VerticalAlignment="Center"
-                            FontSize="16"
-                            Text="Giảm giá:  " />
-                        <TextBox
-                            MinWidth="60"
-                            FontSize="16"
-                            Text="{Binding DataContext.CurrentInvoice.Discountinvoice, RelativeSource={RelativeSource AncestorType=local:MainUserView}}" />
-                    </StackPanel>
-
-                    <StackPanel
-                        Grid.Column="1"
-                        Margin="10"
-                        HorizontalAlignment="Right">
-                        <TextBlock
-                            VerticalAlignment="Center"
-                            FontSize="16"
-                            Text="Phương thức:" />
-                        <ComboBox
-                            MinWidth="160"
-                            FontSize="16"
-                            IsReadOnly="True"
-                            SelectedIndex="0"
-                            SelectedValue="{Binding DataContext.CurrentInvoice.Paymentmethod, RelativeSource={RelativeSource AncestorType=local:MainUserView}}"
-                            SelectedValuePath="Content">
-                            <ComboBoxItem Content="Tiền mặt" />
-                            <ComboBoxItem Content="Chuyển khoản" />
-                        </ComboBox>
-                    </StackPanel>
-
-                    <StackPanel
-                        Grid.Column="2"
-                        Margin="10"
-                        HorizontalAlignment="Center">
-                        <TextBlock
-                            VerticalAlignment="Center"
-                            FontSize="16"
-                            Text="Thành tiền: " />
-                        <TextBox
-                            MinWidth="60"
-                            FontSize="16"
-                            IsReadOnly="True"
-                            Text="{Binding TotalPrice, Converter={StaticResource CurrencyConverter}}" />
-                    </StackPanel>
-                </Grid>
-
-                <StackPanel
-                    Grid.Row="3"
-                    HorizontalAlignment="Right"
-                    Orientation="Horizontal">
-                    <Button
-                        MinWidth="120"
-                        Margin="10,0"
-                        Command="{Binding SwapTableCommand}"
-                        Content="Chuyển bàn" />
-                    <ComboBox Height="30" MinWidth="120">
-                        <ComboBoxItem Content="Bàn 1" />
-                        <ComboBoxItem Content="Bàn 1" />
-                        <ComboBoxItem Content="Bàn 1" />
-                    </ComboBox>
-                    <Button
-                        MinWidth="120"
-                        Margin="10,0,10,0"
-                        Command="{Binding CompleteInvoicePaymentCommand}"
-                        Content="Thanh toán" />
-                    <Button
-                        MinWidth="120"
-                        Command="{Binding CancelInvoicePaymentCommand}"
-                        Content="Hủy hóa đơn" />
-                </StackPanel>
-            </Grid>
-        </GroupBox>
-
-        <Button
-            Grid.Row="1"
-            Margin="20"
-            HorizontalAlignment="Left"
-            VerticalAlignment="Bottom"
-            Command="{Binding SignOutCommand}"
-            Content="Đăng xuất" />
-    </Grid>-->
-
-    <ContentControl Margin="10" Content="{Binding OrderVM}" />
+            </materialDesign:DrawerHost>
+        </materialDesign:DialogHost>
+    </Grid>
 </UserControl>

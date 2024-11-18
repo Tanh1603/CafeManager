@@ -32,7 +32,14 @@
                 <Image
                     RenderOptions.BitmapScalingMode="HighQuality"
                     Source="{Binding ElementName=infofood, Path=SourceImage, Converter={StaticResource StringToImageSourceConverter}, Mode=TwoWay}"
-                    Stretch="UniformToFill" />
+                    Stretch="UniformToFill">
+                    <Image.Clip>
+                        <RectangleGeometry
+                            RadiusX="5"
+                            RadiusY="5"
+                            Rect="0,0,219,164" />
+                    </Image.Clip>
+                </Image>
 
                 <Border Grid.Row="1" CornerRadius="0 0 3 3">
                     <Border.Style>
@@ -54,32 +61,36 @@
                             <ColumnDefinition Width="auto" />
                         </Grid.ColumnDefinitions>
 
-                        <StackPanel Grid.Column="0">
+                        <StackPanel
+                            Grid.Column="0"
+                            Margin="10 5"
+                            HorizontalAlignment="left">
                             <TextBlock
                                 FontSize="18"
                                 Style="{StaticResource infoFoodText}"
                                 Text="{Binding ElementName=infofood, Path=Text, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay, Converter={StaticResource Utf8Converter}}" />
 
-                            <TextBlock Style="{StaticResource infoFoodText}" Text="{Binding ElementName=infofood, UpdateSourceTrigger=PropertyChanged, Path=Price, Mode=TwoWay}" />
+                            <TextBlock
+                                HorizontalAlignment="left"
+                                Style="{StaticResource infoFoodText}"
+                                Text="{Binding ElementName=infofood, UpdateSourceTrigger=PropertyChanged, Path=Price, StringFormat={}{0:N0} đồng, Mode=TwoWay}" />
                         </StackPanel>
 
                         <StackPanel Grid.Column="1" Orientation="Horizontal">
 
                             <Button
-                            x:Name="BtnDelete"
-                            Padding="2"
-                            HorizontalAlignment="Center"
-                            Background="Transparent"
-                            Click="BtnDelete_Click">
-                                <ma:PackIconMaterial Kind="TrashCan" Style="{StaticResource infoFoodIcon}" />
+                                x:Name="BtnUpdate"
+                                HorizontalAlignment="Center"
+                                Click="BtnUpdate_Click"
+                                Style="{StaticResource infoFoodBtn}">
+                                <ma:PackIconMaterial Kind="Pencil" Style="{StaticResource infoFoodIcon}" />
                             </Button>
                             <Button
-                            x:Name="BtnUpdate"
-                            Padding="2"
-                            HorizontalAlignment="Center"
-                            Background="Transparent"
-                            Click="BtnUpdate_Click">
-                                <ma:PackIconMaterial Kind="Pencil" Style="{StaticResource infoFoodIcon}" />
+                                x:Name="BtnDelete"
+                                HorizontalAlignment="Center"
+                                Click="BtnDelete_Click"
+                                Style="{StaticResource infoFoodBtn}">
+                                <ma:PackIconMaterial Kind="TrashCan" Style="{StaticResource infoFoodIcon}" />
                             </Button>
                         </StackPanel>
                     </Grid>
@@ -87,9 +98,35 @@
             </Grid>
         </Border>
 
-        <StackPanel Background="Yellow" Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Top">
-            <Label Content="Giảm giá:" Foreground="Red" HorizontalAlignment="Right" />
-            <TextBlock TextAlignment="Center" VerticalAlignment="Center" Foreground="OrangeRed" MinWidth="50" Text="{Binding ElementName=infofood, Path=Discountfood, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" HorizontalAlignment="Right" />
-        </StackPanel>
+        <Border
+            HorizontalAlignment="Right"
+            VerticalAlignment="Top"
+            CornerRadius="0 5 0 5">
+            <Border.Background>
+                <LinearGradientBrush StartPoint="0,0.5" EndPoint="1,0.5">
+                    <GradientStop Offset="0" Color="#eddb53" />
+                    <GradientStop Offset="1" Color="#fbf5a1" />
+                </LinearGradientBrush>
+            </Border.Background>
+            <StackPanel
+                HorizontalAlignment="Right"
+                VerticalAlignment="Top"
+                Orientation="Horizontal">
+
+                <Label
+                    HorizontalAlignment="Right"
+                    Content="Giảm giá:"
+                    FontWeight="SemiBold"
+                    Foreground="#d32f2f" />
+                <TextBlock
+                    MinWidth="50"
+                    HorizontalAlignment="Right"
+                    VerticalAlignment="Center"
+                    Foreground="#d32f2f"
+                    Text="{Binding ElementName=infofood, Path=Discountfood, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
+                    TextAlignment="Center" />
+            </StackPanel>
+        </Border>
+
     </Grid>
 </UserControl>

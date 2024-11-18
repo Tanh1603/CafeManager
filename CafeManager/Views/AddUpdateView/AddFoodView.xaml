@@ -55,9 +55,15 @@
                         ClipToBounds="True"
                         CornerRadius="100">
                         <Border.Clip>
-                            <EllipseGeometry Center="100,100" RadiusX="100" RadiusY="100" />
+                            <EllipseGeometry
+                                Center="100,100"
+                                RadiusX="100"
+                                RadiusY="100" />
                         </Border.Clip>
-                        <Image Stretch="UniformToFill" RenderOptions.BitmapScalingMode="HighQuality" Source="{Binding Imagefood, UpdateSourceTrigger=PropertyChanged}" />
+                        <Image
+                            RenderOptions.BitmapScalingMode="HighQuality"
+                            Source="{Binding Imagefood, UpdateSourceTrigger=PropertyChanged}"
+                            Stretch="UniformToFill" />
                     </Border>
                 </Grid>
                 <Button
@@ -133,20 +139,34 @@
                         Hint="trà sữa, trà chanh,..."
                         Text="{Binding Foodname, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" />
 
-                    <ComboBox
-                        Name="cbFoodCategory"
-                        Grid.Row="1"
-                        Grid.Column="1"
-                        ItemsSource="{Binding ListFoodCategory}"
-                        SelectedItem="{Binding SelectedFoodCategory}"
-                        Style="{StaticResource MaterialDesignOutlinedComboBox}">
+                    <Grid Grid.Row="1" Grid.Column="1">
+                        <ComboBox
+                            x:Name="cbFoodCategory"
+                            ItemsSource="{Binding ListFoodCategory}"
+                            SelectedItem="{Binding SelectedFoodCategory}"
+                            Style="{StaticResource ComboBoxStyle}"
+                            Tag="--Danh mục thực đơn--"
+                            FontWeight="Regular">
+                            <ComboBox.ItemContainerStyle>
+                                <Style BasedOn="{StaticResource ComboBoxItemStyle}" TargetType="ComboBoxItem">
+                                    <Setter Property="Width" Value="{Binding ActualWidth, ElementName=cbFoodCategory}" />
+                                    <Setter Property="Height" Value="{Binding ActualHeight, ElementName=cbFoodCategory}" />
+                                    <Setter Property="FontWeight" Value="Regular" />
+                                </Style>
+                            </ComboBox.ItemContainerStyle>
+                            <i:Interaction.Triggers>
+                                <i:EventTrigger EventName="SelectionChanged">
+                                    <i:InvokeCommandAction Command="{Binding SelectedFoodCategoryChangeCommand}" CommandParameter="{Binding ElementName=cbFoodCategory, Path=SelectedItem, UpdateSourceTrigger=PropertyChanged}" />
+                                </i:EventTrigger>
+                            </i:Interaction.Triggers>
+                            <ComboBox.ItemTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding Foodcategoryname}" />
+                                </DataTemplate>
+                            </ComboBox.ItemTemplate>
+                        </ComboBox>
 
-                        <ComboBox.ItemTemplate>
-                            <DataTemplate>
-                                <TextBlock Text="{Binding Foodcategoryname}" />
-                            </DataTemplate>
-                        </ComboBox.ItemTemplate>
-                    </ComboBox>
+                    </Grid>
 
                     <uc:infoTextInput
                         Grid.Row="2"
@@ -166,7 +186,7 @@
                     HorizontalAlignment="Right"
                     VerticalAlignment="Bottom"
                     Command="{Binding SubmitCommand}"
-                    Style="{StaticResource confirmInfoButton}" >
+                    Style="{StaticResource confirmInfoButton}">
                     <StackPanel HorizontalAlignment="Center" Orientation="Horizontal">
                         <ma:PackIconMaterial VerticalAlignment="Center" Kind="CheckBold" />
                         <TextBlock

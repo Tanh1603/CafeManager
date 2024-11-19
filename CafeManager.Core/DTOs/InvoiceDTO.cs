@@ -180,7 +180,24 @@ namespace CafeManager.Core.DTOs
         private bool _isCoffeeTable = false;
         private bool _isCustomer = false;
         public bool IsCoffeeTable { get => _isCoffeeTable; set => _isCoffeeTable = value; }
-        public bool IsCustomer { get => _isCustomer; set => _isCustomer = value; }
+
+        public bool IsCustomer
+        {
+            get => _isCustomer;
+            set
+            {
+                _isCustomer = value;
+                OnPropertyChanged();
+            }
+        }
+
+        private readonly string _invoiceCustomerId;
+        public string InvoiceCustomerId => _invoiceCustomerId;
+
+        public InvoiceDTO()
+        {
+            _invoiceCustomerId = $"HD-{Guid.NewGuid().ToString().Substring(0, 4).ToUpper()}";
+        }
 
         protected void OnPropertyChanged([CallerMemberName] string? propertyName = null)
         {

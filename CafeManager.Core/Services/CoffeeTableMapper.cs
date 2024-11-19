@@ -12,6 +12,8 @@ namespace CafeManager.Core.Services
     {
         public static CoffeetableDTO ToDTO(Coffeetable coffeetable)
         {
+            if (coffeetable == null) return null;
+
             return new CoffeetableDTO()
             {
                 Coffeetableid = coffeetable.Coffeetableid,

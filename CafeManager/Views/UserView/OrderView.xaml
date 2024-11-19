@@ -185,6 +185,55 @@
                         </ScrollViewer>
                     </Grid>
                 </TabItem>
+                <TabItem Header="Hóa đơn mang về">
+                    <ScrollViewer HorizontalScrollBarVisibility="Hidden" VerticalScrollBarVisibility="Auto">
+                        <ItemsControl ItemsSource="{Binding ListCustomerInvoiceDTO}">
+                            <ItemsControl.ItemsPanel>
+                                <ItemsPanelTemplate>
+                                    <WrapPanel MaxWidth="800" Orientation="Horizontal" />
+                                </ItemsPanelTemplate>
+                            </ItemsControl.ItemsPanel>
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <Border
+                                        Margin="10"
+                                        BorderBrush="Wheat"
+                                        BorderThickness="2"
+                                        CornerRadius="10">
+                                        <i:Interaction.Triggers>
+                                            <i:EventTrigger EventName="MouseLeftButtonDown">
+                                                <i:InvokeCommandAction Command="{Binding DataContext.ShowSelectedInvoiceCustomerCommand, RelativeSource={RelativeSource AncestorType=local:OrderView}}" CommandParameter="{Binding}" />
+                                            </i:EventTrigger>
+                                        </i:Interaction.Triggers>
+                                        <Grid>
+
+                                            <Grid.RowDefinitions>
+                                                <RowDefinition Height="*" />
+                                                <RowDefinition Height="auto" />
+                                            </Grid.RowDefinitions>
+
+                                            <Grid Grid.Column="0">
+                                                <materialDesign:PackIcon
+                                                    MinWidth="150"
+                                                    MinHeight="100"
+                                                    Background="Transparent"
+                                                    IsHitTestVisible="False"
+                                                    Kind="InvoiceTextEditOutline" />
+                                            </Grid>
+
+                                            <TextBlock
+                                                    Grid.Row="1" Margin="10"
+                                                    HorizontalAlignment="Left"
+                                                    VerticalAlignment="Center"
+                                                    FontSize="16"
+                                                    Text="{Binding InvoiceCustomerId, Mode=OneWay}" />
+                                            </Grid>
+                                    </Border>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                    </ScrollViewer>
+                </TabItem>
             </TabControl>
         </materialDesign:Card>
 
@@ -231,16 +280,52 @@
                             BorderBrush="SandyBrown"
                             BorderThickness="2"
                             CornerRadius="5">
-                            <StackPanel Grid.Column="0" Orientation="Horizontal">
-                                <materialDesign:PackIcon
-                                    Width="30"
-                                    Height="30"
-                                    Kind="TableFurniture" />
-                                <TextBlock
-                                    Margin="5,0,0,0"
-                                    VerticalAlignment="Center"
-                                    FontSize="20"
-                                    Text="{Binding SelectedInvoiceDTO.CoffeetableDTO.TableName}" />
+                            <StackPanel>
+                                <StackPanel Grid.Column="0" Orientation="Horizontal">
+                                    <StackPanel.Style>
+                                        <Style TargetType="StackPanel">
+                                            <Setter Property="Visibility" Value="Collapsed" />
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding SelectedInvoiceDTO.IsCoffeeTable}" Value="True">
+                                                    <Setter Property="Visibility" Value="Visible" />
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </StackPanel.Style>
+
+                                    <materialDesign:PackIcon
+                                        Width="30"
+                                        Height="30"
+                                        Kind="TableFurniture" />
+                                    <TextBlock
+                                        Margin="5,0,0,0"
+                                        VerticalAlignment="Center"
+                                        FontSize="20"
+                                        Text="{Binding SelectedInvoiceDTO.CoffeetableDTO.TableName}" />
+                                </StackPanel>
+
+                                <StackPanel Grid.Column="0" Orientation="Horizontal">
+                                    <StackPanel.Style>
+                                        <Style TargetType="StackPanel">
+                                            <Setter Property="Visibility" Value="Collapsed" />
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding SelectedInvoiceDTO.IsCustomer}" Value="True">
+                                                    <Setter Property="Visibility" Value="Visible" />
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </StackPanel.Style>
+
+                                    <materialDesign:PackIcon
+                                        Width="30"
+                                        Height="30"
+                                        Kind="InvoiceTextEdit" />
+                                    <TextBlock
+                                        Margin="5,0,0,0"
+                                        VerticalAlignment="Center"
+                                        FontSize="20"
+                                        Text="{Binding SelectedInvoiceDTO.InvoiceCustomerId}" />
+                                </StackPanel>
                             </StackPanel>
                         </Border>
 
@@ -399,10 +484,16 @@
                         <ComboBox
                             Grid.Column="1"
                             Width="100"
-                            Height="30">
-                            <ComboBoxItem Content="Bàn 1" />
-                            <ComboBoxItem Content="Bàn 1" />
-                            <ComboBoxItem Content="Bàn 1" />
+                            Height="30"
+                            ItemsSource="{Binding ListCoffeeTableDTO}">
+                            <ComboBox.ItemTemplate>
+                                <DataTemplate>
+                                    <TextBlock
+                                        FontSize="16"
+                                        FontWeight="DemiBold"
+                                        Text="{Binding TableName}" />
+                                </DataTemplate>
+                            </ComboBox.ItemTemplate>
                         </ComboBox>
                         <Button
                             Grid.Column="2"

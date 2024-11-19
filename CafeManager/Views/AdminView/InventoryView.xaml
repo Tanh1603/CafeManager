@@ -82,9 +82,9 @@
                     Kind="Magnify" />
             </Grid>
 
-            <Border Grid.Row="2">
-                <TabControl Style="{DynamicResource tabControlStyle}">
-                    <TabItem Header="Đã dùng" Style="{DynamicResource tabItemStyle}">
+                <Border Grid.Row="2">
+                    <TabControl Style="{DynamicResource tabControlStyle}">
+                        <TabItem Header="Đã dùng" Style="{DynamicResource tabItemStyle}">
 
                         <DataGrid
                             x:Name="SuppliersDataGrid"

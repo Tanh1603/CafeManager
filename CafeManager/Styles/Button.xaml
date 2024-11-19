@@ -285,8 +285,10 @@
         <Setter Property="Foreground" Value="#dac5b4" />
         <Setter Property="Background" Value="#612e0f" />
         <Setter Property="FontSize" Value="14" />
-        <Setter Property="Width" Value="150" />
-        <Setter Property="Height" Value="35" />
+        <Setter Property="MaxWidth" Value="200" />
+
+        <Setter Property="MinWidth" Value="150" />
+        <Setter Property="MinHeight" Value="35" />
         <Setter Property="FontWeight" Value="SemiBold" />
         <Setter Property="FocusVisualStyle" Value="{x:Null}" />
         <Setter Property="Cursor" Value="Hand" />
@@ -329,15 +331,15 @@
         x:Key="adjustInfoButton"
         BasedOn="{StaticResource upLoadButton}"
         TargetType="Button">
-        <Setter Property="Width" Value="100" />
-        <Setter Property="Height" Value="45" />
+        <Setter Property="MinWidth" Value="100" />
+        <Setter Property="MinHeight" Value="45" />
     </Style>
     <Style
         x:Key="confirmInfoButton"
         BasedOn="{StaticResource upLoadButton}"
         TargetType="Button">
-        <Setter Property="Width" Value="120" />
-        <Setter Property="Height" Value="45" />
+        <Setter Property="MinWidth" Value="120" />
+        <Setter Property="MinHeight" Value="45" />
     </Style>
 
     <Style x:Key="datePickerButton" TargetType="Button">
@@ -470,6 +472,34 @@
             </Trigger>
         </Style.Triggers>
     </Style>
+
+    <Style x:Key="windowButton" TargetType="Button" BasedOn="{StaticResource closeButton}"/>
+
+    <Style x:Key="closeWDBtn" TargetType="Button" BasedOn="{StaticResource closeButton}">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Button">
+                    <Border
+                x:Name="border"
+                Background="{TemplateBinding Background}"
+                BorderBrush="{TemplateBinding BorderBrush}"
+                BorderThickness="{TemplateBinding BorderThickness}"
+                CornerRadius="5 10 0 5">
+                        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter TargetName="border" Property="Background" Value="#d32f2f" />
+                        </Trigger>
+                        <Trigger Property="IsPressed" Value="True">
+                            <Setter TargetName="border" Property="Background" Value="#d32f2f" />
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>  
+    
     <Style
         x:Key="closeInfoFoodBtn"
         BasedOn="{StaticResource gridEditButton}"
@@ -515,11 +545,24 @@
             </Trigger>
         </Style.Triggers>
     </Style>
-    <Style
-        x:Key="addImageResBtn"
-        BasedOn="{StaticResource backLoginBtn}"
-        TargetType="Button">
-        <Setter Property="Height" Value="35" />
-        <Setter Property="Width" Value="35" />
+        <Style x:Key="addImageResBtn" TargetType="Button" BasedOn="{StaticResource backLoginBtn}">
+            <Setter Property="Height" Value="35"/>
+            <Setter Property="Width" Value="35"/>
+        </Style>
+
+    <Style x:Key="infoFoodBtn" TargetType="Button" BasedOn="{StaticResource gridEditButton}">
+        <Setter Property="MinHeight" Value="35"/>
+        <Setter Property="MinWidth" Value="35"/>
+        <Setter Property="Background" Value="Transparent"/>
+        <Setter Property="BorderBrush" Value="Transparent"/>
+        <Setter Property="Foreground" Value="#602414"/>
+        <Style.Triggers>
+            <Trigger Property="IsMouseOver" Value="True">
+                <Setter Property="Foreground" Value="#d5b096" />
+                <Setter Property="Background" Value="#602414"/>
+
+
+            </Trigger>
+        </Style.Triggers>
     </Style>
 </ResourceDictionary>

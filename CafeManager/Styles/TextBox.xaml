@@ -84,7 +84,7 @@
         <Setter Property="MinHeight" Value="38" />
         <Setter Property="FontSize" Value="12" />
         <Setter Property="Padding" Value="10" />
-        <Setter Property="Margin" Value="0,10" />
+        <Setter Property="Margin" Value="0 10" />
 
 
 

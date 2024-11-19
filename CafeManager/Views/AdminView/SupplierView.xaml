@@ -97,14 +97,14 @@
                     Kind="Magnify" />
             </Grid>
 
-            <!--  Supplier Datagrid  -->
-            <Border
-                Grid.Row="3"
-                Width="auto"
-                Margin="0,10,0,0"
-                BorderBrush="#602414"
-                BorderThickness="2"
-                CornerRadius="10">
+                <!--  Supplier Datagrid  -->
+                <Border
+                    Grid.Row="3"
+                    Width="auto"
+                 
+                    BorderBrush="#602414"
+                    BorderThickness="2"
+                    CornerRadius="10">
 
                 <DataGrid
                     x:Name="SuppliersDataGrid"
@@ -197,7 +197,7 @@
             </Border>
         </Grid>
 
-        <materialDesign:DialogHost ClipToBounds="False" IsOpen="{Binding IsOpenAddSupplier}">
+        <!--<materialDesign:DialogHost ClipToBounds="False" IsOpen="{Binding IsOpenAddSupplier}">
             <materialDesign:DialogHost.DialogBackground>
                 <SolidColorBrush Color="Transparent" />
             </materialDesign:DialogHost.DialogBackground>
@@ -205,6 +205,6 @@
             <materialDesign:DialogHost.DialogContent>
                 <ContentControl Content="{Binding AddSupplierVM}" />
             </materialDesign:DialogHost.DialogContent>
-        </materialDesign:DialogHost>
+        </materialDesign:DialogHost>-->
     </Grid>
 </UserControl>

@@ -77,7 +77,10 @@
                             <ColumnDefinition Width="auto" />
                         </Grid.ColumnDefinitions>
 
-                        <StackPanel Grid.Column="0">
+                        <StackPanel
+                            Grid.Column="0"
+                            Margin="10,5"
+                            HorizontalAlignment="left">
                             <TextBlock
                                 FontSize="18"
                                 Style="{StaticResource infoFoodText}"

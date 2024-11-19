@@ -36,32 +36,34 @@
             <StackPanel VerticalAlignment="Center">
                 <Grid>
 
-                    <Ellipse
+                    <Rectangle
                         Width="200"
-                        Height="200"
-                        HorizontalAlignment="Center"
-                        VerticalAlignment="Bottom"
+                        Height="150"
                         Fill="#ffffff"
+                        RadiusX="5"
+                        RadiusY="5"
                         StrokeThickness="4">
-                        <Ellipse.Stroke>
+                        <Rectangle.Stroke>
+
                             <LinearGradientBrush>
                                 <GradientStop Offset="0" Color="#cea48c" />
                                 <GradientStop Offset="1" Color="#b79c8b" />
                             </LinearGradientBrush>
-                        </Ellipse.Stroke>
-                    </Ellipse>
+                        </Rectangle.Stroke>
+                    </Rectangle>
 
                     <Border
                         Width="200"
-                        Height="200"
+                        Height="150"
+                        ClipToBounds="True"
                         CornerRadius="100">
-
-                        <Border.Background>
-                            <ImageBrush
-                                ImageSource="{Binding ModifyFood.Imagefood, UpdateSourceTrigger=PropertyChanged}"
-                                RenderOptions.BitmapScalingMode="HighQuality"
-                                Stretch="UniformToFill" />
-                        </Border.Background>
+                        <Border.Clip>
+                            <RectangleGeometry Rect="0,0,200,150" />
+                        </Border.Clip>
+                        <Image
+                            RenderOptions.BitmapScalingMode="HighQuality"
+                            Source="{Binding Imagefood, UpdateSourceTrigger=PropertyChanged}"
+                            Stretch="UniformToFill" />
                     </Border>
                 </Grid>
                 <Button
@@ -137,20 +139,34 @@
                         Hint="trà sữa, trà chanh,..."
                         Text="{Binding ModifyFood.Foodname, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" />
 
-                    <ComboBox
-                        Name="cbFoodCategory"
-                        Grid.Row="1"
-                        Grid.Column="1"
-                        ItemsSource="{Binding ListFoodCategory}"
-                        SelectedItem="{Binding SelectedFoodCategory}"
-                        Style="{StaticResource MaterialDesignOutlinedComboBox}">
+                    <Grid Grid.Row="1" Grid.Column="1">
+                        <ComboBox
+                            x:Name="cbFoodCategory"
+                            FontWeight="Regular"
+                            ItemsSource="{Binding ListFoodCategory}"
+                            SelectedItem="{Binding SelectedFoodCategory}"
+                            Style="{StaticResource ComboBoxStyle}"
+                            Tag="--Danh mục thực đơn--">
+                            <ComboBox.ItemContainerStyle>
+                                <Style BasedOn="{StaticResource ComboBoxItemStyle}" TargetType="ComboBoxItem">
+                                    <Setter Property="Width" Value="{Binding ActualWidth, ElementName=cbFoodCategory}" />
+                                    <Setter Property="Height" Value="{Binding ActualHeight, ElementName=cbFoodCategory}" />
+                                    <Setter Property="FontWeight" Value="Regular" />
+                                </Style>
+                            </ComboBox.ItemContainerStyle>
+                            <i:Interaction.Triggers>
+                                <i:EventTrigger EventName="SelectionChanged">
+                                    <i:InvokeCommandAction Command="{Binding SelectedFoodCategoryChangeCommand}" CommandParameter="{Binding ElementName=cbFoodCategory, Path=SelectedItem, UpdateSourceTrigger=PropertyChanged}" />
+                                </i:EventTrigger>
+                            </i:Interaction.Triggers>
+                            <ComboBox.ItemTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding Foodcategoryname}" />
+                                </DataTemplate>
+                            </ComboBox.ItemTemplate>
+                        </ComboBox>
 
-                        <ComboBox.ItemTemplate>
-                            <DataTemplate>
-                                <TextBlock Text="{Binding Foodcategoryname}" />
-                            </DataTemplate>
-                        </ComboBox.ItemTemplate>
-                    </ComboBox>
+                    </Grid>
 
                     <uc:infoTextInput
                         Grid.Row="2"

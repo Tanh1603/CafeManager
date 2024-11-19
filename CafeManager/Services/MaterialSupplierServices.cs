@@ -37,41 +37,43 @@ namespace CafeManager.WPF.Services
             return await _unitOfWork.MaterialList.GetAllUsedMaterial();
         }
 
-        public async Task<List<MaterialDetailDTO>> GetInventoryList()
-        {
-            var totalList = await GetListMaterialWithDetail();
-            var usedList = await GetListConsumedMaterial();
-            List<MaterialDetailDTO> res = new List<MaterialDetailDTO>();
-            if (totalList != null)
-            {
-                foreach (var item in totalList)
-                {
-                    var tmp = usedList?.FirstOrDefault(
-                        x => x.Materialname == item.Materialname && x.Suppliername == item.Suppliername
-                        && x.Unit == item.Unit && x.Manufacturer == item.Manufacturer && x.Original == item.Original
-                        && x.Manufacturedate == item.Manufacturedate && x.Expirationdate == item.Expirationdate && x.Price == item.Price
-
-                    );
-                    res.Add(new MaterialDetailDTO()
-                    {
-                        Materialname = item.Materialname,
-                        Suppliername = item.Suppliername,
-                        Unit = item.Unit,
-                        Manufacturer = item.Manufacturer,
-                        Manufacturedate = item.Manufacturedate,
-                        Expirationdate = item.Expirationdate,
-                        Price = item.Price,
-                        Original = item.Original,
-                        Quantity = item.Quantity - (tmp?.Quantity ?? 0),
-                    });
-                }
-            }
-            return res;
-        }
+        //public async Task<List<MaterialDetailDTO>> GetInventoryList()
+        //{
+        //    var totalList = await GetListMaterialWithDetail();
+        //    var usedList = await GetListConsumedMaterial();
+        //    List<MaterialDetailDTO> res = new List<MaterialDetailDTO>();
+        //    if (totalList != null)
+        //    {
+        //        foreach (var item in totalList)
+        //        {
+        //            var tmp = usedList?.FirstOrDefault(
+        //                x => x.CurrentMaterial == item.CurrentMaterial
+        //                && x.Manufacturer == item.Manufacturer && x.Original == item.Original
+        //                && x.Manufacturedate == item.Manufacturedate && x.Expirationdate == item.Expirationdate && x.Price == item.Price
+        //            );
+        //            res.Add(new MaterialDetailDTO()
+        //            {
+        //                CurrentMaterial = item.CurrentMaterial,
+        //                Manufacturer = item.Manufacturer,
+        //                Manufacturedate = item.Manufacturedate,
+        //                Expirationdate = item.Expirationdate,
+        //                Price = item.Price,
+        //                Original = item.Original,
+        //                Quantity = item.Quantity - (tmp?.Quantity ?? 0),
+        //            });
+        //        }
+        //    }
+        //    return res;
+        //}
 
         public async Task<IEnumerable<MaterialDetailDTO>?> GetListMaterialWithDetail()
         {
             return await _unitOfWork.MaterialList.GetAllMaterialWithDetail();
+        }
+
+        public async Task<MaterialDetailDTO?> GetMaterialsuppliers(int materialid, int supplierid, int importdetailid)
+        {
+            return await _unitOfWork.MaterialList.GetMaterialsuppliersByImportDetail(materialid, supplierid, importdetailid);
         }
 
         public async Task<Supplier> AddSupplier(Supplier supplier)

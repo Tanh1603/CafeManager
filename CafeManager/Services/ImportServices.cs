@@ -26,6 +26,11 @@ namespace CafeManager.WPF.Services
             return await _unitOfWork.ImportList.GetAllImportsAsync();
         }
 
+        public async Task<Import?> GetImportById(int id)
+        {
+            return await _unitOfWork.ImportList.GetImportById(id);
+        }
+
         //public async Task<IEnumerable<MaterialDetailDTO>?> GetListImportDetailByImportId(int id)
         //{
         //    var listImport = await _unitOfWork.ImportList.GetAllImportsDetailsByImportIdAsync(id);
@@ -50,33 +55,35 @@ namespace CafeManager.WPF.Services
         //        });
         //    return res;
         //}
-        public async Task<IEnumerable<MaterialDetailDTO>?> GetListImportDetailByImportId(int id)
-        {
-            var listImport = await _unitOfWork.ImportList.GetAllImportsDetailsByImportIdAsync(id);
 
-            var res = listImport
-                .Select(x =>
-                {
-                    // Lấy đối tượng MaterialSupplier đầu tiên phù hợp để tái sử dụng
-                    var materialSupplier = x.Material?.Materialsuppliers
-                        .FirstOrDefault(f => f.Supplierid == x.Import.Supplierid && f.Materialid == x.Materialid);
 
-                    return new MaterialDetailDTO
-                    {
-                        Materialname = x.Material?.Materialname,
-                        Suppliername = x.Import.Supplier?.Suppliername,
-                        Unit = x.Material?.Unit,
-                        Quantity = x.Quantity ?? 0,
-                        Price = materialSupplier?.Price ?? 0,
-                        Original = materialSupplier?.Original,
-                        Manufacturer = materialSupplier?.Manufacturer,
-                        Manufacturedate = materialSupplier?.Manufacturedate ?? DateTime.Now,
-                        Expirationdate = materialSupplier?.Expirationdate ?? DateTime.Now
-                    };
-                });
+        //public async Task<IEnumerable<MaterialDetailDTO>?> GetListImportDetailByImportId(int id)
+        //{
+        //    var listImport = await _unitOfWork.ImportList.GetAllImportsDetailsByImportIdAsync(id);
 
-            return res;
-        }
+        //    var res = listImport
+        //        .Select(x =>
+        //        {
+        //            // Lấy đối tượng MaterialSupplier đầu tiên phù hợp để tái sử dụng
+        //            var materialSupplier = x.Material?.Materialsuppliers
+        //                .FirstOrDefault(f => f.Supplierid == x.Import.Supplierid && f.Materialid == x.Materialid);
+
+        //            return new MaterialDetailDTO
+        //            {
+        //                Materialname = x.Material?.Materialname,
+        //                Suppliername = x.Import.Supplier?.Suppliername,
+        //                Unit = x.Material?.Unit,
+        //                Quantity = x.Quantity ?? 0,
+        //                Price = materialSupplier?.Price ?? 0,
+        //                Original = materialSupplier?.Original,
+        //                Manufacturer = materialSupplier?.Manufacturer,
+        //                Manufacturedate = materialSupplier?.Manufacturedate ?? DateTime.Now,
+        //                Expirationdate = materialSupplier?.Expirationdate ?? DateTime.Now
+        //            };
+        //        });
+
+        //    return res;
+        //}
 
         #region Tính toán dữ liệu
 
@@ -98,11 +105,6 @@ namespace CafeManager.WPF.Services
         {
             var listImportDetailById = await _unitOfWork.ImportList.GetAllImportsDetailsByImportIdAsync(id);
             return CaculatePriceOfListImportdetai(listImportDetailById);
-        }
-
-        public async Task<Import> GetImportById(int id)
-        {
-            return await _unitOfWork.ImportList.GetImportById(id);
         }
 
         #endregion Tính toán dữ liệu
@@ -130,15 +132,60 @@ namespace CafeManager.WPF.Services
             catch (Exception ex)
             {
                 await _unitOfWork.RollbackTransactionAsync();
+                _unitOfWork.ClearChangeTracker();
                 throw new InvalidOperationException("Thêm phiếu nhập thất bại.", ex);
             }
         }
 
-        public Import? Update(Import import)
+        public async Task<Import?> UpdateImport(Import import, List<Importdetail>? updateImportDetails)
         {
-            var res = _unitOfWork.ImportList.Update(import);
-            _unitOfWork.Complete();
-            return res;
+            try
+            {
+                await _unitOfWork.BeginTransactionAsync();
+                var res = _unitOfWork.ImportList.Update(import);
+                if (updateImportDetails != null)
+                {
+                    updateImportDetails.ForEach(async x =>
+                    {
+                        if (x.Importdetailid == 0)
+                        {
+                            await _unitOfWork.ImportDetailList.Create(new()
+                            {
+                                Importid = x.Importid,
+                                Materialid = x.Materialid,
+                                Quantity = x.Quantity
+                            });
+                        }
+                        else
+                        {
+                            var existingImportDetial = await _unitOfWork.ImportDetailList.GetById(x.Importdetailid);
+
+                            if (existingImportDetial != null && existingImportDetial.Isdeleted == false)
+                            {
+                                if (x.Isdeleted == true)
+                                {
+                                    existingImportDetial.Isdeleted = false;
+                                }
+                                else
+                                {
+                                    existingImportDetial.Importid = x.Importid;
+                                    existingImportDetial.Materialid = x.Materialid;
+                                    existingImportDetial.Quantity = x.Quantity;
+                                }
+                            }
+                        }
+                    });
+                }
+                await _unitOfWork.CompleteAsync();
+                await _unitOfWork.CommitTransactionAsync();
+                return res;
+            }
+            catch (Exception)
+            {
+                await _unitOfWork.RollbackTransactionAsync();
+                _unitOfWork.ClearChangeTracker();
+                throw new InvalidOperationException("Lỗi khi sửa thông tin nhập hàng");
+            }
         }
 
         public async Task<bool> DeleteImport(int id)

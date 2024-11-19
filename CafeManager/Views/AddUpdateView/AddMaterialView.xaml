@@ -87,10 +87,10 @@
                 Margin="10,20"
                 HorizontalAlignment="Right"
                 VerticalAlignment="Bottom"
+                Command="{Binding SubmitCommand}"
                 Style="{StaticResource adjustInfoButton}">
                 <StackPanel HorizontalAlignment="Center" Orientation="Horizontal">
-                    <ma:PackIconMaterial VerticalAlignment="Center" Kind="Pencil" />
-                    <TextBlock Margin="10,0,0,0" Text="Sửa" />
+                    <TextBlock Text="Xác nhận" />
                 </StackPanel>
             </Button>
         </Grid>

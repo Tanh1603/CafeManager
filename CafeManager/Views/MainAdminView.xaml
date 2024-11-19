@@ -101,7 +101,7 @@
                             Style="{StaticResource menuButton}">
                             <StackPanel Orientation="Horizontal">
                                 <fa:IconImage Icon="MartiniGlassCitrus" Style="{StaticResource menuButtonIcon}" />
-                                <TextBlock Style="{StaticResource menuButtonText}" Text="Nước uống" />
+                                <TextBlock Style="{StaticResource menuButtonText}" Text="Thực đơn" />
                             </StackPanel>
                         </RadioButton>
 

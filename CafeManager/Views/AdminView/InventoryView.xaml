@@ -113,190 +113,23 @@
                         Kind="Magnify" />
                 </Grid>
 
-                <Border Grid.Row="2">
-                    <TabControl Style="{DynamicResource tabControlStyle}">
-                        <TabItem Header="Đã dùng" Style="{DynamicResource tabItemStyle}">
+                <Border Grid.Row="2" VerticalAlignment="Center" HorizontalAlignment="Center">
+                    <TabControl
+                        Style="{DynamicResource tabControlStyle}"
+                        VirtualizingStackPanel.IsVirtualizing="True"
+                        VirtualizingStackPanel.VirtualizationMode="Recycling"
+                        RenderOptions.ClearTypeHint="Enabled"
+                        >
+                        <TabItem Header="Đã dùng" Style="{DynamicResource tabItemStyle}"  IsSelected="True">
 
-                            <DataGrid
-                                x:Name="SuppliersDataGrid"
-                                Width="auto"
-                                VerticalAlignment="Top"
-                                AlternationCount="{Binding ListSupplier.Count}"
-                                CellStyle="{DynamicResource DataGridCellStyle1}"
-                                ColumnHeaderStyle="{DynamicResource DataGridColumnHeaderStyle1}"
-                                ItemsSource="{Binding ListSupplier}"
-                                RowStyle="{DynamicResource DataGridRowStyle1}"
-                                Style="{DynamicResource DataGridStyle1}">
-                                <DataGrid.Columns>
-
-                                    <DataGridTextColumn
-                                        Width="auto"
-                                        Header="STT"
-                                        IsReadOnly="True">
-                                        <DataGridTextColumn.Binding>
-                                            <Binding
-                                                Converter="{StaticResource RowIndexConverter}"
-                                                Path="(ItemsControl.AlternationIndex)"
-                                                RelativeSource="{RelativeSource AncestorType=DataGridRow}" />
-                                        </DataGridTextColumn.Binding>
-                                    </DataGridTextColumn>
-
-                                    <DataGridTextColumn
-                                        Width="*"
-                                        Binding="{Binding Suppliername}"
-                                        CanUserResize="False"
-                                        Header="Nhà cung cấp"
-                                        IsReadOnly="True" />
-
-                                    <DataGridTextColumn
-                                        Width="*"
-                                        Binding="{Binding Representativesupplier}"
-                                        CanUserResize="False"
-                                        Header="Người đại diện"
-                                        IsReadOnly="True" />
-                                    <DataGridTextColumn
-                                        Width="*"
-                                        Binding="{Binding Phone}"
-                                        CanUserResize="False"
-                                        Header="Số điện thoại"
-                                        IsReadOnly="True" />
-                                    <DataGridTextColumn
-                                        Width="*"
-                                        Binding="{Binding Email}"
-                                        CanUserResize="False"
-                                        Header="Email"
-                                        IsReadOnly="True" />
-                                    <DataGridTextColumn
-                                        Width="*"
-                                        Binding="{Binding Address}"
-                                        CanUserResize="False"
-                                        Header="Địa chỉ"
-                                        IsReadOnly="True" />
-
-                                    <DataGridTextColumn
-                                        Width="*"
-                                        Binding="{Binding Notes}"
-                                        CanUserResize="False"
-                                        Header="Thông tin khác"
-                                        IsReadOnly="True" />
-
-                                    <DataGridTemplateColumn
-                                        Width="auto"
-                                        Header="Tùy chỉnh"
-                                        IsReadOnly="True">
-                                        <DataGridTemplateColumn.CellTemplate>
-                                            <DataTemplate>
-                                                <StackPanel Orientation="Horizontal">
-                                                    <Button
-                                                        Command="{Binding DataContext.UpdateSupplierCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
-                                                        CommandParameter="{Binding}"
-                                                        Style="{StaticResource gridEditButton}">
-                                                        <ma:PackIconMaterial Kind="PencilOutline" Style="{StaticResource gridButtonIcon}" />
-                                                    </Button>
-                                                    <Button
-                                                        Margin="5,0,0,0"
-                                                        Command="{Binding DataContext.DeleteSupplierCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
-                                                        CommandParameter="{Binding}"
-                                                        Style="{StaticResource gridRemoveButton}">
-                                                        <ma:PackIconMaterial Kind="DeleteOutline" Style="{StaticResource gridButtonIcon}" />
-                                                    </Button>
-                                                </StackPanel>
-                                            </DataTemplate>
-                                        </DataGridTemplateColumn.CellTemplate>
-                                    </DataGridTemplateColumn>
-                                </DataGrid.Columns>
-                            </DataGrid>
+                            <Border Width="1000">
+                                <TextBlock Text="tồn kho" Height="200" Background="#ffffff"/>
+                            </Border>
                         </TabItem>
                         <TabItem Header="Tồn kho" Style="{DynamicResource tabItemStyle}">
-                            <DataGrid
-                                x:Name="MaterialDataGrid"
-                                Width="auto"
-                                VerticalAlignment="Top"
-                                AlternationCount="{Binding ListSupplier.Count}"
-                                CellStyle="{DynamicResource DataGridCellStyle1}"
-                                ColumnHeaderStyle="{DynamicResource DataGridColumnHeaderStyle1}"
-                                ItemsSource="{Binding ListSupplier}"
-                                RowStyle="{DynamicResource DataGridRowStyle1}"
-                                Style="{DynamicResource DataGridStyle1}">
-                                <DataGrid.Columns>
-
-                                    <DataGridTextColumn
-                                        Width="auto"
-                                        Header="STT"
-                                        IsReadOnly="True">
-                                        <DataGridTextColumn.Binding>
-                                            <Binding
-                                                Converter="{StaticResource RowIndexConverter}"
-                                                Path="(ItemsControl.AlternationIndex)"
-                                                RelativeSource="{RelativeSource AncestorType=DataGridRow}" />
-                                        </DataGridTextColumn.Binding>
-                                    </DataGridTextColumn>
-
-                                    <DataGridTextColumn
-                                        Width="*"
-                                        Binding="{Binding Suppliername}"
-                                        CanUserResize="False"
-                                        Header="Nhà cung cấp"
-                                        IsReadOnly="True" />
-
-                                    <DataGridTextColumn
-                                        Width="*"
-                                        Binding="{Binding Representativesupplier}"
-                                        CanUserResize="False"
-                                        Header="Người đại diện"
-                                        IsReadOnly="True" />
-                                    <DataGridTextColumn
-                                        Width="*"
-                                        Binding="{Binding Phone}"
-                                        CanUserResize="False"
-                                        Header="Số điện thoại"
-                                        IsReadOnly="True" />
-                                    <DataGridTextColumn
-                                        Width="*"
-                                        Binding="{Binding Email}"
-                                        CanUserResize="False"
-                                        Header="Email"
-                                        IsReadOnly="True" />
-                                    <DataGridTextColumn
-                                        Width="*"
-                                        Binding="{Binding Address}"
-                                        CanUserResize="False"
-                                        Header="Địa chỉ"
-                                        IsReadOnly="True" />
-
-                                    <DataGridTextColumn
-                                        Width="*"
-                                        Binding="{Binding Notes}"
-                                        CanUserResize="False"
-                                        Header="Thông tin khác"
-                                        IsReadOnly="True" />
-
-                                    <DataGridTemplateColumn
-                                        Width="auto"
-                                        Header="Tùy chỉnh"
-                                        IsReadOnly="True">
-                                        <DataGridTemplateColumn.CellTemplate>
-                                            <DataTemplate>
-                                                <StackPanel Orientation="Horizontal">
-                                                    <Button
-                                                        Command="{Binding DataContext.UpdateSupplierCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
-                                                        CommandParameter="{Binding}"
-                                                        Style="{StaticResource gridEditButton}">
-                                                        <ma:PackIconMaterial Kind="PencilOutline" Style="{StaticResource gridButtonIcon}" />
-                                                    </Button>
-                                                    <Button
-                                                        Margin="5,0,0,0"
-                                                        Command="{Binding DataContext.DeleteSupplierCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
-                                                        CommandParameter="{Binding}"
-                                                        Style="{StaticResource gridRemoveButton}">
-                                                        <ma:PackIconMaterial Kind="DeleteOutline" Style="{StaticResource gridButtonIcon}" />
-                                                    </Button>
-                                                </StackPanel>
-                                            </DataTemplate>
-                                        </DataGridTemplateColumn.CellTemplate>
-                                    </DataGridTemplateColumn>
-                                </DataGrid.Columns>
-                            </DataGrid>
+                            <Border Width="1000">
+                                <TextBlock Text="tồn kho2" Height="200" Background="#ffffff"/>
+                            </Border>
                         </TabItem>
                     </TabControl>
                 </Border>

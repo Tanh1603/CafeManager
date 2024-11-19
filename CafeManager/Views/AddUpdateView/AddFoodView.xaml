@@ -34,31 +34,29 @@
             <StackPanel VerticalAlignment="Center">
                 <Grid>
 
-                    <Ellipse
+                    <Rectangle
                         Width="200"
-                        Height="200"
-                        HorizontalAlignment="Center"
-                        VerticalAlignment="Bottom"
+                        Height="150"
                         Fill="#ffffff"
+                        RadiusX="5"
+                        RadiusY="5"
                         StrokeThickness="4">
-                        <Ellipse.Stroke>
+                        <Rectangle.Stroke>
+
                             <LinearGradientBrush>
                                 <GradientStop Offset="0" Color="#cea48c" />
                                 <GradientStop Offset="1" Color="#b79c8b" />
                             </LinearGradientBrush>
-                        </Ellipse.Stroke>
-                    </Ellipse>
+                        </Rectangle.Stroke>
+                    </Rectangle>
 
                     <Border
                         Width="200"
-                        Height="200"
+                        Height="150"
                         ClipToBounds="True"
                         CornerRadius="100">
                         <Border.Clip>
-                            <EllipseGeometry
-                                Center="100,100"
-                                RadiusX="100"
-                                RadiusY="100" />
+                            <RectangleGeometry Rect="0,0,200,150" />
                         </Border.Clip>
                         <Image
                             RenderOptions.BitmapScalingMode="HighQuality"
@@ -142,11 +140,11 @@
                     <Grid Grid.Row="1" Grid.Column="1">
                         <ComboBox
                             x:Name="cbFoodCategory"
+                            FontWeight="Regular"
                             ItemsSource="{Binding ListFoodCategory}"
                             SelectedItem="{Binding SelectedFoodCategory}"
                             Style="{StaticResource ComboBoxStyle}"
-                            Tag="--Danh mục thực đơn--"
-                            FontWeight="Regular">
+                            Tag="--Danh mục thực đơn--">
                             <ComboBox.ItemContainerStyle>
                                 <Style BasedOn="{StaticResource ComboBoxItemStyle}" TargetType="ComboBoxItem">
                                     <Setter Property="Width" Value="{Binding ActualWidth, ElementName=cbFoodCategory}" />

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore.Metadata;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -7,6 +8,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Documents;
+using System.Windows.Forms;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
@@ -18,7 +20,7 @@ namespace CafeManager.WPF.Assets.UsersControls
     /// <summary>
     /// Interaction logic for infoTextInput.xaml
     /// </summary>
-    public partial class infoTextInput : UserControl
+    public partial class infoTextInput : System.Windows.Controls.UserControl
     {
         public infoTextInput()
         {
@@ -44,5 +46,23 @@ namespace CafeManager.WPF.Assets.UsersControls
         // Using a DependencyProperty as the backing store for Text.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty TextProperty =
             DependencyProperty.Register("Text", typeof(string), typeof(infoTextInput), new PropertyMetadata(""));
+
+
+
+        public bool IsReadOnly
+        {
+            get { return (bool)GetValue(IsReadOnlyProperty); }
+            set { SetValue(IsReadOnlyProperty, value); }
+        }
+
+        // Using a DependencyProperty as the backing store for MyProperty.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty IsReadOnlyProperty =
+            DependencyProperty.Register("IsReadOnly", typeof(bool), typeof(infoTextInput), new PropertyMetadata(false, OnIsReadOnlyChanged));
+
+        private static void OnIsReadOnlyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            var control = d as infoTextInput;
+            bool newValue = (bool)e.NewValue;
+        }
     }
 }

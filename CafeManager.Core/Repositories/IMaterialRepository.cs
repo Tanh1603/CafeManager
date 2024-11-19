@@ -12,12 +12,12 @@ namespace CafeManager.Core.Repositories
     {
         Task<IEnumerable<Material>> GetAllMaterialAsync();
 
-        Task<IEnumerable<MaterialDetailDTO>> GetAllMaterialWithDetail();
+        Task<IEnumerable<MaterialSupplierDTO>> GetAllMaterialWithDetail();
 
-        Task<IEnumerable<MaterialDetailDTO>> GetAllUsedMaterial();
+        Task<IEnumerable<MaterialSupplierDTO>> GetAllUsedMaterial();
 
         Task<Material> GetMaterialById(int id);
 
-        Task<MaterialDetailDTO> GetMaterialsuppliersByImportDetail(int materialid, int supplierid, int importdetailid);
+        Task<MaterialSupplierDTO> GetMaterialsuppliersByImportDetail(int materialid, int supplierid, int importdetailid);
     }
 }

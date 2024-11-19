@@ -23,7 +23,7 @@ namespace CafeManager.Infrastructure.Repositories
             return await _cafeManagerContext.Materials.Include(x => x.Consumedmaterials).ToListAsync();
         }
 
-        public async Task<IEnumerable<MaterialDetailDTO>> GetAllMaterialWithDetail()
+        public async Task<IEnumerable<MaterialSupplierDTO>> GetAllMaterialWithDetail()
         {
             var result = await (
                 from m in _cafeManagerContext.Materials
@@ -48,7 +48,7 @@ namespace CafeManager.Infrastructure.Repositories
                     ms.Expirationdate,
                     ms.Price
                 } into g
-                select new MaterialDetailDTO
+                select new MaterialSupplierDTO
                 {
                     CurrentMaterial = new Material { Materialname = g.Key.Materialname, Unit = g.Key.Unit },
                     Manufacturer = g.Key.Manufacturer,
@@ -64,7 +64,7 @@ namespace CafeManager.Infrastructure.Repositories
             return result;
         }
 
-        public async Task<IEnumerable<MaterialDetailDTO>> GetAllUsedMaterial()
+        public async Task<IEnumerable<MaterialSupplierDTO>> GetAllUsedMaterial()
         {
             var result = await (
                 from cs in _cafeManagerContext.Consumedmaterials
@@ -89,7 +89,7 @@ namespace CafeManager.Infrastructure.Repositories
                     ms.Expirationdate,
                     ms.Price
                 } into g
-                select new MaterialDetailDTO
+                select new MaterialSupplierDTO
                 {
                     CurrentMaterial = new Material { Materialname = g.Key.Materialname, Unit = g.Key.Unit },
                     Manufacturer = g.Key.Manufacturer,
@@ -113,7 +113,7 @@ namespace CafeManager.Infrastructure.Repositories
                 .FirstOrDefaultAsync(x => x.Materialid == id);
         }
 
-        public async Task<MaterialDetailDTO> GetMaterialsuppliersByImportDetail(int materialid, int supplierid, int importdetailid)
+        public async Task<MaterialSupplierDTO> GetMaterialsuppliersByImportDetail(int materialid, int supplierid, int importdetailid)
         {
             var result = await (
                 from m in _cafeManagerContext.Materials
@@ -138,7 +138,7 @@ namespace CafeManager.Infrastructure.Repositories
                     ms.Expirationdate,
                     ms.Price
                 } into g
-                select new MaterialDetailDTO
+                select new MaterialSupplierDTO
                 {
                     Materialsupplierid = g.Key.Materialsupplierid,
                     CurrentMaterial = new Material { Materialname = g.Key.Materialname, Unit = g.Key.Unit },

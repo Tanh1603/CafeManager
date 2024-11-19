@@ -1,18 +1,27 @@
 ﻿using CafeManager.Core.Data;
-using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.Linq;
 using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
+
+#nullable disable
 
 namespace CafeManager.Core.DTOs
 {
     public class ImportDTO : INotifyPropertyChanged
     {
         private int _importid;
+        private string _deliveryperson;
+        private string _phone;
+        private string _shippingcompany;
+        private DateTime _receiveddate;
+        private int _staffid;
+        private int _supplierid;
+        private bool? _isdeleted;
+
+        private SupplierDTO _supplierDTO;
+        private StaffDTO _staffDTO;
+        private ObservableCollection<ImportDetailDTO> _listImportDetailDTO = [];
+
         public int Importid
         {
             get => _importid;
@@ -23,20 +32,7 @@ namespace CafeManager.Core.DTOs
             }
         }
 
-
-        private Supplier? _importSupplier;
-        public Supplier? ImportSupplier
-        {
-            get => _importSupplier;
-            set
-            {
-                _importSupplier = value;
-                OnPropertyChanged();
-            }
-        }
-
-        private string? _deliveryperson;
-        public string? Deliveryperson
+        public string Deliveryperson
         {
             get => _deliveryperson;
             set
@@ -46,8 +42,7 @@ namespace CafeManager.Core.DTOs
             }
         }
 
-        private string? _phone;
-        public string? Phone
+        public string Phone
         {
             get => _phone;
             set
@@ -57,8 +52,7 @@ namespace CafeManager.Core.DTOs
             }
         }
 
-        private string? _shippingcompany;
-        public string? Shippingcompany
+        public string Shippingcompany
         {
             get => _shippingcompany;
             set
@@ -68,7 +62,6 @@ namespace CafeManager.Core.DTOs
             }
         }
 
-        private DateTime _receiveddate;
         public DateTime Receiveddate
         {
             get => _receiveddate;
@@ -78,18 +71,6 @@ namespace CafeManager.Core.DTOs
                 OnPropertyChanged();
             }
         }
-
-        private Staff _receivedStaff;
-        public Staff ReceivedStaff
-        {
-            get => _receivedStaff;
-            set
-            {
-                _receivedStaff = value;
-                OnPropertyChanged();
-            }
-        }
-        private bool? _isdeleted;
 
         public bool? Isdeleted
         {
@@ -104,8 +85,45 @@ namespace CafeManager.Core.DTOs
             }
         }
 
+        public int Staffid
+        {
+            get => _staffid;
+            set
+            {
+                _staffid = value;
+                OnPropertyChanged();
+            }
+        }
 
-        private ObservableCollection<ImportDetailDTO> _listImportDetailDTO = new ObservableCollection<ImportDetailDTO>();
+        public int Supplierid
+        {
+            get => _supplierid;
+            set
+            {
+                _supplierid = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public SupplierDTO SupplierDTO
+        {
+            get => _supplierDTO;
+            set
+            {
+                _supplierDTO = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public StaffDTO StaffDTO
+        {
+            get => _staffDTO;
+            set
+            {
+                _staffDTO = value;
+                OnPropertyChanged();
+            }
+        }
 
         public ObservableCollection<ImportDetailDTO> ListImportDetailDTO
         {
@@ -116,6 +134,7 @@ namespace CafeManager.Core.DTOs
                 {
                     _listImportDetailDTO = value;
                     OnPropertyChanged();
+                    OnPropertyChanged(nameof(TotalPriceOfImport));
                 }
             }
         }
@@ -125,33 +144,40 @@ namespace CafeManager.Core.DTOs
             return new ImportDTO
             {
                 Importid = this.Importid,
-                ImportSupplier = this.ImportSupplier,
                 Deliveryperson = this.Deliveryperson,
                 Phone = this.Phone,
                 Shippingcompany = this.Shippingcompany,
                 Receiveddate = this.Receiveddate,
-                ReceivedStaff = this.ReceivedStaff,
+                Staffid = this.Staffid,
+                Supplierid = this.Supplierid,
                 Isdeleted = this.Isdeleted,
-                ListImportDetailDTO = new ObservableCollection<ImportDetailDTO>(this.ListImportDetailDTO.Select(history => history.Clone()))
+
+                ListImportDetailDTO = this.ListImportDetailDTO,
+                StaffDTO = this.StaffDTO,
+                SupplierDTO = this.SupplierDTO,
             };
         }
 
-        public event PropertyChangedEventHandler? PropertyChanged;
+        public event PropertyChangedEventHandler PropertyChanged;
 
         protected void OnPropertyChanged([CallerMemberName] string propertyName = null)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
-        public decimal? CaculateTotalPrice()
-        {
-            return ListImportDetailDTO?.Sum(x =>
-            {
-                decimal Price = x.ModifyMaterialDetail?.Price ?? 0;
-                decimal quantity = x.Quantity ?? 0;
+        public decimal TotalPriceOfImport => CaculateTotalPrice();
 
-                return Price * quantity;
-            }) ?? 0;
+        public decimal CaculateTotalPrice()
+        {
+            //return ListImportDetailDTO?.Sum(x =>
+            //{
+            //    decimal Price = x.MaterialDTO.MaterialsuppliersDTO.?.Price ?? 0;
+            //    decimal quantity = x.Quantity ?? 0;
+
+            //    return Price * quantity;
+            //}) ?? 0;
+
+            return 0;
         }
     }
 }

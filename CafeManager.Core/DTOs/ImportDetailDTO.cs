@@ -1,16 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
+﻿using System.ComponentModel;
 using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
+
+#nullable disable
 
 namespace CafeManager.Core.DTOs
 {
     public class ImportDetailDTO : INotifyPropertyChanged
     {
         private int _importdetailid;
+        private int importid;
+        private int materialid;
+        private decimal _quantity;
+        private bool? _isdeleted;
+        private MaterialDTO _materialDTO;
 
         public int Importdetailid
         {
@@ -24,12 +26,28 @@ namespace CafeManager.Core.DTOs
                 }
             }
         }
-        public int ImportId { get; set; }
-        public int MaterialId { get; set; }
 
-        private decimal? _quantity;
+        public int Importid
+        {
+            get => importid;
+            set
+            {
+                importid = value;
+                OnPropertyChanged();
+            }
+        }
 
-        public decimal? Quantity
+        public int Materialid
+        {
+            get => materialid;
+            set
+            {
+                materialid = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public decimal Quantity
         {
             get => _quantity;
             set
@@ -43,23 +61,6 @@ namespace CafeManager.Core.DTOs
             }
         }
 
-        private MaterialDetailDTO _modifyMaterialDetail;
-
-        public MaterialDetailDTO ModifyMaterialDetail
-        {
-            get => _modifyMaterialDetail;
-            set
-            {
-                if (_modifyMaterialDetail != value)
-                {
-                    _modifyMaterialDetail = value;
-                    OnPropertyChanged();
-                }
-            }
-        }
-
-
-        private bool? _isdeleted;
         public bool? Isdeleted
         {
             get => _isdeleted;
@@ -73,23 +74,35 @@ namespace CafeManager.Core.DTOs
             }
         }
 
+        public MaterialDTO MaterialDTO
+        {
+            get => _materialDTO;
+            set
+            {
+                _materialDTO = value;
+                OnPropertyChanged();
+            }
+        }
+
         public ImportDetailDTO Clone()
         {
             return new ImportDetailDTO
             {
                 Importdetailid = this.Importdetailid,
-                ImportId = this.ImportId,
-                MaterialId = this.MaterialId,
-                ModifyMaterialDetail = this.ModifyMaterialDetail,
-                Quantity = this.Quantity
+                Importid = this.Importid,
+                Materialid = this.Materialid,
+                Isdeleted = this.Isdeleted,
+                Quantity = this.Quantity,
+
+                MaterialDTO = this.MaterialDTO
             };
         }
 
-        public event PropertyChangedEventHandler? PropertyChanged;
+        public event PropertyChangedEventHandler PropertyChanged;
 
-        public static Action? UpdateTotalPriceAction { get; set; }
+        public static Action UpdateTotalPriceAction { get; set; }
 
-        protected void OnPropertyChanged([CallerMemberName] string? propertyName = null)
+        protected void OnPropertyChanged([CallerMemberName] string propertyName = null)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }

@@ -43,7 +43,6 @@ namespace CafeManager.Core.Services
                 Endworkingdate = staffDTO.Endworkingdate,
                 Role = staffDTO.Role,
                 Isdeleted = staffDTO.Isdeleted,
-                Staffsalaryhistories = staffDTO.Staffsalaryhistories?.Select(h => StaffSalaryHistoryMapper.ToEntity(h)).ToList()
             };
         }
     }

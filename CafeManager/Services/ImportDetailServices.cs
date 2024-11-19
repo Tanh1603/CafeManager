@@ -21,7 +21,7 @@ namespace CafeManager.WPF.Services
             _unitOfWork = _provider.GetRequiredService<IUnitOfWork>();
         }
 
-        public async Task AddImportDetailArange(List<MaterialDetailDTO> materialDetailDTOs, Import import, Material addMaterial, Supplier addSupplier)
+        public async Task AddImportDetailArange(List<MaterialSupplierDTO> materialDetailDTOs, Import import, Material addMaterial, Supplier addSupplier)
         {
             try
             {

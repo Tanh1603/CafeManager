@@ -90,7 +90,7 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
                     Materialsupplier materialsupplier;
                     foreach(var item in import.ListImportDetailDTO)
                     {
-                        materialsupplier = MaterialDetailMapper.ToEntity(item.ModifyMaterialDetail, import.ImportSupplier.Supplierid);
+                        materialsupplier = MaterialSupplierMapper.ToEntity(item.ModifyMaterialDetail, import.ImportSupplier.Supplierid);
                         Materialsupplier newMaterialsupplier = await _materialSupplierServices.AddMaterialsupplier(materialsupplier);
                     }
                     Import? addImport = await _importServices.AddImport(ImportMapper.ToEntity(import));

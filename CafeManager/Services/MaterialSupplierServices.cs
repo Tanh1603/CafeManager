@@ -32,7 +32,7 @@ namespace CafeManager.WPF.Services
             return await _unitOfWork.SupplierList.GetAllSupplierAsync();
         }
 
-        public async Task<IEnumerable<MaterialDetailDTO>?> GetListConsumedMaterial()
+        public async Task<IEnumerable<MaterialSupplierDTO>?> GetListConsumedMaterial()
         {
             return await _unitOfWork.MaterialList.GetAllUsedMaterial();
         }
@@ -66,12 +66,12 @@ namespace CafeManager.WPF.Services
         //    return res;
         //}
 
-        public async Task<IEnumerable<MaterialDetailDTO>?> GetListMaterialWithDetail()
+        public async Task<IEnumerable<MaterialSupplierDTO>?> GetListMaterialWithDetail()
         {
             return await _unitOfWork.MaterialList.GetAllMaterialWithDetail();
         }
 
-        public async Task<MaterialDetailDTO?> GetMaterialsuppliers(int materialid, int supplierid, int importdetailid)
+        public async Task<MaterialSupplierDTO?> GetMaterialsuppliers(int materialid, int supplierid, int importdetailid)
         {
             return await _unitOfWork.MaterialList.GetMaterialsuppliersByImportDetail(materialid, supplierid, importdetailid);
         }

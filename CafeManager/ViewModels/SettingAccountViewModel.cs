@@ -1,4 +1,7 @@
 ﻿using CafeManager.Core.Data;
+using CafeManager.Core.DTOs;
+using CafeManager.Core.Services;
+using CafeManager.WPF.MessageBox;
 using CafeManager.WPF.Services;
 using CafeManager.WPF.Stores;
 using CommunityToolkit.Mvvm.ComponentModel;
@@ -19,55 +22,41 @@ namespace CafeManager.WPF.ViewModels
         private readonly IServiceProvider _provider;
         private readonly AccountStore _accountStore;
         private readonly AppUserServices _appUserServices;
-        private readonly FileDialogService _fileDialogService;
         private readonly EncryptionHelper _encryptionHelper;
+        private readonly FileDialogService _fileDialogService;
 
         [ObservableProperty]
-        private string _displayname;
+        private AppUserDTO _account = new();
 
         [ObservableProperty]
-        private string _username;
+        private string _oldPassword = string.Empty;
 
         [ObservableProperty]
-        private string _email;
+        private string _newPassword = string.Empty;
 
         [ObservableProperty]
-        private string _role;
+        private string _confirmPassword = string.Empty;
 
         [ObservableProperty]
-        private string _password;
-
-        [ObservableProperty]
-        private BitmapImage? _image;
-
-        [ObservableProperty]
-        private string _oldpassword;
-
-        [ObservableProperty]
-        private string _newpassword;
-
-        [ObservableProperty]
-        private bool _isOpenChangePassWord;
+        private bool _isOpenChangePassWord = false;
 
         public SettingAccountViewModel(IServiceProvider provider)
         {
             _provider = provider;
             _accountStore = provider.GetRequiredService<AccountStore>();
-            _fileDialogService = provider.GetRequiredService<FileDialogService>();
             _appUserServices = provider.GetRequiredService<AppUserServices>();
             _encryptionHelper = provider.GetRequiredService<EncryptionHelper>();
+            _fileDialogService = provider.GetRequiredService<FileDialogService>();
 
             LoadData();
         }
 
         private void LoadData()
         {
-            Username = _accountStore.Account?.Username ?? string.Empty;
-            Displayname = _accountStore.Account?.Displayname ?? string.Empty;
-            Email = _accountStore?.Account?.Email ?? string.Empty;
-            Role = _accountStore?.Account?.Role == 1 ? "Admin" : "User";
-            Image = _fileDialogService.Base64ToBitmapImage(_accountStore?.Account?.Avatar ?? string.Empty) ?? null;
-            Password = _encryptionHelper.DecryptAES(_accountStore?.Account?.Password ?? string.Empty);
+            if (_accountStore.Account != null)
+            {
+                Account = _accountStore.Account.Clone();
+            }
         }
 
         [RelayCommand]
@@ -86,29 +75,27 @@ namespace CafeManager.WPF.ViewModels
                 {
                     return;
                 }
-                appuser.Displayname = Displayname ?? string.Empty;
-                appuser.Username = Username;
-                appuser.Email = Email;
-                appuser.Avatar = _fileDialogService.ConvertBitmapImageToBase64(Image);
+                var account = AppUserMapper.ToEntity(Account);
+
+                appuser.Username = account.Username;
+                appuser.Displayname = account.Displayname;
+                appuser.Email = account.Email;
+                appuser.Avatar = account.Avatar;
 
                 var res = await _appUserServices.UpdateAppUser(appuser);
                 if (res != null)
                 {
-                    //MessageBox.Show("Cập nhật tài khoản thành công");
+                    MyMessageBox.ShowDialog("Cập nhật tài khoản thành công");
                     Properties.Settings.Default.UserName = string.Empty;
                     Properties.Settings.Default.PassWord = string.Empty;
                     Properties.Settings.Default.RememberAccount = false;
                     Properties.Settings.Default.Save();
-                    _accountStore.SetAccount(res);
-                }
-                else
-                {
-                    //MessageBox.Show("Lỗi");
+                    _accountStore.SetAccount(AppUserMapper.ToDTO(res));
                 }
             }
-            catch (Exception)
+            catch (InvalidOperationException ioe)
             {
-                throw;
+                MyMessageBox.ShowDialog(ioe.Message);
             }
         }
 
@@ -117,38 +104,73 @@ namespace CafeManager.WPF.ViewModels
         {
             try
             {
-                if (Oldpassword.Equals(Newpassword))
+                if (Account.Username != _accountStore.Account.Username
+                    || Account.Displayname != _accountStore.Account.Displayname
+                    || Account.Email != _accountStore.Account.Email
+                    || ConvertImageServices.BitmapImageToBase64(Account.Avatar) != ConvertImageServices.BitmapImageToBase64(_accountStore.Account.Avatar)
+                    )
                 {
-                    //MessageBox.Show("Mật khẩu mới và cũn trùng nhau");
+                    MyMessageBox.ShowDialog("Vui lòng cập nhật tài khoản trước khi thay đổi mật khẩu");
                     return;
                 }
-                Appuser? appuser = await _appUserServices.GetAppUserByUserName(_accountStore.Account.Username);
+                if (OldPassword.Equals(NewPassword))
+                {
+                    MyMessageBox.ShowDialog("Mật khẩu mới và cũ trùng nhau");
+                    return;
+                }
+                if (string.IsNullOrEmpty(NewPassword) || string.IsNullOrEmpty(OldPassword))
+                {
+                    MyMessageBox.ShowDialog("Mật khẩu không được để trống");
+                    return;
+                }
+
+                if (!ConfirmPassword.Equals(NewPassword))
+                {
+                    MyMessageBox.ShowDialog("Mật khẩu mới và xác nhận mật khẩu mới không trùng");
+                    return;
+                }
+
+                Appuser? appuser = await _appUserServices.GetAppUserByUserName(Account.Username);
                 if (appuser != null)
                 {
                     string oldHash = _encryptionHelper.DecryptAES(appuser.Password);
-                    if (!oldHash.Equals(Oldpassword))
+                    if (!oldHash.Equals(OldPassword))
                     {
-                        //MessageBox.Show("Mật khẩu cũ không khớp");
+                        MyMessageBox.ShowDialog("Mật khẩu cũ không khớp");
                         return;
                     }
-                    appuser.Password = _encryptionHelper.EncryptAES(Newpassword);
+                    appuser.Password = _encryptionHelper.EncryptAES(NewPassword);
                     var res = await _appUserServices.UpdateAppUser(appuser);
                     if (res != null)
                     {
-                        _accountStore.SetAccount(res);
                         Properties.Settings.Default.UserName = string.Empty;
                         Properties.Settings.Default.PassWord = string.Empty;
                         Properties.Settings.Default.RememberAccount = false;
                         Properties.Settings.Default.Save();
-
-                        //MessageBox.Show("Mật khẩu đổi thành công");
+                        MyMessageBox.ShowDialog("Mật khẩu đổi thành công");
                         IsOpenChangePassWord = false;
                     }
                 }
+                OldPassword = string.Empty;
+                NewPassword = string.Empty;
+                ConfirmPassword = string.Empty;
             }
             catch (InvalidOperationException ioe)
             {
-                //MessageBox.Show(ioe.Message);
+                MyMessageBox.Show(ioe.Message);
+            }
+        }
+
+        [RelayCommand]
+        private void OpenUploadImage()
+        {
+            string filter = "Image files (*.png;*.jpg;*.jpeg;*.bmp)|*.png;*.jpg;*.jpeg;*.bmp|All files (*.*)|*.*";
+            var filePath = _fileDialogService.OpenFileDialog(filter);
+
+            if (!string.IsNullOrEmpty(filePath))
+            {
+                Account.Avatar = new BitmapImage(new Uri(filePath));
+                OnPropertyChanged(nameof(Account));
             }
         }
 
@@ -156,8 +178,9 @@ namespace CafeManager.WPF.ViewModels
         private void CloseChangePassWord()
         {
             IsOpenChangePassWord = false;
-            Oldpassword = string.Empty;
-            Newpassword = string.Empty;
+            OldPassword = string.Empty;
+            NewPassword = string.Empty;
+            ConfirmPassword = string.Empty;
         }
     }
 }

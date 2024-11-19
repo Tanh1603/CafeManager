@@ -179,12 +179,12 @@ namespace CafeManager.WPF.Services
                 using (SmtpClient smtpClient = new SmtpClient("smtp.gmail.com"))
                 {
                     smtpClient.Port = 587;
-                    smtpClient.Credentials = new NetworkCredential(configuration["Email:AddminAccount"], configuration["Email:PassWord"]);
+                    smtpClient.Credentials = new NetworkCredential(configuration["Email:AdminAccount"], configuration["Email:PassWord"]);
                     smtpClient.EnableSsl = true;
 
                     MailMessage mailMessage = new MailMessage
                     {
-                        From = new MailAddress(configuration["Email:AddminAccount"], "Cafe Manager App"),
+                        From = new MailAddress(configuration["Email:AdminAccount"], "Cafe Manager App"),
                         Subject = "Đặt lại mật khẩu",
                         Body = emailBody,
                         IsBodyHtml = true,
@@ -195,7 +195,7 @@ namespace CafeManager.WPF.Services
                     await smtpClient.SendMailAsync(mailMessage);
                 }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
                 throw new InvalidOperationException("Email không tồn tại");
             }

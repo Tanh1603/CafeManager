@@ -52,7 +52,7 @@
         <Setter Property="BorderBrush" Value="Transparent" />
         <Setter Property="BorderThickness" Value="0" />
         <Setter Property="VerticalAlignment" Value="Center" />
-        <Setter Property="Padding" Value="0 5"/>
+        <Setter Property="Padding" Value="0,5" />
         <Setter Property="HorizontalAlignment" Value="Center" />
 
         <Setter Property="Template">
@@ -74,7 +74,10 @@
                             BorderThickness="{TemplateBinding BorderThickness}"
                             CornerRadius="5">
 
-                            <ContentPresenter ContentSource="SelectedContent" SnapsToDevicePixels="True" Margin="{TemplateBinding Padding}"/>
+                            <ContentPresenter
+                                Margin="{TemplateBinding Padding}"
+                                ContentSource="SelectedContent"
+                                SnapsToDevicePixels="True" />
                         </Border>
                     </Grid>
                 </ControlTemplate>

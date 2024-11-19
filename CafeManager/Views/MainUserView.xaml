@@ -51,8 +51,8 @@
 
                                     <Grid Grid.Column="0">
                                         <Border
-                                            Width="50"
-                                            Height="50"
+                                            Width="55"
+                                            Height="55"
                                             CornerRadius="10">
                                             <Border.Background>
                                                 <LinearGradientBrush StartPoint="0,0" EndPoint="1,2">
@@ -61,9 +61,11 @@
                                                 </LinearGradientBrush>
                                             </Border.Background>
                                             <Image
+                                                Width="50"
+                                                Height="50"
                                                 RenderOptions.BitmapScalingMode="HighQuality"
                                                 SnapsToDevicePixels="True"
-                                                Source="{Binding ImageAccount, Converter={StaticResource DefaultAccountImageConverter}}"
+                                                Source="{Binding UserAccount.Avatar, Converter={StaticResource DefaultAccountImageConverter}}"
                                                 Stretch="Uniform"
                                                 StretchDirection="DownOnly" />
                                         </Border>
@@ -77,12 +79,12 @@
                                             Margin="0,0,0,5"
                                             FontSize="15"
                                             Foreground="#f9f9f9"
-                                            Text="{Binding Displayname}" />
+                                            Text="{Binding UserAccount.Displayname}" />
                                         <TextBlock
                                             FontSize="15"
                                             FontWeight="SemiBold"
                                             Foreground="#ffffff"
-                                            Text="{Binding Role}" />
+                                            Text="{Binding UserAccount.Role}" />
                                     </StackPanel>
                                 </Grid>
                                 <Separator

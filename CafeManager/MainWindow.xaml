@@ -54,8 +54,8 @@
                     Width="35"
                     Height="35"
                     Margin="10,5,10,5"
-                    CornerRadius="50"
-                    HorizontalAlignment="Left">
+                    HorizontalAlignment="Left"
+                    CornerRadius="50">
                     <Border.Background>
                         <LinearGradientBrush StartPoint="0,0" EndPoint="1,2">
                             <GradientStop Offset="0" Color="#d5b096" />

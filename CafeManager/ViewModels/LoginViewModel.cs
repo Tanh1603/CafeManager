@@ -10,6 +10,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using CafeManager.WPF.MessageBox;
+using CafeManager.Core.Services;
 
 namespace CafeManager.WPF.ViewModels
 {
@@ -65,7 +66,7 @@ namespace CafeManager.WPF.ViewModels
                     string dialogResult = MyMessageBox.ShowDialog("Đăng nhập thành công", MyMessageBox.Buttons.Yes_No, MyMessageBox.Icons.Information);
                     if (dialogResult == "1")
                     {
-                        _provider.GetRequiredService<AccountStore>().SetAccount(appuser);
+                        _provider.GetRequiredService<AccountStore>().SetAccount(AppUserMapper.ToDTO(appuser));
                         _navigationStore.Navigation = role == 1 ? _provider.GetRequiredService<MainAdminViewModel>() : _provider.GetRequiredService<MainUserViewModel>();
                     }
                     if (IsRememberAccount)

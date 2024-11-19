@@ -115,14 +115,11 @@
 
                             <Setter TargetName="templateRoot" Property="BorderBrush" Value="#9e7555" />
                         </MultiDataTrigger>
-
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
     </Style>
-
-
 
     <!--  basic control template  -->
     <ControlTemplate x:Key="ComboBoxTemplate" TargetType="{x:Type ComboBox}">
@@ -133,27 +130,27 @@
             CornerRadius="5">
             <Grid SnapsToDevicePixels="true">
 
-
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*" />
-                    <ColumnDefinition MinWidth="{DynamicResource {x:Static SystemParameters.VerticalScrollBarWidthKey}}" Width="0"/>
+                    <ColumnDefinition Width="0" MinWidth="{DynamicResource {x:Static SystemParameters.VerticalScrollBarWidthKey}}" />
                 </Grid.ColumnDefinitions>
 
-                <TextBlock x:Name="placeHolderTextBlock"
-                           Text="{TemplateBinding Tag}"
-                           Visibility="Collapsed"
-                           VerticalAlignment="Center"
-                           HorizontalAlignment="Left"
-                           FontSize="12"
-                           Foreground="#99703a"
-                           FontWeight="{TemplateBinding FontWeight}"
-                           TextTrimming="CharacterEllipsis"
-                           Margin="14,0,5,0"
-                           Grid.ColumnSpan="2"
-                           Panel.ZIndex="1"/>
+                <TextBlock
+                    x:Name="placeHolderTextBlock"
+                    Grid.ColumnSpan="2"
+                    Margin="14,0,5,0"
+                    HorizontalAlignment="Left"
+                    VerticalAlignment="Center"
+                    Panel.ZIndex="1"
+                    FontSize="12"
+                    FontWeight="{TemplateBinding FontWeight}"
+                    Foreground="#99703a"
+                    Text="{TemplateBinding Tag}"
+                    TextTrimming="CharacterEllipsis"
+                    Visibility="Collapsed" />
 
                 <Popup
-                    x:Name="PART_Popup"
+                    x:Name="comboBox"
                     Grid.ColumnSpan="2"
                     Width="{Binding ActualWidth, RelativeSource={RelativeSource AncestorType=ComboBox}}"
                     Margin="1"
@@ -161,7 +158,7 @@
                     HorizontalOffset="0"
                     IsOpen="{Binding IsDropDownOpen, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}"
                     Placement="Bottom"
-                     PlacementTarget="{Binding ElementName=comboBox}"
+                    PlacementTarget="{Binding ElementName=comboBox}"
                     PopupAnimation="{DynamicResource {x:Static SystemParameters.ComboBoxPopupAnimationKey}}"
                     VerticalOffset="0">
 
@@ -171,19 +168,16 @@
                         BorderBrush="Transparent"
                         BorderThickness="2"
                         CornerRadius="5">
-                      
-                            <Grid x:Name="grid" RenderOptions.ClearTypeHint="Enabled">
 
-                                <ItemsPresenter
-                                    x:Name="ItemsPresenter"
-                                    Margin="0 1"
-                                    KeyboardNavigation.DirectionalNavigation="Contained"
-                                    SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
+                        <Grid x:Name="grid" RenderOptions.ClearTypeHint="Enabled">
 
-                            </Grid>
-                      
+                            <ItemsPresenter
+                                x:Name="ItemsPresenter"
+                                Margin="0,1"
+                                KeyboardNavigation.DirectionalNavigation="Contained"
+                                SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
+                        </Grid>
                     </Border>
-
                 </Popup>
 
                 <ToggleButton
@@ -210,17 +204,14 @@
         </Border>
         <ControlTemplate.Triggers>
             <Trigger Property="SelectedIndex" Value="-1">
-                <Setter Property="Visibility" TargetName="placeHolderTextBlock" Value="Visible"/>
+                <Setter TargetName="placeHolderTextBlock" Property="Visibility" Value="Visible" />
             </Trigger>
             <Trigger Property="IsFocused" Value="true">
                 <Setter TargetName="templateRoot" Property="BorderBrush" Value="#9e7555" />
             </Trigger>
 
-
             <Trigger Property="IsDropDownOpen" Value="true">
                 <Setter TargetName="dropDownBorder" Property="BorderBrush" Value="#9e7555" />
-
-
             </Trigger>
             <Trigger Property="HasItems" Value="false">
                 <Setter TargetName="dropDownBorder" Property="Height" Value="95" />
@@ -232,10 +223,8 @@
                 </MultiTrigger.Conditions>
                 <Setter Property="ScrollViewer.CanContentScroll" Value="false" />
             </MultiTrigger>
-
         </ControlTemplate.Triggers>
     </ControlTemplate>
-
 
     <Style x:Key="ComboBoxStyle" TargetType="ComboBox">
         <Setter Property="FocusVisualStyle" Value="{StaticResource FocusVisual}" />
@@ -252,27 +241,28 @@
         <Setter Property="ScrollViewer.PanningMode" Value="Both" />
         <Setter Property="Stylus.IsFlicksEnabled" Value="False" />
         <Setter Property="Template" Value="{StaticResource ComboBoxTemplate}" />
-
     </Style>
     <Style x:Key="ComboBoxItemStyle" TargetType="ComboBoxItem">
         <Setter Property="Background" Value="#d5b096" />
-        <Setter Property="Padding" Value="14 0 0 0"/>
+        <Setter Property="Padding" Value="14,0,0,0" />
 
-        <Setter Property="FontSize" Value="12"/>
+        <Setter Property="FontSize" Value="12" />
         <Setter Property="Foreground" Value="#844418" />
         <Setter Property="BorderBrush" Value="Transparent" />
         <Setter Property="BorderThickness" Value="0" />
-        
+
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="ComboBoxItem">
                     <Border
                         x:Name="Background"
-                      
                         Background="{TemplateBinding Background}"
                         BorderBrush="{TemplateBinding BorderBrush}"
                         BorderThickness="{TemplateBinding BorderThickness}">
-                        <ContentPresenter HorizontalAlignment="Left" VerticalAlignment="Center" Margin="{TemplateBinding Padding}"/>
+                        <ContentPresenter
+                            Margin="{TemplateBinding Padding}"
+                            HorizontalAlignment="Left"
+                            VerticalAlignment="Center" />
                     </Border>
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsMouseOver" Value="True">
@@ -282,12 +272,10 @@
                         <Trigger Property="IsSelected" Value="True">
 
                             <Setter TargetName="Background" Property="Background" Value="#b79c8b" />
-
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
     </Style>
-
 </ResourceDictionary>

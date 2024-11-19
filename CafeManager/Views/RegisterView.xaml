@@ -40,11 +40,13 @@
                 </StackPanel>
                 <Button
                     Grid.Row="1"
+                    Width="100"
+                    Margin="0,20,0,0"
                     Command="{Binding NavigateToLoginCommand}"
                     Style="{StaticResource backLoginBtn}">
 
                     <fa:IconImage
-                        Width="150"
+                        Width="100"
                         Foreground="{Binding Foreground, RelativeSource={RelativeSource AncestorType=Button}}"
                         Icon="ArrowCircleLeft" />
                 </Button>
@@ -125,7 +127,7 @@
                         FontWeight="Bold"
                         Foreground="#cb925d"
                         Text="Đăng kí tài khoản" />
-                    <StackPanel Grid.Row="1" Margin="0 20">
+                    <StackPanel Grid.Row="1" Margin="0,20">
                         <Grid Margin="0,10">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="auto" />
@@ -180,7 +182,7 @@
                             <!--  Password="{Binding Password}"  -->
                         </Grid>
 
-                       
+
 
                         <Grid Margin="0,10">
                             <Grid.ColumnDefinitions>
@@ -237,7 +239,7 @@
                         </Grid>
 
 
-                        
+
 
                         <Button
                             Width="300"

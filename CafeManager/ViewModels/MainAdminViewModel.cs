@@ -1,4 +1,5 @@
-﻿using CafeManager.WPF.Services;
+﻿using CafeManager.Core.DTOs;
+using CafeManager.WPF.Services;
 using CafeManager.WPF.Stores;
 using CafeManager.WPF.ViewModels;
 using CafeManager.WPF.ViewModels.AddViewModel;
@@ -15,7 +16,7 @@ using System.Windows.Media.Imaging;
 
 namespace CafeManager.WPF.ViewModels
 {
-    public partial class MainAdminViewModel : ObservableObject
+    public partial class MainAdminViewModel : ObservableObject, IDisposable
     {
         private readonly IServiceProvider _provider;
         private readonly NavigationStore _navigationStore;
@@ -25,13 +26,9 @@ namespace CafeManager.WPF.ViewModels
         private ObservableObject _currentViewModel;
 
         [ObservableProperty]
-        private string _displayname;
+        private AppUserDTO _adminAccount = new();
 
-        [ObservableProperty]
-        private string _role;
-
-        [ObservableProperty]
-        private BitmapImage? _imageAccount;
+        private string currentVM = string.Empty;
 
         public MainAdminViewModel(IServiceProvider provider)
         {
@@ -39,7 +36,7 @@ namespace CafeManager.WPF.ViewModels
             _navigationStore = _provider.GetRequiredService<NavigationStore>();
             _accountStore = provider.GetRequiredService<AccountStore>();
             CurrentViewModel = _provider.GetRequiredService<HomeViewModel>();
-
+            currentVM = "Home";
             LoadAccount();
             _accountStore.ChangeAccount += _accountStore_ChangeAccount;
         }
@@ -52,6 +49,8 @@ namespace CafeManager.WPF.ViewModels
         [RelayCommand]
         private void ChangeCurrentViewModel(string viewModel)
         {
+            if (viewModel.Equals(currentVM)) return;
+
             switch (viewModel)
             {
                 case "Home":
@@ -97,6 +96,7 @@ namespace CafeManager.WPF.ViewModels
                 default:
                     break;
             }
+            currentVM = viewModel;
         }
 
         [RelayCommand]
@@ -108,10 +108,18 @@ namespace CafeManager.WPF.ViewModels
 
         private void LoadAccount()
         {
-            Displayname = _accountStore.Account?.Displayname ?? "No name";
-            Role = (_accountStore.Account?.Role == 1) ? "Admin" : "User";
-            ImageAccount =
-                _provider.GetRequiredService<FileDialogService>().Base64ToBitmapImage(_accountStore.Account?.Avatar ?? string.Empty);
+            if (_accountStore.Account != null)
+            {
+                AdminAccount = _accountStore.Account;
+            }
+        }
+
+        public void Dispose()
+        {
+            if (_accountStore != null)
+            {
+                _accountStore.ChangeAccount -= _accountStore_ChangeAccount;
+            }
         }
     }
 }

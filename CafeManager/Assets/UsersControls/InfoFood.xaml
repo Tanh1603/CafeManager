@@ -79,8 +79,8 @@
 
                         <StackPanel
                             Grid.Column="0"
-                            Margin="10,5"
-                            HorizontalAlignment="left">
+                            HorizontalAlignment="left"
+                            VerticalAlignment="Center">
                             <TextBlock
                                 FontSize="18"
                                 Style="{StaticResource infoFoodText}"
@@ -134,12 +134,14 @@
                                         </Style.Triggers>
                                     </Style>
                                 </Grid.Style>
+
+
                                 <Button
                                     x:Name="BtnRestore"
-                                    Click="BtnRestore_Click"
                                     Padding="2"
                                     HorizontalAlignment="Right"
-                                    Background="Transparent">
+                                    Background="Transparent"
+                                    Click="BtnRestore_Click">
                                     <ma:PackIconMaterial Kind="Restore" Style="{StaticResource infoFoodIcon}" />
                                 </Button>
                             </Grid>

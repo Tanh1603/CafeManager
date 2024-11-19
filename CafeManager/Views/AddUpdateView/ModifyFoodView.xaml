@@ -62,7 +62,7 @@
                         </Border.Clip>
                         <Image
                             RenderOptions.BitmapScalingMode="HighQuality"
-                            Source="{Binding Imagefood, UpdateSourceTrigger=PropertyChanged}"
+                            Source="{Binding ModifyFood.Imagefood, UpdateSourceTrigger=PropertyChanged}"
                             Stretch="UniformToFill" />
                     </Border>
                 </Grid>
@@ -154,18 +154,12 @@
                                     <Setter Property="FontWeight" Value="Regular" />
                                 </Style>
                             </ComboBox.ItemContainerStyle>
-                            <i:Interaction.Triggers>
-                                <i:EventTrigger EventName="SelectionChanged">
-                                    <i:InvokeCommandAction Command="{Binding SelectedFoodCategoryChangeCommand}" CommandParameter="{Binding ElementName=cbFoodCategory, Path=SelectedItem, UpdateSourceTrigger=PropertyChanged}" />
-                                </i:EventTrigger>
-                            </i:Interaction.Triggers>
                             <ComboBox.ItemTemplate>
                                 <DataTemplate>
                                     <TextBlock Text="{Binding Foodcategoryname}" />
                                 </DataTemplate>
                             </ComboBox.ItemTemplate>
                         </ComboBox>
-
                     </Grid>
 
                     <uc:infoTextInput

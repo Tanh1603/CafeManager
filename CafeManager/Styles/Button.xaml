@@ -473,18 +473,24 @@
         </Style.Triggers>
     </Style>
 
-    <Style x:Key="windowButton" TargetType="Button" BasedOn="{StaticResource closeButton}"/>
+    <Style
+        x:Key="windowButton"
+        BasedOn="{StaticResource closeButton}"
+        TargetType="Button" />
 
-    <Style x:Key="closeWDBtn" TargetType="Button" BasedOn="{StaticResource closeButton}">
+    <Style
+        x:Key="closeWDBtn"
+        BasedOn="{StaticResource closeButton}"
+        TargetType="Button">
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="Button">
                     <Border
-                x:Name="border"
-                Background="{TemplateBinding Background}"
-                BorderBrush="{TemplateBinding BorderBrush}"
-                BorderThickness="{TemplateBinding BorderThickness}"
-                CornerRadius="5 10 0 5">
+                        x:Name="border"
+                        Background="{TemplateBinding Background}"
+                        BorderBrush="{TemplateBinding BorderBrush}"
+                        BorderThickness="{TemplateBinding BorderThickness}"
+                        CornerRadius="5 10 0 5">
                         <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
                     </Border>
                     <ControlTemplate.Triggers>
@@ -498,8 +504,8 @@
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
-    </Style>  
-    
+    </Style>
+
     <Style
         x:Key="closeInfoFoodBtn"
         BasedOn="{StaticResource gridEditButton}"
@@ -545,21 +551,27 @@
             </Trigger>
         </Style.Triggers>
     </Style>
-        <Style x:Key="addImageResBtn" TargetType="Button" BasedOn="{StaticResource backLoginBtn}">
-            <Setter Property="Height" Value="35"/>
-            <Setter Property="Width" Value="35"/>
-        </Style>
+    <Style
+        x:Key="addImageResBtn"
+        BasedOn="{StaticResource backLoginBtn}"
+        TargetType="Button">
+        <Setter Property="Height" Value="35" />
+        <Setter Property="Width" Value="35" />
+    </Style>
 
-    <Style x:Key="infoFoodBtn" TargetType="Button" BasedOn="{StaticResource gridEditButton}">
-        <Setter Property="MinHeight" Value="35"/>
-        <Setter Property="MinWidth" Value="35"/>
-        <Setter Property="Background" Value="Transparent"/>
-        <Setter Property="BorderBrush" Value="Transparent"/>
-        <Setter Property="Foreground" Value="#602414"/>
+    <Style
+        x:Key="infoFoodBtn"
+        BasedOn="{StaticResource gridEditButton}"
+        TargetType="Button">
+        <Setter Property="MinHeight" Value="35" />
+        <Setter Property="MinWidth" Value="35" />
+        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="BorderBrush" Value="Transparent" />
+        <Setter Property="Foreground" Value="#602414" />
         <Style.Triggers>
             <Trigger Property="IsMouseOver" Value="True">
                 <Setter Property="Foreground" Value="#d5b096" />
-                <Setter Property="Background" Value="#602414"/>
+                <Setter Property="Background" Value="#602414" />
 
 
             </Trigger>

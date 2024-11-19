@@ -76,7 +76,7 @@
             <Grid
                 Grid.Row="1"
                 Width="200"
-                Margin="0,10,0,0"
+                Margin="0,10"
                 HorizontalAlignment="Right">
                 <TextBlock
                     Margin="15,0"
@@ -97,11 +97,11 @@
                     Kind="Magnify" />
             </Grid>
 
-                <!--  Supplier Datagrid  -->
-                <Border
+            <!--  Supplier Datagrid  -->
+            <Border
                     Grid.Row="3"
                     Width="auto"
-                 
+
                     BorderBrush="#602414"
                     BorderThickness="2"
                     CornerRadius="10">
@@ -197,7 +197,7 @@
             </Border>
         </Grid>
 
-        <!--<materialDesign:DialogHost ClipToBounds="False" IsOpen="{Binding IsOpenAddSupplier}">
+        <materialDesign:DialogHost ClipToBounds="False" IsOpen="{Binding IsOpenAddSupplier}">
             <materialDesign:DialogHost.DialogBackground>
                 <SolidColorBrush Color="Transparent" />
             </materialDesign:DialogHost.DialogBackground>
@@ -205,6 +205,6 @@
             <materialDesign:DialogHost.DialogContent>
                 <ContentControl Content="{Binding AddSupplierVM}" />
             </materialDesign:DialogHost.DialogContent>
-        </materialDesign:DialogHost>-->
+        </materialDesign:DialogHost>
     </Grid>
 </UserControl>

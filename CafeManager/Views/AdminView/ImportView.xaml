@@ -22,12 +22,12 @@
         <BooleanToVisibilityConverter x:Key="BoolToVis" />
         <service:RowIndexConverter x:Key="RowIndexConverter" />
         <DataTemplate DataType="{x:Type addviewmodel:AddImportViewModel}">
-            <addview:AddImportView />
+            <addview:AddImportView/>
         </DataTemplate>
     </UserControl.Resources>
 
     <Grid>
-        <Border Grid.Column="1" CornerRadius="0 0 10 0">
+        <Border Grid.Column="1" CornerRadius="0 10 10 0">
             <Border.Background>
                 <LinearGradientBrush StartPoint="0,0.5" EndPoint="1,0.5">
                     <GradientStop Offset="0" Color="#9c6d3f" />
@@ -35,7 +35,7 @@
                 </LinearGradientBrush>
             </Border.Background>
 
-            <Grid Margin="20,10">
+            <Grid Margin="50,0,40,40">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="auto" />
                     <RowDefinition Height="auto" />
@@ -45,6 +45,7 @@
                 <!--  Page Title  -->
                 <TextBlock
                     Grid.Row="0"
+                    Margin="0,20,0,10"
                     HorizontalAlignment="Left"
                     FontSize="32"
                     FontWeight="SemiBold"
@@ -55,7 +56,7 @@
                 <Button
                     Grid.Row="0"
                     HorizontalAlignment="Right"
-                    Command="{Binding OpenAddImportCommand}"
+                    Command="{Binding OpenModifyImportCommand}"
                     Style="{StaticResource addButton}">
                     <StackPanel Orientation="Horizontal">
                         <ma:PackIconMaterial
@@ -78,7 +79,6 @@
 
                 <StackPanel
                     Grid.Row="1"
-                    Margin="0,10"
                     HorizontalAlignment="Right"
                     Orientation="Horizontal">
                     <TextBlock
@@ -91,7 +91,10 @@
                         Text="Filter by" />
 
                     <!--  Filter Textbox  -->
-                    <Grid Width="200" HorizontalAlignment="Right">
+                    <Grid
+                        Width="200"
+                        Margin="0,20"
+                        HorizontalAlignment="Right">
                         <TextBlock
                             Margin="15,0"
                             VerticalAlignment="Center"
@@ -116,6 +119,8 @@
                 <Border
                     Grid.Row="3"
                     Width="auto"
+                    Margin="0,10,0,0"
+                    Padding="8,0,3,0"
                     BorderBrush="#602414"
                     BorderThickness="2"
                     CornerRadius="10">
@@ -144,27 +149,35 @@
                                 </DataGridTextColumn>
 
                                 <DataGridTextColumn
-                                    Width="*"
+                                    Width="auto"
+                                    Binding="{Binding ImportSupplier.Suppliername}"
+                                    CanUserResize="False"
+                                    Header="Nhà cung cấp"
+                                    IsReadOnly="True" />
+
+                                <DataGridTextColumn
+                                    Width="auto"
                                     Binding="{Binding Deliveryperson}"
                                     CanUserResize="False"
                                     Header="Người giao hàng"
                                     IsReadOnly="True" />
 
                                 <DataGridTextColumn
-                                    Width="*"
+                                    Width="auto"
                                     Binding="{Binding Phone}"
                                     CanUserResize="False"
                                     Header="Số điện thoại"
                                     IsReadOnly="True" />
+
                                 <DataGridTextColumn
-                                    Width="*"
+                                    Width="auto"
                                     Binding="{Binding Receiveddate}"
                                     CanUserResize="False"
                                     Header="Ngày giao"
                                     IsReadOnly="True" />
 
                                 <DataGridTextColumn
-                                    Width="*"
+                                    Width="auto"
                                     Binding="{Binding Receiver}"
                                     CanUserResize="False"
                                     Header="Người nhận"
@@ -179,7 +192,7 @@
                                         <DataTemplate>
                                             <StackPanel Orientation="Horizontal">
                                                 <Button
-                                                    Command="{Binding DataContext.OpenImportDetailCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                                    Command="{Binding DataContext.OpenUpdateImportCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
                                                     CommandParameter="{Binding}"
                                                     Style="{StaticResource gridEditButton}">
                                                     <ma:PackIconMaterial Kind="PencilOutline" Style="{StaticResource gridButtonIcon}" />
@@ -202,20 +215,13 @@
             </Grid>
         </Border>
 
-        <materialDesign:DialogHost
-            Background="Transparent"
-            CloseOnClickAway="True"
-            DialogTheme="Inherit"
-            IsOpen="{Binding IsOpenAddImport}"
-            OverlayBackground="{DynamicResource PrimaryHueDarkBrush}"
-            Placement="Mouse"
-            Style="{StaticResource MaterialDesignEmbeddedDialogHost}">
+        <materialDesign:DialogHost ClipToBounds="False" IsOpen="{Binding IsOpenModifyImportView}">
             <materialDesign:DialogHost.DialogBackground>
                 <SolidColorBrush Color="Transparent" />
             </materialDesign:DialogHost.DialogBackground>
 
             <materialDesign:DialogHost.DialogContent>
-                <ContentControl Content="{Binding AddImportVM}" />
+                <ContentControl Content="{Binding ModifyImportVM}" />
             </materialDesign:DialogHost.DialogContent>
         </materialDesign:DialogHost>
     </Grid>

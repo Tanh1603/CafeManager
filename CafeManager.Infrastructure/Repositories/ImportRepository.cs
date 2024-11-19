@@ -21,8 +21,11 @@ namespace CafeManager.Infrastructure.Repositories
         public async Task<IEnumerable<Import>> GetAllImportsAsync()
         {
             return await _cafeManagerContext.Imports.Where(x => x.Isdeleted == false)
-                .Include(x => x.Importdetails)
+                .Include(x => x.Importdetails.Where(s => s.Isdeleted == false))
+                .ThenInclude(s => s.Material)
+                .ThenInclude(m => m.Materialsuppliers)
                 .Include(x => x.Supplier)
+                .Include(x => x.Staff)
                 .ToListAsync();
         }
 
@@ -32,7 +35,6 @@ namespace CafeManager.Infrastructure.Repositories
                 .Where(x => x.Isdeleted == false)
                 .Include(x => x.Importdetails)
                 .ThenInclude(x => x.Material)
-                .ThenInclude(x => x.Materialsuppliers)
                 .Include(x => x.Supplier)
                 .FirstOrDefaultAsync(x => x.Importid == id);
             return listImportDetail?.Importdetails ?? Enumerable.Empty<Importdetail>();

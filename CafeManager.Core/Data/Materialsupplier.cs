@@ -13,9 +13,9 @@ public partial class Materialsupplier
 
     public int Supplierid { get; set; }
 
-    public DateTime? Manufacturedate { get; set; }
+    public DateTime Manufacturedate { get; set; }
 
-    public DateTime? Expirationdate { get; set; }
+    public DateTime Expirationdate { get; set; }
 
     public string Original { get; set; }
 
@@ -24,8 +24,6 @@ public partial class Materialsupplier
     public decimal? Price { get; set; }
 
     public bool? Isdeleted { get; set; }
-
-    public virtual ICollection<Importdetail> Importdetails { get; set; } = new List<Importdetail>();
 
     public virtual Material Material { get; set; }
 

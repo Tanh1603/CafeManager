@@ -62,7 +62,7 @@ namespace CafeManager.WPF.Services
                         var res = await _unitOfWork.ImportDetailList.Create(new Importdetail()
                         {
                             Importid = addImport.Importid,
-                            Materialsupplierid = newMaterialSuppliers.Materialsupplierid,
+                            Materialid = newMaterialSuppliers.Materialid,
                             Quantity = detail.Quantity,
                         });
                         await _unitOfWork.CompleteAsync();
@@ -72,7 +72,7 @@ namespace CafeManager.WPF.Services
                         var a = await _unitOfWork.ImportDetailList.Create(new Importdetail()
                         {
                             Importid = addImport.Importid,
-                            Materialsupplierid = existing.Materialsupplierid,
+                            Materialid = existing.Materialid,
                             Quantity = detail.Quantity,
                         });
                         await _unitOfWork.CompleteAsync();
@@ -84,6 +84,7 @@ namespace CafeManager.WPF.Services
             catch
             {
                 await _unitOfWork.RollbackTransactionAsync();
+                _unitOfWork.ClearChangeTracker();
                 throw;
             }
         }

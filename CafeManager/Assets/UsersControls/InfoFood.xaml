@@ -1,65 +1,184 @@
-﻿<UserControl x:Class="CafeManager.WPF.Assets.UsersControls.InfoFood"
-             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-             xmlns:ma="http://metro.mahapps.com/winfx/xaml/iconpacks"
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:CafeManager.WPF.Assets.UsersControls"
-             mc:Ignorable="d" 
-             Width="225"
-             Height="185"
-             Name="infofood">
+﻿<UserControl
+    x:Class="CafeManager.WPF.Assets.UsersControls.InfoFood"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="clr-namespace:CafeManager.WPF.Assets.UsersControls"
+    xmlns:ma="http://metro.mahapps.com/winfx/xaml/iconpacks"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    Name="infofood"
+    Width="225"
+    mc:Ignorable="d">
     <UserControl.Resources>
-        <local:Utf8Converter x:Key="Utf8Converter"/>
-        <local:StringToImageSourceConverter x:Key="StringToImageSourceConverter"/>
+        <local:Utf8Converter x:Key="Utf8Converter" />
+        <local:StringToImageSourceConverter x:Key="StringToImageSourceConverter" />
     </UserControl.Resources>
-    <Border CornerRadius="5" BorderThickness="3" Margin="0 10 10 0">
-        <Border.BorderBrush>
-            <LinearGradientBrush StartPoint="0, 0.5">
-                <GradientStop Color="#c69a5d" Offset="0"/>
-                <GradientStop Color="#cb925d" Offset="0.5"/>
+    <Grid>
+        <Border BorderThickness="3" CornerRadius="10">
+            <Border.Style>
+                <Style TargetType="Border">
+                    <Setter Property="BorderBrush">
+                        <Setter.Value>
+                            <LinearGradientBrush StartPoint="0, 0.5">
+                                <GradientStop Offset="0" Color="#c69a5d" />
+                                <GradientStop Offset="0.5" Color="#cb925d" />
 
-                <GradientStop Color="#d4b096" Offset="1"/>
-            </LinearGradientBrush>
-        </Border.BorderBrush>
-        <Grid>
-            <Grid.RowDefinitions>
-                <RowDefinition Height="130"/>
-                <RowDefinition Height="*"/>
+                                <GradientStop Offset="1" Color="#d4b096" />
+                            </LinearGradientBrush>
+                        </Setter.Value>
+                    </Setter>
+                    <Setter Property="BorderThickness" Value="3" />
+                    <Setter Property="CornerRadius" Value="10" />
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding Isdeleted}" Value="True">
+                            <Setter Property="BorderBrush">
+                                <Setter.Value>
+                                    <SolidColorBrush Color="Red" />
+                                </Setter.Value>
+                            </Setter>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </Border.Style>
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="160" />
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
+                <Border
+                    Grid.Row="0"
+                    BorderBrush="Transparent"
+                    CornerRadius="10 10 0 0">
+                    <Border.Background>
+                        <ImageBrush
+                            ImageSource="{Binding Path=SourceImage, Converter={StaticResource StringToImageSourceConverter}, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}"
+                            RenderOptions.BitmapScalingMode="HighQuality"
+                            Stretch="UniformToFill" />
+                    </Border.Background>
+                </Border>
 
-            </Grid.RowDefinitions>
+                <Border Grid.Row="1" CornerRadius="0 0 10 10">
+                    <Border.Style>
+                        <Style TargetType="Border">
+                            <Setter Property="Background">
+                                <Setter.Value>
+                                    <LinearGradientBrush StartPoint="0,0.5" EndPoint="1,0.5">
+                                        <GradientStop Offset="0" Color="#d5b096" />
+                                        <GradientStop Offset="1" Color="#d9c6b3" />
+                                    </LinearGradientBrush>
+                                </Setter.Value>
+                            </Setter>
+                        </Style>
+                    </Border.Style>
+                    <Grid Margin="10">
+
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="auto" />
+                        </Grid.ColumnDefinitions>
+
+                        <StackPanel
+                            Grid.Column="0"
+                            HorizontalAlignment="left"
+                            VerticalAlignment="Center">
+                            <TextBlock
+                                FontSize="18"
+                                Style="{StaticResource infoFoodText}"
+                                Text="{Binding ElementName=infofood, Path=Text, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay, Converter={StaticResource Utf8Converter}}"
+                                TextWrapping="WrapWithOverflow" />
+
+                            <TextBlock
+                                Style="{StaticResource infoFoodText}"
+                                Text="{Binding ElementName=infofood, UpdateSourceTrigger=PropertyChanged, Path=Price, Mode=TwoWay}"
+                                TextWrapping="WrapWithOverflow" />
+                        </StackPanel>
+
+                        <Grid Grid.Column="1">
+                            <StackPanel HorizontalAlignment="Right" Orientation="Horizontal">
+                                <StackPanel.Style>
+                                    <Style TargetType="StackPanel">
+                                        <Setter Property="Visibility" Value="Visible" />
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding ElementName=infofood, Path=Isdeleted, Mode=TwoWay}" Value="True">
+                                                <Setter Property="Visibility" Value="Collapsed" />
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </StackPanel.Style>
+                                <Button
+                                    x:Name="BtnDelete"
+                                    Padding="2"
+                                    HorizontalAlignment="Center"
+                                    Background="Transparent"
+                                    Click="BtnDelete_Click">
+                                    <ma:PackIconMaterial Kind="TrashCan" Style="{StaticResource infoFoodIcon}" />
+                                </Button>
+                                <Button
+                                    x:Name="BtnUpdate"
+                                    Padding="2"
+                                    HorizontalAlignment="Center"
+                                    Background="Transparent"
+                                    Click="BtnUpdate_Click">
+                                    <ma:PackIconMaterial Kind="Pencil" Style="{StaticResource infoFoodIcon}" />
+                                </Button>
+                            </StackPanel>
+
+                            <Grid>
+                                <Grid.Style>
+                                    <Style TargetType="Grid">
+                                        <Setter Property="Visibility" Value="Collapsed" />
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding ElementName=infofood, Path=Isdeleted, Mode=TwoWay}" Value="True">
+                                                <Setter Property="Visibility" Value="Visible" />
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </Grid.Style>
 
 
-            <Image Source="{Binding ElementName=infofood, Path=SourceImage, Converter={StaticResource StringToImageSourceConverter}, FallbackValue='/Assets/Images/defaultImage'}" RenderOptions.BitmapScalingMode="HighQuality" />
+                                <Button
+                                    x:Name="BtnRestore"
+                                    Padding="2"
+                                    HorizontalAlignment="Right"
+                                    Background="Transparent"
+                                    Click="BtnRestore_Click">
+                                    <ma:PackIconMaterial Kind="Restore" Style="{StaticResource infoFoodIcon}" />
+                                </Button>
+                            </Grid>
+                        </Grid>
+                    </Grid>
+                </Border>
+            </Grid>
+        </Border>
 
+        <Border
+            Width="90"
+            Height="25"
+            HorizontalAlignment="Right"
+            VerticalAlignment="Top"
+            Background="Yellow"
+            CornerRadius="0 10 0 0">
 
-            <Border Grid.Row="1" CornerRadius="0 0 3 3">
-                <Border.Style>
-                    <Style TargetType="Border">
-                        <Setter Property="Background">
-                            <Setter.Value>
-                                <LinearGradientBrush StartPoint="0,0.5" EndPoint="1,0.5">
-                                    <GradientStop Color="#d5b096" Offset="0"/>
-                                    <GradientStop Color="#d9c6b3" Offset="1"/>
-                                </LinearGradientBrush>
-                            </Setter.Value>
-                        </Setter>
-                    </Style>
-                </Border.Style>
-                <Grid>
+            <Grid HorizontalAlignment="Left" VerticalAlignment="Center">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="auto" />
+                </Grid.ColumnDefinitions>
 
-                    <TextBlock Text="{Binding ElementName=infofood, Path=Text, Converter={StaticResource Utf8Converter}}" Style="{StaticResource infoFoodText}" FontSize="18" Margin="0 0 0 20"/>
-
-                    <TextBlock Text="{Binding ElementName=infofood, Path=Price}" Style="{StaticResource infoFoodText}" Margin="0 20 0 0"/>
-
-                    <ma:PackIconMaterial Kind="TrashCan" Style="{StaticResource infoFoodIcon}"/>
-                    <ma:PackIconMaterial Kind="Pencil" Style="{StaticResource infoFoodIcon}" Margin="0 0 25 0"/>
-
-                </Grid>
-            </Border>
-
-
-
-        </Grid>
-    </Border>
+                <Label
+                    Grid.Column="0"
+                    HorizontalAlignment="Right"
+                    VerticalAlignment="Center"
+                    Content="Giảm giá:"
+                    Foreground="Red" />
+                <TextBlock
+                    Grid.Column="1"
+                    HorizontalAlignment="Right"
+                    VerticalAlignment="Center"
+                    Foreground="OrangeRed"
+                    Text="{Binding ElementName=infofood, Path=Discountfood, StringFormat={}{0:0}%, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
+                    TextAlignment="Center" />
+            </Grid>
+        </Border>
+    </Grid>
 </UserControl>

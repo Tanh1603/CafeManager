@@ -1,21 +1,75 @@
 ﻿<ResourceDictionary
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:addupdateview="clr-namespace:CafeManager.WPF.Views.AddUpdateView"
+    xmlns:addviewmodels="clr-namespace:CafeManager.WPF.ViewModels.AddViewModel"
+    xmlns:admdinviewmodels="clr-namespace:CafeManager.WPF.ViewModels.AdminViewModel"
+    xmlns:adminviews="clr-namespace:CafeManager.WPF.Views.AdminView"
+    xmlns:userviewmodels="clr-namespace:CafeManager.WPF.ViewModels.UserViewModel"
+    xmlns:userviews="clr-namespace:CafeManager.WPF.Views.UserView"
     xmlns:viewmodels="clr-namespace:CafeManager.WPF.ViewModels"
     xmlns:views="clr-namespace:CafeManager.WPF.Views">
 
-    <DataTemplate DataType="{x:Type viewmodels:TestViewModel}">
-        <views:MainAdminView/>
+    <DataTemplate DataType="{x:Type viewmodels:MainAdminViewModel}">
+        <views:MainAdminView />
     </DataTemplate>
-    <DataTemplate DataType="{x:Type viewmodels:TestImportViewModel}">
-        <views:TestImportView />
+    <DataTemplate DataType="{x:Type viewmodels:MainUserViewModel}">
+        <views:MainUserView />
+    </DataTemplate>
+    <DataTemplate DataType="{x:Type viewmodels:LoginViewModel}">
+        <views:LoginView />
+    </DataTemplate>
+    <DataTemplate DataType="{x:Type viewmodels:RegisterViewModel}">
+        <views:RegisterView />
+    </DataTemplate>
+    <DataTemplate DataType="{x:Type viewmodels:SettingAccountViewModel}">
+        <views:SettingAccountView />
     </DataTemplate>
 
-    <DataTemplate DataType="{x:Type viewmodels:TestInventoryViewModel}">
-        <views:TestInventoryView />
+    <DataTemplate DataType="{x:Type userviewmodels:OrderViewModel}">
+        <userviews:OrderView />
     </DataTemplate>
 
-    <DataTemplate DataType="{x:Type viewmodels:TestSupplierViewModel}">
-        <views:TestSupplierView />
+    <DataTemplate DataType="{x:Type admdinviewmodels:AppUserViewModel}">
+        <adminviews:AppUserView />
+    </DataTemplate>
+    <DataTemplate DataType="{x:Type admdinviewmodels:ImportViewModel}">
+        <adminviews:ImportView />
+    </DataTemplate>
+    <DataTemplate DataType="{x:Type admdinviewmodels:InventoryViewModel}">
+        <adminviews:InventoryView />
+    </DataTemplate>
+    <DataTemplate DataType="{x:Type admdinviewmodels:InvoiceViewModel}">
+        <adminviews:InvoiceView />
+    </DataTemplate>
+    <DataTemplate DataType="{x:Type admdinviewmodels:StaffViewModel}">
+        <adminviews:StaffView />
+    </DataTemplate>
+    <DataTemplate DataType="{x:Type admdinviewmodels:SupplierViewModel}">
+        <adminviews:SupplierView />
+    </DataTemplate>
+    <DataTemplate DataType="{x:Type admdinviewmodels:TableViewModel}">
+        <adminviews:TableView />
+    </DataTemplate>
+    <DataTemplate DataType="{x:Type admdinviewmodels:FoodViewModel}">
+        <adminviews:FoodView />
+    </DataTemplate>
+    <DataTemplate DataType="{x:Type admdinviewmodels:HomeViewModel}">
+        <adminviews:HomeAdminView />
+    </DataTemplate>
+
+    <DataTemplate DataType="{x:Type addviewmodels:AddSuppierViewModel}">
+        <addupdateview:AddSupplierView />
+    </DataTemplate>
+    <DataTemplate DataType="{x:Type addviewmodels:ModifyFoodViewModel}">
+        <addupdateview:ModifyFoodView />
+    </DataTemplate>
+
+    <DataTemplate DataType="{x:Type addviewmodels:ModifyStaffViewModel}">
+        <addupdateview:ModifyStaffView />
+    </DataTemplate>
+
+    <DataTemplate DataType="{x:Type addviewmodels:ModifyInvoiceViewModel}">
+        <addupdateview:ModifyInvoiceView />
     </DataTemplate>
 </ResourceDictionary>

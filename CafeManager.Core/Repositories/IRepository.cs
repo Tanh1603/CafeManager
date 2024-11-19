@@ -18,5 +18,7 @@ namespace CafeManager.Core.Repositories
         Task<IEnumerable<T>> AddArange(IEnumerable<T> entities);
 
         Task<IEnumerable<T>> GetAll();
+
+        Task<T?> GetById(int id);
     }
 }

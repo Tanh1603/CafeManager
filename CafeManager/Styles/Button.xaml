@@ -1,65 +1,75 @@
-﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-                    xmlns:fa="http://schemas.awesome.incremented/wpf/xaml/fontawesome.sharp">
-                    
-    <!--#region menuButton -->
+﻿<ResourceDictionary
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:fa="http://schemas.awesome.incremented/wpf/xaml/fontawesome.sharp">
+
+    <!--#region menuButton-->
     <Style x:Key="menuButton" TargetType="RadioButton">
-        <Setter Property="Background" Value="Transparent"/>
-        <Setter Property="Foreground" Value="#dac5b4"/>
-        <Setter Property="Margin" Value="0 0 0 5"/>
-        <Setter Property="Height" Value="45"/>
-        <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
-        <Setter Property="Tag" Value="#dac5b4"/>
-        <Setter Property="Cursor" Value="Hand"/>
+        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="Foreground" Value="#dac5b4" />
+        <Setter Property="Margin" Value="0,0,0,5" />
+        <Setter Property="Height" Value="45" />
+        <Setter Property="FocusVisualStyle" Value="{x:Null}" />
+        <Setter Property="Tag" Value="#dac5b4" />
+        <Setter Property="Cursor" Value="Hand" />
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="RadioButton">
-                    <Border Background="{TemplateBinding Background}" BorderThickness="4 0 0 0" BorderBrush="Transparent">
-                        <ContentPresenter HorizontalAlignment="Stretch" VerticalAlignment="Center"/>
+                    <Border
+                        Background="{TemplateBinding Background}"
+                        BorderBrush="Transparent"
+                        BorderThickness="4,0,0,0">
+                        <ContentPresenter HorizontalAlignment="Stretch" VerticalAlignment="Center" />
                     </Border>
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
         <Style.Triggers>
             <Trigger Property="IsMouseOver" Value="True">
-                <Setter Property="Foreground" Value="#612e0f"/>
-                <Setter Property="FontWeight" Value="SemiBold"/>
-                <Setter Property="Tag" Value="#612e0f"/>
+                <Setter Property="Foreground" Value="#612e0f" />
+                <Setter Property="FontWeight" Value="SemiBold" />
+                <Setter Property="Tag" Value="#612e0f" />
                 <Setter Property="Background">
                     <Setter.Value>
                         <LinearGradientBrush StartPoint="0,0.5" EndPoint="1,0.5">
-                            <GradientStop Color="#d5b096" Offset="0"/>
-                            <GradientStop Color="#d9c6b3" Offset="1"/>
+                            <GradientStop Offset="0" Color="#d5b096" />
+                            <GradientStop Offset="1" Color="#d9c6b3" />
                         </LinearGradientBrush>
                     </Setter.Value>
                 </Setter>
                 <Setter Property="Template">
                     <Setter.Value>
                         <ControlTemplate TargetType="RadioButton">
-                            <Border Background="{TemplateBinding Background}" BorderThickness="4 0 0 0" BorderBrush="#b07236">
-                                <ContentPresenter HorizontalAlignment="Stretch"  VerticalAlignment="Center"/>
+                            <Border
+                                Background="{TemplateBinding Background}"
+                                BorderBrush="#b07236"
+                                BorderThickness="4,0,0,0">
+                                <ContentPresenter HorizontalAlignment="Stretch" VerticalAlignment="Center" />
                             </Border>
                         </ControlTemplate>
                     </Setter.Value>
                 </Setter>
             </Trigger>
             <Trigger Property="IsChecked" Value="True">
-                <Setter Property="Foreground" Value="#612e0f"/>
-                <Setter Property="FontWeight" Value="SemiBold"/>
-                <Setter Property="Tag" Value="#612e0f"/>
+                <Setter Property="Foreground" Value="#612e0f" />
+                <Setter Property="FontWeight" Value="SemiBold" />
+                <Setter Property="Tag" Value="#612e0f" />
                 <Setter Property="Background">
                     <Setter.Value>
                         <LinearGradientBrush StartPoint="0,0.5" EndPoint="1,0.5">
-                            <GradientStop Color="#d5b096" Offset="0"/>
-                            <GradientStop Color="#d9c6b3" Offset="1"/>
+                            <GradientStop Offset="0" Color="#d5b096" />
+                            <GradientStop Offset="1" Color="#d9c6b3" />
                         </LinearGradientBrush>
                     </Setter.Value>
                 </Setter>
                 <Setter Property="Template">
                     <Setter.Value>
                         <ControlTemplate TargetType="RadioButton">
-                            <Border Background="{TemplateBinding Background}" BorderThickness="4 0 0 0" BorderBrush="#b07236">
-                                <ContentPresenter HorizontalAlignment="Stretch"  VerticalAlignment="Center"/>
+                            <Border
+                                Background="{TemplateBinding Background}"
+                                BorderBrush="#b07236"
+                                BorderThickness="4,0,0,0">
+                                <ContentPresenter HorizontalAlignment="Stretch" VerticalAlignment="Center" />
                             </Border>
                         </ControlTemplate>
                     </Setter.Value>
@@ -69,33 +79,34 @@
     </Style>
 
     <Style x:Key="menuButtonText" TargetType="TextBlock">
-        <Setter Property="FontSize" Value="13"/>
-        <Setter Property="VerticalAlignment" Value="Center"/>
-        <Setter Property="Foreground" Value="{Binding Path=Foreground, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type RadioButton}}}"/>
-
+        <Setter Property="FontSize" Value="13" />
+        <Setter Property="VerticalAlignment" Value="Center" />
+        <Setter Property="Foreground" Value="{Binding Path=Foreground, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type RadioButton}}}" />
     </Style>
     <Style x:Key="menuButtonIcon" TargetType="fa:IconImage">
-        <Setter Property="Width" Value="23"/>
-        <Setter Property="Height" Value="23"/>
-        <Setter Property="Margin" Value="35 0 20 0"/>
-        <Setter Property="Foreground" Value="{Binding Path=Tag, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type RadioButton}}}"/>
+        <Setter Property="Width" Value="23" />
+        <Setter Property="Height" Value="23" />
+        <Setter Property="Margin" Value="20,0,20,0" />
+        <Setter Property="Foreground" Value="{Binding Path=Tag, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type RadioButton}}}" />
     </Style>
     <!--#endregion-->
 
-
     <Style x:Key="topMenuButton" TargetType="RadioButton">
-        <Setter Property="Background" Value="Transparent"/>
-        <Setter Property="Foreground" Value="#dac5b4"/>
-        <Setter Property="Margin" Value="5 0 0 0"/>
-        <Setter Property="Height" Value="30"/>
-        <Setter Property="Width" Value="80"/>
-        <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
-        <Setter Property="BorderThickness" Value="0"/>
+        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="Foreground" Value="#dac5b4" />
+        <Setter Property="Margin" Value="5,0,0,0" />
+        <Setter Property="Height" Value="30" />
+        <Setter Property="Width" Value="80" />
+        <Setter Property="FocusVisualStyle" Value="{x:Null}" />
+        <Setter Property="BorderThickness" Value="0" />
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="RadioButton">
-                    <Border Background="{TemplateBinding Background}" CornerRadius="15" BorderBrush="Transparent">
-                        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    <Border
+                        Background="{TemplateBinding Background}"
+                        BorderBrush="Transparent"
+                        CornerRadius="15">
+                        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
                     </Border>
                 </ControlTemplate>
             </Setter.Value>
@@ -103,144 +114,140 @@
         <Style.Triggers>
             <Trigger Property="IsMouseOver" Value="True">
 
-                <Setter Property="Foreground" Value="#612e0f"/>
-                <Setter Property="FontWeight" Value="SemiBold"/>
+                <Setter Property="Foreground" Value="#612e0f" />
+                <Setter Property="FontWeight" Value="SemiBold" />
                 <Setter Property="Background">
                     <Setter.Value>
                         <LinearGradientBrush StartPoint="0,0.5" EndPoint="1,0.5">
-                            <GradientStop Color="#d5b096" Offset="0"/>
-                            <GradientStop Color="#d9c6b3" Offset="1"/>
+                            <GradientStop Offset="0" Color="#d5b096" />
+                            <GradientStop Offset="1" Color="#d9c6b3" />
                         </LinearGradientBrush>
                     </Setter.Value>
                 </Setter>
-
             </Trigger>
 
             <Trigger Property="IsChecked" Value="True">
-              
-                <Setter Property="Foreground" Value="#612e0f"/>
-                <Setter Property="FontWeight" Value="SemiBold"/>
+
+                <Setter Property="Foreground" Value="#612e0f" />
+                <Setter Property="FontWeight" Value="SemiBold" />
                 <Setter Property="Background">
                     <Setter.Value>
                         <LinearGradientBrush StartPoint="0,0.5" EndPoint="1,0.5">
-                            <GradientStop Color="#d5b096" Offset="0"/>
-                            <GradientStop Color="#d9c6b3" Offset="1"/>
+                            <GradientStop Offset="0" Color="#d5b096" />
+                            <GradientStop Offset="1" Color="#d9c6b3" />
                         </LinearGradientBrush>
                     </Setter.Value>
                 </Setter>
-
             </Trigger>
         </Style.Triggers>
- 
     </Style>
 
-    <!--#region buttonOrder -->
+    <!--#region buttonOrder-->
     <Style x:Key="orderButton" TargetType="Button">
-        <Setter Property="Background" Value="Transparent"/>
-        <Setter Property="Foreground" Value="#dac5b4"/>
-        <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
-        <Setter Property="Width" Value="300"/>
-        <Setter Property="Margin" Value="0 10 0 0"/>
-        <Setter Property="HorizontalAlignment" Value="Stretch"/>
-        <Setter Property="Tag" Value="#dac5b4"/>
-        <Setter Property="Cursor" Value="Hand"/>
+        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="Foreground" Value="#dac5b4" />
+        <Setter Property="FocusVisualStyle" Value="{x:Null}" />
+        <Setter Property="Width" Value="300" />
+        <Setter Property="Margin" Value="0,10,0,0" />
+        <Setter Property="HorizontalAlignment" Value="Stretch" />
+        <Setter Property="Tag" Value="#dac5b4" />
+        <Setter Property="Cursor" Value="Hand" />
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="Button">
-                    <Border Background="{TemplateBinding Background}" Padding="5" >
-                        <ContentPresenter HorizontalAlignment="Stretch" VerticalAlignment="Center"/>
+                    <Border Padding="5" Background="{TemplateBinding Background}">
+                        <ContentPresenter HorizontalAlignment="Stretch" VerticalAlignment="Center" />
                     </Border>
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
         <Style.Triggers>
             <Trigger Property="IsMouseOver" Value="True">
-                <Setter Property="Foreground" Value="#612e0f"/>
-                <Setter Property="FontWeight" Value="SemiBold"/>
-                <Setter Property="Tag" Value="#612e0f"/>
+                <Setter Property="Foreground" Value="#612e0f" />
+                <Setter Property="FontWeight" Value="SemiBold" />
+                <Setter Property="Tag" Value="#612e0f" />
                 <Setter Property="Background">
                     <Setter.Value>
                         <LinearGradientBrush StartPoint="0,0.5" EndPoint="1,0.5">
-                            <GradientStop Color="#d5b096" Offset="0"/>
-                            <GradientStop Color="#d9c6b3" Offset="1"/>
+                            <GradientStop Offset="0" Color="#d5b096" />
+                            <GradientStop Offset="1" Color="#d9c6b3" />
                         </LinearGradientBrush>
                     </Setter.Value>
                 </Setter>
-                
             </Trigger>
-            
         </Style.Triggers>
     </Style>
 
     <Style x:Key="orderText" TargetType="TextBlock">
-       
-        <Setter Property="Foreground" Value="{Binding Path=Foreground, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Button}}}"/>
 
+        <Setter Property="Foreground" Value="{Binding Path=Foreground, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Button}}}" />
     </Style>
     <Style x:Key="orderButtonIcon" TargetType="fa:IconImage">
-        <Setter Property="Width" Value="25"/>
-        <Setter Property="Height" Value="25"/>
-        
-        <Setter Property="Foreground" Value="{Binding Path=Tag, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Button}}}"/>
+        <Setter Property="Width" Value="25" />
+        <Setter Property="Height" Value="25" />
+
+        <Setter Property="Foreground" Value="{Binding Path=Tag, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Button}}}" />
     </Style>
     <Style x:Key="orderBorderIcon" TargetType="Border">
-        <Setter Property="Background" Value="{Binding Path=Tag, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Button}}}"/>
-        <Setter Property="Opacity" Value="0.5"/>
+        <Setter Property="Background" Value="{Binding Path=Tag, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Button}}}" />
+        <Setter Property="Opacity" Value="0.5" />
     </Style>
     <!--#endregion-->
 
-
     <Style x:Key="addButton" TargetType="Button">
-        <Setter Property="Background" Value="#612e0f"/>
-        <Setter Property="Foreground" Value="#dac5b4"/>
-        <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
-        <Setter Property="Width" Value="150"/>
-        <Setter Property="Height" Value="35"/>
-        <Setter Property="HorizontalAlignment" Value="Right"/>
-        <Setter Property="Margin" Value="0 20 0 0"/>
-        <Setter Property="FontSize" Value="13"/>
-        <Setter Property="Grid.Row" Value="1"/>
-        <Setter Property="Cursor" Value="Hand"/>
+        <Setter Property="Background" Value="#612e0f" />
+        <Setter Property="Foreground" Value="#dac5b4" />
+        <Setter Property="FocusVisualStyle" Value="{x:Null}" />
+        <Setter Property="Width" Value="150" />
+        <Setter Property="Height" Value="35" />
+        <Setter Property="HorizontalAlignment" Value="Right" />
+        <Setter Property="Margin" Value="0,20,0,0" />
+        <Setter Property="FontSize" Value="13" />
+
+        <Setter Property="Cursor" Value="Hand" />
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="Button">
                     <Border Background="{TemplateBinding Background}" CornerRadius="7">
-                        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
                     </Border>
                 </ControlTemplate>
             </Setter.Value>
-
         </Setter>
         <Style.Triggers>
             <Trigger Property="IsMouseOver" Value="True">
-                <Setter Property="Background" Value="#dac5b4"/>
-                <Setter Property="Foreground" Value="#612e0f"/>
+                <Setter Property="Background" Value="#dac5b4" />
+                <Setter Property="Foreground" Value="#612e0f" />
             </Trigger>
         </Style.Triggers>
     </Style>
 
-
     <Style x:Key="filterButton" TargetType="RadioButton">
-        <Setter Property="Background" Value="Transparent"/>
-        <Setter Property="Foreground" Value="#602414"/>
-        <Setter Property="FontSize" Value="14"/>
-        <Setter Property="Width" Value="60"/>
-        <Setter Property="Height" Value="45"/>
-        <Setter Property="FontWeight" Value="SemiBold"/>
-        <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
-        <Setter Property="Margin" Value="0 0 20 0"/>
+        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="Foreground" Value="#602414" />
+        <Setter Property="FontSize" Value="14" />
+        <Setter Property="Width" Value="60" />
+        <Setter Property="Height" Value="45" />
+        <Setter Property="FontWeight" Value="SemiBold" />
+        <Setter Property="FocusVisualStyle" Value="{x:Null}" />
+        <Setter Property="Margin" Value="0,0,20,0" />
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="RadioButton">
-                    <Border x:Name="border" Background="{TemplateBinding Background}" CornerRadius="5" BorderThickness="2" BorderBrush="#602414">
-                        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    <Border
+                        x:Name="border"
+                        Background="{TemplateBinding Background}"
+                        BorderBrush="#602414"
+                        BorderThickness="2"
+                        CornerRadius="5">
+                        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
                     </Border>
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsMouseOver" Value="True">
-                            <Setter Property="BorderBrush" Value="#cb925d" TargetName="border"/>
+                            <Setter TargetName="border" Property="BorderBrush" Value="#cb925d" />
                         </Trigger>
                         <Trigger Property="IsChecked" Value="True">
-                            <Setter Property="BorderBrush" Value="#cb925d" TargetName="border"/>
+                            <Setter TargetName="border" Property="BorderBrush" Value="#cb925d" />
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
@@ -248,189 +255,323 @@
         </Setter>
         <Style.Triggers>
             <Trigger Property="IsMouseOver" Value="True">
-                <Setter Property="Foreground" Value="#612e0f"/>
+                <Setter Property="Foreground" Value="#612e0f" />
 
                 <Setter Property="Background">
                     <Setter.Value>
                         <LinearGradientBrush StartPoint="0,0.5" EndPoint="1,0.5">
-                            <GradientStop Color="#d5b096" Offset="0"/>
-                            <GradientStop Color="#d9c6b3" Offset="1"/>
+                            <GradientStop Offset="0" Color="#d5b096" />
+                            <GradientStop Offset="1" Color="#d9c6b3" />
                         </LinearGradientBrush>
                     </Setter.Value>
                 </Setter>
             </Trigger>
             <Trigger Property="IsChecked" Value="True">
-                <Setter Property="Foreground" Value="#612e0f"/>
+                <Setter Property="Foreground" Value="#612e0f" />
 
                 <Setter Property="Background">
                     <Setter.Value>
                         <LinearGradientBrush StartPoint="0,0.5" EndPoint="1,0.5">
-                            <GradientStop Color="#d5b096" Offset="0"/>
-                            <GradientStop Color="#d9c6b3" Offset="1"/>
+                            <GradientStop Offset="0" Color="#d5b096" />
+                            <GradientStop Offset="1" Color="#d9c6b3" />
                         </LinearGradientBrush>
                     </Setter.Value>
                 </Setter>
-
             </Trigger>
         </Style.Triggers>
     </Style>
 
     <Style x:Key="upLoadButton" TargetType="Button">
-        <Setter Property="Foreground" Value="#dac5b4"/>
-        <Setter Property="Background" Value="#612e0f"/>
-        <Setter Property="FontSize" Value="14"/>
-        <Setter Property="Width" Value="150"/>
-        <Setter Property="Height" Value="35"/>
-        <Setter Property="FontWeight" Value="SemiBold"/>
-        <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
-        <Setter Property="Cursor" Value="Hand"/>
+        <Setter Property="Foreground" Value="#dac5b4" />
+        <Setter Property="Background" Value="#612e0f" />
+        <Setter Property="FontSize" Value="14" />
+        <Setter Property="MaxWidth" Value="200" />
+
+        <Setter Property="MinWidth" Value="150" />
+        <Setter Property="MinHeight" Value="35" />
+        <Setter Property="FontWeight" Value="SemiBold" />
+        <Setter Property="FocusVisualStyle" Value="{x:Null}" />
+        <Setter Property="Cursor" Value="Hand" />
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="Button">
-                    <Border x:Name="border" CornerRadius="5" Background="{TemplateBinding Background}" BorderThickness="{TemplateBinding BorderThickness}" BorderBrush="Transparent">
-                        <ContentPresenter VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                    <Border
+                        x:Name="border"
+                        Background="{TemplateBinding Background}"
+                        BorderBrush="Transparent"
+                        BorderThickness="{TemplateBinding BorderThickness}"
+                        CornerRadius="5">
+                        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
                     </Border>
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsMouseOver" Value="True">
-                            <Setter Property="BorderBrush" Value="#cb925d" TargetName="border"/>
+                            <Setter TargetName="border" Property="BorderBrush" Value="#cb925d" />
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
-                
             </Setter.Value>
         </Setter>
         <Style.Triggers>
             <Trigger Property="IsMouseOver" Value="True">
 
-                <Setter Property="Foreground" Value="#612e0f"/>
-                
+                <Setter Property="Foreground" Value="#612e0f" />
+
                 <Setter Property="Background">
                     <Setter.Value>
                         <LinearGradientBrush StartPoint="0,0.5" EndPoint="1,0.5">
-                            <GradientStop Color="#d5b096" Offset="0"/>
-                            <GradientStop Color="#d9c6b3" Offset="1"/>
+                            <GradientStop Offset="0" Color="#d5b096" />
+                            <GradientStop Offset="1" Color="#d9c6b3" />
                         </LinearGradientBrush>
                     </Setter.Value>
                 </Setter>
-
             </Trigger>
-
         </Style.Triggers>
     </Style>
-    <Style x:Key="adjustInfoButton" TargetType="Button" BasedOn="{StaticResource upLoadButton}">
-        <Setter Property="Width" Value="100"/>
-        <Setter Property="Height" Value="45"/>
+    <Style
+        x:Key="adjustInfoButton"
+        BasedOn="{StaticResource upLoadButton}"
+        TargetType="Button">
+        <Setter Property="MinWidth" Value="100" />
+        <Setter Property="MinHeight" Value="45" />
+    </Style>
+    <Style
+        x:Key="confirmInfoButton"
+        BasedOn="{StaticResource upLoadButton}"
+        TargetType="Button">
+        <Setter Property="MinWidth" Value="120" />
+        <Setter Property="MinHeight" Value="45" />
     </Style>
 
     <Style x:Key="datePickerButton" TargetType="Button">
-        <Setter Property="Foreground" Value="#99703a"/>
-        <Setter Property="Background" Value="Transparent"/>
-        <Setter Property="BorderBrush" Value="Transparent"/>
-        <Setter Property="BorderThickness" Value="0"/>
-        <Setter Property="FontSize" Value="14"/>
-        <Setter Property="Width" Value="35"/>
-        <Setter Property="Height" Value="35"/>
-        <Setter Property="FontWeight" Value="SemiBold"/>
-        <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
-        <Setter Property="Cursor" Value="Hand"/>
-        <Setter Property="HorizontalAlignment" Value="Center"/>
-        <Setter Property="VerticalAlignment" Value="Center"/>
+        <Setter Property="Foreground" Value="#99703a" />
+        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="BorderBrush" Value="Transparent" />
+        <Setter Property="BorderThickness" Value="0" />
+        <Setter Property="FontSize" Value="14" />
+        <Setter Property="Width" Value="35" />
+        <Setter Property="Height" Value="35" />
+        <Setter Property="FontWeight" Value="SemiBold" />
+        <Setter Property="FocusVisualStyle" Value="{x:Null}" />
+        <Setter Property="Cursor" Value="Hand" />
+        <Setter Property="HorizontalAlignment" Value="Center" />
+        <Setter Property="VerticalAlignment" Value="Center" />
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="Button">
-                    <Border x:Name="border" CornerRadius="5" Background="{TemplateBinding Background}" BorderThickness="{TemplateBinding BorderThickness}" BorderBrush="Transparent">
-                        <ContentPresenter VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                    <Border
+                        x:Name="border"
+                        Background="{TemplateBinding Background}"
+                        BorderBrush="Transparent"
+                        BorderThickness="{TemplateBinding BorderThickness}"
+                        CornerRadius="5">
+                        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
                     </Border>
-                    
                 </ControlTemplate>
-
             </Setter.Value>
         </Setter>
         <Style.Triggers>
             <Trigger Property="IsMouseOver" Value="True">
 
-                <Setter Property="Foreground" Value="#612e0f"/>
-
-                
-
-            </Trigger>
-
-        </Style.Triggers>
-    </Style>
-
-
-    
-
-    <Style x:Key="pagingButton" TargetType="Button">
-        <Setter Property="Background" Value="Transparent"/>
-        <Setter Property="Foreground" Value="#6c7682"/>
-        <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
-        <Setter Property="Margin" Value="1 0"/>
-        <Setter Property="FontSize" Value="13"/>
-
-        <Setter Property="Template">
-            <Setter.Value>
-                <ControlTemplate TargetType="Button">
-                    <Border Background="{TemplateBinding Background}" CornerRadius="5" Padding="10 5">
-                        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0 0 0 1"/>
-                    </Border>
-                </ControlTemplate>
-            </Setter.Value>
-
-        </Setter>
-        <Style.Triggers>
-            <Trigger Property="IsMouseOver" Value="True">
-                <Setter Property="Background" Value="#7950f2"/>
-                <Setter Property="Foreground" Value="#ffffff"/>
-
+                <Setter Property="Foreground" Value="#612e0f" />
             </Trigger>
         </Style.Triggers>
     </Style>
 
     <Style x:Key="gridEditButton" TargetType="Button">
-        <Setter Property="Background" Value="#9f7454"/>
-        <Setter Property="Foreground" Value="#dac5b4"/>
-        <Setter Property="BorderBrush" Value="#cb925d"/>
-        <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
-        <Setter Property="VerticalAlignment" Value="Center"/>
-        <Setter Property="Cursor" Value="Hand"/>
+        <Setter Property="Background" Value="#9f7454" />
+        <Setter Property="Foreground" Value="#dac5b4" />
+        <Setter Property="BorderBrush" Value="#cb925d" />
+        <Setter Property="FocusVisualStyle" Value="{x:Null}" />
+        <Setter Property="VerticalAlignment" Value="Center" />
+        <Setter Property="Cursor" Value="Hand" />
 
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="Button">
-                    <Border Background="{TemplateBinding Background}" CornerRadius="5" Padding="5" BorderThickness="1" BorderBrush="{TemplateBinding BorderBrush}">
-                        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    <Border
+                        Padding="5"
+                        Background="{TemplateBinding Background}"
+                        BorderBrush="{TemplateBinding BorderBrush}"
+                        BorderThickness="1"
+                        CornerRadius="5">
+                        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
                     </Border>
                 </ControlTemplate>
             </Setter.Value>
-
         </Setter>
         <Style.Triggers>
             <Trigger Property="IsMouseOver" Value="True">
-                <Setter Property="Foreground" Value="#612e0f"/>
+                <Setter Property="Foreground" Value="#612e0f" />
                 <Setter Property="Background">
                     <Setter.Value>
                         <LinearGradientBrush StartPoint="0,0.5" EndPoint="1,0.5">
-                            <GradientStop Color="#d5b096" Offset="0"/>
-                            <GradientStop Color="#d9c6b3" Offset="1"/>
+                            <GradientStop Offset="0" Color="#d5b096" />
+                            <GradientStop Offset="1" Color="#d9c6b3" />
                         </LinearGradientBrush>
                     </Setter.Value>
                 </Setter>
-
-
-
             </Trigger>
         </Style.Triggers>
     </Style>
 
-    <Style x:Key="gridRemoveButton" TargetType="Button" BasedOn="{StaticResource gridEditButton}">
-        <Setter Property="Background" Value="#d32f2f"/>
+    <Style
+        x:Key="gridRemoveButton"
+        BasedOn="{StaticResource gridEditButton}"
+        TargetType="Button">
+        <Setter Property="Background" Value="#d32f2f" />
 
-        <Setter Property="BorderBrush" Value="#b71c1c"/>
+        <Setter Property="BorderBrush" Value="#b71c1c" />
 
         <Style.Triggers>
             <Trigger Property="IsMouseOver" Value="True">
-                <Setter Property="Foreground" Value="#f44336"/>
+                <Setter Property="Foreground" Value="#f44336" />
+            </Trigger>
+        </Style.Triggers>
+    </Style>
+
+    <Style x:Key="closeButton" TargetType="Button">
+        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="Foreground" Value="#66171a" />
+        <Setter Property="BorderBrush" Value="Transparent" />
+        <Setter Property="BorderThickness" Value="0" />
+        <Setter Property="Width" Value="40" />
+        <Setter Property="Height" Value="40" />
+        <Setter Property="FocusVisualStyle" Value="{x:Null}" />
+        <Setter Property="Cursor" Value="Hand" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Button">
+                    <Border
+                        x:Name="border"
+                        Background="{TemplateBinding Background}"
+                        BorderBrush="{TemplateBinding BorderBrush}"
+                        BorderThickness="{TemplateBinding BorderThickness}"
+                        CornerRadius="5">
+                        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter TargetName="border" Property="Background" Value="#b47e66" />
+                        </Trigger>
+                        <Trigger Property="IsPressed" Value="True">
+                            <Setter TargetName="border" Property="Background" Value="#b47e66" />
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+        <Style.Triggers>
+
+            <Trigger Property="IsMouseOver" Value="True">
+
+                <Setter Property="Foreground" Value="#d4b096" />
+            </Trigger>
+
+            <Trigger Property="IsPressed" Value="True">
+                <Setter Property="Foreground" Value="#d4b096" />
+            </Trigger>
+        </Style.Triggers>
+    </Style>
+
+    <Style
+        x:Key="windowButton"
+        BasedOn="{StaticResource closeButton}"
+        TargetType="Button" />
+
+    <Style
+        x:Key="closeWDBtn"
+        BasedOn="{StaticResource closeButton}"
+        TargetType="Button">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Button">
+                    <Border
+                        x:Name="border"
+                        Background="{TemplateBinding Background}"
+                        BorderBrush="{TemplateBinding BorderBrush}"
+                        BorderThickness="{TemplateBinding BorderThickness}"
+                        CornerRadius="5 10 0 5">
+                        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter TargetName="border" Property="Background" Value="#d32f2f" />
+                        </Trigger>
+                        <Trigger Property="IsPressed" Value="True">
+                            <Setter TargetName="border" Property="Background" Value="#d32f2f" />
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style
+        x:Key="closeInfoFoodBtn"
+        BasedOn="{StaticResource gridEditButton}"
+        TargetType="Button">
+        <Setter Property="Width" Value="40" />
+        <Setter Property="Height" Value="40" />
+        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="BorderBrush" Value="Transparent" />
+    </Style>
+
+    <Style
+        x:Key="backLoginBtn"
+        BasedOn="{StaticResource closeButton}"
+        TargetType="Button">
+        <Setter Property="Width" Value="150" />
+        <Setter Property="Height" Value="150" />
+        <Setter Property="Padding" Value="0" />
+        <Setter Property="Foreground" Value="#d5b096" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Button">
+                    <Border
+                        x:Name="border"
+                        Background="{TemplateBinding Background}"
+                        BorderBrush="{TemplateBinding BorderBrush}"
+                        BorderThickness="{TemplateBinding BorderThickness}"
+                        CornerRadius="100">
+                        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
+                    </Border>
+
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+        <Style.Triggers>
+
+            <Trigger Property="IsMouseOver" Value="True">
+
+                <Setter Property="Foreground" Value="#b27e68" />
+            </Trigger>
+
+            <Trigger Property="IsPressed" Value="True">
+                <Setter Property="Foreground" Value="#b27e68" />
+            </Trigger>
+        </Style.Triggers>
+    </Style>
+    <Style
+        x:Key="addImageResBtn"
+        BasedOn="{StaticResource backLoginBtn}"
+        TargetType="Button">
+        <Setter Property="Height" Value="35" />
+        <Setter Property="Width" Value="35" />
+    </Style>
+
+    <Style
+        x:Key="infoFoodBtn"
+        BasedOn="{StaticResource gridEditButton}"
+        TargetType="Button">
+        <Setter Property="MinHeight" Value="35" />
+        <Setter Property="MinWidth" Value="35" />
+        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="BorderBrush" Value="Transparent" />
+        <Setter Property="Foreground" Value="#602414" />
+        <Style.Triggers>
+            <Trigger Property="IsMouseOver" Value="True">
+                <Setter Property="Foreground" Value="#d5b096" />
+                <Setter Property="Background" Value="#602414" />
 
 
             </Trigger>

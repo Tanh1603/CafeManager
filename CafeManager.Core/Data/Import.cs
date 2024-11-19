@@ -17,9 +17,15 @@ public partial class Import
 
     public DateTime Receiveddate { get; set; }
 
-    public string Receiver { get; set; }
+    public int Staffid { get; set; }
+
+    public int Supplierid { get; set; }
 
     public bool? Isdeleted { get; set; }
 
     public virtual ICollection<Importdetail> Importdetails { get; set; } = new List<Importdetail>();
+
+    public virtual Staff Staff { get; set; }
+
+    public virtual Supplier Supplier { get; set; }
 }

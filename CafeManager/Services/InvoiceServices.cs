@@ -27,16 +27,34 @@ namespace CafeManager.WPF.Services
             return await _unitOfWork.InvoiceList.GetAllInvoiceAsync();
         }
 
+        public async Task<Invoice?> GetInvoiceById(int id)
+        {
+            return await _unitOfWork.InvoiceList.GetInvoicesByIdAsync(id);
+        }
+
+        public async Task<IEnumerable<Invoicedetail>?> GetListIvoiceDetailByInvoiceId(int id)
+        {
+            return await _unitOfWork.InvoiceList.GetAllInvoiceDetailByInvoiceIdAsync(id);
+        }
+
         #region Thêm xóa, sửa, tìm kiếm, sắp sếp, phân trang
 
-        public async Task<Invoice?> AddInvoice(Invoice invoice)
+        public async Task<Invoice?> CreateInvoice(Invoice invoice)
         {
-            var res = await _unitOfWork.InvoiceList.Create(invoice);
-            if (res != null)
+            try
             {
-                _unitOfWork.Complete();
+                await _unitOfWork.BeginTransactionAsync();
+                var res = await _unitOfWork.InvoiceList.Create(invoice);
+                await _unitOfWork.CompleteAsync();
+                await _unitOfWork.CommitTransactionAsync();
+                return res;
             }
-            return res;
+            catch (Exception)
+            {
+                await _unitOfWork.RollbackTransactionAsync();
+                _unitOfWork.ClearChangeTracker();
+                throw new InvalidOperationException("Lỗi");
+            }
         }
 
         public async Task<bool> DeleteInvoice(int id)
@@ -51,12 +69,20 @@ namespace CafeManager.WPF.Services
 
         public Invoice? UpdateInvoice(Invoice invoice)
         {
-            var res = _unitOfWork.InvoiceList.Update(invoice);
-            if (res != null)
+            try
             {
-                _unitOfWork.Complete();
+                var res = _unitOfWork.InvoiceList.Update(invoice);
+                if (res != null)
+                {
+                    _unitOfWork.Complete();
+                }
+                return res;
             }
-            return res;
+            catch (Exception)
+            {
+                _unitOfWork.ClearChangeTracker();
+                throw new InvalidOperationException("Lỗi");
+            }
         }
 
         public async Task<IEnumerable<Invoice>?> GetSearchSortPaginateListInvoice(Expression<Func<Invoice, bool>>? searchPredicate = null,
@@ -76,7 +102,7 @@ namespace CafeManager.WPF.Services
             return CaculateTotalPriceFromInvoiceDetail(res);
         }
 
-        private decimal? CaculateTotalPriceFromInvoiceDetail(IEnumerable<Invoicedetail>? invoicedetail)
+        public decimal? CaculateTotalPriceFromInvoiceDetail(IEnumerable<Invoicedetail>? invoicedetail)
         {
             return invoicedetail?.Sum(x =>
             {
@@ -102,5 +128,24 @@ namespace CafeManager.WPF.Services
         }
 
         #endregion tính toán doanh thu của bill
+
+        public async Task<IEnumerable<Invoicedetail>> AddArangeListInvoiceDetail(IEnumerable<Invoicedetail> invoicedetail)
+        {
+            try
+            {
+                await _unitOfWork.BeginTransactionAsync();
+                var res = await _unitOfWork.InvoiceDetail.AddArange(invoicedetail);
+
+                await _unitOfWork.CompleteAsync();
+                await _unitOfWork.CommitTransactionAsync();
+                return res;
+            }
+            catch (Exception)
+            {
+                await _unitOfWork.RollbackTransactionAsync();
+                _unitOfWork.ClearChangeTracker();
+                throw new InvalidOperationException("Lỗi");
+            }
+        }
     }
 }

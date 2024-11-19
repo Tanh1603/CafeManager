@@ -12,11 +12,11 @@ namespace CafeManager.Core.DTOs
         public string? Materialname { get; set; }
         public string? Suppliername { get; set; }
         public string? Unit { get; set; }
-        public int Quantity { get; set; }
+        public decimal Quantity { get; set; }
         public decimal Price { get; set; }
         public string? Original { get; set; }
         public string? Manufacturer { get; set; }
-        public DateTime? Manufacturedate { get; set; }
-        public DateTime? Expirationdate { get; set; }
+        public DateTime Manufacturedate { get; set; }
+        public DateTime Expirationdate { get; set; }
     }
 }

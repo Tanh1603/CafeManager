@@ -1,11 +1,33 @@
 SELECT * FROM appuser;
+ALTER SEQUENCE appuser_appuserid_seq RESTART WITH 1;
+DELETE FROM appuser;
+
 SELECT * FROM staff;
+ALTER SEQUENCE staff_staffid_seq RESTART WITH 1;
+DELETE FROM staff;
+
+SELECT * FROM staffsalaryhistory;
+ALTER SEQUENCE staffsalaryhistory_staffsalaryhistoryid_seq RESTART WITH 1;
+DELETE FROM staffsalaryhistory;
+
 
 SELECT * FROM foodcategory;
 SELECT * FROM food;
+SELECT foodid, foodname, isdeleted, discountfood FROM food;
+ALTER SEQUENCE food_foodid_seq RESTART WITH 1;
+DELETE FROM food;
+
 SELECT * FROM invoices;
+ALTER SEQUENCE invoices_invoiceid_seq RESTART WITH 1;
+DELETE FROM invoices;
+
 SELECT * FROM invoicedetails;
+ALTER SEQUENCE invoicedetails_invoicedetailid_seq RESTART WITH 1;
+DELETE FROM invoicedetails;
+
 SELECT * FROM coffeetable;
+ALTER SEQUENCE coffeetable_coffeetableId_seq RESTART WITH 1;
+DELETE FROM coffeetable;
 
 SELECT * FROM imports;
 ALTER SEQUENCE imports_ImportId_seq RESTART WITH 1;
@@ -102,10 +124,14 @@ JOIN importdetails imd ON imd.materialsupplierid = ms.materialsupplierid
 GROUP BY m.materialname, m.unit, ms.original, 
 ms.manufacturedate, ms.expirationdate,ms.manufacturer, s.suppliername, ms.price;
 
+INSERT INTO appuser (username, "password", email, "role", displayname)
+VALUES ('us', '1', 'tanh@gm.com', 0, 'Tanh');
 
+INSERT INTO invoices (paymentstartdate, paymentenddate, paymentstatus, paymentmethod, discountinvoice)
+VALUES (NOW(), NOW(), 'Có người', 'Tiền mặt', 10);
 
-
-
-
-
-
+INSERT INTO invoicedetails(invoiceid, foodid, quantity) VALUES 
+(2, 5, 5),
+(2, 4, 5),
+(2, 6, 5),
+(2, 7, 5);

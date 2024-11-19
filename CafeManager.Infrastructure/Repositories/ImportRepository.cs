@@ -11,11 +11,19 @@ namespace CafeManager.Infrastructure.Repositories
         {
         }
 
+        public async Task<Import> GetImportById(int id)
+        {
+            return await _cafeManagerContext.Imports
+                        .Where(x => x.Isdeleted == false)
+                        .FirstOrDefaultAsync(x => x.Importid == id);
+        }
+
         public async Task<IEnumerable<Import>> GetAllImportsAsync()
         {
             return await _cafeManagerContext.Imports.Where(x => x.Isdeleted == false)
                 .Include(x => x.Importdetails)
-                .ThenInclude(x => x.Materialsupplier).ToListAsync();
+                .Include(x => x.Supplier)
+                .ToListAsync();
         }
 
         public async Task<IEnumerable<Importdetail>> GetAllImportsDetailsByImportIdAsync(int id)
@@ -23,11 +31,9 @@ namespace CafeManager.Infrastructure.Repositories
             var listImportDetail = await _cafeManagerContext.Imports
                 .Where(x => x.Isdeleted == false)
                 .Include(x => x.Importdetails)
-                .ThenInclude(x => x.Materialsupplier)
                 .ThenInclude(x => x.Material)
-                .Include(x => x.Importdetails)
-                .ThenInclude(x => x.Materialsupplier)
-                .ThenInclude(x => x.Supplier)
+                .ThenInclude(x => x.Materialsuppliers)
+                .Include(x => x.Supplier)
                 .FirstOrDefaultAsync(x => x.Importid == id);
             return listImportDetail?.Importdetails ?? Enumerable.Empty<Importdetail>();
         }
@@ -41,8 +47,20 @@ namespace CafeManager.Infrastructure.Repositories
                 foreach (var item in listImporDetailtDeleted)
                 {
                     item.Isdeleted = true;
-                    item.Materialsupplier.Isdeleted = true;
+                    item.Material.Materialsuppliers
+                        .Where(x => x.Materialid == item.Materialid && x.Supplierid == item.Import.Supplierid).ToList().ForEach(x => x.Isdeleted = true);
                 }
+
+                var entity = await _cafeManagerContext.Set<Import>().FindAsync(id);
+                if (entity != null)
+                {
+                    var property = typeof(Import).GetProperty("Isdeleted");
+                    if (property != null)
+                    {
+                        property.SetValue(entity, true);
+                    }
+                }
+
                 return true;
             }
 

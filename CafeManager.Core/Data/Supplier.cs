@@ -23,5 +23,7 @@ public partial class Supplier
 
     public bool? Isdeleted { get; set; }
 
+    public virtual ICollection<Import> Imports { get; set; } = new List<Import>();
+
     public virtual ICollection<Materialsupplier> Materialsuppliers { get; set; } = new List<Materialsupplier>();
 }

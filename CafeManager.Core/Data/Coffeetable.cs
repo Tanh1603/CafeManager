@@ -9,6 +9,10 @@ public partial class Coffeetable
 {
     public int Coffeetableid { get; set; }
 
+    public int Tablenumber { get; set; }
+
+    public int? Seatingcapacity { get; set; }
+
     public string Statustable { get; set; }
 
     public string Notes { get; set; }

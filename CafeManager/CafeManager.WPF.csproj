@@ -15,6 +15,21 @@
     <None Remove="Assets\Images\milktea.png" />
     <None Remove="Assets\Images\minus.png" />
     <None Remove="Assets\Images\squares.png" />
+    <None Remove="MessageBox\Icons\Error.png" />
+    <None Remove="MessageBox\Icons\Information.png" />
+    <None Remove="MessageBox\Icons\Question.png" />
+    <None Remove="MessageBox\Icons\Warning.png" />
+    <None Remove="Stores\email_template.html" />
+    <None Remove="Stores\reset_email_template.html" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="Stores\email_template.html">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Stores\reset_email_template.html">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </EmbeddedResource>
   </ItemGroup>
 
   <ItemGroup>
@@ -22,12 +37,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Assets\Fonts\" />
-    <Folder Include="Stores\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <PackageReference Include="CommunityToolkit.Mvvm" Version="8.3.2" />
+    <PackageReference Include="FirebaseStorage.net" Version="1.0.3" />
     <PackageReference Include="FontAwesome.Sharp" Version="6.6.0" />
     <PackageReference Include="LiveCharts.Wpf" Version="0.9.7" />
     <PackageReference Include="MahApps.Metro.IconPacks" Version="5.1.0" />
@@ -42,6 +53,8 @@
     <PackageReference Include="Microsoft.Extensions.Hosting" Version="8.0.1" />
     <PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" Version="8.0.1" />
     <PackageReference Include="Microsoft.Xaml.Behaviors.Wpf" Version="1.1.135" />
+    <PackageReference Include="RestSharp" Version="112.1.0" />
+    <PackageReference Include="RestSharp.Authenticators" Version="1.1.1" />
   </ItemGroup>
 
   <ItemGroup>
@@ -66,8 +79,20 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Update="Properties\Settings.Designer.cs">
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+    </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
     <None Update="appsettings.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
   </ItemGroup>
 

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using CafeManager.WPF.MessageBox;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -18,9 +19,9 @@ namespace CafeManager.WPF.Views
     /// <summary>
     /// Interaction logic for loginView.xaml
     /// </summary>
-    public partial class loginView : UserControl
+    public partial class LoginView : UserControl
     {
-        public loginView()
+        public LoginView()
         {
             InitializeComponent();
         }

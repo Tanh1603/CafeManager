@@ -23,6 +23,10 @@ namespace CafeManager.Core.Services
         ISupplierRepository SupplierList { get; }
         IRepository<Materialsupplier> MaterialSupplierList { get; }
 
+        IStaffRepository StaffList { get; }
+        IAppUserRepository AppUserList { get; }
+        IRepository<Staffsalaryhistory> StaffSalaryHistoryList { get; }
+
         int Complete();
 
         Task<int> CompleteAsync();
@@ -32,5 +36,7 @@ namespace CafeManager.Core.Services
         Task CommitTransactionAsync();
 
         Task RollbackTransactionAsync();
+
+        void ClearChangeTracker();
     }
 }

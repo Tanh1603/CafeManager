@@ -10,5 +10,7 @@ namespace CafeManager.Core.Repositories
     public interface ISupplierRepository : IRepository<Supplier>
     {
         Task<IEnumerable<Supplier>> GetAllSupplierAsync();
+
+        Task<Supplier> GetSupplierById(int id);
     }
 }

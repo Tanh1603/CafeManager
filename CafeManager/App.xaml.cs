@@ -3,6 +3,7 @@ using CafeManager.Core.Repositories;
 using CafeManager.Core.Services;
 using CafeManager.Infrastructure.Models;
 using CafeManager.WPF.HostBuilders;
+using CafeManager.WPF.Services;
 using CafeManager.WPF.ViewModels;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
@@ -36,13 +37,11 @@ namespace CafeManager.WPF
 
         protected override void OnStartup(StartupEventArgs e)
         {
-            base.OnStartup(e);
             _host.Start();
-            Window window = new MainWindow()
-            {
-                DataContext = _host.Services.GetRequiredService<MainViewModel>()
-            };
+            Window window = _host.Services.GetRequiredService<MainWindow>();
+            var res = _host.Services.GetRequiredService<AppUserServices>();
             window.Show();
+            base.OnStartup(e);
         }
 
         protected override async void OnExit(ExitEventArgs e)

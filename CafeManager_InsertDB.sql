@@ -118,6 +118,27 @@ INSERT INTO SupplierImportDetails (SupplierId, ImportDetailId, IsDeleted) VALUES
 (4, 4, FALSE),
 (5, 5, FALSE);
 
+-- Dữ liệu mẫu cho bảng Staff
+INSERT INTO Staff (StaffName, Phone, Sex, Birthday, Address, StartWorkingDate, EndWorkingDate, Role, IsDeleted)
+VALUES 
+('John Doe', '123-456-7890', TRUE, '1985-02-15', '123 Main St', '2015-06-01', NULL, 'Manager', FALSE),
+('Jane Smith', '987-654-3210', FALSE, '1990-08-25', '456 Oak Ave', '2018-09-15', '2023-03-10', 'Cashier', FALSE),
+('Alice Johnson', '555-123-4567', FALSE, '1988-12-05', '789 Pine Dr', '2019-11-20', NULL, 'Barista', FALSE),
+('Bob Brown', '555-987-6543', TRUE, '1978-05-30', '321 Maple Ln', '2021-04-10', NULL, 'Cleaner', TRUE),
+('Charlie Green', '555-456-7890', TRUE, '1995-03-12', '456 Spruce Rd', '2022-01-15', NULL, 'Barista', FALSE);
+
+-- Dữ liệu mẫu cho bảng StaffSalaryHistory
+INSERT INTO StaffSalaryHistory (StaffId, Salary, EffectiveDate)
+VALUES
+(1, 5000.00, '2020-01-01'),
+(1, 5500.00, '2021-01-01'),
+(1, 6000.00, '2022-01-01'),
+(2, 3000.00, '2019-09-15'),
+(2, 3200.00, '2020-09-15'),
+(3, 2500.00, '2020-11-20'),
+(3, 2700.00, '2021-11-20'),
+(4, 1800.00, '2021-04-10'),
+(5, 2000.00, '2022-01-15');
 
 
 

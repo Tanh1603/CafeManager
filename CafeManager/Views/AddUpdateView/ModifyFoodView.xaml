@@ -1,0 +1,194 @@
+﻿<UserControl
+    x:Class="CafeManager.WPF.Views.AddUpdateView.ModifyFoodView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:adminviewmodels="clr-namespace:CafeManager.WPF.ViewModels.AdminViewModel"
+    xmlns:adminviews="clr-namespace:CafeManager.WPF.Views.AdminView"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
+    xmlns:ma="http://metro.mahapps.com/winfx/xaml/iconpacks"
+    xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:uc="clr-namespace:CafeManager.WPF.Assets.UsersControls"
+    Width="800"
+    Height="450"
+    mc:Ignorable="d">
+    <Border BorderThickness="4" CornerRadius="10">
+        <Border.Background>
+            <LinearGradientBrush StartPoint="0,0.5" EndPoint="1,0.5">
+                <GradientStop Offset="0" Color="#d4b096" />
+                <GradientStop Offset="1" Color="#dac5b4" />
+            </LinearGradientBrush>
+        </Border.Background>
+        <Border.BorderBrush>
+            <LinearGradientBrush StartPoint="0,0.5">
+                <GradientStop Offset="0" Color="#5e2313" />
+                <GradientStop Offset="0.5" Color="#65402e" />
+                <GradientStop Offset="1" Color="#7c4e37" />
+            </LinearGradientBrush>
+        </Border.BorderBrush>
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="300" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+
+            <StackPanel VerticalAlignment="Center">
+                <Grid>
+
+                    <Rectangle
+                        Width="200"
+                        Height="150"
+                        Fill="#ffffff"
+                        RadiusX="5"
+                        RadiusY="5"
+                        StrokeThickness="4">
+                        <Rectangle.Stroke>
+
+                            <LinearGradientBrush>
+                                <GradientStop Offset="0" Color="#cea48c" />
+                                <GradientStop Offset="1" Color="#b79c8b" />
+                            </LinearGradientBrush>
+                        </Rectangle.Stroke>
+                    </Rectangle>
+
+                    <Border
+                        Width="200"
+                        Height="150"
+                        ClipToBounds="True"
+                        CornerRadius="100">
+                        <Border.Clip>
+                            <RectangleGeometry Rect="0,0,200,150" />
+                        </Border.Clip>
+                        <Image
+                            RenderOptions.BitmapScalingMode="HighQuality"
+                            Source="{Binding ModifyFood.Imagefood, UpdateSourceTrigger=PropertyChanged}"
+                            Stretch="UniformToFill" />
+                    </Border>
+                </Grid>
+                <Button
+                    Margin="0,20,0,0"
+                    Command="{Binding OpenUploadImageCommand}"
+                    Style="{StaticResource upLoadButton}">
+                    <StackPanel Orientation="Horizontal">
+                        <ma:PackIconMaterial VerticalAlignment="Center" Kind="Upload" />
+                        <TextBlock Margin="10,0,0,0" Text="Tải ảnh lên" />
+                    </StackPanel>
+                </Button>
+            </StackPanel>
+            <Grid Grid.Column="1">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="auto" />
+                    <RowDefinition Height="auto" />
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="auto" />
+                </Grid.RowDefinitions>
+                <Button
+                    Grid.Row="0"
+                    Margin="20,10"
+                    HorizontalAlignment="Right"
+                    Command="{Binding DataContext.CloseModifyFoodViewCommand, RelativeSource={RelativeSource AncestorType=adminviews:FoodView}}"
+                    Style="{StaticResource closeButton}">
+                    <ma:PackIconMaterial Kind="Close" Style="{StaticResource iconApp}" />
+                </Button>
+                <TextBlock
+                    Grid.Row="1"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Top"
+                    FontSize="32"
+                    FontWeight="Bold"
+                    Foreground="#5f2414"
+                    Text="Thông tin thực đơn" />
+                <Grid
+                    Grid.Row="2"
+                    Margin="0,10,0,0"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="150" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="auto" />
+                        <RowDefinition Height="auto" />
+                        <RowDefinition Height="auto" />
+                        <RowDefinition Height="auto" />
+                    </Grid.RowDefinitions>
+
+                    <TextBlock
+                        Grid.Row="0"
+                        Style="{StaticResource infoText}"
+                        Text="Tên" />
+                    <TextBlock
+                        Grid.Row="1"
+                        Style="{StaticResource infoText}"
+                        Text="Loại" />
+                    <TextBlock
+                        Grid.Row="2"
+                        Style="{StaticResource infoText}"
+                        Text="Giá" />
+                    <TextBlock
+                        Grid.Row="3"
+                        Style="{StaticResource infoText}"
+                        Text="Mã giảm giá" />
+
+                    <uc:infoTextInput
+                        Grid.Row="0"
+                        Grid.Column="1"
+                        Hint="trà sữa, trà chanh,..."
+                        Text="{Binding ModifyFood.Foodname, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" />
+
+                    <Grid Grid.Row="1" Grid.Column="1">
+                        <ComboBox
+                            x:Name="cbFoodCategory"
+                            FontWeight="Regular"
+                            ItemsSource="{Binding ListFoodCategory}"
+                            SelectedItem="{Binding SelectedFoodCategory}"
+                            Style="{StaticResource ComboBoxStyle}"
+                            Tag="--Danh mục thực đơn--">
+                            <ComboBox.ItemContainerStyle>
+                                <Style BasedOn="{StaticResource ComboBoxItemStyle}" TargetType="ComboBoxItem">
+                                    <Setter Property="Width" Value="{Binding ActualWidth, ElementName=cbFoodCategory}" />
+                                    <Setter Property="Height" Value="{Binding ActualHeight, ElementName=cbFoodCategory}" />
+                                    <Setter Property="FontWeight" Value="Regular" />
+                                </Style>
+                            </ComboBox.ItemContainerStyle>
+                            <ComboBox.ItemTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding Foodcategoryname}" />
+                                </DataTemplate>
+                            </ComboBox.ItemTemplate>
+                        </ComboBox>
+                    </Grid>
+
+                    <uc:infoTextInput
+                        Grid.Row="2"
+                        Grid.Column="1"
+                        Hint="20000,..."
+                        Text="{Binding ModifyFood.Price, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" />
+                    <uc:infoTextInput
+                        Grid.Row="3"
+                        Grid.Column="1"
+                        Hint="15%"
+                        Text="{Binding ModifyFood.Discountfood, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" />
+                </Grid>
+                <Button
+                    Grid.Row="3"
+                    Margin="20"
+                    HorizontalAlignment="Right"
+                    VerticalAlignment="Bottom"
+                    Command="{Binding SubmitCommand}"
+                    Style="{StaticResource confirmInfoButton}">
+                    <StackPanel HorizontalAlignment="Center" Orientation="Horizontal">
+                        <ma:PackIconMaterial VerticalAlignment="Center" Kind="CheckBold" />
+                        <TextBlock
+                            Margin="10,0,0,0"
+                            FontWeight="SemiBold"
+                            Text="Xác nhận" />
+                    </StackPanel>
+                </Button>
+            </Grid>
+        </Grid>
+    </Border>
+</UserControl>

@@ -4,19 +4,17 @@ using CafeManager.Core.Services;
 using CafeManager.Infrastructure.Repositories;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace CafeManager.Infrastructure.Models
 {
     public class UnitOfWork : IUnitOfWork
     {
         private readonly CafeManagerContext _context;
+        private readonly IDbContextFactory<CafeManagerContext> dbContextFactory;
+
         private IDbContextTransaction _transaction;
-        private IDbContextFactory<CafeManagerContext> dbContextFactory;
+        private bool _isTransactionActive;
+        private int _transactionDepth = 0;
 
         #region food
 
@@ -45,6 +43,12 @@ namespace CafeManager.Infrastructure.Models
 
         #endregion Import
 
+        public IStaffRepository StaffList { get; private set; }
+
+        public IAppUserRepository AppUserList { get; private set; }
+
+        public IRepository<Staffsalaryhistory> StaffSalaryHistoryList { get; private set; }
+
         public UnitOfWork(IDbContextFactory<CafeManagerContext> dbContextFactory)
         {
             _context = dbContextFactory.CreateDbContext();
@@ -60,6 +64,10 @@ namespace CafeManager.Infrastructure.Models
             MaterialList = new MaterialRepository(_context);
             SupplierList = new SupplierRepository(_context);
             MaterialSupplierList = new Repository<Materialsupplier>(_context);
+
+            StaffList = new StaffRepository(_context);
+            AppUserList = new AppUserRepository(_context);
+            StaffSalaryHistoryList = new Repository<Staffsalaryhistory>(_context);
         }
 
         public int Complete()
@@ -76,31 +84,46 @@ namespace CafeManager.Infrastructure.Models
         {
             _context.Dispose();
             _transaction?.Dispose();
+
+            GC.SuppressFinalize(this);
         }
 
         public async Task BeginTransactionAsync()
         {
-            _transaction = await _context.Database.BeginTransactionAsync();
+            if (!_isTransactionActive)
+            {
+                _transaction = await _context.Database.BeginTransactionAsync();
+                _isTransactionActive = true;
+            }
+            _transactionDepth++;
         }
 
         public async Task CommitTransactionAsync()
         {
-            if (_transaction != null)
+            if (_isTransactionActive && --_transactionDepth == 0)
             {
-                await _transaction.CommitAsync();
+                await _transaction!.CommitAsync();
                 await _transaction.DisposeAsync();
-                _transaction.Dispose();
+                _transaction = null;
+                _isTransactionActive = false;
             }
         }
 
         public async Task RollbackTransactionAsync()
         {
-            if (_transaction != null)
+            if (_isTransactionActive)
             {
                 await _transaction.RollbackAsync();
                 await _transaction.DisposeAsync();
-                _transaction.Dispose();
+                _transaction = null;
+                _isTransactionActive = false;
+                _transactionDepth = 0;
             }
+        }
+
+        public void ClearChangeTracker()
+        {
+            _context.ChangeTracker.Clear();
         }
     }
 }

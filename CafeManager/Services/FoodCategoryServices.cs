@@ -20,7 +20,7 @@ namespace CafeManager.WPF.Services
             _unitOfWork = provider.GetRequiredService<IUnitOfWork>();
         }
 
-        public async Task<IEnumerable<Foodcategory>> GetListCategory()
+        public async Task<IEnumerable<Foodcategory>> GetListFoodCategory()
         {
             return await _unitOfWork.FoodCategoryList.GetAllFoodCategoryAsync();
         }
@@ -28,6 +28,11 @@ namespace CafeManager.WPF.Services
         public async Task<IEnumerable<Food>> GetListFoodByFoodCatgoryId(int id)
         {
             return await _unitOfWork.FoodCategoryList.GetAllFoodByFoodCatgoryIdAsync(id);
+        }
+
+        public async Task<IEnumerable<Foodcategory>> GetAllListFoodCategory()
+        {
+            return await _unitOfWork.FoodCategoryList.GetAll();
         }
 
         public async Task<Foodcategory?> AddFoodCategory(Foodcategory foodcategory)

@@ -23,13 +23,16 @@ namespace CafeManager.Infrastructure.Repositories
                 .Include(x => x.Coffeetable)
                 .Include(x => x.Invoicedetails)
                 .ThenInclude(x => x.Food)
+                .Include(x => x.Staff)
                 .ToListAsync();
         }
 
         public async Task<IEnumerable<Invoicedetail>?> GetAllInvoiceDetailByInvoiceIdAsync(int id)
         {
-            var res = await _cafeManagerContext.Set<Invoice>().Where(x => x.Isdeleted == false)
+            var res = await _cafeManagerContext.Invoices.Where(x => x.Isdeleted == false)
+                .Include(x => x.Coffeetable)
                 .Include(x => x.Invoicedetails).ThenInclude(x => x.Food)
+                .Include(x => x.Staff)
                 .FirstOrDefaultAsync(x => x.Invoiceid == id);
 
             return res?.Invoicedetails.Where(x => x.Isdeleted == false) ?? Enumerable.Empty<Invoicedetail>();
@@ -37,7 +40,7 @@ namespace CafeManager.Infrastructure.Repositories
 
         public async Task<Coffeetable?> GetCoffeTableByInvoiceIdAsync(int id)
         {
-            var res = await _cafeManagerContext.Set<Invoice>().Where(x => x.Isdeleted == false)
+            var res = await _cafeManagerContext.Invoices.Where(x => x.Isdeleted == false)
                 .Include(x => x.Invoicedetails)
                 .Include(x => x.Coffeetable)
                 .FirstOrDefaultAsync(x => x.Coffeetableid == id);
@@ -51,10 +54,11 @@ namespace CafeManager.Infrastructure.Repositories
 
         public async Task<Invoice?> GetInvoicesByIdAsync(int id)
         {
-            return await _cafeManagerContext.Set<Invoice>().Where(x => x.Isdeleted == false)
+            return await _cafeManagerContext.Invoices.Where(x => x.Isdeleted == false)
                         .Include(x => x.Coffeetable)
                         .Include(x => x.Invoicedetails)
                         .ThenInclude(x => x.Food)
+                        .Include(x => x.Staff)
                         .FirstOrDefaultAsync(x => x.Invoiceid == id) ?? null;
         }
 

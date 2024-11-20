@@ -10,11 +10,15 @@ namespace CafeManager.Core.Services
 {
     public static class SupplierMapper
     {
-        public static SupplierDTO ToDTO(Supplier entity)
+        public static SupplierDTO ToDTO(this Supplier entity, bool isLazyLoad = false, HashSet<object> visited = null)
         {
             if (entity == null) return null;
 
-            return new SupplierDTO
+            visited ??= new HashSet<object>();
+            if (visited.Contains(entity)) return null;
+            visited.Add(entity);
+
+            SupplierDTO dto = new SupplierDTO
             {
                 Supplierid = entity.Supplierid,
                 Suppliername = entity.Suppliername,
@@ -25,9 +29,15 @@ namespace CafeManager.Core.Services
                 Notes = entity.Notes,
                 Isdeleted = entity.Isdeleted,
             };
+            if (isLazyLoad)
+            {
+                dto.ImportDTO = [.. entity.Imports.Select(x => x.ToDTO(true, visited))];
+                dto.MaterialsupplierDTO = [.. entity.Materialsuppliers.Select(x => x.ToDTO(true, visited))];
+            }
+            return dto;
         }
 
-        public static Supplier ToEntity(SupplierDTO dto)
+        public static Supplier ToEntity(this SupplierDTO dto)
         {
             if (dto == null) return null;
 

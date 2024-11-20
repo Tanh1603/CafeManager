@@ -108,15 +108,15 @@ public partial class CafeManagerContext : DbContext
             entity.Property(e => e.Isdeleted)
                 .HasDefaultValue(false)
                 .HasColumnName("isdeleted");
-            entity.Property(e => e.Materialid).HasColumnName("materialid");
+            entity.Property(e => e.Materialsupplierid).HasColumnName("materialsupplierid");
             entity.Property(e => e.Quantity)
                 .HasPrecision(10, 2)
                 .HasDefaultValueSql("0")
                 .HasColumnName("quantity");
 
-            entity.HasOne(d => d.Material).WithMany(p => p.Consumedmaterials)
-                .HasForeignKey(d => d.Materialid)
-                .HasConstraintName("pk_consumedmaterials_material");
+            entity.HasOne(d => d.Materialsupplier).WithMany(p => p.Consumedmaterials)
+                .HasForeignKey(d => d.Materialsupplierid)
+                .HasConstraintName("pk_consumedmaterials_materialsupplierid");
         });
 
         modelBuilder.Entity<Food>(entity =>
@@ -449,6 +449,10 @@ public partial class CafeManagerContext : DbContext
 
         OnModelCreatingPartial(modelBuilder);
     }
-
+    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+    {
+        base.OnConfiguring(optionsBuilder);
+        optionsBuilder.UseLazyLoadingProxies();
+    }
     partial void OnModelCreatingPartial(ModelBuilder modelBuilder);
 }

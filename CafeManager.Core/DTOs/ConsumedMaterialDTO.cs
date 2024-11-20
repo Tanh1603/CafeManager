@@ -8,10 +8,10 @@ namespace CafeManager.Core.DTOs
     public class ConsumedMaterialDTO : INotifyPropertyChanged
     {
         private int _consumedmaterialid;
-        private int? _materialid;
+        private int? _materialsuppplierid;
         private decimal _quantity;
         private bool? _isdeleted;
-        private MaterialDTO _materialDTO;
+        private MaterialSupplierDTO _materialSupplierDTO;
 
         public int Consumedmaterialid
         {
@@ -22,11 +22,11 @@ namespace CafeManager.Core.DTOs
             }
         }
 
-        public int? Materialid
+        public int? Materialsupplierid
         {
-            get => _materialid; set
+            get => _materialsuppplierid; set
             {
-                _materialid = value;
+                _materialsuppplierid = value;
                 OnPropertyChanged();
             }
         }
@@ -49,11 +49,11 @@ namespace CafeManager.Core.DTOs
             }
         }
 
-        public MaterialDTO MaterialDTO
+        public MaterialSupplierDTO MaterialSupplierDTO
         {
-            get => _materialDTO; set
+            get => _materialSupplierDTO; set
             {
-                _materialDTO = value;
+                _materialSupplierDTO = value;
                 OnPropertyChanged();
             }
         }

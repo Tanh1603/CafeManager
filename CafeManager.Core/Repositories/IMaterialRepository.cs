@@ -12,12 +12,6 @@ namespace CafeManager.Core.Repositories
     {
         Task<IEnumerable<Material>> GetAllMaterialAsync();
 
-        Task<IEnumerable<MaterialSupplierDTO>> GetAllMaterialWithDetail();
-
-        Task<IEnumerable<MaterialSupplierDTO>> GetAllUsedMaterial();
-
-        Task<Material> GetMaterialById(int id);
-
-        Task<MaterialSupplierDTO> GetMaterialsuppliersByImportDetail(int materialid, int supplierid, int importdetailid);
+        Task<Material?> GetMaterialById(int id);
     }
 }

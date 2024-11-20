@@ -43,31 +43,31 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
 
         private async void AddSupplierVM_UpdateSupplierNameChanged(Supplier obj)
         {
-            try
-            {
-                IsOpenAddSupplier = false;
-                Supplier oldSupplier = await _materialSupplierServices.GetSupplierById(obj.Supplierid);
-                Supplier? tmp = ListSupplier.FirstOrDefault(x => x.Supplierid == obj.Supplierid);
+            //try
+            //{
+            //    IsOpenAddSupplier = false;
+            //    Supplier oldSupplier = await _materialSupplierServices.GetSupplierById(obj.Supplierid);
+            //    Supplier? tmp = ListSupplier.FirstOrDefault(x => x.Supplierid == obj.Supplierid);
 
-                oldSupplier.Suppliername = obj.Suppliername;
-                oldSupplier.Representativesupplier = obj.Representativesupplier;
-                oldSupplier.Address = obj.Address;
-                oldSupplier.Email = obj.Email;
-                oldSupplier.Phone = obj.Phone;
-                oldSupplier.Notes = obj.Notes;
+            //    oldSupplier.Suppliername = obj.Suppliername;
+            //    oldSupplier.Representativesupplier = obj.Representativesupplier;
+            //    oldSupplier.Address = obj.Address;
+            //    oldSupplier.Email = obj.Email;
+            //    oldSupplier.Phone = obj.Phone;
+            //    oldSupplier.Notes = obj.Notes;
 
-                var newSupplier = _materialSupplierServices.UpdateSupplier(oldSupplier);
-                if (newSupplier != null)
-                {
-                    tmp = newSupplier;
-                    ListSupplier = new(ListSupplier);
-                    MyMessageBox.Show("Cập nhật nhà cung cấp thành công", MyMessageBox.Buttons.OK, MyMessageBox.Icons.Information);
-                }
-            }
-            catch (InvalidOperationException ex)
-            {
-                MyMessageBox.Show(ex.Message, MyMessageBox.Buttons.OK,MyMessageBox.Icons.Warning);
-            }
+            //    var newSupplier = _materialSupplierServices.UpdateSupplier(oldSupplier);
+            //    if (newSupplier != null)
+            //    {
+            //        tmp = newSupplier;
+            //        ListSupplier = new(ListSupplier);
+            //        MyMessageBox.Show("Cập nhật nhà cung cấp thành công", MyMessageBox.Buttons.OK, MyMessageBox.Icons.Information);
+            //    }
+            //}
+            //catch (InvalidOperationException ex)
+            //{
+            //    MyMessageBox.Show(ex.Message, MyMessageBox.Buttons.OK,MyMessageBox.Icons.Warning);
+            //}
         }
 
         private async void AddSupplierVM_AddSupplierChanged(Supplier obj)
@@ -78,7 +78,7 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
                 var addedSupplier = await _materialSupplierServices.AddSupplier(obj);
                 ListSupplier.Add(addedSupplier);
 
-                MyMessageBox.Show("Thêm nhà cung cấp thành công",MyMessageBox.Buttons.OK,MyMessageBox.Icons.Information);
+                MyMessageBox.Show("Thêm nhà cung cấp thành công", MyMessageBox.Buttons.OK, MyMessageBox.Icons.Information);
             }
             catch (InvalidOperationException ex)
             {

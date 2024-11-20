@@ -1,4 +1,5 @@
-﻿using System.ComponentModel;
+﻿using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Runtime.CompilerServices;
 
 #nullable disable
@@ -19,6 +20,7 @@ namespace CafeManager.Core.DTOs
 
         private MaterialDTO _materialDTO;
         private SupplierDTO _supplierDTO;
+        private ObservableCollection<ConsumedMaterialDTO> _consumedMaterialDTO;
 
         public int Materialsupplierid
         {
@@ -135,6 +137,7 @@ namespace CafeManager.Core.DTOs
             {
                 _materialDTO = value;
                 OnPropertyChanged();
+                OnPropertyChanged(nameof(TotalQuantity));
             }
         }
 
@@ -144,6 +147,7 @@ namespace CafeManager.Core.DTOs
             {
                 _supplierDTO = value;
                 OnPropertyChanged();
+                OnPropertyChanged(nameof(TotalQuantity));
             }
         }
 
@@ -164,6 +168,17 @@ namespace CafeManager.Core.DTOs
                 MaterialDTO = this.MaterialDTO,
                 SupplierDTO = this.SupplierDTO
             };
+        }
+
+        public decimal TotalQuantity => MaterialDTO.ImportdetailDTO.Where(x => x.ImportDTO.Supplierid == SupplierDTO.Supplierid).Sum(x => x.Quantity);
+
+        public ObservableCollection<ConsumedMaterialDTO> ConsumedMaterialDTO
+        {
+            get => _consumedMaterialDTO; set
+            {
+                _consumedMaterialDTO = value;
+                OnPropertyChanged();
+            }
         }
 
         public event PropertyChangedEventHandler PropertyChanged;

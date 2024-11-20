@@ -13,6 +13,7 @@ namespace CafeManager.Core.DTOs
         private decimal _quantity;
         private bool? _isdeleted;
         private MaterialDTO _materialDTO;
+        private ImportDTO _importDTO;
 
         public int Importdetailid
         {
@@ -80,6 +81,15 @@ namespace CafeManager.Core.DTOs
             set
             {
                 _materialDTO = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public ImportDTO ImportDTO
+        {
+            get => _importDTO; set
+            {
+                _importDTO = value;
                 OnPropertyChanged();
             }
         }

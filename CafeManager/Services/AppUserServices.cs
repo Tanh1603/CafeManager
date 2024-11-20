@@ -1,23 +1,12 @@
 ﻿using CafeManager.Core.Data;
 using CafeManager.Core.Services;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Identity.Client.NativeInterop;
-using System;
-using System.IO;
-using RestSharp;
-using RestSharp.Authenticators;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net.Mail;
-using System.Text;
-using System.Threading.Tasks;
-using static System.Net.Mime.MediaTypeNames;
-using System.Net;
-using System.Reflection;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement.ListView;
-using Microsoft.Extensions.Configuration;
-using System.Security.Cryptography;
 using CafeManager.WPF.Stores;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using System.IO;
+using System.Net;
+using System.Net.Mail;
+using System.Reflection;
 
 namespace CafeManager.WPF.Services
 {

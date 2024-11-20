@@ -5,29 +5,36 @@ namespace CafeManager.Core.Services
 {
     public static class ConsumedMaterialMapper
     {
-        public static ConsumedMaterialDTO ToDTO(Consumedmaterial entity)
+        public static ConsumedMaterialDTO ToDTO(this Consumedmaterial entity, bool isLazyLoad = false, HashSet<object> visited = null)
         {
             if (entity == null) return null;
 
-            return new ConsumedMaterialDTO
+            visited ??= new HashSet<object>();
+            if (visited.Contains(entity)) return null;
+            visited.Add(entity);
+
+            ConsumedMaterialDTO dto = new ConsumedMaterialDTO
             {
                 Consumedmaterialid = entity.Consumedmaterialid,
-                Materialid = entity.Materialid,
+                Materialsupplierid = entity.Materialsupplierid,
                 Quantity = entity.Quantity ?? 0,
                 Isdeleted = entity.Isdeleted,
-
-                //MaterialDTO = MaterialMapper.ToDTO(entity.Material),
             };
+            if (isLazyLoad)
+            {
+                dto.MaterialSupplierDTO = entity.Materialsupplier.ToDTO(true, visited);
+            }
+            return dto;
         }
 
-        public static Consumedmaterial ToEntity(ConsumedMaterialDTO dto)
+        public static Consumedmaterial ToEntity(this ConsumedMaterialDTO dto)
         {
             if (dto == null) return null;
 
             return new Consumedmaterial
             {
                 Consumedmaterialid = dto.Consumedmaterialid,
-                Materialid = dto.Materialid,
+                Materialsupplierid = dto.Materialsupplierid,
                 Quantity = dto.Quantity,
                 Isdeleted = dto.Isdeleted,
             };

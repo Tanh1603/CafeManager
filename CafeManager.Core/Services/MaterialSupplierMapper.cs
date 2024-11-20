@@ -1,21 +1,19 @@
 ﻿using CafeManager.Core.Data;
 using CafeManager.Core.DTOs;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Security.Cryptography.X509Certificates;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace CafeManager.Core.Services
 {
-    public class MaterialSupplierMapper
+    public static class MaterialSupplierMapper
     {
-        public static MaterialSupplierDTO ToDTO(Materialsupplier entity)
+        public static MaterialSupplierDTO ToDTO(this Materialsupplier entity, bool isLazyLoad = false, HashSet<object> visited = null)
         {
             if (entity == null) return null;
 
-            return new MaterialSupplierDTO
+            visited ??= new HashSet<object>();
+            if (visited.Contains(entity)) return null;
+            visited.Add(entity);
+
+            MaterialSupplierDTO dto = new MaterialSupplierDTO
             {
                 Materialsupplierid = entity.Materialsupplierid,
                 Materialid = entity.Materialid,
@@ -26,13 +24,17 @@ namespace CafeManager.Core.Services
                 Manufacturer = entity.Manufacturer,
                 Price = entity.Price ?? 0,
                 Isdeleted = entity.Isdeleted,
-
-                MaterialDTO = MaterialMapper.ToDTO(entity.Material),
-                SupplierDTO = SupplierMapper.ToDTO(entity.Supplier),
             };
+            if (isLazyLoad)
+            {
+                dto.MaterialDTO = entity.Material.ToDTO(true, visited);
+                dto.ConsumedMaterialDTO = [.. entity.Consumedmaterials.Select(x => x.ToDTO(true, visited))];
+                dto.SupplierDTO = entity.Supplier.ToDTO(true, visited);
+            }
+            return dto;
         }
 
-        public static Materialsupplier ToEntity(MaterialSupplierDTO dto)
+        public static Materialsupplier ToEntity(this MaterialSupplierDTO dto)
         {
             if (dto == null) return null;
 

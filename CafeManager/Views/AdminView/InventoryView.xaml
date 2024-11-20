@@ -82,18 +82,18 @@
                     Kind="Magnify" />
             </Grid>
 
-                <Border Grid.Row="2">
-                    <TabControl Style="{DynamicResource tabControlStyle}">
-                        <TabItem Header="Đã dùng" Style="{DynamicResource tabItemStyle}">
+            <Border Grid.Row="2">
+                <TabControl Style="{DynamicResource tabControlStyle}">
+                    <TabItem Header="Đã dùng" Style="{DynamicResource tabItemStyle}">
 
                         <DataGrid
                             x:Name="SuppliersDataGrid"
                             Width="auto"
                             VerticalAlignment="Top"
-                            AlternationCount="{Binding ListSupplier.Count}"
+                            AlternationCount="{Binding ListConsumedMaterialDTO.Count}"
                             CellStyle="{DynamicResource DataGridCellStyle1}"
                             ColumnHeaderStyle="{DynamicResource DataGridColumnHeaderStyle1}"
-                            ItemsSource="{Binding ListSupplier}"
+                            ItemsSource="{Binding ListConsumedMaterialDTO}"
                             RowStyle="{DynamicResource DataGridRowStyle1}"
                             Style="{DynamicResource DataGridStyle1}">
                             <DataGrid.Columns>
@@ -112,79 +112,65 @@
 
                                 <DataGridTextColumn
                                     Width="*"
-                                    Binding="{Binding Suppliername}"
+                                    Binding="{Binding MaterialSupplierDTO.MaterialDTO.Materialname}"
+                                    CanUserResize="False"
+                                    Header="Tên vật tư"
+                                    IsReadOnly="True" />
+
+                                <DataGridTextColumn
+                                    Width="*"
+                                    Binding="{Binding MaterialSupplierDTO.SupplierDTO.Suppliername}"
                                     CanUserResize="False"
                                     Header="Nhà cung cấp"
                                     IsReadOnly="True" />
-
                                 <DataGridTextColumn
                                     Width="*"
-                                    Binding="{Binding Representativesupplier}"
+                                    Binding="{Binding MaterialSupplierDTO.Manufacturedate}"
                                     CanUserResize="False"
-                                    Header="Người đại diện"
+                                    Header="Ngày sản xuất"
                                     IsReadOnly="True" />
                                 <DataGridTextColumn
                                     Width="*"
-                                    Binding="{Binding Phone}"
+                                    Binding="{Binding MaterialSupplierDTO.Expirationdate}"
                                     CanUserResize="False"
-                                    Header="Số điện thoại"
+                                    Header="Ngày hết hạn"
                                     IsReadOnly="True" />
                                 <DataGridTextColumn
                                     Width="*"
-                                    Binding="{Binding Email}"
+                                    Binding="{Binding MaterialSupplierDTO.Original}"
                                     CanUserResize="False"
-                                    Header="Email"
-                                    IsReadOnly="True" />
-                                <DataGridTextColumn
-                                    Width="*"
-                                    Binding="{Binding Address}"
-                                    CanUserResize="False"
-                                    Header="Địa chỉ"
+                                    Header="Nguồn gốc"
                                     IsReadOnly="True" />
 
                                 <DataGridTextColumn
                                     Width="*"
-                                    Binding="{Binding Notes}"
+                                    Binding="{Binding MaterialSupplierDTO.Manufacturer}"
                                     CanUserResize="False"
-                                    Header="Thông tin khác"
+                                    Header="Nhà sản xuất"
                                     IsReadOnly="True" />
-
-                                <DataGridTemplateColumn
-                                    Width="auto"
-                                    Header="Tùy chỉnh"
-                                    IsReadOnly="True">
-                                    <DataGridTemplateColumn.CellTemplate>
-                                        <DataTemplate>
-                                            <StackPanel Orientation="Horizontal">
-                                                <Button
-                                                    Command="{Binding DataContext.UpdateSupplierCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
-                                                    CommandParameter="{Binding}"
-                                                    Style="{StaticResource gridEditButton}">
-                                                    <ma:PackIconMaterial Kind="PencilOutline" Style="{StaticResource gridButtonIcon}" />
-                                                </Button>
-                                                <Button
-                                                    Margin="5,0,0,0"
-                                                    Command="{Binding DataContext.DeleteSupplierCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
-                                                    CommandParameter="{Binding}"
-                                                    Style="{StaticResource gridRemoveButton}">
-                                                    <ma:PackIconMaterial Kind="DeleteOutline" Style="{StaticResource gridButtonIcon}" />
-                                                </Button>
-                                            </StackPanel>
-                                        </DataTemplate>
-                                    </DataGridTemplateColumn.CellTemplate>
-                                </DataGridTemplateColumn>
+                                <DataGridTextColumn
+                                    Width="*"
+                                    Binding="{Binding MaterialSupplierDTO.Price}"
+                                    CanUserResize="False"
+                                    Header="Giá"
+                                    IsReadOnly="True" />
+                                <DataGridTextColumn
+                                    Width="*"
+                                    Binding="{Binding Quantity, Mode=OneWay}"
+                                    CanUserResize="False"
+                                    Header="Số lượng sử dụng"
+                                    IsReadOnly="True" />
                             </DataGrid.Columns>
                         </DataGrid>
                     </TabItem>
                     <TabItem Header="Tồn kho" Style="{DynamicResource tabItemStyle}">
                         <DataGrid
-                            x:Name="MaterialDataGrid"
                             Width="auto"
                             VerticalAlignment="Top"
-                            AlternationCount="{Binding ListSupplier.Count}"
+                            AlternationCount="{Binding ListInventoryDTO.Count}"
                             CellStyle="{DynamicResource DataGridCellStyle1}"
                             ColumnHeaderStyle="{DynamicResource DataGridColumnHeaderStyle1}"
-                            ItemsSource="{Binding ListSupplier}"
+                            ItemsSource="{Binding ListInventoryDTO}"
                             RowStyle="{DynamicResource DataGridRowStyle1}"
                             Style="{DynamicResource DataGridStyle1}">
                             <DataGrid.Columns>
@@ -203,67 +189,54 @@
 
                                 <DataGridTextColumn
                                     Width="*"
-                                    Binding="{Binding Suppliername}"
+                                    Binding="{Binding MaterialDTO.Materialname}"
+                                    CanUserResize="False"
+                                    Header="Tên vật tư"
+                                    IsReadOnly="True" />
+
+                                <DataGridTextColumn
+                                    Width="*"
+                                    Binding="{Binding SupplierDTO.Suppliername}"
                                     CanUserResize="False"
                                     Header="Nhà cung cấp"
                                     IsReadOnly="True" />
-
                                 <DataGridTextColumn
                                     Width="*"
-                                    Binding="{Binding Representativesupplier}"
+                                    Binding="{Binding Manufacturedate}"
                                     CanUserResize="False"
-                                    Header="Người đại diện"
+                                    Header="Ngày sản xuất"
                                     IsReadOnly="True" />
                                 <DataGridTextColumn
                                     Width="*"
-                                    Binding="{Binding Phone}"
+                                    Binding="{Binding Expirationdate}"
                                     CanUserResize="False"
-                                    Header="Số điện thoại"
+                                    Header="Ngày hết hạn"
                                     IsReadOnly="True" />
                                 <DataGridTextColumn
                                     Width="*"
-                                    Binding="{Binding Email}"
+                                    Binding="{Binding Original}"
                                     CanUserResize="False"
-                                    Header="Email"
-                                    IsReadOnly="True" />
-                                <DataGridTextColumn
-                                    Width="*"
-                                    Binding="{Binding Address}"
-                                    CanUserResize="False"
-                                    Header="Địa chỉ"
+                                    Header="Nguồn gốc"
                                     IsReadOnly="True" />
 
                                 <DataGridTextColumn
                                     Width="*"
-                                    Binding="{Binding Notes}"
+                                    Binding="{Binding Manufacturer}"
                                     CanUserResize="False"
-                                    Header="Thông tin khác"
+                                    Header="Nhà sản xuất"
                                     IsReadOnly="True" />
-
-                                <DataGridTemplateColumn
-                                    Width="auto"
-                                    Header="Tùy chỉnh"
-                                    IsReadOnly="True">
-                                    <DataGridTemplateColumn.CellTemplate>
-                                        <DataTemplate>
-                                            <StackPanel Orientation="Horizontal">
-                                                <Button
-                                                    Command="{Binding DataContext.UpdateSupplierCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
-                                                    CommandParameter="{Binding}"
-                                                    Style="{StaticResource gridEditButton}">
-                                                    <ma:PackIconMaterial Kind="PencilOutline" Style="{StaticResource gridButtonIcon}" />
-                                                </Button>
-                                                <Button
-                                                    Margin="5,0,0,0"
-                                                    Command="{Binding DataContext.DeleteSupplierCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
-                                                    CommandParameter="{Binding}"
-                                                    Style="{StaticResource gridRemoveButton}">
-                                                    <ma:PackIconMaterial Kind="DeleteOutline" Style="{StaticResource gridButtonIcon}" />
-                                                </Button>
-                                            </StackPanel>
-                                        </DataTemplate>
-                                    </DataGridTemplateColumn.CellTemplate>
-                                </DataGridTemplateColumn>
+                                <DataGridTextColumn
+                                    Width="*"
+                                    Binding="{Binding Price}"
+                                    CanUserResize="False"
+                                    Header="Giá"
+                                    IsReadOnly="True" />
+                                <DataGridTextColumn
+                                    Width="*"
+                                    Binding="{Binding TotalQuantity, Mode=OneWay}"
+                                    CanUserResize="False"
+                                    Header="Số lượng sử dụng"
+                                    IsReadOnly="True" />
                             </DataGrid.Columns>
                         </DataGrid>
                     </TabItem>

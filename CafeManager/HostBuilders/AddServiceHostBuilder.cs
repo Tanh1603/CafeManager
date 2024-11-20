@@ -36,6 +36,7 @@ namespace CafeManager.WPF.HostBuilders
 
                 services.AddScoped<MaterialSupplierServices>(provider => new MaterialSupplierServices(provider));
                 services.AddScoped<AppUserServices>(provider => new AppUserServices(provider));
+                services.AddScoped<ConsumedMaterialServices>(provider => new ConsumedMaterialServices(provider));
 
                 services.AddSingleton<EncryptionHelper>(provider => new EncryptionHelper(provider));
             });

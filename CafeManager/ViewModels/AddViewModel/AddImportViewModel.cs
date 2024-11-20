@@ -47,7 +47,7 @@ namespace CafeManager.WPF.ViewModels.AddViewModel
         [ObservableProperty]
         private ImportDetailDTO _currentImportDetail = new()
         {
-            ModifyMaterialDetail = new() { Manufacturedate = DateTime.Now, Expirationdate = DateTime.Now }
+            //ModifyMaterialDetail = new() { Manufacturedate = DateTime.Now, Expirationdate = DateTime.Now }
         };
 
         private int _currentImportDetailIndex = -1;
@@ -101,7 +101,7 @@ namespace CafeManager.WPF.ViewModels.AddViewModel
             {
                 Receiveddate = DateTime.Now,
             };
-            CurrentImportDetail = new() { ModifyMaterialDetail = new() { Manufacturedate = DateTime.Now, Expirationdate = DateTime.Now } };
+            //CurrentImportDetail = new() { ModifyMaterialDetail = new() { Manufacturedate = DateTime.Now, Expirationdate = DateTime.Now } };
         }
 
         [RelayCommand]
@@ -109,7 +109,7 @@ namespace CafeManager.WPF.ViewModels.AddViewModel
         {
             IsAddingImportDetail = true;
             IsUpdatingImportDetail = false;
-            CurrentImportDetail = new() { ModifyMaterialDetail = new() { Manufacturedate = DateTime.Now, Expirationdate = DateTime.Now } };
+            //CurrentImportDetail = new() { ModifyMaterialDetail = new() { Manufacturedate = DateTime.Now, Expirationdate = DateTime.Now } };
         }
 
         [RelayCommand]
@@ -121,12 +121,12 @@ namespace CafeManager.WPF.ViewModels.AddViewModel
                 for (int i = 0; i < ModifyImport.ListImportDetailDTO.Count; i++)
                 {
                     ImportDetailDTO item = ModifyImport.ListImportDetailDTO[i];
-                    if (item.ModifyMaterialDetail.CurrentMaterial == CurrentImportDetail.ModifyMaterialDetail.CurrentMaterial &&
-                            item.ModifyMaterialDetail.Price == CurrentImportDetail.ModifyMaterialDetail.Price &&
-                            item.ModifyMaterialDetail.Original == CurrentImportDetail.ModifyMaterialDetail.Original &&
-                            item.ModifyMaterialDetail.Manufacturer == CurrentImportDetail.ModifyMaterialDetail.Manufacturer &&
-                            item.ModifyMaterialDetail.Manufacturedate == CurrentImportDetail.ModifyMaterialDetail.Manufacturedate &&
-                            item.ModifyMaterialDetail.Expirationdate == CurrentImportDetail.ModifyMaterialDetail.Expirationdate)
+                    //if (item.ModifyMaterialDetail.CurrentMaterial == CurrentImportDetail.ModifyMaterialDetail.CurrentMaterial &&
+                    //        item.ModifyMaterialDetail.Price == CurrentImportDetail.ModifyMaterialDetail.Price &&
+                    //        item.ModifyMaterialDetail.Original == CurrentImportDetail.ModifyMaterialDetail.Original &&
+                    //        item.ModifyMaterialDetail.Manufacturer == CurrentImportDetail.ModifyMaterialDetail.Manufacturer &&
+                    //        item.ModifyMaterialDetail.Manufacturedate == CurrentImportDetail.ModifyMaterialDetail.Manufacturedate &&
+                    //        item.ModifyMaterialDetail.Expirationdate == CurrentImportDetail.ModifyMaterialDetail.Expirationdate)
                     {
                         isOldMaterialDetail = true;
                         item.Quantity += CurrentImportDetail.Quantity;
@@ -149,13 +149,13 @@ namespace CafeManager.WPF.ViewModels.AddViewModel
                 var find = ModifyImport.ListImportDetailDTO.FirstOrDefault(x => x.Importdetailid == CurrentImportDetail.Importdetailid);
                 if (find != null)
                 {
-                    find.ModifyMaterialDetail = CurrentImportDetail.ModifyMaterialDetail;
+                    //find.ModifyMaterialDetail = CurrentImportDetail.ModifyMaterialDetail;
                     find.Quantity = CurrentImportDetail.Quantity;
                     MyMessageBox.Show("Sửa chi tiết đơn hàng thành công", MyMessageBox.Buttons.OK, MyMessageBox.Icons.Information);
                 }
                 IsUpdatingImportDetail = false;
             }
-            CurrentImportDetail = new() { ModifyMaterialDetail = new() { Manufacturedate = DateTime.Now, Expirationdate = DateTime.Now } };
+            //CurrentImportDetail = new() { ModifyMaterialDetail = new() { Manufacturedate = DateTime.Now, Expirationdate = DateTime.Now } };
         }
 
         [RelayCommand]
@@ -176,12 +176,12 @@ namespace CafeManager.WPF.ViewModels.AddViewModel
             IsAddingImportDetail = false;
             CurrentImportDetail = new ImportDetailDTO
             {
-                Importdetailid = value.Importdetailid,
-                ImportId = value.ImportId,
-                MaterialsupplierId = value.MaterialsupplierId,
-                Quantity = value.Quantity,
-                ModifyMaterialDetail = value.ModifyMaterialDetail,
-                Isdeleted = value.Isdeleted
+                //Importdetailid = value.Importdetailid,
+                //ImportId = value.ImportId,
+                //MaterialsupplierId = value.MaterialsupplierId,
+                //Quantity = value.Quantity,
+                //ModifyMaterialDetail = value.ModifyMaterialDetail,
+                //Isdeleted = value.Isdeleted
             };
         }
 
@@ -269,6 +269,7 @@ namespace CafeManager.WPF.ViewModels.AddViewModel
         {
             Close?.Invoke();
         }
+
         //[RelayCommand]
         //private void CloseUserControl()
         //{
@@ -287,7 +288,5 @@ namespace CafeManager.WPF.ViewModels.AddViewModel
         //    }
         //    GC.SuppressFinalize(this);
         //}
-
-
     }
 }

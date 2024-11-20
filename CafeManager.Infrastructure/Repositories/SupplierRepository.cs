@@ -21,7 +21,7 @@ namespace CafeManager.Infrastructure.Repositories
                         .ToListAsync();
         }
 
-        public async Task<Supplier> GetSupplierById(int id)
+        public async Task<Supplier?> GetSupplierById(int id)
         {
             return await _cafeManagerContext.Suppliers.Where(x => x.Isdeleted == false)
                 .Include(m => m.Materialsuppliers)

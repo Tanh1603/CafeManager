@@ -35,8 +35,10 @@ namespace CafeManager.WPF.ViewModels
             _provider = provider;
             _navigationStore = _provider.GetRequiredService<NavigationStore>();
             _accountStore = provider.GetRequiredService<AccountStore>();
-            CurrentViewModel = _provider.GetRequiredService<HomeViewModel>();
-            currentVM = "Home";
+            //CurrentViewModel = _provider.GetRequiredService<HomeViewModel>();
+            CurrentViewModel = _provider.GetRequiredService<InventoryViewModel>();
+            //currentVM = "Home";
+            currentVM = "Inventory";
             LoadAccount();
             _accountStore.ChangeAccount += _accountStore_ChangeAccount;
         }

@@ -7,7 +7,7 @@ namespace CafeManager.Core.Services
 {
     public static class StaffMapper
     {
-        public static StaffDTO ToDTO(Staff staff)
+        public static StaffDTO ToDTO(this Staff staff, bool isLazyLoad = false)
         {
             if (staff == null) throw new ArgumentNullException(nameof(staff));
 

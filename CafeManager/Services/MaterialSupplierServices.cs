@@ -17,12 +17,12 @@ namespace CafeManager.WPF.Services
 
         public async Task<IEnumerable<Material>> GetListMaterial()
         {
-            return await _unitOfWork.MaterialList.GetAllMaterialAsync();
+            return (await _unitOfWork.MaterialList.GetAll()).Where(x => x.Isdeleted == false);
         }
 
         public async Task<IEnumerable<Supplier>> GetListSupplier()
         {
-            return await _unitOfWork.SupplierList.GetAllSupplierAsync();
+            return (await _unitOfWork.SupplierList.GetAll()).Where(x => x.Isdeleted == false);
         }
 
         public async Task<Supplier> AddSupplier(Supplier supplier)
@@ -73,7 +73,8 @@ namespace CafeManager.WPF.Services
 
         public async Task<Supplier?> GetSupplierById(int id)
         {
-            return await _unitOfWork.SupplierList.GetSupplierById(id);
+            var res = await _unitOfWork.SupplierList.GetById(id);
+            return res.Isdeleted == false ? res : null;
         }
 
         public async Task<bool> DeleteSupplier(int id)
@@ -139,7 +140,8 @@ namespace CafeManager.WPF.Services
 
         public async Task<Material?> GetMaterialById(int id)
         {
-            return await _unitOfWork.MaterialList.GetMaterialById(id);
+            var res = await _unitOfWork.MaterialList.GetById(id);
+            return res.Isdeleted == false ? res : null;
         }
 
         public async Task<bool> DeleteMaterial(int id)
@@ -183,7 +185,7 @@ namespace CafeManager.WPF.Services
 
         public async Task<IEnumerable<Materialsupplier>> GetListMaterialSupplier()
         {
-            return await _unitOfWork.MaterialSupplierList.GetAllMaterialSuppierAsync();
+            return await _unitOfWork.MaterialSupplierList.GetAll();
         }
     }
 }

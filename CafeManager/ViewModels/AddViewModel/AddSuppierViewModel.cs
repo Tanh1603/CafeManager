@@ -1,4 +1,5 @@
 ﻿using CafeManager.Core.Data;
+using CafeManager.Core.DTOs;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Microsoft.Extensions.DependencyInjection;
@@ -14,80 +15,36 @@ namespace CafeManager.WPF.ViewModels.AddViewModel
     {
         private readonly IServiceProvider _provider;
 
-        [ObservableProperty]
-        private int _id;
-
-        [ObservableProperty]
-        private string _suppliername;
-
-        [ObservableProperty]
-        private string _representativesupplier;
-
-        [ObservableProperty]
-        private string _phone;
-
-        [ObservableProperty]
-        private string _email;
-
-        [ObservableProperty]
-        private string _address;
-
-        [ObservableProperty]
-        private string _notes;
-
         public bool IsUpdating { get; set; } = false;
         public bool IsAdding { get; set; } = false;
 
-        public event Action<Supplier> AddSupplierChanged;
+        [ObservableProperty]
+        private SupplierDTO _modifySupplier = new();
 
-        public event Action<Supplier> UpdateSupplierNameChanged;
-
-        public event Action Close;
+        public event Action<SupplierDTO>? ModifySupplierChanged;
 
         public AddSuppierViewModel(IServiceProvider provider)
         {
             _provider = provider;
         }
 
-        public void HandleSupplierFromParent(Supplier supplier)
+        public void RecieveSupplierDTO(SupplierDTO supplier)
         {
-            Id = supplier.Supplierid;
-            Suppliername = supplier.Suppliername;
-            Representativesupplier = supplier.Representativesupplier;
-            Phone = supplier.Phone;
-            Email = supplier.Email;
-            Address = supplier.Address;
-            Notes = supplier.Notes;
-            IsUpdating = true;
+            ModifySupplier = supplier.Clone();
+        }
+
+        public void ClearValueOfFrom()
+        {
+            ModifySupplier = new();
+            IsAdding = false;
+            IsUpdating = false;
         }
 
         [RelayCommand]
         private void Submit()
         {
-            Supplier newSupplier = new()
-            {
-                Suppliername = this.Suppliername,
-                Representativesupplier = this.Representativesupplier,
-                Phone = this.Phone,
-                Email = this.Email,
-                Address = this.Address,
-                Notes = this.Notes,
-            };
-            if (IsUpdating)
-            {
-                newSupplier.Supplierid = Id;
-                UpdateSupplierNameChanged?.Invoke(newSupplier);
-            }
-            else if (IsAdding)
-            {
-                AddSupplierChanged?.Invoke(newSupplier);
-            }
-        }
-
-        [RelayCommand]
-        private void CloseUserControl()
-        {
-            Close?.Invoke();
+            ModifySupplierChanged?.Invoke(ModifySupplier.Clone());
+            ClearValueOfFrom();
         }
     }
 }

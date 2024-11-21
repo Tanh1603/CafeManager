@@ -453,6 +453,7 @@ public partial class CafeManagerContext : DbContext
     {
         base.OnConfiguring(optionsBuilder);
         optionsBuilder.UseLazyLoadingProxies();
+        optionsBuilder.LogTo(Console.WriteLine);
     }
     partial void OnModelCreatingPartial(ModelBuilder modelBuilder);
 }

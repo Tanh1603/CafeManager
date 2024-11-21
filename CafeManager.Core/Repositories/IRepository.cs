@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Linq.Expressions;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Linq.Expressions;
 
 namespace CafeManager.Core.Repositories
 {
@@ -11,7 +6,7 @@ namespace CafeManager.Core.Repositories
     {
         Task<T> Create(T entity);
 
-        T? Update(T? entity);
+        T? Update(T entity);
 
         Task<bool> Delete(int id);
 
@@ -20,5 +15,7 @@ namespace CafeManager.Core.Repositories
         Task<IEnumerable<T>> GetAll();
 
         Task<T?> GetById(int id);
+
+        Task<(IEnumerable<T> Items, int TotalCount)> GetByPageAsync(int pageIndex, int pageSize, Expression<Func<T, bool>>? filter = null);
     }
 }

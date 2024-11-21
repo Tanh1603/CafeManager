@@ -23,7 +23,7 @@ namespace CafeManager.WPF.Services
 
         public async Task<IEnumerable<Consumedmaterial>> GetListConsumedMaterial()
         {
-            return await _unitOfWork.ConsumedMaterialList.GetAllConsumedMaterialsAsync();
+            return await _unitOfWork.ConsumedMaterialList.GetAll();
         }
 
         public async Task<Consumedmaterial> AddConsumedmaterial(Consumedmaterial consumedmaterial)

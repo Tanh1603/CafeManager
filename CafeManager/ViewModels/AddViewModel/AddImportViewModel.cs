@@ -84,8 +84,6 @@ namespace CafeManager.WPF.ViewModels.AddViewModel
             AddMaterialVM.Close += AddMaterialSupplierVM_Close;
 
             AddSupplierVM = _provider.GetRequiredService<AddSuppierViewModel>();
-            AddSupplierVM.AddSupplierChanged += AddSupplierVM_AddSupplierChanged;
-            AddSupplierVM.Close += AddMaterialSupplierVM_Close;
         }
 
         public void RecieveImport(ImportDTO import)
@@ -247,13 +245,6 @@ namespace CafeManager.WPF.ViewModels.AddViewModel
 
             AddSupplierVM.IsAdding = true;
             AddSupplierVM.IsUpdating = false;
-
-            AddSupplierVM.Suppliername = string.Empty;
-            AddSupplierVM.Representativesupplier = string.Empty;
-            AddSupplierVM.Address = string.Empty;
-            AddSupplierVM.Email = string.Empty;
-            AddSupplierVM.Phone = string.Empty;
-            AddSupplierVM.Notes = string.Empty;
         }
 
         #endregion Open View

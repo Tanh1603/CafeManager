@@ -1,7 +1,8 @@
-﻿using CafeManager.Core.Data;
-using System.ComponentModel;
+﻿using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Windows.Media.Imaging;
+
+#nullable disable
 
 namespace CafeManager.Core.DTOs
 {
@@ -22,7 +23,6 @@ namespace CafeManager.Core.DTOs
         private bool? _isdeleted;
 
         private FoodCategoryDTO _foodcategory;
-
         public decimal? PriceDiscount => Price * (100 - Discountfood) / 100;
 
         public int Foodid
@@ -145,7 +145,7 @@ namespace CafeManager.Core.DTOs
             };
         }
 
-        public event PropertyChangedEventHandler? PropertyChanged;
+        public event PropertyChangedEventHandler PropertyChanged;
 
         protected void OnPropertyChanged([CallerMemberName] string propertyName = null)
         {

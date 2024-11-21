@@ -146,7 +146,7 @@
 
                         <DataGridTextColumn
                             Width="auto"
-                            Binding="{Binding StaffDTO.Staffname}"
+                            Binding="{Binding Staff.Staffname}"
                             CanUserResize="False"
                             Header="Người tạo hóa đơn"
                             IsReadOnly="True" />

@@ -1,5 +1,4 @@
-﻿using CafeManager.Core.Data;
-using System.Collections.ObjectModel;
+﻿using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 
@@ -14,8 +13,8 @@ namespace CafeManager.Core.DTOs
         private string unit;
         private bool? isdeleted;
 
-        private ObservableCollection<MaterialSupplierDTO> _materialsuppliersDTO = [];
-        private ObservableCollection<ImportDetailDTO> _importdetailDTO = [];
+        private ObservableCollection<MaterialSupplierDTO> _materialsuppliers = [];
+        private ObservableCollection<ImportDetailDTO> _importdetails = [];
 
         public int Materialid
         {
@@ -56,22 +55,28 @@ namespace CafeManager.Core.DTOs
             }
         }
 
-        public ObservableCollection<MaterialSupplierDTO> MaterialsuppliersDTO
+        public ObservableCollection<MaterialSupplierDTO> Materialsuppliers
         {
-            get => _materialsuppliersDTO;
+            get => _materialsuppliers;
             set
             {
-                _materialsuppliersDTO = value;
-                OnPropertyChanged();
+                if (_materialsuppliers != value)
+                {
+                    _materialsuppliers = value;
+                    OnPropertyChanged();
+                }
             }
         }
 
-        public ObservableCollection<ImportDetailDTO> ImportdetailDTO
+        public ObservableCollection<ImportDetailDTO> Importdetails
         {
-            get => _importdetailDTO; set
+            get => _importdetails; set
             {
-                _importdetailDTO = value;
-                OnPropertyChanged();
+                if (_importdetails != value)
+                {
+                    _importdetails = value;
+                    OnPropertyChanged();
+                }
             }
         }
 
@@ -85,8 +90,8 @@ namespace CafeManager.Core.DTOs
                 Materialname = Materialname,
                 Unit = Unit,
                 Isdeleted = Isdeleted,
-                ImportdetailDTO = ImportdetailDTO,
-                MaterialsuppliersDTO = MaterialsuppliersDTO,
+                Importdetails = Importdetails,
+                Materialsuppliers = Materialsuppliers,
             };
         }
 

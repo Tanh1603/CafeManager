@@ -5,12 +5,13 @@ using CafeManager.Infrastructure.Repositories;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
 
+#nullable disable
+
 namespace CafeManager.Infrastructure.Models
 {
     public class UnitOfWork : IUnitOfWork
     {
         private readonly CafeManagerContext _context;
-        private readonly IDbContextFactory<CafeManagerContext> dbContextFactory;
 
         private IDbContextTransaction _transaction;
         private bool _isTransactionActive;

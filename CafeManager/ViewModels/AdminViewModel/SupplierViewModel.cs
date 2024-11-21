@@ -134,15 +134,19 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
         {
             try
             {
-                bool isDeleted = await _materialSupplierServices.DeleteSupplier(supplier.Supplierid);
-                if (isDeleted)
+                string messageBox = MyMessageBox.ShowDialog("Bạn có muốn ẩn nhà cung cấp không?", MyMessageBox.Buttons.Yes_No, MyMessageBox.Icons.Question);
+                if (messageBox.Equals("1"))
                 {
-                    ListSupplier.Remove(supplier);
-                    MyMessageBox.ShowDialog("Xóa nhà cung cấp thanh công");
-                }
-                else
-                {
-                    MyMessageBox.ShowDialog("Xóa nhà cung cấp thất bại");
+                    bool isDeleted = await _materialSupplierServices.DeleteSupplier(supplier.Supplierid);
+                    if (isDeleted)
+                    {
+                        ListSupplier.Remove(supplier);
+                        MyMessageBox.ShowDialog("Ẩn nhà cung cấp thanh công");
+                    }
+                    else
+                    {
+                        MyMessageBox.ShowDialog("Ẩn nhà cung cấp thất bại");
+                    }
                 }
             }
             catch (InvalidOperationException ioe)
@@ -155,6 +159,7 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
         {
             if (ModifySupplierVM != null)
             {
+                ModifySupplierVM.ModifySupplierChanged -= ModifySupplierVM_ModifySupplierChanged;
             }
             GC.SuppressFinalize(this);
         }

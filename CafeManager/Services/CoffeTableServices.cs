@@ -39,13 +39,13 @@ namespace CafeManager.WPF.Services
 
                 var res = await _unitOfWork.CoffeeTableList.Create(coffeetable);
                 await _unitOfWork.CompleteAsync();
+                _unitOfWork.ClearChangeTracker();
                 await _unitOfWork.CommitTransactionAsync();
                 return res;
             }
             catch (Exception)
             {
                 await _unitOfWork.RollbackTransactionAsync();
-                _unitOfWork.ClearChangeTracker();
                 throw;
             }
         }

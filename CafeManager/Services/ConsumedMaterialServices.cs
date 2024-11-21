@@ -33,14 +33,14 @@ namespace CafeManager.WPF.Services
                 await _unitOfWork.BeginTransactionAsync();
                 var list = await _unitOfWork.ConsumedMaterialList.Create(consumedmaterial);
                 await _unitOfWork.CompleteAsync();
+                _unitOfWork.ClearChangeTracker();
 
                 await _unitOfWork.CommitTransactionAsync();
                 return list;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 await _unitOfWork.RollbackTransactionAsync();
-                _unitOfWork.ClearChangeTracker();
                 throw new InvalidOperationException("Lỗi.");
             }
         }
@@ -55,13 +55,13 @@ namespace CafeManager.WPF.Services
 
                 await _unitOfWork.CompleteAsync();
 
+                _unitOfWork.ClearChangeTracker();
                 await _unitOfWork.CommitTransactionAsync();
                 return res;
             }
             catch (Exception ex)
             {
                 await _unitOfWork.RollbackTransactionAsync();
-                _unitOfWork.ClearChangeTracker();
                 throw new InvalidOperationException("Lỗi");
             }
         }
@@ -74,13 +74,13 @@ namespace CafeManager.WPF.Services
 
                 var deleted = await _unitOfWork.SupplierList.Delete(id);
                 await _unitOfWork.CompleteAsync();
+                _unitOfWork.ClearChangeTracker();
                 await _unitOfWork.CommitTransactionAsync();
                 return deleted;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 await _unitOfWork.RollbackTransactionAsync();
-                _unitOfWork.ClearChangeTracker();
                 throw new InvalidOperationException("Lỗi");
             }
         }

@@ -105,6 +105,7 @@ namespace CafeManager.WPF.Services
                 var list = await _unitOfWork.MaterialList.Create(material);
 
                 await _unitOfWork.CompleteAsync();
+                _unitOfWork.ClearChangeTracker();
 
                 await _unitOfWork.CommitTransactionAsync();
                 return list;
@@ -112,7 +113,6 @@ namespace CafeManager.WPF.Services
             catch (Exception ex)
             {
                 await _unitOfWork.RollbackTransactionAsync();
-                _unitOfWork.ClearChangeTracker();
                 throw new InvalidOperationException("Xoá vật liệu liệu thất bại.", ex);
             }
         }
@@ -127,13 +127,13 @@ namespace CafeManager.WPF.Services
 
                 await _unitOfWork.CompleteAsync();
 
+                _unitOfWork.ClearChangeTracker();
                 await _unitOfWork.CommitTransactionAsync();
                 return res;
             }
             catch (Exception ex)
             {
                 await _unitOfWork.RollbackTransactionAsync();
-                _unitOfWork.ClearChangeTracker();
                 throw new InvalidOperationException("Xoá vật liệu liệu thất bại.", ex);
             }
         }
@@ -152,6 +152,7 @@ namespace CafeManager.WPF.Services
 
                 var deleted = await _unitOfWork.MaterialList.Delete(id);
                 await _unitOfWork.CompleteAsync();
+                _unitOfWork.ClearChangeTracker();
                 await _unitOfWork.CommitTransactionAsync();
                 return deleted;
             }
@@ -172,7 +173,7 @@ namespace CafeManager.WPF.Services
                 var res = await _unitOfWork.MaterialSupplierList.Create(materialsupplier);
 
                 await _unitOfWork.CompleteAsync();
-
+                _unitOfWork.ClearChangeTracker();
                 await _unitOfWork.CommitTransactionAsync();
                 return res;
             }

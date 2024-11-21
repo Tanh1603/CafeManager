@@ -75,64 +75,6 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
 
         private async void ModifyFoodVM_ModifyFoodChanged(FoodDTO foodDTO)
         {
-            //try
-            //{
-            //    if (ModifyFoodVM.IsAdding)
-            //    {
-            //        Food addFood = await _foodServices.CreateFood(FoodMapper.ToEntity(foodDTO));
-            //        if (addFood != null)
-            //        {
-            //            FoodDTO addFoodDTO = FoodMapper.ToDTO(addFood);
-            //            if (addFoodDTO.Foodcategoryid == SelectedFoodCategory.Foodcategoryid)
-            //            {
-            //                ListFoodByFoodCategoryId.Add(addFoodDTO);
-            //            }
-            //            MyMessageBox.Show("Thêm thức ăn thành công");
-            //        }
-            //    }
-            //    if (ModifyFoodVM.IsUpdating)
-            //    {
-            //        var updateFood = await _foodServices.GetFoodById(foodDTO.Foodid);
-            //        Food updateFoodEntity = FoodMapper.ToEntity(foodDTO);
-
-            //        updateFood.Foodname = updateFoodEntity.Foodname;
-            //        updateFood.Foodcategoryid = updateFoodEntity.Foodcategoryid;
-            //        updateFood.Price = updateFoodEntity.Price;
-            //        updateFood.Imagefood = updateFoodEntity.Imagefood;
-            //        updateFood.Discountfood = updateFoodEntity.Discountfood;
-            //        var res = _foodServices.UpdatFood(updateFood);
-
-            //        if (res != null)
-            //        {
-            //            var updateFoodDTO = ListFoodByFoodCategoryId
-            //                                .FirstOrDefault(f => f.Foodid == res.Foodid);
-            //            if (updateFoodDTO != null)
-            //            {
-            //                FoodDTO foodMapper = FoodMapper.ToDTO(res);
-            //                if (foodMapper.Foodcategoryid == SelectedFoodCategory.Foodcategoryid)
-            //                {
-            //                    updateFoodDTO.Foodid = foodMapper.Foodid;
-            //                    updateFoodDTO.Foodname = foodMapper.Foodname;
-            //                    updateFoodDTO.Foodcategoryid = foodMapper.Foodcategoryid;
-            //                    updateFoodDTO.Price = foodMapper.Price;
-            //                    updateFoodDTO.Discountfood = foodMapper.Discountfood;
-            //                    updateFoodDTO.Imagefood = foodMapper.Imagefood;
-            //                }
-            //                else
-            //                {
-            //                    ListFoodByFoodCategoryId.Remove(updateFoodDTO);
-            //                }
-            //                MyMessageBox.Show("Sửa thức ăn thành công");
-            //            }
-            //        }
-            //    }
-            //    IsOpenModifyFoodView = false;
-            //    ModifyFoodVM.ClearValueOfForm();
-            //}
-            //catch (InvalidOperationException ioe)
-            //{
-            //    MyMessageBox.Show(ioe.Message);
-            //}
             try
             {
                 if (ModifyFoodVM.IsAdding)

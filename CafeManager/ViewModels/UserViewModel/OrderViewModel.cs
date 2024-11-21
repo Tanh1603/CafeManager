@@ -1,10 +1,12 @@
-﻿using CafeManager.Core.Data;
+﻿using AutoMapper;
+using CafeManager.Core.Data;
 using CafeManager.Core.DTOs;
 using CafeManager.Core.Services;
 using CafeManager.WPF.MessageBox;
 using CafeManager.WPF.Services;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using LiveCharts.Configurations;
 using Microsoft.Extensions.DependencyInjection;
 using System.Collections.ObjectModel;
 
@@ -18,6 +20,7 @@ namespace CafeManager.WPF.ViewModels.UserViewModel
         private readonly CoffeTableServices _coffeTableServices;
         private readonly InvoiceServices _invoiceServices;
         private readonly StaffServices _staffServices;
+        private readonly IMapper _mapper;
 
         [ObservableProperty]
         private ObservableCollection<CoffeetableDTO> _listCoffeeTableDTO = [];
@@ -59,16 +62,20 @@ namespace CafeManager.WPF.ViewModels.UserViewModel
             _coffeTableServices = provider.GetRequiredService<CoffeTableServices>();
             _invoiceServices = provider.GetRequiredService<InvoiceServices>();
             _staffServices = provider.GetRequiredService<StaffServices>();
+            _mapper = provider.GetRequiredService<IMapper>();
+
             Task.Run(LoadData);
         }
 
         private async Task LoadData()
         {
             var dbListCoffeeTable = await _coffeTableServices.GetListCoffeTable();
-            ListCoffeeTableDTO = [.. dbListCoffeeTable.Select(x => CoffeeTableMapper.ToDTO(x))];
+            //ListCoffeeTableDTO = [.. dbListCoffeeTable.Select(x => CoffeeTableMapper.ToDTO(x))];
+            ListCoffeeTableDTO = [.. _mapper.Map<List<CoffeetableDTO>>(dbListCoffeeTable)];
 
             var dbListFoodCategory = await _foodCategoryServices.GetListFoodCategory();
-            ListFoodCategoryDTO = [.. dbListFoodCategory.Select(x => FoodCategoryMapper.ToDTO(x))];
+            //ListFoodCategoryDTO = [.. dbListFoodCategory.Select(x => FoodCategoryMapper.ToDTO(x))];
+            ListFoodCategoryDTO = [.. _mapper.Map<List<FoodCategoryDTO>>(dbListFoodCategory)];
 
             SelectedFoodCategory = ListFoodCategoryDTO[0];
             if (SelectedFoodCategory != null)
@@ -77,7 +84,8 @@ namespace CafeManager.WPF.ViewModels.UserViewModel
             }
 
             var dbStaff = await _staffServices.GetListStaff();
-            ListStaffDTO = [.. dbStaff.Select(x => StaffMapper.ToDTO(x))];
+            //ListStaffDTO = [.. dbStaff.Select(x => StaffMapper.ToDTO(x))];
+            ListStaffDTO = [.. _mapper.Map<List<StaffDTO>>(dbStaff)];
         }
 
         [RelayCommand]
@@ -87,7 +95,8 @@ namespace CafeManager.WPF.ViewModels.UserViewModel
             {
                 var dbListFood =
             await _foodCategoryServices.GetListFoodByFoodCatgoryId(foodCategoryDTO.Foodcategoryid);
-                ListFoodDTO = [.. dbListFood.Select(x => FoodMapper.ToDTO(x))];
+                //ListFoodDTO = [.. dbListFood.Select(x => FoodMapper.ToDTO(x))];
+                ListFoodDTO = [.. _mapper.Map<List<FoodDTO>>(dbListFood)];
             }
         }
 
@@ -104,7 +113,7 @@ namespace CafeManager.WPF.ViewModels.UserViewModel
                     SelectedInvoiceDTO = new InvoiceDTO()
                     {
                         Coffeetableid = tableDTO.Coffeetableid,
-                        CoffeetableDTO = tableDTO,
+                        Coffeetable = tableDTO,
                         IsCoffeeTable = true,
                     };
                     ListInvoiceDTO.Add(SelectedInvoiceDTO);
@@ -112,7 +121,7 @@ namespace CafeManager.WPF.ViewModels.UserViewModel
             }
 
             SelectedInvoiceDTO = ListInvoiceDTO.FirstOrDefault(x => x.Coffeetableid == tableDTO.Coffeetableid) ?? new();
-            OnPropertyChanged(nameof(SelectedInvoiceDTO.CoffeetableDTO.TableName));
+            OnPropertyChanged(nameof(SelectedInvoiceDTO.Coffeetable.TableName));
         }
 
         [RelayCommand]
@@ -120,7 +129,7 @@ namespace CafeManager.WPF.ViewModels.UserViewModel
         {
             if (SelectedInvoiceDTO.IsCoffeeTable == true || SelectedInvoiceDTO.IsCustomer == true)
             {
-                var exisitingFood = SelectedInvoiceDTO.ListInvoiceDetailDTO.FirstOrDefault(x => x.Foodid == foodDTO.Foodid);
+                var exisitingFood = SelectedInvoiceDTO.Invoicedetails.FirstOrDefault(x => x.Foodid == foodDTO.Foodid);
                 if (exisitingFood != null)
                 {
                     exisitingFood.Quantity += 1;
@@ -130,11 +139,11 @@ namespace CafeManager.WPF.ViewModels.UserViewModel
                     var newDetail = new InvoiceDetailDTO()
                     {
                         Quantity = 1,
-                        FoodDTO = foodDTO,
+                        Food = foodDTO,
                         Foodid = foodDTO.Foodid,
                     };
                     newDetail.QuantityChanged += NewDetail_QuantityChanged;
-                    SelectedInvoiceDTO.ListInvoiceDetailDTO.Add(newDetail);
+                    SelectedInvoiceDTO.Invoicedetails.Add(newDetail);
                 }
                 OnPropertyChanged(nameof(SelectedInvoiceDTO));
             }
@@ -153,7 +162,7 @@ namespace CafeManager.WPF.ViewModels.UserViewModel
         private void DeleteFood(InvoiceDetailDTO invoiceDetailDTO)
         {
             invoiceDetailDTO.QuantityChanged -= NewDetail_QuantityChanged;
-            SelectedInvoiceDTO.ListInvoiceDetailDTO.Remove(invoiceDetailDTO);
+            SelectedInvoiceDTO.Invoicedetails.Remove(invoiceDetailDTO);
             OnPropertyChanged(nameof(SelectedInvoiceDTO));
         }
 
@@ -162,21 +171,22 @@ namespace CafeManager.WPF.ViewModels.UserViewModel
             try
             {
                 SelectedInvoiceDTO.Staffid = SelectedStaffDTO.Staffid;
-                SelectedInvoiceDTO.StaffDTO = SelectedStaffDTO;
+                SelectedInvoiceDTO.Staff = SelectedStaffDTO;
                 SelectedInvoiceDTO.Paymentenddate = DateTime.Now;
                 SelectedInvoiceDTO.Paymentmethod = SelectedPaymentMethod;
                 SelectedInvoiceDTO.Paymentstatus = statusInvoice;
-                Invoice addInvoice = InvoiceMapper.ToEntity(SelectedInvoiceDTO);
+                //Invoice addInvoice = InvoiceMapper.ToEntity(SelectedInvoiceDTO);
+                Invoice addInvoice = _mapper.Map<Invoice>(SelectedInvoiceDTO);
                 var res = await _invoiceServices.CreateInvoice(addInvoice);
                 if (res != null)
                 {
-                    foreach (var item in SelectedInvoiceDTO.ListInvoiceDetailDTO)
+                    foreach (var item in SelectedInvoiceDTO.Invoicedetails)
                     {
                         item.Invoiceid = res.Invoiceid;
                     }
                     var listInvoiceDetail =
-                        await _invoiceServices
-                        .AddArangeListInvoiceDetail(SelectedInvoiceDTO.ListInvoiceDetailDTO.Select(x => InvoiceDetailMapper.ToEntity(x)));
+                        //await _invoiceServices.AddArangeListInvoiceDetail(SelectedInvoiceDTO.Invoicedetails.Select(x => InvoiceDetailMapper.ToEntity(x)));
+                        await _invoiceServices.AddArangeListInvoiceDetail(_mapper.Map<List<Invoicedetail>>(SelectedInvoiceDTO.Invoicedetails));
                     SelectedInvoiceDTO.Invoiceid = res.Invoiceid;
                     return true;
                 }
@@ -205,7 +215,7 @@ namespace CafeManager.WPF.ViewModels.UserViewModel
                 }
                 else if (SelectedInvoiceDTO.IsCoffeeTable)
                 {
-                    messageBox = MyMessageBox.ShowDialog($"Bạn có muốn thanh toán hóa đơn {SelectedInvoiceDTO.CoffeetableDTO.TableName}");
+                    messageBox = MyMessageBox.ShowDialog($"Bạn có muốn thanh toán hóa đơn {SelectedInvoiceDTO.Coffeetable.TableName}");
                 }
 
                 if (messageBox.Equals("1"))
@@ -244,7 +254,7 @@ namespace CafeManager.WPF.ViewModels.UserViewModel
                 }
                 else if (SelectedInvoiceDTO.IsCoffeeTable)
                 {
-                    messageBox = MyMessageBox.ShowDialog($"Bạn có muốn hủy hóa hóa đơn {SelectedInvoiceDTO.CoffeetableDTO.TableName}");
+                    messageBox = MyMessageBox.ShowDialog($"Bạn có muốn hủy hóa hóa đơn {SelectedInvoiceDTO.Coffeetable.TableName}");
                 }
 
                 if (messageBox.Equals("1"))
@@ -301,7 +311,7 @@ namespace CafeManager.WPF.ViewModels.UserViewModel
 
         public void Dispose()
         {
-            foreach (var item in SelectedInvoiceDTO.ListInvoiceDetailDTO)
+            foreach (var item in SelectedInvoiceDTO.Invoicedetails)
             {
                 item.QuantityChanged -= NewDetail_QuantityChanged;
             }

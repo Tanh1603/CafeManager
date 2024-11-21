@@ -8,6 +8,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Stores\**" />
+    <EmbeddedResource Remove="Stores\**" />
+    <None Remove="Stores\**" />
+    <Page Remove="Stores\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\CafeManager.Core\CafeManager.Core.csproj" />
   </ItemGroup>
 

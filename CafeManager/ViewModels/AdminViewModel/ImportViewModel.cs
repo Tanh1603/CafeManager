@@ -71,7 +71,7 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
             ModifyImportVM.ListStaff = new ObservableCollection<Staff>(dbListStaff);
 
             var importList = await _importServices.GetListImport();
-            ListImport = [.. importList.ToList().Select(x => ImportMapper.ToDTO(x))];
+            //ListImport = [.. importList.ToList().Select(x => ImportMapper.ToDTO(x))];
             foreach (var import in ListImport)
             {
                 foreach (var item in import.ListImportDetailDTO)

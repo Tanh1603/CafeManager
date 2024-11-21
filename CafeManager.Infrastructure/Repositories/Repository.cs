@@ -2,13 +2,7 @@
 using CafeManager.Infrastructure.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
-using Microsoft.Extensions.DependencyInjection;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Linq.Expressions;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace CafeManager.Infrastructure.Repositories
 {
@@ -27,7 +21,7 @@ namespace CafeManager.Infrastructure.Repositories
             return entityEntry.Entity;
         }
 
-        public virtual T? Update(T? entity)
+        public virtual T? Update(T entity)
         {
             var existingEntity = _cafeManagerContext.Set<T>().Local.FirstOrDefault(e => e == entity);
 
@@ -87,6 +81,21 @@ namespace CafeManager.Infrastructure.Repositories
         public async Task<T?> GetById(int id)
         {
             return await _cafeManagerContext.Set<T>().FindAsync(id);
+        }
+
+        public async Task<(IEnumerable<T> Items, int TotalCount)> GetByPageAsync(int pageIndex, int pageSize, Expression<Func<T, bool>>? filter = null)
+        {
+            IQueryable<T> query = _cafeManagerContext.Set<T>();
+
+            if (filter != null)
+            {
+                query = query.Where(filter);
+            };
+
+            int totalCount = await query.CountAsync();
+            List<T> items = await query.Skip((pageIndex - 1) * pageSize).Skip(pageSize).ToListAsync();
+
+            return (items, totalCount);
         }
     }
 }

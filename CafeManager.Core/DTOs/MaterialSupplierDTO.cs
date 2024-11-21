@@ -22,6 +22,8 @@ namespace CafeManager.Core.DTOs
         private SupplierDTO _supplierDTO;
         private ObservableCollection<ConsumedMaterialDTO> _consumedMaterialDTO;
 
+        public decimal TotalQuantity { get; set; }
+
         public int Materialsupplierid
         {
             get => _materialsupplierid;
@@ -166,11 +168,10 @@ namespace CafeManager.Core.DTOs
                 Isdeleted = this.Isdeleted,
 
                 MaterialDTO = this.MaterialDTO,
-                SupplierDTO = this.SupplierDTO
+                SupplierDTO = this.SupplierDTO,
+                TotalQuantity = this.TotalQuantity,
             };
         }
-
-        public decimal TotalQuantity => MaterialDTO.ImportdetailDTO.Where(x => x.ImportDTO.Supplierid == SupplierDTO.Supplierid).Sum(x => x.Quantity);
 
         public ObservableCollection<ConsumedMaterialDTO> ConsumedMaterialDTO
         {

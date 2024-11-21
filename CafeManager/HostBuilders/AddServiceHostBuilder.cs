@@ -1,18 +1,7 @@
-﻿using CafeManager.Core.Data;
-using CafeManager.Core.Repositories;
-using CafeManager.Core.Services;
-using CafeManager.Infrastructure.Models;
-using CafeManager.Infrastructure.Repositories;
-using CafeManager.WPF.Services;
+﻿using CafeManager.WPF.Services;
 using CafeManager.WPF.Stores;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace CafeManager.WPF.HostBuilders
 {
@@ -39,6 +28,7 @@ namespace CafeManager.WPF.HostBuilders
                 services.AddScoped<ConsumedMaterialServices>(provider => new ConsumedMaterialServices(provider));
 
                 services.AddSingleton<EncryptionHelper>(provider => new EncryptionHelper(provider));
+                services.AddAutoMapper(typeof(MappingProfile));
             });
             return hostBuilder;
         }

@@ -1,4 +1,6 @@
-﻿using CafeManager.Core.DTOs;
+﻿using AutoMapper;
+using CafeManager.Core.Data;
+using CafeManager.Core.DTOs;
 using CafeManager.Core.Services;
 using CafeManager.WPF.Services;
 using CommunityToolkit.Mvvm.ComponentModel;
@@ -12,9 +14,7 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
         private readonly IServiceProvider _provider;
         private readonly MaterialSupplierServices _materialSupplierServices;
         private readonly ConsumedMaterialServices _consumedMaterialServices;
-
-        //[ObservableProperty]
-        //private ObservableCollection<MaterialSupplierDTO> _listMaterialSupplierDTO = [];
+        private readonly IMapper _mapper;
 
         [ObservableProperty]
         private ObservableCollection<ConsumedMaterialDTO> _listConsumedMaterialDTO = [];
@@ -27,7 +27,7 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
             _provider = provider;
             _materialSupplierServices = provider.GetRequiredService<MaterialSupplierServices>();
             _consumedMaterialServices = provider.GetRequiredService<ConsumedMaterialServices>();
-
+            _mapper = provider.GetRequiredService<IMapper>();
             //Task.Run(LoadData);
             _ = LoadData();
         }
@@ -37,8 +37,10 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
             var dbMaterialSupplier = await _materialSupplierServices.GetListMaterialSupplier();
             var dbConsumedMaterial = await _consumedMaterialServices.GetListConsumedMaterial();
 
-            ListConsumedMaterialDTO = [.. dbConsumedMaterial.Select(x => x.ToDTO(true))];
-            ListInventoryDTO = [.. dbMaterialSupplier.Select(x => x.ToDTO(true))];
+            ListConsumedMaterialDTO = [.. _mapper.Map<List<ConsumedMaterialDTO>>(dbConsumedMaterial)];
+            ListInventoryDTO = [.. _mapper.Map<List<MaterialSupplierDTO>>(dbMaterialSupplier)];
+
+            var list = _mapper.Map<List<Consumedmaterial>>(ListConsumedMaterialDTO);
         }
     }
 }

@@ -79,13 +79,6 @@
                     BorderBrush="#602414"
                     ItemsSource="{Binding ListFoodCategory}"
                     SelectedItem="{Binding SelectedFoodCategory}">
-
-                    <i:Interaction.Triggers>
-                        <i:EventTrigger EventName="SelectionChanged">
-                            <i:InvokeCommandAction Command="{Binding SelectedFoodCategoryChangeCommand}" CommandParameter="{Binding ElementName=cbFoodCategory, Path=SelectedItem, UpdateSourceTrigger=PropertyChanged}" />
-                        </i:EventTrigger>
-                    </i:Interaction.Triggers>
-
                     <ComboBox.ItemTemplate>
 
                         <DataTemplate>

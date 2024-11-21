@@ -1,13 +1,6 @@
 ﻿using CafeManager.Core.Data;
-using CafeManager.Core.DTOs;
 using CafeManager.Core.Services;
-using CafeManager.Infrastructure.Models;
 using Microsoft.Extensions.DependencyInjection;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace CafeManager.WPF.Services
 {
@@ -22,19 +15,9 @@ namespace CafeManager.WPF.Services
             _unitOfWork = _serviceProvider.GetRequiredService<IUnitOfWork>();
         }
 
-        public async Task<Food> GetFoodById(int id)
+        public async Task<Food?> GetFoodById(int id)
         {
-            return await _unitOfWork.FoodList.GetFoodById(id);
-        }
-
-        public async Task<Food?> GetDeletedFoodById(int id)
-        {
-            return (await _unitOfWork.FoodList.GetAll()).FirstOrDefault(x => x.Foodid == id);
-        }
-
-        public async Task<IEnumerable<Food>> GetAllListFoodByFoodCategoryId(int id)
-        {
-            return (await _unitOfWork.FoodList.GetAll()).Where(x => x.Foodcategoryid == id);
+            return await _unitOfWork.FoodList.GetById(id);
         }
 
         public async Task<Food> CreateFood(Food food)
@@ -56,7 +39,7 @@ namespace CafeManager.WPF.Services
             }
         }
 
-        public Food? UpdatFood(Food? obj)
+        public Food? UpdatFood(Food obj)
         {
             try
             {

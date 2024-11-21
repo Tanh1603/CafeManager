@@ -99,12 +99,11 @@
 
             <!--  Supplier Datagrid  -->
             <Border
-                    Grid.Row="3"
-                    Width="auto"
-
-                    BorderBrush="#602414"
-                    BorderThickness="2"
-                    CornerRadius="10">
+                Grid.Row="3"
+                Width="auto"
+                BorderBrush="#602414"
+                BorderThickness="2"
+                CornerRadius="10">
 
                 <DataGrid
                     x:Name="SuppliersDataGrid"
@@ -176,7 +175,7 @@
                                 <DataTemplate>
                                     <StackPanel Orientation="Horizontal">
                                         <Button
-                                            Command="{Binding DataContext.UpdateSupplierCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                            Command="{Binding DataContext.OpenUpdateSupplierCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
                                             CommandParameter="{Binding}"
                                             Style="{StaticResource gridEditButton}">
                                             <ma:PackIconMaterial Kind="PencilOutline" Style="{StaticResource gridButtonIcon}" />
@@ -203,7 +202,7 @@
             </materialDesign:DialogHost.DialogBackground>
 
             <materialDesign:DialogHost.DialogContent>
-                <ContentControl Content="{Binding AddSupplierVM}" />
+                <ContentControl Content="{Binding ModifySupplierVM}" />
             </materialDesign:DialogHost.DialogContent>
         </materialDesign:DialogHost>
     </Grid>

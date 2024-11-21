@@ -21,72 +21,72 @@ namespace CafeManager.WPF.Services
             _unitOfWork = _provider.GetRequiredService<IUnitOfWork>();
         }
 
-        //public async Task AddImportDetailArange(List<MaterialSupplierDTO> materialDetailDTOs, Import import, Material addMaterial, Supplier addSupplier)
-        //{
-        //    try
-        //    {
-        //        await _unitOfWork.BeginTransactionAsync();
+        public async Task AddImportDetailArange(List<MaterialSupplierDTO> materialDetailDTOs, Import import, Material addMaterial, Supplier addSupplier)
+        {
+            //try
+            //{
+            //    await _unitOfWork.BeginTransactionAsync();
 
-        //        var addImport = await _unitOfWork.ImportList.Create(import);
-        //        await _unitOfWork.CompleteAsync();
+            //    var addImport = await _unitOfWork.ImportList.Create(import);
+            //    await _unitOfWork.CompleteAsync();
 
-        //        Materialsupplier newMaterialSuppliers = new();
-        //        var existingMaterialSuppliers = await _unitOfWork.MaterialSupplierList.GetAll();
+            //    Materialsupplier newMaterialSuppliers = new();
+            //    var existingMaterialSuppliers = await _unitOfWork.MaterialSupplierList.GetAll();
 
-        //        foreach (var detail in materialDetailDTOs)
-        //        {
-        //            var existing = existingMaterialSuppliers
-        //                .FirstOrDefault(m => m.Materialid == addMaterial.Materialid &&
-        //                                     m.Supplierid == addSupplier.Supplierid &&
-        //                                     m.Original == detail.Original &&
-        //                                     m.Manufacturer == detail.Manufacturer &&
-        //                                     m.Manufacturedate == detail.Manufacturedate &&
-        //                                     m.Expirationdate == detail.Expirationdate &&
-        //                                     m.Price == detail.Price);
+            //    foreach (var detail in materialDetailDTOs)
+            //    {
+            //        var existing = existingMaterialSuppliers
+            //            .FirstOrDefault(m => m.Materialid == addMaterial.Materialid &&
+            //                                 m.Supplierid == addSupplier.Supplierid &&
+            //                                 m.Original == detail.Original &&
+            //                                 m.Manufacturer == detail.Manufacturer &&
+            //                                 m.Manufacturedate == detail.Manufacturedate &&
+            //                                 m.Expirationdate == detail.Expirationdate &&
+            //                                 m.Price == detail.Price);
 
-        //            if (existing == null)
-        //            {
-        //                newMaterialSuppliers = await _unitOfWork.MaterialSupplierList.Create(
-        //                    new Materialsupplier
-        //                    {
-        //                        Materialid = addMaterial.Materialid,
-        //                        Supplierid = addSupplier.Supplierid,
-        //                        Manufacturedate = detail.Manufacturedate,
-        //                        Expirationdate = detail.Expirationdate,
-        //                        Original = detail.Original,
-        //                        Manufacturer = detail.Manufacturer,
-        //                        Price = detail.Price,
-        //                    });
-        //                await _unitOfWork.CompleteAsync();
+            //        if (existing == null)
+            //        {
+            //            newMaterialSuppliers = await _unitOfWork.MaterialSupplierList.Create(
+            //                new Materialsupplier
+            //                {
+            //                    Materialid = addMaterial.Materialid,
+            //                    Supplierid = addSupplier.Supplierid,
+            //                    Manufacturedate = detail.Manufacturedate,
+            //                    Expirationdate = detail.Expirationdate,
+            //                    Original = detail.Original,
+            //                    Manufacturer = detail.Manufacturer,
+            //                    Price = detail.Price,
+            //                });
+            //            await _unitOfWork.CompleteAsync();
 
-        //                var res = await _unitOfWork.ImportDetailList.Create(new Importdetail()
-        //                {
-        //                    Importid = addImport.Importid,
-        //                    Materialid = newMaterialSuppliers.Materialid,
-        //                    Quantity = detail.Quantity,
-        //                });
-        //                await _unitOfWork.CompleteAsync();
-        //            }
-        //            else
-        //            {
-        //                var a = await _unitOfWork.ImportDetailList.Create(new Importdetail()
-        //                {
-        //                    Importid = addImport.Importid,
-        //                    Materialid = existing.Materialid,
-        //                    Quantity = detail.Quantity,
-        //                });
-        //                await _unitOfWork.CompleteAsync();
-        //            }
-        //        }
+            //            var res = await _unitOfWork.ImportDetailList.Create(new Importdetail()
+            //            {
+            //                Importid = addImport.Importid,
+            //                Materialid = newMaterialSuppliers.Materialid,
+            //                Quantity = detail.Quantity,
+            //            });
+            //            await _unitOfWork.CompleteAsync();
+            //        }
+            //        else
+            //        {
+            //            var a = await _unitOfWork.ImportDetailList.Create(new Importdetail()
+            //            {
+            //                Importid = addImport.Importid,
+            //                Materialid = existing.Materialid,
+            //                Quantity = detail.Quantity,
+            //            });
+            //            await _unitOfWork.CompleteAsync();
+            //        }
+            //    }
 
-        //        await _unitOfWork.CommitTransactionAsync();
-        //    }
-        //    catch
-        //    {
-        //        await _unitOfWork.RollbackTransactionAsync();
-        //        _unitOfWork.ClearChangeTracker();
-        //        throw;
-        //    }
-        //}
+            //    await _unitOfWork.CommitTransactionAsync();
+            //}
+            //catch
+            //{
+            //    await _unitOfWork.RollbackTransactionAsync();
+            //    _unitOfWork.ClearChangeTracker();
+            //    throw;
+            //}
+        }
     }
 }

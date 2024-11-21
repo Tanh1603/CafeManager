@@ -85,11 +85,13 @@
                                 FontSize="18"
                                 Style="{StaticResource infoFoodText}"
                                 Text="{Binding ElementName=infofood, Path=Text, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay, Converter={StaticResource Utf8Converter}}"
+                                HorizontalAlignment="Left"
                                 TextWrapping="WrapWithOverflow" />
 
                             <TextBlock
                                 Style="{StaticResource infoFoodText}"
-                                Text="{Binding ElementName=infofood, UpdateSourceTrigger=PropertyChanged, Path=Price, Mode=TwoWay}"
+                                HorizontalAlignment="Left"
+                                Text="{Binding ElementName=infofood, UpdateSourceTrigger=PropertyChanged, StringFormat={}{0:N0} đồng, Path=Price, Mode=TwoWay}"
                                 TextWrapping="WrapWithOverflow" />
                         </StackPanel>
 
@@ -106,21 +108,18 @@
                                     </Style>
                                 </StackPanel.Style>
                                 <Button
-                                    x:Name="BtnDelete"
-                                    Padding="2"
-                                    HorizontalAlignment="Center"
-                                    Background="Transparent"
-                                    Click="BtnDelete_Click">
-                                    <ma:PackIconMaterial Kind="TrashCan" Style="{StaticResource infoFoodIcon}" />
-                                </Button>
-                                <Button
                                     x:Name="BtnUpdate"
-                                    Padding="2"
-                                    HorizontalAlignment="Center"
-                                    Background="Transparent"
-                                    Click="BtnUpdate_Click">
+                                    Click="BtnUpdate_Click"
+                                    Style="{StaticResource infoFoodBtn}">
                                     <ma:PackIconMaterial Kind="Pencil" Style="{StaticResource infoFoodIcon}" />
                                 </Button>
+                                <Button
+                                    x:Name="BtnDelete"
+                                    Click="BtnDelete_Click"
+                                    Style="{StaticResource infoFoodBtn}">
+                                    <ma:PackIconMaterial Kind="TrashCan" Style="{StaticResource infoFoodIcon}" />
+                                </Button>
+
                             </StackPanel>
 
                             <Grid>
@@ -138,9 +137,7 @@
 
                                 <Button
                                     x:Name="BtnRestore"
-                                    Padding="2"
-                                    HorizontalAlignment="Right"
-                                    Background="Transparent"
+                                   Style="{StaticResource infoFoodBtn}"
                                     Click="BtnRestore_Click">
                                     <ma:PackIconMaterial Kind="Restore" Style="{StaticResource infoFoodIcon}" />
                                 </Button>
@@ -156,9 +153,13 @@
             Height="25"
             HorizontalAlignment="Right"
             VerticalAlignment="Top"
-            Background="Yellow"
             CornerRadius="0 10 0 0">
-
+            <Border.Background>
+                <LinearGradientBrush StartPoint="0.5,0" EndPoint="1,0">
+                    <GradientStop Offset="0" Color="#eddb53" />
+                    <GradientStop Offset="1" Color="#fbf5a1" />
+                </LinearGradientBrush>
+            </Border.Background>
             <Grid HorizontalAlignment="Left" VerticalAlignment="Center">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*" />
@@ -170,11 +171,13 @@
                     HorizontalAlignment="Right"
                     VerticalAlignment="Center"
                     Content="Giảm giá:"
+                    FontWeight="Bold"
                     Foreground="Red" />
                 <TextBlock
                     Grid.Column="1"
                     HorizontalAlignment="Right"
                     VerticalAlignment="Center"
+                    FontWeight="SemiBold"
                     Foreground="OrangeRed"
                     Text="{Binding ElementName=infofood, Path=Discountfood, StringFormat={}{0:0}%, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
                     TextAlignment="Center" />

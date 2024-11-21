@@ -149,21 +149,21 @@
                             </DataGridTextColumn>
 
                                 <DataGridTextColumn
-                                    Width="auto"
-                                    Binding="{Binding ImportSupplier.Suppliername}"
+                                    Width="150"
+                                    Binding="{Binding Supplier.Suppliername}"
                                     CanUserResize="False"
                                     Header="Nhà cung cấp"
                                     IsReadOnly="True" />
 
                                 <DataGridTextColumn
-                                    Width="auto"
+                                    Width="150"
                                     Binding="{Binding Deliveryperson}"
                                     CanUserResize="False"
                                     Header="Người giao hàng"
                                     IsReadOnly="True" />
 
                                 <DataGridTextColumn
-                                    Width="auto"
+                                    Width="120"
                                     Binding="{Binding Phone}"
                                     CanUserResize="False"
                                     Header="Số điện thoại"
@@ -178,7 +178,7 @@
 
                                 <DataGridTextColumn
                                     Width="auto"
-                                    Binding="{Binding Receiver}"
+                                    Binding="{Binding Staff.Staffname}"
                                     CanUserResize="False"
                                     Header="Người nhận"
                                     IsReadOnly="True" />

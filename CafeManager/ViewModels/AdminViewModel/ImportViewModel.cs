@@ -34,7 +34,7 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
         private decimal _totalPrice;
 
         [ObservableProperty]
-        private ObservableCollection<ImportDTO> _listImport = [];
+        private ObservableCollection<Import> _listImport = [];
 
         //[ObservableProperty]
         //private ObservableCollection<MaterialDetailDTO> _listMaterialDetailDTO = [];
@@ -54,11 +54,10 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
             _materialSupplierServices = provider.GetRequiredService<MaterialSupplierServices>();
 
             ModifyImportVM = _serviceProvider.GetRequiredService<AddImportViewModel>();
-            ModifyImportVM.ImportChanged += AddImportVM_ImportChanged;
+            ModifyImportVM.ImportChanged += ModifyImportVM_ImportChanged;
             _isOpenModifyImportView = false;
             Task.Run(LoadData);
         }
-
         private async Task LoadData()
         {
             var dbListSupplier = await _materialSupplierServices.GetListSupplier();
@@ -71,92 +70,68 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
             ModifyImportVM.ListStaff = new ObservableCollection<Staff>(dbListStaff);
 
             var importList = await _importServices.GetListImport();
-            //ListImport = [.. importList.ToList().Select(x => ImportMapper.ToDTO(x))];
-            foreach (var import in ListImport)
-            {
-                foreach (var item in import.ListImportDetailDTO)
-                {
-                    //var materialDetailDTO = await _materialSupplierServices.GetMaterialsuppliers(item.MaterialId, import.ImportSupplier.Supplierid, item.Importdetailid);
-                    //item.ModifyMaterialDetail = materialDetailDTO;
-                }
-            }
+            ListImport = new ObservableCollection<Import>(importList);
         }
 
-        private async void AddImportVM_ImportChanged(ImportDTO import)
+        private async Task LoadDetailData(Import import)
+        {
+            var dbImportMaterailDetails = await _importServices.GetListImportDetailByImportId(import.Importid);
+            ModifyImportVM.CurrentListImportdetail = new ObservableCollection<ImportMaterialDetailDTO>(dbImportMaterailDetails);
+        }
+
+        private async void ModifyImportVM_ImportChanged(Import import, List<ImportMaterialDetailDTO> importMaterials)
         {
             try
             {
-                //if (ModifyImportVM.IsAdding)
-                //{
-                //    Materialsupplier materialsupplier;
-                //    foreach (var item in import.ListImportDetailDTO)
-                //    {
-                //        //materialsupplier = MaterialSupplierMapper.ToEntity(item.ModifyMaterialDetail, import.ImportSupplier.Supplierid);
-                //        //Materialsupplier newMaterialsupplier = await _materialSupplierServices.AddMaterialsupplier(materialsupplier);
-                //    }
-                //    //Import? addImport = await _importServices.AddImport(ImportMapper.ToEntity(import));
+                if (ModifyImportVM.IsAdding)
+                {
+                    Import? addImport = await _importServices.AddImport(import, importMaterials);
 
-                //    if (addImport != null)
-                //    {
-                //        //var addImportDTO = ImportMapper.ToDTO(addImport);
-                //        foreach (var item in addImportDTO.ListImportDetailDTO)
-                //        {
-                //            //var materialDetailDTO = await _materialSupplierServices.GetMaterialsuppliers(item.ModifyMaterialDetail.CurrentMaterial.Materialid, addImport.Supplierid, item.Importdetailid);
-                //            //item.ModifyMaterialDetail = materialDetailDTO;
-                //        }
+                    if (addImport != null)
+                    {
+                        ListImport.Add(addImport);
+                        IsOpenModifyImportView = false;
+                        MyMessageBox.Show("Thêm thông tin phiếu nhập thành công", MyMessageBox.Buttons.OK, MyMessageBox.Icons.Information);
+                    }
+                    else
+                    {
+                        MyMessageBox.Show("Thêm thông tin phiếu nhập thất bại", MyMessageBox.Buttons.OK, MyMessageBox.Icons.Error);
+                    }
+                }
+                if (ModifyImportVM.IsUpdating)
+                {
+                    if(import != null)
+                    {
+                        Import? updateImport = await _importServices.GetImportById(import.Importid);
+                        if (updateImport != null)
+                        {
+                            updateImport.Deliveryperson = import.Deliveryperson;
+                            updateImport.Phone = import.Phone;
+                            updateImport.Shippingcompany = import.Shippingcompany;
+                            updateImport.Receiveddate = import.Receiveddate;
+                            updateImport.Staffid = import.Staffid;
+                            updateImport.Supplierid = import.Supplierid;
+                            await _importServices.UpdateImport(import, importMaterials);
+                        }
+                        MyMessageBox.Show("Sửa thông tin phiếu nhập thành công", MyMessageBox.Buttons.OK, MyMessageBox.Icons.Information);
 
-                //        ListImport.Add(addImportDTO);
-                //        IsOpenModifyImportView = false;
-                //        MyMessageBox.Show("Thêm thông tin phiếu nhập thành công", MyMessageBox.Buttons.OK, MyMessageBox.Icons.Information);
-                //    }
-                //    else
-                //    {
-                //        MyMessageBox.Show("Thêm thông tin phiếu nhập thất bại", MyMessageBox.Buttons.OK, MyMessageBox.Icons.Error);
-                //    }
-                //}
-                //if (ModifyImportVM.IsUpdating)
-                //{
-                //    var updateImportDTO = ListImport.FirstOrDefault(x => x.Importid == import.Importid);
-                //    if (updateImportDTO != null)
-                //    {
-                //        //updateImportDTO.ImportSupplier = import.ImportSupplier;
-                //        //updateImportDTO.Deliveryperson = import.Deliveryperson;
-                //        //updateImportDTO.Phone = import.Phone;
-                //        //updateImportDTO.Shippingcompany = import.Shippingcompany;
-                //        //updateImportDTO.Receiveddate = import.Receiveddate;
-                //        //updateImportDTO.ReceivedStaff = import.ReceivedStaff;
-                //        updateImportDTO.ListImportDetailDTO = import.ListImportDetailDTO;
-
-                //        Import? updateImport = await _importServices.GetImportById(updateImportDTO.Importid);
-                //        List<Importdetail>? updateListImportDetail = [];
-                //        if (updateImport != null)
-                //        {
-                //            //updateImport.Supplierid = import.ImportSupplier.Supplierid;
-                //            //updateImport.Deliveryperson = import.Deliveryperson;
-                //            //updateImport.Phone = import.Phone;
-                //            //updateImport.Shippingcompany = import.Shippingcompany;
-                //            //updateImport.Receiveddate = import.Receiveddate;
-                //            //updateImport.Staffid = import.ReceivedStaff.Staffid;
-                //            //updateListImportDetail = import.ListImportDetailDTO.Select(x => ImportDetailMapper.ToEntity(x)).ToList();
-
-                //            await _importServices.UpdateImport(updateImport, updateListImportDetail);
-                //        }
-                //        MyMessageBox.Show("Sửa thông tin phiếu nhập thành công", MyMessageBox.Buttons.OK, MyMessageBox.Icons.Information);
-                //    }
-                //    else
-                //    {
-                //        MyMessageBox.Show("Sửa thông tin phiếu nhập thất bại", MyMessageBox.Buttons.OK, MyMessageBox.Icons.Error);
-                //    }
-                //    IsOpenModifyImportView = false;
-                //    ListImport = [.. ListImport];
-                //    ModifyImportVM.ClearValueOfViewModel();
-                //}
+                    }
+                    else
+                    {
+                        MyMessageBox.Show("Sửa thông tin phiếu nhập thất bại", MyMessageBox.Buttons.OK, MyMessageBox.Icons.Error);
+                    }
+                    IsOpenModifyImportView = false;
+                    ModifyImportVM.ClearValueOfViewModel();
+                }
+                ListImport = [.. ListImport];
             }
             catch
             {
                 MyMessageBox.Show("Lỗi", MyMessageBox.Buttons.OK, MyMessageBox.Icons.Warning);
             }
         }
+
+
 
         [RelayCommand]
         private void OpenModifyImport(ImportDTO importDTO)
@@ -174,36 +149,46 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
         }
 
         [RelayCommand]
-        private void OpenUpdateImport(ImportDTO importDTO)
+        private void OpenUpdateImport(Import import)
         {
-            ModifyImportVM.RecieveImport(importDTO.Clone());
+            ModifyImportVM.RecieveImport(import);
+            _ = LoadDetailData(import);
             IsOpenModifyImportView = true;
             ModifyImportVM.IsUpdating = true;
+            ModifyImportVM.IsAddingImportDetail = true;
         }
 
         [RelayCommand]
-        private async void DeleteImport(ImportDTO import)
+        private async void DeleteImport(Import import)
         {
             try
             {
-                var isDeleted = await _importServices.DeleteImport(import.Importid);
-                if (isDeleted)
+                var res = MyMessageBox.ShowDialog("Bạn có muốn xóa chi tiết đơn hàng này ko", MyMessageBox.Buttons.Yes_No_Cancel, MyMessageBox.Icons.Warning);
+                if (res.Equals("1"))
                 {
-                    ListImport.Remove(import);
+                    var isDeleted = await _importServices.DeleteImport(import.Importid);
+                    if (isDeleted)
+                    {
+                        ListImport.Remove(import);
+                    }
+                    MyMessageBox.Show("Xoá chi tiết đơn hàng thành công", MyMessageBox.Buttons.OK, MyMessageBox.Icons.Information);
                 }
             }
             catch (InvalidOperationException ivd)
             {
                 MyMessageBox.Show(ivd.Message, MyMessageBox.Buttons.OK, MyMessageBox.Icons.Warning);
             }
+
         }
 
         public void Dispose()
         {
-            ModifyImportVM.ImportChanged -= AddImportVM_ImportChanged;
+            ModifyImportVM.ImportChanged -= ModifyImportVM_ImportChanged;
         }
     }
 }
+
+
 
 //private void AddImportVM_Close()
 //{
@@ -257,6 +242,7 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
 //    AddImportVM.Original = string.Empty;
 //    AddImportVM.Manufacturer = string.Empty;
 //}
+
 
 //private bool _isUpdateImportChangedRegistered = false;
 

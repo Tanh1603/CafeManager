@@ -134,11 +134,11 @@
                             <Button
                                 x:Name="bntCancel"
                                 Height="32"
-                                
+                                Uid="0"
                                 MinWidth="60"
                                 Margin="0,0,10,0"
                                 HorizontalAlignment="Right"
-                                Click="bntCancel_Click"
+                                Click="bntReturnValue_Click"
                                 Content="Cancel"
                                 Style="{StaticResource upLoadButton}"
                                 Visibility="Hidden"/>

@@ -14,6 +14,7 @@ using System.Threading.Tasks;
 using CafeManager.WPF.MessageBox;
 using CafeManager.Core.Services;
 using System.Windows.Documents;
+using AutoMapper;
 
 namespace CafeManager.WPF.ViewModels.AdminViewModel
 {
@@ -23,6 +24,7 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
         private readonly ImportServices _importServices;
         private readonly MaterialSupplierServices _materialSupplierServices;
         private readonly StaffServices _staffServices;
+        //private IMapper _mapper;
 
         [ObservableProperty]
         private bool _isOpenModifyImportView;
@@ -31,7 +33,7 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
         private AddImportViewModel _modifyImportVM;
 
         [ObservableProperty]
-        private decimal _totalPrice;
+        private decimal _totalPrice = 0;
 
         [ObservableProperty]
         private ObservableCollection<Import> _listImport = [];
@@ -60,8 +62,8 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
         }
         private async Task LoadData()
         {
-            var dbListSupplier = await _materialSupplierServices.GetListSupplier();
-            ModifyImportVM.ListSupplier = new ObservableCollection<Supplier>(dbListSupplier);
+            var list = await _materialSupplierServices.GetListSupplier();
+            ModifyImportVM.ListSupplier = [.. ModifyImportVM._mapper.Map<List<SupplierDTO>>(list)];
 
             var dbListMaterial = await _materialSupplierServices.GetListMaterial();
             ModifyImportVM.ListMaterial = new ObservableCollection<Material>(dbListMaterial);
@@ -71,12 +73,15 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
 
             var importList = await _importServices.GetListImport();
             ListImport = new ObservableCollection<Import>(importList);
+
+            TotalPrice = await _importServices.GetTotalImportPrice();
         }
 
         private async Task LoadDetailData(Import import)
         {
             var dbImportMaterailDetails = await _importServices.GetListImportDetailByImportId(import.Importid);
             ModifyImportVM.CurrentListImportdetail = new ObservableCollection<ImportMaterialDetailDTO>(dbImportMaterailDetails);
+            ModifyImportVM.ImportPrice = await _importServices.GetImportPriceById(import.Importid);
         }
 
         private async void ModifyImportVM_ImportChanged(Import import, List<ImportMaterialDetailDTO> importMaterials)
@@ -154,6 +159,7 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
             ModifyImportVM.RecieveImport(import);
             _ = LoadDetailData(import);
             IsOpenModifyImportView = true;
+            //ModifyImportVM.IsAdding = false;
             ModifyImportVM.IsUpdating = true;
             ModifyImportVM.IsAddingImportDetail = true;
         }

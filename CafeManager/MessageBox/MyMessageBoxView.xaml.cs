@@ -98,10 +98,5 @@ namespace CafeManager.WPF.MessageBox
             ReturnString = ((Button)sender).Uid.ToString();
             Close();
         }
-
-        private void bntCancel_Click(object sender, RoutedEventArgs e)
-        {
-            Close();
-        }
     }
 }

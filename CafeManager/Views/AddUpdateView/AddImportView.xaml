@@ -282,7 +282,7 @@
                                     <ma:PackIconMaterial
                                         Width="15"
                                         Height="15"
-                                        Kind="Close"
+                                        Kind="Refresh"
                                         Style="{StaticResource iconApp}" />
                                 </Button>
 
@@ -485,7 +485,7 @@
 
                             <DataGridTextColumn
                                 Width="Auto"
-                                Binding="{Binding Price}"
+                                Binding="{Binding Price, StringFormat={}{0:0}}"
                                 CanUserResize="False"
                                 Header="Giá"
                                 IsReadOnly="True" />
@@ -543,7 +543,7 @@
                 <Grid Grid.Row="3">
                     <StackPanel Orientation="Horizontal">
                         <TextBlock Text="Tổng giá trị: " />
-                        <TextBox IsEnabled="True" Text="{Binding ImportPrice}"/>
+                        <TextBlock Text="{Binding ImportPrice, StringFormat={}{0:0}}"/>
                     </StackPanel>
                 </Grid>
 

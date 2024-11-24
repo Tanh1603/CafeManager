@@ -90,6 +90,33 @@ namespace CafeManager.WPF.Services
             return res;
         }
 
+        public async Task<decimal> GetImportPriceById(int id)
+        {
+            var listImport = (await _unitOfWork.ImportDetailList.GetAll())
+                .Where(x => x.Isdeleted == false && x.Importid == id);
+            decimal res = 0;
+            foreach(var item in listImport)
+            {
+                var tmp = item.Material.Materialsuppliers.FirstOrDefault(x => x.Supplierid == item.Import.Supplierid && x.Isdeleted == false);
+                res += (item.Quantity ?? 0) * (tmp.Price ?? 0);
+            }
+            return res;
+        }
+
+        public async Task<decimal> GetTotalImportPrice()
+        {
+            var listImport = await _unitOfWork.ImportList.GetAll();
+            var validImports = listImport.Where(x => x.Isdeleted == false);
+
+            // Thực thi tất cả tác vụ bất đồng bộ và chờ chúng hoàn thành
+            var importPrices = await Task.WhenAll(validImports.Select(import => GetImportPriceById(import.Importid)));
+
+            // Tính tổng
+            return importPrices.Sum();
+        }
+
+
+
         #region Tính toán dữ liệu
 
         private decimal CaculatePriceOfListImportdetai(IEnumerable<Importdetail> importdetails)

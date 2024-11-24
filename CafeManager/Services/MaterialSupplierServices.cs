@@ -15,6 +15,18 @@ namespace CafeManager.WPF.Services
             _unitOfWork = provider.GetRequiredService<IUnitOfWork>();
         }
 
+        public async Task<decimal?> GetQuantityMaterialSupplier(int id)
+        {
+            var materialSupplier = await _unitOfWork.MaterialSupplierList.GetById(id);
+            if (materialSupplier == null) return 0;
+
+            return materialSupplier.Material.Importdetails?
+                .Where(item => item.Import.Supplierid == materialSupplier.Supplierid
+                            && item.Materialid == materialSupplier.Materialid)
+                .Sum(item => (decimal?)item.Quantity) ?? 0;
+        }
+
+
         public async Task<IEnumerable<Material>> GetListMaterial()
         {
             return (await _unitOfWork.MaterialList.GetAll()).Where(x => x.Isdeleted == false);

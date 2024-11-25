@@ -160,6 +160,32 @@
                                     CanUserResize="False"
                                     Header="Số lượng sử dụng"
                                     IsReadOnly="True" />
+
+                                <DataGridTemplateColumn
+                                    Width="auto"
+                                    Header="Tùy chỉnh"
+                                    IsReadOnly="True">
+
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <StackPanel Orientation="Horizontal">
+                                                <Button
+                                                    Command="{Binding DataContext.OpenUpdateImportCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                                    CommandParameter="{Binding}"
+                                                    Style="{StaticResource gridEditButton}">
+                                                    <ma:PackIconMaterial Kind="PencilOutline" Style="{StaticResource gridButtonIcon}" />
+                                                </Button>
+                                                <Button
+                                                    Margin="5,0,0,0"
+                                                    Command="{Binding DataContext.DeleteConsumedMaterialCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                                    CommandParameter="{Binding}"
+                                                    Style="{StaticResource gridRemoveButton}">
+                                                    <ma:PackIconMaterial Kind="DeleteOutline" Style="{StaticResource gridButtonIcon}" />
+                                                </Button>
+                                            </StackPanel>
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>
                             </DataGrid.Columns>
                         </DataGrid>
                     </TabItem>
@@ -235,8 +261,95 @@
                                     Width="*"
                                     Binding="{Binding TotalQuantity, Mode=OneWay}"
                                     CanUserResize="False"
-                                    Header="Số lượng sử dụng"
+                                    Header="Số lượng"
                                     IsReadOnly="True" />
+
+                                <DataGridTemplateColumn
+                                    Width="auto"
+                                    Header="Sử dụng"
+                                    IsReadOnly="True">
+
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <Button
+                                                Height="20"
+                                                Width="20"
+                                                HorizontalAlignment="Left"
+                                                Command="{Binding OpenPopup_AddCommand}"
+                                                Style="{StaticResource confirmInfoButton}">
+                                                <materialDesign:PopupBox
+                                                    Grid.Row="2"
+                                                    Margin="4"
+                                                    HorizontalAlignment="Stretch"
+                                                    VerticalAlignment="Stretch"
+                                                    Background="Transparent"
+                                                    BorderBrush="Transparent"
+                                                    BorderThickness="0"
+                                                    IsPopupOpen="{Binding IsPopupOpen}"
+                                                    PlacementMode="RightAndAlignMiddles"
+                                                    PopupElevation="Dp4"
+                                                    PopupHorizontalOffset="40"
+                                                    PopupUniformCornerRadius="10"
+                                                    StaysOpen="True">
+                                                    <materialDesign:PopupBox.ToggleContent>
+                                                        <Button
+                                                            Height="10"
+                                                            Width="15"
+                                                            HorizontalAlignment="Center"
+                                                            VerticalAlignment="Center"
+                                                            Background="Transparent"
+                                                            Command="{Binding DataContext.OpenPopup_AddCommand, RelativeSource={RelativeSource AncestorType=local:InventoryView}}"
+                                                            Style="{StaticResource confirmInfoButton}">
+                                                            <materialDesign:PackIcon
+                                                                Width="30"
+                                                                Height="20"
+                                                                Foreground="White"
+                                                                Kind="Minus" />
+                                                        </Button>
+                                                    </materialDesign:PopupBox.ToggleContent>
+                                                    <materialDesign:PopupBox.PopupContent>
+                                                        <StackPanel Margin="10,0">
+                                                            <Grid>
+                                                                <Grid.RowDefinitions>
+                                                                    <RowDefinition Height="auto" />
+                                                                    <RowDefinition Height="auto" />
+                                                                </Grid.RowDefinitions>
+                                                                <Grid.ColumnDefinitions>
+                                                                    <ColumnDefinition Width="auto" />
+                                                                    <ColumnDefinition Width="*" />
+                                                                </Grid.ColumnDefinitions>
+                                                                <TextBlock
+                                                                    Grid.Row="0"
+                                                                    Style="{StaticResource infoText}"
+                                                                    Text="Số lượng:" />
+                                                                <uc:infoTextInput
+                                                                    Grid.Row="0"
+                                                                    Grid.Column="1"
+                                                                    MinWidth="140"
+                                                                    Focusable="True"
+                                                                    Text="{Binding DataContext.ConsumedQuantity, UpdateSourceTrigger=PropertyChanged, RelativeSource={RelativeSource AncestorType=local:ImportView}, Mode=TwoWay}"/>
+
+                                                            </Grid>
+                                                            <Button
+                                                                HorizontalAlignment="Right"
+                                                                VerticalAlignment="Bottom"
+                                                                Command="{Binding ModifyConsumedMaterialCommand}"
+                                                                Style="{StaticResource confirmInfoButton}">
+                                                                <StackPanel HorizontalAlignment="Center" Orientation="Horizontal">
+                                                                    <ma:PackIconMaterial VerticalAlignment="Center" Kind="CheckBold" />
+                                                                    <TextBlock
+                                                                        Margin="10,0,0,0"
+                                                                        FontWeight="SemiBold"
+                                                                        Text="Xác nhận" />
+                                                                </StackPanel>
+                                                            </Button>
+                                                        </StackPanel>
+                                                    </materialDesign:PopupBox.PopupContent>
+                                                </materialDesign:PopupBox>
+                                            </Button>
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>
                             </DataGrid.Columns>
                         </DataGrid>
                     </TabItem>

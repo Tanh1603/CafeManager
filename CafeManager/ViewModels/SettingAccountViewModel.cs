@@ -85,7 +85,7 @@ namespace CafeManager.WPF.ViewModels
                         Properties.Settings.Default.PassWord = string.Empty;
                         Properties.Settings.Default.RememberAccount = false;
                         Properties.Settings.Default.Save();
-                        _accountStore.SetAccount(AppUserMapper.ToDTO(res));
+                        _accountStore.SetAccount(_mapper.Map<AppUserDTO>(res));
                     }
                 }
             }

@@ -100,7 +100,7 @@ namespace CafeManager.WPF.Services
                 var assembly = Assembly.GetExecutingAssembly();
                 var file = "CafeManager.WPF.Stores.email_template.html";
                 string htmlTemplate;
-                using (Stream stream = assembly.GetManifestResourceStream(file))
+                using (Stream? stream = assembly.GetManifestResourceStream(file))
                 {
                     if (stream == null)
                         throw new FileNotFoundException("Tài nguyên không tìm thấy.", file);
@@ -149,7 +149,7 @@ namespace CafeManager.WPF.Services
                 var assembly = Assembly.GetExecutingAssembly();
                 var file = "CafeManager.WPF.Stores.reset_email_template.html";
                 string htmlTemplate;
-                using (Stream stream = assembly.GetManifestResourceStream(file))
+                using (Stream? stream = assembly.GetManifestResourceStream(file))
                 {
                     if (stream == null)
                         throw new FileNotFoundException("Tài nguyên không tìm thấy.", file);
@@ -184,7 +184,7 @@ namespace CafeManager.WPF.Services
                     await smtpClient.SendMailAsync(mailMessage);
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 throw new InvalidOperationException("Email không tồn tại");
             }

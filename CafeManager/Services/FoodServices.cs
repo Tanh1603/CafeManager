@@ -20,6 +20,11 @@ namespace CafeManager.WPF.Services
             return await _unitOfWork.FoodList.GetById(id);
         }
 
+        public async Task<IEnumerable<Food>> GetAllFood()
+        {
+            return await _unitOfWork.FoodList.GetAll();
+        }
+
         public async Task<Food> CreateFood(Food food)
         {
             try
@@ -28,13 +33,13 @@ namespace CafeManager.WPF.Services
                 var res = await _unitOfWork.FoodList.Create(food);
 
                 await _unitOfWork.CompleteAsync();
+                _unitOfWork.ClearChangeTracker();
                 await _unitOfWork.CommitTransactionAsync();
                 return res;
             }
             catch (Exception)
             {
                 await _unitOfWork.RollbackTransactionAsync();
-                _unitOfWork.ClearChangeTracker();
                 throw new InvalidOperationException("Thêm thức ăn thất bại.");
             }
         }
@@ -68,13 +73,13 @@ namespace CafeManager.WPF.Services
                 {
                     await _unitOfWork.CompleteAsync();
                 }
+                _unitOfWork.ClearChangeTracker();
                 await _unitOfWork.CommitTransactionAsync();
                 return isdeleted;
             }
             catch (Exception)
             {
                 await _unitOfWork.RollbackTransactionAsync();
-                _unitOfWork.ClearChangeTracker();
                 throw new InvalidOperationException("Xóa thức ăn thất bại.");
             }
         }

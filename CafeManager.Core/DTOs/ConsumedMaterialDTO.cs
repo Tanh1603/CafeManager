@@ -11,7 +11,7 @@ namespace CafeManager.Core.DTOs
         private int? _materialsuppplierid;
         private decimal _quantity;
         private bool? _isdeleted;
-        private MaterialSupplierDTO _materialSupplierDTO;
+        private MaterialSupplierDTO _materialsupplier;
 
         public int Consumedmaterialid
         {
@@ -49,12 +49,15 @@ namespace CafeManager.Core.DTOs
             }
         }
 
-        public MaterialSupplierDTO MaterialSupplierDTO
+        public MaterialSupplierDTO Materialsupplier
         {
-            get => _materialSupplierDTO; set
+            get => _materialsupplier; set
             {
-                _materialSupplierDTO = value;
-                OnPropertyChanged();
+                if (_materialsupplier != value)
+                {
+                    _materialsupplier = value;
+                    OnPropertyChanged();
+                }
             }
         }
 

@@ -38,6 +38,17 @@ namespace CafeManager.Infrastructure.Repositories
             return entity;
         }
 
+        public virtual async Task<T?> UpdateById(int id, T entity)
+        {
+            var existingEntity = await _cafeManagerContext.Set<T>().FindAsync(id);
+
+            if (existingEntity != null)
+            {
+                _cafeManagerContext.Entry(existingEntity).CurrentValues.SetValues(entity);
+            }
+            return entity;
+        }
+
         public virtual async Task<bool> Delete(int id)
         {
             var entity = await _cafeManagerContext.Set<T>().FindAsync(id);
@@ -81,6 +92,46 @@ namespace CafeManager.Infrastructure.Repositories
         public async Task<T?> GetById(int id)
         {
             return await _cafeManagerContext.Set<T>().FindAsync(id);
+        }
+
+        public async Task<IEnumerable<T>> GetAllExistedAsync()
+        {
+            var entities = await _cafeManagerContext.Set<T>().ToListAsync();
+            var filteredEntities = entities
+                .Where(entity =>
+                {
+                    var isDeletedProperty = typeof(T).GetProperty("Isdeleted");
+
+                    if (isDeletedProperty != null && isDeletedProperty.PropertyType == typeof(bool?))
+                    {
+                        var isDeletedValue = (bool?)isDeletedProperty.GetValue(entity);
+                        return isDeletedValue == false;
+                    }
+
+                    return false;
+                });
+
+            return filteredEntities;
+        }
+
+        public async Task<IEnumerable<T>> GetAllDeletedAsync()
+        {
+            var entities = await _cafeManagerContext.Set<T>().ToListAsync();
+            var filteredEntities = entities
+                .Where(entity =>
+                {
+                    var isDeletedProperty = typeof(T).GetProperty("Isdeleted");
+
+                    if (isDeletedProperty != null && isDeletedProperty.PropertyType == typeof(bool?))
+                    {
+                        var isDeletedValue = (bool?)isDeletedProperty.GetValue(entity);
+                        return isDeletedValue != false;
+                    }
+
+                    return false;
+                });
+
+            return filteredEntities;
         }
 
         public async Task<(IEnumerable<T> Items, int TotalCount)> GetByPageAsync(int pageIndex, int pageSize, Expression<Func<T, bool>>? filter = null)

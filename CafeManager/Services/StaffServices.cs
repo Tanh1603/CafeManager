@@ -35,21 +35,26 @@ namespace CafeManager.WPF.Services
             return await _unitOfWork.StaffList.GetStaffById(id);
         }
 
-        public async Task<Staff?> CreateStaff(Staff staff)
+        public async Task<Staff?> CreateStaff(Staff staff, List<Staffsalaryhistory> staffsalaryhistories)
         {
             try
             {
                 await _unitOfWork.BeginTransactionAsync();
                 Staff res = await _unitOfWork.StaffList.Create(staff);
                 await _unitOfWork.CompleteAsync();
-
+                if (staffsalaryhistories != null)
+                {
+                    staffsalaryhistories.ForEach(x => x.Staffid = res.Staffid);
+                    await _unitOfWork.StaffSalaryHistoryList.AddArange(staffsalaryhistories);
+                    await _unitOfWork.CompleteAsync();
+                }
+                _unitOfWork.ClearChangeTracker();
                 await _unitOfWork.CommitTransactionAsync();
                 return res;
             }
             catch (Exception)
             {
                 await _unitOfWork.RollbackTransactionAsync();
-                _unitOfWork.ClearChangeTracker();
                 throw new InvalidOperationException("Lỗi khi thêm nhân viên");
             }
         }
@@ -101,13 +106,13 @@ namespace CafeManager.WPF.Services
                     existingHistories.ForEach(x => x.Isdeleted = true);
                 }
                 await _unitOfWork.CompleteAsync();
+                _unitOfWork.ClearChangeTracker();
                 await _unitOfWork.CommitTransactionAsync();
                 return res;
             }
             catch (Exception)
             {
                 await _unitOfWork.RollbackTransactionAsync();
-                _unitOfWork.ClearChangeTracker();
                 throw new InvalidOperationException("Lỗi khi sửa nhân viên");
             }
         }
@@ -124,13 +129,13 @@ namespace CafeManager.WPF.Services
                 }
                 bool res = await _unitOfWork.StaffList.Delete(id);
                 await _unitOfWork.CompleteAsync();
+                _unitOfWork.ClearChangeTracker();
                 await _unitOfWork.CommitTransactionAsync();
                 return res;
             }
             catch (Exception)
             {
                 await _unitOfWork.RollbackTransactionAsync();
-                _unitOfWork.ClearChangeTracker();
                 throw new InvalidOperationException("Lỗi khi xóa nhân viên");
             }
         }

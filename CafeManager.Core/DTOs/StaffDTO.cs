@@ -2,6 +2,8 @@
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 
+#nullable disable
+
 namespace CafeManager.Core.DTOs
 {
     public class StaffDTO : INotifyPropertyChanged
@@ -96,7 +98,7 @@ namespace CafeManager.Core.DTOs
             }
         }
 
-        private DateOnly _startworkingdate;
+        private DateOnly _startworkingdate = DateOnly.FromDateTime(DateTime.Now);
 
         public DateOnly Startworkingdate
         {
@@ -156,7 +158,7 @@ namespace CafeManager.Core.DTOs
             }
         }
 
-        private ObservableCollection<StaffsalaryhistoryDTO> _staffsalaryhistories = new();
+        private ObservableCollection<StaffsalaryhistoryDTO> _staffsalaryhistories = [];
 
         public ObservableCollection<StaffsalaryhistoryDTO> Staffsalaryhistories
         {
@@ -175,18 +177,17 @@ namespace CafeManager.Core.DTOs
         {
             return new StaffDTO
             {
-                Staffid = this.Staffid,
-                Staffname = this.Staffname,
-                Phone = this.Phone,
-                Sex = this.Sex,
-                Birthday = this.Birthday,
-                Address = this.Address,
-                Startworkingdate = this.Startworkingdate,
-                Endworkingdate = this.Endworkingdate,
-                Role = this.Role,
-                Isdeleted = this.Isdeleted,
-                // Sao chép ObservableCollection Staffsalaryhistories (sao chép sâu)
-                Staffsalaryhistories = new ObservableCollection<StaffsalaryhistoryDTO>(this.Staffsalaryhistories.Select(history => history.Clone()))
+                Staffid = Staffid,
+                Staffname = Staffname,
+                Phone = Phone,
+                Sex = Sex,
+                Birthday = Birthday,
+                Address = Address,
+                Startworkingdate = Startworkingdate,
+                Endworkingdate = Endworkingdate,
+                Role = Role,
+                Isdeleted = Isdeleted,
+                Staffsalaryhistories = Staffsalaryhistories
             };
         }
 

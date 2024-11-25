@@ -12,8 +12,8 @@ namespace CafeManager.Core.DTOs
         private int materialid;
         private decimal _quantity;
         private bool? _isdeleted;
-        private MaterialDTO _materialDTO;
-        private ImportDTO _importDTO;
+        private MaterialDTO _material;
+        private ImportDTO _import;
 
         public int Importdetailid
         {
@@ -75,22 +75,29 @@ namespace CafeManager.Core.DTOs
             }
         }
 
-        public MaterialDTO MaterialDTO
+        public MaterialDTO Material
         {
-            get => _materialDTO;
+            get => _material;
             set
             {
-                _materialDTO = value;
-                OnPropertyChanged();
+                if (_material != value)
+                {
+                    _material = value;
+                    OnPropertyChanged();
+                }
             }
         }
 
-        public ImportDTO ImportDTO
+        public ImportDTO Import
         {
-            get => _importDTO; set
+            get => _import;
+            set
             {
-                _importDTO = value;
-                OnPropertyChanged();
+                if (_import != value)
+                {
+                    _import = value;
+                    OnPropertyChanged();
+                }
             }
         }
 
@@ -104,7 +111,8 @@ namespace CafeManager.Core.DTOs
                 Isdeleted = this.Isdeleted,
                 Quantity = this.Quantity,
 
-                MaterialDTO = this.MaterialDTO
+                Material = this.Material,
+                Import = this.Import,
             };
         }
 

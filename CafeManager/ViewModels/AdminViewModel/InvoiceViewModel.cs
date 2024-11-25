@@ -1,4 +1,5 @@
-﻿using CafeManager.Core.Data;
+﻿using AutoMapper;
+using CafeManager.Core.Data;
 using CafeManager.Core.DTOs;
 using CafeManager.Core.Services;
 using CafeManager.WPF.MessageBox;
@@ -7,6 +8,7 @@ using CafeManager.WPF.ViewModels.AddViewModel;
 using CommunityToolkit.Mvvm.Collections;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using LiveCharts.Configurations;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Microsoft.Extensions.DependencyInjection;
 using System;
@@ -24,6 +26,7 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
     {
         private readonly IServiceProvider _provider;
         private readonly InvoiceServices _invoiceServices;
+        private readonly IMapper _mapper;
 
         [ObservableProperty]
         private ModifyInvoiceViewModel _modifyInvoiceVM;
@@ -38,15 +41,16 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
         {
             _provider = provider;
             _invoiceServices = provider.GetRequiredService<InvoiceServices>();
-            ModifyInvoiceVM = provider.GetRequiredService<ModifyInvoiceViewModel>();
+            _mapper = provider.GetRequiredService<IMapper>();
 
+            ModifyInvoiceVM = provider.GetRequiredService<ModifyInvoiceViewModel>();
             Task.Run(LoadData);
         }
 
         private async Task LoadData()
         {
             var dbListInvoice = await _invoiceServices.GetListInvoices();
-            ListInvoiceDTO = [.. dbListInvoice.Select(x => InvoiceMapper.ToDTO(x))];
+            ListInvoiceDTO = [.. _mapper.Map<List<InvoiceDTO>>(dbListInvoice)];
         }
 
         [RelayCommand]
@@ -61,7 +65,7 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
         {
             try
             {
-                string messageBox = MyMessageBox.ShowDialog("Bạn có muốn xóa hóa đơn này không?");
+                string messageBox = MyMessageBox.ShowDialog("Bạn có muốn xóa hóa đơn này không?", MyMessageBox.Buttons.Yes_No, MyMessageBox.Icons.Question);
                 if (messageBox.Equals("1"))
                 {
                     bool isSuccessDeleted = await _invoiceServices.DeleteInvoice(invoiceDTO.Invoiceid);

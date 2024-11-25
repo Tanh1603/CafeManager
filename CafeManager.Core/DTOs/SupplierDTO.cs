@@ -25,8 +25,8 @@ namespace CafeManager.Core.DTOs
 
         private bool? _isdeleted;
 
-        private ObservableCollection<ImportDTO> _importDTO = [];
-        private ObservableCollection<MaterialSupplierDTO> _materialsupplierDTO = [];
+        private ObservableCollection<ImportDTO> _imports = [];
+        private ObservableCollection<MaterialSupplierDTO> _materialsuppliers = [];
 
         public int Supplierid
         {
@@ -100,21 +100,27 @@ namespace CafeManager.Core.DTOs
             }
         }
 
-        public ObservableCollection<ImportDTO> ImportDTO
+        public ObservableCollection<ImportDTO> Imports
         {
-            get => _importDTO; set
+            get => _imports; set
             {
-                _importDTO = value;
-                OnPropertyChanged();
+                if (_imports != value)
+                {
+                    _imports = value;
+                    OnPropertyChanged();
+                }
             }
         }
 
-        public ObservableCollection<MaterialSupplierDTO> MaterialsupplierDTO
+        public ObservableCollection<MaterialSupplierDTO> Materialsuppliers
         {
-            get => _materialsupplierDTO; set
+            get => _materialsuppliers; set
             {
-                _materialsupplierDTO = value;
-                OnPropertyChanged();
+                if (_materialsuppliers != value)
+                {
+                    _materialsuppliers = value;
+                    OnPropertyChanged();
+                }
             }
         }
 
@@ -131,8 +137,8 @@ namespace CafeManager.Core.DTOs
                 Notes = Notes,
                 Isdeleted = Isdeleted,
 
-                ImportDTO = ImportDTO,
-                MaterialsupplierDTO = MaterialsupplierDTO
+                Imports = Imports,
+                Materialsuppliers = Materialsuppliers
             };
         }
 

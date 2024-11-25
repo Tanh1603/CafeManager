@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
 using CafeManager.Core.Data;
 using CafeManager.Core.DTOs;
-using CafeManager.Core.Services;
 using CafeManager.WPF.Services;
 using CommunityToolkit.Mvvm.ComponentModel;
 using Microsoft.Extensions.DependencyInjection;
@@ -28,8 +27,7 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
             _materialSupplierServices = provider.GetRequiredService<MaterialSupplierServices>();
             _consumedMaterialServices = provider.GetRequiredService<ConsumedMaterialServices>();
             _mapper = provider.GetRequiredService<IMapper>();
-            //Task.Run(LoadData);
-            _ = LoadData();
+            Task.Run(LoadData);
         }
 
         private async Task LoadData()

@@ -30,7 +30,7 @@ namespace CafeManager.WPF.HostBuilders
                 services.AddTransient<ImportViewModel>(provider => new ImportViewModel(provider));
                 services.AddTransient<InventoryViewModel>(provider => new InventoryViewModel(provider));
                 services.AddTransient<InvoiceViewModel>(provider => new InvoiceViewModel(provider));
-                services.AddScoped<StaffViewModel>(provider => new StaffViewModel(provider));
+                services.AddTransient<StaffViewModel>(provider => new StaffViewModel(provider));
                 services.AddTransient<SupplierViewModel>(provider => new SupplierViewModel(provider));
                 services.AddTransient<TableViewModel>(provider => new TableViewModel(provider));
 

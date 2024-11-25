@@ -24,6 +24,9 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
         private ObservableCollection<SupplierDTO> _listSupplier = [];
 
         [ObservableProperty]
+        private ObservableCollection<SupplierDTO> _listDeletedSupplier = [];
+
+        [ObservableProperty]
         private AddSuppierViewModel _modifySupplierVM;
 
         public SupplierViewModel(IServiceProvider provider)
@@ -57,31 +60,13 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
                 }
                 if (ModifySupplierVM.IsUpdating)
                 {
-                    var updateSupplier = await _materialSupplierServices.GetSupplierById(obj.Supplierid);
-                    if (updateSupplier != null)
+                    var res = await _materialSupplierServices.UpdateSupplierById(obj.Supplierid, _mapper.Map<Supplier>(obj));
+                    if (res != null)
                     {
-                        updateSupplier.Supplierid = obj.Supplierid;
-                        updateSupplier.Suppliername = obj.Suppliername;
-                        updateSupplier.Representativesupplier = obj.Representativesupplier;
-                        updateSupplier.Phone = obj.Phone;
-                        updateSupplier.Email = obj.Email;
-                        updateSupplier.Address = obj.Address;
-                        updateSupplier.Notes = obj.Notes;
-                        updateSupplier.Isdeleted = obj.Isdeleted;
-
-                        var res = await _materialSupplierServices.UpdateSupplier(updateSupplier);
-                        var updateSupplierDTO = ListSupplier.FirstOrDefault(x => x.Supplierid == res?.Supplierid);
-                        if (updateSupplierDTO != null && res != null)
+                        var updateSupplierDTO = ListSupplier.FirstOrDefault(x => x.Supplierid == res.Supplierid);
+                        if (updateSupplierDTO != null)
                         {
-                            updateSupplierDTO.Supplierid = res.Supplierid;
-                            updateSupplierDTO.Suppliername = res.Suppliername;
-                            updateSupplierDTO.Representativesupplier = res.Representativesupplier;
-                            updateSupplierDTO.Phone = res.Phone;
-                            updateSupplierDTO.Email = res.Email;
-                            updateSupplierDTO.Address = res.Address;
-                            updateSupplierDTO.Notes = res.Notes;
-                            updateSupplierDTO.Isdeleted = res.Isdeleted;
-
+                            _mapper.Map(res, updateSupplierDTO);
                             MyMessageBox.ShowDialog("Sửa nhà cung cấp thành công");
                             ModifySupplierVM.ClearValueOfFrom();
                             IsOpenAddSupplier = false;
@@ -101,8 +86,13 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
 
         private async Task LoadData()
         {
-            var list = await _materialSupplierServices.GetListSupplier();
-            ListSupplier = [.. _mapper.Map<List<SupplierDTO>>(list)];
+            var all = await _materialSupplierServices.GetListSupplier();
+
+            var listExisted = all.ToList().Where(x => x.Isdeleted == false);
+            var listDeleted = all.ToList().Where(x => x.Isdeleted == true);
+
+            ListSupplier = [.. _mapper.Map<List<SupplierDTO>>(listExisted)];
+            ListDeletedSupplier = [.. _mapper.Map<List<SupplierDTO>>(listDeleted)];
         }
 
         [RelayCommand]
@@ -111,8 +101,6 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
             IsOpenAddSupplier = true;
             ModifySupplierVM.IsAdding = true;
         }
-
-        private bool _isUpdateSupplierChangedRegistered = false;
 
         [RelayCommand]
         private void OpenUpdateSupplier(SupplierDTO supplier)
@@ -134,15 +122,48 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
         {
             try
             {
-                bool isDeleted = await _materialSupplierServices.DeleteSupplier(supplier.Supplierid);
-                if (isDeleted)
+                string messageBox = MyMessageBox.ShowDialog("Bạn có muốn ẩn nhà cung cấp không?", MyMessageBox.Buttons.Yes_No, MyMessageBox.Icons.Question);
+                if (messageBox.Equals("1"))
                 {
-                    ListSupplier.Remove(supplier);
-                    MyMessageBox.ShowDialog("Xóa nhà cung cấp thanh công");
+                    bool isDeleted = await _materialSupplierServices.DeleteSupplier(supplier.Supplierid);
+                    if (isDeleted)
+                    {
+                        ListSupplier.Remove(supplier);
+                        ListDeletedSupplier.Add(supplier);
+                        MyMessageBox.ShowDialog("Ẩn nhà cung cấp thanh công");
+                    }
+                    else
+                    {
+                        MyMessageBox.ShowDialog("Ẩn nhà cung cấp thất bại");
+                    }
                 }
-                else
+            }
+            catch (InvalidOperationException ioe)
+            {
+                MyMessageBox.ShowDialog(ioe.Message);
+            }
+        }
+
+        [RelayCommand]
+        private async Task RestoreSupplier(SupplierDTO supplier)
+        {
+            try
+            {
+                string messageBox = MyMessageBox.ShowDialog("Bạn có muốn hiển thị nhà cung cấp không?", MyMessageBox.Buttons.Yes_No, MyMessageBox.Icons.Question);
+                if (messageBox.Equals("1"))
                 {
-                    MyMessageBox.ShowDialog("Xóa nhà cung cấp thất bại");
+                    supplier.Isdeleted = false;
+                    var res = await _materialSupplierServices.UpdateSupplierById(supplier.Supplierid, _mapper.Map<Supplier>(supplier));
+                    if (res != null)
+                    {
+                        ListSupplier.Add(supplier);
+                        ListDeletedSupplier.Remove(supplier);
+                        MyMessageBox.ShowDialog("Hiển thị nhà cung cấp thanh công");
+                    }
+                    else
+                    {
+                        MyMessageBox.ShowDialog("Hiển thị nhà cung cấp thất bại");
+                    }
                 }
             }
             catch (InvalidOperationException ioe)
@@ -155,6 +176,7 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
         {
             if (ModifySupplierVM != null)
             {
+                ModifySupplierVM.ModifySupplierChanged -= ModifySupplierVM_ModifySupplierChanged;
             }
             GC.SuppressFinalize(this);
         }

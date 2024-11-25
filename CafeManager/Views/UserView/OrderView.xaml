@@ -227,7 +227,7 @@
                                                     VerticalAlignment="Center"
                                                     FontSize="16"
                                                     Text="{Binding InvoiceCustomerId, Mode=OneWay}" />
-                                            </Grid>
+                                        </Grid>
                                     </Border>
                                 </DataTemplate>
                             </ItemsControl.ItemTemplate>
@@ -301,7 +301,7 @@
                                         Margin="5,0,0,0"
                                         VerticalAlignment="Center"
                                         FontSize="20"
-                                        Text="{Binding SelectedInvoiceDTO.CoffeetableDTO.TableName}" />
+                                        Text="{Binding SelectedInvoiceDTO.Coffeetable.TableName}" />
                                 </StackPanel>
 
                                 <StackPanel Grid.Column="0" Orientation="Horizontal">
@@ -363,10 +363,10 @@
                         BorderThickness="2"
                         CornerRadius="10">
                         <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
-                            <ListView HorizontalAlignment="Stretch" ItemsSource="{Binding SelectedInvoiceDTO.ListInvoiceDetailDTO}">
+                            <ListView HorizontalAlignment="Stretch" ItemsSource="{Binding SelectedInvoiceDTO.Invoicedetails}">
                                 <ListView.View>
                                     <GridView>
-                                        <GridViewColumn DisplayMemberBinding="{Binding FoodDTO.Foodname}" Header="Tên món" />
+                                        <GridViewColumn DisplayMemberBinding="{Binding Food.Foodname}" Header="Tên món" />
                                         <GridViewColumn Header="Số lượng">
                                             <GridViewColumn.CellTemplate>
                                                 <DataTemplate>
@@ -393,7 +393,7 @@
                                                 </DataTemplate>
                                             </GridViewColumn.CellTemplate>
                                         </GridViewColumn>
-                                        <GridViewColumn DisplayMemberBinding="{Binding FoodDTO.PriceDiscount, StringFormat={}{0:00}}" Header="Đơn giá" />
+                                        <GridViewColumn DisplayMemberBinding="{Binding Food.PriceDiscount, StringFormat={}{0:00}}" Header="Đơn giá" />
                                         <GridViewColumn Header="Options">
                                             <GridViewColumn.CellTemplate>
                                                 <DataTemplate>

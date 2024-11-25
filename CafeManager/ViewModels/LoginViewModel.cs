@@ -24,19 +24,19 @@ namespace CafeManager.WPF.ViewModels
         private readonly IMapper _mapper;
 
         [ObservableProperty]
-        private string _username;
+        private string _username = string.Empty;
 
         [ObservableProperty]
-        private string _password;
+        private string _password = string.Empty;
 
         [ObservableProperty]
-        private string _resetUser;
+        private string _resetUser = string.Empty;
 
         [ObservableProperty]
-        private string _resetEmail;
+        private string _resetEmail = string.Empty;
 
         [ObservableProperty]
-        private string _vertificationCode;
+        private string _vertificationCode = string.Empty;
 
         [ObservableProperty]
         private bool _isOpenResetPassWord;

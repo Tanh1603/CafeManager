@@ -18,9 +18,9 @@ namespace CafeManager.Core.DTOs
         private decimal _price;
         private bool? _isdeleted;
 
-        private MaterialDTO _materialDTO;
-        private SupplierDTO _supplierDTO;
-        private ObservableCollection<ConsumedMaterialDTO> _consumedMaterialDTO;
+        private MaterialDTO _material;
+        private SupplierDTO _supplier;
+        private ObservableCollection<ConsumedMaterialDTO> _consumedmaterials;
 
         public decimal TotalQuantity { get; set; }
 
@@ -133,23 +133,29 @@ namespace CafeManager.Core.DTOs
             }
         }
 
-        public MaterialDTO MaterialDTO
+        public MaterialDTO Material
         {
-            get => _materialDTO; set
+            get => _material; set
             {
-                _materialDTO = value;
-                OnPropertyChanged();
-                OnPropertyChanged(nameof(TotalQuantity));
+                if (_material != value)
+                {
+                    _material = value;
+                    OnPropertyChanged();
+                    OnPropertyChanged(nameof(TotalQuantity));
+                }
             }
         }
 
-        public SupplierDTO SupplierDTO
+        public SupplierDTO Supplier
         {
-            get => _supplierDTO; set
+            get => _supplier; set
             {
-                _supplierDTO = value;
-                OnPropertyChanged();
-                OnPropertyChanged(nameof(TotalQuantity));
+                if (_supplier != value)
+                {
+                    _supplier = value;
+                    OnPropertyChanged();
+                    OnPropertyChanged(nameof(TotalQuantity));
+                }
             }
         }
 
@@ -167,18 +173,22 @@ namespace CafeManager.Core.DTOs
                 Price = this.Price,
                 Isdeleted = this.Isdeleted,
 
-                MaterialDTO = this.MaterialDTO,
-                SupplierDTO = this.SupplierDTO,
+                Material = this.Material,
+                Supplier = this.Supplier,
                 TotalQuantity = this.TotalQuantity,
+                Consumedmaterials = this.Consumedmaterials,
             };
         }
 
-        public ObservableCollection<ConsumedMaterialDTO> ConsumedMaterialDTO
+        public ObservableCollection<ConsumedMaterialDTO> Consumedmaterials
         {
-            get => _consumedMaterialDTO; set
+            get => _consumedmaterials; set
             {
-                _consumedMaterialDTO = value;
-                OnPropertyChanged();
+                if (_consumedmaterials != value)
+                {
+                    _consumedmaterials = value;
+                    OnPropertyChanged();
+                }
             }
         }
 

@@ -6,6 +6,9 @@ using CommunityToolkit.Mvvm.Input;
 using Microsoft.Extensions.DependencyInjection;
 using CafeManager.WPF.MessageBox;
 using System.Windows.Media.Imaging;
+using CafeManager.Core.Services;
+
+#nullable disable
 
 namespace CafeManager.WPF.ViewModels
 {
@@ -77,7 +80,7 @@ namespace CafeManager.WPF.ViewModels
                         Password = this.Password,
                         Email = this.Email,
                         Role = (this.Role ?? string.Empty).Equals("Admin") ? 1 : 0,
-                        Avatar = _fileDialogService.ConvertBitmapImageToBase64(this.Avata)
+                        Avatar = ConvertImageServices.BitmapImageToBase64(this.Avata)
                     };
                     Appuser res = await _appUserServices.Register(appuser);
                     if (res == null)
@@ -125,6 +128,7 @@ namespace CafeManager.WPF.ViewModels
         }
 
         private string _textBoxImageText;
+
         public string TextBoxImageText
         {
             get => _textBoxImageText;
@@ -135,7 +139,6 @@ namespace CafeManager.WPF.ViewModels
                     _textBoxImageText = value;
                     OnPropertyChanged();
 
-                    
                     if (!string.IsNullOrEmpty(_textBoxImageText) && System.IO.File.Exists(_textBoxImageText))
                     {
                         Avata = new BitmapImage(new Uri(_textBoxImageText, UriKind.RelativeOrAbsolute));

@@ -1,4 +1,5 @@
-﻿using CafeManager.Core.Data;
+﻿using AutoMapper;
+using CafeManager.Core.Data;
 using CafeManager.Core.DTOs;
 using CafeManager.Core.Services;
 using CafeManager.WPF.MessageBox;
@@ -16,6 +17,7 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
     {
         private readonly IServiceProvider _provider;
         private readonly StaffServices _staffServices;
+        private readonly IMapper _mapper;
 
         [ObservableProperty]
         private DateOnly? _endWorkingDate = new DateOnly?(DateOnly.FromDateTime(DateTime.Now));
@@ -73,6 +75,7 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
             ModifyStaffVM = provider.GetRequiredService<ModifyStaffViewModel>();
             ModifyStaffVM.StaffChanged += ModifyStaffVM_StaffChanged;
             IsOpenModifyStaffView = false;
+            _mapper = provider.GetRequiredService<IMapper>();
             Task.Run(LoadData);
         }
 
@@ -82,10 +85,11 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
             {
                 if (ModifyStaffVM.IsAdding)
                 {
-                    Staff? addStaff = await _staffServices.CreateStaff(StaffMapper.ToEntity(staff));
+                    Staff? addStaff =
+                        await _staffServices.CreateStaff(_mapper.Map<Staff>(staff), _mapper.Map<List<Staffsalaryhistory>>(staff.Staffsalaryhistories));
                     if (addStaff != null)
                     {
-                        ListStaff.Add(StaffMapper.ToDTO(addStaff));
+                        ListStaff.Add(_mapper.Map<StaffDTO>(addStaff));
                         IsOpenModifyStaffView = false;
                         MyMessageBox.Show("Thêm nhân viên thành công");
                     }
@@ -122,8 +126,7 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
                             updateStaff.Endworkingdate = staff.Endworkingdate;
                             updateStaff.Role = staff.Role;
 
-                            updateStaffSalaryHitory
-                                = staff.Staffsalaryhistories.Select(x => StaffSalaryHistoryMapper.ToEntity(x)).ToList();
+                            updateStaffSalaryHitory = _mapper.Map<List<Staffsalaryhistory>>(staff.Staffsalaryhistories);
 
                             await _staffServices.UpdateStaff(updateStaff, updateStaffSalaryHitory);
                         }
@@ -147,23 +150,19 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
         private async Task LoadData()
         {
             var dbListStaff = await _staffServices.GetListStaff();
-            ListStaff = [.. dbListStaff.ToList().Select(x => StaffMapper.ToDTO(x))];
+            ListStaff = [.. _mapper.Map<List<StaffDTO>>(dbListStaff)];
+
             var dbListStaffDeleted = await _staffServices.GetListStaffDeleted();
-            ListStaffDeleted = [.. dbListStaffDeleted.ToList().Select(x => StaffMapper.ToDTO(x))];
+            ListStaffDeleted = [.. _mapper.Map<List<StaffDTO>>(dbListStaffDeleted)];
             CurrentListStaff = [.. ListStaff];
         }
 
-        [RelayCommand(CanExecute = nameof(CanExcuteOpenModifyStaff))]
+        [RelayCommand]
         private void OpenModifyStaff(StaffDTO staffDTO)
         {
             IsOpenModifyStaffView = true;
             ModifyStaffVM.IsAdding = true;
-            ModifyStaffVM.IsStaffDeleted = IsListStaffDeleted;
-        }
-
-        private bool CanExcuteOpenModifyStaff()
-        {
-            return IsListStaffDeleted == false;
+            ModifyStaffVM.IsEnable = true;
         }
 
         [RelayCommand]
@@ -179,12 +178,12 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
             ModifyStaffVM.RecieveStaff(staffDTO.Clone());
             IsOpenModifyStaffView = true;
             ModifyStaffVM.IsUpdating = true;
-            ModifyStaffVM.IsStaffDeleted = IsListStaffDeleted;
+            ModifyStaffVM.IsEnable = !IsListStaffDeleted;
         }
 
         private StaffDTO TempDeleteStaff = new();
 
-        [RelayCommand(CanExecute = nameof(CanExcuteOpenModifyStaff))]
+        [RelayCommand]
         private void OpenDeleteStaffView(StaffDTO staffDTO)
         {
             IsOpenDeleteStaffView = true;

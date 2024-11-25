@@ -1,4 +1,4 @@
-﻿using CafeManager.Core.Data;
+﻿using AutoMapper;
 using CafeManager.Core.DTOs;
 using CafeManager.WPF.MessageBox;
 using CafeManager.WPF.Services;
@@ -12,9 +12,10 @@ namespace CafeManager.WPF.ViewModels.AddViewModel
     {
         private readonly IServiceProvider _provider;
         private readonly StaffServices _staffServices;
+        private readonly IMapper _mapper;
 
         [ObservableProperty]
-        private bool _isPopupOpen = false;
+        private bool _isOpenModifySalary = false;
 
         [ObservableProperty]
         private bool _isAdding = false;
@@ -29,14 +30,10 @@ namespace CafeManager.WPF.ViewModels.AddViewModel
         private bool _isUpdatingStaffSalaryHistory = false;
 
         [ObservableProperty]
-        [NotifyCanExecuteChangedFor(nameof(OpenPopup_AddCommand))]
-        [NotifyCanExecuteChangedFor(nameof(OpenPopup_UpdateCommand))]
-        [NotifyCanExecuteChangedFor(nameof(DeleteStaffSalaryHistoryCommand))]
-        [NotifyCanExecuteChangedFor(nameof(SubmitModifyStaffCommand))]
-        [NotifyPropertyChangedFor(nameof(IsEnable))]
         private bool _isStaffDeleted = false;
 
-        public bool IsEnable => !IsStaffDeleted;
+        [ObservableProperty]
+        private bool _isEnable = true;
 
         [ObservableProperty]
         private StaffDTO _modifyStaff = new()
@@ -57,7 +54,7 @@ namespace CafeManager.WPF.ViewModels.AddViewModel
         {
             _provider = provider;
             _staffServices = provider.GetRequiredService<StaffServices>();
-            IsPopupOpen = false;
+            _mapper = provider.GetRequiredService<IMapper>();
         }
 
         public void RecieveStaff(StaffDTO staff)
@@ -73,26 +70,49 @@ namespace CafeManager.WPF.ViewModels.AddViewModel
             ModifyStaff = new()
             {
                 Startworkingdate = DateOnly.FromDateTime(DateTime.Now),
-                Birthday = DateOnly.FromDateTime(DateTime.Now),
+                Birthday = DateOnly.FromDateTime(DateTime.Now)
             };
             CurrentStaffSalary = new() { Effectivedate = DateOnly.FromDateTime(DateTime.Now) };
             Endworkingdate = null;
         }
 
-        [RelayCommand(CanExecute = nameof(CanexcuteOpenPopUpBox))]
-        private void OpenPopup_Add()
+        [RelayCommand]
+        private void DeleteStaffSalaryHistory(StaffsalaryhistoryDTO staffsalaryhistory)
         {
-            IsPopupOpen = true;
-            IsAddingStaffSalaryHistory = true;
+            var res = MyMessageBox.ShowDialog("Bạn có muốn xóa lịch sử lương này ko", MyMessageBox.Buttons.Yes_No, MyMessageBox.Icons.Warning);
+            if (res.Equals("1") && res != null)
+            {
+                ModifyStaff.Staffsalaryhistories.Remove(staffsalaryhistory);
+                MyMessageBox.Show("Xóa lịch sử lương thành công");
+            }
         }
 
-        private bool CanexcuteOpenPopUpBox()
+        public event Action<StaffDTO>? StaffChanged;
+
+        [RelayCommand]
+        private void SubmitModifyStaff()
         {
-            return IsStaffDeleted == false;
+            StaffChanged?.Invoke(ModifyStaff.Clone());
         }
 
         [RelayCommand]
-        private void ModifyStaffSalaryHistory()
+        private void OpenUpdateStaffSalaryHistory(StaffsalaryhistoryDTO staffsalaryhistoryDTO)
+        {
+            IsOpenModifySalary = true;
+            IsUpdatingStaffSalaryHistory = true;
+            CurrentStaffSalary = staffsalaryhistoryDTO.Clone();
+            _currentStaffSalaryIndex = ModifyStaff.Staffsalaryhistories.IndexOf(staffsalaryhistoryDTO);
+        }
+
+        [RelayCommand]
+        private void OpenModifyStaffSalaryHistory()
+        {
+            IsOpenModifySalary = true;
+            IsAddingStaffSalaryHistory = true;
+        }
+
+        [RelayCommand]
+        private void SubmitModifySalaryHistory()
         {
             if (IsAddingStaffSalaryHistory)
             {
@@ -103,15 +123,16 @@ namespace CafeManager.WPF.ViewModels.AddViewModel
                 if (existing != null)
                 {
                     MyMessageBox.ShowDialog("Ngày hiệu lực thêm mới bị trùng.");
+                    IsAddingStaffSalaryHistory = true;
+                    return;
                 }
                 else
                 {
                     ModifyStaff.Staffsalaryhistories.Add(CurrentStaffSalary);
                     _currentStaffSalaryIndex = ModifyStaff.Staffsalaryhistories.IndexOf(CurrentStaffSalary);
                     MyMessageBox.Show("Thêm lịch sử lương thành công.");
+                    IsAddingStaffSalaryHistory = false;
                 }
-
-                IsAddingStaffSalaryHistory = false;
             }
 
             if (IsUpdatingStaffSalaryHistory)
@@ -133,8 +154,13 @@ namespace CafeManager.WPF.ViewModels.AddViewModel
                     ModifyStaff.Staffsalaryhistories[_currentStaffSalaryIndex].Effectivedate = CurrentStaffSalary.Effectivedate;
                     ModifyStaff.Staffsalaryhistories[_currentStaffSalaryIndex].Salary = CurrentStaffSalary.Salary;
                     MyMessageBox.Show("Sửa lịch sử lương thành công.");
+                    IsUpdatingStaffSalaryHistory = false;
                 }
-                IsUpdatingStaffSalaryHistory = false;
+                else
+                {
+                    IsUpdatingStaffSalaryHistory = true;
+                    return;
+                }
             }
 
             // Reset lại `CurrentStaffSalary` sau khi thêm/sửa
@@ -142,41 +168,17 @@ namespace CafeManager.WPF.ViewModels.AddViewModel
             {
                 Effectivedate = DateOnly.FromDateTime(DateTime.Now)
             };
-            IsPopupOpen = false;
+            IsOpenModifySalary = false;
         }
 
-        [RelayCommand(CanExecute = nameof(CanexcuteOpenPopUpBox))]
-        private void DeleteStaffSalaryHistory(StaffsalaryhistoryDTO staffsalaryhistory)
+        [RelayCommand]
+        private void CloseModifySalaryHistory()
         {
-            var res = MyMessageBox.ShowDialog("Bạn có muốn xóa lịch sử lương này ko", MyMessageBox.Buttons.Yes_No, MyMessageBox.Icons.Warning);
-            if (res.Equals("1") && res != null)
+            IsOpenModifySalary = false;
+            CurrentStaffSalary = new()
             {
-                ModifyStaff.Staffsalaryhistories.Remove(staffsalaryhistory);
-                MyMessageBox.Show("Xóa lịch sử lương thành công");
-            }
-        }
-
-        [RelayCommand(CanExecute = nameof(CanexcuteOpenPopUpBox))]
-        private void OpenPopup_Update(StaffsalaryhistoryDTO staffsalaryhistory)
-        {
-            IsPopupOpen = true;
-            IsUpdatingStaffSalaryHistory = true;
-            CurrentStaffSalary = new StaffsalaryhistoryDTO
-            {
-                Staffsalaryhistoryid = staffsalaryhistory.Staffsalaryhistoryid,
-                Salary = staffsalaryhistory.Salary,
-                Effectivedate = staffsalaryhistory.Effectivedate,
-                Staffid = staffsalaryhistory.Staffid,
+                Effectivedate = DateOnly.FromDateTime(DateTime.Now)
             };
-            _currentStaffSalaryIndex = ModifyStaff.Staffsalaryhistories.IndexOf(staffsalaryhistory);
-        }
-
-        public event Action<StaffDTO>? StaffChanged;
-
-        [RelayCommand(CanExecute = nameof(CanexcuteOpenPopUpBox))]
-        private void SubmitModifyStaff()
-        {
-            StaffChanged?.Invoke(ModifyStaff.Clone());
         }
     }
 }

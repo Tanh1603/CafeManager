@@ -15,26 +15,21 @@ namespace CafeManager.WPF.Services
             _unitOfWork = provider.GetRequiredService<IUnitOfWork>();
         }
 
-        public async Task<decimal?> GetQuantityMaterialSupplier(int id)
-        {
-            var materialSupplier = await _unitOfWork.MaterialSupplierList.GetById(id);
-            if (materialSupplier == null) return 0;
-
-            return materialSupplier.Material.Importdetails?
-                .Where(item => item.Import.Supplierid == materialSupplier.Supplierid
-                            && item.Materialid == materialSupplier.Materialid)
-                .Sum(item => (decimal?)item.Quantity) ?? 0;
-        }
-
-
-        public async Task<IEnumerable<Material>> GetListMaterial()
-        {
-            return (await _unitOfWork.MaterialList.GetAll()).Where(x => x.Isdeleted == false);
-        }
+        #region Supplier
 
         public async Task<IEnumerable<Supplier>> GetListSupplier()
         {
-            return (await _unitOfWork.SupplierList.GetAll()).Where(x => x.Isdeleted == false);
+            return await _unitOfWork.SupplierList.GetAll();
+        }
+
+        public async Task<IEnumerable<Supplier>> GetListExistedSupplier()
+        {
+            return await _unitOfWork.SupplierList.GetAllExistedAsync();
+        }
+
+        public async Task<IEnumerable<Supplier>> GetListDeletedSupplier()
+        {
+            return await _unitOfWork.SupplierList.GetAllDeletedAsync();
         }
 
         public async Task<Supplier> AddSupplier(Supplier supplier)
@@ -83,10 +78,31 @@ namespace CafeManager.WPF.Services
             }
         }
 
+        public async Task<Supplier?> UpdateSupplierById(int id, Supplier supplier)
+        {
+            try
+            {
+                await _unitOfWork.BeginTransactionAsync();
+
+                var res = await _unitOfWork.SupplierList.UpdateById(id, supplier);
+
+                await _unitOfWork.CompleteAsync();
+
+                _unitOfWork.ClearChangeTracker();
+                await _unitOfWork.CommitTransactionAsync();
+                return res;
+            }
+            catch (Exception ex)
+            {
+                await _unitOfWork.RollbackTransactionAsync();
+                throw new InvalidOperationException("Xoá vật liệu liệu thất bại.", ex);
+            }
+        }
+
         public async Task<Supplier?> GetSupplierById(int id)
         {
             var res = await _unitOfWork.SupplierList.GetById(id);
-            return res.Isdeleted == false ? res : null;
+            return res?.Isdeleted == false ? res : null;
         }
 
         public async Task<bool> DeleteSupplier(int id)
@@ -107,7 +123,15 @@ namespace CafeManager.WPF.Services
             }
         }
 
-        //Material
+        #endregion Supplier
+
+        #region Material
+
+        public async Task<IEnumerable<Material>> GetListMaterial()
+        {
+            return (await _unitOfWork.MaterialList.GetAll()).Where(x => x.Isdeleted == false);
+        }
+
         public async Task<Material> AddMaterial(Material material)
         {
             try
@@ -117,6 +141,7 @@ namespace CafeManager.WPF.Services
                 var list = await _unitOfWork.MaterialList.Create(material);
 
                 await _unitOfWork.CompleteAsync();
+                _unitOfWork.ClearChangeTracker();
 
                 await _unitOfWork.CommitTransactionAsync();
                 return list;
@@ -124,7 +149,6 @@ namespace CafeManager.WPF.Services
             catch (Exception ex)
             {
                 await _unitOfWork.RollbackTransactionAsync();
-                _unitOfWork.ClearChangeTracker();
                 throw new InvalidOperationException("Xoá vật liệu liệu thất bại.", ex);
             }
         }
@@ -139,13 +163,13 @@ namespace CafeManager.WPF.Services
 
                 await _unitOfWork.CompleteAsync();
 
+                _unitOfWork.ClearChangeTracker();
                 await _unitOfWork.CommitTransactionAsync();
                 return res;
             }
             catch (Exception ex)
             {
                 await _unitOfWork.RollbackTransactionAsync();
-                _unitOfWork.ClearChangeTracker();
                 throw new InvalidOperationException("Xoá vật liệu liệu thất bại.", ex);
             }
         }
@@ -153,7 +177,7 @@ namespace CafeManager.WPF.Services
         public async Task<Material?> GetMaterialById(int id)
         {
             var res = await _unitOfWork.MaterialList.GetById(id);
-            return res.Isdeleted == false ? res : null;
+            return res?.Isdeleted == false ? res : null;
         }
 
         public async Task<bool> DeleteMaterial(int id)
@@ -164,6 +188,7 @@ namespace CafeManager.WPF.Services
 
                 var deleted = await _unitOfWork.MaterialList.Delete(id);
                 await _unitOfWork.CompleteAsync();
+                _unitOfWork.ClearChangeTracker();
                 await _unitOfWork.CommitTransactionAsync();
                 return deleted;
             }
@@ -173,6 +198,8 @@ namespace CafeManager.WPF.Services
                 throw new InvalidOperationException("Xoá vật liệu thất bại.", ex);
             }
         }
+
+        #endregion Material
 
         //Add Material Supplier
         public async Task<Materialsupplier> AddMaterialsupplier(Materialsupplier materialsupplier)
@@ -184,7 +211,7 @@ namespace CafeManager.WPF.Services
                 var res = await _unitOfWork.MaterialSupplierList.Create(materialsupplier);
 
                 await _unitOfWork.CompleteAsync();
-
+                _unitOfWork.ClearChangeTracker();
                 await _unitOfWork.CommitTransactionAsync();
                 return res;
             }

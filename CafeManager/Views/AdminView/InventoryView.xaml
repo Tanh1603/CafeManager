@@ -112,45 +112,45 @@
 
                                 <DataGridTextColumn
                                     Width="*"
-                                    Binding="{Binding MaterialSupplierDTO.MaterialDTO.Materialname}"
+                                    Binding="{Binding Materialsupplier.Material.Materialname}"
                                     CanUserResize="False"
                                     Header="Tên vật tư"
                                     IsReadOnly="True" />
 
                                 <DataGridTextColumn
                                     Width="*"
-                                    Binding="{Binding MaterialSupplierDTO.SupplierDTO.Suppliername}"
+                                    Binding="{Binding Materialsupplier.Supplier.Suppliername}"
                                     CanUserResize="False"
                                     Header="Nhà cung cấp"
                                     IsReadOnly="True" />
                                 <DataGridTextColumn
                                     Width="*"
-                                    Binding="{Binding MaterialSupplierDTO.Manufacturedate}"
+                                    Binding="{Binding Materialsupplier.Manufacturedate}"
                                     CanUserResize="False"
                                     Header="Ngày sản xuất"
                                     IsReadOnly="True" />
                                 <DataGridTextColumn
                                     Width="*"
-                                    Binding="{Binding MaterialSupplierDTO.Expirationdate}"
+                                    Binding="{Binding Materialsupplier.Expirationdate}"
                                     CanUserResize="False"
                                     Header="Ngày hết hạn"
                                     IsReadOnly="True" />
                                 <DataGridTextColumn
                                     Width="*"
-                                    Binding="{Binding MaterialSupplierDTO.Original}"
+                                    Binding="{Binding Materialsupplier.Original}"
                                     CanUserResize="False"
                                     Header="Nguồn gốc"
                                     IsReadOnly="True" />
 
                                 <DataGridTextColumn
                                     Width="*"
-                                    Binding="{Binding MaterialSupplierDTO.Manufacturer}"
+                                    Binding="{Binding Materialsupplier.Manufacturer}"
                                     CanUserResize="False"
                                     Header="Nhà sản xuất"
                                     IsReadOnly="True" />
                                 <DataGridTextColumn
                                     Width="*"
-                                    Binding="{Binding MaterialSupplierDTO.Price}"
+                                    Binding="{Binding Materialsupplier.Price}"
                                     CanUserResize="False"
                                     Header="Giá"
                                     IsReadOnly="True" />
@@ -215,14 +215,14 @@
 
                                 <DataGridTextColumn
                                     Width="*"
-                                    Binding="{Binding MaterialDTO.Materialname}"
+                                    Binding="{Binding Material.Materialname}"
                                     CanUserResize="False"
                                     Header="Tên vật tư"
                                     IsReadOnly="True" />
 
                                 <DataGridTextColumn
                                     Width="*"
-                                    Binding="{Binding SupplierDTO.Suppliername}"
+                                    Binding="{Binding Supplier.Suppliername}"
                                     CanUserResize="False"
                                     Header="Nhà cung cấp"
                                     IsReadOnly="True" />

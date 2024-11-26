@@ -1,17 +1,15 @@
 ﻿using System.Collections.ObjectModel;
-using System.ComponentModel;
-using System.Runtime.CompilerServices;
 
 #nullable disable
 
 namespace CafeManager.Core.DTOs
 {
-    public class MaterialDTO : INotifyPropertyChanged
+    public class MaterialDTO : BaseDTO
     {
         private int materialid;
         private string materialname;
         private string unit;
-        private bool? isdeleted;
+        private bool isdeleted;
 
         private ObservableCollection<MaterialSupplierDTO> _materialsuppliers = [];
         private ObservableCollection<ImportDetailDTO> _importdetails = [];
@@ -46,7 +44,7 @@ namespace CafeManager.Core.DTOs
             }
         }
 
-        public bool? Isdeleted
+        public bool Isdeleted
         {
             get => isdeleted; set
             {
@@ -80,8 +78,6 @@ namespace CafeManager.Core.DTOs
             }
         }
 
-        public event PropertyChangedEventHandler PropertyChanged;
-
         public MaterialDTO Clone()
         {
             return new MaterialDTO()
@@ -93,11 +89,6 @@ namespace CafeManager.Core.DTOs
                 Importdetails = Importdetails,
                 Materialsuppliers = Materialsuppliers,
             };
-        }
-
-        protected void OnPropertyChanged([CallerMemberName] string propertyName = null)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
     }
 }

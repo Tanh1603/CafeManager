@@ -1,12 +1,10 @@
 ﻿using System.Collections.ObjectModel;
-using System.ComponentModel;
-using System.Runtime.CompilerServices;
 
 #nullable disable
 
 namespace CafeManager.Core.DTOs
 {
-    public class ImportDTO : INotifyPropertyChanged
+    public class ImportDTO : BaseDTO
     {
         private int _importid;
         private string _deliveryperson;
@@ -15,7 +13,7 @@ namespace CafeManager.Core.DTOs
         private DateTime _receiveddate;
         private int _staffid;
         private int _supplierid;
-        private bool? _isdeleted;
+        private bool _isdeleted;
 
         private SupplierDTO _supplier;
         private StaffDTO _staff;
@@ -71,7 +69,7 @@ namespace CafeManager.Core.DTOs
             }
         }
 
-        public bool? Isdeleted
+        public bool Isdeleted
         {
             get => _isdeleted;
             set
@@ -147,26 +145,20 @@ namespace CafeManager.Core.DTOs
         {
             return new ImportDTO
             {
-                Importid = this.Importid,
-                Deliveryperson = this.Deliveryperson,
-                Phone = this.Phone,
-                Shippingcompany = this.Shippingcompany,
-                Receiveddate = this.Receiveddate,
-                Staffid = this.Staffid,
-                Supplierid = this.Supplierid,
+                Id = Id,
+                Importid = Importid,
+                Deliveryperson = Deliveryperson,
+                Phone = Phone,
+                Shippingcompany = Shippingcompany,
+                Receiveddate = Receiveddate,
+                Staffid = Staffid,
+                Supplierid = Supplierid,
                 Isdeleted = this.Isdeleted,
 
-                Importdetails = this.Importdetails,
-                Staff = this.Staff,
-                Supplier = this.Supplier,
+                Importdetails = Importdetails,
+                Staff = Staff,
+                Supplier = Supplier,
             };
-        }
-
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        protected void OnPropertyChanged([CallerMemberName] string propertyName = null)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
     }
 }

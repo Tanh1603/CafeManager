@@ -104,122 +104,198 @@
                 </Grid>
             </StackPanel>
 
-            <ComboBox
-                Grid.Row="1"
-                MinWidth="140"
-                HorizontalAlignment="Left"
-                SelectedIndex="{Binding StatusStaffIndex, Mode=TwoWay}">
-                <ComboBoxItem Content="Còn làm việc" />
-                <ComboBoxItem Content="Đã nghỉ việc" />
-            </ComboBox>
-
             <!--  Supplier Datagrid  -->
-            <Border
+            <!--<Border
                 Grid.Row="3"
                 Width="auto"
                 BorderBrush="#602414"
                 BorderThickness="2"
                 ClipToBounds="True"
-                CornerRadius="10">
-                <DataGrid
-                    x:Name="SuppliersDataGrid"
-                    VerticalAlignment="Top"
-                    AlternationCount="{Binding CurrentListStaff.Count}"
-                    Background="Transparent"
-                    CellStyle="{DynamicResource DataGridCellStyle1}"
-                    ColumnHeaderStyle="{DynamicResource DataGridColumnHeaderStyle1}"
-                    ItemsSource="{Binding CurrentListStaff}"
-                    RowStyle="{DynamicResource DataGridRowStyle1}"
-                    Style="{DynamicResource DataGridStyle1}">
-                    <DataGrid.Columns>
-                        <DataGridTextColumn
-                            Width="auto"
-                            Header="STT"
-                            IsReadOnly="True">
-                            <DataGridTextColumn.Binding>
-                                <Binding
-                                    Converter="{StaticResource RowIndexConverter}"
-                                    Path="(ItemsControl.AlternationIndex)"
-                                    RelativeSource="{RelativeSource AncestorType=DataGridRow}" />
-                            </DataGridTextColumn.Binding>
-                        </DataGridTextColumn>
+                CornerRadius="10">-->
+            <TabControl
+                Grid.Row="3"
+                HorizontalAlignment="Stretch"
+                VerticalAlignment="Stretch"
+                Style="{DynamicResource tabControlStyle}">
+                <TabItem Header="Đang hiển thị" Style="{DynamicResource tabItemStyle}">
+                    <DataGrid
+                        VerticalAlignment="Top"
+                        AlternationCount="{Binding ListExistedStaff.Count}"
+                        Background="Transparent"
+                        CellStyle="{DynamicResource DataGridCellStyle1}"
+                        ColumnHeaderStyle="{DynamicResource DataGridColumnHeaderStyle1}"
+                        ItemsSource="{Binding ListExistedStaff}"
+                        RowStyle="{DynamicResource DataGridRowStyle1}"
+                        Style="{DynamicResource DataGridStyle1}">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn
+                                Width="auto"
+                                Header="STT"
+                                IsReadOnly="True">
+                                <DataGridTextColumn.Binding>
+                                    <Binding
+                                        Converter="{StaticResource RowIndexConverter}"
+                                        Path="(ItemsControl.AlternationIndex)"
+                                        RelativeSource="{RelativeSource AncestorType=DataGridRow}" />
+                                </DataGridTextColumn.Binding>
+                            </DataGridTextColumn>
 
-                        <DataGridTextColumn
-                            Width="*"
-                            Binding="{Binding Staffname}"
-                            CanUserResize="False"
-                            Header="Tên nhân viên"
-                            IsReadOnly="True" />
+                            <DataGridTextColumn
+                                Width="*"
+                                Binding="{Binding Staffname}"
+                                CanUserResize="False"
+                                Header="Tên nhân viên"
+                                IsReadOnly="True" />
 
-                        <DataGridTextColumn
-                            Width="*"
-                            Binding="{Binding Phone}"
-                            CanUserResize="False"
-                            Header="Số điện thoại"
-                            IsReadOnly="True" />
-                        <DataGridTextColumn
-                            Width="*"
-                            Binding="{Binding Sex, Converter={StaticResource SexConverter}}"
-                            CanUserResize="False"
-                            Header="Giới tính"
-                            IsReadOnly="True" />
-                        <DataGridTextColumn
-                            Width="*"
-                            Binding="{Binding Birthday, StringFormat=dd/MM/yyyy}"
-                            CanUserResize="False"
-                            Header="Ngày sinh"
-                            IsReadOnly="True" />
-                        <DataGridTextColumn
-                            Width="*"
-                            Binding="{Binding Address}"
-                            CanUserResize="False"
-                            Header="Địa chỉ"
-                            IsReadOnly="True" />
+                            <DataGridTextColumn
+                                Width="*"
+                                Binding="{Binding Phone}"
+                                CanUserResize="False"
+                                Header="Số điện thoại"
+                                IsReadOnly="True" />
+                            <DataGridTextColumn
+                                Width="*"
+                                Binding="{Binding Sex, Converter={StaticResource SexConverter}}"
+                                CanUserResize="False"
+                                Header="Giới tính"
+                                IsReadOnly="True" />
+                            <DataGridTextColumn
+                                Width="*"
+                                Binding="{Binding Birthday, StringFormat=dd/MM/yyyy}"
+                                CanUserResize="False"
+                                Header="Ngày sinh"
+                                IsReadOnly="True" />
+                            <DataGridTextColumn
+                                Width="*"
+                                Binding="{Binding Address}"
+                                CanUserResize="False"
+                                Header="Địa chỉ"
+                                IsReadOnly="True" />
 
-                        <DataGridTemplateColumn
-                            Width="auto"
-                            Header="Tùy chỉnh"
-                            IsReadOnly="True">
-                            <DataGridTemplateColumn.CellTemplate>
-                                <DataTemplate>
-                                    <StackPanel
-                                        HorizontalAlignment="Center"
-                                        Background="Transparent"
-                                        Orientation="Horizontal">
-                                        <Grid>
-                                            <Button
-                                                Command="{Binding DataContext.OpenUpdateStaffCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
-                                                CommandParameter="{Binding}"
-                                                Style="{StaticResource gridEditButton}">
-                                                <ma:PackIconMaterial Kind="PencilOutline" Style="{StaticResource gridButtonIcon}" />
-                                            </Button>
-                                        </Grid>
-                                        <Grid>
-                                            <Grid.Resources>
-                                                <Style TargetType="Grid">
-                                                    <Setter Property="Visibility" Value="Visible" />
-                                                    <Style.Triggers>
-                                                        <DataTrigger Binding="{Binding Isdeleted}" Value="True">
-                                                            <Setter Property="Visibility" Value="Collapsed" />
-                                                        </DataTrigger>
-                                                    </Style.Triggers>
-                                                </Style>
-                                            </Grid.Resources>
-                                            <Button
-                                                Margin="5,0,0,0"
-                                                Command="{Binding DataContext.OpenDeleteStaffViewCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
-                                                CommandParameter="{Binding}"
-                                                Style="{StaticResource gridRemoveButton}">
-                                                <ma:PackIconMaterial Kind="DeleteOutline" Style="{StaticResource gridButtonIcon}" />
-                                            </Button>
-                                        </Grid>
-                                    </StackPanel>
-                                </DataTemplate>
-                            </DataGridTemplateColumn.CellTemplate>
-                        </DataGridTemplateColumn>
-                    </DataGrid.Columns>
-                </DataGrid>
-            </Border>
+                            <DataGridTemplateColumn
+                                Width="auto"
+                                Header="Tùy chỉnh"
+                                IsReadOnly="True">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <StackPanel
+                                            HorizontalAlignment="Center"
+                                            Background="Transparent"
+                                            Orientation="Horizontal">
+                                            <Grid>
+                                                <Button
+                                                    Command="{Binding DataContext.OpenUpdateStaffCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                                    CommandParameter="{Binding}"
+                                                    Style="{StaticResource gridEditButton}">
+                                                    <ma:PackIconMaterial Kind="PencilOutline" Style="{StaticResource gridButtonIcon}" />
+                                                </Button>
+                                            </Grid>
+                                            <Grid>
+                                                <Grid.Resources>
+                                                    <Style TargetType="Grid">
+                                                        <Setter Property="Visibility" Value="Visible" />
+                                                        <Style.Triggers>
+                                                            <DataTrigger Binding="{Binding Isdeleted}" Value="True">
+                                                                <Setter Property="Visibility" Value="Collapsed" />
+                                                            </DataTrigger>
+                                                        </Style.Triggers>
+                                                    </Style>
+                                                </Grid.Resources>
+                                                <Button
+                                                    Margin="5,0,0,0"
+                                                    Command="{Binding DataContext.OpenDeleteStaffViewCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                                    CommandParameter="{Binding}"
+                                                    Style="{StaticResource gridRemoveButton}">
+                                                    <ma:PackIconMaterial Kind="DeleteOutline" Style="{StaticResource gridButtonIcon}" />
+                                                </Button>
+                                            </Grid>
+                                        </StackPanel>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </TabItem>
+                <TabItem Header="Đã nghỉ việc" Style="{DynamicResource tabItemStyle}">
+                    <DataGrid
+                        VerticalAlignment="Top"
+                        AlternationCount="{Binding ListDeletedStaff.Count}"
+                        Background="Transparent"
+                        CellStyle="{DynamicResource DataGridCellStyle1}"
+                        ColumnHeaderStyle="{DynamicResource DataGridColumnHeaderStyle1}"
+                        ItemsSource="{Binding ListDeletedStaff}"
+                        RowStyle="{DynamicResource DataGridRowStyle1}"
+                        Style="{DynamicResource DataGridStyle1}">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn
+                                Width="auto"
+                                Header="STT"
+                                IsReadOnly="True">
+                                <DataGridTextColumn.Binding>
+                                    <Binding
+                                        Converter="{StaticResource RowIndexConverter}"
+                                        Path="(ItemsControl.AlternationIndex)"
+                                        RelativeSource="{RelativeSource AncestorType=DataGridRow}" />
+                                </DataGridTextColumn.Binding>
+                            </DataGridTextColumn>
+
+                            <DataGridTextColumn
+                                Width="*"
+                                Binding="{Binding Staffname}"
+                                CanUserResize="False"
+                                Header="Tên nhân viên"
+                                IsReadOnly="True" />
+
+                            <DataGridTextColumn
+                                Width="*"
+                                Binding="{Binding Phone}"
+                                CanUserResize="False"
+                                Header="Số điện thoại"
+                                IsReadOnly="True" />
+                            <DataGridTextColumn
+                                Width="*"
+                                Binding="{Binding Sex, Converter={StaticResource SexConverter}}"
+                                CanUserResize="False"
+                                Header="Giới tính"
+                                IsReadOnly="True" />
+                            <DataGridTextColumn
+                                Width="*"
+                                Binding="{Binding Birthday, StringFormat=dd/MM/yyyy}"
+                                CanUserResize="False"
+                                Header="Ngày sinh"
+                                IsReadOnly="True" />
+                            <DataGridTextColumn
+                                Width="*"
+                                Binding="{Binding Address}"
+                                CanUserResize="False"
+                                Header="Địa chỉ"
+                                IsReadOnly="True" />
+
+                            <DataGridTemplateColumn
+                                Width="auto"
+                                Header="Tùy chỉnh"
+                                IsReadOnly="True">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <Button
+                                            Margin="5,0,0,0"
+                                            HorizontalAlignment="Center"
+                                            VerticalAlignment="Center"
+                                            Background="Blue"
+                                            BorderBrush="Transparent"
+                                            Command="{Binding DataContext.OpenInfoStaffViewCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                            CommandParameter="{Binding}"
+                                            Style="{StaticResource gridEditButton}">
+                                            <ma:PackIconMaterial Kind="Information" Style="{StaticResource gridButtonIcon}" />
+                                        </Button>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </TabItem>
+            </TabControl>
+            <!--</Border>-->
         </Grid>
 
         <materialDesign:DialogHost ClipToBounds="False" IsOpen="{Binding IsOpenModifyStaffView}">

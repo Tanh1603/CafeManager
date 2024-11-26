@@ -5,6 +5,7 @@ using CafeManager.WPF.Services;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Microsoft.Extensions.DependencyInjection;
+using System.Collections.ObjectModel;
 
 namespace CafeManager.WPF.ViewModels.AddViewModel
 {
@@ -24,28 +25,19 @@ namespace CafeManager.WPF.ViewModels.AddViewModel
         private bool _isUpdating = false;
 
         [ObservableProperty]
-        private bool _isAddingStaffSalaryHistory = false;
-
-        [ObservableProperty]
-        private bool _isUpdatingStaffSalaryHistory = false;
-
-        [ObservableProperty]
         private bool _isStaffDeleted = false;
 
         [ObservableProperty]
         private bool _isEnable = true;
 
         [ObservableProperty]
-        private StaffDTO _modifyStaff = new()
-        {
-            Startworkingdate = DateOnly.FromDateTime(DateTime.Now),
-            Birthday = DateOnly.FromDateTime(DateTime.Now),
-        };
+        private StaffDTO _modifyStaff = new();
 
         [ObservableProperty]
-        private StaffsalaryhistoryDTO _currentStaffSalary = new() { Effectivedate = DateOnly.FromDateTime(DateTime.Now) };
+        private StaffsalaryhistoryDTO _currentStaffSalary = new();
 
-        private int _currentStaffSalaryIndex = -1;
+        public ObservableCollection<StaffsalaryhistoryDTO> ListExisted
+            => [.. ModifyStaff.Staffsalaryhistories.Where(x => x.Isdeleted == false)];
 
         [ObservableProperty]
         private DateOnly? _endworkingdate;
@@ -61,18 +53,15 @@ namespace CafeManager.WPF.ViewModels.AddViewModel
         {
             ModifyStaff = staff;
             Endworkingdate = ModifyStaff.Endworkingdate;
+            OnPropertyChanged(nameof(ListExisted));
         }
 
         public void ClearValueOfViewModel()
         {
             IsAdding = false;
             IsUpdating = false;
-            ModifyStaff = new()
-            {
-                Startworkingdate = DateOnly.FromDateTime(DateTime.Now),
-                Birthday = DateOnly.FromDateTime(DateTime.Now)
-            };
-            CurrentStaffSalary = new() { Effectivedate = DateOnly.FromDateTime(DateTime.Now) };
+            ModifyStaff = new();
+            CurrentStaffSalary = new();
             Endworkingdate = null;
         }
 
@@ -82,9 +71,65 @@ namespace CafeManager.WPF.ViewModels.AddViewModel
             var res = MyMessageBox.ShowDialog("Bạn có muốn xóa lịch sử lương này ko", MyMessageBox.Buttons.Yes_No, MyMessageBox.Icons.Warning);
             if (res.Equals("1") && res != null)
             {
-                ModifyStaff.Staffsalaryhistories.Remove(staffsalaryhistory);
-                MyMessageBox.Show("Xóa lịch sử lương thành công");
+                var deleted = ModifyStaff.Staffsalaryhistories.FirstOrDefault(x => x.Isdeleted == false && x.Id == staffsalaryhistory.Id);
+                if (deleted != null)
+                {
+                    deleted.Isdeleted = true;
+                    MyMessageBox.Show("Xóa lịch sử lương thành công");
+                    OnPropertyChanged(nameof(ModifyStaff));
+                    OnPropertyChanged(nameof(ListExisted));
+                }
             }
+        }
+
+        [RelayCommand]
+        private void OpenUpdateStaffSalaryHistory(StaffsalaryhistoryDTO staffsalaryhistoryDTO)
+        {
+            IsOpenModifySalary = true;
+            CurrentStaffSalary = staffsalaryhistoryDTO.Clone();
+        }
+
+        [RelayCommand]
+        private void OpenModifyStaffSalaryHistory()
+        {
+            IsOpenModifySalary = true;
+        }
+
+        [RelayCommand]
+        private void SubmitModifySalaryHistory()
+        {
+            var existedHistory = ModifyStaff.Staffsalaryhistories
+                .FirstOrDefault(x => x.Isdeleted == false &&
+                    x.Effectivedate.Month == CurrentStaffSalary.Effectivedate.Month && x.Effectivedate.Year == CurrentStaffSalary.Effectivedate.Year);
+            if (existedHistory != null)
+            {
+                var duplicated = ModifyStaff.Staffsalaryhistories.FirstOrDefault(x => x.Id != CurrentStaffSalary.Id && x.Effectivedate.Month == CurrentStaffSalary.Effectivedate.Month && x.Effectivedate.Year == CurrentStaffSalary.Effectivedate.Year && x.Isdeleted == false);
+
+                if (duplicated != null)
+                {
+                    MyMessageBox.Show("Lịch sử lương bị trùng tháng năm với đã có");
+                }
+                else
+                {
+                    MyMessageBox.Show("Sửa lịch sử lương thành công");
+                    existedHistory.Salary = CurrentStaffSalary.Salary;
+                }
+            }
+            else
+            {
+                MyMessageBox.Show("Thêm lịch sử lương thành công");
+                ModifyStaff.Staffsalaryhistories.Add(CurrentStaffSalary);
+            }
+            IsOpenModifySalary = false;
+            CurrentStaffSalary = new();
+            OnPropertyChanged(nameof(ListExisted));
+        }
+
+        [RelayCommand]
+        private void CloseModifySalaryHistory()
+        {
+            IsOpenModifySalary = false;
+            CurrentStaffSalary = new();
         }
 
         public event Action<StaffDTO>? StaffChanged;
@@ -92,93 +137,16 @@ namespace CafeManager.WPF.ViewModels.AddViewModel
         [RelayCommand]
         private void SubmitModifyStaff()
         {
-            StaffChanged?.Invoke(ModifyStaff.Clone());
-        }
-
-        [RelayCommand]
-        private void OpenUpdateStaffSalaryHistory(StaffsalaryhistoryDTO staffsalaryhistoryDTO)
-        {
-            IsOpenModifySalary = true;
-            IsUpdatingStaffSalaryHistory = true;
-            CurrentStaffSalary = staffsalaryhistoryDTO.Clone();
-            _currentStaffSalaryIndex = ModifyStaff.Staffsalaryhistories.IndexOf(staffsalaryhistoryDTO);
-        }
-
-        [RelayCommand]
-        private void OpenModifyStaffSalaryHistory()
-        {
-            IsOpenModifySalary = true;
-            IsAddingStaffSalaryHistory = true;
-        }
-
-        [RelayCommand]
-        private void SubmitModifySalaryHistory()
-        {
-            if (IsAddingStaffSalaryHistory)
+            if (IsAdding)
             {
-                var existing = ModifyStaff.Staffsalaryhistories.FirstOrDefault(x =>
-                    x.Effectivedate.Month == CurrentStaffSalary.Effectivedate.Month &&
-                    x.Effectivedate.Year == CurrentStaffSalary.Effectivedate.Year);
-
-                if (existing != null)
-                {
-                    MyMessageBox.ShowDialog("Ngày hiệu lực thêm mới bị trùng.");
-                    IsAddingStaffSalaryHistory = true;
-                    return;
-                }
-                else
-                {
-                    ModifyStaff.Staffsalaryhistories.Add(CurrentStaffSalary);
-                    _currentStaffSalaryIndex = ModifyStaff.Staffsalaryhistories.IndexOf(CurrentStaffSalary);
-                    MyMessageBox.Show("Thêm lịch sử lương thành công.");
-                    IsAddingStaffSalaryHistory = false;
-                }
+                ModifyStaff.Staffsalaryhistories = [.. ModifyStaff.Staffsalaryhistories.Where(x => x.Isdeleted == false)];
+                StaffChanged?.Invoke(ModifyStaff.Clone());
             }
-
-            if (IsUpdatingStaffSalaryHistory)
+            if (IsUpdating)
             {
-                bool ok = false;
-
-                for (int i = 0; i < ModifyStaff.Staffsalaryhistories.Count; i++)
-                {
-                    StaffsalaryhistoryDTO staffsalaryhistory = ModifyStaff.Staffsalaryhistories[i];
-                    if (i != _currentStaffSalaryIndex && CurrentStaffSalary.Effectivedate.Month == staffsalaryhistory.Effectivedate.Month && CurrentStaffSalary.Effectivedate.Year == staffsalaryhistory.Effectivedate.Year)
-                    {
-                        MyMessageBox.Show("Ngày hiệu lực thay đổi bị trùng");
-                        ok = true;
-                        break;
-                    }
-                }
-                if (!ok)
-                {
-                    ModifyStaff.Staffsalaryhistories[_currentStaffSalaryIndex].Effectivedate = CurrentStaffSalary.Effectivedate;
-                    ModifyStaff.Staffsalaryhistories[_currentStaffSalaryIndex].Salary = CurrentStaffSalary.Salary;
-                    MyMessageBox.Show("Sửa lịch sử lương thành công.");
-                    IsUpdatingStaffSalaryHistory = false;
-                }
-                else
-                {
-                    IsUpdatingStaffSalaryHistory = true;
-                    return;
-                }
+                ModifyStaff.Staffsalaryhistories.ToList().ForEach(x => x.Staffid = ModifyStaff.Staffid);
+                StaffChanged?.Invoke(ModifyStaff.Clone());
             }
-
-            // Reset lại `CurrentStaffSalary` sau khi thêm/sửa
-            CurrentStaffSalary = new()
-            {
-                Effectivedate = DateOnly.FromDateTime(DateTime.Now)
-            };
-            IsOpenModifySalary = false;
-        }
-
-        [RelayCommand]
-        private void CloseModifySalaryHistory()
-        {
-            IsOpenModifySalary = false;
-            CurrentStaffSalary = new()
-            {
-                Effectivedate = DateOnly.FromDateTime(DateTime.Now)
-            };
         }
     }
 }

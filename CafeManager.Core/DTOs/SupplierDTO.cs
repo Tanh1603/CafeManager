@@ -7,7 +7,7 @@ using System.Runtime.CompilerServices;
 
 namespace CafeManager.Core.DTOs
 {
-    public class SupplierDTO : INotifyPropertyChanged
+    public class SupplierDTO : BaseDTO
     {
         private int _supplierid;
 
@@ -23,7 +23,7 @@ namespace CafeManager.Core.DTOs
 
         private string _notes;
 
-        private bool? _isdeleted;
+        private bool _isdeleted;
 
         private ObservableCollection<ImportDTO> _imports = [];
         private ObservableCollection<MaterialSupplierDTO> _materialsuppliers = [];
@@ -91,7 +91,7 @@ namespace CafeManager.Core.DTOs
             }
         }
 
-        public bool? Isdeleted
+        public bool Isdeleted
         {
             get => _isdeleted; set
             {
@@ -128,6 +128,7 @@ namespace CafeManager.Core.DTOs
         {
             return new SupplierDTO
             {
+                Id = Id,
                 Supplierid = Supplierid,
                 Suppliername = Suppliername,
                 Representativesupplier = Representativesupplier,
@@ -140,13 +141,6 @@ namespace CafeManager.Core.DTOs
                 Imports = Imports,
                 Materialsuppliers = Materialsuppliers
             };
-        }
-
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        protected void OnPropertyChanged([CallerMemberName] string propertyName = null)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
     }
 }

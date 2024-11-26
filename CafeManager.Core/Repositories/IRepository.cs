@@ -10,6 +10,8 @@ namespace CafeManager.Core.Repositories
 
         Task<T?> UpdateById(int id, T entity);
 
+        Task UpdateListAsync(List<T> newEntities, Expression<Func<T, object>> keySelector);
+
         Task<bool> Delete(int id);
 
         Task<IEnumerable<T>> AddArange(IEnumerable<T> entities);

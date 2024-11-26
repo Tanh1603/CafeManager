@@ -5,12 +5,12 @@ using System.Runtime.CompilerServices;
 
 namespace CafeManager.Core.DTOs
 {
-    public class ConsumedMaterialDTO : INotifyPropertyChanged
+    public class ConsumedMaterialDTO : BaseDTO
     {
         private int _consumedmaterialid;
-        private int? _materialsuppplierid;
+        private int _materialsuppplierid;
         private decimal _quantity;
-        private bool? _isdeleted;
+        private bool _isdeleted;
         private MaterialSupplierDTO _materialsupplier;
 
         public int Consumedmaterialid
@@ -22,7 +22,7 @@ namespace CafeManager.Core.DTOs
             }
         }
 
-        public int? Materialsupplierid
+        public int Materialsupplierid
         {
             get => _materialsuppplierid; set
             {
@@ -40,7 +40,7 @@ namespace CafeManager.Core.DTOs
             }
         }
 
-        public bool? Isdeleted
+        public bool Isdeleted
         {
             get => _isdeleted; set
             {
@@ -59,13 +59,6 @@ namespace CafeManager.Core.DTOs
                     OnPropertyChanged();
                 }
             }
-        }
-
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        protected void OnPropertyChanged([CallerMemberName] string propertyName = null)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
     }
 }

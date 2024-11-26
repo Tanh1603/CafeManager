@@ -5,13 +5,13 @@ using System.Runtime.CompilerServices;
 
 namespace CafeManager.Core.DTOs
 {
-    public class ImportDetailDTO : INotifyPropertyChanged
+    public class ImportDetailDTO : BaseDTO
     {
         private int _importdetailid;
         private int importid;
         private int materialid;
         private decimal _quantity;
-        private bool? _isdeleted;
+        private bool _isdeleted;
         private MaterialDTO _material;
         private ImportDTO _import;
 
@@ -62,7 +62,7 @@ namespace CafeManager.Core.DTOs
             }
         }
 
-        public bool? Isdeleted
+        public bool Isdeleted
         {
             get => _isdeleted;
             set
@@ -105,24 +105,18 @@ namespace CafeManager.Core.DTOs
         {
             return new ImportDetailDTO
             {
-                Importdetailid = this.Importdetailid,
-                Importid = this.Importid,
-                Materialid = this.Materialid,
-                Isdeleted = this.Isdeleted,
-                Quantity = this.Quantity,
+                Id = Id,
+                Importdetailid = Importdetailid,
+                Importid = Importid,
+                Materialid = Materialid,
+                Isdeleted = Isdeleted,
+                Quantity = Quantity,
 
-                Material = this.Material,
-                Import = this.Import,
+                Material = Material,
+                Import = Import,
             };
         }
 
-        public event PropertyChangedEventHandler PropertyChanged;
-
         public static Action UpdateTotalPriceAction { get; set; }
-
-        protected void OnPropertyChanged([CallerMemberName] string propertyName = null)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
     }
 }

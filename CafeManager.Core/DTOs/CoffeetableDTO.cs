@@ -2,21 +2,23 @@
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 
+#nullable disable
+
 namespace CafeManager.Core.DTOs
 {
-    public class CoffeetableDTO : INotifyPropertyChanged
+    public class CoffeetableDTO : BaseDTO
     {
         private int coffeetableid;
 
         private int _tablenumber;
 
-        private int? _seatingcapacity;
+        private int _seatingcapacity;
 
         private string _statustable;
 
         private string _notes;
 
-        private bool? _isdeleted;
+        private bool _isdeleted;
 
         public int Coffeetableid
         {
@@ -28,7 +30,7 @@ namespace CafeManager.Core.DTOs
             }
         }
 
-        public int? Seatingcapacity
+        public int Seatingcapacity
         {
             get => _seatingcapacity;
             set
@@ -57,7 +59,7 @@ namespace CafeManager.Core.DTOs
             }
         }
 
-        public bool? Isdeleted
+        public bool Isdeleted
         {
             get => _isdeleted;
             set
@@ -84,20 +86,14 @@ namespace CafeManager.Core.DTOs
         {
             return new CoffeetableDTO()
             {
-                Coffeetableid = this.Coffeetableid,
-                Tablenumber = this.Tablenumber,
-                Seatingcapacity = this.Seatingcapacity,
-                Statustable = this.Statustable,
-                Notes = this.Notes,
-                Isdeleted = this.Isdeleted,
+                Id = Id,
+                Coffeetableid = Coffeetableid,
+                Tablenumber = Tablenumber,
+                Seatingcapacity = Seatingcapacity,
+                Statustable = Statustable,
+                Notes = Notes,
+                Isdeleted = Isdeleted,
             };
-        }
-
-        public event PropertyChangedEventHandler? PropertyChanged;
-
-        protected void OnPropertyChanged([CallerMemberName] string? propertyName = null)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
     }
 }

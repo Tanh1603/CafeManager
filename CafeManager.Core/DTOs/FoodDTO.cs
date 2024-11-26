@@ -6,7 +6,7 @@ using System.Windows.Media.Imaging;
 
 namespace CafeManager.Core.DTOs
 {
-    public class FoodDTO : INotifyPropertyChanged
+    public class FoodDTO : BaseDTO
     {
         private int _foodid;
 
@@ -16,7 +16,7 @@ namespace CafeManager.Core.DTOs
 
         private decimal _price;
 
-        private BitmapImage? _imagefood;
+        private BitmapImage _imagefood;
 
         private decimal _discountfood;
 
@@ -78,7 +78,7 @@ namespace CafeManager.Core.DTOs
             }
         }
 
-        public BitmapImage? Imagefood
+        public BitmapImage Imagefood
         {
             get => _imagefood;
             set
@@ -135,21 +135,15 @@ namespace CafeManager.Core.DTOs
         {
             return new FoodDTO()
             {
-                Foodid = this.Foodid,
-                Foodname = this.Foodname,
-                Foodcategoryid = this.Foodcategoryid,
-                Price = this.Price,
-                Imagefood = this.Imagefood,
-                Discountfood = this.Discountfood,
-                Isdeleted = this.Isdeleted,
+                Id = Id,
+                Foodid = Foodid,
+                Foodname = Foodname,
+                Foodcategoryid = Foodcategoryid,
+                Price = Price,
+                Imagefood = Imagefood,
+                Discountfood = Discountfood,
+                Isdeleted = Isdeleted,
             };
-        }
-
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        protected void OnPropertyChanged([CallerMemberName] string propertyName = null)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
     }
 }

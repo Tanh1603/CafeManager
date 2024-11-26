@@ -6,9 +6,18 @@ using System.Runtime.CompilerServices;
 
 namespace CafeManager.Core.DTOs
 {
-    public class StaffDTO : INotifyPropertyChanged
+    public class StaffDTO : BaseDTO
     {
         private int _staffid;
+        private string _staffname;
+        private string _phone;
+        private DateOnly _birthday = DateOnly.FromDateTime(DateTime.Now);
+        private string _address;
+        private DateOnly _startworkingdate = DateOnly.FromDateTime(DateTime.Now);
+        private bool _sex;
+        private DateOnly? _endworkingdate = null;
+        private string _role;
+        private bool _isdeleted;
 
         public int Staffid
         {
@@ -23,8 +32,6 @@ namespace CafeManager.Core.DTOs
             }
         }
 
-        private string _staffname;
-
         public string Staffname
         {
             get => _staffname;
@@ -37,8 +44,6 @@ namespace CafeManager.Core.DTOs
                 }
             }
         }
-
-        private string _phone;
 
         public string Phone
         {
@@ -53,9 +58,7 @@ namespace CafeManager.Core.DTOs
             }
         }
 
-        private bool? _sex;
-
-        public bool? Sex
+        public bool Sex
         {
             get => _sex;
             set
@@ -67,8 +70,6 @@ namespace CafeManager.Core.DTOs
                 }
             }
         }
-
-        private DateOnly _birthday;
 
         public DateOnly Birthday
         {
@@ -83,8 +84,6 @@ namespace CafeManager.Core.DTOs
             }
         }
 
-        private string _address;
-
         public string Address
         {
             get => _address;
@@ -97,8 +96,6 @@ namespace CafeManager.Core.DTOs
                 }
             }
         }
-
-        private DateOnly _startworkingdate = DateOnly.FromDateTime(DateTime.Now);
 
         public DateOnly Startworkingdate
         {
@@ -113,8 +110,6 @@ namespace CafeManager.Core.DTOs
             }
         }
 
-        private DateOnly? _endworkingdate;
-
         public DateOnly? Endworkingdate
         {
             get => _endworkingdate;
@@ -127,8 +122,6 @@ namespace CafeManager.Core.DTOs
                 }
             }
         }
-
-        private string _role;
 
         public string Role
         {
@@ -143,9 +136,7 @@ namespace CafeManager.Core.DTOs
             }
         }
 
-        private bool? _isdeleted;
-
-        public bool? Isdeleted
+        public bool Isdeleted
         {
             get => _isdeleted;
             set
@@ -177,6 +168,7 @@ namespace CafeManager.Core.DTOs
         {
             return new StaffDTO
             {
+                Id = Id,
                 Staffid = Staffid,
                 Staffname = Staffname,
                 Phone = Phone,
@@ -189,13 +181,6 @@ namespace CafeManager.Core.DTOs
                 Isdeleted = Isdeleted,
                 Staffsalaryhistories = Staffsalaryhistories
             };
-        }
-
-        public event PropertyChangedEventHandler? PropertyChanged;
-
-        protected void OnPropertyChanged([CallerMemberName] string propertyName = null)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
     }
 }

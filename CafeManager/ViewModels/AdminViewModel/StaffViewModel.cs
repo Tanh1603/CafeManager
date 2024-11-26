@@ -1,13 +1,12 @@
 ﻿using AutoMapper;
 using CafeManager.Core.Data;
 using CafeManager.Core.DTOs;
-using CafeManager.Core.Services;
 using CafeManager.WPF.MessageBox;
 using CafeManager.WPF.Services;
 using CafeManager.WPF.ViewModels.AddViewModel;
 using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.DependencyInjection;
 using CommunityToolkit.Mvvm.Input;
-using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Microsoft.Extensions.DependencyInjection;
 using System.Collections.ObjectModel;
 
@@ -34,39 +33,11 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
         [ObservableProperty]
         private ModifyStaffViewModel _modifyStaffVM;
 
-        [ObservableProperty]
-        private ObservableCollection<StaffDTO> _listStaff = [];
+        public ObservableCollection<StaffDTO> ListExistedStaff => [.. AllStaff.Where(x => x.Isdeleted == false)];
 
-        [ObservableProperty]
-        private ObservableCollection<StaffDTO> _listStaffDeleted = [];
+        public ObservableCollection<StaffDTO> ListDeletedStaff => [.. AllStaff.Where(x => x.Isdeleted != false)];
 
-        [ObservableProperty]
-        private ObservableCollection<StaffDTO> _currentListStaff = [];
-
-        private int _statusStaffIndex = 0;
-
-        [ObservableProperty]
-        [NotifyCanExecuteChangedFor(nameof(OpenModifyStaffCommand))]
-        private bool _isListStaffDeleted = false;
-
-        public int StatusStaffIndex
-        {
-            get => _statusStaffIndex;
-            set
-            {
-                _statusStaffIndex = value;
-                if (value == 0)
-                {
-                    CurrentListStaff = [.. ListStaff];
-                    IsListStaffDeleted = false;
-                }
-                else
-                {
-                    CurrentListStaff = [.. ListStaffDeleted];
-                    IsListStaffDeleted = true;
-                }
-            }
-        }
+        private List<StaffDTO> AllStaff = [];
 
         public StaffViewModel(IServiceProvider provider)
         {
@@ -74,7 +45,6 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
             _staffServices = provider.GetRequiredService<StaffServices>();
             ModifyStaffVM = provider.GetRequiredService<ModifyStaffViewModel>();
             ModifyStaffVM.StaffChanged += ModifyStaffVM_StaffChanged;
-            IsOpenModifyStaffView = false;
             _mapper = provider.GetRequiredService<IMapper>();
             Task.Run(LoadData);
         }
@@ -86,10 +56,10 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
                 if (ModifyStaffVM.IsAdding)
                 {
                     Staff? addStaff =
-                        await _staffServices.CreateStaff(_mapper.Map<Staff>(staff), _mapper.Map<List<Staffsalaryhistory>>(staff.Staffsalaryhistories));
+                        await _staffServices.CreateStaff(_mapper.Map<Staff>(staff));
                     if (addStaff != null)
                     {
-                        ListStaff.Add(_mapper.Map<StaffDTO>(addStaff));
+                        AllStaff.Add(_mapper.Map<StaffDTO>(addStaff));
                         IsOpenModifyStaffView = false;
                         MyMessageBox.Show("Thêm nhân viên thành công");
                     }
@@ -100,61 +70,35 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
                 }
                 if (ModifyStaffVM.IsUpdating)
                 {
-                    var updateStaffDTO = ListStaff.FirstOrDefault(x => x.Staffid == staff.Staffid);
-                    if (updateStaffDTO != null)
+                    var res = await _staffServices.UpdateStaff(_mapper.Map<Staff>(staff));
+                    if (res != null)
                     {
-                        updateStaffDTO.Staffname = staff.Staffname;
-                        updateStaffDTO.Phone = staff.Phone;
-                        updateStaffDTO.Sex = staff.Sex;
-                        updateStaffDTO.Birthday = staff.Birthday;
-                        updateStaffDTO.Address = staff.Address;
-                        updateStaffDTO.Startworkingdate = staff.Startworkingdate;
-                        updateStaffDTO.Endworkingdate = staff.Endworkingdate;
-                        updateStaffDTO.Role = staff.Role;
-                        updateStaffDTO.Staffsalaryhistories = staff.Staffsalaryhistories;
-
-                        Staff? updateStaff = await _staffServices.GetStaffById(updateStaffDTO.Staffid);
-                        List<Staffsalaryhistory>? updateStaffSalaryHitory = [];
-                        if (updateStaff != null)
-                        {
-                            updateStaff.Staffname = staff.Staffname;
-                            updateStaff.Phone = staff.Phone;
-                            updateStaff.Sex = staff.Sex;
-                            updateStaff.Birthday = staff.Birthday;
-                            updateStaff.Address = staff.Address;
-                            updateStaff.Startworkingdate = staff.Startworkingdate;
-                            updateStaff.Endworkingdate = staff.Endworkingdate;
-                            updateStaff.Role = staff.Role;
-
-                            updateStaffSalaryHitory = _mapper.Map<List<Staffsalaryhistory>>(staff.Staffsalaryhistories);
-
-                            await _staffServices.UpdateStaff(updateStaff, updateStaffSalaryHitory);
-                        }
-                        MyMessageBox.Show("Sửa thông nhân viên thành công");
+                        var updateDTO = AllStaff.FirstOrDefault(x => x.Staffid == staff.Staffid);
+                        _mapper.Map(res, updateDTO);
+                        MyMessageBox.ShowDialog("Sửa nhân viên thành công");
                     }
                     else
                     {
-                        MyMessageBox.Show("Sửa thông nhân viên thất bại");
+                        MyMessageBox.ShowDialog("Sửa nhân viên thất bại");
                     }
                 }
                 IsOpenModifyStaffView = false;
-                CurrentListStaff = [.. ListStaff];
                 ModifyStaffVM.ClearValueOfViewModel();
+                OnPropertyChanged(nameof(ListExistedStaff));
+                OnPropertyChanged(nameof(ListDeletedStaff));
             }
-            catch (Exception)
+            catch (InvalidOperationException ioe)
             {
-                MyMessageBox.Show("Lỗi");
+                MyMessageBox.ShowDialog(ioe.Message);
             }
         }
 
         private async Task LoadData()
         {
             var dbListStaff = await _staffServices.GetListStaff();
-            ListStaff = [.. _mapper.Map<List<StaffDTO>>(dbListStaff)];
-
-            var dbListStaffDeleted = await _staffServices.GetListStaffDeleted();
-            ListStaffDeleted = [.. _mapper.Map<List<StaffDTO>>(dbListStaffDeleted)];
-            CurrentListStaff = [.. ListStaff];
+            AllStaff = new List<StaffDTO>(_mapper.Map<List<StaffDTO>>(dbListStaff));
+            OnPropertyChanged(nameof(ListExistedStaff));
+            OnPropertyChanged(nameof(ListDeletedStaff));
         }
 
         [RelayCommand]
@@ -178,7 +122,15 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
             ModifyStaffVM.RecieveStaff(staffDTO.Clone());
             IsOpenModifyStaffView = true;
             ModifyStaffVM.IsUpdating = true;
-            ModifyStaffVM.IsEnable = !IsListStaffDeleted;
+            ModifyStaffVM.IsEnable = true;
+        }
+
+        [RelayCommand]
+        private void OpenInfoStaffView(StaffDTO staffDTO)
+        {
+            ModifyStaffVM.RecieveStaff(staffDTO.Clone());
+            IsOpenModifyStaffView = true;
+            ModifyStaffVM.IsEnable = false;
         }
 
         private StaffDTO TempDeleteStaff = new();
@@ -204,22 +156,15 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
                 bool isSuccessDelete = await _staffServices.DeleteStaff(TempDeleteStaff.Staffid, EndWorkingDate);
                 if (isSuccessDelete)
                 {
-                    var res = ListStaff.FirstOrDefault(x => x.Staffid == TempDeleteStaff.Staffid);
+                    var res = AllStaff.FirstOrDefault(x => x.Staffid == TempDeleteStaff.Staffid);
                     if (res != null)
                     {
-                        ListStaff.Remove(res);
+                        res.Isdeleted = true;
+                        res.Endworkingdate = EndWorkingDate;
+                        OnPropertyChanged(nameof(ListExistedStaff));
+                        OnPropertyChanged(nameof(ListDeletedStaff));
+                        MyMessageBox.Show("Xóa nhân viên thành công (Nhân viên nghỉ việc)");
                     }
-                    TempDeleteStaff.Endworkingdate = EndWorkingDate;
-                    ListStaffDeleted.Add(TempDeleteStaff);
-                    if (IsListStaffDeleted == false)
-                    {
-                        CurrentListStaff = [.. ListStaff];
-                    }
-                    else
-                    {
-                        CurrentListStaff = [.. ListStaffDeleted];
-                    }
-                    MyMessageBox.Show("Xóa nhân viên thành công (Nhân viên nghỉ việc)");
                 }
                 else
                 {

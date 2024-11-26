@@ -5,13 +5,13 @@ using System.Runtime.CompilerServices;
 
 namespace CafeManager.Core.DTOs
 {
-    public class InvoiceDetailDTO : INotifyPropertyChanged
+    public class InvoiceDetailDTO : BaseDTO
     {
         private int _invoicedetailid;
-        private int? _invoiceid;
+        private int _invoiceid;
         private int _foodid;
         private int _quantity;
-        private bool? _isdeleted;
+        private bool _isdeleted;
         private FoodDTO _food;
 
         public int Invoicedetailid
@@ -24,7 +24,7 @@ namespace CafeManager.Core.DTOs
             }
         }
 
-        public int? Invoiceid
+        public int Invoiceid
         {
             get => _invoiceid;
             set
@@ -44,7 +44,7 @@ namespace CafeManager.Core.DTOs
             }
         }
 
-        public bool? Isdeleted
+        public bool Isdeleted
         {
             get => _isdeleted;
             set
@@ -87,6 +87,7 @@ namespace CafeManager.Core.DTOs
         {
             return new InvoiceDetailDTO()
             {
+                Id = Id,
                 Invoicedetailid = Invoicedetailid,
                 Invoiceid = Invoiceid,
                 Foodid = Foodid,
@@ -94,13 +95,6 @@ namespace CafeManager.Core.DTOs
                 Isdeleted = Isdeleted,
                 Food = Food,
             };
-        }
-
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        protected void OnPropertyChanged([CallerMemberName] string propertyName = null)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
     }
 }

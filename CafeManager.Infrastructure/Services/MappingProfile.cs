@@ -91,12 +91,9 @@ public class MappingProfile : Profile
             .ForMember(dest => dest.Food, opt => opt.Ignore());
 
         // Staff <-> StaffDTO
-        CreateMap<Staff, StaffDTO>();
-        CreateMap<StaffDTO, Staff>()
-            .ForMember(dest => dest.Staffsalaryhistories, opt => opt.Ignore());
+        CreateMap<Staff, StaffDTO>().ReverseMap();
 
         // Staffsalaryhistories <-> StaffsalaryhistoriesDTO
-        CreateMap<Staffsalaryhistory, StaffsalaryhistoryDTO>();
-        CreateMap<StaffsalaryhistoryDTO, Staffsalaryhistory>();
+        CreateMap<Staffsalaryhistory, StaffsalaryhistoryDTO>().ReverseMap();
     }
 }

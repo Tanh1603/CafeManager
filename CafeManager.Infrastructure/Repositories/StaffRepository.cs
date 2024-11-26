@@ -11,39 +11,21 @@ namespace CafeManager.Infrastructure.Repositories
         {
         }
 
-        public async Task<Staff?> UpdateStaffWithListSatffSalaryHistory(Staff staff)
+        public async Task<Staff?> GetStaffById(int id)
         {
-            var update = await _cafeManagerContext.Staff.FindAsync(staff.Staffid);
-            if (update != null)
-            {
-                // Cập nhật thông tin Staff
-                _cafeManagerContext.Entry(update).CurrentValues.SetValues(staff);
+            return await _cafeManagerContext.Staff
+                .Where(x => x.Isdeleted == false)
+                .Include(x => x.Staffsalaryhistories.Where(s => s.Isdeleted == false))
+                .FirstOrDefaultAsync(x => x.Staffid == id);
+        }
 
-                // Lấy danh sách Staffsalaryhistory hiện có trong cơ sở dữ liệu
-                var existingStaffSalaryHistory = await _cafeManagerContext.Staffsalaryhistories
-                    .Where(x => x.Isdeleted == false && x.Staffid == staff.Staffid).ToListAsync();
-
-                // Phân loại các bản ghi mới
-                var newEntities = staff.Staffsalaryhistories.Where(x => x.Staffsalaryhistoryid == 0).ToList();
-                var updateEntities = staff.Staffsalaryhistories
-                    .Where(x => x.Staffsalaryhistoryid != 0)
-                    .ToDictionary(x => x.Staffsalaryhistoryid); // Tạo dictionary từ các bản ghi có ID
-
-                // Cập nhật các bản ghi hiện có
-                existingStaffSalaryHistory.ForEach(existingEntity =>
-                {
-                    if (updateEntities.TryGetValue(existingEntity.Staffsalaryhistoryid, out var newEntity))
-                    {
-                        // Cập nhật bản ghi nếu tìm thấy
-                        _cafeManagerContext.Entry(existingEntity).CurrentValues.SetValues(newEntity);
-                        updateEntities.Remove(existingEntity.Staffsalaryhistoryid);
-                    }
-                });
-                if (newEntities.Any())
-                {
-                    await _cafeManagerContext.AddRangeAsync(newEntities);
-                }
-            }
+        public async Task<IEnumerable<Staff>> GetAllStaffAsync()
+        {
+            return await _cafeManagerContext.Staff
+                .Where(x => x.Isdeleted == false)
+                .Include(x => x.Staffsalaryhistories.Where(s => s.Isdeleted == false))
+                .ToListAsync();
+        }
 
             return update;
         }

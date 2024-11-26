@@ -27,10 +27,10 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
         [ObservableProperty]
         private bool _isUpdating = false;
 
-        private int _currentMaterialsupplierid = 0;
-
         [ObservableProperty]
-        private ConsumedMaterialDTO _currentConsumedMaterial = new();
+        private ConsumedMaterialDTO _modifyConsumedMaterial = new();
+
+        private decimal _currentQuantity;
 
         [ObservableProperty]
         private ObservableCollection<ConsumedMaterialDTO> _listConsumedMaterialDTO = [];
@@ -48,6 +48,86 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
             _ = LoadData();
         }
 
+        [RelayCommand]
+        private async void SubmitConsumedMaterial()
+        {
+            bool ok = false;
+            try
+            {
+                if (!IsValidData())
+                    throw new InvalidOperationException("Số lượng trong kho nhỏ hơn yêu cầu");   
+                if (IsAdding)
+                {
+                    var addConsumedMaterial = await _consumedMaterialServices.AddConsumedmaterial(_mapper.Map<Consumedmaterial>(ModifyConsumedMaterial));
+                    if (addConsumedMaterial != null)
+                    {
+                        var res = ListConsumedMaterialDTO.FirstOrDefault(x => x.Consumedmaterialid == addConsumedMaterial.Consumedmaterialid);
+                        if (res != null)
+                        {
+                            _mapper.Map(addConsumedMaterial, res);
+                        }
+                        else
+                        {    
+                            ListConsumedMaterialDTO.Add(_mapper.Map<ConsumedMaterialDTO>(addConsumedMaterial));
+                        }      
+                        MyMessageBox.ShowDialog("Thêm chi tiết sử dụng vật tư cấp thành công");
+                        IsPopupOpen = false;
+                        ok = true;
+                    }
+                    else
+                    {
+                        MyMessageBox.Show("Thêm chi tiết sử dụng vật tư thất bại");
+                    }
+                }
+                if (IsUpdating)
+                {
+                    var res = await _consumedMaterialServices.UpdateConsumedMaterialById(ModifyConsumedMaterial.Consumedmaterialid, _mapper.Map<Consumedmaterial>(ModifyConsumedMaterial));
+                    if (res != null)
+                    {
+                        var updateConsumedMaterialDTO = ListConsumedMaterialDTO.FirstOrDefault(x => x.Consumedmaterialid == res.Consumedmaterialid);
+                        if (updateConsumedMaterialDTO != null)
+                        {
+                            _mapper.Map(res, updateConsumedMaterialDTO);
+                            MyMessageBox.ShowDialog("Sửa nhà cung cấp thành công");
+                            IsPopupOpen = false;
+                            ok = true;
+                        }
+                    }
+                    else
+                    {
+                        MyMessageBox.ShowDialog("Sửa nhà cung cấp thất bại");
+                    }
+                }
+                if (ok)
+                {
+                    var updateMaterialSupplier = ListInventoryDTO.FirstOrDefault(x => x.Materialsupplierid == ModifyConsumedMaterial.Materialsupplierid);
+                    if (updateMaterialSupplier != null)
+                    {
+                        updateMaterialSupplier.TotalQuantity -= ModifyConsumedMaterial.Quantity;
+                    }
+                    ClearValueOfPopupBox();
+                }
+            }
+            catch (InvalidOperationException ioe)
+            {
+                MyMessageBox.ShowDialog(ioe.Message, MyMessageBox.Buttons.OK, MyMessageBox.Icons.Warning);
+            }
+        }
+
+        private bool IsValidData()
+        {
+            var materialSupplier = ListInventoryDTO.FirstOrDefault(x => x.Materialsupplierid == ModifyConsumedMaterial.Materialsupplierid);
+            if (IsAdding)
+            {
+                return materialSupplier.TotalQuantity - ModifyConsumedMaterial.Quantity > 0;
+            }    
+            if(IsUpdating)
+            {
+                return materialSupplier.TotalQuantity - (ModifyConsumedMaterial.Quantity - _currentQuantity) > 0;
+            }    
+            return false;
+        }
+
         private async Task LoadData()
         {
             var dbMaterialSupplier = await _materialSupplierServices.GetListMaterialSupplier();
@@ -63,76 +143,62 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
         {
             IsAdding = false;
             IsUpdating = false;
-            CurrentConsumedMaterial = new();
+            ModifyConsumedMaterial = new();
+            _currentQuantity = 0;
         }
 
         [RelayCommand]
-        private void OpenPopup_Add(MaterialSupplierDTO materialSupplierDTO)
+        private void OpenPopup_Add(MaterialSupplierDTO materialSupplier)
         {
-            _currentMaterialsupplierid = materialSupplierDTO.Materialsupplierid;
+            ModifyConsumedMaterial.Materialsupplierid = materialSupplier.Materialsupplierid;
+
             IsPopupOpen = true;
             IsAdding = true;
         }
         [RelayCommand]
         private void OpenPopup_Update(ConsumedMaterialDTO consumedMaterialDTO)
         {
-            _currentMaterialsupplierid = consumedMaterialDTO.Materialsupplierid ?? 0;
+            _currentQuantity = consumedMaterialDTO.Quantity;
+            ModifyConsumedMaterial = consumedMaterialDTO.Clone();
             IsPopupOpen = true;
-            IsAdding = true;
+            IsUpdating = true;
         }
 
         [RelayCommand]
-        private void ModifyStaffSalaryHistory()
+        private async Task DeleteConsumedMaterial(ConsumedMaterialDTO consumedMaterial)
         {
-            if (IsAdding)
+            try
             {
-                var existing = ListConsumedMaterialDTO.FirstOrDefault(x =>
-                    x.Effectivedate.Month == CurrentStaffSalary.Effectivedate.Month &&
-                    x.Effectivedate.Year == CurrentStaffSalary.Effectivedate.Year);
-
-                if (existing != null)
+                string messageBox = MyMessageBox.ShowDialog("Bạn có muốn xoá chi tiết sử dụng vật liệu này không?", MyMessageBox.Buttons.Yes_No, MyMessageBox.Icons.Question);
+                if (messageBox.Equals("1"))
                 {
-                    MyMessageBox.ShowDialog("Ngày hiệu lực thêm mới bị trùng.");
-                }
-                else
-                {
-                    ModifyStaff.Staffsalaryhistories.Add(CurrentStaffSalary);
-                    _currentStaffSalaryIndex = ModifyStaff.Staffsalaryhistories.IndexOf(CurrentStaffSalary);
-                    MyMessageBox.Show("Thêm lịch sử lương thành công.");
-                }
-
-                IsAddingStaffSalaryHistory = false;
-            }
-
-            if (IsUpdatingStaffSalaryHistory)
-            {
-                bool ok = false;
-
-                for (int i = 0; i < ModifyStaff.Staffsalaryhistories.Count; i++)
-                {
-                    StaffsalaryhistoryDTO staffsalaryhistory = ModifyStaff.Staffsalaryhistories[i];
-                    if (i != _currentStaffSalaryIndex && CurrentStaffSalary.Effectivedate.Month == staffsalaryhistory.Effectivedate.Month && CurrentStaffSalary.Effectivedate.Year == staffsalaryhistory.Effectivedate.Year)
+                    bool isDeleted = await _consumedMaterialServices.DeleteConsumedmaterial(consumedMaterial.Consumedmaterialid);
+                    if (isDeleted)
                     {
-                        MyMessageBox.Show("Ngày hiệu lực thay đổi bị trùng");
-                        ok = true;
-                        break;
+                        var updateMaterialSupplier = ListInventoryDTO.FirstOrDefault(x => x.Materialsupplierid == consumedMaterial.Materialsupplierid);
+                        if (updateMaterialSupplier != null)
+                        {
+                            updateMaterialSupplier.TotalQuantity += consumedMaterial.Quantity;
+                        }
+                        ListConsumedMaterialDTO.Remove(consumedMaterial);
+                        MyMessageBox.ShowDialog("Xoá chi tiết sử dụng vật liệu thanh công");
+                    }
+                    else
+                    {
+                        MyMessageBox.ShowDialog("Xoá chi tiết sử dụng vật liệu thất bại");
                     }
                 }
-                if (!ok)
-                {
-                    ModifyStaff.Staffsalaryhistories[_currentStaffSalaryIndex].Effectivedate = CurrentStaffSalary.Effectivedate;
-                    ModifyStaff.Staffsalaryhistories[_currentStaffSalaryIndex].Salary = CurrentStaffSalary.Salary;
-                    MyMessageBox.Show("Sửa lịch sử lương thành công.");
-                }
-                IsUpdatingStaffSalaryHistory = false;
             }
-
-            // Reset lại `CurrentStaffSalary` sau khi thêm/sửa
-            CurrentStaffSalary = new()
+            catch (InvalidOperationException ioe)
             {
-                Effectivedate = DateOnly.FromDateTime(DateTime.Now)
-            };
+                MyMessageBox.ShowDialog(ioe.Message);
+            }
+        }
+        [RelayCommand]
+        private void ClosePopup()
+        {
             IsPopupOpen = false;
+            ClearValueOfPopupBox();
         }
     }
 }

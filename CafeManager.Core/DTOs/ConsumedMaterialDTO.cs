@@ -61,6 +61,18 @@ namespace CafeManager.Core.DTOs
             }
         }
 
+        public ConsumedMaterialDTO Clone()
+        {
+            return new ConsumedMaterialDTO
+            {
+                Consumedmaterialid = Consumedmaterialid,
+                Materialsupplierid = Materialsupplierid,
+                Quantity = Quantity,
+                Isdeleted = Isdeleted,
+                Materialsupplier = Materialsupplier
+            };
+        }
+
         public event PropertyChangedEventHandler PropertyChanged;
 
         protected void OnPropertyChanged([CallerMemberName] string propertyName = null)

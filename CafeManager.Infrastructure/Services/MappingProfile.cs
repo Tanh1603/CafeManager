@@ -36,7 +36,7 @@ public class MappingProfile : Profile
                 -
                 (src.Consumedmaterials != null
                     ? src.Consumedmaterials
-                        .Where(cm => cm.Materialsupplierid == src.Materialsupplierid)
+                        .Where(cm => cm.Materialsupplierid == src.Materialsupplierid && src.Isdeleted == false)
                         .Sum(cm => cm.Quantity ?? 0)
                     : 0)
             ));

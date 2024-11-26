@@ -22,7 +22,7 @@ namespace CafeManager.Core.DTOs
         private SupplierDTO _supplier;
         private ObservableCollection<ConsumedMaterialDTO> _consumedmaterials;
 
-        public decimal TotalQuantity { get; set; }
+        private decimal _totalQuantity;
 
         public int Materialsupplierid
         {
@@ -128,6 +128,19 @@ namespace CafeManager.Core.DTOs
                 if (_isdeleted != value)
                 {
                     _isdeleted = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
+        public decimal TotalQuantity
+        {
+            get => _totalQuantity;
+            set
+            {
+                if (value != _totalQuantity)
+                {
+                    _totalQuantity = value;
                     OnPropertyChanged();
                 }
             }

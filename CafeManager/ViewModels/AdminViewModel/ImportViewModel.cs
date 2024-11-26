@@ -24,7 +24,7 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
         private readonly ImportServices _importServices;
         private readonly MaterialSupplierServices _materialSupplierServices;
         private readonly StaffServices _staffServices;
-        //private IMapper _mapper;
+        private IMapper _mapper;
 
         [ObservableProperty]
         private bool _isOpenModifyImportView;

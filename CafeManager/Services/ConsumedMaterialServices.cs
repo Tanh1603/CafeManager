@@ -49,7 +49,7 @@ namespace CafeManager.WPF.Services
                         consumedMaterial.Quantity += addConsumedMaterial.Quantity;
                     }
                     await _unitOfWork.CompleteAsync();
-                    _unitOfWork.ClearChangeTracker();
+                    //_unitOfWork.ClearChangeTracker();
 
                     await _unitOfWork.CommitTransactionAsync();
                     return consumedMaterial;

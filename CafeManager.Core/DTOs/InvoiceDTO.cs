@@ -1,12 +1,10 @@
 ﻿using System.Collections.ObjectModel;
-using System.ComponentModel;
-using System.Runtime.CompilerServices;
 
 #nullable disable
 
 namespace CafeManager.Core.DTOs
 {
-    public class InvoiceDTO : INotifyPropertyChanged
+    public class InvoiceDTO : BaseDTO
     {
         private int _invoiceid;
 
@@ -167,6 +165,7 @@ namespace CafeManager.Core.DTOs
         {
             return new InvoiceDTO()
             {
+                Id = Id,
                 Invoiceid = Invoiceid,
                 Coffeetableid = Coffeetableid,
                 Paymentstartdate = Paymentstartdate,
@@ -182,8 +181,6 @@ namespace CafeManager.Core.DTOs
                 Invoicedetails = Invoicedetails,
             };
         }
-
-        public event PropertyChangedEventHandler? PropertyChanged;
 
         private bool _isCoffeeTable = false;
         private bool _isCustomer = false;
@@ -205,11 +202,6 @@ namespace CafeManager.Core.DTOs
         public InvoiceDTO()
         {
             _invoiceCustomerId = $"HD-{Guid.NewGuid().ToString().Substring(0, 4).ToUpper()}";
-        }
-
-        protected void OnPropertyChanged([CallerMemberName] string? propertyName = null)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
         public decimal TotalPrice => CaculateTotalPrice();

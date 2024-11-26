@@ -40,6 +40,11 @@ namespace CafeManager.Infrastructure.Repositories
 
         public virtual async Task<T?> UpdateById(int id, T entity)
         {
+            var entityType = _cafeManagerContext.Model.FindEntityType(typeof(T));
+            var primaryKey = entityType?.FindPrimaryKey();
+            var keyProperty = primaryKey?.Properties.First();
+            var keyValue = keyProperty?.PropertyInfo?.GetValue(entity);
+
             var existingEntity = await _cafeManagerContext.Set<T>().FindAsync(id);
 
             if (existingEntity != null)

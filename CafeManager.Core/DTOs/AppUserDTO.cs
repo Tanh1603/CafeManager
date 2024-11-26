@@ -1,24 +1,20 @@
-﻿using CafeManager.Core.Services;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
+﻿using System.ComponentModel;
 using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Media.Imaging;
+
+#nullable disable
 
 namespace CafeManager.Core.DTOs
 {
-    public class AppUserDTO
+    public class AppUserDTO : BaseDTO
     {
         private int _appUserId;
         private string _username;
         private string _displayName;
         private string _email;
-        private string? _role;
+        private string _role;
         private BitmapImage _avatar;
-        private bool? _isDeleted;
+        private bool _isDeleted;
 
         public int Appuserid
         {
@@ -72,7 +68,7 @@ namespace CafeManager.Core.DTOs
             }
         }
 
-        public string? Role
+        public string Role
         {
             get => _role;
             set
@@ -85,7 +81,7 @@ namespace CafeManager.Core.DTOs
             }
         }
 
-        public BitmapImage? Avatar
+        public BitmapImage Avatar
         {
             get => _avatar;
             set
@@ -98,7 +94,7 @@ namespace CafeManager.Core.DTOs
             }
         }
 
-        public bool? Isdeleted
+        public bool Isdeleted
         {
             get => _isDeleted;
             set
@@ -115,21 +111,15 @@ namespace CafeManager.Core.DTOs
         {
             return new AppUserDTO
             {
-                Appuserid = this.Appuserid,
-                Username = this.Username,
-                Displayname = this.Displayname,
-                Email = this.Email,
-                Role = this.Role,
-                Avatar = this.Avatar,
-                Isdeleted = this.Isdeleted
+                Id = Id,
+                Appuserid = Appuserid,
+                Username = Username,
+                Displayname = Displayname,
+                Email = Email,
+                Role = Role,
+                Avatar = Avatar,
+                Isdeleted = Isdeleted
             };
-        }
-
-        public event PropertyChangedEventHandler? PropertyChanged;
-
-        protected virtual void OnPropertyChanged([CallerMemberName] string? propertyName = null)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
     }
 }

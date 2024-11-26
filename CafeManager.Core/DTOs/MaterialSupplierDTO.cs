@@ -6,7 +6,7 @@ using System.Runtime.CompilerServices;
 
 namespace CafeManager.Core.DTOs
 {
-    public class MaterialSupplierDTO : INotifyPropertyChanged
+    public class MaterialSupplierDTO : BaseDTO
     {
         private int _materialsupplierid;
         private int materialid;
@@ -16,7 +16,7 @@ namespace CafeManager.Core.DTOs
         private string _original;
         private string _manufacturer;
         private decimal _price;
-        private bool? _isdeleted;
+        private bool _isdeleted;
 
         private MaterialDTO _material;
         private SupplierDTO _supplier;
@@ -120,7 +120,7 @@ namespace CafeManager.Core.DTOs
             }
         }
 
-        public bool? Isdeleted
+        public bool Isdeleted
         {
             get => _isdeleted;
             set
@@ -163,20 +163,21 @@ namespace CafeManager.Core.DTOs
         {
             return new MaterialSupplierDTO()
             {
-                Materialsupplierid = this.Materialsupplierid,
-                Materialid = this.Materialid,
-                Supplierid = this.Supplierid,
-                Manufacturedate = this.Manufacturedate,
-                Expirationdate = this.Expirationdate,
-                Original = this.Original,
-                Manufacturer = this.Manufacturer,
-                Price = this.Price,
-                Isdeleted = this.Isdeleted,
+                Id = Id,
+                Materialsupplierid = Materialsupplierid,
+                Materialid = Materialid,
+                Supplierid = Supplierid,
+                Manufacturedate = Manufacturedate,
+                Expirationdate = Expirationdate,
+                Original = Original,
+                Manufacturer = Manufacturer,
+                Price = Price,
+                Isdeleted = Isdeleted,
 
-                Material = this.Material,
-                Supplier = this.Supplier,
-                TotalQuantity = this.TotalQuantity,
-                Consumedmaterials = this.Consumedmaterials,
+                Material = Material,
+                Supplier = Supplier,
+                TotalQuantity = TotalQuantity,
+                Consumedmaterials = Consumedmaterials,
             };
         }
 
@@ -190,13 +191,6 @@ namespace CafeManager.Core.DTOs
                     OnPropertyChanged();
                 }
             }
-        }
-
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        protected void OnPropertyChanged([CallerMemberName] string propertyName = null)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
     }
 }

@@ -19,130 +19,135 @@
         <converter:DefaultAccountImageConverter x:Key="DefaultAccountImageConverter" />
         <converter:CornerRadiusClippingConverter x:Key="CornerRadiusClippingConverter" />
     </UserControl.Resources>
-
     <Grid>
-        <materialDesign:DialogHost
-            Margin="5,0"
-            Background="Transparent"
-            DialogMargin="10">
+        <Grid.Background>
+            <LinearGradientBrush StartPoint="0,0.5" EndPoint="1,0.5">
+                <GradientStop Offset="0" Color="#9c6d3f" />
+                <GradientStop Offset="1" Color="#cb925d" />
+            </LinearGradientBrush>
+        </Grid.Background>
+        <Grid >
+            <materialDesign:DialogHost Background="Transparent" DialogMargin="10">
 
-            <materialDesign:DrawerHost
-                IsLeftDrawerOpen="{Binding ElementName=btnMenu, Path=IsChecked}"
-                LeftDrawerBackground="{DynamicResource SecondaryHueLightBrush}"
-                LeftDrawerCornerRadius="0 0 0 0"
-                OverlayBackground="Transparent">
-                <materialDesign:DrawerHost.LeftDrawerContent>
-                    <Grid Background="Transparent">
-                        <Border CornerRadius="0 0 10 10">
-                            <Border.Background>
-                                <LinearGradientBrush StartPoint="0.5,0" EndPoint="0.5,1">
-                                    <GradientStop Offset="0" Color="#824618" />
-                                    <GradientStop Offset="1" Color="#844518" />
-                                </LinearGradientBrush>
-                            </Border.Background>
-                            <StackPanel HorizontalAlignment="Left" VerticalAlignment="Top">
-                                <!--  username  -->
-                                <Grid Margin="10,0,0,5" HorizontalAlignment="Left">
+                <materialDesign:DrawerHost
+                    IsLeftDrawerOpen="{Binding ElementName=btnMenu, Path=IsChecked}"
+                    LeftDrawerBackground="{DynamicResource SecondaryHueLightBrush}"
+                    LeftDrawerCornerRadius="0 0 0 0"
+                    OverlayBackground="Transparent">
+                    <materialDesign:DrawerHost.LeftDrawerContent>
+                        <Grid Background="Transparent">
+                            <Border CornerRadius="0 0 10 10">
+                                <Border.Background>
+                                    <LinearGradientBrush StartPoint="0.5,0" EndPoint="0.5,1">
+                                        <GradientStop Offset="0" Color="#824618" />
+                                        <GradientStop Offset="1" Color="#844518" />
+                                    </LinearGradientBrush>
+                                </Border.Background>
+                                <StackPanel HorizontalAlignment="Left" VerticalAlignment="Top">
+                                    <!--  username  -->
+                                    <Grid Margin="10,0,0,5" HorizontalAlignment="Left">
 
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="*" />
-                                        <ColumnDefinition Width="auto" />
-                                    </Grid.ColumnDefinitions>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*" />
+                                            <ColumnDefinition Width="auto" />
+                                        </Grid.ColumnDefinitions>
 
-                                    <Grid Grid.Column="0">
-                                        <Border
-                                            Width="55"
-                                            Height="55"
-                                            CornerRadius="10">
-                                            <Border.Background>
-                                                <LinearGradientBrush StartPoint="0,0" EndPoint="1,2">
-                                                    <GradientStop Offset="0" Color="#d5b096" />
-                                                    <GradientStop Offset="1" Color="#d3b7ff" />
-                                                </LinearGradientBrush>
-                                            </Border.Background>
-                                            <Image
-                                                Width="50"
-                                                Height="50"
-                                                RenderOptions.BitmapScalingMode="HighQuality"
-                                                SnapsToDevicePixels="True"
-                                                Source="{Binding UserAccount.Avatar, Converter={StaticResource DefaultAccountImageConverter}}"
-                                                Stretch="Uniform"
-                                                StretchDirection="DownOnly" />
-                                        </Border>
+                                        <Grid Grid.Column="0">
+                                            <Border
+                                                Width="55"
+                                                Height="55"
+                                                CornerRadius="10">
+                                                <Border.Background>
+                                                    <LinearGradientBrush StartPoint="0,0" EndPoint="1,2">
+                                                        <GradientStop Offset="0" Color="#d5b096" />
+                                                        <GradientStop Offset="1" Color="#d3b7ff" />
+                                                    </LinearGradientBrush>
+                                                </Border.Background>
+                                                <Image
+                                                    Width="50"
+                                                    Height="50"
+                                                    RenderOptions.BitmapScalingMode="HighQuality"
+                                                    SnapsToDevicePixels="True"
+                                                    Source="{Binding UserAccount.Avatar, Converter={StaticResource DefaultAccountImageConverter}}"
+                                                    Stretch="Uniform"
+                                                    StretchDirection="DownOnly" />
+                                            </Border>
+                                        </Grid>
+
+                                        <StackPanel
+                                            Grid.Column="1"
+                                            Margin="10,0,0,0"
+                                            VerticalAlignment="Center">
+                                            <TextBlock
+                                                Margin="0,0,0,5"
+                                                FontSize="15"
+                                                Foreground="#f9f9f9"
+                                                Text="{Binding UserAccount.Displayname}" />
+                                            <TextBlock
+                                                FontSize="15"
+                                                FontWeight="SemiBold"
+                                                Foreground="#ffffff"
+                                                Text="{Binding UserAccount.Role}" />
+                                        </StackPanel>
                                     </Grid>
+                                    <Separator
+                                        Height="0.8"
+                                        Margin="10"
+                                        Background="#ffffff" />
 
-                                    <StackPanel
-                                        Grid.Column="1"
-                                        Margin="10,0,0,0"
-                                        VerticalAlignment="Center">
-                                        <TextBlock
-                                            Margin="0,0,0,5"
-                                            FontSize="15"
-                                            Foreground="#f9f9f9"
-                                            Text="{Binding UserAccount.Displayname}" />
-                                        <TextBlock
-                                            FontSize="15"
-                                            FontWeight="SemiBold"
-                                            Foreground="#ffffff"
-                                            Text="{Binding UserAccount.Role}" />
-                                    </StackPanel>
-                                </Grid>
-                                <Separator
-                                    Height="0.8"
-                                    Margin="10"
-                                    Background="#ffffff" />
+                                    <!--  menu buttons  -->
+                                    <RadioButton
+                                        MinWidth="200"
+                                        Command="{Binding ChangeCurrentViewModelCommand}"
+                                        CommandParameter="OrderFood"
+                                        IsChecked="True"
+                                        Style="{StaticResource menuButton}">
+                                        <StackPanel Orientation="Horizontal">
+                                            <fa:IconImage Icon="ChartColumn" Style="{StaticResource menuButtonIcon}" />
+                                            <TextBlock Style="{StaticResource menuButtonText}" Text="Đặt món" />
+                                        </StackPanel>
+                                    </RadioButton>
 
-                                <!--  menu buttons  -->
-                                <RadioButton
-                                    MinWidth="200"
-                                    Command="{Binding ChangeCurrentViewModelCommand}"
-                                    CommandParameter="OrderFood"
-                                    IsChecked="True"
-                                    Style="{StaticResource menuButton}">
-                                    <StackPanel Orientation="Horizontal">
-                                        <fa:IconImage Icon="ChartColumn" Style="{StaticResource menuButtonIcon}" />
-                                        <TextBlock Style="{StaticResource menuButtonText}" Text="Đặt món" />
-                                    </StackPanel>
-                                </RadioButton>
+                                    <RadioButton
+                                        Command="{Binding ChangeCurrentViewModelCommand}"
+                                        CommandParameter="Setting"
+                                        Style="{StaticResource menuButton}">
+                                        <StackPanel Orientation="Horizontal">
+                                            <fa:IconImage Icon="Cog" Style="{StaticResource menuButtonIcon}" />
+                                            <TextBlock Style="{StaticResource menuButtonText}" Text="Cài đặt" />
+                                        </StackPanel>
+                                    </RadioButton>
 
-                                <RadioButton
-                                    Command="{Binding ChangeCurrentViewModelCommand}"
-                                    CommandParameter="Setting"
-                                    Style="{StaticResource menuButton}">
-                                    <StackPanel Orientation="Horizontal">
-                                        <fa:IconImage Icon="Cog" Style="{StaticResource menuButtonIcon}" />
-                                        <TextBlock Style="{StaticResource menuButtonText}" Text="Cài đặt" />
-                                    </StackPanel>
-                                </RadioButton>
+                                    <RadioButton Command="{Binding SignOutCommand}" Style="{StaticResource menuButton}">
+                                        <StackPanel Orientation="Horizontal">
+                                            <fa:IconImage Icon="PowerOff" Style="{StaticResource menuButtonIcon}" />
+                                            <TextBlock Style="{StaticResource menuButtonText}" Text="Đăng xuất" />
+                                        </StackPanel>
+                                    </RadioButton>
+                                </StackPanel>
+                            </Border>
+                        </Grid>
+                    </materialDesign:DrawerHost.LeftDrawerContent>
+                    <Grid>
 
-                                <RadioButton Command="{Binding SignOutCommand}" Style="{StaticResource menuButton}">
-                                    <StackPanel Orientation="Horizontal">
-                                        <fa:IconImage Icon="PowerOff" Style="{StaticResource menuButtonIcon}" />
-                                        <TextBlock Style="{StaticResource menuButtonText}" Text="Đăng xuất" />
-                                    </StackPanel>
-                                </RadioButton>
-                            </StackPanel>
-                        </Border>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="auto" />
+                            <RowDefinition Height="*" />
+                        </Grid.RowDefinitions>
+                        <Grid Grid.Row="0" Margin="5 0">
+                            <ToggleButton
+                                x:Name="btnMenu"
+                                HorizontalAlignment="Left"
+                                Command="{Binding OpenMenuCommand}"
+                                IsChecked="{Binding IsLeftDrawerOpen}"
+                                Style="{StaticResource MaterialDesignHamburgerToggleButton}" />
+                        </Grid>
+                        <Grid Grid.Row="1" Background="Transparent">
+                            <ContentControl Margin="10" Content="{Binding CurrentVM}" />
+                        </Grid>
                     </Grid>
-                </materialDesign:DrawerHost.LeftDrawerContent>
-                <Grid Background="Transparent">
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="auto" />
-                        <RowDefinition Height="*" />
-                    </Grid.RowDefinitions>
-                    <Grid Grid.Row="0">
-                        <ToggleButton
-                            x:Name="btnMenu"
-                            HorizontalAlignment="Left"
-                            Command="{Binding OpenMenuCommand}"
-                            IsChecked="{Binding IsLeftDrawerOpen}"
-                            Style="{StaticResource MaterialDesignHamburgerToggleButton}" />
-                    </Grid>
-                    <Grid Grid.Row="1" Background="Transparent">
-                        <ContentControl Margin="10" Content="{Binding CurrentVM}" />
-                    </Grid>
-                </Grid>
-            </materialDesign:DrawerHost>
-        </materialDesign:DialogHost>
+                </materialDesign:DrawerHost>
+            </materialDesign:DialogHost>
+        </Grid>
     </Grid>
 </UserControl>

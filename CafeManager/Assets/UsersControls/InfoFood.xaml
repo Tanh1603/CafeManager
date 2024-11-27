@@ -12,6 +12,7 @@
     <UserControl.Resources>
         <local:Utf8Converter x:Key="Utf8Converter" />
         <local:StringToImageSourceConverter x:Key="StringToImageSourceConverter" />
+        <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
     </UserControl.Resources>
     <Grid>
         <Border BorderThickness="3" CornerRadius="10">
@@ -93,7 +94,7 @@
                                 TextWrapping="WrapWithOverflow" />
                         </StackPanel>
 
-                        <Grid Grid.Column="1">
+                        <Grid Grid.Column="1" Visibility="{Binding IsButtonVisible, RelativeSource={RelativeSource AncestorType=UserControl}, Converter={StaticResource BooleanToVisibilityConverter}}">
                             <StackPanel HorizontalAlignment="Right" Orientation="Horizontal">
                                 <StackPanel.Style>
                                     <Style TargetType="StackPanel">

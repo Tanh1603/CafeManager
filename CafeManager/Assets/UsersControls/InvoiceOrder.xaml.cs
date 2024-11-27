@@ -16,24 +16,14 @@ using System.Windows.Shapes;
 namespace CafeManager.WPF.Assets.UsersControls
 {
     /// <summary>
-    /// Interaction logic for InfoTable.xaml
+    /// Interaction logic for InvoiceOrder.xaml
     /// </summary>
-    public partial class InfoTable : UserControl
+    public partial class InvoiceOrder : UserControl
     {
-        public InfoTable()
+        public InvoiceOrder()
         {
             InitializeComponent();
         }
-    public static readonly DependencyProperty IsButtonVisibleProperty =
-        DependencyProperty.Register("IsButtonVisible", typeof(bool), typeof(InfoTable),
-        new PropertyMetadata(true)); // Mặc định là true
-
-        public bool IsButtonVisible
-        {
-            get => (bool)GetValue(IsButtonVisibleProperty);
-            set => SetValue(IsButtonVisibleProperty, value);
-        }
-
         public string Text
         {
             get { return (string)GetValue(TextProperty); }
@@ -42,7 +32,6 @@ namespace CafeManager.WPF.Assets.UsersControls
 
         // Using a DependencyProperty as the backing store for SourceImage.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty TextProperty =
-            DependencyProperty.Register("Text", typeof(string), typeof(InfoTable));
+            DependencyProperty.Register("Text", typeof(string), typeof(InvoiceOrder));
     }
-    
 }

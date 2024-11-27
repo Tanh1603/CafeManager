@@ -4,16 +4,10 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace CafeManager.WPF.Services
 {
-    public class MaterialSupplierServices
+    public class MaterialSupplierServices(IServiceProvider provider)
     {
-        private readonly IServiceProvider _provider;
-        private readonly IUnitOfWork _unitOfWork;
-
-        public MaterialSupplierServices(IServiceProvider provider)
-        {
-            _provider = provider;
-            _unitOfWork = provider.GetRequiredService<IUnitOfWork>();
-        }
+        private readonly IServiceProvider _provider = provider;
+        private readonly IUnitOfWork _unitOfWork = provider.GetRequiredService<IUnitOfWork>();
 
         #region Supplier
 
@@ -63,28 +57,7 @@ namespace CafeManager.WPF.Services
             {
                 await _unitOfWork.BeginTransactionAsync();
 
-                var res = _unitOfWork.SupplierList.Update(supplier);
-
-                await _unitOfWork.CompleteAsync();
-
-                await _unitOfWork.CommitTransactionAsync();
-                return res;
-            }
-            catch (Exception ex)
-            {
-                await _unitOfWork.RollbackTransactionAsync();
-                _unitOfWork.ClearChangeTracker();
-                throw new InvalidOperationException("Xoá vật liệu liệu thất bại.", ex);
-            }
-        }
-
-        public async Task<Supplier?> UpdateSupplierById(int id, Supplier supplier)
-        {
-            try
-            {
-                await _unitOfWork.BeginTransactionAsync();
-
-                var res = await _unitOfWork.SupplierList.UpdateById(id, supplier);
+                var res = await _unitOfWork.SupplierList.Update(supplier);
 
                 await _unitOfWork.CompleteAsync();
 
@@ -159,7 +132,7 @@ namespace CafeManager.WPF.Services
             {
                 await _unitOfWork.BeginTransactionAsync();
 
-                var res = _unitOfWork.MaterialList.Update(material);
+                var res = await _unitOfWork.MaterialList.Update(material);
 
                 await _unitOfWork.CompleteAsync();
 

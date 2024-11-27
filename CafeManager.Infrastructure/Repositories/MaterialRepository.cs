@@ -10,6 +10,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+#nullable disable
+
 namespace CafeManager.Infrastructure.Repositories
 {
     public class MaterialRepository : Repository<Material>, IMaterialRepository

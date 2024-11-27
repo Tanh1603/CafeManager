@@ -20,14 +20,32 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
         [ObservableProperty]
         private bool _isOpenAddSupplier = false;
 
-        [ObservableProperty]
-        private ObservableCollection<SupplierDTO> _listSupplier = [];
+        private List<SupplierDTO> AllSupplier = [];
 
-        [ObservableProperty]
-        private ObservableCollection<SupplierDTO> _listDeletedSupplier = [];
+        private List<SupplierDTO> _filterSupplierList = [];
+
+        public ObservableCollection<SupplierDTO> ListExistedSupplier => [.. _filterSupplierList.Where(x => x.Isdeleted == false) ?? []];
+
+        public ObservableCollection<SupplierDTO> ListDeletedSupplier => [.. _filterSupplierList.Where(x => x.Isdeleted == true) ?? []];
 
         [ObservableProperty]
         private AddSuppierViewModel _modifySupplierVM;
+
+        private string _searchText = string.Empty;
+
+        public string SearchText
+        {
+            get => _searchText;
+            set
+            {
+                if (_searchText != value)
+                {
+                    _searchText = value;
+                    FilterSupplier();
+                    OnPropertyChanged(nameof(SearchText));
+                }
+            }
+        }
 
         public SupplierViewModel(IServiceProvider provider)
         {
@@ -39,6 +57,31 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
             Task.Run(LoadData);
         }
 
+        private async Task LoadData()
+        {
+            AllSupplier = _mapper.Map<List<SupplierDTO>>(await _materialSupplierServices.GetListSupplier());
+            _filterSupplierList = _mapper.Map<List<SupplierDTO>>(AllSupplier);
+
+            OnPropertyChanged(nameof(ListExistedSupplier));
+            OnPropertyChanged(nameof(ListDeletedSupplier));
+        }
+
+        private void FilterSupplier()
+        {
+            var filtered = AllSupplier.Where(x =>
+                string.IsNullOrWhiteSpace(SearchText) ||
+                x.Suppliername.Contains(SearchText, StringComparison.OrdinalIgnoreCase) ||
+                x.Representativesupplier.Contains(SearchText, StringComparison.OrdinalIgnoreCase) ||
+                x.Phone.Contains(SearchText) ||
+                x.Email.Contains(SearchText) ||
+                x.Address.Contains(SearchText) ||
+                x.Notes.Contains(SearchText)
+                ).ToList();
+            _filterSupplierList = [.. filtered];
+            OnPropertyChanged(nameof(ListExistedSupplier));
+            OnPropertyChanged(nameof(ListDeletedSupplier));
+        }
+
         private async void ModifySupplierVM_ModifySupplierChanged(SupplierDTO obj)
         {
             try
@@ -48,8 +91,9 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
                     var addSupplier = await _materialSupplierServices.AddSupplier(_mapper.Map<Supplier>(obj));
                     if (addSupplier != null)
                     {
-                        ListSupplier.Add(_mapper.Map<SupplierDTO>(addSupplier));
+                        AllSupplier.Add(_mapper.Map<SupplierDTO>(addSupplier));
                         MyMessageBox.ShowDialog("Thêm nhà cung cấp thành công");
+                        FilterSupplier();
                         ModifySupplierVM.ClearValueOfFrom();
                         IsOpenAddSupplier = false;
                     }
@@ -60,14 +104,15 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
                 }
                 if (ModifySupplierVM.IsUpdating)
                 {
-                    var res = await _materialSupplierServices.UpdateSupplierById(obj.Supplierid, _mapper.Map<Supplier>(obj));
+                    var res = await _materialSupplierServices.UpdateSupplier(_mapper.Map<Supplier>(obj));
                     if (res != null)
                     {
-                        var updateSupplierDTO = ListSupplier.FirstOrDefault(x => x.Supplierid == res.Supplierid);
+                        var updateSupplierDTO = AllSupplier.FirstOrDefault(x => x.Supplierid == res.Supplierid);
                         if (updateSupplierDTO != null)
                         {
                             _mapper.Map(res, updateSupplierDTO);
                             MyMessageBox.ShowDialog("Sửa nhà cung cấp thành công");
+                            FilterSupplier();
                             ModifySupplierVM.ClearValueOfFrom();
                             IsOpenAddSupplier = false;
                         }
@@ -82,17 +127,6 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
             {
                 MyMessageBox.ShowDialog(ioe.Message);
             }
-        }
-
-        private async Task LoadData()
-        {
-            var all = await _materialSupplierServices.GetListSupplier();
-
-            var listExisted = all.ToList().Where(x => x.Isdeleted == false);
-            var listDeleted = all.ToList().Where(x => x.Isdeleted == true);
-
-            ListSupplier = [.. _mapper.Map<List<SupplierDTO>>(listExisted)];
-            ListDeletedSupplier = [.. _mapper.Map<List<SupplierDTO>>(listDeleted)];
         }
 
         [RelayCommand]
@@ -128,9 +162,10 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
                     bool isDeleted = await _materialSupplierServices.DeleteSupplier(supplier.Supplierid);
                     if (isDeleted)
                     {
-                        ListSupplier.Remove(supplier);
-                        ListDeletedSupplier.Add(supplier);
+                        var deleted = AllSupplier.First(x => x.Supplierid == supplier.Supplierid);
+                        deleted.Isdeleted = true;
                         MyMessageBox.ShowDialog("Ẩn nhà cung cấp thanh công");
+                        FilterSupplier();
                     }
                     else
                     {
@@ -153,12 +188,13 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
                 if (messageBox.Equals("1"))
                 {
                     supplier.Isdeleted = false;
-                    var res = await _materialSupplierServices.UpdateSupplierById(supplier.Supplierid, _mapper.Map<Supplier>(supplier));
+                    var res = await _materialSupplierServices.UpdateSupplier(_mapper.Map<Supplier>(supplier));
                     if (res != null)
                     {
-                        ListSupplier.Add(supplier);
-                        ListDeletedSupplier.Remove(supplier);
+                        var restore = AllSupplier.First(x => x.Supplierid == supplier.Supplierid);
+                        restore.Isdeleted = false;
                         MyMessageBox.ShowDialog("Hiển thị nhà cung cấp thanh công");
+                        FilterSupplier();
                     }
                     else
                     {

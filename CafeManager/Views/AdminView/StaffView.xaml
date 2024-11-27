@@ -92,7 +92,10 @@
                         IsHitTestVisible="False"
                         Text="Search in Members..."
                         Visibility="{Binding ElementName=txtFilter, Path=Text.IsEmpty, Converter={StaticResource BoolToVis}}" />
-                    <TextBox x:Name="txtFilter" Style="{StaticResource textBoxFilter}" />
+                    <TextBox
+                        x:Name="txtFilter"
+                        Style="{StaticResource textBoxFilter}"
+                        Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}" />
                     <ma:PackIconMaterial
                         Width="15"
                         Height="15"
@@ -298,7 +301,12 @@
             <!--</Border>-->
         </Grid>
 
-        <materialDesign:DialogHost ClipToBounds="False" IsOpen="{Binding IsOpenModifyStaffView}">
+        <materialDesign:DialogHost
+            DialogTheme="Inherit"
+            IsOpen="{Binding IsOpenModifyStaffView}"
+            OverlayBackground="{DynamicResource PrimaryHueDarkBrush}"
+            Placement="Mouse"
+            Style="{StaticResource MaterialDesignEmbeddedDialogHost}">
             <materialDesign:DialogHost.DialogBackground>
                 <SolidColorBrush Color="Transparent" />
             </materialDesign:DialogHost.DialogBackground>
@@ -308,7 +316,12 @@
             </materialDesign:DialogHost.DialogContent>
         </materialDesign:DialogHost>
 
-        <materialDesign:DialogHost ClipToBounds="False" IsOpen="{Binding IsOpenDeleteStaffView}">
+        <materialDesign:DialogHost
+            DialogTheme="Inherit"
+            IsOpen="{Binding IsOpenDeleteStaffView}"
+            OverlayBackground="{DynamicResource PrimaryHueDarkBrush}"
+            Placement="Mouse"
+            Style="{StaticResource MaterialDesignEmbeddedDialogHost}">
             <materialDesign:DialogHost.DialogBackground>
                 <SolidColorBrush Color="Transparent" />
             </materialDesign:DialogHost.DialogBackground>

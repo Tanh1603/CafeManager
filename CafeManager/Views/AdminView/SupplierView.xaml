@@ -86,7 +86,10 @@
                     IsHitTestVisible="False"
                     Text="Search in Members..."
                     Visibility="{Binding ElementName=txtFilter, Path=Text.IsEmpty, Converter={StaticResource BoolToVis}}" />
-                <TextBox x:Name="txtFilter" Style="{StaticResource textBoxFilter}" />
+                <TextBox
+                    x:Name="txtFilter"
+                    Style="{StaticResource textBoxFilter}"
+                    Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}" />
                 <ma:PackIconMaterial
                     Width="15"
                     Height="15"
@@ -112,10 +115,10 @@
                 <TabItem Header="Đang hiển thị" Style="{DynamicResource tabItemStyle}">
                     <DataGrid
                         VerticalAlignment="Top"
-                        AlternationCount="{Binding ListSupplier.Count}"
+                        AlternationCount="{Binding ListExistedSupplier.Count}"
                         CellStyle="{DynamicResource DataGridCellStyle1}"
                         ColumnHeaderStyle="{DynamicResource DataGridColumnHeaderStyle1}"
-                        ItemsSource="{Binding ListSupplier}"
+                        ItemsSource="{Binding ListExistedSupplier}"
                         RowStyle="{DynamicResource DataGridRowStyle1}"
                         Style="{DynamicResource DataGridStyle1}">
                         <DataGrid.Columns>
@@ -284,7 +287,12 @@
             <!--</Border>-->
         </Grid>
 
-        <materialDesign:DialogHost ClipToBounds="False" IsOpen="{Binding IsOpenAddSupplier}">
+        <materialDesign:DialogHost
+            DialogTheme="Inherit"
+            IsOpen="{Binding IsOpenAddSupplier}"
+            OverlayBackground="{DynamicResource PrimaryHueDarkBrush}"
+            Placement="Mouse"
+            Style="{StaticResource MaterialDesignEmbeddedDialogHost}">
             <materialDesign:DialogHost.DialogBackground>
                 <SolidColorBrush Color="Transparent" />
             </materialDesign:DialogHost.DialogBackground>

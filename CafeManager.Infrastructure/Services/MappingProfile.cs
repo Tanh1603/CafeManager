@@ -58,9 +58,11 @@ public class MappingProfile : Profile
 
         // AppUserDTO <-> Appuser
         CreateMap<Appuser, AppUserDTO>()
-            .ForMember(dest => dest.Avatar, opt => opt.MapFrom(src => ConvertImageServices.Base64ToBitmapImage(src.Avatar)));
+            .ForMember(dest => dest.Avatar, opt => opt.MapFrom(src => ConvertImageServices.Base64ToBitmapImage(src.Avatar)))
+            .ForMember(dest => dest.Role, opt => opt.MapFrom(src => src.Role == 1 ? "Admin" : "User"));
         CreateMap<AppUserDTO, Appuser>()
-            .ForMember(dest => dest.Avatar, opt => opt.MapFrom(src => ConvertImageServices.BitmapImageToBase64(src.Avatar)));
+            .ForMember(dest => dest.Avatar, opt => opt.MapFrom(src => ConvertImageServices.BitmapImageToBase64(src.Avatar)))
+            .ForMember(dest => dest.Role, opt => opt.MapFrom(src => src.Role == "Admin" ? true : false));
 
         // CoffeetableDTO <-> Coffeetable
         CreateMap<Coffeetable, CoffeetableDTO>();
@@ -75,8 +77,7 @@ public class MappingProfile : Profile
         CreateMap<Food, FoodDTO>()
             .ForMember(dest => dest.Imagefood, opt => opt.MapFrom(src => ConvertImageServices.Base64ToBitmapImage(src.Imagefood)));
         CreateMap<FoodDTO, Food>()
-            .ForMember(dest => dest.Imagefood, opt => opt.MapFrom(src => ConvertImageServices.BitmapImageToBase64(src.Imagefood)))
-            .ForMember(dest => dest.Foodcategory, opt => opt.Ignore());
+            .ForMember(dest => dest.Imagefood, opt => opt.MapFrom(src => ConvertImageServices.BitmapImageToBase64(src.Imagefood)));
 
         // Invoice <-> InvoiceDTO
         CreateMap<Invoice, InvoiceDTO>();

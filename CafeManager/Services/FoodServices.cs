@@ -44,20 +44,21 @@ namespace CafeManager.WPF.Services
             }
         }
 
-        public Food? UpdatFood(Food obj)
+        public async Task<Food?> UpdatFood(Food obj)
         {
             try
             {
-                var res = _unitOfWork.FoodList.Update(obj);
-                if (res != null)
-                {
-                    _unitOfWork.Complete();
-                }
+                await _unitOfWork.BeginTransactionAsync();
+
+                var res = await _unitOfWork.FoodList.Update(obj);
+                await _unitOfWork.CompleteAsync();
+                _unitOfWork.ClearChangeTracker();
+                await _unitOfWork.CommitTransactionAsync();
                 return res;
             }
             catch (Exception)
             {
-                _unitOfWork.ClearChangeTracker();
+                await _unitOfWork.RollbackTransactionAsync();
                 throw new InvalidOperationException("Sửa thức ăn thất bại.");
             }
         }

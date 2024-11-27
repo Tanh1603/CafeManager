@@ -13,7 +13,7 @@ DELETE FROM staffsalaryhistory;
 
 SELECT * FROM foodcategory;
 SELECT * FROM food;
-SELECT foodid, foodname, isdeleted, discountfood FROM food;
+SELECT foodid, foodname, isdeleted, discountfood, foodcategoryid FROM food;
 ALTER SEQUENCE food_foodid_seq RESTART WITH 1;
 DELETE FROM food;
 

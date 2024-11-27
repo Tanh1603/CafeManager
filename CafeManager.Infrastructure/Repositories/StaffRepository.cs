@@ -5,12 +5,8 @@ using Microsoft.EntityFrameworkCore;
 
 namespace CafeManager.Infrastructure.Repositories
 {
-    public class StaffRepository : Repository<Staff>, IStaffRepository
+    public class StaffRepository(CafeManagerContext cafeManagerContext) : Repository<Staff>(cafeManagerContext), IStaffRepository
     {
-        public StaffRepository(CafeManagerContext cafeManagerContext) : base(cafeManagerContext)
-        {
-        }
-
         public async Task<Staff?> UpdateStaffWithListSatffSalaryHistory(Staff staff)
         {
             var update = await _cafeManagerContext.Staff.FindAsync(staff.Staffid);
@@ -39,7 +35,7 @@ namespace CafeManager.Infrastructure.Repositories
                         updateEntities.Remove(existingEntity.Staffsalaryhistoryid);
                     }
                 });
-                if (newEntities.Any())
+                if (newEntities.Count != 0)
                 {
                     await _cafeManagerContext.AddRangeAsync(newEntities);
                 }

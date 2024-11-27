@@ -153,7 +153,10 @@
                             IsHitTestVisible="False"
                             Text="Tìm kiếm..."
                             Visibility="{Binding ElementName=txtFilter, Path=Text.IsEmpty, Converter={StaticResource BoolToVis}}" />
-                        <TextBox x:Name="txtFilter" Style="{StaticResource textBoxFilter}" />
+                        <TextBox
+                            x:Name="txtFilter"
+                            Style="{StaticResource textBoxFilter}"
+                            Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}" />
                         <ma:PackIconMaterial
                             Width="15"
                             Height="15"

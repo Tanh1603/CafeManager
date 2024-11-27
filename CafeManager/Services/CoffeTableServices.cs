@@ -10,16 +10,10 @@ using System.Threading.Tasks;
 
 namespace CafeManager.WPF.Services
 {
-    public class CoffeTableServices
+    public class CoffeTableServices(IServiceProvider provider)
     {
-        private IServiceProvider _provider;
-        private IUnitOfWork _unitOfWork;
-
-        public CoffeTableServices(IServiceProvider provider)
-        {
-            _provider = provider;
-            _unitOfWork = provider.GetRequiredService<IUnitOfWork>();
-        }
+        private IServiceProvider _provider = provider;
+        private IUnitOfWork _unitOfWork = provider.GetRequiredService<IUnitOfWork>();
 
         public async Task<IEnumerable<Coffeetable>> GetListCoffeTable()
         {
@@ -50,9 +44,9 @@ namespace CafeManager.WPF.Services
             }
         }
 
-        public Coffeetable? UpdateCoffeeTable(Coffeetable coffeetable)
+        public async Task<Coffeetable?> UpdateCoffeeTable(Coffeetable coffeetable)
         {
-            var res = _unitOfWork.CoffeeTableList.Update(coffeetable);
+            var res = await _unitOfWork.CoffeeTableList.Update(coffeetable);
             _unitOfWork.Complete();
             return res;
         }

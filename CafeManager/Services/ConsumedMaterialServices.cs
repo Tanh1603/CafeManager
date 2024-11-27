@@ -10,16 +10,10 @@ using System.Threading.Tasks;
 
 namespace CafeManager.WPF.Services
 {
-    public class ConsumedMaterialServices
+    public class ConsumedMaterialServices(IServiceProvider provider)
     {
-        private readonly IServiceProvider _provider;
-        private readonly IUnitOfWork _unitOfWork;
-
-        public ConsumedMaterialServices(IServiceProvider provider)
-        {
-            _provider = provider;
-            _unitOfWork = provider.GetRequiredService<IUnitOfWork>();
-        }
+        private readonly IServiceProvider _provider = provider;
+        private readonly IUnitOfWork _unitOfWork = provider.GetRequiredService<IUnitOfWork>();
 
         public async Task<IEnumerable<Consumedmaterial>> GetListConsumedMaterial()
         {
@@ -51,7 +45,7 @@ namespace CafeManager.WPF.Services
             {
                 await _unitOfWork.BeginTransactionAsync();
 
-                var res = _unitOfWork.ConsumedMaterialList.Update(consumedmaterial);
+                var res = await _unitOfWork.ConsumedMaterialList.Update(consumedmaterial);
 
                 await _unitOfWork.CompleteAsync();
 
@@ -59,7 +53,7 @@ namespace CafeManager.WPF.Services
                 await _unitOfWork.CommitTransactionAsync();
                 return res;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 await _unitOfWork.RollbackTransactionAsync();
                 throw new InvalidOperationException("Lỗi");

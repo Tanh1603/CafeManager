@@ -4,6 +4,7 @@ using CafeManager.Core.DTOs;
 using CafeManager.WPF.MessageBox;
 using CafeManager.WPF.Services;
 using CafeManager.WPF.ViewModels.AddViewModel;
+using Castle.Components.DictionaryAdapter.Xml;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Microsoft.Extensions.DependencyInjection;
@@ -22,9 +23,8 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
         [ObservableProperty]
         private ObservableCollection<FoodCategoryDTO> _listFoodCategory = [];
 
-        [ObservableProperty]
-        private ObservableCollection<FoodDTO> _listFoodByFoodCategoryId = [];
-
+        public ObservableCollection<FoodDTO> ListFoodByFoodCategoryId => [.. _filterListFood ?? []];
+        private List<FoodDTO> _filterListFood = [];
         private FoodCategoryDTO _selectedFoodCategory = new();
 
         public FoodCategoryDTO SelectedFoodCategory
@@ -35,8 +35,9 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
                 {
                     if (value != null)
                     {
-                        ListFoodByFoodCategoryId = ListFoodCategory.FirstOrDefault(x => x.Foodcategoryid == value.Foodcategoryid)?.Foods ?? [];
                         _selectedFoodCategory = value;
+                        FilterListFood();
+                        OnPropertyChanged(nameof(ListFoodByFoodCategoryId));
                     }
                 }
                 OnPropertyChanged();
@@ -51,6 +52,22 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
 
         [ObservableProperty]
         private bool _isOpenModifyFCView;
+
+        private string _searchText = string.Empty;
+
+        public string SearchText
+        {
+            get => _searchText;
+            set
+            {
+                if (_searchText != value)
+                {
+                    _searchText = value;
+                    FilterListFood();
+                    OnPropertyChanged(nameof(SearchText));
+                }
+            }
+        }
 
         public FoodViewModel(IServiceProvider provider)
         {
@@ -69,8 +86,17 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
             var dbListFoodCategory = await _foodCategoryServices.GetAllListFoodCategory();
             ListFoodCategory = [.. _mapper.Map<List<FoodCategoryDTO>>(dbListFoodCategory)];
             SelectedFoodCategory = ListFoodCategory[0];
-            ListFoodByFoodCategoryId = ListFoodCategory.FirstOrDefault(x => x.Foodcategoryid == SelectedFoodCategory.Foodcategoryid)?.Foods ?? [];
+            FilterListFood();
             ModifyFoodVM.ReceiveListFoodCategory(ListFoodCategory.ToList());
+        }
+
+        private void FilterListFood()
+        {
+            var filter = SelectedFoodCategory.Foods?.Where(x => string.IsNullOrWhiteSpace(SearchText)
+            || x.Foodname.Contains(SearchText, StringComparison.OrdinalIgnoreCase) || x.Price.ToString().Contains(SearchText)).ToList();
+
+            _filterListFood = [.. filter];
+            OnPropertyChanged(nameof(ListFoodByFoodCategoryId));
         }
 
         private async void ModifyFoodVM_ModifyFoodChanged(FoodDTO foodDTO)
@@ -85,7 +111,7 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
                         FoodDTO addFoodDTO = _mapper.Map<FoodDTO>(addFood);
                         if (addFoodDTO.Foodcategoryid == SelectedFoodCategory.Foodcategoryid)
                         {
-                            ListFoodByFoodCategoryId.Add(addFoodDTO);
+                            SelectedFoodCategory.Foods.Add(addFoodDTO);
                         }
                         else
                         {
@@ -96,43 +122,28 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
                 }
                 if (ModifyFoodVM.IsUpdating)
                 {
-                    Food? updateFood = await _foodServices.GetFoodById(foodDTO.Foodid);
-                    if (updateFood != null)
+                    var res = await _foodServices.UpdatFood(_mapper.Map<Food>(foodDTO));
+                    if (res != null)
                     {
-                        Food updateFoodEntity = _mapper.Map<Food>(foodDTO);
-                        updateFood.Foodname = updateFoodEntity.Foodname;
-                        updateFood.Foodcategoryid = updateFoodEntity.Foodcategoryid;
-                        updateFood.Price = updateFoodEntity.Price;
-                        updateFood.Imagefood = updateFoodEntity.Imagefood;
-                        updateFood.Discountfood = updateFoodEntity.Discountfood;
-                        Food? res = _foodServices.UpdatFood(updateFood);
-                        if (res != null)
+                        var updateFoodDTO = SelectedFoodCategory.Foods.FirstOrDefault(x => x.Foodid == res.Foodid);
+                        if (updateFoodDTO != null)
                         {
-                            var updateFoodDTO = ListFoodByFoodCategoryId
-                                                .FirstOrDefault(f => f.Foodid == res.Foodid);
-                            if (updateFoodDTO != null)
+                            if (updateFoodDTO.Foodcategoryid == res.Foodcategoryid)
                             {
-                                FoodDTO foodMapper = _mapper.Map<FoodDTO>(res);
-                                if (foodMapper.Foodcategoryid == SelectedFoodCategory.Foodcategoryid)
-                                {
-                                    updateFoodDTO.Foodid = foodMapper.Foodid;
-                                    updateFoodDTO.Foodname = foodMapper.Foodname;
-                                    updateFoodDTO.Foodcategoryid = foodMapper.Foodcategoryid;
-                                    updateFoodDTO.Price = foodMapper.Price;
-                                    updateFoodDTO.Discountfood = foodMapper.Discountfood;
-                                    updateFoodDTO.Imagefood = foodMapper.Imagefood;
-                                }
-                                else
-                                {
-                                    ListFoodByFoodCategoryId.Remove(updateFoodDTO);
-                                }
-                                MyMessageBox.Show("Sửa thức ăn thành công");
+                                _mapper.Map(res, updateFoodDTO);
                             }
+                            else
+                            {
+                                SelectedFoodCategory.Foods.Remove(updateFoodDTO);
+                                ListFoodCategory.FirstOrDefault(x => x.Foodcategoryid == res.Foodcategoryid)?.Foods.Add(_mapper.Map<FoodDTO>(res));
+                            }
+                            MyMessageBox.Show("Sửa thức ăn thành công");
                         }
                     }
                 }
                 IsOpenModifyFoodView = false;
                 ModifyFoodVM.ClearValueOfForm();
+                FilterListFood();
             }
             catch (InvalidOperationException ioe)
             {
@@ -173,12 +184,13 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
                     bool isdeleted = await _foodServices.DeletFood(foodDTO.Foodid);
                     if (isdeleted)
                     {
-                        MyMessageBox.Show("Ẩn món ăn thành công");
-                        var deletedFoodDTO = ListFoodByFoodCategoryId.FirstOrDefault(x => x.Foodid == foodDTO.Foodid);
+                        var deletedFoodDTO = SelectedFoodCategory.Foods.FirstOrDefault(x => x.Foodid == foodDTO.Foodid);
                         if (deletedFoodDTO != null)
                         {
                             deletedFoodDTO.Isdeleted = true;
                         }
+                        MyMessageBox.Show("Ẩn món ăn thành công");
+                        OnPropertyChanged(nameof(ListFoodByFoodCategoryId));
                     }
                 }
             }
@@ -200,14 +212,15 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
                     if (showFood != null)
                     {
                         showFood.Isdeleted = false;
-                        _foodServices.UpdatFood(showFood);
+                        await _foodServices.UpdatFood(showFood);
 
-                        var showFoodDTO = ListFoodByFoodCategoryId.FirstOrDefault(x => x.Foodid == foodDTO.Foodid);
+                        var showFoodDTO = SelectedFoodCategory.Foods.FirstOrDefault(x => x.Foodid == foodDTO.Foodid);
                         if (showFoodDTO != null)
                         {
                             showFoodDTO.Isdeleted = false;
                         }
                         MyMessageBox.Show("Hiện món ăn thành công");
+                        OnPropertyChanged(nameof(ListFoodByFoodCategoryId));
                     }
                 }
             }

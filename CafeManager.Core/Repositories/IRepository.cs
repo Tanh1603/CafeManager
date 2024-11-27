@@ -6,9 +6,9 @@ namespace CafeManager.Core.Repositories
     {
         Task<T> Create(T entity);
 
-        T? Update(T entity);
+        //T? Update(T entity);
 
-        Task<T?> UpdateById(int id, T entity);
+        Task<T?> Update(T entity);
 
         Task<bool> Delete(int id);
 

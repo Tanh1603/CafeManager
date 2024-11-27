@@ -1,25 +1,14 @@
 ﻿using CafeManager.Core.Data;
 using CafeManager.Core.Services;
 using Microsoft.Extensions.DependencyInjection;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Linq.Expressions;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace CafeManager.WPF.Services
 {
-    public class InvoiceServices
+    public class InvoiceServices(IServiceProvider provider)
     {
-        private readonly IServiceProvider _provider;
-        private readonly IUnitOfWork _unitOfWork;
-
-        public InvoiceServices(IServiceProvider provider)
-        {
-            _provider = provider;
-            _unitOfWork = provider.GetRequiredService<IUnitOfWork>();
-        }
+        private readonly IServiceProvider _provider = provider;
+        private readonly IUnitOfWork _unitOfWork = provider.GetRequiredService<IUnitOfWork>();
 
         // Hàm load tất cả bill
         public async Task<IEnumerable<Invoice>> GetListInvoices()
@@ -67,15 +56,15 @@ namespace CafeManager.WPF.Services
             return res;
         }
 
-        public Invoice? UpdateInvoice(Invoice invoice)
+        public async Task<Invoice?> UpdateInvoice(Invoice invoice)
         {
             try
             {
-                var res = _unitOfWork.InvoiceList.Update(invoice);
-                if (res != null)
-                {
-                    _unitOfWork.Complete();
-                }
+                await _unitOfWork.BeginTransactionAsync();
+                var res = await _unitOfWork.InvoiceList.Update(invoice);
+                _unitOfWork.Complete();
+                _unitOfWork.ClearChangeTracker();
+                await _unitOfWork.CommitTransactionAsync();
                 return res;
             }
             catch (Exception)
@@ -105,14 +94,14 @@ namespace CafeManager.WPF.Services
         public decimal? CaculateTotalPriceFromInvoiceDetail(IEnumerable<Invoicedetail>? invoicedetail)
         {
             return invoicedetail?.Sum(x =>
-            {
-                decimal? discountInvoice = (100 - x.Invoice.Discountinvoice) / 100;
-                decimal? foodPrice = x.Food.Price;
-                decimal? foodDiscount = (100 - x.Food.Discountfood) / 100;
-                decimal? quantity = x.Quantity;
+                                                                                                                   {
+                                                                                                                       decimal? discountInvoice = (100 - x.Invoice.Discountinvoice) / 100;
+                                                                                                                       decimal? foodPrice = x.Food.Price;
+                                                                                                                       decimal? foodDiscount = (100 - x.Food.Discountfood) / 100;
+                                                                                                                       decimal? quantity = x.Quantity;
 
-                return discountInvoice * foodDiscount * foodPrice * quantity;
-            }) ?? decimal.Zero;
+                                                                                                                       return discountInvoice * foodDiscount * foodPrice * quantity;
+                                                                                                                   }) ?? decimal.Zero;
         }
 
         public async Task<decimal?> GetTotalPriceFromAllInvoices()

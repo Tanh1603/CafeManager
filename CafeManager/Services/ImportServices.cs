@@ -13,16 +13,10 @@ using static System.Windows.Forms.VisualStyles.VisualStyleElement.ListView;
 
 namespace CafeManager.WPF.Services
 {
-    public class ImportServices
+    public class ImportServices(IServiceProvider provider)
     {
-        private readonly IServiceProvider _provider;
-        private readonly IUnitOfWork _unitOfWork;
-
-        public ImportServices(IServiceProvider provider)
-        {
-            _provider = provider;
-            _unitOfWork = provider.GetRequiredService<IUnitOfWork>();
-        }
+        private readonly IServiceProvider _provider = provider;
+        private readonly IUnitOfWork _unitOfWork = provider.GetRequiredService<IUnitOfWork>();
 
         public async Task<IEnumerable<Import>?> GetListImport()
         {
@@ -58,7 +52,6 @@ namespace CafeManager.WPF.Services
         //        });
         //    return res;
         //}
-
 
         public async Task<IEnumerable<ImportMaterialDetailDTO>?> GetListImportDetailByImportId(int id)
         {
@@ -138,7 +131,7 @@ namespace CafeManager.WPF.Services
                                              m.Manufacturedate == detail.Manufacturedate &&
                                              m.Expirationdate == detail.Expirationdate &&
                                              m.Price == detail.Price);
-                    if(existing == null)
+                    if (existing == null)
                     {
                         newMaterialSupplier = await _unitOfWork.MaterialSupplierList.Create(
                             new Materialsupplier
@@ -196,7 +189,8 @@ namespace CafeManager.WPF.Services
 
                 if (updateImportDetails != null)
                 {
-                    foreach (var x in updateImportDetails) {
+                    foreach (var x in updateImportDetails)
+                    {
                         if (x.Importdetailid == 0)
                         {
                             await _unitOfWork.ImportDetailList.Create(new()
@@ -270,7 +264,7 @@ namespace CafeManager.WPF.Services
                 }
                 await _unitOfWork.CompleteAsync();
                 await _unitOfWork.CommitTransactionAsync();
-                return res;
+                return await res;
             }
             catch (Exception)
             {

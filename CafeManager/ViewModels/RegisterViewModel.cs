@@ -73,7 +73,7 @@ namespace CafeManager.WPF.ViewModels
             {
                 if (VertificationCode == _appUserServices.VerificationCode)
                 {
-                    Appuser appuser = new Appuser()
+                    Appuser appuser = new()
                     {
                         Username = this.Username,
                         Displayname = this.Displayname,

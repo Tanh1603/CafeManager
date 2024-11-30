@@ -27,6 +27,7 @@
                 <ResourceDictionary Source="Styles/DataGrid.xaml" />
                 <ResourceDictionary Source="Styles/TabControl.xaml" />
                 <ResourceDictionary Source="Styles/ComboBox.xaml" />
+                <ResourceDictionary Source="Styles/ListView.xaml" />
 
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>

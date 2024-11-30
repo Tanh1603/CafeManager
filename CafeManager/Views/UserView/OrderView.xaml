@@ -8,15 +8,19 @@
     xmlns:local="clr-namespace:CafeManager.WPF.Views.UserView"
     xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:uc="clr-namespace:CafeManager.WPF.Assets.UsersControls"
+    Name="orderview"
     mc:Ignorable="d">
     <UserControl.Resources>
         <converter:CurrencyConverter x:Key="CurrencyConverter" />
+        <converter:ResponsiveWidthConverter x:Key="ResponsiveWidthConverter" />
+        <converter:TabWidthConverter x:Key="TabWidthConverter" />
     </UserControl.Resources>
 
     <Grid>
 
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="1.5*" />
+            <ColumnDefinition Width="1.3*" />
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
 
@@ -24,261 +28,207 @@
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
 
-        <materialDesign:Card Grid.Column="0" UniformCornerRadius="10">
-            <TabControl
-                HorizontalContentAlignment="Left"
-                Background="Transparent"
-                Style="{StaticResource MaterialDesignFilledTabControl}">
-                <TabItem Header="Bàn">
-                    <ScrollViewer HorizontalScrollBarVisibility="Hidden" VerticalScrollBarVisibility="Auto">
-                        <ItemsControl ItemsSource="{Binding ListCoffeeTableDTO}">
-                            <ItemsControl.ItemsPanel>
-                                <ItemsPanelTemplate>
-                                    <WrapPanel MaxWidth="620" Orientation="Horizontal" />
-                                </ItemsPanelTemplate>
-                            </ItemsControl.ItemsPanel>
-                            <ItemsControl.ItemTemplate>
-                                <DataTemplate>
-                                    <Border
-                                        Margin="10"
-                                        BorderBrush="Wheat"
-                                        BorderThickness="2"
-                                        CornerRadius="10">
-                                        <i:Interaction.Triggers>
-                                            <i:EventTrigger EventName="MouseLeftButtonDown">
-                                                <i:InvokeCommandAction Command="{Binding DataContext.ChooseTableCommand, RelativeSource={RelativeSource AncestorType=local:OrderView}}" CommandParameter="{Binding}" />
-                                            </i:EventTrigger>
-                                        </i:Interaction.Triggers>
+        <Grid Grid.Column="0" HorizontalAlignment="Center">
+            <Border CornerRadius="5">
+                <Border.Background>
+                    <LinearGradientBrush StartPoint="0,0.5" EndPoint="1,0.5">
+                        <GradientStop Offset="1" Color="#fee3d4" />
+                        <GradientStop Offset="0" Color="#f2ccb7" />
+                    </LinearGradientBrush>
+                </Border.Background>
+                <TabControl VerticalAlignment="Top">
+                    <TabControl.ItemContainerStyle>
+                        <Style TargetType="TabItem">
+                            <Setter Property="Width">
+                                <Setter.Value>
+                                    <MultiBinding Converter="{StaticResource TabWidthConverter}">
 
-                                        <Grid Background="Transparent">
-                                            <Grid.RowDefinitions>
-                                                <RowDefinition Height="*" />
-                                                <RowDefinition Height="auto" />
-                                            </Grid.RowDefinitions>
+                                        <Binding
+                                            Path="ActualWidth"
+                                            PresentationTraceSources.TraceLevel="High"
+                                            RelativeSource="{RelativeSource AncestorType=TabControl}" />
 
-                                            <Border
-                                                Grid.Row="0"
-                                                Grid.Column="0"
-                                                Width="130"
-                                                Height="110"
-                                                CornerRadius="10 10 0 0">
-                                                <Border.Background>
-                                                    <ImageBrush
-                                                        ImageSource="/Assets/Images/coffee.png"
-                                                        RenderOptions.BitmapScalingMode="HighQuality"
-                                                        Stretch="Uniform" />
-                                                </Border.Background>
-                                            </Border>
-                                            <TextBlock
-                                                Grid.Row="1"
-                                                Margin="5,0,0,0"
-                                                HorizontalAlignment="Center"
-                                                VerticalAlignment="Center"
-                                                FontSize="16"
-                                                Text="{Binding TableName}" />
-                                        </Grid>
-                                    </Border>
-                                </DataTemplate>
-                            </ItemsControl.ItemTemplate>
-                        </ItemsControl>
-                    </ScrollViewer>
-                </TabItem>
-                <TabItem Header="Menu">
-                    <Grid Margin="10">
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="auto" />
-                            <RowDefinition Height="*" />
-                        </Grid.RowDefinitions>
-                        <StackPanel Grid.Row="0" Orientation="Horizontal">
-                            <TextBlock
-                                VerticalAlignment="Center"
-                                FontSize="16"
-                                Text="Danh mục món ăn:   " />
-                            <ComboBox
-                                Name="cbFoodCategory"
-                                Width="150"
-                                ItemsSource="{Binding ListFoodCategoryDTO}"
-                                SelectedItem="{Binding SelectedFoodCategory}"
-                                Style="{StaticResource MaterialDesignOutlinedComboBox}">
-                                <i:Interaction.Triggers>
-                                    <i:EventTrigger EventName="SelectionChanged">
-                                        <i:InvokeCommandAction Command="{Binding DataContext.SeletedFoodCategoryChangedCommand, RelativeSource={RelativeSource AncestorType=local:OrderView}}" CommandParameter="{Binding ElementName=cbFoodCategory, Path=SelectedItem}" />
-                                    </i:EventTrigger>
-                                </i:Interaction.Triggers>
-                                <ComboBox.ItemTemplate>
-                                    <DataTemplate>
-                                        <TextBlock FontSize="14" Text="{Binding Foodcategoryname}" />
-                                    </DataTemplate>
-                                </ComboBox.ItemTemplate>
-                            </ComboBox>
-                        </StackPanel>
-                        <ScrollViewer
-                            Grid.Row="1"
-                            HorizontalScrollBarVisibility="Hidden"
-                            VerticalScrollBarVisibility="Auto">
-                            <ItemsControl Height="auto" ItemsSource="{Binding ListFoodDTO}">
+                                        <Binding Path="Items.Count" RelativeSource="{RelativeSource AncestorType=TabControl}" />
+                                    </MultiBinding>
+                                </Setter.Value>
+                            </Setter>
+                        </Style>
+                    </TabControl.ItemContainerStyle>
+
+                    <TabItem Header="Bàn" Style="{StaticResource tabItemStyle}">
+                        <Grid Margin="10">
+
+                            <ScrollViewer HorizontalScrollBarVisibility="Hidden" VerticalScrollBarVisibility="Auto">
+                                <ItemsControl ItemsSource="{Binding ListCoffeeTableDTO}">
+                                    <ItemsControl.ItemsPanel>
+                                        <ItemsPanelTemplate>
+                                            <WrapPanel Width="1200" MinWidth="800" />
+                                        </ItemsPanelTemplate>
+                                    </ItemsControl.ItemsPanel>
+                                    <ItemsControl.ItemTemplate>
+                                        <DataTemplate>
+                                            <uc:InfoTable
+                                            Margin="0 10 10 0"
+                                            IsButtonVisible="False"
+                                            Text="{Binding TableName}">
+                                                <i:Interaction.Triggers>
+                                                    <i:EventTrigger EventName="MouseLeftButtonDown">
+                                                        <i:InvokeCommandAction Command="{Binding DataContext.ChooseTableCommand, RelativeSource={RelativeSource AncestorType=local:OrderView}}" CommandParameter="{Binding}" />
+                                                    </i:EventTrigger>
+                                                </i:Interaction.Triggers>
+                                            </uc:InfoTable>
+                                        </DataTemplate>
+                                    </ItemsControl.ItemTemplate>
+                                </ItemsControl>
+                            </ScrollViewer>
+                        </Grid>
+                    </TabItem>
+                    <TabItem Header="Menu" Style="{StaticResource tabItemStyle}">
+                        <Grid Margin="10">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="auto" />
+                                <RowDefinition Height="*" />
+                            </Grid.RowDefinitions>
+                            <StackPanel Grid.Row="0" Orientation="Horizontal">
+
+                                <ComboBox
+                                    Name="cbFoodCategory"
+                                    Grid.Column="0"
+                                    MinWidth="180"
+                                    MinHeight="35"
+                                    FontWeight="Bold"
+                                    ItemsSource="{Binding ListFoodCategoryDTO}"
+                                    SelectedItem="{Binding SelectedFoodCategory}"
+                                    Style="{StaticResource ComboBoxStyle}"
+                                    Tag="--Danh mục thực đơn--">
+
+                                    <i:Interaction.Triggers>
+                                        <i:EventTrigger EventName="SelectionChanged">
+                                            <i:InvokeCommandAction Command="{Binding DataContext.SeletedFoodCategoryChangedCommand, RelativeSource={RelativeSource AncestorType=local:OrderView}}" CommandParameter="{Binding ElementName=cbFoodCategory, Path=SelectedItem}" />
+                                        </i:EventTrigger>
+                                    </i:Interaction.Triggers>
+                                    <ComboBox.ItemContainerStyle>
+                                        <Style BasedOn="{StaticResource ComboBoxItemStyle}" TargetType="ComboBoxItem">
+                                            <Setter Property="Width" Value="{Binding ActualWidth, ElementName=cbFoodCategory}" />
+                                            <Setter Property="Height" Value="{Binding ActualHeight, ElementName=cbFoodCategory}" />
+                                        </Style>
+                                    </ComboBox.ItemContainerStyle>
+                                    <ComboBox.ItemTemplate>
+
+                                        <DataTemplate>
+
+                                            <TextBlock Text="{Binding Foodcategoryname}" TextWrapping="Wrap" />
+                                        </DataTemplate>
+                                    </ComboBox.ItemTemplate>
+                                </ComboBox>
+                            </StackPanel>
+                            <ScrollViewer
+                                Grid.Row="1"
+                                HorizontalScrollBarVisibility="Hidden"
+                                VerticalScrollBarVisibility="Auto">
+                                <ItemsControl Height="auto" ItemsSource="{Binding ListFoodDTO}">
+                                    <ItemsControl.ItemsPanel>
+                                        <ItemsPanelTemplate>
+                                            <WrapPanel Width="1200" MinWidth="800" />
+                                        </ItemsPanelTemplate>
+                                    </ItemsControl.ItemsPanel>
+                                    <ItemsControl.ItemTemplate>
+                                        <DataTemplate>
+
+                                            <uc:InfoFood
+                                                Margin="0,10,10,0"
+                                                Discountfood="{Binding Discountfood}"
+                                                IsButtonVisible="False"
+                                                Isdeleted="{Binding Isdeleted}"
+                                                Price="{Binding Price}"
+                                                SourceImage="{Binding Imagefood, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
+                                                Text="{Binding Foodname}">
+                                                <i:Interaction.Triggers>
+                                                    <i:EventTrigger EventName="MouseLeftButtonDown">
+                                                        <i:InvokeCommandAction Command="{Binding DataContext.ChooseFoodCommand, RelativeSource={RelativeSource AncestorType=local:OrderView}}" CommandParameter="{Binding}" />
+                                                    </i:EventTrigger>
+                                                </i:Interaction.Triggers>
+                                            </uc:InfoFood>
+                                        </DataTemplate>
+                                    </ItemsControl.ItemTemplate>
+                                </ItemsControl>
+                            </ScrollViewer>
+                        </Grid>
+                    </TabItem>
+                    <TabItem Header="Hóa đơn mang về" Style="{StaticResource tabItemStyle}">
+                        <ScrollViewer HorizontalScrollBarVisibility="Hidden" VerticalScrollBarVisibility="Auto">
+                            <ItemsControl ItemsSource="{Binding ListCustomerInvoiceDTO}">
                                 <ItemsControl.ItemsPanel>
                                     <ItemsPanelTemplate>
-                                        <WrapPanel MaxWidth="800" Orientation="Horizontal" />
+                                        <WrapPanel Width="1200" MinWidth="800" />
                                     </ItemsPanelTemplate>
                                 </ItemsControl.ItemsPanel>
                                 <ItemsControl.ItemTemplate>
                                     <DataTemplate>
-                                        <Border
-                                            Margin="10"
-                                            BorderBrush="Wheat"
-                                            BorderThickness="2"
-                                            CornerRadius="10">
+
+                                        <uc:InvoiceOrder Margin="10" Text="{Binding InvoiceCustomerId, Mode=OneWay}">
                                             <i:Interaction.Triggers>
                                                 <i:EventTrigger EventName="MouseLeftButtonDown">
-                                                    <i:InvokeCommandAction Command="{Binding DataContext.ChooseFoodCommand, RelativeSource={RelativeSource AncestorType=local:OrderView}}" CommandParameter="{Binding}" />
+                                                    <i:InvokeCommandAction Command="{Binding DataContext.ShowSelectedInvoiceCustomerCommand, RelativeSource={RelativeSource AncestorType=local:OrderView}}" CommandParameter="{Binding}" />
                                                 </i:EventTrigger>
                                             </i:Interaction.Triggers>
-
-                                            <Grid>
-                                                <Grid Background="Transparent">
-                                                    <Grid.RowDefinitions>
-                                                        <RowDefinition Height="*" />
-                                                        <RowDefinition Height="auto" />
-                                                        <RowDefinition Height="auto" />
-                                                    </Grid.RowDefinitions>
-                                                    <Border
-                                                        Width="165"
-                                                        Height="100"
-                                                        BorderBrush="Black"
-                                                        BorderThickness="2"
-                                                        CornerRadius="10,10,0,0">
-                                                        <Border.Background>
-                                                            <ImageBrush ImageSource="{Binding Imagefood}" Stretch="UniformToFill" />
-                                                        </Border.Background>
-                                                    </Border>
-
-                                                    <StackPanel Grid.Row="1">
-                                                        <TextBlock
-                                                            Margin="5,0,0,0"
-                                                            HorizontalAlignment="Left"
-                                                            VerticalAlignment="Center"
-                                                            FontSize="16"
-                                                            Text="{Binding Foodname}" />
-                                                        <TextBlock
-                                                            Margin="5,0,0,0"
-                                                            HorizontalAlignment="Left"
-                                                            VerticalAlignment="Center"
-                                                            FontSize="16"
-                                                            Text="{Binding Price}" />
-                                                    </StackPanel>
-                                                </Grid>
-
-                                                <StackPanel
-                                                    HorizontalAlignment="Right"
-                                                    VerticalAlignment="Top"
-                                                    Background="Yellow"
-                                                    Orientation="Horizontal">
-                                                    <TextBlock FontSize="14" Text="Giảm giá:  " />
-                                                    <TextBlock FontSize="14" Text="{Binding Discountfood, StringFormat={}{0:0}%}" />
-                                                </StackPanel>
-                                            </Grid>
-                                        </Border>
+                                        </uc:InvoiceOrder>
                                     </DataTemplate>
                                 </ItemsControl.ItemTemplate>
                             </ItemsControl>
                         </ScrollViewer>
-                    </Grid>
-                </TabItem>
-                <TabItem Header="Hóa đơn mang về">
-                    <ScrollViewer HorizontalScrollBarVisibility="Hidden" VerticalScrollBarVisibility="Auto">
-                        <ItemsControl ItemsSource="{Binding ListCustomerInvoiceDTO}">
-                            <ItemsControl.ItemsPanel>
-                                <ItemsPanelTemplate>
-                                    <WrapPanel MaxWidth="800" Orientation="Horizontal" />
-                                </ItemsPanelTemplate>
-                            </ItemsControl.ItemsPanel>
-                            <ItemsControl.ItemTemplate>
-                                <DataTemplate>
-                                    <Border
-                                        Margin="10"
-                                        BorderBrush="Wheat"
-                                        BorderThickness="2"
-                                        CornerRadius="10">
-                                        <i:Interaction.Triggers>
-                                            <i:EventTrigger EventName="MouseLeftButtonDown">
-                                                <i:InvokeCommandAction Command="{Binding DataContext.ShowSelectedInvoiceCustomerCommand, RelativeSource={RelativeSource AncestorType=local:OrderView}}" CommandParameter="{Binding}" />
-                                            </i:EventTrigger>
-                                        </i:Interaction.Triggers>
-                                        <Grid>
+                    </TabItem>
+                </TabControl>
+            </Border>
+        </Grid>
 
-                                            <Grid.RowDefinitions>
-                                                <RowDefinition Height="*" />
-                                                <RowDefinition Height="auto" />
-                                            </Grid.RowDefinitions>
-
-                                            <Grid Grid.Column="0">
-                                                <materialDesign:PackIcon
-                                                    MinWidth="150"
-                                                    MinHeight="100"
-                                                    Background="Transparent"
-                                                    IsHitTestVisible="False"
-                                                    Kind="InvoiceTextEditOutline" />
-                                            </Grid>
-
-                                            <TextBlock
-                                                    Grid.Row="1" Margin="10"
-                                                    HorizontalAlignment="Left"
-                                                    VerticalAlignment="Center"
-                                                    FontSize="16"
-                                                    Text="{Binding InvoiceCustomerId, Mode=OneWay}" />
-                                        </Grid>
-                                    </Border>
-                                </DataTemplate>
-                            </ItemsControl.ItemTemplate>
-                        </ItemsControl>
-                    </ScrollViewer>
-                </TabItem>
-            </TabControl>
-        </materialDesign:Card>
-
-        <materialDesign:Card
+        <Grid
             Grid.Column="1"
             Margin="10,0,0,0"
-            UniformCornerRadius="10">
-            <Grid>
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="auto" />
-                    <RowDefinition Height="*" />
-                </Grid.RowDefinitions>
-
-                <materialDesign:Card
-                    Grid.Row="0"
-                    Height="50"
-                    Background="#906457">
-                    <TextBlock
-                        HorizontalAlignment="Center"
-                        VerticalAlignment="Center"
-                        FontSize="16"
-                        FontWeight="Bold"
-                        Foreground="White"
-                        Text="Chi tiết hóa đơn" />
-                </materialDesign:Card>
-                <Grid Grid.Row="1" Margin="10">
+            HorizontalAlignment="Stretch">
+            <Border CornerRadius="5">
+                <Border.Background>
+                    <LinearGradientBrush StartPoint="0,0.5" EndPoint="1,0.5">
+                        <GradientStop Offset="1" Color="#fee3d4" />
+                        <GradientStop Offset="0" Color="#f2ccb7" />
+                    </LinearGradientBrush>
+                </Border.Background>
+                <Grid>
                     <Grid.RowDefinitions>
+                        <RowDefinition Height="auto" />
                         <RowDefinition Height="auto" />
                         <RowDefinition Height="*" />
                         <RowDefinition Height="auto" />
                         <RowDefinition Height="auto" />
                     </Grid.RowDefinitions>
 
-                    <Grid Grid.Row="0">
+                    <Border
+                        Grid.Row="0"
+                        Padding="20"
+                        Background="#66171a"
+                        CornerRadius="5">
+
+                        <TextBlock
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Center"
+                            FontSize="16"
+                            FontWeight="Bold"
+                            Foreground="#dedede"
+                            Text="Chi tiết hóa đơn" />
+                    </Border>
+                    <Grid Grid.Row="1" Margin="10">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="auto" />
                             <ColumnDefinition Width="auto" />
-                            <ColumnDefinition Width="auto" />
+                            <ColumnDefinition Width="*" />
                         </Grid.ColumnDefinitions>
-
                         <Border
                             Grid.Column="0"
                             MinWidth="100"
-                            BorderBrush="SandyBrown"
-                            BorderThickness="2"
+                            Padding="5"
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Stretch"
+                            Background="#d5b096"
                             CornerRadius="5">
                             <StackPanel>
                                 <StackPanel Grid.Column="0" Orientation="Horizontal">
@@ -296,15 +246,20 @@
                                     <materialDesign:PackIcon
                                         Width="30"
                                         Height="30"
+                                        VerticalAlignment="Center"
                                         Kind="TableFurniture" />
                                     <TextBlock
-                                        Margin="5,0,0,0"
+                                        Margin="5,0,5,0"
                                         VerticalAlignment="Center"
                                         FontSize="20"
                                         Text="{Binding SelectedInvoiceDTO.Coffeetable.TableName}" />
                                 </StackPanel>
 
-                                <StackPanel Grid.Column="0" Orientation="Horizontal">
+                                <StackPanel
+                                    Grid.Column="0"
+                                    HorizontalAlignment="Center"
+                                    VerticalAlignment="Center"
+                                    Orientation="Horizontal">
                                     <StackPanel.Style>
                                         <Style TargetType="StackPanel">
                                             <Setter Property="Visibility" Value="Collapsed" />
@@ -319,59 +274,112 @@
                                     <materialDesign:PackIcon
                                         Width="30"
                                         Height="30"
+                                        VerticalAlignment="Center"
                                         Kind="InvoiceTextEdit" />
                                     <TextBlock
-                                        Margin="5,0,0,0"
+                                        Margin="5,0,5,0"
                                         VerticalAlignment="Center"
-                                        FontSize="20"
+                                        FontSize="16"
+                                        FontWeight="Bold"
+                                        Foreground="#844418"
                                         Text="{Binding SelectedInvoiceDTO.InvoiceCustomerId}" />
                                 </StackPanel>
                             </StackPanel>
                         </Border>
-
-                        <StackPanel Grid.Column="2" VerticalAlignment="Center">
-                            <ComboBox
-                                MinWidth="120"
-                                Margin="5,0,0,0"
-                                VerticalAlignment="Center"
-                                materialDesign:HintAssist.Hint="Nhân viên tạo hóa đơn"
-                                FontSize="16"
-                                ItemsSource="{Binding ListStaffDTO}"
-                                SelectedItem="{Binding SelectedStaffDTO}">
-                                <ComboBox.ItemTemplate>
-                                    <DataTemplate>
-                                        <TextBlock
-                                            VerticalAlignment="Center"
-                                            FontSize="14"
-                                            Text="{Binding Staffname}" />
-                                    </DataTemplate>
-                                </ComboBox.ItemTemplate>
-                            </ComboBox>
-                        </StackPanel>
-
                         <Button
                             Grid.Column="1"
-                            MinWidth="150"
+                            MinWidth="140"
                             Margin="20,0"
                             Command="{Binding CreateTakeAwayInvoiceCommand}"
-                            Content="Mang về" />
+                            Style="{StaticResource confirmInfoButton}">
+                            <StackPanel HorizontalAlignment="Center" Orientation="Horizontal">
+                                <materialDesign:PackIcon
+                                    Width="30"
+                                    Height="30"
+                                    VerticalAlignment="Center"
+                                    Kind="PackageDelivered" />
+                                <TextBlock
+                                    Margin="10,0,0,0"
+                                    VerticalAlignment="Center"
+                                    FontSize="16"
+                                    FontWeight="SemiBold"
+                                    Text="Mang về" />
+                            </StackPanel>
+                        </Button>
+                        <Grid Grid.Column="2">
+                            <StackPanel Grid.Column="2" VerticalAlignment="Center">
+                                <ComboBox
+                                    x:Name="cbListStaff"
+                                    MinWidth="120"
+                                    Margin="5,0,0,0"
+                                    VerticalAlignment="Center"
+                                    FontSize="16"
+                                    FontWeight="Bold"
+                                    ItemsSource="{Binding ListStaffDTO}"
+                                    SelectedItem="{Binding SelectedStaffDTO}"
+                                    Style="{StaticResource ComboBoxStyle}"
+                                    Tag="-Nhân viên tạo hóa đơn--">
+                                    <ComboBox.ItemContainerStyle>
+                                        <Style BasedOn="{StaticResource ComboBoxItemStyle}" TargetType="ComboBoxItem">
+                                            <Setter Property="Width" Value="{Binding ActualWidth, ElementName=cbListStaff}" />
+                                            <Setter Property="Height" Value="{Binding ActualHeight, ElementName=cbListStaff}" />
+                                        </Style>
+                                    </ComboBox.ItemContainerStyle>
+                                    <ComboBox.ItemTemplate>
+                                        <DataTemplate>
+                                            <TextBlock
+                                                VerticalAlignment="Center"
+                                                FontSize="14"
+                                                Text="{Binding Staffname}" />
+                                        </DataTemplate>
+                                    </ComboBox.ItemTemplate>
+                                </ComboBox>
+                            </StackPanel>
+                        </Grid>
                     </Grid>
-
                     <Border
-                        Grid.Row="1"
-                        BorderBrush="Wheat"
+                        Grid.Row="2"
+                        Margin="10"
+                        Background="#d5b096"
                         BorderThickness="2"
                         CornerRadius="10">
+                        <Border.BorderBrush>
+                            <LinearGradientBrush>
+                                <GradientStop Offset="0" Color="#c69a5d" />
+                                <GradientStop Offset="0.5" Color="#cb925d" />
+
+                                <GradientStop Offset="1" Color="#d4b096" />
+                            </LinearGradientBrush>
+                        </Border.BorderBrush>
                         <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
                             <ListView HorizontalAlignment="Stretch" ItemsSource="{Binding SelectedInvoiceDTO.Invoicedetails}">
                                 <ListView.View>
                                     <GridView>
-                                        <GridViewColumn DisplayMemberBinding="{Binding Food.Foodname}" Header="Tên món" />
-                                        <GridViewColumn Header="Số lượng">
+
+                                        <GridViewColumn Header="Tên món">
+
                                             <GridViewColumn.CellTemplate>
                                                 <DataTemplate>
                                                     <Grid>
-                                                        <materialDesign:NumericUpDown Minimum="1" Value="{Binding Quantity}">
+                                                        <TextBlock
+                                                            HorizontalAlignment="Center"
+                                                            FontSize="16"
+                                                            Foreground="#faf8f6"
+                                                            Text="{Binding Food.Foodname}" />
+                                                    </Grid>
+                                                </DataTemplate>
+                                            </GridViewColumn.CellTemplate>
+                                        </GridViewColumn>
+                                        <GridViewColumn Header="Số lượng">
+
+                                            <GridViewColumn.CellTemplate>
+
+                                                <DataTemplate>
+                                                    <Grid HorizontalAlignment="Center">
+                                                        <materialDesign:NumericUpDown
+                                                            Foreground="#612e0f"
+                                                            Minimum="1"
+                                                            Value="{Binding Quantity}">
                                                             <materialDesign:NumericUpDown.IncreaseContent>
                                                                 <Border
                                                                     BorderBrush="{DynamicResource MaterialDesign.Brush.Foreground}"
@@ -393,13 +401,22 @@
                                                 </DataTemplate>
                                             </GridViewColumn.CellTemplate>
                                         </GridViewColumn>
-                                        <GridViewColumn DisplayMemberBinding="{Binding Food.PriceDiscount, StringFormat={}{0:00}}" Header="Đơn giá" />
+                                        <GridViewColumn Header="Đơn giá">
+                                            <GridViewColumn.CellTemplate>
+                                                <DataTemplate>
+                                                    <TextBlock
+                                                        HorizontalAlignment="Stretch"
+                                                        Foreground="#612e0f"
+                                                        Text="{Binding Food.PriceDiscount, Converter={StaticResource CurrencyConverter}}" />
+                                                </DataTemplate>
+                                            </GridViewColumn.CellTemplate>
+                                        </GridViewColumn>
                                         <GridViewColumn Header="Options">
                                             <GridViewColumn.CellTemplate>
                                                 <DataTemplate>
                                                     <Button
+                                                        HorizontalAlignment="Center"
                                                         Background="Transparent"
-                                                        BorderBrush="Transparent"
                                                         BorderThickness="0"
                                                         Command="{Binding DataContext.DeleteFoodCommand, RelativeSource={RelativeSource AncestorType=local:OrderView}}"
                                                         CommandParameter="{Binding}">
@@ -413,8 +430,7 @@
                             </ListView>
                         </ScrollViewer>
                     </Border>
-
-                    <Grid Grid.Row="2">
+                    <Grid Grid.Row="3">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="auto" />
                             <ColumnDefinition Width="*" />
@@ -423,12 +439,13 @@
 
                         <StackPanel Grid.Column="0" Margin="10">
                             <TextBlock
-                                VerticalAlignment="Center"
-                                FontSize="16"
+                                Margin="5,0,0,0"
+                                Style="{StaticResource infoText}"
                                 Text="Giảm giá:  " />
                             <TextBox
-                                MinWidth="60"
-                                FontSize="16"
+                                Width="70"
+                                MinWidth="20"
+                                Style="{StaticResource textbox}"
                                 Text="{Binding SelectedInvoiceDTO.Discountinvoice}" />
                         </StackPanel>
 
@@ -436,17 +453,15 @@
                             Grid.Column="1"
                             Margin="10"
                             HorizontalAlignment="Right">
-                            <TextBlock
-                                VerticalAlignment="Center"
-                                FontSize="16"
-                                Text="Phương thức:" />
+                            <TextBlock Style="{StaticResource infoText}" Text="Phương thức:" />
                             <ComboBox
                                 MinWidth="160"
-                                FontSize="16"
                                 IsReadOnly="True"
+                                ItemContainerStyle="{StaticResource ComboBoxItemStyle}"
                                 SelectedIndex="0"
                                 SelectedValue="{Binding SelectedPaymentMethod}"
-                                SelectedValuePath="Content">
+                                SelectedValuePath="Content"
+                                Style="{StaticResource ComboBoxStyle}">
                                 <ComboBoxItem Content="Tiền mặt" />
                                 <ComboBoxItem Content="Chuyển khoản" />
                             </ComboBox>
@@ -456,58 +471,104 @@
                             Grid.Column="2"
                             Margin="10"
                             HorizontalAlignment="Center">
-                            <TextBlock
-                                VerticalAlignment="Center"
-                                FontSize="16"
-                                Text="Thành tiền: " />
+                            <TextBlock Style="{StaticResource infoText}" Text="Thành tiền: " />
                             <TextBox
                                 MinWidth="60"
-                                FontSize="16"
                                 IsReadOnly="True"
+                                Style="{StaticResource textbox}"
                                 Text="{Binding SelectedInvoiceDTO.TotalPrice, Mode=OneWay, Converter={StaticResource CurrencyConverter}}" />
                         </StackPanel>
                     </Grid>
-
-                    <Grid Grid.Row="3">
+                    <Grid Grid.Row="4" Margin="10">
                         <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="auto" />
+                            <ColumnDefinition Width="auto" />
                             <ColumnDefinition Width="*" />
-                            <ColumnDefinition Width="*" />
-                            <ColumnDefinition />
-                            <ColumnDefinition />
+                            <ColumnDefinition Width="auto" />
+                            <ColumnDefinition Width="auto" />
                         </Grid.ColumnDefinitions>
                         <Button
                             Grid.Column="0"
-                            Width="120"
+                            Width="130"
+                            Height="50"
                             HorizontalAlignment="Left"
                             Command="{Binding SwapTableCommand}"
-                            Content="Chuyển bàn" />
-                        <ComboBox
-                            Grid.Column="1"
-                            Width="100"
-                            Height="30"
-                            ItemsSource="{Binding ListCoffeeTableDTO}">
-                            <ComboBox.ItemTemplate>
-                                <DataTemplate>
-                                    <TextBlock
-                                        FontSize="16"
-                                        FontWeight="DemiBold"
-                                        Text="{Binding TableName}" />
-                                </DataTemplate>
-                            </ComboBox.ItemTemplate>
-                        </ComboBox>
-                        <Button
-                            Grid.Column="2"
-                            Width="120"
-                            Command="{Binding CancelInvoicePaymentCommand}"
-                            Content="Hủy hóa đơn" />
+                            Style="{StaticResource confirmInfoButton}">
+                            <StackPanel HorizontalAlignment="Center" Orientation="Horizontal">
+                                <materialDesign:PackIcon
+                                    Width="20"
+                                    Height="20"
+                                    VerticalAlignment="Center"
+                                    Kind="SwapHorizontalBold" />
+                                <TextBlock
+                                    Margin="5,0,5,0"
+                                    VerticalAlignment="Center"
+                                    FontSize="16"
+                                    FontWeight="SemiBold"
+                                    Text="Chuyển bàn" />
+                            </StackPanel>
+                        </Button>
+                        <Grid Grid.Column="1">
+
+                            <ComboBox
+                                Width="100"
+                                ItemContainerStyle="{StaticResource ComboBoxItemStyle}"
+                                Style="{StaticResource ComboBoxStyle}">
+                                ItemsSource="{Binding ListCoffeeTableDTO}">
+                                <ComboBox.ItemTemplate>
+                                    <DataTemplate>
+                                        <TextBlock
+                                            FontSize="16"
+                                            FontWeight="DemiBold"
+                                            Text="{Binding TableName}" />
+                                    </DataTemplate>
+                                </ComboBox.ItemTemplate>
+                            </ComboBox>
+                        </Grid>
                         <Button
                             Grid.Column="3"
-                            Width="120"
+                            Width="140"
+                            Height="50"
+                            Command="{Binding CancelInvoicePaymentCommand}"
+                            Style="{StaticResource confirmInfoButton}">
+                            <StackPanel HorizontalAlignment="Center" Orientation="Horizontal">
+                                <materialDesign:PackIcon
+                                    Width="20"
+                                    Height="20"
+                                    VerticalAlignment="Center"
+                                    Kind="Trash" />
+                                <TextBlock
+                                    Margin="5,0,5,0"
+                                    VerticalAlignment="Center"
+                                    FontSize="16"
+                                    FontWeight="SemiBold"
+                                    Text="Hủy hóa đơn" />
+                            </StackPanel>
+                        </Button>
+                        <Button
+                            Grid.Column="4"
+                            Width="130"
+                            Height="50"
+                            Margin="5 0 0 0 "
                             Command="{Binding CompleteInvoicePaymentCommand}"
-                            Content="Thanh toán" />
+                            Style="{StaticResource confirmInfoButton}">
+                            <StackPanel HorizontalAlignment="Center" Orientation="Horizontal">
+                                <materialDesign:PackIcon
+                                    Width="20"
+                                    Height="20"
+                                    VerticalAlignment="Center"
+                                    Kind="Payment" />
+                                <TextBlock
+                                    Margin="5,0,5,0"
+                                    VerticalAlignment="Center"
+                                    FontSize="16"
+                                    FontWeight="SemiBold"
+                                    Text="Thanh toán" />
+                            </StackPanel>
+                        </Button>
                     </Grid>
                 </Grid>
-            </Grid>
-        </materialDesign:Card>
+            </Border>
+        </Grid>
     </Grid>
 </UserControl>

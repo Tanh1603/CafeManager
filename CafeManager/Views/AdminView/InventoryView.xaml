@@ -2,6 +2,8 @@
     x:Class="CafeManager.WPF.Views.AdminView.InventoryView"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:addview="clr-namespace:CafeManager.WPF.Views.AddUpdateView"
+    xmlns:adminviews="clr-namespace:CafeManager.WPF.Views.AdminView"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:fa="http://schemas.awesome.incremented/wpf/xaml/fontawesome.sharp"
     xmlns:local="clr-namespace:CafeManager.WPF.Views.AdminView"
@@ -12,12 +14,16 @@
     xmlns:service="clr-namespace:CafeManager.WPF.Services.Converter"
     xmlns:uc="clr-namespace:CafeManager.WPF.Assets.UsersControls"
     xmlns:view="clr-namespace:CafeManager.WPF.Views"
+    xmlns:vm="clr-namespace:CafeManager.WPF.ViewModels.AddViewModel"
     d:DesignHeight="450"
     d:DesignWidth="800"
     mc:Ignorable="d">
     <UserControl.Resources>
         <BooleanToVisibilityConverter x:Key="BoolToVis" />
         <service:RowIndexConverter x:Key="RowIndexConverter" />
+        <DataTemplate DataType="{x:Type vm:AddMaterialViewModel}">
+            <addview:AddMaterialView />
+        </DataTemplate>
     </UserControl.Resources>
 
     <Grid>
@@ -80,6 +86,152 @@
                     VerticalAlignment="Center"
                     Foreground="#d5b096"
                     Kind="Magnify" />
+            </Grid>
+
+            <Grid
+                Grid.Row="1"
+                Margin="10,10,0,10"
+                HorizontalAlignment="Left">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+
+                <Button
+                    Width="15"
+                    Height="15"
+                    Margin="0,5,10,0"
+                    VerticalAlignment="Center"
+                    Command="{Binding ChangeRoleMaterialCommand}"
+                    Style="{StaticResource closeButton}">
+
+                    <ma:PackIconMaterial
+                        Width="15"
+                        Height="15"
+                        Kind="Repeat"
+                        Style="{StaticResource iconApp}" />
+                </Button>
+
+                <Grid Grid.Column="1" 
+                      Visibility="{Binding IsGetMaterial, Converter={StaticResource BoolToVis}}">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition MinWidth="150" />
+                        <ColumnDefinition Width="auto" />
+                    </Grid.ColumnDefinitions>
+
+                    <ComboBox
+                        Grid.Column="0"
+                        MinWidth="150"
+                        MinHeight="35"
+                        VerticalAlignment="Center"
+                        materialDesign:HintAssist.Hint="Vật liệu"
+                        materialDesign:TextBlockAssist.AutoToolTip="True"
+                        BorderBrush="#602414"
+                        ItemsSource="{Binding ListMaterialDTO}"
+                        SelectedItem="{Binding SelectedMaterial}">
+                        <ComboBox.ItemTemplate>
+                            <DataTemplate>
+                                <Grid>
+                                    <TextBlock
+                                        Margin="0,0,10,0"
+                                        VerticalAlignment="Center"
+                                        Text="{Binding Materialname}"
+                                        TextWrapping="Wrap" />
+                                </Grid>
+                            </DataTemplate>
+                        </ComboBox.ItemTemplate>
+                    </ComboBox>
+
+                    <Button
+                        Grid.Column="1"
+                        Width="60"
+                        Height="35"
+                        Margin="5,0,0,0"
+                        HorizontalAlignment="Left"
+                        Command="{Binding OpenPopupMaterialViewCommand}"
+                        Style="{StaticResource confirmInfoButton}">
+                        <materialDesign:PopupBox
+                            Grid.Row="2"
+                            Margin="4"
+                            IsPopupOpen="{Binding IsOpenPopupMVM, Mode=TwoWay}"
+                            PopupElevation="Dp4"
+                            PopupHorizontalOffset="40"
+                            PopupUniformCornerRadius="10"
+                            StaysOpen="True">
+                            <materialDesign:PopupBox.ToggleContent>
+                                <Button
+                                    HorizontalAlignment="Center"
+                                    VerticalAlignment="Center"
+                                    Background="Transparent"
+                                    Command="{Binding DataContext.OpenPopupMaterialViewCommand, RelativeSource={RelativeSource AncestorType=local:InventoryView}}"
+                                    Style="{StaticResource confirmInfoButton}">
+                                    <materialDesign:PackIcon
+                                        Width="30"
+                                        Height="30"
+                                        Foreground="White"
+                                        Kind="Plus" />
+                                </Button>
+                            </materialDesign:PopupBox.ToggleContent>
+                            <StackPanel>
+                                <Button
+                                    Command="{Binding OpenAddMaterialCommand}"
+                                    Content="Thêm vật liệu"
+                                    Style="{StaticResource confirmInfoButton}" />
+                                <Button
+                                    Command="{Binding DeleteMaterialCommand}"
+                                    Content="Ẩn vật liệu"
+                                    Style="{StaticResource confirmInfoButton}" />
+                                <Button
+                                    Command="{Binding OpenUpdateMaterialCommand}"
+                                    Content="Sửa vật liệu"
+                                    Style="{StaticResource confirmInfoButton}" />
+                            </StackPanel>
+                        </materialDesign:PopupBox>
+                    </Button>
+                </Grid>
+
+                <!--Vật liệu đã ẩn-->
+                <Grid Grid.Column="1" 
+                      Visibility="{Binding IsDeletedMaterial, Converter={StaticResource BoolToVis}}">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition MinWidth="150" />
+                        <ColumnDefinition Width="auto" />
+                    </Grid.ColumnDefinitions>
+
+                    <ComboBox
+                        Grid.Column="0"
+                        MinWidth="150"
+                        MinHeight="35"
+                        VerticalAlignment="Center"
+                        materialDesign:HintAssist.Hint="Vật liệu đã ẩn"
+                        materialDesign:TextBlockAssist.AutoToolTip="True"
+                        BorderBrush="#602414"
+                        ItemsSource="{Binding ListDeletedMaterialDTO}"
+                        SelectedItem="{Binding SelectedMaterial}">
+                        <ComboBox.ItemTemplate>
+                            <DataTemplate>
+                                <Grid>
+                                    <TextBlock
+                                        Margin="0,0,10,0"
+                                        VerticalAlignment="Center"
+                                        Text="{Binding Materialname}"
+                                        TextWrapping="Wrap" />
+                                </Grid>
+                            </DataTemplate>
+                        </ComboBox.ItemTemplate>
+                    </ComboBox>
+
+                    <Button
+                        Grid.Column="1"
+                        Width="60"
+                        Height="35"
+                        Margin="5,0,0,0"
+                        HorizontalAlignment="Left"
+                        Content="Hiển thị"
+                        Command="{Binding RestoreMaterialCommand}"
+                        Style="{StaticResource confirmInfoButton}" />
+
+                </Grid>
             </Grid>
 
             <Border Grid.Row="2">
@@ -160,6 +312,32 @@
                                     CanUserResize="False"
                                     Header="Số lượng sử dụng"
                                     IsReadOnly="True" />
+
+                                <DataGridTemplateColumn
+                                    Width="auto"
+                                    Header="Tùy chỉnh"
+                                    IsReadOnly="True">
+
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <StackPanel Orientation="Horizontal">
+                                                <Button
+                                                    Command="{Binding DataContext.OpenPopup_UpdateCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                                    CommandParameter="{Binding}"
+                                                    Style="{StaticResource gridEditButton}">
+                                                    <ma:PackIconMaterial Kind="PencilOutline" Style="{StaticResource gridButtonIcon}" />
+                                                </Button>
+                                                <Button
+                                                    Margin="5,0,0,0"
+                                                    Command="{Binding DataContext.DeleteConsumedMaterialCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                                    CommandParameter="{Binding}"
+                                                    Style="{StaticResource gridRemoveButton}">
+                                                    <ma:PackIconMaterial Kind="DeleteOutline" Style="{StaticResource gridButtonIcon}" />
+                                                </Button>
+                                            </StackPanel>
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>
                             </DataGrid.Columns>
                         </DataGrid>
                     </TabItem>
@@ -235,26 +413,110 @@
                                     Width="*"
                                     Binding="{Binding TotalQuantity, Mode=OneWay}"
                                     CanUserResize="False"
-                                    Header="Số lượng sử dụng"
+                                    Header="Số lượng"
                                     IsReadOnly="True" />
+
+                                <DataGridTemplateColumn
+                                    Width="auto"
+                                    Header=""
+                                    IsReadOnly="True">
+
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <Button
+                                                Command="{Binding DataContext.OpenPopup_AddCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                                CommandParameter="{Binding}"
+                                                Style="{StaticResource gridEditButton}">
+                                                <ma:PackIconMaterial Kind="Minus" Style="{StaticResource gridButtonIcon}" />
+                                            </Button>
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>
                             </DataGrid.Columns>
                         </DataGrid>
                     </TabItem>
                 </TabControl>
             </Border>
+            <materialDesign:PopupBox
+                Grid.Row="2"
+                Margin="4"
+                HorizontalAlignment="Stretch"
+                VerticalAlignment="Stretch"
+                Background="Transparent"
+                BorderBrush="Transparent"
+                BorderThickness="0"
+                IsPopupOpen="{Binding DataContext.IsPopupOpen, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                PlacementMode="RightAndAlignMiddles"
+                PopupElevation="Dp4"
+                PopupHorizontalOffset="40"
+                PopupUniformCornerRadius="10"
+                StaysOpen="True"
+                Visibility="Hidden">
+                <materialDesign:PopupBox.PopupContent>
+                    <StackPanel Margin="10,0">
+                        <Button
+                            Width="auto"
+                            Height="auto"
+                            Margin="5,5,5,5"
+                            HorizontalAlignment="Right"
+                            Command="{Binding DataContext.ClosePopupCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                            Style="{StaticResource closeButton}">
+                            <ma:PackIconMaterial Kind="Close" Style="{StaticResource iconApp}" />
+                        </Button>
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="auto" />
+                                <RowDefinition Height="auto" />
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="auto" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+                            <TextBlock
+                                Grid.Row="1"
+                                Style="{StaticResource infoText}"
+                                Text="Số lượng:" />
+                            <uc:infoTextInput
+                                Grid.Row="1"
+                                Grid.Column="1"
+                                MinWidth="140"
+                                Focusable="True"
+                                Text="{Binding DataContext.ModifyConsumedMaterial.Quantity, UpdateSourceTrigger=PropertyChanged, RelativeSource={RelativeSource AncestorType=UserControl}, Mode=TwoWay}" />
+                        </Grid>
+                        <Button
+                            HorizontalAlignment="Right"
+                            VerticalAlignment="Bottom"
+                            Command="{Binding DataContext.SubmitConsumedMaterialCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                            Style="{StaticResource confirmInfoButton}">
+                            <StackPanel HorizontalAlignment="Center" Orientation="Horizontal">
+                                <ma:PackIconMaterial VerticalAlignment="Center" Kind="CheckBold" />
+                                <TextBlock
+                                    Margin="10,0,0,0"
+                                    FontWeight="SemiBold"
+                                    Text="Xác nhận" />
+                            </StackPanel>
+                        </Button>
+                    </StackPanel>
+                </materialDesign:PopupBox.PopupContent>
+            </materialDesign:PopupBox>
         </Grid>
 
-        <!--<materialDesign:DialogHost
-           Background="Transparent"
-           CloseOnClickAway="True"
-           DialogTheme="Inherit"
-           IsOpen="{Binding IsOpenAddSupplier}"
-           OverlayBackground="{DynamicResource PrimaryHueDarkBrush}"
-           Placement="Mouse"
-           Style="{StaticResource MaterialDesignEmbeddedDialogHost}">
+        <materialDesign:DialogHost
+            Grid.ColumnSpan="2"
+            Background="Transparent"
+            DialogTheme="Inherit"
+            IsOpen="{Binding IsOpenAddMaterial}"
+            OverlayBackground="{DynamicResource PrimaryHueDarkBrush}"
+            Style="{StaticResource MaterialDesignEmbeddedDialogHost}">
+
+            <materialDesign:DialogHost.DialogBackground>
+                <SolidColorBrush Color="Transparent" />
+            </materialDesign:DialogHost.DialogBackground>
+
             <materialDesign:DialogHost.DialogContent>
-                <ContentControl Content="{Binding AddSupplierVM}" />
+                <ContentControl Content="{Binding ModifyMaterialVM}" />
             </materialDesign:DialogHost.DialogContent>
-        </materialDesign:DialogHost>-->
+
+        </materialDesign:DialogHost>
     </Grid>
 </UserControl>

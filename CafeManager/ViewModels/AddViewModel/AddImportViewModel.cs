@@ -1,18 +1,31 @@
 ﻿using CafeManager.Core.Data;
 using CafeManager.Core.DTOs;
-using CafeManager.WPF.MessageBox;
 using CafeManager.WPF.Services;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.Extensions.DependencyInjection;
+using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using CafeManager.WPF.MessageBox;
+using System.Windows.Forms.VisualStyles;
+using System.Diagnostics;
+using System.Windows.Forms;
+using System.Runtime.CompilerServices;
+using AutoMapper;
 
 namespace CafeManager.WPF.ViewModels.AddViewModel
 {
     public partial class AddImportViewModel : ObservableObject
     {
         private readonly IServiceProvider _provider;
+        private readonly ImportDetailServices _importdetailServices;
         private readonly MaterialSupplierServices _materialSupplierServices;
+        public IMapper _mapper;
 
         [ObservableProperty]
         private bool _isOpenAddMaterialSupplier;
@@ -42,8 +55,10 @@ namespace CafeManager.WPF.ViewModels.AddViewModel
             Expirationdate = DateTime.Now,
         };
 
+        private ImportMaterialDetailDTO _updateImportDetail = new();
+
         [ObservableProperty]
-        private decimal _importPrice;
+        private decimal _importPrice = 0;
 
         [ObservableProperty]
         private ObservableCollection<ImportMaterialDetailDTO> _currentListImportdetail = [];
@@ -52,10 +67,10 @@ namespace CafeManager.WPF.ViewModels.AddViewModel
         private ObservableCollection<Staff> _listStaff = [];
 
         [ObservableProperty]
-        private ObservableCollection<Supplier> _listSupplier = [];
+        private ObservableCollection<SupplierDTO> _listSupplier = [];
 
         [ObservableProperty]
-        private ObservableCollection<Material> _listMaterial = [];
+        private ObservableCollection<MaterialDTO> _listMaterial = [];
 
         public event Action<Import, List<ImportMaterialDetailDTO>?> ImportChanged;
 
@@ -65,7 +80,7 @@ namespace CafeManager.WPF.ViewModels.AddViewModel
         private object _selectedViewModel;
 
         [ObservableProperty]
-        private Material _selectedMaterial = new() { Isdeleted = false };
+        private MaterialDTO _selectedMaterial = new();
 
         [ObservableProperty]
         private AddMaterialViewModel _addMaterialVM;
@@ -76,13 +91,17 @@ namespace CafeManager.WPF.ViewModels.AddViewModel
         public AddImportViewModel(IServiceProvider provider)
         {
             _provider = provider;
+            _importdetailServices = provider.GetRequiredService<ImportDetailServices>();
             _materialSupplierServices = provider.GetRequiredService<MaterialSupplierServices>();
+            _mapper = _provider.GetRequiredService<IMapper>();
 
             AddMaterialVM = _provider.GetRequiredService<AddMaterialViewModel>();
-            AddMaterialVM.AddMaterialChanged += AddMaterialVM_AddMaterialChanged;
+            AddMaterialVM.ModifyMaterialChanged += AddMaterialVM_ModifyMaterialChanged;
             AddMaterialVM.Close += AddMaterialSupplierVM_Close;
 
             AddSupplierVM = _provider.GetRequiredService<AddSuppierViewModel>();
+            AddSupplierVM.ModifySupplierChanged += AddSupplierVM_ModifySupplierChanged;
+            AddSupplierVM.Close += AddMaterialSupplierVM_Close;
         }
 
         public void RecieveImport(Import import)
@@ -107,6 +126,7 @@ namespace CafeManager.WPF.ViewModels.AddViewModel
             };
             SelectedMaterial = new();
             CurrentListImportdetail.Clear();
+            ImportPrice = 0;
         }
 
         [RelayCommand]
@@ -156,39 +176,59 @@ namespace CafeManager.WPF.ViewModels.AddViewModel
             }
             else if (IsUpdatingImportDetail)
             {
-                bool ok = false;
-
-                var find = CurrentListImportdetail.FirstOrDefault(x => x.Importdetailid == CurrentImportDetail.Importdetailid);
-                if (find != null)
+                if (IsAdding)
                 {
-                    find.Materialname = CurrentImportDetail.Materialname;
-                    find.Price = CurrentImportDetail.Price;
-                    find.Original = CurrentImportDetail.Original;
-                    find.Manufacturer = CurrentImportDetail.Manufacturer;
-                    find.Manufacturedate = CurrentImportDetail.Manufacturedate;
-                    find.Expirationdate = CurrentImportDetail.Expirationdate;
-                    find.Quantity = CurrentImportDetail.Quantity;
-                    MyMessageBox.Show("Sửa chi tiết đơn hàng thành công", MyMessageBox.Buttons.OK, MyMessageBox.Icons.Information);
+                    var find = CurrentListImportdetail.FirstOrDefault(x => x.Materialid == _updateImportDetail.Materialid
+                    && x.Price == _updateImportDetail.Price && x.Original == _updateImportDetail.Original
+                    && x.Manufacturer == _updateImportDetail.Manufacturer && x.Manufacturedate == _updateImportDetail.Manufacturedate
+                    && x.Expirationdate == _updateImportDetail.Expirationdate && x.Quantity == _updateImportDetail.Quantity);
+                    if (find != null)
+                    {
+                        find.Materialname = CurrentImportDetail.Materialname;
+                        find.Price = CurrentImportDetail.Price;
+                        find.Original = CurrentImportDetail.Original;
+                        find.Manufacturer = CurrentImportDetail.Manufacturer;
+                        find.Manufacturedate = CurrentImportDetail.Manufacturedate;
+                        find.Expirationdate = CurrentImportDetail.Expirationdate;
+                        find.Quantity = CurrentImportDetail.Quantity;
+                    }
                 }
+                else
+                {
+                    var find = CurrentListImportdetail.FirstOrDefault(x => x.Importdetailid == _updateImportDetail.Importdetailid);
+                    if (find != null)
+                    {
+                        find.Materialname = CurrentImportDetail.Materialname;
+                        find.Price = CurrentImportDetail.Price;
+                        find.Original = CurrentImportDetail.Original;
+                        find.Manufacturer = CurrentImportDetail.Manufacturer;
+                        find.Manufacturedate = CurrentImportDetail.Manufacturedate;
+                        find.Expirationdate = CurrentImportDetail.Expirationdate;
+                        find.Quantity = CurrentImportDetail.Quantity;
+                    }
+                }
+                MyMessageBox.Show("Sửa chi tiết đơn hàng thành công", MyMessageBox.Buttons.OK, MyMessageBox.Icons.Information);
             }
-            CurrentImportDetail = new() { Manufacturedate = DateTime.Now, Expirationdate = DateTime.Now };
-            SelectedMaterial = new();
+            ClearAddImportDetail();
             CurrentListImportdetail = [.. CurrentListImportdetail];
-            IsAddingImportDetail = true;
-            IsUpdatingImportDetail = false;
+            ReloadImportPrice();
         }
 
         [RelayCommand]
-        private void DeleteImportDetail(ImportMaterialDetailDTO importDetail)
+        private async void DeleteImportDetail(ImportMaterialDetailDTO importDetail)
         {
             var res = MyMessageBox.ShowDialog("Bạn có muốn xóa chi tiết đơn hàng này ko", MyMessageBox.Buttons.Yes_No_Cancel, MyMessageBox.Icons.Warning);
             if (res.Equals("1"))
             {
-                CurrentListImportdetail.Remove(importDetail);
-                MyMessageBox.Show("Xoá chi tiết đơn hàng thành công", MyMessageBox.Buttons.OK, MyMessageBox.Icons.Information);
+                var isDeleted = await _importdetailServices.DeleteImportdetail(importDetail);
+                if (isDeleted)
+                {
+                    CurrentListImportdetail.Remove(importDetail);
+                    MyMessageBox.Show("Xoá chi tiết đơn hàng thành công", MyMessageBox.Buttons.OK, MyMessageBox.Icons.Information);
+                }    
+                
             }
-            IsAddingImportDetail = true;
-            IsUpdatingImportDetail = false;
+            ReloadImportPrice();
         }
 
         [RelayCommand]
@@ -196,6 +236,8 @@ namespace CafeManager.WPF.ViewModels.AddViewModel
         {
             IsUpdatingImportDetail = true;
             IsAddingImportDetail = false;
+
+            _updateImportDetail = value;
             CurrentImportDetail = new ImportMaterialDetailDTO
             {
                 Importdetailid = value.Importdetailid,
@@ -216,6 +258,7 @@ namespace CafeManager.WPF.ViewModels.AddViewModel
                 Unit = value.Unit,
                 Isdeleted = value.Isdeleted
             };
+            ReloadImportPrice();
         }
 
         private void AddMaterialSupplierVM_Close()
@@ -224,36 +267,36 @@ namespace CafeManager.WPF.ViewModels.AddViewModel
         }
 
         //Supplier
-        private async void AddSupplierVM_AddSupplierChanged(Supplier obj)
+        private async void AddSupplierVM_ModifySupplierChanged(SupplierDTO obj)
         {
-            try
+            var addSupplier = await _materialSupplierServices.AddSupplier(_mapper.Map<Supplier>(obj));
+            if (addSupplier != null)
             {
+                ListSupplier.Add(_mapper.Map<SupplierDTO>(addSupplier));
+                MyMessageBox.ShowDialog("Thêm nhà cung cấp thành công");
+                AddSupplierVM.ClearValueOfFrom();
                 IsOpenAddMaterialSupplier = false;
-                var addedSupplier = await _materialSupplierServices.AddSupplier(obj);
-                ListSupplier.Add(addedSupplier);
-
-                MyMessageBox.Show("Thêm nhà cung cấp thành công", MyMessageBox.Buttons.OK, MyMessageBox.Icons.Information);
             }
-            catch (InvalidOperationException ex)
+            else
             {
-                MyMessageBox.Show(ex.Message, MyMessageBox.Buttons.OK, MyMessageBox.Icons.Warning);
+                MyMessageBox.Show("Thêm nhà cung cấp thất bại");
             }
         }
 
         //Material
-        private async void AddMaterialVM_AddMaterialChanged(Material obj)
+        private async void AddMaterialVM_ModifyMaterialChanged(MaterialDTO obj)
         {
-            try
+            var addMaterial = await _materialSupplierServices.AddMaterial(_mapper.Map<Material>(obj));
+            if (addMaterial != null)
             {
+                ListMaterial.Add(_mapper.Map<MaterialDTO>(addMaterial));
+                MyMessageBox.ShowDialog("Thêm nhà cung cấp thành công");
+                AddSupplierVM.ClearValueOfFrom();
                 IsOpenAddMaterialSupplier = false;
-                var addedMaterial = await _materialSupplierServices.AddMaterial(obj);
-                ListMaterial.Add(addedMaterial);
-
-                MyMessageBox.Show("Thêm vật liệu cấp thành công", MyMessageBox.Buttons.OK, MyMessageBox.Icons.Information);
             }
-            catch (InvalidOperationException ex)
+            else
             {
-                MyMessageBox.Show(ex.Message, MyMessageBox.Buttons.OK, MyMessageBox.Icons.Warning);
+                MyMessageBox.Show("Thêm nhà cung cấp thất bại");
             }
         }
 
@@ -268,8 +311,7 @@ namespace CafeManager.WPF.ViewModels.AddViewModel
             AddMaterialVM.IsAdding = true;
             AddMaterialVM.IsUpdating = false;
 
-            AddMaterialVM.Materialname = string.Empty;
-            AddMaterialVM.Unit = string.Empty;
+            AddMaterialVM.ModifyMaterial = new();
         }
 
         [RelayCommand]
@@ -288,6 +330,17 @@ namespace CafeManager.WPF.ViewModels.AddViewModel
         private void SubmitModifyImport()
         {
             ImportChanged?.Invoke(ModifyImport, CurrentListImportdetail.ToList());
+
+        }
+
+        [RelayCommand]
+        private void ReloadImportPrice()
+        {
+            ImportPrice = 0;
+            foreach (var item in CurrentListImportdetail)
+            {
+                ImportPrice += item.Price * item.Quantity;
+            }
         }
 
         [RelayCommand]

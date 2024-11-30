@@ -30,13 +30,13 @@ public class MappingProfile : Profile
             .ForMember(dest => dest.TotalQuantity, opt => opt.MapFrom(src =>
                 (src.Material.Importdetails != null
                     ? src.Material.Importdetails
-                        .Where(id => id.Import != null && id.Import.Supplierid == src.Supplier.Supplierid)
+                        .Where(id => id.Isdeleted == false && id.Import != null && id.Import.Supplierid == src.Supplier.Supplierid)
                         .Sum(id => id.Quantity ?? 0)
                     : 0)
                 -
                 (src.Consumedmaterials != null
                     ? src.Consumedmaterials
-                        .Where(cm => cm.Materialsupplierid == src.Materialsupplierid)
+                        .Where(cm => cm.Materialsupplierid == src.Materialsupplierid && cm.Isdeleted == false)
                         .Sum(cm => cm.Quantity ?? 0)
                     : 0)
             ));

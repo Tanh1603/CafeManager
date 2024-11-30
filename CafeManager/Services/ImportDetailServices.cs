@@ -21,7 +21,29 @@ namespace CafeManager.WPF.Services
             _unitOfWork = _provider.GetRequiredService<IUnitOfWork>();
         }
 
-        public async Task AddImportDetailArange(List<MaterialSupplierDTO> materialDetailDTOs, Import import, Material addMaterial, Supplier addSupplier)
+        public async Task<bool> DeleteImportdetail(ImportMaterialDetailDTO importMaterial)
+        {
+            try
+            {
+                await _unitOfWork.BeginTransactionAsync();
+
+                var deleted = await _unitOfWork.ImportDetailList.Delete(importMaterial.Importdetailid);
+                if (deleted == false)
+                {
+                    throw new InvalidOperationException("Lỗi.");
+                }
+                await _unitOfWork.CompleteAsync();
+                await _unitOfWork.CommitTransactionAsync();
+                return deleted;
+            }
+            catch (Exception ex)
+            {
+                await _unitOfWork.RollbackTransactionAsync();
+                throw new InvalidOperationException("Xoá phiếu nhập thất bại.", ex);
+            }
+        }
+
+            public async Task AddImportDetailArange(List<MaterialSupplierDTO> materialDetailDTOs, Import import, Material addMaterial, Supplier addSupplier)
         {
             //try
             //{

@@ -46,8 +46,8 @@ namespace CafeManager.Infrastructure.Repositories
                 foreach (var item in listImporDetailtDeleted)
                 {
                     item.Isdeleted = true;
-                    item.Material.Materialsuppliers
-                        .Where(x => x.Materialid == item.Materialid && x.Supplierid == item.Import.Supplierid).ToList().ForEach(x => x.Isdeleted = true);
+                    //item.Material.Materialsuppliers
+                    //    .Where(x => x.Materialid == item.Materialid && x.Supplierid == item.Import.Supplierid).ToList().ForEach(x => x.Isdeleted = true);
                 }
 
                 var entity = await _cafeManagerContext.Set<Import>().FindAsync(id);

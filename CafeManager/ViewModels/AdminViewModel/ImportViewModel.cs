@@ -14,6 +14,8 @@ using System.Threading.Tasks;
 using CafeManager.WPF.MessageBox;
 using CafeManager.Core.Services;
 using System.Windows.Documents;
+using AutoMapper;
+using System.Windows.Media.Media3D;
 
 namespace CafeManager.WPF.ViewModels.AdminViewModel
 {
@@ -23,6 +25,7 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
         private readonly ImportServices _importServices;
         private readonly MaterialSupplierServices _materialSupplierServices;
         private readonly StaffServices _staffServices;
+        //private IMapper _mapper;
 
         [ObservableProperty]
         private bool _isOpenModifyImportView;
@@ -31,7 +34,7 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
         private AddImportViewModel _modifyImportVM;
 
         [ObservableProperty]
-        private decimal _totalPrice;
+        private decimal _totalPrice = 0;
 
         [ObservableProperty]
         private ObservableCollection<Import> _listImport = [];
@@ -60,23 +63,26 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
         }
         private async Task LoadData()
         {
-            var dbListSupplier = await _materialSupplierServices.GetListSupplier();
-            ModifyImportVM.ListSupplier = new ObservableCollection<Supplier>(dbListSupplier);
+            var list = (await _materialSupplierServices.GetListSupplier()).ToList().Where(x => x.Isdeleted == false);
+            ModifyImportVM.ListSupplier = [.. ModifyImportVM._mapper.Map<List<SupplierDTO>>(list)];
 
-            var dbListMaterial = await _materialSupplierServices.GetListMaterial();
-            ModifyImportVM.ListMaterial = new ObservableCollection<Material>(dbListMaterial);
+            var dbListMaterial = (await _materialSupplierServices.GetListMaterial()).ToList().Where(x => x.Isdeleted == false);
+            ModifyImportVM.ListMaterial = [.. ModifyImportVM._mapper.Map<List<MaterialDTO>>(dbListMaterial)];
 
             var dbListStaff = await _staffServices.GetListStaff();
             ModifyImportVM.ListStaff = new ObservableCollection<Staff>(dbListStaff);
 
             var importList = await _importServices.GetListImport();
             ListImport = new ObservableCollection<Import>(importList);
+
+            TotalPrice = await _importServices.GetTotalImportPrice();
         }
 
         private async Task LoadDetailData(Import import)
         {
             var dbImportMaterailDetails = await _importServices.GetListImportDetailByImportId(import.Importid);
             ModifyImportVM.CurrentListImportdetail = new ObservableCollection<ImportMaterialDetailDTO>(dbImportMaterailDetails);
+            ModifyImportVM.ImportPrice = await _importServices.GetImportPriceById(import.Importid);
         }
 
         private async void ModifyImportVM_ImportChanged(Import import, List<ImportMaterialDetailDTO> importMaterials)
@@ -102,17 +108,18 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
                 {
                     if(import != null)
                     {
-                        Import? updateImport = await _importServices.GetImportById(import.Importid);
-                        if (updateImport != null)
-                        {
-                            updateImport.Deliveryperson = import.Deliveryperson;
-                            updateImport.Phone = import.Phone;
-                            updateImport.Shippingcompany = import.Shippingcompany;
-                            updateImport.Receiveddate = import.Receiveddate;
-                            updateImport.Staffid = import.Staffid;
-                            updateImport.Supplierid = import.Supplierid;
-                            await _importServices.UpdateImport(import, importMaterials);
-                        }
+                        //Import? updateImport = await _importServices.GetImportById(import.Importid);
+                        //if (updateImport != null)
+                        //{
+                        //    updateImport.Deliveryperson = import.Deliveryperson;
+                        //    updateImport.Phone = import.Phone;
+                        //    updateImport.Shippingcompany = import.Shippingcompany;
+                        //    updateImport.Receiveddate = import.Receiveddate;
+                        //    updateImport.Staffid = import.Staffid;
+                        //    updateImport.Supplierid = import.Supplierid;
+                        //    await _importServices.UpdateImport(import, importMaterials);
+                        //}
+                        await _importServices.UpdateImport(import, importMaterials);
                         MyMessageBox.Show("Sửa thông tin phiếu nhập thành công", MyMessageBox.Buttons.OK, MyMessageBox.Icons.Information);
 
                     }
@@ -121,8 +128,8 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
                         MyMessageBox.Show("Sửa thông tin phiếu nhập thất bại", MyMessageBox.Buttons.OK, MyMessageBox.Icons.Error);
                     }
                     IsOpenModifyImportView = false;
-                    ModifyImportVM.ClearValueOfViewModel();
                 }
+                ModifyImportVM.ClearValueOfViewModel();
                 ListImport = [.. ListImport];
             }
             catch
@@ -154,6 +161,7 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
             ModifyImportVM.RecieveImport(import);
             _ = LoadDetailData(import);
             IsOpenModifyImportView = true;
+            //ModifyImportVM.IsAdding = false;
             ModifyImportVM.IsUpdating = true;
             ModifyImportVM.IsAddingImportDetail = true;
         }
@@ -187,97 +195,3 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
         }
     }
 }
-
-
-
-//private void AddImportVM_Close()
-//{
-//    IsOpenAddImportView = false;
-//}
-
-//private async void AddImportVM_UpdateImportChanged(List<MaterialDetailDTO> materialdetailDTOs, Import import, Material material, Supplier supplier)
-//{
-//    try
-//    {
-//        IsOpenAddImport = false;
-//        _importServices.Update(import);
-//        await _importDetailServices.UpdateImportDetailArange(materialdetailDTOs, import, material, supplier);
-//        MyMessageBox.Show("Thay đổi chi tiết phiếu nhập thành công", MyMessageBox.Buttons.OK, MyMessageBox.Icons.Information);
-//    }
-//    catch (InvalidOperationException ex)
-//    {
-//        MyMessageBox.Show(ex.Message, MyMessageBox.Buttons.OK, MyMessageBox.Icons.Warning);
-//    }
-//}
-
-//private async void AddImportVM_AddImportChanged(List<MaterialDetailDTO> materialdetailDTOs, Import addimport, Material addmaterial, Supplier addsupplier)
-//{
-//    try
-//    {
-//        IsOpenAddImport = false;
-//        await _importDetailServices.AddImportDetailArange(materialdetailDTOs, addimport, addmaterial, addsupplier);
-//        ListImport.Add(addimport);
-//        MyMessageBox.Show("Thêm chi tiết phiếu nhập cấp thành công", MyMessageBox.Buttons.OK, MyMessageBox.Icons.Information);
-//    }
-//    catch (InvalidOperationException ex)
-//    {
-//        MyMessageBox.Show(ex.Message, MyMessageBox.Buttons.OK, MyMessageBox.Icons.Warning);
-//    }
-//}
-
-//[RelayCommand]
-//public void OpenAddImport()
-//{
-//    IsOpenAddImport = true;
-//    AddImportVM.IsAdding = true;
-//    AddImportVM.IsUpdating = false;
-
-//    AddImportVM.Deliveryperson = string.Empty;
-//    AddImportVM.Phone = string.Empty;
-//    AddImportVM.Shippingcompany = string.Empty;
-//    AddImportVM.Receiveddate = DateTime.Now;
-
-//    AddImportVM.ManufactureDate = DateTime.Now;
-//    AddImportVM.ExpirationDate = DateTime.Now;
-//    AddImportVM.Original = string.Empty;
-//    AddImportVM.Manufacturer = string.Empty;
-//}
-
-
-//private bool _isUpdateImportChangedRegistered = false;
-
-//[RelayCommand]
-//private void OpenImportDetail (Import selectedImport)
-//{
-//    if (selectedImport != null)
-//    {
-//        IsOpenAddImport = true;
-
-//        AddImportVM.IsAdding = false;
-//        AddImportVM.IsUpdating = true;
-
-//        AddImportVM.HandleImportFromParent(selectedImport);
-
-//        _ = LoadImportDetails(selectedImport.Importid);
-
-//        AddImportVM.IsAdding = false;
-//        AddImportVM.IsUpdating = true;
-//    }
-//}
-
-//[RelayCommand]
-//private async Task DeleteImport(Import import)
-//{
-//    try
-//    {
-//        var isDeleted = await _importServices.DeleteImport(import.Importid);
-//        if (isDeleted)
-//        {
-//            ListImport.Remove(import);
-//        }
-//    }
-//    catch (InvalidOperationException ivd)
-//    {
-//        MyMessageBox.Show(ivd.Message, MyMessageBox.Buttons.OK, MyMessageBox.Icons.Warning);
-//    }
-//}

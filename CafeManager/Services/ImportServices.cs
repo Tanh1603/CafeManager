@@ -55,14 +55,16 @@ namespace CafeManager.WPF.Services
 
         public async Task<IEnumerable<ImportMaterialDetailDTO>?> GetListImportDetailByImportId(int id)
         {
-            var listImport = await _unitOfWork.ImportList.GetAllImportsDetailsByImportIdAsync(id);
+            var listImport = (await _unitOfWork.ImportList.GetAllImportsDetailsByImportIdAsync(id))
+                .Where(x => x.Isdeleted == false);
+
 
             var res = listImport
                 .Select(x =>
                 {
                     // Lấy đối tượng MaterialSupplier đầu tiên phù hợp để tái sử dụng
                     var materialSupplier = x.Material?.Materialsuppliers
-                        .FirstOrDefault(f => f.Supplierid == x.Import.Supplierid && f.Materialid == x.Materialid);
+                        .FirstOrDefault(f => f.Isdeleted == false && f.Supplierid == x.Import.Supplierid && f.Materialid == x.Materialid);
 
                     return new ImportMaterialDetailDTO
                     {
@@ -82,6 +84,56 @@ namespace CafeManager.WPF.Services
 
             return res;
         }
+
+        //public async Task<decimal> GetImportPriceById(int id)
+        //{
+        //    var listImport = (await _unitOfWork.ImportDetailList.GetAll())
+        //        .Where(x => x.Isdeleted == false && x.Importid == id);
+        //    decimal res = 0;
+        //    foreach(var item in listImport)
+        //    {
+        //        var tmp = item.Material.Materialsuppliers.FirstOrDefault(x => x.Supplierid == item.Import.Supplierid && x.Isdeleted == false);
+        //        res += (item.Quantity ?? 0) * (tmp.Price ?? 0);
+        //    }
+        //    return res;
+        //}
+
+        public async Task<decimal> GetImportPriceById(int id)
+        {
+            var listImport = (await _unitOfWork.ImportDetailList.GetAll())
+                .Where(x => x.Isdeleted == false && x.Importid == id);
+            decimal res = 0;
+
+            foreach (var item in listImport)
+            {
+                if (item.Material == null || item.Material.Materialsuppliers == null)
+                    continue; // Bỏ qua nếu Material hoặc Materialsuppliers bằng null
+
+                var tmp = item.Material.Materialsuppliers
+                    .FirstOrDefault(x => x.Supplierid == item.Import.Supplierid && x.Isdeleted == false);
+
+                if (tmp != null) // Kiểm tra tmp không null trước khi sử dụng
+                {
+                    res += (item.Quantity ?? 0) * (tmp.Price ?? 0);
+                }
+            }
+            return res;
+        }
+
+
+        public async Task<decimal> GetTotalImportPrice()
+        {
+            var listImport = await _unitOfWork.ImportList.GetAll();
+            var validImports = listImport.Where(x => x.Isdeleted == false);
+
+            // Thực thi tất cả tác vụ bất đồng bộ và chờ chúng hoàn thành
+            var importPrices = await Task.WhenAll(validImports.Select(import => GetImportPriceById(import.Importid)));
+
+            // Tính tổng
+            return importPrices.Sum();
+        }
+
+
 
         #region Tính toán dữ liệu
 
@@ -263,13 +315,13 @@ namespace CafeManager.WPF.Services
                     }
                 }
                 await _unitOfWork.CompleteAsync();
+                _unitOfWork.ClearChangeTracker();
                 await _unitOfWork.CommitTransactionAsync();
                 return await res;
             }
             catch (Exception)
             {
                 await _unitOfWork.RollbackTransactionAsync();
-                _unitOfWork.ClearChangeTracker();
                 throw new InvalidOperationException("Lỗi khi sửa thông tin nhập hàng");
             }
         }

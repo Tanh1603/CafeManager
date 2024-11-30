@@ -23,6 +23,8 @@ namespace CafeManager.WPF.ViewModels.AddViewModel
 
         public event Action<SupplierDTO>? ModifySupplierChanged;
 
+        public event Action Close;
+
         public AddSuppierViewModel(IServiceProvider provider)
         {
             _provider = provider;
@@ -45,6 +47,12 @@ namespace CafeManager.WPF.ViewModels.AddViewModel
         {
             ModifySupplierChanged?.Invoke(ModifySupplier.Clone());
             ClearValueOfFrom();
+        }
+
+        [RelayCommand]
+        private void CloseUserControl()
+        {
+            Close?.Invoke();
         }
     }
 }

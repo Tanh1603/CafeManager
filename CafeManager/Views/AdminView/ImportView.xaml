@@ -17,7 +17,6 @@
     d:DesignHeight="450"
     d:DesignWidth="800"
     mc:Ignorable="d">
-
     <UserControl.Resources>
         <BooleanToVisibilityConverter x:Key="BoolToVis" />
         <service:RowIndexConverter x:Key="RowIndexConverter" />
@@ -116,7 +115,10 @@
                 </StackPanel>
 
                 <!--  Import Datagrid  -->
-                <ScrollViewer Grid.Row="2" VerticalScrollBarVisibility="Hidden" HorizontalScrollBarVisibility="Auto">
+                <ScrollViewer
+                    Grid.Row="2"
+                    HorizontalScrollBarVisibility="Auto"
+                    VerticalScrollBarVisibility="Hidden">
                     <DataGrid
                         x:Name="ImportsDataGrid"
                         VerticalAlignment="Top"
@@ -206,7 +208,14 @@
             </Grid>
         </Border>
 
-        <materialDesign:DialogHost ClipToBounds="False" IsOpen="{Binding IsOpenModifyImportView}">
+        <materialDesign:DialogHost
+            Background="Transparent"
+            DialogTheme="Inherit"
+            IsOpen="{Binding IsOpenModifyImportView}"
+            OverlayBackground="{DynamicResource PrimaryHueDarkBrush}"
+            Placement="Mouse"
+            Style="{StaticResource MaterialDesignEmbeddedDialogHost}">
+
             <materialDesign:DialogHost.DialogBackground>
                 <SolidColorBrush Color="Transparent" />
             </materialDesign:DialogHost.DialogBackground>

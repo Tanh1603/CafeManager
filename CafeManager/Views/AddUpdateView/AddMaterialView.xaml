@@ -74,12 +74,12 @@
                     Grid.Row="0"
                     Grid.Column="1"
                     Hint="đường, sữa,..."
-                    Text="{Binding Materialname, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" />
+                    Text="{Binding ModifyMaterial.Materialname, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" />
                 <uc:infoTextInput
                     Grid.Row="1"
                     Grid.Column="1"
                     Hint="kg, gói"
-                    Text="{Binding Unit, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" />
+                    Text="{Binding ModifyMaterial.Unit, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" />
             </Grid>
 
             <Button

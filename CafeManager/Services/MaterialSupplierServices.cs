@@ -129,7 +129,7 @@ namespace CafeManager.WPF.Services
 
         public async Task<IEnumerable<Material>> GetListMaterial()
         {
-            return (await _unitOfWork.MaterialList.GetAll()).Where(x => x.Isdeleted == false);
+            return await _unitOfWork.MaterialList.GetAll();
         }
 
         public async Task<Material> AddMaterial(Material material)
@@ -170,7 +170,28 @@ namespace CafeManager.WPF.Services
             catch (Exception ex)
             {
                 await _unitOfWork.RollbackTransactionAsync();
-                throw new InvalidOperationException("Xoá vật liệu liệu thất bại.", ex);
+                throw new InvalidOperationException("Xoá vật liệu thất bại.", ex);
+            }
+        }
+
+        public async Task<Material?> UpdateMaterialById(int id, Material material)
+        {
+            try
+            {
+                await _unitOfWork.BeginTransactionAsync();
+
+                var res = await _unitOfWork.MaterialList.UpdateById(id, material);
+
+                await _unitOfWork.CompleteAsync();
+
+                _unitOfWork.ClearChangeTracker();
+                await _unitOfWork.CommitTransactionAsync();
+                return res;
+            }
+            catch (Exception ex)
+            {
+                await _unitOfWork.RollbackTransactionAsync();
+                throw new InvalidOperationException("Sửa vật liệu thất bại.", ex);
             }
         }
 

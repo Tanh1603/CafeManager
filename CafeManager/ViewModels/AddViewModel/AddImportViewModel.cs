@@ -23,6 +23,7 @@ namespace CafeManager.WPF.ViewModels.AddViewModel
     public partial class AddImportViewModel : ObservableObject
     {
         private readonly IServiceProvider _provider;
+        private readonly ImportDetailServices _importdetailServices;
         private readonly MaterialSupplierServices _materialSupplierServices;
         public IMapper _mapper;
 
@@ -69,7 +70,7 @@ namespace CafeManager.WPF.ViewModels.AddViewModel
         private ObservableCollection<SupplierDTO> _listSupplier = [];
 
         [ObservableProperty]
-        private ObservableCollection<Material> _listMaterial = [];
+        private ObservableCollection<MaterialDTO> _listMaterial = [];
 
         public event Action<Import, List<ImportMaterialDetailDTO>?> ImportChanged;
 
@@ -79,7 +80,7 @@ namespace CafeManager.WPF.ViewModels.AddViewModel
         private object _selectedViewModel;
 
         [ObservableProperty]
-        private Material _selectedMaterial = new() { Isdeleted = false };
+        private MaterialDTO _selectedMaterial = new();
 
         [ObservableProperty]
         private AddMaterialViewModel _addMaterialVM;
@@ -90,15 +91,17 @@ namespace CafeManager.WPF.ViewModels.AddViewModel
         public AddImportViewModel(IServiceProvider provider)
         {
             _provider = provider;
+            _importdetailServices = provider.GetRequiredService<ImportDetailServices>();
             _materialSupplierServices = provider.GetRequiredService<MaterialSupplierServices>();
             _mapper = _provider.GetRequiredService<IMapper>();
 
             AddMaterialVM = _provider.GetRequiredService<AddMaterialViewModel>();
-            AddMaterialVM.AddMaterialChanged += AddMaterialVM_AddMaterialChanged;
+            AddMaterialVM.ModifyMaterialChanged += AddMaterialVM_ModifyMaterialChanged;
             AddMaterialVM.Close += AddMaterialSupplierVM_Close;
 
             AddSupplierVM = _provider.GetRequiredService<AddSuppierViewModel>();
             AddSupplierVM.ModifySupplierChanged += AddSupplierVM_ModifySupplierChanged;
+            AddSupplierVM.Close += AddMaterialSupplierVM_Close;
         }
 
         public void RecieveImport(Import import)
@@ -212,15 +215,19 @@ namespace CafeManager.WPF.ViewModels.AddViewModel
         }
 
         [RelayCommand]
-        private void DeleteImportDetail(ImportMaterialDetailDTO importDetail)
+        private async void DeleteImportDetail(ImportMaterialDetailDTO importDetail)
         {
             var res = MyMessageBox.ShowDialog("Bạn có muốn xóa chi tiết đơn hàng này ko", MyMessageBox.Buttons.Yes_No_Cancel, MyMessageBox.Icons.Warning);
             if (res.Equals("1"))
             {
-                CurrentListImportdetail.Remove(importDetail);
-                MyMessageBox.Show("Xoá chi tiết đơn hàng thành công", MyMessageBox.Buttons.OK, MyMessageBox.Icons.Information);
+                var isDeleted = await _importdetailServices.DeleteImportdetail(importDetail);
+                if (isDeleted)
+                {
+                    CurrentListImportdetail.Remove(importDetail);
+                    MyMessageBox.Show("Xoá chi tiết đơn hàng thành công", MyMessageBox.Buttons.OK, MyMessageBox.Icons.Information);
+                }    
+                
             }
-            ClearAddImportDetail();
             ReloadImportPrice();
         }
 
@@ -277,27 +284,20 @@ namespace CafeManager.WPF.ViewModels.AddViewModel
         }
 
         //Material
-        private async void AddMaterialVM_AddMaterialChanged(Material obj)
+        private async void AddMaterialVM_ModifyMaterialChanged(MaterialDTO obj)
         {
-            try
+            var addMaterial = await _materialSupplierServices.AddMaterial(_mapper.Map<Material>(obj));
+            if (addMaterial != null)
             {
+                ListMaterial.Add(_mapper.Map<MaterialDTO>(addMaterial));
+                MyMessageBox.ShowDialog("Thêm nhà cung cấp thành công");
+                AddSupplierVM.ClearValueOfFrom();
                 IsOpenAddMaterialSupplier = false;
-                var addedMaterial = await _materialSupplierServices.AddMaterial(obj);
-                ListMaterial.Add(addedMaterial);
-
-                MyMessageBox.Show("Thêm vật liệu cấp thành công", MyMessageBox.Buttons.OK, MyMessageBox.Icons.Information);
             }
-            catch (InvalidOperationException ex)
+            else
             {
-                MyMessageBox.Show(ex.Message, MyMessageBox.Buttons.OK, MyMessageBox.Icons.Warning);
+                MyMessageBox.Show("Thêm nhà cung cấp thất bại");
             }
-        }
-
-        [RelayCommand]
-        private void CloseModifySupplier()
-        {
-            IsOpenAddMaterialSupplier = false;
-            AddSupplierVM.ClearValueOfFrom();
         }
 
         #region Open View
@@ -311,8 +311,7 @@ namespace CafeManager.WPF.ViewModels.AddViewModel
             AddMaterialVM.IsAdding = true;
             AddMaterialVM.IsUpdating = false;
 
-            AddMaterialVM.Materialname = string.Empty;
-            AddMaterialVM.Unit = string.Empty;
+            AddMaterialVM.ModifyMaterial = new();
         }
 
         [RelayCommand]

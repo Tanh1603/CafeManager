@@ -1,4 +1,5 @@
 ﻿using CafeManager.Core.Data;
+using CafeManager.Core.DTOs;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Microsoft.Extensions.DependencyInjection;
@@ -14,21 +15,13 @@ namespace CafeManager.WPF.ViewModels.AddViewModel
     {
         private readonly IServiceProvider _provider;
 
-        [ObservableProperty]
-        private int _materialid;
-
-        [ObservableProperty]
-        private string _materialname;
-
-        [ObservableProperty]
-        private string _unit;
-
         public bool IsUpdating { get; set; } = false;
         public bool IsAdding { get; set; } = false;
 
-        public event Action<Material> AddMaterialChanged;
+        [ObservableProperty]
+        private MaterialDTO _modifyMaterial = new();
 
-        public event Action<Material> UpdateMaterialNameChanged;
+        public event Action<MaterialDTO> ModifyMaterialChanged;
 
         public event Action Close;
 
@@ -37,32 +30,23 @@ namespace CafeManager.WPF.ViewModels.AddViewModel
             _provider = provider;
         }
 
-        public void HandleSupplierFromParent(Material material)
+        public void ReceiveMaterialDTO(MaterialDTO material)
         {
-            Materialid = material.Materialid;
-            Materialname = material.Materialname;
-            Unit = material.Unit;
-            IsUpdating = true;
+            ModifyMaterial = material.Clone();
+        }
+
+        public void ClearValueOfFrom()
+        {
+            ModifyMaterial = new();
+            IsAdding = false;
+            IsUpdating = false;
         }
 
         [RelayCommand]
         private void Submit()
         {
-            Material newMaterial = new()
-            {
-                Materialid = this.Materialid,
-                Materialname = this.Materialname,
-                Unit = this.Unit
-            };
-            if (IsUpdating)
-            {
-                newMaterial.Materialid = Materialid;
-                UpdateMaterialNameChanged?.Invoke(newMaterial);
-            }
-            else if (IsAdding)
-            {
-                AddMaterialChanged?.Invoke(newMaterial);
-            }
+            ModifyMaterialChanged?.Invoke(ModifyMaterial.Clone());
+            ClearValueOfFrom();
         }
 
         [RelayCommand]

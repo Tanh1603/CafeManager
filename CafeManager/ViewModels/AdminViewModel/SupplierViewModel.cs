@@ -36,7 +36,14 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
             _mapper = _serviceProvider.GetRequiredService<IMapper>();
             ModifySupplierVM = _serviceProvider.GetRequiredService<AddSuppierViewModel>();
             ModifySupplierVM.ModifySupplierChanged += ModifySupplierVM_ModifySupplierChanged;
+            ModifySupplierVM.Close += ModifySupplierVM_Close;
             Task.Run(LoadData);
+        }
+
+        private void ModifySupplierVM_Close()
+        {
+            IsOpenAddSupplier = false;
+            ModifySupplierVM.ClearValueOfFrom();
         }
 
         private async void ModifySupplierVM_ModifySupplierChanged(SupplierDTO obj)
@@ -177,6 +184,7 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
             if (ModifySupplierVM != null)
             {
                 ModifySupplierVM.ModifySupplierChanged -= ModifySupplierVM_ModifySupplierChanged;
+                ModifySupplierVM.Close -= ModifySupplierVM_Close;
             }
             GC.SuppressFinalize(this);
         }

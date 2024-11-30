@@ -62,14 +62,16 @@ namespace CafeManager.WPF.Services
 
         public async Task<IEnumerable<ImportMaterialDetailDTO>?> GetListImportDetailByImportId(int id)
         {
-            var listImport = await _unitOfWork.ImportList.GetAllImportsDetailsByImportIdAsync(id);
+            var listImport = (await _unitOfWork.ImportList.GetAllImportsDetailsByImportIdAsync(id))
+                .Where(x => x.Isdeleted == false);
+
 
             var res = listImport
                 .Select(x =>
                 {
                     // Lấy đối tượng MaterialSupplier đầu tiên phù hợp để tái sử dụng
                     var materialSupplier = x.Material?.Materialsuppliers
-                        .FirstOrDefault(f => f.Supplierid == x.Import.Supplierid && f.Materialid == x.Materialid);
+                        .FirstOrDefault(f => f.Isdeleted == false && f.Supplierid == x.Import.Supplierid && f.Materialid == x.Materialid);
 
                     return new ImportMaterialDetailDTO
                     {
@@ -90,18 +92,41 @@ namespace CafeManager.WPF.Services
             return res;
         }
 
+        //public async Task<decimal> GetImportPriceById(int id)
+        //{
+        //    var listImport = (await _unitOfWork.ImportDetailList.GetAll())
+        //        .Where(x => x.Isdeleted == false && x.Importid == id);
+        //    decimal res = 0;
+        //    foreach(var item in listImport)
+        //    {
+        //        var tmp = item.Material.Materialsuppliers.FirstOrDefault(x => x.Supplierid == item.Import.Supplierid && x.Isdeleted == false);
+        //        res += (item.Quantity ?? 0) * (tmp.Price ?? 0);
+        //    }
+        //    return res;
+        //}
+
         public async Task<decimal> GetImportPriceById(int id)
         {
             var listImport = (await _unitOfWork.ImportDetailList.GetAll())
                 .Where(x => x.Isdeleted == false && x.Importid == id);
             decimal res = 0;
-            foreach(var item in listImport)
+
+            foreach (var item in listImport)
             {
-                var tmp = item.Material.Materialsuppliers.FirstOrDefault(x => x.Supplierid == item.Import.Supplierid && x.Isdeleted == false);
-                res += (item.Quantity ?? 0) * (tmp.Price ?? 0);
+                if (item.Material == null || item.Material.Materialsuppliers == null)
+                    continue; // Bỏ qua nếu Material hoặc Materialsuppliers bằng null
+
+                var tmp = item.Material.Materialsuppliers
+                    .FirstOrDefault(x => x.Supplierid == item.Import.Supplierid && x.Isdeleted == false);
+
+                if (tmp != null) // Kiểm tra tmp không null trước khi sử dụng
+                {
+                    res += (item.Quantity ?? 0) * (tmp.Price ?? 0);
+                }
             }
             return res;
         }
+
 
         public async Task<decimal> GetTotalImportPrice()
         {

@@ -587,12 +587,15 @@
             IsOpen="{Binding IsOpenAddMaterialSupplier}"
             OverlayBackground="{DynamicResource PrimaryHueDarkBrush}"
             Style="{StaticResource MaterialDesignEmbeddedDialogHost}">
+            
             <materialDesign:DialogHost.DialogBackground>
                 <SolidColorBrush Color="Transparent" />
             </materialDesign:DialogHost.DialogBackground>
+            
             <materialDesign:DialogHost.DialogContent>
                 <ContentControl Content="{Binding SelectedViewModel}" />
             </materialDesign:DialogHost.DialogContent>
+            
         </materialDesign:DialogHost>
     </Grid>
 </UserControl>

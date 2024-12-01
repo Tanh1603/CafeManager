@@ -8,53 +8,22 @@ public class MappingProfile : Profile
     public MappingProfile()
     {
         // Import <-> ImportDTO
-        CreateMap<Import, ImportDTO>();
-        CreateMap<ImportDTO, Import>()
-            .ForMember(dest => dest.Staff, opt => opt.Ignore())
-            .ForMember(dest => dest.Supplier, opt => opt.Ignore())
-            .ForMember(dest => dest.Importdetails, opt => opt.Ignore());
+        CreateMap<Import, ImportDTO>().ReverseMap();
 
         // ImportDetail <-> ImportDetailDTO
-        CreateMap<Importdetail, ImportDetailDTO>();
-        CreateMap<ImportDetailDTO, Importdetail>()
-            .ForMember(dest => dest.Material, opt => opt.Ignore())
-            .ForMember(dest => dest.Import, opt => opt.Ignore());
+        CreateMap<Importdetail, ImportDetailDTO>().ReverseMap();
 
         // Material <-> MaterialDTO
-        CreateMap<Material, MaterialDTO>();
-        CreateMap<MaterialDTO, Material>()
-            .ForMember(dest => dest.Materialsuppliers, opt => opt.Ignore());
+        CreateMap<Material, MaterialDTO>().ReverseMap();
 
         // MaterialSupplier <-> MaterialSupplierDTO
-        CreateMap<Materialsupplier, MaterialSupplierDTO>()
-            .ForMember(dest => dest.TotalQuantity, opt => opt.MapFrom(src =>
-                (src.Material.Importdetails != null
-                    ? src.Material.Importdetails
-                        .Where(id => id.Isdeleted == false && id.Import != null && id.Import.Supplierid == src.Supplier.Supplierid)
-                        .Sum(id => id.Quantity ?? 0)
-                    : 0)
-                -
-                (src.Consumedmaterials != null
-                    ? src.Consumedmaterials
-                        .Where(cm => cm.Materialsupplierid == src.Materialsupplierid && cm.Isdeleted == false)
-                        .Sum(cm => cm.Quantity ?? 0)
-                    : 0)
-            ));
-        CreateMap<MaterialSupplierDTO, Materialsupplier>()
-            .ForMember(dest => dest.Material, opt => opt.Ignore())
-            .ForMember(dest => dest.Supplier, opt => opt.Ignore())
-            .ForMember(dest => dest.Consumedmaterials, opt => opt.Ignore());
+        CreateMap<Materialsupplier, MaterialSupplierDTO>().ReverseMap();
 
         // Supplier <-> SupplierDTO
-        CreateMap<Supplier, SupplierDTO>();
-        CreateMap<SupplierDTO, Supplier>()
-            .ForMember(dest => dest.Imports, opt => opt.Ignore())
-            .ForMember(dest => dest.Materialsuppliers, opt => opt.Ignore());
+        CreateMap<Supplier, SupplierDTO>().ReverseMap();
 
         // ConsumedMaterial <-> ConsumedMaterialDTO
-        CreateMap<Consumedmaterial, ConsumedMaterialDTO>();
-        CreateMap<ConsumedMaterialDTO, Consumedmaterial>()
-            .ForMember(dest => dest.Materialsupplier, opt => opt.Ignore());
+        CreateMap<Consumedmaterial, ConsumedMaterialDTO>().ReverseMap();
 
         // AppUserDTO <-> Appuser
         CreateMap<Appuser, AppUserDTO>()
@@ -62,16 +31,13 @@ public class MappingProfile : Profile
             .ForMember(dest => dest.Role, opt => opt.MapFrom(src => src.Role == 1 ? "Admin" : "User"));
         CreateMap<AppUserDTO, Appuser>()
             .ForMember(dest => dest.Avatar, opt => opt.MapFrom(src => ConvertImageServices.BitmapImageToBase64(src.Avatar)))
-            .ForMember(dest => dest.Role, opt => opt.MapFrom(src => src.Role == "Admin" ? true : false));
+            .ForMember(dest => dest.Role, opt => opt.MapFrom(src => src.Role == "Admin"));
 
         // CoffeetableDTO <-> Coffeetable
-        CreateMap<Coffeetable, CoffeetableDTO>();
-        CreateMap<CoffeetableDTO, Coffeetable>();
+        CreateMap<Coffeetable, CoffeetableDTO>().ReverseMap();
 
         // FoodCategoryDTO <-> Foodcategory
-        CreateMap<Foodcategory, FoodCategoryDTO>();
-        CreateMap<FoodCategoryDTO, Foodcategory>()
-            .ForMember(dest => dest.Foods, src => src.Ignore());
+        CreateMap<Foodcategory, FoodCategoryDTO>().ReverseMap();
 
         // Food <-> FoodDTO
         CreateMap<Food, FoodDTO>()
@@ -80,16 +46,10 @@ public class MappingProfile : Profile
             .ForMember(dest => dest.Imagefood, opt => opt.MapFrom(src => ConvertImageServices.BitmapImageToBase64(src.Imagefood)));
 
         // Invoice <-> InvoiceDTO
-        CreateMap<Invoice, InvoiceDTO>();
-        CreateMap<InvoiceDTO, Invoice>()
-            .ForMember(dest => dest.Invoicedetails, opt => opt.Ignore())
-            .ForMember(dest => dest.Staff, opt => opt.Ignore())
-            .ForMember(dest => dest.Coffeetable, opt => opt.Ignore());
+        CreateMap<Invoice, InvoiceDTO>().ReverseMap();
 
         // Invoicedetail <-> InvoiceDetailDTO
-        CreateMap<Invoicedetail, InvoiceDetailDTO>();
-        CreateMap<InvoiceDetailDTO, Invoicedetail>()
-            .ForMember(dest => dest.Food, opt => opt.Ignore());
+        CreateMap<Invoicedetail, InvoiceDetailDTO>().ReverseMap();
 
         // Staff <-> StaffDTO
         CreateMap<Staff, StaffDTO>().ReverseMap();

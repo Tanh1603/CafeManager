@@ -1,4 +1,5 @@
-﻿using System.ComponentModel;
+﻿using CafeManager.Core.Data;
+using System.ComponentModel;
 using System.Runtime.CompilerServices;
 
 #nullable disable
@@ -12,7 +13,7 @@ namespace CafeManager.Core.DTOs
         private int materialid;
         private decimal _quantity;
         private bool _isdeleted;
-        private MaterialDTO _material;
+        private MaterialSupplierDTO _materialsupplier;
         private ImportDTO _import;
 
         public int Importdetailid
@@ -75,19 +76,6 @@ namespace CafeManager.Core.DTOs
             }
         }
 
-        public MaterialDTO Material
-        {
-            get => _material;
-            set
-            {
-                if (_material != value)
-                {
-                    _material = value;
-                    OnPropertyChanged();
-                }
-            }
-        }
-
         public ImportDTO Import
         {
             get => _import;
@@ -96,6 +84,18 @@ namespace CafeManager.Core.DTOs
                 if (_import != value)
                 {
                     _import = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
+        public MaterialSupplierDTO Materialsupplier
+        {
+            get => _materialsupplier; set
+            {
+                if (_materialsupplier != value)
+                {
+                    _materialsupplier = value;
                     OnPropertyChanged();
                 }
             }
@@ -112,8 +112,8 @@ namespace CafeManager.Core.DTOs
                 Isdeleted = Isdeleted,
                 Quantity = Quantity,
 
-                Material = Material,
                 Import = Import,
+                Materialsupplier = Materialsupplier,
             };
         }
 

@@ -152,15 +152,11 @@ namespace CafeManager.WPF.Services
             try
             {
                 await _unitOfWork.BeginTransactionAsync();
-
-                //var res = await _unitOfWork.MaterialList.UpdateById(id, material);
-
+                var res = await _unitOfWork.MaterialList.Update(material);
                 await _unitOfWork.CompleteAsync();
-
                 _unitOfWork.ClearChangeTracker();
                 await _unitOfWork.CommitTransactionAsync();
-                //return res;
-                return null;
+                return res;
             }
             catch (Exception ex)
             {

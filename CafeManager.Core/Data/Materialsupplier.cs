@@ -27,6 +27,8 @@ public partial class Materialsupplier
 
     public virtual ICollection<Consumedmaterial> Consumedmaterials { get; set; } = new List<Consumedmaterial>();
 
+    public virtual ICollection<Importdetail> Importdetails { get; set; } = new List<Importdetail>();
+
     public virtual Material Material { get; set; }
 
     public virtual Supplier Supplier { get; set; }

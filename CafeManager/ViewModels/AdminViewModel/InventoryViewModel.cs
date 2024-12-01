@@ -37,12 +37,13 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
 
         [ObservableProperty]
         private bool _isGetMaterial = true;
+
         public bool IsDeletedMaterial => !IsGetMaterial;
 
-        partial void OnIsGetMaterialChanged(bool value)
-        {
-            OnPropertyChanged(nameof(IsDeletedMaterial)); // Báo rằng IsDeletedMaterial cũng đã thay đổi
-        }
+        //private partial void OnIsGetMaterialChanged(bool value)
+        //{
+        //    OnPropertyChanged(nameof(IsDeletedMaterial)); // Báo rằng IsDeletedMaterial cũng đã thay đổi
+        //}
 
         [ObservableProperty]
         private ConsumedMaterialDTO _modifyConsumedMaterial = new();
@@ -65,7 +66,7 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
         private AddMaterialViewModel _modifyMaterialVM;
 
         [ObservableProperty]
-        private MaterialDTO _selectedMaterial;
+        private MaterialDTO _selectedMaterial = new();
 
         public InventoryViewModel(IServiceProvider provider)
         {
@@ -78,8 +79,7 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
             ModifyMaterialVM.Close += ModifyMaterialVM_Close;
 
             _mapper = provider.GetRequiredService<IMapper>();
-            //Task.Run(LoadData);
-            _ = LoadData();
+            Task.Run(LoadData);
         }
 
         private async Task LoadData()
@@ -100,6 +100,7 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
         }
 
         #region Material
+
         private async void ModifyMaterialVM_ModifyMaterialChanged(MaterialDTO obj)
         {
             try
@@ -166,7 +167,7 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
             {
                 MyMessageBox.ShowDialog("Hãy chọn vật tư", MyMessageBox.Buttons.OK, MyMessageBox.Icons.Warning);
                 return;
-            }    
+            }
             IsOpenAddMaterial = true;
             ModifyMaterialVM.IsUpdating = true;
             ModifyMaterialVM.ReceiveMaterialDTO(SelectedMaterial);
@@ -207,7 +208,7 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
         {
             try
             {
-                if(SelectedMaterial == null)
+                if (SelectedMaterial == null)
                     throw new InvalidOperationException("Hãy chọn vật tư");
 
                 string messageBox = MyMessageBox.ShowDialog("Bạn có muốn hiển thị vật tư không?", MyMessageBox.Buttons.Yes_No, MyMessageBox.Icons.Question);
@@ -240,7 +241,8 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
         {
             IsGetMaterial = !IsGetMaterial;
         }
-        #endregion
+
+        #endregion Material
 
         [RelayCommand]
         private async void SubmitConsumedMaterial()
@@ -249,7 +251,7 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
             try
             {
                 if (!IsValidData())
-                    throw new InvalidOperationException("Số lượng trong kho nhỏ hơn yêu cầu");   
+                    throw new InvalidOperationException("Số lượng trong kho nhỏ hơn yêu cầu");
                 if (IsAdding)
                 {
                     var addConsumedMaterial = await _consumedMaterialServices.AddConsumedmaterial(_mapper.Map<Consumedmaterial>(ModifyConsumedMaterial));
@@ -261,9 +263,9 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
                             _mapper.Map(addConsumedMaterial, res);
                         }
                         else
-                        {    
+                        {
                             ListConsumedMaterialDTO.Add(_mapper.Map<ConsumedMaterialDTO>(addConsumedMaterial));
-                        }      
+                        }
                         MyMessageBox.ShowDialog("Thêm chi tiết sử dụng vật tư cấp thành công");
                         IsPopupOpen = false;
                         ok = true;
@@ -295,10 +297,6 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
                 if (ok)
                 {
                     var updateMaterialSupplier = ListInventoryDTO.FirstOrDefault(x => x.Materialsupplierid == ModifyConsumedMaterial.Materialsupplierid);
-                    if (updateMaterialSupplier != null)
-                    {
-                        updateMaterialSupplier.TotalQuantity -= ModifyConsumedMaterial.Quantity;
-                    }
                     ClearValueOfPopupBox();
                 }
             }
@@ -314,14 +312,13 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
             if (IsAdding)
             {
                 return materialSupplier.TotalQuantity - ModifyConsumedMaterial.Quantity > 0;
-            }    
-            if(IsUpdating)
+            }
+            if (IsUpdating)
             {
                 return materialSupplier.TotalQuantity - (ModifyConsumedMaterial.Quantity - _currentQuantity) > 0;
-            }    
+            }
             return false;
         }
-
 
         public void ClearValueOfPopupBox()
         {
@@ -339,6 +336,7 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
             IsPopupOpen = true;
             IsAdding = true;
         }
+
         [RelayCommand]
         private void OpenPopup_Update(ConsumedMaterialDTO consumedMaterialDTO)
         {
@@ -360,10 +358,6 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
                     if (isDeleted)
                     {
                         var updateMaterialSupplier = ListInventoryDTO.FirstOrDefault(x => x.Materialsupplierid == consumedMaterial.Materialsupplierid);
-                        if (updateMaterialSupplier != null)
-                        {
-                            updateMaterialSupplier.TotalQuantity += consumedMaterial.Quantity;
-                        }
                         ListConsumedMaterialDTO.Remove(consumedMaterial);
                         MyMessageBox.ShowDialog("Xoá chi tiết sử dụng vật liệu thanh công");
                     }

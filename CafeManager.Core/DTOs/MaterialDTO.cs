@@ -12,7 +12,6 @@ namespace CafeManager.Core.DTOs
         private bool isdeleted;
 
         private ObservableCollection<MaterialSupplierDTO> _materialsuppliers = [];
-        private ObservableCollection<ImportDetailDTO> _importdetails = [];
 
         public int Materialid
         {
@@ -66,18 +65,6 @@ namespace CafeManager.Core.DTOs
             }
         }
 
-        public ObservableCollection<ImportDetailDTO> Importdetails
-        {
-            get => _importdetails; set
-            {
-                if (_importdetails != value)
-                {
-                    _importdetails = value;
-                    OnPropertyChanged();
-                }
-            }
-        }
-
         public MaterialDTO Clone()
         {
             return new MaterialDTO()
@@ -86,7 +73,6 @@ namespace CafeManager.Core.DTOs
                 Materialname = Materialname,
                 Unit = Unit,
                 Isdeleted = Isdeleted,
-                Importdetails = Importdetails,
                 Materialsuppliers = Materialsuppliers,
             };
         }

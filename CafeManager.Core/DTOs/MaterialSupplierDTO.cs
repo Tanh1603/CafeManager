@@ -1,4 +1,5 @@
-﻿using System.Collections.ObjectModel;
+﻿using CafeManager.Core.Data;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 
@@ -20,9 +21,8 @@ namespace CafeManager.Core.DTOs
 
         private MaterialDTO _material;
         private SupplierDTO _supplier;
-        private ObservableCollection<ConsumedMaterialDTO> _consumedmaterials;
-
-        private decimal _totalQuantity;
+        private ObservableCollection<ConsumedMaterialDTO> _consumedmaterials = [];
+        private ObservableCollection<ImportDetailDTO> _importdetails = [];
 
         public int Materialsupplierid
         {
@@ -133,18 +133,7 @@ namespace CafeManager.Core.DTOs
             }
         }
 
-        public decimal TotalQuantity
-        {
-            get => _totalQuantity;
-            set
-            {
-                if (value != _totalQuantity)
-                {
-                    _totalQuantity = value;
-                    OnPropertyChanged();
-                }
-            }
-        }
+        public decimal TotalQuantity => (Importdetails?.Sum(x => x.Quantity) ?? 0) - (Consumedmaterials?.Sum(x => x.Quantity) ?? 0);
 
         public MaterialDTO Material
         {
@@ -172,6 +161,32 @@ namespace CafeManager.Core.DTOs
             }
         }
 
+        public ObservableCollection<ConsumedMaterialDTO> Consumedmaterials
+        {
+            get => _consumedmaterials; set
+            {
+                if (_consumedmaterials != value)
+                {
+                    _consumedmaterials = value;
+                    OnPropertyChanged();
+                    OnPropertyChanged(nameof(TotalQuantity));
+                }
+            }
+        }
+
+        public ObservableCollection<ImportDetailDTO> Importdetails
+        {
+            get => _importdetails; set
+            {
+                if (_importdetails != value)
+                {
+                    _importdetails = value;
+                    OnPropertyChanged();
+                    OnPropertyChanged(nameof(TotalQuantity));
+                }
+            }
+        }
+
         public MaterialSupplierDTO Clone()
         {
             return new MaterialSupplierDTO()
@@ -189,21 +204,9 @@ namespace CafeManager.Core.DTOs
 
                 Material = Material,
                 Supplier = Supplier,
-                TotalQuantity = TotalQuantity,
+                Importdetails = Importdetails,
                 Consumedmaterials = Consumedmaterials,
             };
-        }
-
-        public ObservableCollection<ConsumedMaterialDTO> Consumedmaterials
-        {
-            get => _consumedmaterials; set
-            {
-                if (_consumedmaterials != value)
-                {
-                    _consumedmaterials = value;
-                    OnPropertyChanged();
-                }
-            }
         }
     }
 }

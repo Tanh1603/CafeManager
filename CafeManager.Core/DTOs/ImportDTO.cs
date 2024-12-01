@@ -137,9 +137,12 @@ namespace CafeManager.Core.DTOs
                 {
                     _importdetails = value;
                     OnPropertyChanged();
+                    OnPropertyChanged(nameof(TotalPrice));
                 }
             }
         }
+
+        public decimal TotalPrice => Importdetails?.Sum(x => x.Quantity * x.Materialsupplier.Price) ?? 0;
 
         public ImportDTO Clone()
         {

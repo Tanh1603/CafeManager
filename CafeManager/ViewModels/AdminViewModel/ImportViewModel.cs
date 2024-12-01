@@ -1,21 +1,13 @@
-﻿using CafeManager.Core.Data;
+﻿using AutoMapper;
+using CafeManager.Core.Data;
 using CafeManager.Core.DTOs;
+using CafeManager.WPF.MessageBox;
 using CafeManager.WPF.Services;
 using CafeManager.WPF.ViewModels.AddViewModel;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Microsoft.Extensions.DependencyInjection;
-using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using CafeManager.WPF.MessageBox;
-using CafeManager.Core.Services;
-using System.Windows.Documents;
-using AutoMapper;
-using System.Windows.Media.Media3D;
 
 namespace CafeManager.WPF.ViewModels.AdminViewModel
 {
@@ -25,7 +17,7 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
         private readonly ImportServices _importServices;
         private readonly MaterialSupplierServices _materialSupplierServices;
         private readonly StaffServices _staffServices;
-        //private IMapper _mapper;
+        private readonly IMapper _mapper;
 
         [ObservableProperty]
         private bool _isOpenModifyImportView;
@@ -55,12 +47,14 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
             _importServices = provider.GetRequiredService<ImportServices>();
             _staffServices = provider.GetRequiredService<StaffServices>();
             _materialSupplierServices = provider.GetRequiredService<MaterialSupplierServices>();
+            _mapper = provider.GetRequiredService<IMapper>();
 
             ModifyImportVM = _serviceProvider.GetRequiredService<AddImportViewModel>();
             ModifyImportVM.ImportChanged += ModifyImportVM_ImportChanged;
             _isOpenModifyImportView = false;
             Task.Run(LoadData);
         }
+
         private async Task LoadData()
         {
             var list = (await _materialSupplierServices.GetListSupplier()).ToList().Where(x => x.Isdeleted == false);
@@ -74,15 +68,13 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
 
             var importList = await _importServices.GetListImport();
             ListImport = new ObservableCollection<Import>(importList);
-
-            TotalPrice = await _importServices.GetTotalImportPrice();
         }
 
         private async Task LoadDetailData(Import import)
         {
-            var dbImportMaterailDetails = await _importServices.GetListImportDetailByImportId(import.Importid);
-            ModifyImportVM.CurrentListImportdetail = new ObservableCollection<ImportMaterialDetailDTO>(dbImportMaterailDetails);
-            ModifyImportVM.ImportPrice = await _importServices.GetImportPriceById(import.Importid);
+            //var dbImportMaterailDetails = await _importServices.GetListImportDetailByImportId(import.Importid);
+            //ModifyImportVM.CurrentListImportdetail = new ObservableCollection<ImportMaterialDetailDTO>(dbImportMaterailDetails);
+            //ModifyImportVM.ImportPrice = await _importServices.GetImportPriceById(import.Importid);
         }
 
         private async void ModifyImportVM_ImportChanged(Import import, List<ImportMaterialDetailDTO> importMaterials)
@@ -91,7 +83,7 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
             {
                 if (ModifyImportVM.IsAdding)
                 {
-                    Import? addImport = await _importServices.AddImport(import, importMaterials);
+                    Import? addImport = await _importServices.AddImport(import);
 
                     if (addImport != null)
                     {
@@ -106,7 +98,7 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
                 }
                 if (ModifyImportVM.IsUpdating)
                 {
-                    if(import != null)
+                    if (import != null)
                     {
                         //Import? updateImport = await _importServices.GetImportById(import.Importid);
                         //if (updateImport != null)
@@ -121,7 +113,6 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
                         //}
                         await _importServices.UpdateImport(import, importMaterials);
                         MyMessageBox.Show("Sửa thông tin phiếu nhập thành công", MyMessageBox.Buttons.OK, MyMessageBox.Icons.Information);
-
                     }
                     else
                     {
@@ -137,8 +128,6 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
                 MyMessageBox.Show("Lỗi", MyMessageBox.Buttons.OK, MyMessageBox.Icons.Warning);
             }
         }
-
-
 
         [RelayCommand]
         private void OpenModifyImport(ImportDTO importDTO)
@@ -186,7 +175,6 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
             {
                 MyMessageBox.Show(ivd.Message, MyMessageBox.Buttons.OK, MyMessageBox.Icons.Warning);
             }
-
         }
 
         public void Dispose()

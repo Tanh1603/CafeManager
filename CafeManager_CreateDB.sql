@@ -167,12 +167,11 @@ CREATE TABLE Imports (
 CREATE TABLE ImportDetails (
     ImportDetailId SERIAL,
     ImportId INT NOT NULL,
-	MaterialId INT NOT NULL,
+	MaterialSupplierId INT NOT NULL,
 	Quantity DECIMAL(10, 2) DEFAULT 0,
 	IsDeleted BOOLEAN DEFAULT FALSE,
 	
     CONSTRAINT PK_ImportDetails PRIMARY KEY (ImportDetailId),
     CONSTRAINT FK_ImportDetails_Imports FOREIGN KEY (ImportId) REFERENCES Imports(ImportId),
-    CONSTRAINT FK_ImportDetails_Material FOREIGN KEY (MaterialId) REFERENCES Material(MaterialId)
+    CONSTRAINT FK_ImportDetails_MaterialSupplier FOREIGN KEY (MaterialSupplierId) REFERENCES MaterialSuplier(MaterialSupplierId)
 );
-

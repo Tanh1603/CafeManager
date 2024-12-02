@@ -58,7 +58,10 @@
                         ClipToBounds="True"
                         CornerRadius="100">
                         <Border.Clip>
-                            <RectangleGeometry Rect="0,0,200,150" />
+                            <RectangleGeometry
+                                RadiusX="5"
+                                RadiusY="5"
+                                Rect="0,0,200,150" />
                         </Border.Clip>
                         <Image
                             RenderOptions.BitmapScalingMode="HighQuality"

@@ -24,9 +24,13 @@ namespace CafeManager.WPF.ViewModels
         private readonly IMapper _mapper;
 
         [ObservableProperty]
+        [NotifyPropertyChangedFor(nameof(CanLogin))]
+        [NotifyCanExecuteChangedFor(nameof(LoginCommand))]
         private string _username = string.Empty;
 
         [ObservableProperty]
+        [NotifyPropertyChangedFor(nameof(CanLogin))]
+        [NotifyCanExecuteChangedFor(nameof(LoginCommand))]
         private string _password = string.Empty;
 
         [ObservableProperty]
@@ -58,7 +62,14 @@ namespace CafeManager.WPF.ViewModels
             }
         }
 
-        [RelayCommand]
+        public bool CanLogin => HasUsername && HasPassword;
+
+        private bool HasUsername => !string.IsNullOrEmpty(Username);
+        private bool HasPassword => !string.IsNullOrEmpty(Password);
+
+
+
+        [RelayCommand(CanExecute = nameof(CanLogin))]
         private async Task Login()
         {
             try

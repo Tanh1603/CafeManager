@@ -74,11 +74,12 @@
                     MinWidth="150"
                     MinHeight="35"
                     VerticalAlignment="Center"
-                    materialDesign:HintAssist.Hint="Danh mục món ăn"
-                    materialDesign:TextBlockAssist.AutoToolTip="True"
-                    BorderBrush="#602414"
+                    Style="{StaticResource ComboBoxStyle}"
+                    Tag="--Danh mục thực đơn--"
+                    FontWeight="Bold"
                     ItemsSource="{Binding ListFoodCategory}"
-                    SelectedItem="{Binding SelectedFoodCategory}">
+                    SelectedItem="{Binding SelectedFoodCategory}"
+                    ItemContainerStyle="{StaticResource ComboBoxItemStyle}">
                     <ComboBox.ItemTemplate>
 
                         <DataTemplate>

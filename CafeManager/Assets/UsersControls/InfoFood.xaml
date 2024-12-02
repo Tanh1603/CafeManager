@@ -155,12 +155,13 @@
         </Border>
 
         <Border
-            Width="90"
+            Width="100"
             Height="25"
             HorizontalAlignment="Right"
             VerticalAlignment="Top"
             Background="Yellow"
-            CornerRadius="0 10 0 0">
+            
+            CornerRadius="0 10 0 10">
 
             <Grid HorizontalAlignment="Left" VerticalAlignment="Center">
                 <Grid.ColumnDefinitions>
@@ -173,11 +174,13 @@
                     HorizontalAlignment="Right"
                     VerticalAlignment="Center"
                     Content="Giảm giá:"
+                    FontWeight="Bold"
                     Foreground="Red" />
                 <TextBlock
                     Grid.Column="1"
                     HorizontalAlignment="Right"
                     VerticalAlignment="Center"
+                    FontWeight="Bold"
                     Foreground="OrangeRed"
                     Text="{Binding ElementName=infofood, Path=Discountfood, StringFormat={}{0:0}%, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
                     TextAlignment="Center" />

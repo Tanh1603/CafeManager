@@ -1,24 +1,12 @@
 ﻿using AutoMapper;
-using CafeManager.Core.Data;
 using CafeManager.Core.DTOs;
-using CafeManager.Core.Services;
 using CafeManager.WPF.MessageBox;
 using CafeManager.WPF.Services;
 using CafeManager.WPF.ViewModels.AddViewModel;
-using CommunityToolkit.Mvvm.Collections;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using LiveCharts.Configurations;
-using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Microsoft.Extensions.DependencyInjection;
-using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Input;
 
 namespace CafeManager.WPF.ViewModels.AdminViewModel
 {
@@ -37,6 +25,19 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
         [ObservableProperty]
         private ObservableCollection<InvoiceDTO> _listInvoiceDTO = [];
 
+        private string _searchKey = string.Empty;
+
+        public string SearchKey
+        {
+            get => _searchKey; set
+            {
+                if (_searchKey != value)
+                {
+                    _searchKey = value;
+                }
+            }
+        }
+
         public InvoiceViewModel(IServiceProvider provider)
         {
             _provider = provider;
@@ -49,8 +50,11 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
 
         private async Task LoadData()
         {
-            var dbListInvoice = await _invoiceServices.GetListInvoices();
-            ListInvoiceDTO = [.. _mapper.Map<List<InvoiceDTO>>(dbListInvoice)];
+            //var dbListInvoice = await _invoiceServices.GetListInvoices();
+            var dbListInvoice = await _invoiceServices.GetSearchPaginateListInvoice(null, pageIndex, pageSize);
+            ListInvoiceDTO = [.. _mapper.Map<List<InvoiceDTO>>(dbListInvoice.Item1)];
+            totalPages = (dbListInvoice.Item2 + pageSize - 1) / pageSize;
+            OnPropertyChanged(nameof(PageUI));
         }
 
         [RelayCommand]
@@ -87,5 +91,53 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
         {
             IsOpenModifyInvoiceVM = false;
         }
+
+        #region Phân trang
+
+        private int pageIndex = 1;
+
+        private int pageSize = 2;
+        private int totalPages = 0;
+
+        public string PageUI => $"{pageIndex}/{totalPages}";
+
+        [RelayCommand]
+        private async Task FirstPage()
+        {
+            pageIndex = 1;
+
+            await LoadData();
+        }
+
+        [RelayCommand]
+        private async Task NextPage()
+        {
+            if (pageIndex == totalPages)
+            {
+                return;
+            }
+            pageIndex += 1;
+            await LoadData();
+        }
+
+        [RelayCommand]
+        private async Task PreviousPage()
+        {
+            if (pageIndex == 1)
+            {
+                return;
+            }
+            pageIndex -= 1;
+            await LoadData();
+        }
+
+        [RelayCommand]
+        private async Task LastPage()
+        {
+            pageIndex = totalPages;
+            await LoadData();
+        }
+
+        #endregion Phân trang
     }
 }

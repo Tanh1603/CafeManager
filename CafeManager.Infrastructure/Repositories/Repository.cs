@@ -117,7 +117,7 @@ namespace CafeManager.Infrastructure.Repositories
             };
 
             int totalCount = await query.CountAsync();
-            List<T> items = await query.Skip((pageIndex - 1) * pageSize).Skip(pageSize).ToListAsync();
+            List<T> items = await query.Skip((pageIndex - 1) * pageSize).Take(pageSize).ToListAsync();
 
             return (items, totalCount);
         }

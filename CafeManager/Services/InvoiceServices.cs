@@ -81,6 +81,11 @@ namespace CafeManager.WPF.Services
             return await _unitOfWork.InvoiceList.SearchSortPaginateAsync(searchPredicate, sortKeySelector, ascending, skip, take);
         }
 
+        public async Task<(IEnumerable<Invoice>?, int)> GetSearchPaginateListInvoice(Expression<Func<Invoice, bool>>? searchPredicate = null, int skip = 0, int take = 20)
+        {
+            return await _unitOfWork.InvoiceList.GetByPageAsync(skip, take, searchPredicate);
+        }
+
         #endregion Thêm xóa, sửa, tìm kiếm, sắp sếp, phân trang
 
         #region tính toán doanh thu của bill

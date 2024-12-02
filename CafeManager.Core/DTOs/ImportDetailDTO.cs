@@ -9,8 +9,8 @@ namespace CafeManager.Core.DTOs
     public class ImportDetailDTO : BaseDTO
     {
         private int _importdetailid;
-        private int importid;
-        private int materialid;
+        private int _importid;
+        private int _materialsupplierid;
         private decimal _quantity;
         private bool _isdeleted;
         private MaterialSupplierDTO _materialsupplier;
@@ -31,20 +31,20 @@ namespace CafeManager.Core.DTOs
 
         public int Importid
         {
-            get => importid;
+            get => _importid;
             set
             {
-                importid = value;
+                _importid = value;
                 OnPropertyChanged();
             }
         }
 
         public int Materialid
         {
-            get => materialid;
+            get => _materialsupplierid;
             set
             {
-                materialid = value;
+                _materialsupplierid = value;
                 OnPropertyChanged();
             }
         }

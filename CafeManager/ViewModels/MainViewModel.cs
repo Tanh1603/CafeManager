@@ -30,7 +30,7 @@ namespace CafeManager.WPF.ViewModels
             _navigationStore = _provider.GetRequiredService<NavigationStore>();
             _navigationStore.Navigation = CurrentViewModel;
 
-            CurrentViewModel = _provider.GetRequiredService<MainUserViewModel>();
+            CurrentViewModel = _provider.GetRequiredService<MainAdminViewModel>();
             _navigationStore.NavigationStoreChanged += _navigationStore_NavigationStoreChanged;
         }
 

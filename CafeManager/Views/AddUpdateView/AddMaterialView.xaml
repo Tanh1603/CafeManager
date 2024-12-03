@@ -90,7 +90,11 @@
                 Command="{Binding SubmitCommand}"
                 Style="{StaticResource adjustInfoButton}">
                 <StackPanel HorizontalAlignment="Center" Orientation="Horizontal">
-                    <TextBlock Text="Xác nhận" />
+                    <ma:PackIconMaterial VerticalAlignment="Center" Kind="CheckBold" />
+                    <TextBlock
+                        Margin="10,0,0,0"
+                        FontWeight="SemiBold"
+                        Text="Xác nhận" />
                 </StackPanel>
             </Button>
         </Grid>

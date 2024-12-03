@@ -7,12 +7,16 @@ using Microsoft.Extensions.DependencyInjection;
 using CafeManager.WPF.MessageBox;
 using System.Windows.Media.Imaging;
 using CafeManager.Core.Services;
+using System.ComponentModel.DataAnnotations;
+using System.Text.RegularExpressions;
+using System.Drawing.Text;
 
 #nullable disable
 
 namespace CafeManager.WPF.ViewModels
 {
-    public partial class RegisterViewModel : ObservableObject
+    
+    public partial class RegisterViewModel : ObservableValidator
     {
         private readonly IServiceProvider _provider;
         private readonly NavigationStore _navigationStore;
@@ -20,16 +24,91 @@ namespace CafeManager.WPF.ViewModels
         private readonly FileDialogService _fileDialogService;
 
         [ObservableProperty]
+        [NotifyDataErrorInfo]
+        [Required(ErrorMessage = "Tên người dùng không được để trống.")]
+        [CustomValidation(typeof(RegisterViewModel), nameof(ValidateUserName))]
+        [NotifyPropertyChangedFor(nameof(CanSubmit))]
+        [NotifyCanExecuteChangedFor(nameof(RegisterCommand))]
         private string _username;
 
+        public static ValidationResult ValidateUserName(string userName, ValidationContext context)
+        {
+            // Quy tắc: Chỉ cho phép ký tự chữ và số, 3-20 ký tự
+            var regex = new Regex(@"^[a-zA-Z0-9]{3,20}$");
+
+            if (string.IsNullOrEmpty(userName) || regex.IsMatch(userName))
+            {
+                return ValidationResult.Success!;
+            }
+            return new ValidationResult("Tên người dùng chỉ được chứa chữ cái, số và dài từ 3 đến 20 ký tự.");
+        }
+
+
         [ObservableProperty]
+        [NotifyDataErrorInfo]
+        [Required(ErrorMessage = "Tên hiển thị không được để trống.")]
+        [CustomValidation(typeof(RegisterViewModel), nameof(ValidateDisplayName))]
+        [NotifyPropertyChangedFor(nameof(CanSubmit))]
+        [NotifyCanExecuteChangedFor(nameof(RegisterCommand))]
         private string _displayname;
 
-        [ObservableProperty]
-        private string _password;
+        public static ValidationResult ValidateDisplayName(string displayName, ValidationContext context)
+        {
+           
+            var regex = new Regex(@"^[a-zA-Z0-9\s\-]{3,50}$");
+
+            if (string.IsNullOrEmpty(displayName) || regex.IsMatch(displayName))
+            {
+                return ValidationResult.Success!;
+            }
+            return new ValidationResult("Tên hiển thị chỉ được chứa chữ cái, số, khoảng trắng, dấu gạch ngang và dài từ 3 đến 50 ký tự.");
+        }
+        
+
 
         [ObservableProperty]
+        [NotifyDataErrorInfo]
+        [Required(ErrorMessage = "Mật khẩu không được để trống.")]
+        [CustomValidation(typeof(RegisterViewModel), nameof(ValidatePassword))]
+        [NotifyPropertyChangedFor(nameof(CanSubmit))]
+        [NotifyCanExecuteChangedFor(nameof(RegisterCommand))]
+        private string _password;
+
+
+        public static ValidationResult ValidatePassword(string password, ValidationContext context)
+        {
+            
+            var regex = new Regex(@"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,20}$");
+
+            if (string.IsNullOrEmpty(password) || regex.IsMatch(password))
+            {
+                return ValidationResult.Success!;
+            }
+            return new ValidationResult("Mật khẩu phải chứa ít nhất 1 chữ hoa, 1 chữ thường, 1 số, 1 ký tự đặc biệt và có độ dài từ 8-20 ký tự.");
+        }
+
+
+        [ObservableProperty]
+        [NotifyDataErrorInfo]
+        [Required(ErrorMessage = "Email không được để trống.")]
+        [CustomValidation(typeof(RegisterViewModel), nameof(ValidateEmail))]
+        [NotifyPropertyChangedFor(nameof(CanSubmit))]
+        [NotifyCanExecuteChangedFor(nameof(RegisterCommand))]
+
         private string _email;
+
+
+        public static ValidationResult ValidateEmail(string email, ValidationContext context)
+        {
+            // Biểu thức chính quy để xác thực email
+            var regex = new Regex(@"^[^@\s]+@[^@\s]+\.[^@\s]+$");
+
+            if (string.IsNullOrEmpty(email) || regex.IsMatch(email))
+            {
+                return ValidationResult.Success!;
+            }
+            return new ValidationResult("Email không hợp lệ. Vui lòng nhập đúng định dạng.");
+        }
 
         [ObservableProperty]
         private string _role;
@@ -43,6 +122,23 @@ namespace CafeManager.WPF.ViewModels
         [ObservableProperty]
         private string _vertificationCode;
 
+
+
+       
+        public bool CanSubmit => HasUsernname && HasPassword && HasEmail && HasDisplayname && !HasErrors;
+
+        private bool HasUsernname => !string.IsNullOrEmpty(Username);
+
+        private bool HasPassword => !string.IsNullOrEmpty(Password);
+
+        private bool HasEmail => !string.IsNullOrEmpty(Email);
+
+
+        private bool HasDisplayname => !string.IsNullOrEmpty(Displayname);
+
+
+
+
         public RegisterViewModel(IServiceProvider provider)
         {
             _provider = provider;
@@ -51,7 +147,7 @@ namespace CafeManager.WPF.ViewModels
             _fileDialogService = provider.GetRequiredService<FileDialogService>();
         }
 
-        [RelayCommand]
+        [RelayCommand(CanExecute = nameof(CanSubmit))]
         private async Task Register()
         {
             try
@@ -101,18 +197,7 @@ namespace CafeManager.WPF.ViewModels
             }
         }
 
-        [RelayCommand]
-        private void SetAvata()
-        {
-            string filter = "Image files (*.png;*.jpg;*.jpeg;*.bmp)|*.png;*.jpg;*.jpeg;*.bmp|All files (*.*)|*.*";
-            var filePath = _fileDialogService.OpenFileDialog(filter);
-
-            if (!string.IsNullOrEmpty(filePath))
-            {
-                Avata = new BitmapImage(new Uri(filePath));
-                TextBoxImageText = filePath;
-            }
-        }
+     
 
         [RelayCommand]
         private void NavigateToLogin()
@@ -127,24 +212,6 @@ namespace CafeManager.WPF.ViewModels
             VertificationCode = string.Empty;
         }
 
-        private string _textBoxImageText;
-
-        public string TextBoxImageText
-        {
-            get => _textBoxImageText;
-            set
-            {
-                if (_textBoxImageText != value)
-                {
-                    _textBoxImageText = value;
-                    OnPropertyChanged();
-
-                    if (!string.IsNullOrEmpty(_textBoxImageText) && System.IO.File.Exists(_textBoxImageText))
-                    {
-                        Avata = new BitmapImage(new Uri(_textBoxImageText, UriKind.RelativeOrAbsolute));
-                    }
-                }
-            }
-        }
+       
     }
 }

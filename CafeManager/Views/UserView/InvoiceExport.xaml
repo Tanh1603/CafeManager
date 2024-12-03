@@ -62,38 +62,38 @@
                     <ColumnDefinition Width="auto"/>
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
-                <TextBlock Text='Hóa đơn' Foreground="Brown" FontSize="32" FontWeight="Bold" FontStyle="Italic" />
-                <Grid Grid.Row="1" >
+                <TextBlock Text='Hóa đơn' Foreground="#844518" FontSize="32" FontWeight="Bold" FontStyle="Italic" />
+                <Grid Grid.Row="1"  Margin="0 10 0 0">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="auto" SharedSizeGroup="label"/>
                         <ColumnDefinition Width="*"/>
                     </Grid.ColumnDefinitions>
-                    <TextBlock Text="Hóa đơn#:" Foreground="Brown"/>
-                    <TextBlock Grid.Column="1" Text="aaa"/>
+                    <TextBlock Text="Hóa đơn#:  " Foreground="#844518" FontSize="16"/>
+                    <TextBlock Grid.Column="1" Text="aaa" FontSize="16"/>
                 </Grid>
                 <Grid Grid.Row="2" >
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="auto" SharedSizeGroup="label"/>
                         <ColumnDefinition Width="*"/>
                     </Grid.ColumnDefinitions>
-                    <TextBlock Text="Bàn#:" Foreground="Brown"/>
-                    <TextBlock Grid.Column="1" Text="aaa"/>
+                    <TextBlock Text="Bàn#:" Foreground="#844518" FontSize="16"/>
+                    <TextBlock Grid.Column="1" Text="aaa" FontSize="16"/>
                 </Grid>
                 <Grid Grid.Row="3" >
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="auto" SharedSizeGroup="label"/>
                         <ColumnDefinition Width="*"/>
                     </Grid.ColumnDefinitions>
-                    <TextBlock Text="Ngày:" Foreground="Brown"/>
-                    <TextBlock Grid.Column="1" Text="aa"/>
+                    <TextBlock Text="Ngày:" Foreground="Brown" FontSize="16"/>
+                    <TextBlock Grid.Column="1" Text="aa" FontSize="16"/>
                 </Grid>
                 <Grid Grid.Row="4" >
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="auto" SharedSizeGroup="label"/>
                         <ColumnDefinition Width="*"/>
                     </Grid.ColumnDefinitions>
-                    <TextBlock Text="Giờ vào:" Foreground="Brown"/>
-                    <TextBlock Grid.Column="1" Text="aa"/>
+                    <TextBlock Text="Giờ vào:" Foreground="Brown" FontSize="16"/>
+                    <TextBlock Grid.Column="1" Text="aa" FontSize="16"/>
                 </Grid>
 
                 <Grid Grid.Row="3" Grid.Column="1" HorizontalAlignment="Right" >
@@ -101,16 +101,16 @@
                         <ColumnDefinition Width="auto" SharedSizeGroup="label"/>
                         <ColumnDefinition Width="*"/>
                     </Grid.ColumnDefinitions>
-                    <TextBlock Text="In lúc:" Foreground="Brown"/>
-                    <TextBlock Grid.Column="1" Text="aa"/>
+                    <TextBlock Text="In lúc:" Foreground="Brown" FontSize="16"/>
+                    <TextBlock Grid.Column="1" Text="aa" FontSize="16"/>
                 </Grid>
                 <Grid Grid.Row="4" Grid.Column="1" HorizontalAlignment="Right" >
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="auto" SharedSizeGroup="label"/>
                         <ColumnDefinition Width="*"/>
                     </Grid.ColumnDefinitions>
-                    <TextBlock Text="Giờ ra:" Foreground="Brown"/>
-                    <TextBlock Grid.Column="1" Text="aa"/>
+                    <TextBlock Text="Giờ ra:" Foreground="Brown" FontSize="16"/>
+                    <TextBlock Grid.Column="1" Text="aa" FontSize="16"/>
                 </Grid>
             </Grid>
             <Grid Grid.Row="2">
@@ -127,7 +127,7 @@
                 </ListView>
             </Grid>
             
-            <Grid Grid.Row="4">
+            <Grid Grid.Row="4" Margin="0 10 0 0">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="auto"/>
                     <ColumnDefinition Width="*"/>
@@ -140,14 +140,14 @@
                 </Grid.RowDefinitions>
                 <Grid Grid.Row="0" Grid.IsSharedSizeScope="True">
                     <StackPanel>
-                        <TextBlock Text="Liên hệ:"/>
-                        <Grid>
+                        <TextBlock Text="Liên hệ" FontSize="16" Foreground="#844518" FontWeight="Bold"/>
+                        <Grid Margin="0 10 0 0">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="auto" SharedSizeGroup="label"/>
                                 <ColumnDefinition Width="*"/>
                             </Grid.ColumnDefinitions>
-                            <TextBlock Text="Email:"/>
-                            <TextBlock Grid.Column="1" Text="cafeManager@gmail.com"/>
+                            <TextBlock Text="Email:  " FontSize="14"/>
+                            <TextBlock Grid.Column="1" Text="cafeManager@gmail.com" FontSize="14"/>
 
 
                         </Grid>
@@ -156,25 +156,25 @@
                                 <ColumnDefinition Width="auto" SharedSizeGroup="label"/>
                                 <ColumnDefinition Width="*"/>
                             </Grid.ColumnDefinitions>
-                            <TextBlock Text="SĐT:"/>
-                            <TextBlock Grid.Column="1" Text="0377929994"/>
+                            <TextBlock Text="SĐT:" FontSize="14"/>
+                            <TextBlock Grid.Column="1" Text="0377929994" FontSize="14"/>
 
 
                         </Grid>
                     </StackPanel>
                     
                 </Grid>
-                <Grid Grid.Column="1" HorizontalAlignment="Right" Grid.IsSharedSizeScope="True">
+                <Grid Grid.Column="1" HorizontalAlignment="Right" Grid.IsSharedSizeScope="True" Margin="0 0 20 0">
                     
                 <StackPanel>
-                    <TextBlock Text="Khấu trừ"/>
+                        <TextBlock Text="Khấu trừ" FontSize="16" Foreground="#844518" FontWeight="Bold"/>
                     <Grid>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="auto" SharedSizeGroup="label"/>
                             <ColumnDefinition Width="*"/>
                         </Grid.ColumnDefinitions>
-                        <TextBlock Text="Mã giảm giá:"/>
-                        <TextBlock Grid.Column="1" Text=""/>
+                            <TextBlock Text="Mã giảm giá:" FontSize="16"/>
+                            <TextBlock Grid.Column="1" Text="" FontSize="16"/>
             
                         
                     </Grid>
@@ -184,16 +184,16 @@
                             <ColumnDefinition Width="auto" SharedSizeGroup="label"/>
                             <ColumnDefinition Width="*"/>
                         </Grid.ColumnDefinitions>
-                        <TextBlock Text="Tổng tiền:"/>
-                        <TextBlock Grid.Column="1" Text=""/>
+                            <TextBlock Text="Tổng tiền:" FontSize="16"/>
+                            <TextBlock Grid.Column="1" Text="" FontSize="16"/>
 
 
                     </Grid>
                 </StackPanel>
                 </Grid>
             </Grid>
-            <Grid Grid.Row="5" HorizontalAlignment="Center">
-                <TextBlock Text="Cảm ơn quý khách! Hẹn gặp lại"/>
+            <Grid Grid.Row="5" HorizontalAlignment="Center" Margin="0 10 0 0">
+                <TextBlock Text="Cảm ơn quý khách! Hẹn gặp lại!" FontSize="16" FontStyle="Italic" Foreground="#844518" FontWeight="Bold"/>
             </Grid>
         </Grid>
     </Border>

@@ -29,6 +29,7 @@ namespace CafeManager.WPF.Services
         public string VerificationCode { get; private set; }
         public string NewPassWord { get; private set; }
 
+        
         public AppUserServices(IServiceProvider provider)
         {
             _provider = provider;

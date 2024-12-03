@@ -8,6 +8,7 @@ using CommunityToolkit.Mvvm.Input;
 using Microsoft.Extensions.DependencyInjection;
 using System.Collections.ObjectModel;
 
+
 namespace CafeManager.WPF.ViewModels.UserViewModel
 {
     public partial class OrderViewModel : ObservableObject, IDisposable
@@ -18,6 +19,8 @@ namespace CafeManager.WPF.ViewModels.UserViewModel
         private readonly CoffeTableServices _coffeTableServices;
         private readonly InvoiceServices _invoiceServices;
         private readonly StaffServices _staffServices;
+
+        public PrintInvoice PrintInvoice { get; }
 
         [ObservableProperty]
         private ObservableCollection<CoffeetableDTO> _listCoffeeTableDTO = [];
@@ -201,11 +204,11 @@ namespace CafeManager.WPF.ViewModels.UserViewModel
                 string messageBox = string.Empty;
                 if (SelectedInvoiceDTO.IsCustomer)
                 {
-                    messageBox = MyMessageBox.ShowDialog($"Bạn có muốn thanh toán hóa đơn {SelectedInvoiceDTO.InvoiceCustomerId}");
+                    messageBox = MyMessageBox.ShowDialog($"Bạn có muốn thanh toán hóa đơn {SelectedInvoiceDTO.InvoiceCustomerId}", MyMessageBox.Buttons.OK, MyMessageBox.Icons.Information);
                 }
                 else if (SelectedInvoiceDTO.IsCoffeeTable)
                 {
-                    messageBox = MyMessageBox.ShowDialog($"Bạn có muốn thanh toán hóa đơn {SelectedInvoiceDTO.CoffeetableDTO.TableName}");
+                    messageBox = MyMessageBox.ShowDialog($"Bạn có muốn thanh toán hóa đơn {SelectedInvoiceDTO.CoffeetableDTO.TableName}", MyMessageBox.Buttons.Yes_No, MyMessageBox.Icons.Question);
                 }
 
                 if (messageBox.Equals("1"))
@@ -219,11 +222,36 @@ namespace CafeManager.WPF.ViewModels.UserViewModel
                         OnPropertyChanged(nameof(ListCustomerInvoiceDTO));
                     }
                 }
+                await Print();
             }
             catch (InvalidOperationException ioe)
             {
                 MyMessageBox.Show(ioe.Message);
             }
+        }
+
+        private async Task Print()
+        {
+
+            // Tạo View và gắn DataContext
+            var invoiceExportView = new Views.UserView.InvoiceExport();
+            invoiceExportView.DataContext = this;
+
+            double width = 500;  // Chiều rộng mong muốn
+            double height = 600; // Chiều cao mong muốn
+
+            // Render View ra Bitmap
+            var bitmap = PrintInvoice.RenderViewToBitmap(invoiceExportView, width, height);
+
+            // Hiển thị SaveFileDialog
+            string filePath = PrintInvoice.ShowSaveFileDialog();
+            if (filePath == null)
+            {
+                return; // Người dùng hủy
+            }
+
+            // Lưu PDF
+            PrintInvoice.SaveBitmapToPdf(bitmap, filePath);
         }
 
         [RelayCommand]
@@ -240,11 +268,11 @@ namespace CafeManager.WPF.ViewModels.UserViewModel
                 string messageBox = string.Empty;
                 if (SelectedInvoiceDTO.IsCustomer)
                 {
-                    messageBox = MyMessageBox.ShowDialog($"Bạn có muốn hủy hóa đơn {SelectedInvoiceDTO.InvoiceCustomerId}");
+                    messageBox = MyMessageBox.ShowDialog($"Bạn có muốn hủy hóa đơn {SelectedInvoiceDTO.InvoiceCustomerId}", MyMessageBox.Buttons.Yes_No, MyMessageBox.Icons.Question);
                 }
                 else if (SelectedInvoiceDTO.IsCoffeeTable)
                 {
-                    messageBox = MyMessageBox.ShowDialog($"Bạn có muốn hủy hóa hóa đơn {SelectedInvoiceDTO.CoffeetableDTO.TableName}");
+                    messageBox = MyMessageBox.ShowDialog($"Bạn có muốn hủy hóa hóa đơn {SelectedInvoiceDTO.CoffeetableDTO.TableName}", MyMessageBox.Buttons.Yes_No, MyMessageBox.Icons.Question);
                 }
 
                 if (messageBox.Equals("1"))

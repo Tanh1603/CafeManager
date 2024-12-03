@@ -31,7 +31,7 @@
                     </LinearGradientBrush>
                 </Border.Background>
 
-                <StackPanel HorizontalAlignment="Left" VerticalAlignment="Center">
+                <StackPanel HorizontalAlignment="Left" VerticalAlignment="Top">
                     <!--  username  -->
                     <Grid Margin="10,0,0,5" HorizontalAlignment="Left">
 
@@ -197,7 +197,7 @@
         </Grid>
 
         <!--  main section  -->
-        <Border Grid.Column="1">
+        <Border Grid.Column="1" CornerRadius="10 0 0 0">
             <Border.Background>
                 <LinearGradientBrush StartPoint="0,0.5" EndPoint="1,0.5">
                     <GradientStop Offset="0" Color="#9c6d3f" />

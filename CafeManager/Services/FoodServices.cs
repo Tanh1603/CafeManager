@@ -1,13 +1,6 @@
 ﻿using CafeManager.Core.Data;
-using CafeManager.Core.DTOs;
 using CafeManager.Core.Services;
-using CafeManager.Infrastructure.Models;
 using Microsoft.Extensions.DependencyInjection;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace CafeManager.WPF.Services
 {
@@ -22,19 +15,14 @@ namespace CafeManager.WPF.Services
             _unitOfWork = _serviceProvider.GetRequiredService<IUnitOfWork>();
         }
 
-        public async Task<Food> GetFoodById(int id)
+        public async Task<Food?> GetFoodById(int id)
         {
-            return await _unitOfWork.FoodList.GetFoodById(id);
+            return await _unitOfWork.FoodList.GetById(id);
         }
 
-        public async Task<Food?> GetDeletedFoodById(int id)
+        public async Task<IEnumerable<Food>> GetAllFood()
         {
-            return (await _unitOfWork.FoodList.GetAll()).FirstOrDefault(x => x.Foodid == id);
-        }
-
-        public async Task<IEnumerable<Food>> GetAllListFoodByFoodCategoryId(int id)
-        {
-            return (await _unitOfWork.FoodList.GetAll()).Where(x => x.Foodcategoryid == id);
+            return await _unitOfWork.FoodList.GetAll();
         }
 
         public async Task<Food> CreateFood(Food food)
@@ -45,31 +33,32 @@ namespace CafeManager.WPF.Services
                 var res = await _unitOfWork.FoodList.Create(food);
 
                 await _unitOfWork.CompleteAsync();
+                _unitOfWork.ClearChangeTracker();
                 await _unitOfWork.CommitTransactionAsync();
                 return res;
             }
             catch (Exception)
             {
                 await _unitOfWork.RollbackTransactionAsync();
-                _unitOfWork.ClearChangeTracker();
                 throw new InvalidOperationException("Thêm thức ăn thất bại.");
             }
         }
 
-        public Food? UpdatFood(Food? obj)
+        public async Task<Food?> UpdatFood(Food obj)
         {
             try
             {
-                var res = _unitOfWork.FoodList.Update(obj);
-                if (res != null)
-                {
-                    _unitOfWork.Complete();
-                }
+                await _unitOfWork.BeginTransactionAsync();
+
+                var res = await _unitOfWork.FoodList.Update(obj);
+                await _unitOfWork.CompleteAsync();
+                _unitOfWork.ClearChangeTracker();
+                await _unitOfWork.CommitTransactionAsync();
                 return res;
             }
             catch (Exception)
             {
-                _unitOfWork.ClearChangeTracker();
+                await _unitOfWork.RollbackTransactionAsync();
                 throw new InvalidOperationException("Sửa thức ăn thất bại.");
             }
         }
@@ -85,13 +74,13 @@ namespace CafeManager.WPF.Services
                 {
                     await _unitOfWork.CompleteAsync();
                 }
+                _unitOfWork.ClearChangeTracker();
                 await _unitOfWork.CommitTransactionAsync();
                 return isdeleted;
             }
             catch (Exception)
             {
                 await _unitOfWork.RollbackTransactionAsync();
-                _unitOfWork.ClearChangeTracker();
                 throw new InvalidOperationException("Xóa thức ăn thất bại.");
             }
         }

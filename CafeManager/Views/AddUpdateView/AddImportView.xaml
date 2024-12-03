@@ -4,6 +4,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:addview="clr-namespace:CafeManager.WPF.Views.AddUpdateView"
     xmlns:addviewmodel="clr-namespace:CafeManager.WPF.ViewModels.AddViewModel"
+    xmlns:adminviews="clr-namespace:CafeManager.WPF.Views.AdminView"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:fa="http://schemas.awesome.incremented/wpf/xaml/fontawesome.sharp"
     xmlns:local="clr-namespace:CafeManager.WPF.Views"
@@ -15,7 +16,7 @@
     xmlns:uc="clr-namespace:CafeManager.WPF.Assets.UsersControls"
     xmlns:view="clr-namespace:CafeManager.WPF.Views"
     xmlns:vm="clr-namespace:CafeManager.WPF.ViewModels.AddViewModel"
-    Width="Auto"
+    Width="900"
     Height="Auto"
     d:DataContext="{d:DesignInstance Type=addviewmodel:AddImportViewModel}"
     mc:Ignorable="d">
@@ -36,7 +37,7 @@
             <ColumnDefinition Width="175*" />
             <ColumnDefinition Width="109*" />
         </Grid.ColumnDefinitions>
-        <Border CornerRadius="10 10 10 10" Grid.ColumnSpan="2">
+        <Border Grid.ColumnSpan="2" CornerRadius="10 10 10 10">
             <Border.Background>
                 <LinearGradientBrush StartPoint="0,0.5" EndPoint="1,0.5">
                     <GradientStop Offset="0" Color="#d4b096" />
@@ -47,8 +48,9 @@
             <Grid Margin="40,0,40,10">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="20" />
-                    <RowDefinition Height="190" />
                     <RowDefinition Height="220" />
+                    <RowDefinition Height="240" />
+                    <RowDefinition Height="Auto"/>
                     <RowDefinition Height="Auto" />
                 </Grid.RowDefinitions>
 
@@ -66,9 +68,10 @@
                 </Button>-->
 
                 <!--  Thông tin nhập hàng  -->
+
                 <Grid Grid.Row="1">
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="300" />
+                        <ColumnDefinition />
                         <ColumnDefinition />
                     </Grid.ColumnDefinitions>
                     <Border
@@ -84,12 +87,25 @@
                                 <RowDefinition />
                             </Grid.RowDefinitions>
 
-                            <TextBlock
-                                HorizontalAlignment="Left"
-                                FontSize="18"
-                                FontWeight="SemiBold"
-                                Foreground="#5f2414"
-                                Text="Thông tin nhập hàng" />
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto" />
+                                    <ColumnDefinition />
+                                </Grid.ColumnDefinitions>
+                                <TextBlock
+                                    HorizontalAlignment="Left"
+                                    FontSize="18"
+                                    FontWeight="SemiBold"
+                                    Foreground="#5f2414"
+                                    Text="Thông tin nhập hàng" />
+                                <ma:PackIconMaterial
+                                    Grid.Column="1"
+                                    Margin="10,0,0,0"
+                                    Kind="PencilOutline"
+                                    Style="{StaticResource gridButtonIcon}"
+                                    Visibility="{Binding IsUpdating, Converter={StaticResource BoolToVis}}" />
+
+                            </Grid>
 
                             <Grid Grid.Row="1" Margin="5,0,5,0">
                                 <Grid.RowDefinitions>
@@ -98,8 +114,44 @@
                                     <RowDefinition Height="Auto" />
                                     <RowDefinition Height="Auto" />
                                     <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="Auto" />
                                 </Grid.RowDefinitions>
-                                <Grid>
+
+                                <Grid Grid.Row="0">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition />
+                                        <ColumnDefinition Width="Auto" />
+                                    </Grid.ColumnDefinitions>
+                                    <ComboBox
+                                        Margin="10,5"
+                                        materialDesign:HintAssist.Hint="Nhà cung cấp"
+                                        DisplayMemberPath="Suppliername"
+                                        ItemsSource="{Binding ListSupplier}"
+                                        SelectedValue="{Binding ModifyImport.Supplierid, Mode=TwoWay}"
+                                        SelectedValuePath="Supplierid" />
+
+                                    <Button
+                                        Grid.Column="1"
+                                        Width="70"
+                                        Height="25"
+                                        Margin="0,5,5,5"
+                                        HorizontalAlignment="Center"
+                                        VerticalAlignment="Center"
+                                        Command="{Binding OpenAddSupplierCommand}"
+                                        Style="{StaticResource addButton}">
+                                        <StackPanel Orientation="Horizontal">
+                                            <ma:PackIconMaterial
+                                                Width="11"
+                                                Height="11"
+                                                Margin="0,1,5,0"
+                                                VerticalAlignment="Center"
+                                                Kind="Plus" />
+                                            <TextBlock FontSize="11" Text="Nhập mới" />
+                                        </StackPanel>
+                                    </Button>
+                                </Grid>
+
+                                <Grid Grid.Row="1">
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition Width="Auto" />
                                         <ColumnDefinition />
@@ -108,11 +160,10 @@
                                     <TextBox
                                         Grid.Column="1"
                                         VerticalAlignment="Center"
-                                        IsEnabled="{Binding IsAdding}"
-                                        Text="{Binding Deliveryperson, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" />
+                                        Text="{Binding ModifyImport.Deliveryperson, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" />
                                 </Grid>
 
-                                <Grid Grid.Row="1">
+                                <Grid Grid.Row="2">
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition Width="Auto" />
                                         <ColumnDefinition />
@@ -121,11 +172,10 @@
                                     <TextBox
                                         Grid.Column="1"
                                         VerticalAlignment="Center"
-                                        IsEnabled="{Binding IsAdding}"
-                                        Text="{Binding Phone, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" />
+                                        Text="{Binding ModifyImport.Phone, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" />
                                 </Grid>
 
-                                <Grid Grid.Row="2">
+                                <Grid Grid.Row="3">
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition Width="Auto" />
                                         <ColumnDefinition />
@@ -134,21 +184,7 @@
                                     <TextBox
                                         Grid.Column="1"
                                         VerticalAlignment="Center"
-                                        IsEnabled="{Binding IsAdding}"
-                                        Text="{Binding Shippingcompany, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" />
-                                </Grid>
-
-                                <Grid Grid.Row="3">
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="Auto" />
-                                        <ColumnDefinition />
-                                    </Grid.ColumnDefinitions>
-                                    <TextBlock VerticalAlignment="Bottom" Text="Người nhận: " />
-                                    <TextBox
-                                        Grid.Column="1"
-                                        VerticalAlignment="Center"
-                                        IsEnabled="{Binding IsAdding}"
-                                        Text="{Binding Receiver, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" />
+                                        Text="{Binding ModifyImport.Shippingcompany, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" />
                                 </Grid>
 
                                 <Grid Grid.Row="4">
@@ -156,10 +192,27 @@
                                         <ColumnDefinition Width="Auto" />
                                         <ColumnDefinition />
                                     </Grid.ColumnDefinitions>
+                                    <TextBlock VerticalAlignment="Bottom" Text="Người nhận: " />
+                                    <ComboBox
+                                        Grid.Column="1"
+                                        Margin="10,5"
+                                        materialDesign:HintAssist.Hint="Nhân viên"
+                                        DisplayMemberPath="Staffname"
+                                        ItemsSource="{Binding ListStaff}"
+                                        SelectedValue="{Binding ModifyImport.Staffid, Mode=TwoWay}"
+                                        SelectedValuePath="Staffid" />
+                                </Grid>
+
+                                <Grid Grid.Row="5">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="Auto" />
+                                        <ColumnDefinition />
+                                    </Grid.ColumnDefinitions>
                                     <Grid>
                                         <Grid.ColumnDefinitions>
                                             <ColumnDefinition Width="Auto" />
-                                            <ColumnDefinition />
+                                            <ColumnDefinition Width="Auto" />
+                                            <ColumnDefinition Width="Auto" />
                                         </Grid.ColumnDefinitions>
                                         <TextBlock VerticalAlignment="Bottom" Text="Ngày giao: " />
                                         <DatePicker
@@ -169,32 +222,22 @@
                                             HorizontalAlignment="Left"
                                             materialDesign:HintAssist.Hint="Pick Date"
                                             materialDesign:TextFieldAssist.HasClearButton="True"
-                                            IsEnabled="{Binding IsAdding}"
-                                            SelectedDate="{Binding Receiveddate, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
+                                            SelectedDate="{Binding ModifyImport.Receiveddate, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
                                             Style="{StaticResource MaterialDesignFloatingHintDatePicker}" />
-                                    </Grid>
 
-                                    <!--<Button
-                                        Grid.Column="1"
-                                        Width="80"
-                                        Height="25"
-                                        Margin="0,0,10,0"
-                                        HorizontalAlignment="Right"
-                                        VerticalAlignment="Bottom"
-                                        Command="{Binding SubmitImportCommand}"
-                                        Style="{StaticResource addButton}"
-                                        Visibility="{Binding IsAdding, Converter={StaticResource BoolToVis}}">
-                                        <StackPanel Orientation="Horizontal">
-                                            <ma:PackIconMaterial
-                                                Width="11"
-                                                Height="11"
-                                                Margin="0,1,5,0"
-                                                VerticalAlignment="Center"
-                                                Kind="Plus" />
-                                            <TextBlock FontSize="11" Text="Xác nhận" />
-                                        </StackPanel>
-                                    </Button>-->
+                                        <materialDesign:TimePicker
+                                            x:Name="PresetTimePicker"
+                                            Grid.Column="2"
+                                            Width="100"
+                                            Margin="20,0,0,0"
+                                            Padding="0,10,0,0"
+                                            materialDesign:HintAssist.Hint="Pick Time"
+                                            materialDesign:TextFieldAssist.HasClearButton="True"
+                                            Is24Hours="True"
+                                            SelectedTime="{Binding ModifyImport.Receiveddate, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" />
+                                    </Grid>
                                 </Grid>
+
                             </Grid>
                         </Grid>
                     </Border>
@@ -213,60 +256,57 @@
                                 <RowDefinition Height="Auto" />
                                 <RowDefinition Height="Auto" />
                                 <RowDefinition Height="Auto" />
-                                <RowDefinition />
                             </Grid.RowDefinitions>
 
-                            <TextBlock
-                                HorizontalAlignment="Left"
-                                FontSize="18"
-                                FontWeight="SemiBold"
-                                Foreground="#5f2414"
-                                Text="Thêm thông tin" />
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto" />
+                                    <ColumnDefinition />
+                                </Grid.ColumnDefinitions>
+                                <TextBlock
+                                    HorizontalAlignment="Left"
+                                    FontSize="18"
+                                    FontWeight="SemiBold"
+                                    Foreground="#5f2414"
+                                    Text="Thêm thông tin" />
+
+                                <Button
+                                    Grid.Column="1"
+                                    Width="15"
+                                    Height="15"
+                                    Margin="0,5,10,0"
+                                    HorizontalAlignment="Right"
+                                    Command="{Binding ClearAddImportDetailCommand}"
+                                    Style="{StaticResource closeButton}">
+
+                                    <ma:PackIconMaterial
+                                        Width="15"
+                                        Height="15"
+                                        Kind="Refresh"
+                                        Style="{StaticResource iconApp}" />
+                                </Button>
+
+                            </Grid>
 
                             <!--  Nhà cung cấp và vật liệu  -->
                             <Grid Grid.Row="1">
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition />
                                     <ColumnDefinition Width="Auto" />
-                                    <ColumnDefinition />
-                                    <ColumnDefinition Width="Auto" />
                                 </Grid.ColumnDefinitions>
+
                                 <ComboBox
-                                    Margin="10,5"
-                                    materialDesign:HintAssist.Hint="Nhà cung cấp"
-                                    DisplayMemberPath="Suppliername"
-                                    ItemsSource="{Binding ListSupplier}"
-                                    SelectedValue="{Binding SelectedSupplier}" />
-                                <ComboBox
-                                    Grid.Column="2"
+                                    Grid.Column="0"
                                     Margin="10,5"
                                     materialDesign:HintAssist.Hint="Vật liệu"
                                     DisplayMemberPath="Materialname"
                                     ItemsSource="{Binding ListMaterial}"
-                                    SelectedValue="{Binding SelectedMaterial}" />
+                                    SelectedItem="{Binding SelectedMaterial}"
+                                    SelectedValue="{Binding SelectedMaterial.Materialid, Mode=TwoWay}"
+                                    SelectedValuePath="Materialid" />
 
                                 <Button
                                     Grid.Column="1"
-                                    Width="70"
-                                    Height="25"
-                                    Margin="0,5,5,5"
-                                    HorizontalAlignment="Center"
-                                    VerticalAlignment="Center"
-                                    Command="{Binding OpenAddSupplierCommand}"
-                                    Style="{StaticResource addButton}">
-                                    <StackPanel Orientation="Horizontal">
-                                        <ma:PackIconMaterial
-                                            Width="11"
-                                            Height="11"
-                                            Margin="0,1,5,0"
-                                            VerticalAlignment="Center"
-                                            Kind="Plus" />
-                                        <TextBlock FontSize="11" Text="Nhập mới" />
-                                    </StackPanel>
-                                </Button>
-
-                                <Button
-                                    Grid.Column="3"
                                     Width="70"
                                     Height="25"
                                     Margin="0,5,5,5"
@@ -292,6 +332,8 @@
                                     <RowDefinition Height="Auto" />
                                     <RowDefinition Height="Auto" />
                                     <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="Auto" />
                                 </Grid.RowDefinitions>
 
                                 <Grid.ColumnDefinitions>
@@ -312,7 +354,7 @@
                                         HorizontalAlignment="Left"
                                         materialDesign:HintAssist.Hint="Pick Date"
                                         materialDesign:TextFieldAssist.HasClearButton="True"
-                                        SelectedDate="{Binding ManufactureDate, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
+                                        SelectedDate="{Binding CurrentImportDetail.Manufacturedate, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
                                         Style="{StaticResource MaterialDesignFloatingHintDatePicker}" />
                                 </Grid>
 
@@ -329,7 +371,7 @@
                                         HorizontalAlignment="Left"
                                         materialDesign:HintAssist.Hint="Pick Date"
                                         materialDesign:TextFieldAssist.HasClearButton="True"
-                                        SelectedDate="{Binding ExpirationDate, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
+                                        SelectedDate="{Binding CurrentImportDetail.Expirationdate, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
                                         Style="{StaticResource MaterialDesignFloatingHintDatePicker}" />
                                 </Grid>
 
@@ -338,29 +380,26 @@
                                         <ColumnDefinition Width="Auto" />
                                         <ColumnDefinition />
                                     </Grid.ColumnDefinitions>
-                                    <TextBlock VerticalAlignment="Bottom" Text="Xuất xứ: " />
-                                    <TextBox
-                                        Grid.Column="1"
-                                        VerticalAlignment="Center"
-                                        Text="{Binding Original, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" />
-                                </Grid>
-
-                                <Grid
-                                    Grid.Row="1"
-                                    Grid.Column="1"
-                                    Margin="0,0,5,0">
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="Auto" />
-                                        <ColumnDefinition />
-                                    </Grid.ColumnDefinitions>
                                     <TextBlock VerticalAlignment="Bottom" Text="Nhà sản xuất: " />
                                     <TextBox
                                         Grid.Column="1"
                                         VerticalAlignment="Center"
-                                        Text="{Binding Manufacturer, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" />
+                                        Text="{Binding CurrentImportDetail.Manufacturer, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" />
                                 </Grid>
 
                                 <Grid Grid.Row="2" Margin="0,0,5,0">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="Auto" />
+                                        <ColumnDefinition />
+                                    </Grid.ColumnDefinitions>
+                                    <TextBlock VerticalAlignment="Bottom" Text="Xuất xứ: " />
+                                    <TextBox
+                                        Grid.Column="1"
+                                        VerticalAlignment="Center"
+                                        Text="{Binding CurrentImportDetail.Original, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" />
+                                </Grid>
+
+                                <Grid Grid.Row="3" Margin="0,0,5,0">
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition Width="Auto" />
                                         <ColumnDefinition />
@@ -369,11 +408,11 @@
                                     <TextBox
                                         Grid.Column="1"
                                         VerticalAlignment="Center"
-                                        Text="{Binding Price, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" />
+                                        Text="{Binding CurrentImportDetail.Price, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" />
                                 </Grid>
 
                                 <Grid
-                                    Grid.Row="2"
+                                    Grid.Row="3"
                                     Grid.Column="1"
                                     Margin="0,0,5,0">
                                     <Grid.ColumnDefinitions>
@@ -384,30 +423,24 @@
                                     <TextBox
                                         Grid.Column="1"
                                         VerticalAlignment="Center"
-                                        Text="{Binding Quantity, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" />
+                                        Text="{Binding CurrentImportDetail.Quantity, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" />
                                 </Grid>
-                            </Grid>
 
-                            <Button
-                                Grid.Row="3"
-                                Width="80"
-                                Height="25"
-                                Margin="0,5,10,5"
-                                HorizontalAlignment="Right"
-                                VerticalAlignment="Center"
-                                Command="{Binding SubmitMaterialSupplierCommand}"
-                                Style="{StaticResource addButton}"
-                                Visibility="{Binding IsAdding, Converter={StaticResource BoolToVis}}">
-                                <StackPanel Orientation="Horizontal">
-                                    <ma:PackIconMaterial
-                                        Width="11"
-                                        Height="11"
-                                        Margin="0,1,5,0"
-                                        VerticalAlignment="Center"
-                                        Kind="Plus" />
-                                    <TextBlock FontSize="11" Text="Xác nhận" />
-                                </StackPanel>
-                            </Button>
+                                <Button
+                                    Grid.Row="4"
+                                    Grid.Column="1"
+                                    Width="80"
+                                    Height="25"
+                                    Margin="0,5,10,5"
+                                    HorizontalAlignment="Right"
+                                    VerticalAlignment="Center"
+                                    Command="{Binding ModifyImportDetailListCommand}"
+                                    Style="{StaticResource addButton}">
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock FontSize="11" Text="Xác nhận" />
+                                    </StackPanel>
+                                </Button>
+                            </Grid>
                         </Grid>
                     </Border>
                 </Grid>
@@ -416,10 +449,10 @@
                     <DataGrid
                         x:Name="ImportDetailsDataGrid"
                         VerticalAlignment="Top"
-                        AlternationCount="{Binding ListMaterialDetailDTO.Count}"
+                        AlternationCount="{Binding CurrentListImportdetail.Count}"
                         CellStyle="{DynamicResource DataGridCellStyle1}"
                         ColumnHeaderStyle="{DynamicResource DataGridColumnHeaderStyle1}"
-                        ItemsSource="{Binding ListMaterialDetailDTO}"
+                        ItemsSource="{Binding CurrentListImportdetail}"
                         RowStyle="{DynamicResource DataGridRowStyle1}"
                         Style="{DynamicResource DataGridStyle1}">
                         <DataGrid.Columns>
@@ -452,16 +485,19 @@
 
                             <DataGridTextColumn
                                 Width="Auto"
-                                Binding="{Binding Price}"
+                                Binding="{Binding Price, StringFormat={}{0:0}}"
                                 CanUserResize="False"
                                 Header="Giá"
                                 IsReadOnly="True" />
+
                             <DataGridTextColumn
                                 Width="Auto"
                                 Binding="{Binding Quantity}"
                                 CanUserResize="False"
                                 Header="Số lượng"
                                 IsReadOnly="True" />
+
+
                             <DataGridTextColumn
                                 Width="Auto"
                                 Binding="{Binding Unit}"
@@ -474,12 +510,6 @@
                                 CanUserResize="False"
                                 Header="Ngày hết hạn"
                                 IsReadOnly="True" />
-                            <DataGridTextColumn
-                                Width="Auto"
-                                Binding="{Binding Suppliername}"
-                                CanUserResize="False"
-                                Header="Nhà cung cấp"
-                                IsReadOnly="True" />
 
                             <DataGridTemplateColumn
                                 Width="Auto"
@@ -490,10 +520,15 @@
                                     <DataTemplate>
                                         <StackPanel Orientation="Horizontal">
                                             <Button
+                                                Command="{Binding DataContext.UpdateImportDetailCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                                CommandParameter="{Binding}"
+                                                Style="{StaticResource gridEditButton}">
+                                                <ma:PackIconMaterial Kind="PencilOutline" Style="{StaticResource gridButtonIcon}" />
+                                            </Button>
+                                            <Button
                                                 Margin="5,0,0,0"
                                                 Command="{Binding DataContext.DeleteImportDetailCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
                                                 CommandParameter="{Binding}"
-                                                IsEnabled="{Binding DataContext.IsAdding, RelativeSource={RelativeSource AncestorType=UserControl}}"
                                                 Style="{StaticResource gridRemoveButton}">
                                                 <ma:PackIconMaterial Kind="DeleteOutline" Style="{StaticResource gridButtonIcon}" />
                                             </Button>
@@ -506,6 +541,13 @@
                 </ScrollViewer>
 
                 <Grid Grid.Row="3">
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="Tổng giá trị: " />
+                        <TextBlock Text="{Binding ImportPrice, StringFormat={}{0:0}}"/>
+                    </StackPanel>
+                </Grid>
+
+                <Grid Grid.Row="4">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition />
                         <ColumnDefinition Width="90" />
@@ -516,11 +558,9 @@
                         Width="80"
                         Height="25"
                         Margin="5"
-                        Command="{Binding SubmitAllImportDetailCommand}"
-                        Style="{StaticResource addButton}"
-                        Visibility="{Binding IsAdding, Converter={StaticResource BoolToVis}}">
+                        Command="{Binding SubmitModifyImportCommand}"
+                        Style="{StaticResource addButton}">
                         <StackPanel Orientation="Horizontal">
-
                             <TextBlock Text="Xác nhận" />
                         </StackPanel>
                     </Button>
@@ -530,7 +570,7 @@
                         Width="60"
                         Height="25"
                         Margin="5"
-                        Command="{Binding CloseUserControlCommand}"
+                        Command="{Binding DataContext.CloseAddImportCommand, RelativeSource={RelativeSource AncestorType=adminviews:ImportView}}"
                         Style="{StaticResource addButton}">
                         <StackPanel Orientation="Horizontal">
                             <TextBlock Text="Thoát" />
@@ -541,19 +581,21 @@
         </Border>
 
         <materialDesign:DialogHost
+            Grid.ColumnSpan="2"
             Background="Transparent"
-            CloseOnClickAway="True"
             DialogTheme="Inherit"
             IsOpen="{Binding IsOpenAddMaterialSupplier}"
             OverlayBackground="{DynamicResource PrimaryHueDarkBrush}"
-            Placement="Mouse"
-            Style="{StaticResource MaterialDesignEmbeddedDialogHost}" Grid.ColumnSpan="2">
+            Style="{StaticResource MaterialDesignEmbeddedDialogHost}">
+            
             <materialDesign:DialogHost.DialogBackground>
                 <SolidColorBrush Color="Transparent" />
             </materialDesign:DialogHost.DialogBackground>
+            
             <materialDesign:DialogHost.DialogContent>
                 <ContentControl Content="{Binding SelectedViewModel}" />
             </materialDesign:DialogHost.DialogContent>
+            
         </materialDesign:DialogHost>
     </Grid>
 </UserControl>

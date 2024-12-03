@@ -1,18 +1,9 @@
 ﻿using CafeManager.Core.DTOs;
-using CafeManager.WPF.Services;
 using CafeManager.WPF.Stores;
-using CafeManager.WPF.ViewModels;
-using CafeManager.WPF.ViewModels.AddViewModel;
 using CafeManager.WPF.ViewModels.AdminViewModel;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Microsoft.Extensions.DependencyInjection;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Media.Imaging;
 
 namespace CafeManager.WPF.ViewModels
 {
@@ -37,6 +28,8 @@ namespace CafeManager.WPF.ViewModels
             _accountStore = provider.GetRequiredService<AccountStore>();
             CurrentViewModel = _provider.GetRequiredService<HomeViewModel>();
             currentVM = "Home";
+            //CurrentViewModel = _provider.GetRequiredService<InventoryViewModel>();
+            //currentVM = "Inventory";
             LoadAccount();
             _accountStore.ChangeAccount += _accountStore_ChangeAccount;
         }

@@ -9,16 +9,10 @@ using System.Threading.Tasks;
 
 namespace CafeManager.WPF.Services
 {
-    public class FoodCategoryServices
+    public class FoodCategoryServices(IServiceProvider provider)
     {
-        private readonly IServiceProvider _provider;
-        private readonly IUnitOfWork _unitOfWork;
-
-        public FoodCategoryServices(IServiceProvider provider)
-        {
-            _provider = provider;
-            _unitOfWork = provider.GetRequiredService<IUnitOfWork>();
-        }
+        private readonly IServiceProvider _provider = provider;
+        private readonly IUnitOfWork _unitOfWork = provider.GetRequiredService<IUnitOfWork>();
 
         public async Task<IEnumerable<Foodcategory>> GetListFoodCategory()
         {
@@ -45,9 +39,9 @@ namespace CafeManager.WPF.Services
             return res;
         }
 
-        public Foodcategory? UpdateFoodCategory(Foodcategory foodcategory)
+        public async Task<Foodcategory?> UpdateFoodCategory(Foodcategory foodcategory)
         {
-            var res = _unitOfWork.FoodCategoryList.Update(foodcategory);
+            var res = await _unitOfWork.FoodCategoryList.Update(foodcategory);
             if (res != null)
             {
                 _unitOfWork.Complete();

@@ -140,7 +140,7 @@
                                         HorizontalAlignment="Center"
                                         VerticalAlignment="Center"
                                         FontSize="16"
-                                        Text="{Binding Tablename}"
+                                        Text="{Binding TableName}"
                                         TextWrapping="WrapWithOverflow" />
                                     <materialDesign:PopupBox
                                         Grid.Column="1"

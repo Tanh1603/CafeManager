@@ -121,7 +121,6 @@
                                         <DataTemplate>
 
                                             <TextBlock Text="{Binding Foodcategoryname}" TextWrapping="Wrap" />
-
                                         </DataTemplate>
                                     </ComboBox.ItemTemplate>
                                 </ComboBox>
@@ -152,7 +151,6 @@
                                                         <i:InvokeCommandAction Command="{Binding DataContext.ChooseFoodCommand, RelativeSource={RelativeSource AncestorType=local:OrderView}}" CommandParameter="{Binding}" />
                                                     </i:EventTrigger>
                                                 </i:Interaction.Triggers>
-
                                             </uc:InfoFood>
                                         </DataTemplate>
                                     </ItemsControl.ItemTemplate>
@@ -227,7 +225,6 @@
                             <ColumnDefinition Width="auto" />
                             <ColumnDefinition Width="auto" />
                             <ColumnDefinition Width="*" />
-
                         </Grid.ColumnDefinitions>
                         <Border
                             Grid.Column="0"
@@ -258,10 +255,8 @@
                                     <TextBlock
                                         Margin="5,0,5,0"
                                         VerticalAlignment="Center"
-                                        FontSize="16"
-                                        FontWeight="Bold"
-                                        Foreground="#844418"
-                                        Text="{Binding SelectedInvoiceDTO.CoffeetableDTO.TableName}" />
+                                        FontSize="20"
+                                        Text="{Binding SelectedInvoiceDTO.Coffeetable.TableName}" />
                                 </StackPanel>
 
                                 <StackPanel
@@ -344,7 +339,6 @@
                                     </ComboBox.ItemTemplate>
                                 </ComboBox>
                             </StackPanel>
-
                         </Grid>
                     </Grid>
                     <Border

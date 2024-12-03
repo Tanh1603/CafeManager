@@ -1,18 +1,18 @@
-﻿using CafeManager.Core.Data;
-using CafeManager.Core.Services;
-using System.ComponentModel;
+﻿using System.ComponentModel;
 using System.Runtime.CompilerServices;
+
+#nullable disable
 
 namespace CafeManager.Core.DTOs
 {
-    public class InvoiceDetailDTO : INotifyPropertyChanged
+    public class InvoiceDetailDTO : BaseDTO
     {
         private int _invoicedetailid;
-        private int? _invoiceid;
+        private int _invoiceid;
         private int _foodid;
         private int _quantity;
-        private bool? _isdeleted;
-        private FoodDTO _foodDTO;
+        private bool _isdeleted;
+        private FoodDTO _food;
 
         public int Invoicedetailid
         {
@@ -24,7 +24,7 @@ namespace CafeManager.Core.DTOs
             }
         }
 
-        public int? Invoiceid
+        public int Invoiceid
         {
             get => _invoiceid;
             set
@@ -44,7 +44,7 @@ namespace CafeManager.Core.DTOs
             }
         }
 
-        public bool? Isdeleted
+        public bool Isdeleted
         {
             get => _isdeleted;
             set
@@ -68,15 +68,18 @@ namespace CafeManager.Core.DTOs
             }
         }
 
-        public event Action? QuantityChanged;
+        public event Action QuantityChanged;
 
-        public FoodDTO FoodDTO
+        public FoodDTO Food
         {
-            get => _foodDTO;
+            get => _food;
             set
             {
-                _foodDTO = value;
-                OnPropertyChanged();
+                if (_food != value)
+                {
+                    _food = value;
+                    OnPropertyChanged();
+                }
             }
         }
 
@@ -84,20 +87,14 @@ namespace CafeManager.Core.DTOs
         {
             return new InvoiceDetailDTO()
             {
-                Invoicedetailid = this.Invoicedetailid,
-                Invoiceid = this.Invoiceid,
-                Foodid = this.Foodid,
-                Quantity = this.Quantity,
-                Isdeleted = this.Isdeleted,
-                FoodDTO = this.FoodDTO,
+                Id = Id,
+                Invoicedetailid = Invoicedetailid,
+                Invoiceid = Invoiceid,
+                Foodid = Foodid,
+                Quantity = Quantity,
+                Isdeleted = Isdeleted,
+                Food = Food,
             };
-        }
-
-        public event PropertyChangedEventHandler? PropertyChanged;
-
-        protected void OnPropertyChanged([CallerMemberName] string? propertyName = null)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
     }
 }

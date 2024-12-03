@@ -11,6 +11,6 @@ namespace CafeManager.Core.Repositories
     {
         Task<IEnumerable<Supplier>> GetAllSupplierAsync();
 
-        Task<Supplier> GetSupplierById(int id);
+        Task<Supplier?> GetSupplierById(int id);
     }
 }

@@ -1,13 +1,10 @@
-﻿using CafeManager.Core.Data;
-using CafeManager.Core.Services;
-using System;
-using System.Collections.ObjectModel;
-using System.ComponentModel;
-using System.Runtime.CompilerServices;
+﻿using System.Collections.ObjectModel;
+
+#nullable disable
 
 namespace CafeManager.Core.DTOs
 {
-    public class InvoiceDTO : INotifyPropertyChanged
+    public class InvoiceDTO : BaseDTO
     {
         private int _invoiceid;
 
@@ -105,41 +102,50 @@ namespace CafeManager.Core.DTOs
             }
         }
 
-        private ObservableCollection<InvoiceDetailDTO> _listInvoiceDetailDTO = [];
+        private ObservableCollection<InvoiceDetailDTO> _invoicedetails = [];
 
-        public ObservableCollection<InvoiceDetailDTO> ListInvoiceDetailDTO
+        public ObservableCollection<InvoiceDetailDTO> Invoicedetails
         {
-            get => _listInvoiceDetailDTO;
+            get => _invoicedetails;
             set
             {
-                _listInvoiceDetailDTO = value;
-                OnPropertyChanged();
-                OnPropertyChanged(nameof(TotalPrice));
+                if (_invoicedetails != value)
+                {
+                    _invoicedetails = value;
+                    OnPropertyChanged();
+                    OnPropertyChanged(nameof(TotalPrice));
+                }
             }
         }
 
-        private StaffDTO _staffDTO;
+        private StaffDTO _staff;
 
-        public StaffDTO StaffDTO
+        public StaffDTO Staff
         {
-            get => _staffDTO;
+            get => _staff;
             set
             {
-                _staffDTO = value;
-                OnPropertyChanged();
+                if (_staff != value)
+                {
+                    _staff = value;
+                    OnPropertyChanged();
+                }
             }
         }
 
-        private CoffeetableDTO _coffeetableDTO;
+        private CoffeetableDTO _coffeetable;
 
-        public CoffeetableDTO CoffeetableDTO
+        public CoffeetableDTO Coffeetable
         {
-            get => _coffeetableDTO;
+            get => _coffeetable;
             set
             {
-                _coffeetableDTO = value;
-                OnPropertyChanged();
-                OnPropertyChanged(nameof(CustomerOrTable));
+                if (_coffeetable != value)
+                {
+                    _coffeetable = value;
+                    OnPropertyChanged();
+                    OnPropertyChanged(nameof(CustomerOrTable));
+                }
             }
         }
 
@@ -159,23 +165,22 @@ namespace CafeManager.Core.DTOs
         {
             return new InvoiceDTO()
             {
-                Invoiceid = this.Invoiceid,
-                Coffeetableid = this.Coffeetableid,
-                Paymentstartdate = this.Paymentstartdate,
-                Paymentenddate = this.Paymentenddate,
-                Paymentstatus = this.Paymentstatus,
-                Paymentmethod = this.Paymentmethod,
-                Discountinvoice = this.Discountinvoice,
-                Isdeleted = this.Isdeleted,
-                Staffid = this.Staffid,
+                Id = Id,
+                Invoiceid = Invoiceid,
+                Coffeetableid = Coffeetableid,
+                Paymentstartdate = Paymentstartdate,
+                Paymentenddate = Paymentenddate,
+                Paymentstatus = Paymentstatus,
+                Paymentmethod = Paymentmethod,
+                Discountinvoice = Discountinvoice,
+                Isdeleted = Isdeleted,
+                Staffid = Staffid,
 
-                StaffDTO = this.StaffDTO,
-                CoffeetableDTO = this.CoffeetableDTO,
-                ListInvoiceDetailDTO = this.ListInvoiceDetailDTO,
+                Staff = Staff,
+                Coffeetable = Coffeetable,
+                Invoicedetails = Invoicedetails,
             };
         }
-
-        public event PropertyChangedEventHandler? PropertyChanged;
 
         private bool _isCoffeeTable = false;
         private bool _isCustomer = false;
@@ -199,22 +204,17 @@ namespace CafeManager.Core.DTOs
             _invoiceCustomerId = $"HD-{Guid.NewGuid().ToString().Substring(0, 4).ToUpper()}";
         }
 
-        protected void OnPropertyChanged([CallerMemberName] string? propertyName = null)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
-
         public decimal TotalPrice => CaculateTotalPrice();
 
-        public string CustomerOrTable => CoffeetableDTO != null ? CoffeetableDTO.TableName : "Khác vãng lai";
+        public string CustomerOrTable => Coffeetable != null ? Coffeetable.TableName : "Khác vãng lai";
 
         public decimal CaculateTotalPrice()
         {
-            return ListInvoiceDetailDTO?.Sum(x =>
+            return Invoicedetails?.Sum(x =>
             {
                 decimal? discountInvoice = (100 - Discountinvoice) / 100;
-                decimal foodPrice = x.FoodDTO.Price;
-                decimal foodDiscount = (100 - x.FoodDTO.Discountfood) / 100;
+                decimal foodPrice = x.Food.Price;
+                decimal foodDiscount = (100 - x.Food.Discountfood) / 100;
                 int quantity = x.Quantity;
 
                 return discountInvoice * foodDiscount * foodPrice * quantity;

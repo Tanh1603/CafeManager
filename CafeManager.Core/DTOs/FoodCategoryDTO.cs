@@ -1,18 +1,16 @@
-﻿using CafeManager.Core.Data;
-using CafeManager.Core.DTOs;
-using CafeManager.Core.Services;
+﻿using CafeManager.Core.DTOs;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 
 #nullable disable
 
-public class FoodCategoryDTO : INotifyPropertyChanged
+public class FoodCategoryDTO : BaseDTO
 {
     private int _foodcategoryid;
     private string _foodcategoryame;
-    private bool? _isdeleted;
-    private ObservableCollection<FoodDTO> _foods = new();
+    private bool _isdeleted;
+    private ObservableCollection<FoodDTO> _foods;
 
     public int Foodcategoryid
     {
@@ -40,7 +38,7 @@ public class FoodCategoryDTO : INotifyPropertyChanged
         }
     }
 
-    public bool? Isdeleted
+    public bool Isdeleted
     {
         get => _isdeleted;
         set
@@ -70,17 +68,11 @@ public class FoodCategoryDTO : INotifyPropertyChanged
     {
         return new FoodCategoryDTO()
         {
-            Foodcategoryid = this.Foodcategoryid,
-            Foodcategoryname = this.Foodcategoryname,
-            Isdeleted = this.Isdeleted,
-            Foods = [.. this.Foods.Select(f => f.Clone()).ToList()],
+            Id = Id,
+            Foodcategoryid = Foodcategoryid,
+            Foodcategoryname = Foodcategoryname,
+            Isdeleted = Isdeleted,
+            Foods = Foods,
         };
-    }
-
-    public event PropertyChangedEventHandler PropertyChanged;
-
-    protected void OnPropertyChanged([CallerMemberName] string propertyName = null)
-    {
-        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
     }
 }

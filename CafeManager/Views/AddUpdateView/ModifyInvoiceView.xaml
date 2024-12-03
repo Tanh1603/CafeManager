@@ -212,7 +212,7 @@
                                     Grid.ColumnSpan="2"
                                     Height="60"
                                     IsEnabled="False"
-                                    Text="{Binding CurrentInvoiceDTO.StaffDTO.Staffname, Mode=OneWay}" />
+                                    Text="{Binding CurrentInvoiceDTO.Staff.Staffname, Mode=OneWay}" />
                             </Grid>
                         </StackPanel>
                     </materialDesign:Card>
@@ -258,10 +258,10 @@
                                     Background="Transparent"
                                     BorderBrush="Transparent"
                                     BorderThickness="0"
-                                    ItemsSource="{Binding CurrentInvoiceDTO.ListInvoiceDetailDTO}">
+                                    ItemsSource="{Binding CurrentInvoiceDTO.Invoicedetails}">
                                     <ListView.View>
                                         <GridView>
-                                            <GridViewColumn DisplayMemberBinding="{Binding FoodDTO.Foodname}">
+                                            <GridViewColumn DisplayMemberBinding="{Binding Food.Foodname}">
                                                 <GridViewColumn.Header>
                                                     <TextBlock
                                                         FontSize="14"
@@ -271,7 +271,7 @@
                                                         TextAlignment="Center" />
                                                 </GridViewColumn.Header>
                                             </GridViewColumn>
-                                            <GridViewColumn DisplayMemberBinding="{Binding FoodDTO.Price, Converter={StaticResource CurrencyConverter}}">
+                                            <GridViewColumn DisplayMemberBinding="{Binding Food.Price, Converter={StaticResource CurrencyConverter}}">
                                                 <GridViewColumn.Header>
                                                     <TextBlock
                                                         FontSize="14"
@@ -281,7 +281,7 @@
                                                         TextAlignment="Center" />
                                                 </GridViewColumn.Header>
                                             </GridViewColumn>
-                                            <GridViewColumn DisplayMemberBinding="{Binding FoodDTO.Discountfood, StringFormat='{}{0:0}%'}">
+                                            <GridViewColumn DisplayMemberBinding="{Binding Food.Discountfood, StringFormat='{}{0:0}%'}">
                                                 <GridViewColumn.Header>
                                                     <TextBlock
                                                         FontSize="14"

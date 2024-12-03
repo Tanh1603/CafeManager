@@ -11,6 +11,8 @@ using System.Text;
 using System.Threading.Tasks;
 using CafeManager.WPF.MessageBox;
 using CafeManager.Core.Services;
+using AutoMapper;
+using CafeManager.Core.DTOs;
 
 namespace CafeManager.WPF.ViewModels
 {
@@ -19,21 +21,22 @@ namespace CafeManager.WPF.ViewModels
         private readonly IServiceProvider _provider;
         private readonly NavigationStore _navigationStore;
         private readonly AppUserServices _appUserServices;
+        private readonly IMapper _mapper;
 
         [ObservableProperty]
-        private string _username;
+        private string _username = string.Empty;
 
         [ObservableProperty]
-        private string _password;
+        private string _password = string.Empty;
 
         [ObservableProperty]
-        private string _resetUser;
+        private string _resetUser = string.Empty;
 
         [ObservableProperty]
-        private string _resetEmail;
+        private string _resetEmail = string.Empty;
 
         [ObservableProperty]
-        private string _vertificationCode;
+        private string _vertificationCode = string.Empty;
 
         [ObservableProperty]
         private bool _isOpenResetPassWord;
@@ -46,7 +49,7 @@ namespace CafeManager.WPF.ViewModels
             _provider = provider;
             _navigationStore = _provider.GetRequiredService<NavigationStore>();
             _appUserServices = provider.GetRequiredService<AppUserServices>();
-
+            _mapper = provider.GetRequiredService<IMapper>();
             if (Properties.Settings.Default.RememberAccount)
             {
                 Username = Properties.Settings.Default.UserName;
@@ -66,7 +69,7 @@ namespace CafeManager.WPF.ViewModels
                     string dialogResult = MyMessageBox.ShowDialog("Đăng nhập thành công", MyMessageBox.Buttons.Yes_No, MyMessageBox.Icons.Information);
                     if (dialogResult == "1")
                     {
-                        _provider.GetRequiredService<AccountStore>().SetAccount(AppUserMapper.ToDTO(appuser));
+                        _provider.GetRequiredService<AccountStore>().SetAccount(_mapper.Map<AppUserDTO>(appuser));
                         _navigationStore.Navigation = role == 1 ? _provider.GetRequiredService<MainAdminViewModel>() : _provider.GetRequiredService<MainUserViewModel>();
                     }
                     if (IsRememberAccount)

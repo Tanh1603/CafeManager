@@ -551,13 +551,7 @@
             </Trigger>
         </Style.Triggers>
     </Style>
-    <Style
-        x:Key="addImageResBtn"
-        BasedOn="{StaticResource backLoginBtn}"
-        TargetType="Button">
-        <Setter Property="Height" Value="35" />
-        <Setter Property="Width" Value="35" />
-    </Style>
+    
 
     <Style
         x:Key="infoFoodBtn"
@@ -576,5 +570,30 @@
 
             </Trigger>
         </Style.Triggers>
+    </Style>
+
+    <Style x:Key="addCircleBtn" BasedOn="{StaticResource confirmInfoButton}" TargetType="Button">
+        <Setter Property="MinWidth" Value="40"/>
+        <Setter Property="MinHeight" Value="40"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Button">
+                    <Border
+                x:Name="border"
+                Background="{TemplateBinding Background}"
+                BorderBrush="Transparent"
+                BorderThickness="{TemplateBinding BorderThickness}"
+                CornerRadius="50">
+                        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter TargetName="border" Property="BorderBrush" Value="#cb925d" />
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+
     </Style>
 </ResourceDictionary>

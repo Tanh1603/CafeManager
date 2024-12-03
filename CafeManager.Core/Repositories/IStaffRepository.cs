@@ -9,10 +9,6 @@ namespace CafeManager.Core.Repositories
 {
     public interface IStaffRepository : IRepository<Staff>
     {
-        Task<IEnumerable<Staff>> GetAllStaffAsync();
-
-        Task<IEnumerable<Staff>> GetAllStaffDeletedAsync();
-
-        Task<Staff?> GetStaffById(int id);
+        Task<Staff?> UpdateStaffWithListSatffSalaryHistory(Staff staff);
     }
 }

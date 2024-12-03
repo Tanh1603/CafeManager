@@ -9,11 +9,11 @@ public partial class Consumedmaterial
 {
     public int Consumedmaterialid { get; set; }
 
-    public int? Materialid { get; set; }
+    public int? Materialsupplierid { get; set; }
 
     public decimal? Quantity { get; set; }
 
     public bool? Isdeleted { get; set; }
 
-    public virtual Material Material { get; set; }
+    public virtual Materialsupplier Materialsupplier { get; set; }
 }

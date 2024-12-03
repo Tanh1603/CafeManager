@@ -2,24 +2,14 @@
 using CafeManager.Infrastructure.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
-using Microsoft.Extensions.DependencyInjection;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Linq.Expressions;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace CafeManager.Infrastructure.Repositories
 {
-    public class Repository<T> : IRepository<T> where T : class
+    public class Repository<T>(CafeManagerContext cafeManagerContext) : IRepository<T> where T : class
     {
-        protected CafeManagerContext _cafeManagerContext;
-
-        public Repository(CafeManagerContext cafeManagerContext)
-        {
-            _cafeManagerContext = cafeManagerContext;
-        }
+        protected CafeManagerContext _cafeManagerContext
+            = cafeManagerContext;
 
         public virtual async Task<T> Create(T entity)
         {
@@ -27,20 +17,19 @@ namespace CafeManager.Infrastructure.Repositories
             return entityEntry.Entity;
         }
 
-        public virtual T? Update(T? entity)
+        public virtual async Task<T?> Update(T entity)
         {
-            var existingEntity = _cafeManagerContext.Set<T>().Local.FirstOrDefault(e => e == entity);
+            var entityType = _cafeManagerContext.Model.FindEntityType(typeof(T));
+            var primaryKey = entityType?.FindPrimaryKey();
+            var keyProperty = primaryKey?.Properties[0];
+            var keyValue = keyProperty?.PropertyInfo?.GetValue(entity);
+
+            var existingEntity = await _cafeManagerContext.Set<T>().FindAsync(keyValue);
 
             if (existingEntity != null)
             {
                 _cafeManagerContext.Entry(existingEntity).CurrentValues.SetValues(entity);
             }
-            else
-            {
-                _cafeManagerContext.Set<T>().Attach(entity);
-                _cafeManagerContext.Entry(entity).State = EntityState.Modified;
-            }
-
             return entity;
         }
 
@@ -59,21 +48,10 @@ namespace CafeManager.Infrastructure.Repositories
             return false;
         }
 
-        private bool IsEntityNotDeleted(T entity)
-        {
-            var property = typeof(T).GetProperty("Isdeleted");
-            if (property != null)
-            {
-                var isDeletedValue = property.GetValue(entity) as bool?;
-                return isDeletedValue != true;
-            }
-            return true;
-        }
-
         public async Task<IEnumerable<T>> AddArange(IEnumerable<T> entities)
         {
             if (entities == null || !entities.Any())
-                return Enumerable.Empty<T>();
+                return [];
 
             await _cafeManagerContext.AddRangeAsync(entities);
             return entities;
@@ -87,6 +65,61 @@ namespace CafeManager.Infrastructure.Repositories
         public async Task<T?> GetById(int id)
         {
             return await _cafeManagerContext.Set<T>().FindAsync(id);
+        }
+
+        public async Task<IEnumerable<T>> GetAllExistedAsync()
+        {
+            var entities = await _cafeManagerContext.Set<T>().ToListAsync();
+            var filteredEntities = entities
+                .Where(entity =>
+                {
+                    var isDeletedProperty = typeof(T).GetProperty("Isdeleted");
+
+                    if (isDeletedProperty != null && isDeletedProperty.PropertyType == typeof(bool?))
+                    {
+                        var isDeletedValue = (bool?)isDeletedProperty.GetValue(entity);
+                        return isDeletedValue == false;
+                    }
+
+                    return false;
+                });
+
+            return filteredEntities;
+        }
+
+        public async Task<IEnumerable<T>> GetAllDeletedAsync()
+        {
+            var entities = await _cafeManagerContext.Set<T>().ToListAsync();
+            var filteredEntities = entities
+                .Where(entity =>
+                {
+                    var isDeletedProperty = typeof(T).GetProperty("Isdeleted");
+
+                    if (isDeletedProperty != null && isDeletedProperty.PropertyType == typeof(bool?))
+                    {
+                        var isDeletedValue = (bool?)isDeletedProperty.GetValue(entity);
+                        return isDeletedValue != false;
+                    }
+
+                    return false;
+                });
+
+            return filteredEntities;
+        }
+
+        public async Task<(IEnumerable<T> Items, int TotalCount)> GetByPageAsync(int pageIndex, int pageSize, Expression<Func<T, bool>>? filter = null)
+        {
+            IQueryable<T> query = _cafeManagerContext.Set<T>();
+
+            if (filter != null)
+            {
+                query = query.Where(filter);
+            };
+
+            int totalCount = await query.CountAsync();
+            List<T> items = await query.Skip((pageIndex - 1) * pageSize).Skip(pageSize).ToListAsync();
+
+            return (items, totalCount);
         }
     }
 }

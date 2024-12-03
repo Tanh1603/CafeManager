@@ -4,108 +4,29 @@ using CafeManager.Core.Services;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Media.Media3D;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement.ListView;
 
 namespace CafeManager.WPF.Services
 {
-    public class ImportServices
+    public class ImportServices(IServiceProvider provider)
     {
-        private readonly IServiceProvider _provider;
-        private readonly IUnitOfWork _unitOfWork;
-
-        public ImportServices(IServiceProvider provider)
-        {
-            _provider = provider;
-            _unitOfWork = provider.GetRequiredService<IUnitOfWork>();
-        }
+        private readonly IServiceProvider _provider = provider;
+        private readonly IUnitOfWork _unitOfWork = provider.GetRequiredService<IUnitOfWork>();
 
         public async Task<IEnumerable<Import>?> GetListImport()
         {
-            return await _unitOfWork.ImportList.GetAllImportsAsync();
+            return await _unitOfWork.ImportList.GetAll();
         }
 
-        //public async Task<IEnumerable<MaterialDetailDTO>?> GetListImportDetailByImportId(int id)
-        //{
-        //    var listImport = await _unitOfWork.ImportList.GetAllImportsDetailsByImportIdAsync(id);
-        //    var res = listImport.Where(x => x.Isdeleted == false)
-        //        .Select(x => new MaterialDetailDTO
-        //        {
-        //            Materialname = x.Material?.Materialname,
-
-        //            Suppliername = x.Import.Supplier?.Suppliername,
-        //            Unit = x.Material?.Unit,
-        //            Quantity = x.Quantity ?? 0,
-        //            Price = x.Material?.Materialsuppliers.FirstOrDefault(f => f.Supplierid == x.Import.Supplierid && f.Materialid == x.Materialid)?.Price ?? 0,
-        //            Original = x.Material?.Materialsuppliers.FirstOrDefault(f => f.Supplierid == x.Import.Supplierid && f.Materialid == x.Materialid)?.Original,
-
-        //            Manufacturer = x.Material?.Materialsuppliers.FirstOrDefault(f => f.Supplierid == x.Import.Supplierid && f.Materialid == x.Materialid)?.Manufacturer,
-
-        //            Manufacturedate =
-        //            (DateTime)(x.Material?.Materialsuppliers.FirstOrDefault(f => f.Supplierid == x.Import.Supplierid && f.Materialid == x.Materialid)?.Manufacturedate),
-
-        //            Expirationdate =
-        //            (DateTime)(x.Material?.Materialsuppliers.FirstOrDefault(f => f.Supplierid == x.Import.Supplierid && f.Materialid == x.Materialid)?.Expirationdate),
-        //        });
-        //    return res;
-        //}
-        public async Task<IEnumerable<MaterialDetailDTO>?> GetListImportDetailByImportId(int id)
+        public async Task<Import?> GetImportById(int id)
         {
-            var listImport = await _unitOfWork.ImportList.GetAllImportsDetailsByImportIdAsync(id);
-
-            var res = listImport
-                .Select(x =>
-                {
-                    // Lấy đối tượng MaterialSupplier đầu tiên phù hợp để tái sử dụng
-                    var materialSupplier = x.Material?.Materialsuppliers
-                        .FirstOrDefault(f => f.Supplierid == x.Import.Supplierid && f.Materialid == x.Materialid);
-
-                    return new MaterialDetailDTO
-                    {
-                        Materialname = x.Material?.Materialname,
-                        Suppliername = x.Import.Supplier?.Suppliername,
-                        Unit = x.Material?.Unit,
-                        Quantity = x.Quantity ?? 0,
-                        Price = materialSupplier?.Price ?? 0,
-                        Original = materialSupplier?.Original,
-                        Manufacturer = materialSupplier?.Manufacturer,
-                        Manufacturedate = materialSupplier?.Manufacturedate ?? DateTime.Now,
-                        Expirationdate = materialSupplier?.Expirationdate ?? DateTime.Now
-                    };
-                });
-
-            return res;
+            return await _unitOfWork.ImportList.GetById(id);
         }
-
-        #region Tính toán dữ liệu
-
-        private decimal CaculatePriceOfListImportdetai(IEnumerable<Importdetail> importdetails)
-        {
-            return importdetails.Sum(
-                    x => (x.Quantity ?? 0) * (x.Material?.Materialsuppliers
-                        .FirstOrDefault(f => f.Supplierid == x.Import.Supplierid && f.Materialid == x.Materialid)?.Price ?? 0)
-                );
-        }
-
-        public async Task<decimal> GetTotalPriceImports()
-        {
-            var listImport = await _unitOfWork.ImportList.GetAllImportsAsync();
-            return listImport.Sum(x => CaculatePriceOfListImportdetai(x.Importdetails));
-        }
-
-        public async Task<decimal> GetTotalPriceImportById(int id)
-        {
-            var listImportDetailById = await _unitOfWork.ImportList.GetAllImportsDetailsByImportIdAsync(id);
-            return CaculatePriceOfListImportdetai(listImportDetailById);
-        }
-
-        public async Task<Import> GetImportById(int id)
-        {
-            return await _unitOfWork.ImportList.GetImportById(id);
-        }
-
-        #endregion Tính toán dữ liệu
 
         #region Thêm, xoa, sua import
 
@@ -115,17 +36,11 @@ namespace CafeManager.WPF.Services
             {
                 await _unitOfWork.BeginTransactionAsync();
 
-                var list = await _unitOfWork.ImportList.Create(import);
-
-                if (list == null)
-                {
-                    throw new InvalidOperationException("Lỗi.");
-                }
-
+                var addimport = await _unitOfWork.ImportList.Create(import);
                 await _unitOfWork.CompleteAsync();
-
+                _unitOfWork.ClearChangeTracker();
                 await _unitOfWork.CommitTransactionAsync();
-                return list;
+                return addimport;
             }
             catch (Exception ex)
             {
@@ -134,11 +49,100 @@ namespace CafeManager.WPF.Services
             }
         }
 
-        public Import? Update(Import import)
+        public async Task<Import?> UpdateImport(Import import, List<ImportMaterialDetailDTO>? updateImportDetails)
         {
-            var res = _unitOfWork.ImportList.Update(import);
-            _unitOfWork.Complete();
-            return res;
+            try
+            {
+                await _unitOfWork.BeginTransactionAsync();
+                var res = _unitOfWork.ImportList.Update(import);
+                Materialsupplier newMaterialSupplier = new();
+                var existingMaterialSuppliers = (await _unitOfWork.MaterialSupplierList.GetAll())
+                    .Where(x => x.Isdeleted == false).ToList();
+                var existingImportDetails = await _unitOfWork.ImportDetailList.GetAll();
+
+                if (updateImportDetails != null)
+                {
+                    foreach (var x in updateImportDetails)
+                    {
+                        if (x.Importdetailid == 0)
+                        {
+                            await _unitOfWork.ImportDetailList.Create(new()
+                            {
+                                Importid = import.Importid,
+                                Quantity = x.Quantity
+                            });
+                        }
+                        else
+                        {
+                            var existingImportDetail = existingImportDetails.FirstOrDefault(m => m.Isdeleted == false && m.Importdetailid == x.Importdetailid);
+
+                            if (existingImportDetail != null)
+                            {
+                                if (x.Isdeleted == true)
+                                {
+                                    existingImportDetail.Isdeleted = false;
+                                }
+                                else
+                                {
+                                    existingImportDetail.Importid = import.Importid;
+                                    existingImportDetail.Quantity = x.Quantity;
+                                }
+                            }
+                        }
+
+                        if (x.Materialsupplierid == 0)
+                        {
+                            var existing = existingMaterialSuppliers
+                                .FirstOrDefault(m => m.Materialid == x.Materialid &&
+                                             m.Supplierid == import.Supplierid &&
+                                             m.Original == x.Original &&
+                                             m.Manufacturer == x.Manufacturer &&
+                                             m.Manufacturedate == x.Manufacturedate &&
+                                             m.Expirationdate == x.Expirationdate &&
+                                             m.Price == x.Price);
+                            if (existing == null)
+                            {
+                                newMaterialSupplier = await _unitOfWork.MaterialSupplierList.Create(
+                                    new Materialsupplier
+                                    {
+                                        Materialid = x.Materialid,
+                                        Supplierid = import.Supplierid,
+                                        Manufacturedate = x.Manufacturedate,
+                                        Expirationdate = x.Expirationdate,
+                                        Original = x.Original,
+                                        Manufacturer = x.Manufacturer,
+                                        Price = x.Price,
+                                    });
+                                await _unitOfWork.CompleteAsync();
+                            }
+                        }
+                        else
+                        {
+                            var existMaterialSupplier = await _unitOfWork.MaterialSupplierList.GetById(x.Materialsupplierid);
+                            if (existMaterialSupplier != null)
+                            {
+                                existMaterialSupplier.Materialid = x.Materialid;
+                                existMaterialSupplier.Supplierid = import.Supplierid;
+                                existMaterialSupplier.Manufacturedate = x.Manufacturedate;
+                                existMaterialSupplier.Expirationdate = x.Expirationdate;
+                                existMaterialSupplier.Original = x.Original;
+                                existMaterialSupplier.Manufacturer = x.Manufacturer;
+                                existMaterialSupplier.Price = x.Price;
+                            }
+                            await _unitOfWork.CompleteAsync();
+                        }
+                    }
+                }
+                await _unitOfWork.CompleteAsync();
+                _unitOfWork.ClearChangeTracker();
+                await _unitOfWork.CommitTransactionAsync();
+                return await res;
+            }
+            catch (Exception)
+            {
+                await _unitOfWork.RollbackTransactionAsync();
+                throw new InvalidOperationException("Lỗi khi sửa thông tin nhập hàng");
+            }
         }
 
         public async Task<bool> DeleteImport(int id)

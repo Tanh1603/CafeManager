@@ -2,6 +2,7 @@
     x:Class="CafeManager.WPF.Assets.UsersControls.InfoFood"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:converter="clr-namespace:CafeManager.WPF.Services.Converter"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:local="clr-namespace:CafeManager.WPF.Assets.UsersControls"
     xmlns:ma="http://metro.mahapps.com/winfx/xaml/iconpacks"
@@ -13,6 +14,7 @@
         <local:Utf8Converter x:Key="Utf8Converter" />
         <local:StringToImageSourceConverter x:Key="StringToImageSourceConverter" />
         <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
+        <converter:CurrencyConverter x:Key="CurrencyConverter" />
     </UserControl.Resources>
     <Grid>
         <Border BorderThickness="3" CornerRadius="10">
@@ -86,11 +88,12 @@
                                 FontSize="18"
                                 Style="{StaticResource infoFoodText}"
                                 Text="{Binding ElementName=infofood, Path=Text, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay, Converter={StaticResource Utf8Converter}}"
-                                TextWrapping="WrapWithOverflow" />
+                                TextTrimming="CharacterEllipsis"
+                                TextWrapping="NoWrap" />
 
                             <TextBlock
                                 Style="{StaticResource infoFoodText}"
-                                Text="{Binding ElementName=infofood, UpdateSourceTrigger=PropertyChanged, Path=Price, Mode=TwoWay}"
+                                Text="{Binding ElementName=infofood, UpdateSourceTrigger=PropertyChanged, Path=Price, Mode=TwoWay, Converter={StaticResource CurrencyConverter}}"
                                 TextWrapping="WrapWithOverflow" />
                         </StackPanel>
 
@@ -107,21 +110,18 @@
                                     </Style>
                                 </StackPanel.Style>
                                 <Button
-                                    x:Name="BtnDelete"
-                                    Padding="2"
-                                    HorizontalAlignment="Center"
-                                    Background="Transparent"
-                                    Click="BtnDelete_Click">
-                                    <ma:PackIconMaterial Kind="TrashCan" Style="{StaticResource infoFoodIcon}" />
-                                </Button>
-                                <Button
                                     x:Name="BtnUpdate"
-                                    Padding="2"
-                                    HorizontalAlignment="Center"
-                                    Background="Transparent"
-                                    Click="BtnUpdate_Click">
+                                    Click="BtnUpdate_Click"
+                                    Style="{StaticResource infoFoodBtn}">
                                     <ma:PackIconMaterial Kind="Pencil" Style="{StaticResource infoFoodIcon}" />
                                 </Button>
+                                <Button
+                                    x:Name="BtnDelete"
+                                    Click="BtnDelete_Click"
+                                    Style="{StaticResource infoFoodBtn}">
+                                    <ma:PackIconMaterial Kind="TrashCan" Style="{StaticResource infoFoodIcon}" />
+                                </Button>
+
                             </StackPanel>
 
                             <Grid>
@@ -136,12 +136,9 @@
                                     </Style>
                                 </Grid.Style>
 
-
                                 <Button
                                     x:Name="BtnRestore"
-                                    Padding="2"
-                                    HorizontalAlignment="Right"
-                                    Background="Transparent"
+                                   Style="{StaticResource infoFoodBtn}"
                                     Click="BtnRestore_Click">
                                     <ma:PackIconMaterial Kind="Restore" Style="{StaticResource infoFoodIcon}" />
                                 </Button>
@@ -153,12 +150,13 @@
         </Border>
 
         <Border
-            Width="90"
+            Width="100"
             Height="25"
             HorizontalAlignment="Right"
             VerticalAlignment="Top"
             Background="Yellow"
-            CornerRadius="0 10 0 0">
+            
+            CornerRadius="0 10 0 10">
 
             <Grid HorizontalAlignment="Left" VerticalAlignment="Center">
                 <Grid.ColumnDefinitions>
@@ -171,11 +169,13 @@
                     HorizontalAlignment="Right"
                     VerticalAlignment="Center"
                     Content="Giảm giá:"
+                    FontWeight="Bold"
                     Foreground="Red" />
                 <TextBlock
                     Grid.Column="1"
                     HorizontalAlignment="Right"
                     VerticalAlignment="Center"
+                    FontWeight="Bold"
                     Foreground="OrangeRed"
                     Text="{Binding ElementName=infofood, Path=Discountfood, StringFormat={}{0:0}%, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
                     TextAlignment="Center" />

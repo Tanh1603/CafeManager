@@ -1,11 +1,11 @@
-﻿using System.ComponentModel;
-using System.Runtime.CompilerServices;
-
-namespace CafeManager.Core.DTOs
+﻿namespace CafeManager.Core.DTOs
 {
-    public class StaffsalaryhistoryDTO : INotifyPropertyChanged
+    public class StaffsalaryhistoryDTO : BaseDTO
     {
         private int _staffsalaryhistoryid;
+        private int _staffid;
+        private decimal _salary;
+        private bool _isdeleted;
 
         public int Staffsalaryhistoryid
         {
@@ -20,8 +20,6 @@ namespace CafeManager.Core.DTOs
             }
         }
 
-        private int _staffid;
-
         public int Staffid
         {
             get => _staffid;
@@ -34,8 +32,6 @@ namespace CafeManager.Core.DTOs
                 }
             }
         }
-
-        private decimal _salary;
 
         public decimal Salary
         {
@@ -50,7 +46,7 @@ namespace CafeManager.Core.DTOs
             }
         }
 
-        private DateOnly _effectivedate;
+        private DateOnly _effectivedate = DateOnly.FromDateTime(DateTime.Now);
 
         public DateOnly Effectivedate
         {
@@ -65,9 +61,7 @@ namespace CafeManager.Core.DTOs
             }
         }
 
-        private bool? _isdeleted;
-
-        public bool? Isdeleted
+        public bool Isdeleted
         {
             get => _isdeleted;
             set
@@ -84,18 +78,12 @@ namespace CafeManager.Core.DTOs
         {
             return new StaffsalaryhistoryDTO
             {
-                Staffsalaryhistoryid = this.Staffsalaryhistoryid,
-                Staffid = this.Staffid,
-                Salary = this.Salary,
-                Effectivedate = this.Effectivedate
+                Id = Id,
+                Staffsalaryhistoryid = Staffsalaryhistoryid,
+                Staffid = Staffid,
+                Salary = Salary,
+                Effectivedate = Effectivedate
             };
-        }
-
-        public event PropertyChangedEventHandler? PropertyChanged;
-
-        protected void OnPropertyChanged([CallerMemberName] string propertyName = null)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
     }
 }

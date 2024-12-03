@@ -1,41 +1,22 @@
 ﻿using CafeManager.Core.Data;
 using CafeManager.Core.Services;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Identity.Client.NativeInterop;
-using System;
-using System.IO;
-using RestSharp;
-using RestSharp.Authenticators;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net.Mail;
-using System.Text;
-using System.Threading.Tasks;
-using static System.Net.Mime.MediaTypeNames;
-using System.Net;
-using System.Reflection;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement.ListView;
-using Microsoft.Extensions.Configuration;
-using System.Security.Cryptography;
 using CafeManager.WPF.Stores;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using System.IO;
+using System.Net;
+using System.Net.Mail;
+using System.Reflection;
 
 namespace CafeManager.WPF.Services
 {
-    public class AppUserServices
+    public class AppUserServices(IServiceProvider provider)
     {
-        private readonly IServiceProvider _provider;
-        private readonly IUnitOfWork _unitOfWork;
-        private readonly IConfiguration configuration;
-        public string VerificationCode { get; private set; }
-        public string NewPassWord { get; private set; }
-
-        
-        public AppUserServices(IServiceProvider provider)
-        {
-            _provider = provider;
-            _unitOfWork = provider.GetRequiredService<IUnitOfWork>();
-            configuration = provider.GetRequiredService<IConfiguration>();
-        }
+        private readonly IServiceProvider _provider = provider;
+        private readonly IUnitOfWork _unitOfWork = provider.GetRequiredService<IUnitOfWork>();
+        private readonly IConfiguration configuration = provider.GetRequiredService<IConfiguration>();
+        public string VerificationCode { get; private set; } = string.Empty;
+        public string NewPassWord { get; private set; } = string.Empty;
 
         public async Task<Appuser> Register(Appuser appuser)
         {
@@ -97,54 +78,53 @@ namespace CafeManager.WPF.Services
             }
         }
 
-        private string GenerateVerificationCode()
+        private string GenerateVerificationCode
         {
-            Random random = new Random();
-            return random.Next(100000, 999999).ToString(); ;
+            get
+            {
+                Random random = new();
+                return random.Next(100000, 999999).ToString();
+            }
         }
 
         public async Task SendVerificationEmail(string recipientEmail, string userName)
         {
             try
             {
-                VerificationCode = GenerateVerificationCode();
+                VerificationCode = GenerateVerificationCode;
 
                 var assembly = Assembly.GetExecutingAssembly();
                 var file = "CafeManager.WPF.Stores.email_template.html";
                 string htmlTemplate;
-                using (Stream stream = assembly.GetManifestResourceStream(file))
+                using (Stream? stream = assembly.GetManifestResourceStream(file))
                 {
                     if (stream == null)
                         throw new FileNotFoundException("Tài nguyên không tìm thấy.", file);
 
-                    using (StreamReader reader = new StreamReader(stream))
-                    {
-                        htmlTemplate = reader.ReadToEnd();
-                    }
+                    using StreamReader reader = new(stream);
+                    htmlTemplate = reader.ReadToEnd();
                 }
 
                 string emailBody = htmlTemplate
                     .Replace("{{UserName}}", userName)
                     .Replace("{{VerificationCode}}", VerificationCode);
 
-                using (SmtpClient smtpClient = new SmtpClient("smtp.gmail.com"))
+                using SmtpClient smtpClient = new("smtp.gmail.com");
+                smtpClient.Port = 587;
+                smtpClient.Credentials = new NetworkCredential(configuration["Email:AdminAccount"], configuration["Email:PassWord"]);
+                smtpClient.EnableSsl = true;
+
+                MailMessage mailMessage = new()
                 {
-                    smtpClient.Port = 587;
-                    smtpClient.Credentials = new NetworkCredential(configuration["Email:AdminAccount"], configuration["Email:PassWord"]);
-                    smtpClient.EnableSsl = true;
+                    From = new MailAddress(configuration["Email:AdminAccount"], "Cafe Manager App"),
+                    Subject = "Xác thực tài khoản",
+                    Body = emailBody,
+                    IsBodyHtml = true,
+                };
 
-                    MailMessage mailMessage = new MailMessage
-                    {
-                        From = new MailAddress(configuration["Email:AdminAccount"], "Cafe Manager App"),
-                        Subject = "Xác thực tài khoản",
-                        Body = emailBody,
-                        IsBodyHtml = true,
-                    };
+                mailMessage.To.Add(recipientEmail);
 
-                    mailMessage.To.Add(recipientEmail);
-
-                    await smtpClient.SendMailAsync(mailMessage);
-                }
+                await smtpClient.SendMailAsync(mailMessage);
             }
             catch (Exception)
             {
@@ -156,20 +136,18 @@ namespace CafeManager.WPF.Services
         {
             try
             {
-                NewPassWord = GenerateVerificationCode();
+                NewPassWord = GenerateVerificationCode;
 
                 var assembly = Assembly.GetExecutingAssembly();
                 var file = "CafeManager.WPF.Stores.reset_email_template.html";
                 string htmlTemplate;
-                using (Stream stream = assembly.GetManifestResourceStream(file))
+                using (Stream? stream = assembly.GetManifestResourceStream(file))
                 {
                     if (stream == null)
                         throw new FileNotFoundException("Tài nguyên không tìm thấy.", file);
 
-                    using (StreamReader reader = new StreamReader(stream))
-                    {
-                        htmlTemplate = reader.ReadToEnd();
-                    }
+                    using StreamReader reader = new(stream);
+                    htmlTemplate = reader.ReadToEnd();
                 }
 
                 string emailBody = htmlTemplate
@@ -177,26 +155,24 @@ namespace CafeManager.WPF.Services
                     .Replace("{{AdminEmail}}", configuration["Email:AddminAccount"])
                     .Replace("{{NewPassWord}}", NewPassWord);
 
-                using (SmtpClient smtpClient = new SmtpClient("smtp.gmail.com"))
+                using SmtpClient smtpClient = new("smtp.gmail.com");
+                smtpClient.Port = 587;
+                smtpClient.Credentials = new NetworkCredential(configuration["Email:AdminAccount"], configuration["Email:PassWord"]);
+                smtpClient.EnableSsl = true;
+
+                MailMessage mailMessage = new()
                 {
-                    smtpClient.Port = 587;
-                    smtpClient.Credentials = new NetworkCredential(configuration["Email:AdminAccount"], configuration["Email:PassWord"]);
-                    smtpClient.EnableSsl = true;
+                    From = new MailAddress(configuration["Email:AdminAccount"], "Cafe Manager App"),
+                    Subject = "Đặt lại mật khẩu",
+                    Body = emailBody,
+                    IsBodyHtml = true,
+                };
 
-                    MailMessage mailMessage = new MailMessage
-                    {
-                        From = new MailAddress(configuration["Email:AdminAccount"], "Cafe Manager App"),
-                        Subject = "Đặt lại mật khẩu",
-                        Body = emailBody,
-                        IsBodyHtml = true,
-                    };
+                mailMessage.To.Add(recipientEmail);
 
-                    mailMessage.To.Add(recipientEmail);
-
-                    await smtpClient.SendMailAsync(mailMessage);
-                }
+                await smtpClient.SendMailAsync(mailMessage);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 throw new InvalidOperationException("Email không tồn tại");
             }
@@ -213,7 +189,7 @@ namespace CafeManager.WPF.Services
                     return false;
                 }
                 res.Password = _provider.GetRequiredService<EncryptionHelper>().EncryptAES(NewPassWord);
-                _unitOfWork.AppUserList.Update(res);
+                await _unitOfWork.AppUserList.Update(res);
                 await _unitOfWork.CompleteAsync();
                 await _unitOfWork.CommitTransactionAsync();
                 return true;
@@ -237,7 +213,7 @@ namespace CafeManager.WPF.Services
             {
                 await _unitOfWork.BeginTransactionAsync();
 
-                var res = _unitOfWork.AppUserList.Update(user);
+                var res = await _unitOfWork.AppUserList.Update(user);
                 await _unitOfWork.CompleteAsync();
                 await _unitOfWork.CommitTransactionAsync();
                 return res;

@@ -150,7 +150,7 @@
                     Visibility="Collapsed" />
 
                 <Popup
-                    x:Name="comboBox"
+                    x:Name="comboBoxStyle"
                     Grid.ColumnSpan="2"
                     Width="{Binding ActualWidth, RelativeSource={RelativeSource AncestorType=ComboBox}}"
                     Margin="1"
@@ -182,7 +182,6 @@
 
                 <ToggleButton
                     x:Name="toggleButton"
-                    
                     Grid.ColumnSpan="2"
                     Background="{TemplateBinding Background}"
                     BorderBrush="{TemplateBinding BorderBrush}"
@@ -279,5 +278,4 @@
             </Setter.Value>
         </Setter>
     </Style>
-
 </ResourceDictionary>

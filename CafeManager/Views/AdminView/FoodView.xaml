@@ -19,7 +19,7 @@
         <converter:ResponsiveWidthConverter x:Key="ResponsiveWidthConverter" />
     </UserControl.Resources>
     <Grid>
-        <Grid Margin="20">
+        <Grid Margin="10,0">
             <Grid.RowDefinitions>
                 <RowDefinition Height="auto" />
                 <RowDefinition Height="auto" />

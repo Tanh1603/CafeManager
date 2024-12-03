@@ -68,9 +68,9 @@
                                     <ItemsControl.ItemTemplate>
                                         <DataTemplate>
                                             <uc:InfoTable
-                                            Margin="0 10 10 0"
-                                            IsButtonVisible="False"
-                                            Text="{Binding TableName}">
+                                                Margin="0,10,10,0"
+                                                IsButtonVisible="False"
+                                                Text="{Binding TableName}">
                                                 <i:Interaction.Triggers>
                                                     <i:EventTrigger EventName="MouseLeftButtonDown">
                                                         <i:InvokeCommandAction Command="{Binding DataContext.ChooseTableCommand, RelativeSource={RelativeSource AncestorType=local:OrderView}}" CommandParameter="{Binding}" />
@@ -549,7 +549,7 @@
                             Grid.Column="4"
                             Width="130"
                             Height="50"
-                            Margin="5 0 0 0 "
+                            Margin="5,0,0,0"
                             Command="{Binding CompleteInvoicePaymentCommand}"
                             Style="{StaticResource confirmInfoButton}">
                             <StackPanel HorizontalAlignment="Center" Orientation="Horizontal">

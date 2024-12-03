@@ -18,10 +18,7 @@
         <converter:RowIndexConverter x:Key="RowIndexConverter" />
         <converter:CurrencyConverter x:Key="CurrencyConverter" />
     </UserControl.Resources>
-    <Border
-        Height="auto"
-        BorderThickness="4"
-        CornerRadius="10">
+    <Border BorderThickness="4" CornerRadius="10">
         <Border.Background>
             <LinearGradientBrush StartPoint="0,0.5" EndPoint="1,0.5">
                 <GradientStop Offset="0" Color="#d4b096" />
@@ -35,311 +32,110 @@
                 <GradientStop Offset="1" Color="#7c4e37" />
             </LinearGradientBrush>
         </Border.BorderBrush>
-        <StackPanel>
-            <Border Margin="0,5,5,0" CornerRadius="10">
-                <Button
-                    Grid.Row="0"
-                    HorizontalAlignment="Right"
-                    BorderBrush="Transparent"
-                    BorderThickness="0"
-                    Command="{Binding DataContext.CloseModifyInvoiceViewCommand, RelativeSource={RelativeSource AncestorType=adminviews:InvoiceView}}"
-                    Style="{StaticResource closeButton}">
-                    <ma:PackIconMaterial Kind="Close" Style="{StaticResource iconApp}" />
-                </Button>
-            </Border>
-            <Grid>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="auto" />
-                    <ColumnDefinition Width="*" />
-                </Grid.ColumnDefinitions>
-                <Border
-                    Margin="10,5,5,5"
-                    BorderThickness="2"
-                    CornerRadius="10">
-                    <Border.BorderBrush>
-                        <LinearGradientBrush StartPoint="0,0.5">
-                            <GradientStop Offset="0" Color="#5e2313" />
-                            <GradientStop Offset="0.5" Color="#65402e" />
-                            <GradientStop Offset="1" Color="#7c4e37" />
-                        </LinearGradientBrush>
-                    </Border.BorderBrush>
-                    <materialDesign:Card
-                        Margin="5"
-                        materialDesign:ElevationAssist.Elevation="Dp24"
-                        Background="Transparent"
-                        UniformCornerRadius="10">
-                        <StackPanel>
-                            <TextBlock
-                                HorizontalAlignment="Center"
-                                FontSize="24"
-                                FontWeight="SemiBold"
-                                Foreground="#5f2414"
-                                Text="Thông tin hóa đơn" />
-                            <Grid>
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="100" />
-                                    <ColumnDefinition Width="*" />
-                                    <ColumnDefinition Width="*" />
-                                    <ColumnDefinition Width="*" />
-                                </Grid.ColumnDefinitions>
-
-                                <Grid.RowDefinitions>
-                                    <RowDefinition Height="auto" />
-                                    <RowDefinition Height="auto" />
-                                    <RowDefinition Height="auto" />
-                                    <RowDefinition Height="auto" />
-                                    <RowDefinition Height="auto" />
-                                    <RowDefinition Height="auto" />
-                                    <RowDefinition Height="auto" />
-                                </Grid.RowDefinitions>
-
-                                <TextBlock
-                                    Grid.Row="0"
-                                    Grid.Column="0"
-                                    VerticalAlignment="Center"
-                                    Style="{StaticResource infoText}"
-                                    Text="Ngày bắt đầu hóa đơn"
-                                    TextWrapping="Wrap" />
-                                <DatePicker
-                                    Grid.Row="0"
-                                    Grid.Column="1"
-                                    MinWidth="140"
-                                    Margin="5"
-                                    SelectedDate="{Binding CurrentInvoiceDTO.Paymentstartdate, StringFormat=dd-MM-yyyy}"
-                                    Style="{StaticResource MaterialDesignOutlinedDatePicker}" />
-
-                                <materialDesign:TimePicker
-                                    Grid.Row="0"
-                                    Grid.Column="2"
-                                    MinWidth="100"
-                                    Margin="5"
-                                    Is24Hours="True"
-                                    SelectedTime="{Binding CurrentInvoiceDTO.Paymentstartdate}"
-                                    Style="{StaticResource MaterialDesignOutlinedTimePicker}" />
-
-                                <TextBlock
-                                    Grid.Row="1"
-                                    Grid.Column="0"
-                                    VerticalAlignment="Center"
-                                    Style="{StaticResource infoText}"
-                                    Text="Ngày thanh toán hóa đơn"
-                                    TextWrapping="Wrap" />
-                                <DatePicker
-                                    Grid.Row="1"
-                                    Grid.Column="1"
-                                    MinWidth="140"
-                                    Margin="5"
-                                    SelectedDate="{Binding CurrentInvoiceDTO.Paymentenddate}"
-                                    Style="{StaticResource MaterialDesignOutlinedDatePicker}" />
-                                <materialDesign:TimePicker
-                                    Grid.Row="1"
-                                    Grid.Column="2"
-                                    MinWidth="100"
-                                    Margin="5"
-                                    Is24Hours="True"
-                                    SelectedTime="{Binding CurrentInvoiceDTO.Paymentenddate}"
-                                    Style="{StaticResource MaterialDesignOutlinedTimePicker}" />
-
-                                <TextBlock
-                                    Grid.Row="2"
-                                    Grid.Column="0"
-                                    VerticalAlignment="Center"
-                                    Style="{StaticResource infoText}"
-                                    Text="Trạng thái hóa đơn"
-                                    TextWrapping="Wrap" />
-
-                                <uc:infoTextInput
-                                    Grid.Row="2"
-                                    Grid.Column="1"
-                                    Grid.ColumnSpan="2"
-                                    Height="60"
-                                    Text="{Binding CurrentInvoiceDTO.Paymentstatus, Mode=TwoWay}" />
-
-                                <TextBlock
-                                    Grid.Row="3"
-                                    Grid.Column="0"
-                                    VerticalAlignment="Center"
-                                    Style="{StaticResource infoText}"
-                                    Text="Phương thức thanh toán"
-                                    TextWrapping="Wrap" />
-
-                                <uc:infoTextInput
-                                    Grid.Row="3"
-                                    Grid.Column="1"
-                                    Grid.ColumnSpan="2"
-                                    Height="60"
-                                    Text="{Binding CurrentInvoiceDTO.Paymentmethod, Mode=TwoWay}" />
-
-                                <TextBlock
-                                    Grid.Row="4"
-                                    Grid.Column="0"
-                                    VerticalAlignment="Center"
-                                    Style="{StaticResource infoText}"
-                                    Text="Giảm giá(%)"
-                                    TextWrapping="Wrap" />
-                                <uc:infoTextInput
-                                    Grid.Row="4"
-                                    Grid.Column="1"
-                                    Grid.ColumnSpan="2"
-                                    Height="60"
-                                    Text="{Binding CurrentInvoiceDTO.Discountinvoice, Mode=TwoWay}" />
-
-                                <TextBlock
-                                    Grid.Row="5"
-                                    Grid.Column="0"
-                                    VerticalAlignment="Center"
-                                    Style="{StaticResource infoText}"
-                                    Text="Bàn (Khách)"
-                                    TextWrapping="Wrap" />
-                                <uc:infoTextInput
-                                    Grid.Row="5"
-                                    Grid.Column="1"
-                                    Grid.ColumnSpan="2"
-                                    Height="60"
-                                    IsEnabled="False"
-                                    Text="{Binding CurrentInvoiceDTO.CustomerOrTable, StringFormat='{}{0:0}', Mode=OneWay}" />
-
-                                <TextBlock
-                                    Grid.Row="6"
-                                    Grid.Column="0"
-                                    VerticalAlignment="Center"
-                                    Style="{StaticResource infoText}"
-                                    Text="Nhân viên tạo hóa đơn"
-                                    TextWrapping="Wrap" />
-                                <uc:infoTextInput
-                                    Grid.Row="6"
-                                    Grid.Column="1"
-                                    Grid.ColumnSpan="2"
-                                    Height="60"
-                                    IsEnabled="False"
-                                    Text="{Binding CurrentInvoiceDTO.Staff.Staffname, Mode=OneWay}" />
-                            </Grid>
-                        </StackPanel>
-                    </materialDesign:Card>
-                </Border>
-
-                <Border
-                    Grid.Column="1"
-                    Margin="5,5,10,5"
-                    BorderThickness="2"
-                    CornerRadius="10">
-                    <Border.BorderBrush>
-                        <LinearGradientBrush StartPoint="0,0.5">
-                            <GradientStop Offset="0" Color="#5e2313" />
-                            <GradientStop Offset="0.5" Color="#65402e" />
-                            <GradientStop Offset="1" Color="#7c4e37" />
-                        </LinearGradientBrush>
-                    </Border.BorderBrush>
-                    <materialDesign:Card
-                        materialDesign:ElevationAssist.Elevation="Dp24"
-                        Background="Transparent"
-                        UniformCornerRadius="10">
-                        <Grid>
-                            <Grid.RowDefinitions>
-                                <RowDefinition Height="auto" />
-                                <RowDefinition Height="*" />
-                            </Grid.RowDefinitions>
-
-                            <TextBlock
-                                Grid.Row="0"
-                                Margin="0,10"
-                                HorizontalAlignment="Center"
-                                FontSize="24"
-                                FontWeight="SemiBold"
-                                Foreground="#5f2414"
-                                Text="Thông tin chi tiết hóa đơn" />
-                            <Grid Grid.Row="1">
-                                <Grid.RowDefinitions>
-                                    <RowDefinition Height="*" />
-                                    <RowDefinition Height="auto" />
-                                </Grid.RowDefinitions>
-                                <ListView
-                                    Grid.Row="0"
-                                    Background="Transparent"
-                                    BorderBrush="Transparent"
-                                    BorderThickness="0"
-                                    ItemsSource="{Binding CurrentInvoiceDTO.Invoicedetails}">
-                                    <ListView.View>
-                                        <GridView>
-                                            <GridViewColumn DisplayMemberBinding="{Binding Food.Foodname}">
-                                                <GridViewColumn.Header>
-                                                    <TextBlock
-                                                        FontSize="14"
-                                                        FontWeight="Bold"
-                                                        Style="{StaticResource infoText}"
-                                                        Text="Món ăn"
-                                                        TextAlignment="Center" />
-                                                </GridViewColumn.Header>
-                                            </GridViewColumn>
-                                            <GridViewColumn DisplayMemberBinding="{Binding Food.Price, Converter={StaticResource CurrencyConverter}}">
-                                                <GridViewColumn.Header>
-                                                    <TextBlock
-                                                        FontSize="14"
-                                                        FontWeight="Bold"
-                                                        Style="{StaticResource infoText}"
-                                                        Text="Giá món ăn"
-                                                        TextAlignment="Center" />
-                                                </GridViewColumn.Header>
-                                            </GridViewColumn>
-                                            <GridViewColumn DisplayMemberBinding="{Binding Food.Discountfood, StringFormat='{}{0:0}%'}">
-                                                <GridViewColumn.Header>
-                                                    <TextBlock
-                                                        FontSize="14"
-                                                        Style="{StaticResource infoText}"
-                                                        Text="Giảm giá món ăn"
-                                                        TextAlignment="Center" />
-                                                </GridViewColumn.Header>
-                                            </GridViewColumn>
-                                            <GridViewColumn DisplayMemberBinding="{Binding Quantity}">
-                                                <GridViewColumn.Header>
-                                                    <TextBlock
-                                                        FontSize="14"
-                                                        Style="{StaticResource infoText}"
-                                                        Text="Số lượng"
-                                                        TextAlignment="Center" />
-                                                </GridViewColumn.Header>
-                                            </GridViewColumn>
-                                        </GridView>
-                                    </ListView.View>
-                                </ListView>
-
-                                <StackPanel
-                                    Grid.Row="1"
-                                    HorizontalAlignment="Right"
-                                    Orientation="Horizontal">
-                                    <TextBlock
-                                        Margin="0,0,20,0"
-                                        VerticalAlignment="Center"
-                                        FontSize="20"
-                                        FontWeight="Bold"
-                                        Foreground="#5e2313"
-                                        Text="Thành tiền:" />
-                                    <TextBox
-                                        MinWidth="100"
-                                        VerticalAlignment="Center"
-                                        FontSize="20"
-                                        FontWeight="Bold"
-                                        IsReadOnly="True"
-                                        Text="{Binding CurrentInvoiceDTO.TotalPrice, Mode=OneWay, Converter={StaticResource CurrencyConverter}}" />
-                                </StackPanel>
-                            </Grid>
-                        </Grid>
-                    </materialDesign:Card>
-                </Border>
-            </Grid>
+        <StackPanel Margin="10">
             <Button
-                Margin="10"
                 HorizontalAlignment="Right"
-                VerticalAlignment="Bottom"
-                Style="{StaticResource confirmInfoButton}">
-                <StackPanel HorizontalAlignment="Center" Orientation="Horizontal">
-                    <ma:PackIconMaterial VerticalAlignment="Center" Kind="CheckBold" />
-                    <TextBlock
-                        Margin="10"
-                        FontWeight="SemiBold"
-                        Text="Xác nhận" />
-                </StackPanel>
+                BorderBrush="Transparent"
+                BorderThickness="0"
+                Command="{Binding DataContext.CloseModifyInvoiceViewCommand, RelativeSource={RelativeSource AncestorType=adminviews:InvoiceView}}"
+                Style="{StaticResource closeButton}">
+                <ma:PackIconMaterial Kind="Close" Style="{StaticResource iconApp}" />
             </Button>
+            <materialDesign:Card
+                MinHeight="400"
+                materialDesign:ElevationAssist.Elevation="Dp24"
+                Background="Transparent"
+                UniformCornerRadius="10">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="auto" />
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
+
+                    <TextBlock
+                        Grid.Row="0"
+                        HorizontalAlignment="Center"
+                        FontSize="24"
+                        FontWeight="SemiBold"
+                        Foreground="#5f2414"
+                        Text="Thông tin chi tiết hóa đơn" />
+                    <Grid Grid.Row="1">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*" />
+                            <RowDefinition Height="auto" />
+                        </Grid.RowDefinitions>
+                        <ListView
+                            Grid.Row="0"
+                            Background="Transparent"
+                            BorderBrush="Transparent"
+                            BorderThickness="0"
+                            ItemsSource="{Binding CurrentInvoiceDTO.Invoicedetails}">
+                            <ListView.View>
+                                <GridView>
+                                    <GridViewColumn DisplayMemberBinding="{Binding Food.Foodname}">
+                                        <GridViewColumn.Header>
+                                            <TextBlock
+                                                FontSize="14"
+                                                FontWeight="Bold"
+                                                Style="{StaticResource infoText}"
+                                                Text="Món ăn"
+                                                TextAlignment="Center" />
+                                        </GridViewColumn.Header>
+                                    </GridViewColumn>
+                                    <GridViewColumn DisplayMemberBinding="{Binding Food.Price, Converter={StaticResource CurrencyConverter}}">
+                                        <GridViewColumn.Header>
+                                            <TextBlock
+                                                FontSize="14"
+                                                FontWeight="Bold"
+                                                Style="{StaticResource infoText}"
+                                                Text="Giá món ăn"
+                                                TextAlignment="Center" />
+                                        </GridViewColumn.Header>
+                                    </GridViewColumn>
+                                    <GridViewColumn DisplayMemberBinding="{Binding Food.Discountfood, StringFormat='{}{0:0}%'}">
+                                        <GridViewColumn.Header>
+                                            <TextBlock
+                                                FontSize="14"
+                                                Style="{StaticResource infoText}"
+                                                Text="Giảm giá món ăn"
+                                                TextAlignment="Center" />
+                                        </GridViewColumn.Header>
+                                    </GridViewColumn>
+                                    <GridViewColumn DisplayMemberBinding="{Binding Quantity}">
+                                        <GridViewColumn.Header>
+                                            <TextBlock
+                                                FontSize="14"
+                                                Style="{StaticResource infoText}"
+                                                Text="Số lượng"
+                                                TextAlignment="Center" />
+                                        </GridViewColumn.Header>
+                                    </GridViewColumn>
+                                </GridView>
+                            </ListView.View>
+                        </ListView>
+
+                        <StackPanel
+                            Grid.Row="1"
+                            HorizontalAlignment="Right"
+                            Orientation="Horizontal">
+                            <TextBlock
+                                Margin="0,0,20,0"
+                                VerticalAlignment="Center"
+                                FontSize="20"
+                                FontWeight="Bold"
+                                Foreground="#5e2313"
+                                Text="Thành tiền:" />
+                            <TextBox
+                                MinWidth="100"
+                                VerticalAlignment="Center"
+                                FontSize="20"
+                                FontWeight="Bold"
+                                IsReadOnly="True"
+                                Text="{Binding CurrentInvoiceDTO.TotalPrice, Mode=OneWay, Converter={StaticResource CurrencyConverter}}" />
+                        </StackPanel>
+                    </Grid>
+                </Grid>
+            </materialDesign:Card>
         </StackPanel>
     </Border>
 </UserControl>

@@ -138,8 +138,8 @@
 
                                 <Button
                                     x:Name="BtnRestore"
-                                   Style="{StaticResource infoFoodBtn}"
-                                    Click="BtnRestore_Click">
+                                    Click="BtnRestore_Click"
+                                    Style="{StaticResource infoFoodBtn}">
                                     <ma:PackIconMaterial Kind="Restore" Style="{StaticResource infoFoodIcon}" />
                                 </Button>
                             </Grid>
@@ -155,7 +155,6 @@
             HorizontalAlignment="Right"
             VerticalAlignment="Top"
             Background="Yellow"
-            
             CornerRadius="0 10 0 10">
 
             <Grid HorizontalAlignment="Left" VerticalAlignment="Center">

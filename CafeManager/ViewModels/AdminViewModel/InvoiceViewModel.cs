@@ -1,12 +1,17 @@
 ﻿using AutoMapper;
+using CafeManager.Core.Data;
 using CafeManager.Core.DTOs;
 using CafeManager.WPF.MessageBox;
 using CafeManager.WPF.Services;
 using CafeManager.WPF.ViewModels.AddViewModel;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.IdentityModel.Tokens;
 using System.Collections.ObjectModel;
+using System.Linq.Expressions;
+using System.Windows;
 
 namespace CafeManager.WPF.ViewModels.AdminViewModel
 {
@@ -25,15 +30,64 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
         [ObservableProperty]
         private ObservableCollection<InvoiceDTO> _listInvoiceDTO = [];
 
-        private string _searchKey = string.Empty;
+        private DateTime? _startDate;
 
-        public string SearchKey
+        public DateTime? StartDate
         {
-            get => _searchKey; set
+            get => _startDate;
+            set
             {
-                if (_searchKey != value)
+                if (_startDate != value)
                 {
-                    _searchKey = value;
+                    _startDate = value;
+                    OnPropertyChanged();
+                    _ = LoadData();
+                }
+            }
+        }
+
+        private DateTime? _endDate;
+
+        public DateTime? EndDate
+        {
+            get => _endDate;
+            set
+            {
+                if (value != _endDate)
+                {
+                    _endDate = value;
+                    OnPropertyChanged();
+                    _ = LoadData();
+                }
+            }
+        }
+
+        private string? _status;
+
+        public string? Status
+        {
+            get => _status; set
+            {
+                if (_status != value)
+                {
+                    _status = value;
+                    OnPropertyChanged();
+                    _ = LoadData();
+                }
+            }
+        }
+
+        private string? _paymentMethod;
+
+        public string? PaymentMethod
+        {
+            get => _paymentMethod; set
+            {
+                if (_paymentMethod != value)
+                {
+                    _paymentMethod = value;
+                    OnPropertyChanged();
+                    _ = LoadData();
                 }
             }
         }
@@ -50,15 +104,21 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
 
         private async Task LoadData()
         {
-            //var dbListInvoice = await _invoiceServices.GetListInvoices();
-            var dbListInvoice = await _invoiceServices.GetSearchPaginateListInvoice(null, pageIndex, pageSize);
+            Expression<Func<Invoice, bool>> filter = invoice =>
+            (invoice.Isdeleted == false) &&
+            (StartDate == null || invoice.Paymentstartdate >= StartDate) &&
+            (EndDate == null || invoice.Paymentenddate <= EndDate) &&
+            (string.IsNullOrEmpty(Status) || invoice.Paymentstatus.Contains(Status)) &&
+            (string.IsNullOrEmpty(PaymentMethod) || invoice.Paymentmethod.Contains(PaymentMethod));
+
+            var dbListInvoice = await _invoiceServices.GetSearchPaginateListInvoice(filter, pageIndex, pageSize);
             ListInvoiceDTO = [.. _mapper.Map<List<InvoiceDTO>>(dbListInvoice.Item1)];
             totalPages = (dbListInvoice.Item2 + pageSize - 1) / pageSize;
             OnPropertyChanged(nameof(PageUI));
         }
 
         [RelayCommand]
-        private void UpdateInvoice(InvoiceDTO invoiceDTO)
+        private void InfoInvoice(InvoiceDTO invoiceDTO)
         {
             IsOpenModifyInvoiceVM = true;
             ModifyInvoiceVM.RecieveInvoiceDTO(invoiceDTO.Clone());
@@ -76,7 +136,7 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
                     if (isSuccessDeleted)
                     {
                         MyMessageBox.Show("Xóa hóa đơn thành công");
-                        ListInvoiceDTO.Remove(invoiceDTO);
+                        _ = LoadData();
                     }
                 }
             }
@@ -96,7 +156,7 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
 
         private int pageIndex = 1;
 
-        private int pageSize = 2;
+        private int pageSize = 5;
         private int totalPages = 0;
 
         public string PageUI => $"{pageIndex}/{totalPages}";

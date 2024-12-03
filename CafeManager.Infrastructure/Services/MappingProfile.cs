@@ -46,10 +46,15 @@ public class MappingProfile : Profile
             .ForMember(dest => dest.Imagefood, opt => opt.MapFrom(src => ConvertImageServices.BitmapImageToBase64(src.Imagefood)));
 
         // Invoice <-> InvoiceDTO
-        CreateMap<Invoice, InvoiceDTO>().ReverseMap();
+        CreateMap<Invoice, InvoiceDTO>();
+        CreateMap<InvoiceDTO, Invoice>()
+            .ForMember(dest => dest.Coffeetable, opt => opt.Ignore())
+            .ForMember(dest => dest.Staff, opt => opt.Ignore());
 
         // Invoicedetail <-> InvoiceDetailDTO
-        CreateMap<Invoicedetail, InvoiceDetailDTO>().ReverseMap();
+        CreateMap<Invoicedetail, InvoiceDetailDTO>();
+        CreateMap<InvoiceDetailDTO, Invoicedetail>()
+            .ForMember(dest => dest.Food, opt => opt.Ignore());
 
         // Staff <-> StaffDTO
         CreateMap<Staff, StaffDTO>().ReverseMap();

@@ -551,7 +551,7 @@
             </Trigger>
         </Style.Triggers>
     </Style>
-    
+
 
     <Style
         x:Key="infoFoodBtn"
@@ -572,18 +572,21 @@
         </Style.Triggers>
     </Style>
 
-    <Style x:Key="addCircleBtn" BasedOn="{StaticResource confirmInfoButton}" TargetType="Button">
-        <Setter Property="MinWidth" Value="40"/>
-        <Setter Property="MinHeight" Value="40"/>
+    <Style
+        x:Key="addCircleBtn"
+        BasedOn="{StaticResource confirmInfoButton}"
+        TargetType="Button">
+        <Setter Property="MinWidth" Value="40" />
+        <Setter Property="MinHeight" Value="40" />
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="Button">
                     <Border
-                x:Name="border"
-                Background="{TemplateBinding Background}"
-                BorderBrush="Transparent"
-                BorderThickness="{TemplateBinding BorderThickness}"
-                CornerRadius="50">
+                        x:Name="border"
+                        Background="{TemplateBinding Background}"
+                        BorderBrush="Transparent"
+                        BorderThickness="{TemplateBinding BorderThickness}"
+                        CornerRadius="50">
                         <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
                     </Border>
                     <ControlTemplate.Triggers>

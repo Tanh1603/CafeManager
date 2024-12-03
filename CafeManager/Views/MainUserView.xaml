@@ -26,9 +26,8 @@
                 <GradientStop Offset="1" Color="#cb925d" />
             </LinearGradientBrush>
         </Grid.Background>
-        <Grid >
+        <Grid>
             <materialDesign:DialogHost Background="Transparent" DialogMargin="10">
-
                 <materialDesign:DrawerHost
                     IsLeftDrawerOpen="{Binding ElementName=btnMenu, Path=IsChecked}"
                     LeftDrawerBackground="{DynamicResource SecondaryHueLightBrush}"
@@ -134,16 +133,18 @@
                             <RowDefinition Height="auto" />
                             <RowDefinition Height="*" />
                         </Grid.RowDefinitions>
-                        <Grid Grid.Row="0" Margin="5 0">
+                        <Grid Grid.Row="0" Margin="5,0">
                             <ToggleButton
                                 x:Name="btnMenu"
                                 HorizontalAlignment="Left"
                                 Command="{Binding OpenMenuCommand}"
+                                Cursor="Hand"
+                                Foreground="#ddd1c3"
                                 IsChecked="{Binding IsLeftDrawerOpen}"
                                 Style="{StaticResource MaterialDesignHamburgerToggleButton}" />
                         </Grid>
                         <Grid Grid.Row="1" Background="Transparent">
-                            <ContentControl Margin="10" Content="{Binding CurrentVM}" />
+                            <ContentControl Content="{Binding CurrentVM}" />
                         </Grid>
                     </Grid>
                 </materialDesign:DrawerHost>

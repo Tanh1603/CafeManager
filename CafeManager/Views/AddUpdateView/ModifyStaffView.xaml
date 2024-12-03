@@ -68,14 +68,18 @@
                     </Button>
                 </Border>
 
-                <Grid Grid.Row="1" Margin="10,0">
+                <StackPanel
+                    Grid.Row="1"
+                    Margin="10,0"
+                    Orientation="Horizontal">
 
-                    <Grid.ColumnDefinitions>
+                    <!--<Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*" MinWidth="400" />
                         <ColumnDefinition Width="auto" />
-                    </Grid.ColumnDefinitions>
+                    </Grid.ColumnDefinitions>-->
 
                     <Border
+                        MinWidth="400"
                         Margin="0,0,10,0"
                         BorderThickness="2"
                         CornerRadius="10">
@@ -86,6 +90,16 @@
                                 <GradientStop Offset="1" Color="#7c4e37" />
                             </LinearGradientBrush>
                         </Border.BorderBrush>
+                        <Border.Resources>
+                            <Style TargetType="Border">
+                                <Setter Property="Visibility" Value="Visible" />
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding IsEnable}" Value="False">
+                                        <Setter Property="Visibility" Value="Collapsed" />
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Border.Resources>
                         <StackPanel>
                             <TextBlock
                                 HorizontalAlignment="Center"
@@ -224,9 +238,9 @@
 
                     <Border
                         Grid.Column="1"
+                        MinHeight="400"
                         BorderThickness="2"
-                        CornerRadius="10"
-                        IsEnabled="{Binding IsEnable}">
+                        CornerRadius="10">
                         <Border.BorderBrush>
                             <LinearGradientBrush StartPoint="0,0.5">
                                 <GradientStop Offset="0" Color="#5e2313" />
@@ -260,24 +274,48 @@
                                                 <DataTemplate>
                                                     <StackPanel Grid.Column="1" Orientation="Horizontal">
 
-                                                        <Button
-                                                            x:Name="BtnDelete"
-                                                            Padding="2"
-                                                            HorizontalAlignment="Center"
-                                                            Background="Transparent"
-                                                            Command="{Binding DataContext.DeleteStaffSalaryHistoryCommand, RelativeSource={RelativeSource AncestorType=local:ModifyStaffView}}"
-                                                            CommandParameter="{Binding}">
-                                                            <ma:PackIconMaterial Kind="TrashCan" Style="{StaticResource infoFoodIcon}" />
-                                                        </Button>
-                                                        <Button
-                                                            x:Name="BtnUpdate"
-                                                            Padding="2"
-                                                            HorizontalAlignment="Center"
-                                                            Background="Transparent"
-                                                            Command="{Binding DataContext.OpenUpdateStaffSalaryHistoryCommand, RelativeSource={RelativeSource AncestorType=local:ModifyStaffView}}"
-                                                            CommandParameter="{Binding}">
-                                                            <ma:PackIconMaterial Kind="Pencil" Style="{StaticResource infoFoodIcon}" />
-                                                        </Button>
+                                                        <Grid>
+                                                            <Grid.Resources>
+                                                                <Style TargetType="Grid">
+                                                                    <Setter Property="Visibility" Value="Visible" />
+                                                                    <Style.Triggers>
+                                                                        <DataTrigger Binding="{Binding DataContext.IsEnable, RelativeSource={RelativeSource AncestorType=local:ModifyStaffView}}" Value="False">
+                                                                            <Setter Property="Visibility" Value="Collapsed" />
+                                                                        </DataTrigger>
+                                                                    </Style.Triggers>
+                                                                </Style>
+                                                            </Grid.Resources>
+                                                            <Button
+                                                                x:Name="BtnDelete"
+                                                                Padding="2"
+                                                                HorizontalAlignment="Center"
+                                                                Background="Transparent"
+                                                                Command="{Binding DataContext.DeleteStaffSalaryHistoryCommand, RelativeSource={RelativeSource AncestorType=local:ModifyStaffView}}"
+                                                                CommandParameter="{Binding}">
+                                                                <ma:PackIconMaterial Kind="TrashCan" Style="{StaticResource infoFoodIcon}" />
+                                                            </Button>
+                                                        </Grid>
+                                                        <Grid>
+                                                            <Grid.Resources>
+                                                                <Style TargetType="Grid">
+                                                                    <Setter Property="Visibility" Value="Visible" />
+                                                                    <Style.Triggers>
+                                                                        <DataTrigger Binding="{Binding DataContext.IsEnable, RelativeSource={RelativeSource AncestorType=local:ModifyStaffView}}" Value="False">
+                                                                            <Setter Property="Visibility" Value="Collapsed" />
+                                                                        </DataTrigger>
+                                                                    </Style.Triggers>
+                                                                </Style>
+                                                            </Grid.Resources>
+                                                            <Button
+                                                                x:Name="BtnUpdate"
+                                                                Padding="2"
+                                                                HorizontalAlignment="Center"
+                                                                Background="Transparent"
+                                                                Command="{Binding DataContext.OpenUpdateStaffSalaryHistoryCommand, RelativeSource={RelativeSource AncestorType=local:ModifyStaffView}}"
+                                                                CommandParameter="{Binding}">
+                                                                <ma:PackIconMaterial Kind="Pencil" Style="{StaticResource infoFoodIcon}" />
+                                                            </Button>
+                                                        </Grid>
                                                     </StackPanel>
                                                 </DataTemplate>
                                             </GridViewColumn.CellTemplate>
@@ -286,42 +324,67 @@
                                 </ListView.View>
                             </ListView>
 
-                            <Button
-                                Grid.Row="2"
-                                Height="35"
-                                Margin="10"
-                                HorizontalAlignment="Left"
-                                VerticalAlignment="Bottom"
-                                Command="{Binding OpenModifyStaffSalaryHistoryCommand}"
-                                Style="{StaticResource confirmInfoButton}">
-                                <StackPanel HorizontalAlignment="Center" Orientation="Horizontal">
-                                    <ma:PackIconMaterial VerticalAlignment="Center" Kind="Plus" />
-                                    <TextBlock
-                                        Margin="10,0,0,0"
-                                        FontWeight="SemiBold"
-                                        Text="Thêm" />
-                                </StackPanel>
-                            </Button>
+                            <Grid Grid.Row="2">
+
+                                <Grid.Resources>
+                                    <Style TargetType="Grid">
+                                        <Setter Property="Visibility" Value="Visible" />
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding IsEnable}" Value="False">
+                                                <Setter Property="Visibility" Value="Collapsed" />
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </Grid.Resources>
+
+                                <Button
+                                    Height="35"
+                                    Margin="10"
+                                    HorizontalAlignment="Left"
+                                    VerticalAlignment="Bottom"
+                                    Command="{Binding OpenModifyStaffSalaryHistoryCommand}"
+                                    Style="{StaticResource confirmInfoButton}">
+                                    <StackPanel HorizontalAlignment="Center" Orientation="Horizontal">
+                                        <ma:PackIconMaterial VerticalAlignment="Center" Kind="Plus" />
+                                        <TextBlock
+                                            Margin="10,0,0,0"
+                                            FontWeight="SemiBold"
+                                            Text="Thêm" />
+                                    </StackPanel>
+                                </Button>
+                            </Grid>
                         </Grid>
                     </Border>
+                </StackPanel>
+                <Grid Grid.Row="2">
+                    <Grid.Resources>
+                        <Style TargetType="Grid">
+                            <Setter Property="Visibility" Value="Visible" />
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding IsEnable}" Value="False">
+                                    <Setter Property="Visibility" Value="Collapsed" />
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Grid.Resources>
+
+                    <Button
+                        Height="35"
+                        Margin="10"
+                        HorizontalAlignment="Right"
+                        VerticalAlignment="Bottom"
+                        Command="{Binding SubmitModifyStaffCommand}"
+                        IsEnabled="{Binding IsEnable}"
+                        Style="{StaticResource confirmInfoButton}">
+                        <StackPanel HorizontalAlignment="Center" Orientation="Horizontal">
+                            <ma:PackIconMaterial VerticalAlignment="Center" Kind="CheckBold" />
+                            <TextBlock
+                                Margin="10,0,0,0"
+                                FontWeight="SemiBold"
+                                Text="Xác nhận" />
+                        </StackPanel>
+                    </Button>
                 </Grid>
-                <Button
-                    Grid.Row="2"
-                    Height="35"
-                    Margin="10"
-                    HorizontalAlignment="Right"
-                    VerticalAlignment="Bottom"
-                    Command="{Binding SubmitModifyStaffCommand}"
-                    IsEnabled="{Binding IsEnable}"
-                    Style="{StaticResource confirmInfoButton}">
-                    <StackPanel HorizontalAlignment="Center" Orientation="Horizontal">
-                        <ma:PackIconMaterial VerticalAlignment="Center" Kind="CheckBold" />
-                        <TextBlock
-                            Margin="10,0,0,0"
-                            FontWeight="SemiBold"
-                            Text="Xác nhận" />
-                    </StackPanel>
-                </Button>
             </Grid>
 
             <materialDesign:DialogHost

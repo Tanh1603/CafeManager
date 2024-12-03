@@ -13,17 +13,12 @@ namespace CafeManager.WPF.Services
         // Hàm load tất cả bill
         public async Task<IEnumerable<Invoice>> GetListInvoices()
         {
-            return await _unitOfWork.InvoiceList.GetAllInvoiceAsync();
+            return await _unitOfWork.InvoiceList.GetAllExistedAsync();
         }
 
         public async Task<Invoice?> GetInvoiceById(int id)
         {
-            return await _unitOfWork.InvoiceList.GetInvoicesByIdAsync(id);
-        }
-
-        public async Task<IEnumerable<Invoicedetail>?> GetListIvoiceDetailByInvoiceId(int id)
-        {
-            return await _unitOfWork.InvoiceList.GetAllInvoiceDetailByInvoiceIdAsync(id);
+            return await _unitOfWork.InvoiceList.GetById(id);
         }
 
         #region Thêm xóa, sửa, tìm kiếm, sắp sếp, phân trang
@@ -74,11 +69,9 @@ namespace CafeManager.WPF.Services
             }
         }
 
-        public async Task<IEnumerable<Invoice>?> GetSearchSortPaginateListInvoice(Expression<Func<Invoice, bool>>? searchPredicate = null,
-                                                            Expression<Func<Invoice, object>>? sortKeySelector = null,
-                                                            bool ascending = true, int skip = 0, int take = 20)
+        public async Task<(IEnumerable<Invoice>?, int)> GetSearchPaginateListInvoice(Expression<Func<Invoice, bool>>? searchPredicate = null, int skip = 0, int take = 20)
         {
-            return await _unitOfWork.InvoiceList.SearchSortPaginateAsync(searchPredicate, sortKeySelector, ascending, skip, take);
+            return await _unitOfWork.InvoiceList.GetByPageAsync(skip, take, searchPredicate);
         }
 
         #endregion Thêm xóa, sửa, tìm kiếm, sắp sếp, phân trang
@@ -87,8 +80,8 @@ namespace CafeManager.WPF.Services
 
         public async Task<decimal?> GetTotalPriceByInvoiceId(int id)
         {
-            var res = await _unitOfWork.InvoiceList.GetAllInvoiceDetailByInvoiceIdAsync(id);
-            return CaculateTotalPriceFromInvoiceDetail(res);
+            var res = await _unitOfWork.InvoiceList.GetById(id);
+            return CaculateTotalPriceFromInvoiceDetail(res?.Invoicedetails) ?? 0;
         }
 
         public decimal? CaculateTotalPriceFromInvoiceDetail(IEnumerable<Invoicedetail>? invoicedetail)
@@ -107,7 +100,7 @@ namespace CafeManager.WPF.Services
         public async Task<decimal?> GetTotalPriceFromAllInvoices()
         {
             decimal? totalMoney = decimal.Zero;
-            var listInvoices = await _unitOfWork.InvoiceList.GetAllInvoiceAsync();
+            var listInvoices = await _unitOfWork.InvoiceList.GetAllExistedAsync();
             foreach (var invoice in listInvoices)
             {
                 totalMoney += CaculateTotalPriceFromInvoiceDetail(invoice.Invoicedetails);

@@ -63,6 +63,7 @@ namespace CafeManager.WPF.ViewModels.AddViewModel
             ModifyStaff = new();
             CurrentStaffSalary = new();
             Endworkingdate = null;
+            OnPropertyChanged(nameof(ListExisted));
         }
 
         [RelayCommand]

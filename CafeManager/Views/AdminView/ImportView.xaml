@@ -34,7 +34,7 @@
                 </LinearGradientBrush>
             </Border.Background>
 
-            <Grid Margin="20,10">
+            <Grid Margin="10,0">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="auto" />
                     <RowDefinition Height="auto" />

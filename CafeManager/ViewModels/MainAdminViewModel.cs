@@ -21,6 +21,9 @@ namespace CafeManager.WPF.ViewModels
 
         private string currentVM = string.Empty;
 
+        [ObservableProperty]
+        private bool _IsLeftDrawerOpen;
+
         public MainAdminViewModel(IServiceProvider provider)
         {
             _provider = provider;
@@ -90,6 +93,7 @@ namespace CafeManager.WPF.ViewModels
                     break;
             }
             currentVM = viewModel;
+            IsLeftDrawerOpen = false;
         }
 
         [RelayCommand]
@@ -105,6 +109,12 @@ namespace CafeManager.WPF.ViewModels
             {
                 AdminAccount = _accountStore.Account;
             }
+        }
+
+        [RelayCommand]
+        private void OpenMenu()
+        {
+            IsLeftDrawerOpen = true;
         }
 
         public void Dispose()

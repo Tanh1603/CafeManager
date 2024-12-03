@@ -1,22 +1,12 @@
-﻿using CafeManager.Core.Data;
+﻿using AutoMapper;
+using CafeManager.Core.Data;
 using CafeManager.Core.DTOs;
+using CafeManager.WPF.MessageBox;
 using CafeManager.WPF.Services;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.Extensions.DependencyInjection;
-using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using CafeManager.WPF.MessageBox;
-using System.Windows.Forms.VisualStyles;
-using System.Diagnostics;
-using System.Windows.Forms;
-using System.Runtime.CompilerServices;
-using AutoMapper;
 
 namespace CafeManager.WPF.ViewModels.AddViewModel
 {
@@ -225,8 +215,7 @@ namespace CafeManager.WPF.ViewModels.AddViewModel
                 {
                     CurrentListImportdetail.Remove(importDetail);
                     MyMessageBox.Show("Xoá chi tiết đơn hàng thành công", MyMessageBox.Buttons.OK, MyMessageBox.Icons.Information);
-                }    
-                
+                }
             }
             ReloadImportPrice();
         }
@@ -330,7 +319,6 @@ namespace CafeManager.WPF.ViewModels.AddViewModel
         private void SubmitModifyImport()
         {
             ImportChanged?.Invoke(ModifyImport, CurrentListImportdetail.ToList());
-
         }
 
         [RelayCommand]

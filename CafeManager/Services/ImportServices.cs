@@ -49,99 +49,21 @@ namespace CafeManager.WPF.Services
             }
         }
 
-        public async Task<Import?> UpdateImport(Import import, List<ImportMaterialDetailDTO>? updateImportDetails)
+        public async Task<Import?> UpdateImport(Import import)
         {
             try
             {
                 await _unitOfWork.BeginTransactionAsync();
-                var res = _unitOfWork.ImportList.Update(import);
-                Materialsupplier newMaterialSupplier = new();
-                var existingMaterialSuppliers = (await _unitOfWork.MaterialSupplierList.GetAll())
-                    .Where(x => x.Isdeleted == false).ToList();
-                var existingImportDetails = await _unitOfWork.ImportDetailList.GetAll();
-
-                if (updateImportDetails != null)
-                {
-                    foreach (var x in updateImportDetails)
-                    {
-                        if (x.Importdetailid == 0)
-                        {
-                            await _unitOfWork.ImportDetailList.Create(new()
-                            {
-                                Importid = import.Importid,
-                                Quantity = x.Quantity
-                            });
-                        }
-                        else
-                        {
-                            var existingImportDetail = existingImportDetails.FirstOrDefault(m => m.Isdeleted == false && m.Importdetailid == x.Importdetailid);
-
-                            if (existingImportDetail != null)
-                            {
-                                if (x.Isdeleted == true)
-                                {
-                                    existingImportDetail.Isdeleted = false;
-                                }
-                                else
-                                {
-                                    existingImportDetail.Importid = import.Importid;
-                                    existingImportDetail.Quantity = x.Quantity;
-                                }
-                            }
-                        }
-
-                        if (x.Materialsupplierid == 0)
-                        {
-                            var existing = existingMaterialSuppliers
-                                .FirstOrDefault(m => m.Materialid == x.Materialid &&
-                                             m.Supplierid == import.Supplierid &&
-                                             m.Original == x.Original &&
-                                             m.Manufacturer == x.Manufacturer &&
-                                             m.Manufacturedate == x.Manufacturedate &&
-                                             m.Expirationdate == x.Expirationdate &&
-                                             m.Price == x.Price);
-                            if (existing == null)
-                            {
-                                newMaterialSupplier = await _unitOfWork.MaterialSupplierList.Create(
-                                    new Materialsupplier
-                                    {
-                                        Materialid = x.Materialid,
-                                        Supplierid = import.Supplierid,
-                                        Manufacturedate = x.Manufacturedate,
-                                        Expirationdate = x.Expirationdate,
-                                        Original = x.Original,
-                                        Manufacturer = x.Manufacturer,
-                                        Price = x.Price,
-                                    });
-                                await _unitOfWork.CompleteAsync();
-                            }
-                        }
-                        else
-                        {
-                            var existMaterialSupplier = await _unitOfWork.MaterialSupplierList.GetById(x.Materialsupplierid);
-                            if (existMaterialSupplier != null)
-                            {
-                                existMaterialSupplier.Materialid = x.Materialid;
-                                existMaterialSupplier.Supplierid = import.Supplierid;
-                                existMaterialSupplier.Manufacturedate = x.Manufacturedate;
-                                existMaterialSupplier.Expirationdate = x.Expirationdate;
-                                existMaterialSupplier.Original = x.Original;
-                                existMaterialSupplier.Manufacturer = x.Manufacturer;
-                                existMaterialSupplier.Price = x.Price;
-                            }
-                            await _unitOfWork.CompleteAsync();
-                        }
-                    }
-                }
+                await _unitOfWork.ImportList.UpdateStaffWithListImportDetail(import);
                 await _unitOfWork.CompleteAsync();
                 _unitOfWork.ClearChangeTracker();
                 await _unitOfWork.CommitTransactionAsync();
-                return await res;
+                return await _unitOfWork.ImportList.GetById(import.Importid);
             }
             catch (Exception)
             {
                 await _unitOfWork.RollbackTransactionAsync();
-                throw new InvalidOperationException("Lỗi khi sửa thông tin nhập hàng");
+                throw new InvalidOperationException("Lỗi khi sửa phiếu nhập");
             }
         }
 

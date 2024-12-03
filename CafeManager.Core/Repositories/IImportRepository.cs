@@ -9,5 +9,6 @@ namespace CafeManager.Core.Repositories
 {
     public interface IImportRepository : IRepository<Import>
     {
+        public Task<Import> UpdateStaffWithListImportDetail(Import import);
     }
 }

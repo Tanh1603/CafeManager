@@ -93,6 +93,7 @@ namespace CafeManager.WPF.Services
 
                 //await _unitOfWork.ConsumedMaterialList.UpdateById(id, consumedmaterial);
                 var res = await _unitOfWork.ConsumedMaterialList.GetById(id);
+                res.Quantity = consumedmaterial.Quantity;
 
                 await _unitOfWork.CompleteAsync();
 

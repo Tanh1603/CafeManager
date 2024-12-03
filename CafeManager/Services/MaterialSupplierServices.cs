@@ -217,5 +217,11 @@ namespace CafeManager.WPF.Services
         {
             return await _unitOfWork.MaterialSupplierList.GetAll();
         }
+
+        public async Task<Materialsupplier?> GetMaterialsupplierById(int id)
+        {
+            var res = await _unitOfWork.MaterialSupplierList.GetById(id);
+            return res?.Isdeleted == false ? res : null;
+        }
     }
 }

@@ -39,7 +39,7 @@ namespace CafeManager.Core.DTOs
             }
         }
 
-        public int Materialid
+        public int Materialsupplierid
         {
             get => _materialsupplierid;
             set
@@ -108,7 +108,7 @@ namespace CafeManager.Core.DTOs
                 Id = Id,
                 Importdetailid = Importdetailid,
                 Importid = Importid,
-                Materialid = Materialid,
+                Materialsupplierid = Materialsupplierid,
                 Isdeleted = Isdeleted,
                 Quantity = Quantity,
 

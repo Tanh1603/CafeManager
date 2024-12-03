@@ -20,6 +20,7 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
         private readonly ConsumedMaterialServices _consumedMaterialServices;
         private readonly IMapper _mapper;
 
+        #region Material Declare
         [ObservableProperty]
         private bool _isOpenAddMaterial = false;
 
@@ -27,28 +28,12 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
         private bool _isPopupOpen = false;
 
         [ObservableProperty]
-        private bool _isAdding = false;
-
-        [ObservableProperty]
-        private bool _isUpdating = false;
-
-        [ObservableProperty]
-        private bool _isOpenPopupMVM = false;
+        private bool _isOpenModifyConsumed = false;
 
         [ObservableProperty]
         private bool _isGetMaterial = true;
 
         public bool IsDeletedMaterial => !IsGetMaterial;
-
-        //private partial void OnIsGetMaterialChanged(bool value)
-        //{
-        //    OnPropertyChanged(nameof(IsDeletedMaterial)); // Báo rằng IsDeletedMaterial cũng đã thay đổi
-        //}
-
-        [ObservableProperty]
-        private ConsumedMaterialDTO _modifyConsumedMaterial = new();
-
-        private decimal _currentQuantity;
 
         [ObservableProperty]
         private ObservableCollection<MaterialDTO> _listMaterialDTO = [];
@@ -57,17 +42,48 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
         private ObservableCollection<MaterialDTO> _listDeletedMaterialDTO = [];
 
         [ObservableProperty]
-        private ObservableCollection<ConsumedMaterialDTO> _listConsumedMaterialDTO = [];
+        private MaterialDTO _selectedMaterial;
+        #endregion
+
+        #region Inventory Delcare
+        [ObservableProperty]
+        private bool _isAdding = false;
 
         [ObservableProperty]
-        private ObservableCollection<MaterialSupplierDTO> _listInventoryDTO = [];
+        private bool _isUpdating = false;
+
+        [ObservableProperty]
+        private ConsumedMaterialDTO _modifyConsumedMaterial = new();
+
+        private decimal currentQuantity;
 
         [ObservableProperty]
         private AddMaterialViewModel _modifyMaterialVM;
 
-        [ObservableProperty]
-        private MaterialDTO _selectedMaterial = new();
+        private ObservableCollection<ConsumedMaterialDTO> ListConsumedMaterialDTO = [];
+        public ObservableCollection<ConsumedMaterialDTO> CurrentListConsumedMaterial => [.. _filterListConsumedMaterial];
 
+        private ObservableCollection<MaterialSupplierDTO> ListInventoryDTO = [];
+        public ObservableCollection<MaterialSupplierDTO> CurrentListInventory => [.. _filterListInventory];
+
+        private List<ConsumedMaterialDTO> _filterListConsumedMaterial = [];
+        private List<MaterialSupplierDTO> _filterListInventory = [];
+        #endregion
+
+        private string _searchText = string.Empty;
+        public string SearchText
+        {
+            get => _searchText;
+            set
+            {
+                if (_searchText != value)
+                {
+                    _searchText = value;
+                    FilterInventory();
+                    OnPropertyChanged(nameof(SearchText));
+                }
+            }
+        }
         public InventoryViewModel(IServiceProvider provider)
         {
             _provider = provider;
@@ -88,18 +104,46 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
             var dbConsumedMaterial = (await _consumedMaterialServices.GetListConsumedMaterial()).ToList().Where(x => x.Isdeleted == false);
             var dbMaterial = await _materialSupplierServices.GetListMaterial();
 
-            var listExistedMaterial = dbMaterial.ToList().Where(x => x.Isdeleted == false);
-            var listDeletedMaterial = dbMaterial.ToList().Where(x => x.Isdeleted == true);
+            var listExistedMaterial = dbMaterial.ToList().Where(x => x.Isdeleted == false); // List vật liệu đang có
+            var listDeletedMaterial = dbMaterial.ToList().Where(x => x.Isdeleted == true); // List vật liệu đã ẩn
 
             ListMaterialDTO = [.. _mapper.Map<List<MaterialDTO>>(listExistedMaterial)];
             ListDeletedMaterialDTO = [.. _mapper.Map<List<MaterialDTO>>(listDeletedMaterial)];
             ListConsumedMaterialDTO = [.. _mapper.Map<List<ConsumedMaterialDTO>>(dbConsumedMaterial)];
             ListInventoryDTO = [.. _mapper.Map<List<MaterialSupplierDTO>>(dbMaterialSupplier)];
 
-            var list = _mapper.Map<List<Consumedmaterial>>(ListConsumedMaterialDTO);
+            _filterListConsumedMaterial = [.. ListConsumedMaterialDTO];
+            OnPropertyChanged(nameof(CurrentListConsumedMaterial));
+            _filterListInventory = [.. ListInventoryDTO];
+            OnPropertyChanged(nameof(CurrentListInventory));
+        }
+
+        private void FilterInventory()
+        {
+            var filterConsumed = ListConsumedMaterialDTO.Where(x => string.IsNullOrWhiteSpace(SearchText)
+            || x.Materialsupplier.Material.Materialname.Contains(SearchText, StringComparison.OrdinalIgnoreCase)
+            || x.Materialsupplier.Supplier.Suppliername.Contains(SearchText) || x.Materialsupplier.Original.Contains(SearchText, StringComparison.OrdinalIgnoreCase)
+            || x.Materialsupplier.Manufacturer.Contains(SearchText, StringComparison.OrdinalIgnoreCase)
+            || x.Materialsupplier.Price.ToString().Contains(SearchText, StringComparison.OrdinalIgnoreCase)).ToList();
+
+            var filterInventory = ListInventoryDTO.Where(x => string.IsNullOrWhiteSpace(SearchText)
+            || x.Material.Materialname.Contains(SearchText, StringComparison.OrdinalIgnoreCase)
+            || x.Supplier.Suppliername.Contains(SearchText) || x.Original.Contains(SearchText, StringComparison.OrdinalIgnoreCase)
+            || x.Manufacturer.Contains(SearchText, StringComparison.OrdinalIgnoreCase)
+            || x.Price.ToString().Contains(SearchText, StringComparison.OrdinalIgnoreCase)).ToList();
+
+            _filterListConsumedMaterial = [.. filterConsumed];
+            OnPropertyChanged(nameof(CurrentListConsumedMaterial));
+            _filterListInventory = [..  filterInventory];
+            OnPropertyChanged(nameof(CurrentListInventory));
         }
 
         #region Material
+        [RelayCommand]
+        private void OpenPopupMaterialView()
+        {
+            IsPopupOpen = true;
+        }
 
         private async void ModifyMaterialVM_ModifyMaterialChanged(MaterialDTO obj)
         {
@@ -155,6 +199,7 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
         [RelayCommand]
         private void OpenAddMaterial()
         {
+            IsPopupOpen = false;
             IsOpenAddMaterial = true;
             ModifyMaterialVM.IsAdding = true;
             ModifyMaterialVM.ModifyMaterial = new();
@@ -168,6 +213,7 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
                 MyMessageBox.ShowDialog("Hãy chọn vật tư", MyMessageBox.Buttons.OK, MyMessageBox.Icons.Warning);
                 return;
             }
+            IsPopupOpen = false;
             IsOpenAddMaterial = true;
             ModifyMaterialVM.IsUpdating = true;
             ModifyMaterialVM.ReceiveMaterialDTO(SelectedMaterial);
@@ -176,6 +222,7 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
         [RelayCommand]
         private async Task DeleteMaterial()
         {
+            IsPopupOpen = false;
             try
             {
                 if (SelectedMaterial == null)
@@ -188,6 +235,7 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
                     if (isDeleted)
                     {
                         ListMaterialDTO.Remove(SelectedMaterial);
+                        ListDeletedMaterialDTO.Add(SelectedMaterial);
                         MyMessageBox.ShowDialog("Ẩn vật tư thanh công");
                         SelectedMaterial = new();
                     }
@@ -228,7 +276,6 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
                         MyMessageBox.ShowDialog("Hiển thị vật tư thất bại");
                     }
                 }
-                ClearValueOfPopupBox();
             }
             catch (InvalidOperationException ioe)
             {
@@ -239,10 +286,14 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
         [RelayCommand]
         private void ChangeRoleMaterial()
         {
+            SelectedMaterial = null;
             IsGetMaterial = !IsGetMaterial;
+            OnPropertyChanged(nameof(IsDeletedMaterial));
         }
 
         #endregion Material
+
+        #region ConsumedMaterial
 
         [RelayCommand]
         private async void SubmitConsumedMaterial()
@@ -266,13 +317,12 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
                         {
                             ListConsumedMaterialDTO.Add(_mapper.Map<ConsumedMaterialDTO>(addConsumedMaterial));
                         }
-                        MyMessageBox.ShowDialog("Thêm chi tiết sử dụng vật tư cấp thành công");
-                        IsPopupOpen = false;
+                        MyMessageBox.ShowDialog("Thêm chi tiết sử dụng vật liệu cấp thành công");
                         ok = true;
                     }
                     else
                     {
-                        MyMessageBox.Show("Thêm chi tiết sử dụng vật tư thất bại");
+                        MyMessageBox.Show("Thêm chi tiết sử dụng vật liệu thất bại");
                     }
                 }
                 if (IsUpdating)
@@ -284,8 +334,7 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
                         if (updateConsumedMaterialDTO != null)
                         {
                             _mapper.Map(res, updateConsumedMaterialDTO);
-                            MyMessageBox.ShowDialog("Sửa nhà cung cấp thành công");
-                            IsPopupOpen = false;
+                            MyMessageBox.ShowDialog("Sửa chi tiết sử dụng vật liệu thành công");
                             ok = true;
                         }
                     }
@@ -296,8 +345,14 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
                 }
                 if (ok)
                 {
+                    var ms = await _materialSupplierServices.GetMaterialsupplierById(ModifyConsumedMaterial.Materialsupplierid);
                     var updateMaterialSupplier = ListInventoryDTO.FirstOrDefault(x => x.Materialsupplierid == ModifyConsumedMaterial.Materialsupplierid);
-                    ClearValueOfPopupBox();
+                    _mapper.Map(ms, updateMaterialSupplier);
+                    ListInventoryDTO = [.. ListInventoryDTO];
+                    ListConsumedMaterialDTO = [.. ListConsumedMaterialDTO];
+                    ClearValueOfFrom();
+                    IsOpenModifyConsumed = false;
+                    FilterInventory();
                 }
             }
             catch (InvalidOperationException ioe)
@@ -311,38 +366,38 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
             var materialSupplier = ListInventoryDTO.FirstOrDefault(x => x.Materialsupplierid == ModifyConsumedMaterial.Materialsupplierid);
             if (IsAdding)
             {
-                return materialSupplier.TotalQuantity - ModifyConsumedMaterial.Quantity > 0;
+                return materialSupplier.TotalQuantity - ModifyConsumedMaterial.Quantity >= 0;
             }
             if (IsUpdating)
             {
-                return materialSupplier.TotalQuantity - (ModifyConsumedMaterial.Quantity - _currentQuantity) > 0;
+                return materialSupplier.TotalQuantity - (ModifyConsumedMaterial.Quantity - currentQuantity) >= 0;
             }
             return false;
         }
 
-        public void ClearValueOfPopupBox()
+        public void ClearValueOfFrom()
         {
             IsAdding = false;
             IsUpdating = false;
             ModifyConsumedMaterial = new();
-            _currentQuantity = 0;
+            currentQuantity = 0;
         }
 
         [RelayCommand]
-        private void OpenPopup_Add(MaterialSupplierDTO materialSupplier)
+        private void OpenModifyConsumed_Add(MaterialSupplierDTO materialSupplier)
         {
             ModifyConsumedMaterial.Materialsupplierid = materialSupplier.Materialsupplierid;
 
-            IsPopupOpen = true;
+            IsOpenModifyConsumed = true;
             IsAdding = true;
         }
 
         [RelayCommand]
-        private void OpenPopup_Update(ConsumedMaterialDTO consumedMaterialDTO)
+        private void OpenModifyConsumed_Update(ConsumedMaterialDTO consumedMaterialDTO)
         {
-            _currentQuantity = consumedMaterialDTO.Quantity;
+            currentQuantity = consumedMaterialDTO.Quantity;
             ModifyConsumedMaterial = consumedMaterialDTO.Clone();
-            IsPopupOpen = true;
+            IsOpenModifyConsumed = true;
             IsUpdating = true;
         }
 
@@ -357,7 +412,11 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
                     bool isDeleted = await _consumedMaterialServices.DeleteConsumedmaterial(consumedMaterial.Consumedmaterialid);
                     if (isDeleted)
                     {
+                        var ms = await _materialSupplierServices.GetMaterialsupplierById(consumedMaterial.Materialsupplierid);
                         var updateMaterialSupplier = ListInventoryDTO.FirstOrDefault(x => x.Materialsupplierid == consumedMaterial.Materialsupplierid);
+                        _mapper.Map(ms, updateMaterialSupplier);
+                        ListInventoryDTO = [.. ListInventoryDTO];
+
                         ListConsumedMaterialDTO.Remove(consumedMaterial);
                         MyMessageBox.ShowDialog("Xoá chi tiết sử dụng vật liệu thanh công");
                     }
@@ -371,20 +430,17 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
             {
                 MyMessageBox.ShowDialog(ioe.Message);
             }
+            FilterInventory();
         }
 
         [RelayCommand]
-        private void OpenPopupMaterialView()
+        private void CloseModifyConsumed()
         {
-            IsOpenPopupMVM = true;
+            IsOpenModifyConsumed = false;
+            ClearValueOfFrom();
         }
 
-        [RelayCommand]
-        private void ClosePopup()
-        {
-            IsPopupOpen = false;
-            ClearValueOfPopupBox();
-        }
+        #endregion
 
         public void Dispose()
         {

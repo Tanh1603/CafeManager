@@ -50,7 +50,7 @@
                     <RowDefinition Height="20" />
                     <RowDefinition Height="220" />
                     <RowDefinition Height="240" />
-                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto" />
                     <RowDefinition Height="Auto" />
                 </Grid.RowDefinitions>
 
@@ -543,7 +543,7 @@
                 <Grid Grid.Row="3">
                     <StackPanel Orientation="Horizontal">
                         <TextBlock Text="Tổng giá trị: " />
-                        <TextBlock Text="{Binding ImportPrice, StringFormat={}{0:0}}"/>
+                        <TextBlock Text="{Binding ImportPrice, StringFormat={}{0:0}}" />
                     </StackPanel>
                 </Grid>
 
@@ -587,15 +587,15 @@
             IsOpen="{Binding IsOpenAddMaterialSupplier}"
             OverlayBackground="{DynamicResource PrimaryHueDarkBrush}"
             Style="{StaticResource MaterialDesignEmbeddedDialogHost}">
-            
+
             <materialDesign:DialogHost.DialogBackground>
                 <SolidColorBrush Color="Transparent" />
             </materialDesign:DialogHost.DialogBackground>
-            
+
             <materialDesign:DialogHost.DialogContent>
                 <ContentControl Content="{Binding SelectedViewModel}" />
             </materialDesign:DialogHost.DialogContent>
-            
+
         </materialDesign:DialogHost>
     </Grid>
 </UserControl>

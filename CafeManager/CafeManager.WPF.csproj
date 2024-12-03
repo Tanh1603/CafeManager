@@ -12,11 +12,15 @@
     <None Remove="Assets\Images\close.png" />
     <None Remove="Assets\Images\coffee.png" />
     <None Remove="Assets\Images\defaultImage.png" />
+    <None Remove="Assets\Images\error.png" />
+    <None Remove="Assets\Images\information.png" />
     <None Remove="Assets\Images\invoice.png" />
     <None Remove="Assets\Images\milktea.png" />
     <None Remove="Assets\Images\minus.png" />
+    <None Remove="Assets\Images\question.png" />
     <None Remove="Assets\Images\squares.png" />
     <None Remove="Assets\Images\table.png" />
+    <None Remove="Assets\Images\warning.png" />
     <None Remove="MessageBox\Icons\Error.png" />
     <None Remove="MessageBox\Icons\Information.png" />
     <None Remove="MessageBox\Icons\Question.png" />
@@ -70,6 +74,12 @@
     <Resource Include="Assets\Images\defaultImage.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
+    <Resource Include="Assets\Images\error.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assets\Images\information.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
     <Resource Include="Assets\Images\invoice.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
@@ -79,10 +89,16 @@
     <Resource Include="Assets\Images\minus.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
+    <Resource Include="Assets\Images\question.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
     <Resource Include="Assets\Images\squares.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
     <Resource Include="Assets\Images\table.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assets\Images\warning.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
   </ItemGroup>

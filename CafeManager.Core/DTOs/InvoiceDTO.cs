@@ -196,13 +196,7 @@ namespace CafeManager.Core.DTOs
             }
         }
 
-        //private readonly string _invoiceCustomerId;
         public string InvoiceCustomerId => $"HD-{Id.ToString().Substring(0, 4).ToUpper()}";
-
-        public InvoiceDTO()
-        {
-            //_invoiceCustomerId = $"HD-{Guid.NewGuid().ToString().Substring(0, 4).ToUpper()}";
-        }
 
         public decimal TotalPrice => CaculateTotalPrice();
 

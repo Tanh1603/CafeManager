@@ -52,7 +52,6 @@ namespace CafeManager.WPF.Services
 
                 var res = await _unitOfWork.FoodList.Update(obj);
                 await _unitOfWork.CompleteAsync();
-                _unitOfWork.ClearChangeTracker();
                 await _unitOfWork.CommitTransactionAsync();
                 return res;
             }

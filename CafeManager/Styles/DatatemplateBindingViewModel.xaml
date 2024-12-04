@@ -28,11 +28,11 @@
 
     <DataTemplate DataType="{x:Type userviewmodels:OrderViewModel}">
         <userviews:OrderView />
-        
+
     </DataTemplate>
-    
-  
-    
+
+
+
     <DataTemplate DataType="{x:Type admdinviewmodels:AppUserViewModel}">
         <adminviews:AppUserView />
     </DataTemplate>

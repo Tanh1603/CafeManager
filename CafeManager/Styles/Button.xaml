@@ -418,9 +418,9 @@
         x:Key="gridRemoveButton"
         BasedOn="{StaticResource gridEditButton}"
         TargetType="Button">
-    
-        
-  
+
+
+
 
         <Style.Triggers>
             <Trigger Property="IsMouseOver" Value="True">

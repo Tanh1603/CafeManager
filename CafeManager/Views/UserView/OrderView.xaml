@@ -72,7 +72,6 @@
                                             <uc:InfoTable
                                                 Margin="0,10,10,0"
                                                 IsButtonVisible="False"
-                                               
                                                 Text="{Binding TableName}">
                                                 <i:Interaction.Triggers>
                                                     <i:EventTrigger EventName="MouseLeftButtonDown">
@@ -184,7 +183,6 @@
                 </TabControl>
             </Border>
         </Grid>
-
 
         <Grid
             Grid.Column="1"
@@ -360,10 +358,10 @@
                         <DataGrid
                             x:Name="OrderDataGrid"
                             HorizontalAlignment="Stretch"
-                            AlternationCount="{Binding SelectedInvoiceDTO.ListInvoiceDetailDTO.Count}"
+                            AlternationCount="{Binding SelectedInvoiceDTO.Invoicedetails.Count}"
                             CellStyle="{DynamicResource DataGridCellStyle1}"
                             ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle1}"
-                            ItemsSource="{Binding SelectedInvoiceDTO.ListInvoiceDetailDTO}"
+                            ItemsSource="{Binding SelectedInvoiceDTO.Invoicedetails}"
                             RowStyle="{DynamicResource DataGridRowStyle1}"
                             ScrollViewer.HorizontalScrollBarVisibility="auto"
                             ScrollViewer.VerticalScrollBarVisibility="Hidden"
@@ -392,7 +390,7 @@
                                                     HorizontalAlignment="Center"
                                                     FontSize="16"
                                                     Foreground="#612e0f"
-                                                    Text="{Binding FoodDTO.Foodname}" />
+                                                    Text="{Binding Food.Foodname}" />
                                             </Grid>
                                         </DataTemplate>
                                     </DataGridTemplateColumn.CellTemplate>
@@ -405,7 +403,7 @@
                                                 <materialDesign:NumericUpDown
                                                     Foreground="#612e0f"
                                                     Minimum="1"
-                                                    Value="{Binding Quantity}">
+                                                    Value="{Binding Quantity, UpdateSourceTrigger=PropertyChanged}">
                                                     <materialDesign:NumericUpDown.IncreaseContent>
                                                         <Border
                                                             BorderBrush="{DynamicResource MaterialDesign.Brush.Foreground}"
@@ -436,27 +434,13 @@
                                             <TextBlock
                                                 HorizontalAlignment="Center"
                                                 Foreground="#612e0f"
-                                                Text="{Binding FoodDTO.Price, Converter={StaticResource CurrencyConverter}}" />
-                                        </DataTemplate>
-                                    </DataGridTemplateColumn.CellTemplate>
-                                </DataGridTemplateColumn>
-                                <DataGridTemplateColumn
-                                    Width="*"
-                                    Header="Thành tiền"
-                                    IsReadOnly="True">
-                                    <DataGridTemplateColumn.CellTemplate>
-                                        <DataTemplate>
-                                            <TextBlock
-                                                HorizontalAlignment="Center"
-                                                Foreground="#612e0f"
-                                                Text="" />
+                                                Text="{Binding Food.PriceDiscount, Mode=OneWay, Converter={StaticResource CurrencyConverter}}" />
                                         </DataTemplate>
                                     </DataGridTemplateColumn.CellTemplate>
                                 </DataGridTemplateColumn>
                                 <DataGridTemplateColumn Width="*" Header="Tùy chỉnh">
                                     <DataGridTemplateColumn.CellTemplate>
                                         <DataTemplate>
-
 
                                             <Button
                                                 HorizontalAlignment="Center"
@@ -466,14 +450,11 @@
                                                 Style="{StaticResource gridRemoveButton}">
                                                 <ma:PackIconMaterial Kind="DeleteOutline" Style="{StaticResource gridButtonIcon}" />
                                             </Button>
-
                                         </DataTemplate>
                                     </DataGridTemplateColumn.CellTemplate>
                                 </DataGridTemplateColumn>
-
                             </DataGrid.Columns>
                         </DataGrid>
-
                     </Border>
                     <Grid Grid.Row="3">
                         <Grid.ColumnDefinitions>
@@ -558,14 +539,14 @@
                             <ComboBox
                                 Width="100"
                                 ItemContainerStyle="{StaticResource ComboBoxItemStyle}"
+                                ItemsSource="{Binding ListCoffeeTableDTO}"
                                 Style="{StaticResource ComboBoxStyle}">
-                                ItemsSource="{Binding ListCoffeeTableDTO}">
                                 <ComboBox.ItemTemplate>
                                     <DataTemplate>
                                         <TextBlock
                                             FontSize="16"
                                             FontWeight="DemiBold"
-                                            Text="{Binding TableName}" />
+                                            Text="{Binding TableName, Mode=OneWay}" />
                                     </DataTemplate>
                                 </ComboBox.ItemTemplate>
                             </ComboBox>

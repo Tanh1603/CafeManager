@@ -3,11 +3,11 @@ using CafeManager.Core.Data;
 using CafeManager.Core.DTOs;
 using CafeManager.WPF.MessageBox;
 using CafeManager.WPF.Services;
+using CafeManager.WPF.Views.UserView;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Microsoft.Extensions.DependencyInjection;
 using System.Collections.ObjectModel;
-
 
 namespace CafeManager.WPF.ViewModels.UserViewModel
 {
@@ -21,7 +21,7 @@ namespace CafeManager.WPF.ViewModels.UserViewModel
         private readonly StaffServices _staffServices;
         private readonly IMapper _mapper;
 
-        public PrintInvoice PrintInvoice { get; }
+        public PrintInvoice PrintInvoice { get; } = new();
 
         [ObservableProperty]
         private ObservableCollection<CoffeetableDTO> _listCoffeeTableDTO = [];
@@ -163,18 +163,17 @@ namespace CafeManager.WPF.ViewModels.UserViewModel
             OnPropertyChanged(nameof(SelectedInvoiceDTO));
         }
 
-        private async Task<bool> AddInvoiceToDataBase(string statusInvoice)
+        private async Task<Invoice?> AddInvoiceToDataBase(string statusInvoice)
         {
             try
             {
                 SelectedInvoiceDTO.Staffid = SelectedStaffDTO.Staffid;
-                SelectedInvoiceDTO.Staff = SelectedStaffDTO;
                 SelectedInvoiceDTO.Paymentenddate = DateTime.Now;
                 SelectedInvoiceDTO.Paymentmethod = SelectedPaymentMethod;
                 SelectedInvoiceDTO.Paymentstatus = statusInvoice;
                 Invoice addInvoice = _mapper.Map<Invoice>(SelectedInvoiceDTO);
                 var res = await _invoiceServices.CreateInvoice(addInvoice);
-                return res != null;
+                return res;
             }
             catch (InvalidOperationException ioe)
             {
@@ -195,25 +194,26 @@ namespace CafeManager.WPF.ViewModels.UserViewModel
                 string messageBox = string.Empty;
                 if (SelectedInvoiceDTO.IsCustomer)
                 {
-                    messageBox = MyMessageBox.ShowDialog($"Bạn có muốn thanh toán hóa đơn {SelectedInvoiceDTO.InvoiceCustomerId}", MyMessageBox.Buttons.OK, MyMessageBox.Icons.Information);
+                    messageBox = MyMessageBox.ShowDialog($"Bạn có muốn thanh toán hóa đơn {SelectedInvoiceDTO.InvoiceCustomerId}", MyMessageBox.Buttons.Yes_No, MyMessageBox.Icons.Information);
                 }
                 else if (SelectedInvoiceDTO.IsCoffeeTable)
                 {
-                    messageBox = MyMessageBox.ShowDialog($"Bạn có muốn thanh toán hóa đơn {SelectedInvoiceDTO.CoffeetableDTO.TableName}", MyMessageBox.Buttons.Yes_No, MyMessageBox.Icons.Question);
+                    messageBox = MyMessageBox.ShowDialog($"Bạn có muốn thanh toán hóa đơn {SelectedInvoiceDTO.Coffeetable.TableName}", MyMessageBox.Buttons.Yes_No, MyMessageBox.Icons.Question);
                 }
 
                 if (messageBox.Equals("1"))
                 {
-                    bool isSuccess = await AddInvoiceToDataBase("Hóa đơn đã thanh toán");
-                    if (isSuccess)
+                    var addInvoice = await AddInvoiceToDataBase("Hóa đơn đã thanh toán");
+                    if (addInvoice != null)
                     {
                         ListInvoiceDTO.Remove(SelectedInvoiceDTO);
-                        MyMessageBox.Show("Thanh toán hóa đơn thành công");
+                        MyMessageBox.ShowDialog("Thanh toán hóa đơn thành công", MyMessageBox.Buttons.OK, MyMessageBox.Icons.None);
                         SelectedInvoiceDTO = new();
+                        var exportInvocie = _mapper.Map<InvoiceDTO>(addInvoice);
+                        Print(_mapper.Map<InvoiceDTO>(addInvoice));
                         OnPropertyChanged(nameof(ListCustomerInvoiceDTO));
                     }
                 }
-                await Print();
             }
             catch (InvalidOperationException ioe)
             {
@@ -221,28 +221,35 @@ namespace CafeManager.WPF.ViewModels.UserViewModel
             }
         }
 
-        private async Task Print()
+        private void Print(InvoiceDTO invoiceDTO)
         {
+            //// Tạo View và gắn DataContext
+            //var invoiceExportView = new Views.UserView.InvoiceExport();
+            //invoiceExportView.DataContext = this;
 
-            // Tạo View và gắn DataContext
-            var invoiceExportView = new Views.UserView.InvoiceExport();
-            invoiceExportView.DataContext = this;
+            //double width = 500;  // Chiều rộng mong muốn
+            //double height = 600; // Chiều cao mong muốn
 
-            double width = 500;  // Chiều rộng mong muốn
-            double height = 600; // Chiều cao mong muốn
+            //// Render View ra Bitmap
+            //var bitmap = PrintInvoice.RenderViewToBitmap(invoiceExportView, width, height);
 
-            // Render View ra Bitmap
-            var bitmap = PrintInvoice.RenderViewToBitmap(invoiceExportView, width, height);
+            //// Hiển thị SaveFileDialog
+            //string filePath = PrintInvoice.ShowSaveFileDialog();
+            //if (filePath == null)
+            //{
+            //    return; // Người dùng hủy
+            //}
 
-            // Hiển thị SaveFileDialog
-            string filePath = PrintInvoice.ShowSaveFileDialog();
-            if (filePath == null)
+            //// Lưu PDF
+            //PrintInvoice.SaveBitmapToPdf(bitmap, filePath);
+
+            var invoiceExportViewModel = new InvoiceExportViewModel();
+            invoiceExportViewModel.InvoiceExport = invoiceDTO;
+            InvoiceExport invoiceExportView = new InvoiceExport()
             {
-                return; // Người dùng hủy
-            }
-
-            // Lưu PDF
-            PrintInvoice.SaveBitmapToPdf(bitmap, filePath);
+                DataContext = invoiceExportViewModel,
+            };
+            invoiceExportView.Show();
         }
 
         [RelayCommand]
@@ -263,13 +270,13 @@ namespace CafeManager.WPF.ViewModels.UserViewModel
                 }
                 else if (SelectedInvoiceDTO.IsCoffeeTable)
                 {
-                    messageBox = MyMessageBox.ShowDialog($"Bạn có muốn hủy hóa hóa đơn {SelectedInvoiceDTO.CoffeetableDTO.TableName}", MyMessageBox.Buttons.Yes_No, MyMessageBox.Icons.Question);
+                    messageBox = MyMessageBox.ShowDialog($"Bạn có muốn hủy hóa hóa đơn {SelectedInvoiceDTO.Coffeetable.TableName}", MyMessageBox.Buttons.Yes_No, MyMessageBox.Icons.Question);
                 }
 
                 if (messageBox.Equals("1"))
                 {
-                    bool isSuccess = await AddInvoiceToDataBase("Hóa đơn đã bị hủy");
-                    if (isSuccess)
+                    var cancelInvoice = await AddInvoiceToDataBase("Hóa đơn đã bị hủy");
+                    if (cancelInvoice != null)
                     {
                         ListInvoiceDTO.Remove(SelectedInvoiceDTO);
                         MyMessageBox.Show("Hủy hóa đơn thành công");
@@ -313,7 +320,7 @@ namespace CafeManager.WPF.ViewModels.UserViewModel
                 var tmp = ListInvoiceDTO.FirstOrDefault(x => x.InvoiceCustomerId == invoiceDTO.InvoiceCustomerId);
                 if (tmp != null)
                 {
-                    SelectedInvoiceDTO = ListInvoiceDTO.FirstOrDefault(x => x.InvoiceCustomerId == invoiceDTO.InvoiceCustomerId);
+                    SelectedInvoiceDTO = ListInvoiceDTO.FirstOrDefault(x => x.InvoiceCustomerId == invoiceDTO.InvoiceCustomerId) ?? new();
                 }
             }
         }

@@ -30,7 +30,6 @@ namespace CafeManager.WPF.Services
                 await _unitOfWork.BeginTransactionAsync();
                 var res = await _unitOfWork.InvoiceList.Create(invoice);
                 await _unitOfWork.CompleteAsync();
-                _unitOfWork.ClearChangeTracker();
                 await _unitOfWork.CommitTransactionAsync();
                 return res;
             }

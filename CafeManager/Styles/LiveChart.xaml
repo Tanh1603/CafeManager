@@ -1,0 +1,20 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:lvc="clr-namespace:LiveCharts.Wpf;assembly=LiveCharts.Wpf">
+    <Style TargetType="lvc:CartesianChart">
+        <Setter Property="Background">
+            <Setter.Value>
+                <LinearGradientBrush StartPoint="0.5,0" EndPoint="0.5,1">
+                    <GradientStop Offset="1" Color="#9b442a" />
+                    <GradientStop Offset="0" Color="#d5b096" />
+                </LinearGradientBrush>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style TargetType="lvc:DefaultTooltip">
+        <Setter Property="Background" Value="#844518"></Setter>
+        <Setter Property="Foreground" Value="#dac5b4"></Setter>
+       
+    </Style>
+</ResourceDictionary>

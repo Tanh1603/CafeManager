@@ -199,7 +199,7 @@ namespace CafeManager.WPF.ViewModels.UserViewModel
                 }
                 else if (SelectedInvoiceDTO.IsCoffeeTable)
                 {
-                    messageBox = MyMessageBox.ShowDialog($"Bạn có muốn thanh toán hóa đơn {SelectedInvoiceDTO.CoffeetableDTO.TableName}", MyMessageBox.Buttons.Yes_No, MyMessageBox.Icons.Question);
+                    //messageBox = MyMessageBox.ShowDialog($"Bạn có muốn thanh toán hóa đơn {SelectedInvoiceDTO.CoffeetableDTO.TableName}", MyMessageBox.Buttons.Yes_No, MyMessageBox.Icons.Question);
                 }
 
                 if (messageBox.Equals("1"))
@@ -263,7 +263,7 @@ namespace CafeManager.WPF.ViewModels.UserViewModel
                 }
                 else if (SelectedInvoiceDTO.IsCoffeeTable)
                 {
-                    messageBox = MyMessageBox.ShowDialog($"Bạn có muốn hủy hóa hóa đơn {SelectedInvoiceDTO.CoffeetableDTO.TableName}", MyMessageBox.Buttons.Yes_No, MyMessageBox.Icons.Question);
+                    //messageBox = MyMessageBox.ShowDialog($"Bạn có muốn hủy hóa hóa đơn {SelectedInvoiceDTO.CoffeetableDTO.TableName}", MyMessageBox.Buttons.Yes_No, MyMessageBox.Icons.Question);
                 }
 
                 if (messageBox.Equals("1"))

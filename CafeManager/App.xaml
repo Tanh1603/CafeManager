@@ -28,6 +28,7 @@
                 <ResourceDictionary Source="Styles/TabControl.xaml" />
                 <ResourceDictionary Source="Styles/ComboBox.xaml" />
                 <ResourceDictionary Source="Styles/ListView.xaml" />
+                <ResourceDictionary Source="Styles/LiveChart.xaml" />
 
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>

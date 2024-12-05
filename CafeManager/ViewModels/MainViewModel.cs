@@ -2,6 +2,7 @@
 using CafeManager.Core.DTOs;
 using CafeManager.WPF.Services;
 using CafeManager.WPF.Stores;
+using CafeManager.WPF.ViewModels.AdminViewModel;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Microsoft.Extensions.DependencyInjection;
@@ -30,7 +31,7 @@ namespace CafeManager.WPF.ViewModels
             _navigationStore = _provider.GetRequiredService<NavigationStore>();
             _navigationStore.Navigation = CurrentViewModel;
 
-            CurrentViewModel = _provider.GetRequiredService<LoginViewModel>();
+            CurrentViewModel = _provider.GetRequiredService<HomeViewModel>();
             _navigationStore.NavigationStoreChanged += _navigationStore_NavigationStoreChanged;
         }
 

@@ -38,8 +38,11 @@ namespace CafeManager.Infrastructure.Repositories
                         _cafeManagerContext.Entry(existingEntity).CurrentValues.SetValues(newEntity);
 
                         // Xử lý Materialsupplier
-                        existingEntity.Materialsupplier = await FindOrCreateMaterialsupplier(newEntity.Materialsupplier);
-
+                        var updateMaterialsupplier = await _cafeManagerContext.Materialsuppliers.FindAsync(existingEntity.Materialsupplierid);
+                        if (updateMaterialsupplier != null)
+                        {
+                            _cafeManagerContext.Entry(update).CurrentValues.SetValues(existingEntity.Materialsupplier);
+                        }
                         updateEntities.Remove(existingEntity.Importdetailid);
                     }
                 }

@@ -32,7 +32,7 @@
 
                 <RowDefinition Height="auto" />
                 <RowDefinition Height="auto" />
-                <RowDefinition Height="auto" />
+                <!--<RowDefinition Height="auto" />-->
                 <RowDefinition Height="*" />
             </Grid.RowDefinitions>
 
@@ -77,9 +77,10 @@
                     IsHitTestVisible="False"
                     Text="Search in Members..."
                     Visibility="{Binding ElementName=txtFilter, Path=Text.IsEmpty, Converter={StaticResource BoolToVis}}" />
-                <TextBox x:Name="txtFilter"
-                         Style="{StaticResource textBoxFilter}"
-                         Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}"/>
+                <TextBox
+                    x:Name="txtFilter"
+                    Style="{StaticResource textBoxFilter}"
+                    Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}" />
                 <ma:PackIconMaterial
                     Width="15"
                     Height="15"
@@ -233,7 +234,7 @@
                 </Grid>
             </Grid>
 
-            <Border Grid.Row="2">
+            <Border Grid.Row="2" VerticalAlignment="Top">
                 <TabControl Style="{DynamicResource tabControlStyle}">
                     <TabItem Header="Đã dùng" Style="{DynamicResource tabItemStyle}">
 
@@ -246,6 +247,9 @@
                             ColumnHeaderStyle="{DynamicResource DataGridColumnHeaderStyle1}"
                             ItemsSource="{Binding CurrentListConsumedMaterial}"
                             RowStyle="{DynamicResource DataGridRowStyle1}"
+                            ScrollViewer.CanContentScroll="True"
+                            ScrollViewer.HorizontalScrollBarVisibility="Auto"
+                            ScrollViewer.VerticalScrollBarVisibility="Auto"
                             Style="{DynamicResource DataGridStyle1}">
                             <DataGrid.Columns>
 
@@ -349,6 +353,9 @@
                             ColumnHeaderStyle="{DynamicResource DataGridColumnHeaderStyle1}"
                             ItemsSource="{Binding CurrentListInventory}"
                             RowStyle="{DynamicResource DataGridRowStyle1}"
+                            ScrollViewer.CanContentScroll="True"
+                            ScrollViewer.HorizontalScrollBarVisibility="Auto"
+                            ScrollViewer.VerticalScrollBarVisibility="Auto"
                             Style="{DynamicResource DataGridStyle1}">
                             <DataGrid.Columns>
 

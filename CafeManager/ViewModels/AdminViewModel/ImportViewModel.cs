@@ -171,12 +171,12 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
                 }
                 IsOpenModifyImportView = false;
                 ModifyImportVM.ClearValueOfViewModel();
+                FilterImport();
             }
             catch
             {
                 MyMessageBox.Show("Lỗi", MyMessageBox.Buttons.OK, MyMessageBox.Icons.Warning);
             }
-            FilterImport();
         }
 
         public void Dispose()

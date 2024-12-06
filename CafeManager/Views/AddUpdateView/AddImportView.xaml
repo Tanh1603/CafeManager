@@ -342,7 +342,10 @@
                         ColumnHeaderStyle="{DynamicResource DataGridColumnHeaderStyle1}"
                         ItemsSource="{Binding ListExisted}"
                         RowStyle="{DynamicResource DataGridRowStyle1}"
-                        Style="{DynamicResource DataGridStyle1}">
+                        Style="{DynamicResource DataGridStyle1}"
+                        ScrollViewer.CanContentScroll="True"
+                        ScrollViewer.VerticalScrollBarVisibility="Auto"
+                        ScrollViewer.HorizontalScrollBarVisibility="Hidden">
                         <DataGrid.Columns>
 
                             <DataGridTextColumn

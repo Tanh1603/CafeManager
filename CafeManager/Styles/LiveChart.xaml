@@ -17,4 +17,10 @@
         <Setter Property="Foreground" Value="#dac5b4"></Setter>
        
     </Style>
+
+    <Style TargetType="lvc:DefaultLegend">
+
+        <Setter Property="Foreground" Value="#CDA48B"/>
+        <Setter Property="FontWeight" Value="Bold"/>
+    </Style>
 </ResourceDictionary>

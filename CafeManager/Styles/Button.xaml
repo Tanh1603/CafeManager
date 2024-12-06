@@ -77,7 +77,7 @@
             </Trigger>
         </Style.Triggers>
     </Style>
-
+    
     <Style x:Key="menuButtonText" TargetType="TextBlock">
         <Setter Property="FontSize" Value="13" />
         <Setter Property="VerticalAlignment" Value="Center" />
@@ -92,11 +92,10 @@
     <!--#endregion-->
 
     <Style x:Key="topMenuButton" TargetType="RadioButton">
-        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="Background" Value="#DEDEDE" />
         <Setter Property="Foreground" Value="#dac5b4" />
-        <Setter Property="Margin" Value="5,0,0,0" />
-        <Setter Property="Height" Value="30" />
-        <Setter Property="Width" Value="80" />
+        <Setter Property="Margin" Value="7" />
+       
         <Setter Property="FocusVisualStyle" Value="{x:Null}" />
         <Setter Property="BorderThickness" Value="0" />
         <Setter Property="Template">
@@ -142,6 +141,71 @@
         </Style.Triggers>
     </Style>
 
+    <Style TargetType="CheckBox">
+        <Setter Property="Background" Value="#DEDEDE" />
+        <Setter Property="Foreground" Value="#dac5b4" />
+        <Setter Property="Margin" Value="7" />
+
+        <Setter Property="FocusVisualStyle" Value="{x:Null}" />
+        <Setter Property="BorderThickness" Value="0" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="CheckBox">
+                    <Border
+                 Background="{TemplateBinding Background}"
+                 BorderBrush="Transparent"
+                 CornerRadius="15">
+                        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+        <Style.Triggers>
+            <Trigger Property="IsMouseOver" Value="True">
+
+                <Setter Property="Foreground" Value="#612e0f" />
+                <Setter Property="FontWeight" Value="SemiBold" />
+                <Setter Property="Background">
+                    <Setter.Value>
+                        <LinearGradientBrush StartPoint="0,0.5" EndPoint="1,0.5">
+                            <GradientStop Offset="0" Color="#d5b096" />
+                            <GradientStop Offset="1" Color="#d9c6b3" />
+                        </LinearGradientBrush>
+                    </Setter.Value>
+                </Setter>
+            </Trigger>
+
+            <Trigger Property="IsChecked" Value="True">
+
+                <Setter Property="Foreground" Value="#612e0f" />
+                <Setter Property="FontWeight" Value="SemiBold" />
+                <Setter Property="Background">
+                    <Setter.Value>
+                        <LinearGradientBrush StartPoint="0,0.5" EndPoint="1,0.5">
+                            <GradientStop Offset="0" Color="#d5b096" />
+                            <GradientStop Offset="1" Color="#d9c6b3" />
+                        </LinearGradientBrush>
+                    </Setter.Value>
+                </Setter>
+            </Trigger>
+        </Style.Triggers>
+    </Style>
+        
+    <Style x:Key="statisBtn" TargetType="RadioButton" BasedOn="{StaticResource topMenuButton}">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="RadioButton">
+                    <Border
+                Background="{TemplateBinding Background}"
+                BorderBrush="Transparent"
+                CornerRadius="50">
+                        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+    
     <!--#region buttonOrder-->
     <Style x:Key="orderButton" TargetType="Button">
         <Setter Property="Background" Value="Transparent" />

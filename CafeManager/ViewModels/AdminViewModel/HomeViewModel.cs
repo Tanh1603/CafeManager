@@ -14,6 +14,7 @@ using LiveCharts.Wpf;
 using SeriesCollection = LiveCharts.SeriesCollection;
 using System.Windows;
 using Newtonsoft.Json.Linq;
+using LiveCharts.Defaults;
 
 namespace CafeManager.WPF.ViewModels.AdminViewModel
 {
@@ -31,12 +32,60 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
 
         private void CreatePieSeries()
         {
-            throw new NotImplementedException();
+            PieSeries = new SeriesCollection
+            {
+                new PieSeries
+                {
+                    Title = "Chrome",
+                    Values = new ChartValues<ObservableValue> { new ObservableValue(8) },
+                    DataLabels = true
+                },
+                new PieSeries
+                {
+                    Title = "Mozilla",
+                    Values = new ChartValues<ObservableValue> { new ObservableValue(6) },
+                    DataLabels = true
+                },
+                new PieSeries
+                {
+                    Title = "Opera",
+                    Values = new ChartValues<ObservableValue> { new ObservableValue(10) },
+                    DataLabels = true
+                },
+                new PieSeries
+                {
+                    Title = "Explorer",
+                    Values = new ChartValues<ObservableValue> { new ObservableValue(4) },
+                    DataLabels = true
+                }
+            };
         }
 
         private void CreateStackRowSeries()
         {
-            throw new NotImplementedException();
+            StackRowSeries = new SeriesCollection
+            {
+                new StackedRowSeries
+                {
+                    Values = new ChartValues<double> {4, 5, 6, 8},
+                    StackMode = StackMode.Values, // this is not necessary, values is the default stack mode
+                    DataLabels = true
+                },
+                new StackedRowSeries
+                {
+                    Values = new ChartValues<double> {2, 5, 6, 7},
+                    StackMode = StackMode.Values,
+                    DataLabels = true
+                }
+            };
+
+
+
+
+
+
+            LabelsStackRow = new[] { "Chrome", "Mozilla", "Opera", "IE" };
+            FormatterStackRow = value => value + " Mill";
         }
 
         private void CreateDynamicVisibility()
@@ -64,16 +113,21 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
                 ProfitSeries,
                 InvoiceSeries
             };
-            Labels = new[] { "Maria", "Susan", "Charles", "Frida" };
-            Formatter = value => value.ToString("N");
+            LabelsCol = new[] { "Maria", "Susan", "Charles", "Frida" };
+            FormatterCol = value => value.ToString("N");
 
         }
+        public SeriesCollection PieSeries { get; set; }
+        public SeriesCollection StackRowSeries { get; set; }
+        public string[] LabelsStackRow { get; set; }
+        public Func<double, string> FormatterStackRow { get; set; }
+
 
         public ColumnSeries FoodSeries { get; set; }
         public ColumnSeries ProfitSeries { get; set; }
         public ColumnSeries InvoiceSeries { get; set; }
-        public string[] Labels { get; set; }
-        public Func<double, string> Formatter { get; set; }
+        public string[] LabelsCol { get; set; }
+        public Func<double, string> FormatterCol { get; set; }
 
 
         public SeriesCollection ColumnSeries { get; set; }

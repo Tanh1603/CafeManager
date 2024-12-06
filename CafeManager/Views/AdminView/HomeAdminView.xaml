@@ -2,6 +2,7 @@
     x:Class="CafeManager.WPF.Views.AdminView.HomeAdminView"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:adminviewmodel="clr-namespace:CafeManager.WPF.ViewModels.AdminViewModel"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:fa="http://schemas.awesome.incremented/wpf/xaml/fontawesome.sharp"
     xmlns:local="clr-namespace:CafeManager.WPF.Views.AdminView"
@@ -9,7 +10,8 @@
     xmlns:ma="http://metro.mahapps.com/winfx/xaml/iconpacks"
     xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:uc="clr-namespace:CafeManager.WPF.Assets.UsersControls" xmlns:adminviewmodel="clr-namespace:CafeManager.WPF.ViewModels.AdminViewModel" d:DataContext="{d:DesignInstance Type=adminviewmodel:HomeViewModel}"
+    xmlns:uc="clr-namespace:CafeManager.WPF.Assets.UsersControls"
+    d:DataContext="{d:DesignInstance Type=adminviewmodel:HomeViewModel}"
     d:DesignHeight="700"
     d:DesignWidth="1300"
     mc:Ignorable="d">
@@ -32,7 +34,7 @@
                 <RowDefinition Height="1.5*" />
                 <RowDefinition Height="*" />
             </Grid.RowDefinitions>
-            <Grid Margin="10, 20, 10, 10">
+            <Grid Margin="10,20,10,10">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="auto" />
                     <RowDefinition Height="*" />
@@ -41,7 +43,6 @@
 
                     <TextBlock
                         Grid.Row="0"
-                        
                         HorizontalAlignment="Left"
                         FontSize="32"
                         FontWeight="SemiBold"
@@ -56,20 +57,265 @@
 
                 </StackPanel>
                 <Grid Grid.Row="1" Margin="0,5,0,0">
-                    <Border CornerRadius="10">
+                    <Border Padding="10" CornerRadius="10">
                         <Border.Background>
                             <LinearGradientBrush StartPoint="0,0.5" EndPoint="1,0.5">
                                 <GradientStop Offset="1" Color="#fee3d4" />
                                 <GradientStop Offset="0" Color="#f2ccb7" />
                             </LinearGradientBrush>
                         </Border.Background>
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+
+                            <Grid Grid.IsSharedSizeScope="True">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="*" />
+                                    <RowDefinition Height="*" />
+                                    <RowDefinition Height="*" />
+                                </Grid.RowDefinitions>
+                                <Grid Margin="0,0,0,5">
+                                    <Border Padding="5" CornerRadius="10">
+                                        <Border.Background>
+                                            <LinearGradientBrush StartPoint="0,0.5" EndPoint="1,0.5">
+                                                <GradientStop Offset="0" Color="#9c6d3f" />
+                                                <GradientStop Offset="1" Color="#cb925d" />
+                                            </LinearGradientBrush>
+                                        </Border.Background>
+                                        <Grid>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="auto" />
+                                                <ColumnDefinition Width="auto" SharedSizeGroup="Label" />
+                                                <ColumnDefinition Width="*" />
+                                            </Grid.ColumnDefinitions>
+                                            <ma:PackIconMaterial
+                                                MinWidth="25"
+                                                MinHeight="25"
+                                                VerticalAlignment="Center"
+                                                Foreground="#fee3d4"
+                                                Kind="Cash" />
+                                            <Grid Grid.Column="1" Margin="10,0,0,0">
+                                                <TextBlock Style="{StaticResource statisText}" Text="Doanh thu: " />
+
+                                            </Grid>
+                                            <Grid Grid.Column="2">
+                                                <TextBlock
+                                                    Foreground="#DEDEDE"
+                                                    Style="{StaticResource statisText}"
+                                                    Text="123" />
+                                            </Grid>
+                                        </Grid>
+
+                                    </Border>
+                                </Grid>
+                                <Grid
+                                    Grid.Row="2"
+                                    Grid.Column="0"
+                                    Margin="0,0,0,5">
+                                    <Border Padding="5" CornerRadius="10">
+                                        <Border.Background>
+                                            <LinearGradientBrush StartPoint="0,0.5" EndPoint="1,0.5">
+                                                <GradientStop Offset="0" Color="#9c6d3f" />
+                                                <GradientStop Offset="1" Color="#cb925d" />
+                                            </LinearGradientBrush>
+                                        </Border.Background>
+                                        <Grid>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="auto" />
+                                                <ColumnDefinition Width="auto" SharedSizeGroup="Label" />
+                                                <ColumnDefinition Width="*" />
+                                            </Grid.ColumnDefinitions>
+                                            <ma:PackIconMaterial
+                                                MinWidth="25"
+                                                MinHeight="25"
+                                                VerticalAlignment="Center"
+                                                Foreground="#fee3d4"
+                                                Kind="Truck" />
+                                            <Grid Grid.Column="1" Margin="10,0,0,0">
+                                                <TextBlock Style="{StaticResource statisText}" Text="Nguyên liệu: " />
+
+                                            </Grid>
+                                            <Grid Grid.Column="2">
+                                                <TextBlock
+                                                    Foreground="#DEDEDE"
+                                                    Style="{StaticResource statisText}"
+                                                    Text="123" />
+                                            </Grid>
+                                        </Grid>
+
+                                    </Border>
+                                </Grid>
+                                <Grid
+                                    Grid.Row="1"
+                                    Grid.Column="0"
+                                    Margin="0,0,0,5">
+                                    <Border Padding="5" CornerRadius="10">
+                                        <Border.Background>
+                                            <LinearGradientBrush StartPoint="0,0.5" EndPoint="1,0.5">
+                                                <GradientStop Offset="0" Color="#9c6d3f" />
+                                                <GradientStop Offset="1" Color="#cb925d" />
+                                            </LinearGradientBrush>
+                                        </Border.Background>
+                                        <Grid>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="auto" />
+                                                <ColumnDefinition Width="auto" SharedSizeGroup="Label" />
+                                                <ColumnDefinition Width="*" />
+                                            </Grid.ColumnDefinitions>
+                                            <ma:PackIconMaterial
+                                                MinWidth="25"
+                                                MinHeight="25"
+                                                VerticalAlignment="Center"
+                                                Foreground="#fee3d4"
+                                                Kind="InvoiceText" />
+                                            <Grid Grid.Column="1" Margin="10,0,0,0">
+                                                <TextBlock Style="{StaticResource statisText}" Text="Hóa đơn: " />
+
+                                            </Grid>
+                                            <Grid Grid.Column="2">
+                                                <TextBlock
+                                                    Foreground="#DEDEDE"
+                                                    Style="{StaticResource statisText}"
+                                                    Text="123" />
+                                            </Grid>
+                                        </Grid>
+
+                                    </Border>
+                                </Grid>
+                            </Grid>
+
+                            <Grid Grid.Column="1" Grid.IsSharedSizeScope="True">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="*" />
+                                    <RowDefinition Height="*" />
+                                    <RowDefinition Height="*" />
+                                </Grid.RowDefinitions>
+                                <Grid Grid.Column="1" Margin="10,0,0,5">
+                                    <Border Padding="5" CornerRadius="10">
+                                        <Border.Background>
+                                            <LinearGradientBrush StartPoint="0,0.5" EndPoint="1,0.5">
+                                                <GradientStop Offset="0" Color="#9c6d3f" />
+                                                <GradientStop Offset="1" Color="#cb925d" />
+                                            </LinearGradientBrush>
+                                        </Border.Background>
+                                        <Grid>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="auto" />
+                                                <ColumnDefinition Width="auto" SharedSizeGroup="Label2" />
+                                                <ColumnDefinition Width="*" />
+                                            </Grid.ColumnDefinitions>
+                                            <ma:PackIconMaterial
+                                                MinWidth="25"
+                                                MinHeight="25"
+                                                VerticalAlignment="Center"
+                                                Foreground="#fee3d4"
+                                                Kind="AccountCircle" />
+                                            <Grid Grid.Column="1" Margin="10,0,0,0">
+                                                <TextBlock Style="{StaticResource statisText}" Text="Nhân viên: " />
+
+                                            </Grid>
+                                            <Grid Grid.Column="2">
+                                                <TextBlock
+                                                    Foreground="#DEDEDE"
+                                                    Style="{StaticResource statisText}"
+                                                    Text="123" />
+                                            </Grid>
+                                        </Grid>
+
+                                    </Border>
+                                </Grid>
+                                <Grid
+                                    Grid.Row="1"
+                                    Grid.Column="1"
+                                    Margin="10,0,0,5">
+                                    <Border Padding="5" CornerRadius="10">
+                                        <Border.Background>
+                                            <LinearGradientBrush StartPoint="0,0.5" EndPoint="1,0.5">
+                                                <GradientStop Offset="0" Color="#9c6d3f" />
+                                                <GradientStop Offset="1" Color="#cb925d" />
+                                            </LinearGradientBrush>
+                                        </Border.Background>
+                                        <Grid>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="auto" />
+                                                <ColumnDefinition Width="auto" SharedSizeGroup="Label2" />
+                                                <ColumnDefinition Width="*" />
+                                            </Grid.ColumnDefinitions>
+                                            <ma:PackIconMaterial
+                                                MinWidth="25"
+                                                MinHeight="25"
+                                                VerticalAlignment="Center"
+                                                Foreground="#fee3d4"
+                                                Kind="GlassCocktail" />
+                                            <Grid Grid.Column="1" Margin="10,0,0,0">
+                                                <TextBlock Style="{StaticResource statisText}" Text="Thực đơn: " />
+
+                                            </Grid>
+                                            <Grid Grid.Column="2">
+                                                <TextBlock
+                                                    Foreground="#DEDEDE"
+                                                    Style="{StaticResource statisText}"
+                                                    Text="123" />
+                                            </Grid>
+                                        </Grid>
+
+                                    </Border>
+                                </Grid>
+                                <Grid
+                                    Grid.Row="2"
+                                    Grid.Column="1"
+                                    Margin="10,0,0,5">
+                                    <Border Padding="5" CornerRadius="10">
+                                        <Border.Background>
+                                            <LinearGradientBrush StartPoint="0,0.5" EndPoint="1,0.5">
+                                                <GradientStop Offset="0" Color="#9c6d3f" />
+                                                <GradientStop Offset="1" Color="#cb925d" />
+                                            </LinearGradientBrush>
+                                        </Border.Background>
+                                        <Grid>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="auto" />
+                                                <ColumnDefinition Width="auto" SharedSizeGroup="Label2" />
+                                                <ColumnDefinition Width="*" />
+                                            </Grid.ColumnDefinitions>
+                                            <ma:PackIconMaterial
+                                                MinWidth="25"
+                                                MinHeight="25"
+                                                VerticalAlignment="Center"
+                                                Foreground="#fee3d4"
+                                                Kind="TableFurniture" />
+                                            <Grid Grid.Column="1" Margin="10,0,0,0">
+                                                <TextBlock Style="{StaticResource statisText}" Text="Bàn: " />
+
+                                            </Grid>
+                                            <Grid Grid.Column="2">
+                                                <TextBlock
+                                                    Foreground="#DEDEDE"
+                                                    Style="{StaticResource statisText}"
+                                                    Text="123" />
+                                            </Grid>
+                                        </Grid>
+
+                                    </Border>
+                                </Grid>
+                            </Grid>
+
+
+
+
+
+                        </Grid>
                     </Border>
                 </Grid>
+
+
             </Grid>
             <Grid
                 Grid.Row="0"
                 Grid.Column="1"
-                Margin="10 0 10 10">
+                Margin="10,0,10,10">
 
                 <Border Padding="10" CornerRadius="10">
                     <Border.Background>
@@ -78,7 +324,11 @@
                             <GradientStop Offset="0" Color="#f2ccb7" />
                         </LinearGradientBrush>
                     </Border.Background>
-                    <Calendar materialDesign:CalendarAssist.HeaderBackground="#844518" materialDesign:CalendarAssist.Orientation="Horizontal" />
+                    <Calendar
+                        HorizontalAlignment="Stretch"
+                        VerticalAlignment="Stretch"
+                        materialDesign:CalendarAssist.HeaderBackground="#844518"
+                        materialDesign:CalendarAssist.Orientation="Horizontal" />
 
                 </Border>
             </Grid>
@@ -87,66 +337,91 @@
                 Grid.Row="1"
                 Grid.ColumnSpan="2"
                 Margin="10">
-                <Border Padding="10" CornerRadius="10">
+                <Border Padding="5" CornerRadius="10">
                     <Border.Background>
                         <LinearGradientBrush StartPoint="0,0.5" EndPoint="1,0.5">
                             <GradientStop Offset="1" Color="#fee3d4" />
                             <GradientStop Offset="0" Color="#f2ccb7" />
                         </LinearGradientBrush>
                     </Border.Background>
-                    <lvc:CartesianChart LegendLocation="Bottom" Zoom="X">
-                        
-
-                  
-
-                        <lvc:CartesianChart.Series>
-                            <lvc:LineSeries
-                                PointGeometrySize="10"
-                                Stroke="#9b442a"
-                                StrokeThickness="2"
-                                Values="20000, 5000, 40000" />
-
-
-
-                        </lvc:CartesianChart.Series>
-
-                        <lvc:CartesianChart.AxisX>
-                            <lvc:Axis
-                                Foreground="#d5b096"
-                                Labels="alo, v, 213, 335, 10"
-                                MinValue="0">
-                                <lvc:Axis.Separator>
-                                    <lvc:Separator Stroke="#d5b096" StrokeThickness="1" />
-                                </lvc:Axis.Separator>
-                            </lvc:Axis>
-                        </lvc:CartesianChart.AxisX>
-
-                        <lvc:CartesianChart.AxisY>
-                            <lvc:Axis
-                                Title="Số lượng"
-                                Foreground="#dac5b4"
-                                Labels="0, 10, 20, 123"
-                                MinValue="0">
-                                <lvc:Axis.Separator>
-                                    <lvc:Separator StrokeThickness="1" />
-                                </lvc:Axis.Separator>
-                            </lvc:Axis>
-                        </lvc:CartesianChart.AxisY>
-                        <lvc:CartesianChart.ChartLegend>
-                            <lvc:DefaultLegend
-                                
-                                Background="Red"
-                                FontWeight="Bold"
-                                Foreground="#CDA48B" />
-                        </lvc:CartesianChart.ChartLegend>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="auto" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+                        <StackPanel VerticalAlignment="Center">
+                            <RadioButton
+                                MinWidth="30"
+                                MinHeight="30"
+                                IsChecked="True"
+                                Style="{StaticResource statisBtn}">
+                                <ma:PackIconMaterial Kind="Cash" />
+                            </RadioButton>
+                            <RadioButton
+                                MinWidth="30"
+                                MinHeight="30"
+                                Style="{StaticResource statisBtn}">
+                                <ma:PackIconMaterial Kind="InvoiceText" />
+                            </RadioButton>
+                            <RadioButton
+                                MinWidth="30"
+                                MinHeight="30"
+                                Style="{StaticResource statisBtn}">
+                                <ma:PackIconMaterial Kind="Truck" />
+                            </RadioButton>
+                        </StackPanel>
+                        <lvc:CartesianChart
+                            Grid.Column="1"
+                            LegendLocation="Bottom"
+                            Zoom="X">
 
 
-                    </lvc:CartesianChart>
+
+
+                            <lvc:CartesianChart.AxisX>
+                                <lvc:Axis Foreground="#dac5b4" MinValue="0">
+                                    <lvc:Axis.Separator>
+                                        <lvc:Separator StrokeThickness="1" />
+                                    </lvc:Axis.Separator>
+                                </lvc:Axis>
+                            </lvc:CartesianChart.AxisX>
+
+                            <lvc:CartesianChart.AxisY>
+                                <lvc:Axis Foreground="#dac5b4" MinValue="0">
+                                    <lvc:Axis.Separator>
+                                        <lvc:Separator StrokeThickness="0" />
+                                    </lvc:Axis.Separator>
+                                </lvc:Axis>
+                            </lvc:CartesianChart.AxisY>
+
+                            <lvc:CartesianChart.Series>
+                                <lvc:LineSeries
+                                    PointGeometrySize="0"
+                                    Stroke="#9b442a"
+                                    StrokeThickness="0"
+                                    Values="20000, 10000, 5000, 10000">
+                                    <lvc:LineSeries.Fill>
+                                        <LinearGradientBrush StartPoint="0.5,0" EndPoint="0.5,1">
+                                            <GradientStop Offset="0.5" Color="#d5b096" />
+                                            <GradientStop Offset="1" Color="#dcd1c3" />
+                                        </LinearGradientBrush>
+                                    </lvc:LineSeries.Fill>
+                                </lvc:LineSeries>
+                            </lvc:CartesianChart.Series>
+
+
+
+
+
+
+
+                        </lvc:CartesianChart>
+                    </Grid>
 
                 </Border>
             </Grid>
         </Grid>
-        <Grid Grid.Column="1" Margin="10 0 10 10">
+        <Grid Grid.Column="1" Margin="10,0,10,10">
             <Border CornerRadius="10">
                 <Border.Background>
                     <LinearGradientBrush StartPoint="0,0.5" EndPoint="1,0.5">
@@ -154,24 +429,30 @@
                         <GradientStop Offset="0" Color="#f2ccb7" />
                     </LinearGradientBrush>
                 </Border.Background>
-                <lvc:PieChart  
-                      LegendLocation="Right" InnerRadius="100" Margin="20" Series="{Binding PieSeries}">
+                <lvc:PieChart
+                    Margin="20"
+                    InnerRadius="100"
+                    LegendLocation="Right"
+                    Series="{Binding PieSeries}">
                     <lvc:PieChart.ChartLegend>
-                        <lvc:DefaultLegend BulletSize="20"></lvc:DefaultLegend>
+                        <lvc:DefaultLegend BulletSize="20" />
                     </lvc:PieChart.ChartLegend>
                     <lvc:PieChart.DataTooltip>
-                        <lvc:DefaultTooltip BulletSize="20" Background="#844518" Foreground="#dac5b4"></lvc:DefaultTooltip>
+                        <lvc:DefaultTooltip
+                            Background="#844518"
+                            BulletSize="20"
+                            Foreground="#dac5b4" />
                     </lvc:PieChart.DataTooltip>
                 </lvc:PieChart>
             </Border>
         </Grid>
         <Grid Grid.Row="1" Grid.ColumnSpan="2">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
             <Grid Grid.Column="0" Margin="10">
-                <Border CornerRadius="10" Padding="10">
+                <Border Padding="10" CornerRadius="10">
                     <Border.Background>
                         <LinearGradientBrush StartPoint="0,0.5" EndPoint="1,0.5">
                             <GradientStop Offset="1" Color="#fee3d4" />
@@ -180,16 +461,17 @@
                     </Border.Background>
 
 
-                    <!--<lvc:CartesianChart Series="{Binding SeriesCollection}" LegendLocation="Bottom" Loaded="CartesianChart_Loaded">
+                    <lvc:CartesianChart
+                        LegendLocation="Bottom"
+                        Loaded="CartesianChart_Loaded"
+                        Series="{Binding StackRowSeries}">
                         <lvc:CartesianChart.AxisX>
-                            <lvc:Axis Title="Browser" 
-                          LabelFormatter="{Binding Formatter}"
-                          Separator="{x:Static lvc:DefaultAxes.CleanSeparator}" />
+                            <lvc:Axis Title="Browser" LabelFormatter="{Binding FormatterStackRow}" />
                         </lvc:CartesianChart.AxisX>
                         <lvc:CartesianChart.AxisY>
-                            <lvc:Axis Title="Usage" Labels="{Binding Labels}" ></lvc:Axis>
+                            <lvc:Axis Title="Usage" Labels="{Binding LabelsStackRow}" />
                         </lvc:CartesianChart.AxisY>
-                    </lvc:CartesianChart>-->
+                    </lvc:CartesianChart>
 
 
 
@@ -198,7 +480,7 @@
 
 
             <Grid Grid.Column="1" Margin="10">
-                <Border CornerRadius="10" Padding="10">
+                <Border Padding="10" CornerRadius="10">
                     <Border.Background>
                         <LinearGradientBrush StartPoint="0,0.5" EndPoint="1,0.5">
                             <GradientStop Offset="1" Color="#fee3d4" />
@@ -207,20 +489,39 @@
                     </Border.Background>
                     <Grid>
                         <Grid.RowDefinitions>
-                            <RowDefinition Height="auto"/>
-                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="auto" />
+                            <RowDefinition Height="*" />
                         </Grid.RowDefinitions>
-                        <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="5">
-                            <Button Command="{Binding ToggleSeries0Command}" Content="Thực đơn" Style="{StaticResource adjustInfoButton}" MaxHeight="10" ></Button>
-                            <Button Command="{Binding ToggleSeries1Command}" Content="Thực đơn" Style="{StaticResource adjustInfoButton}"></Button>
-                            <Button Command="{Binding ToggleSeries2Command}" Content="Thực đơn" Style="{StaticResource adjustInfoButton}"></Button>
+                        <StackPanel
+                            Grid.Row="0"
+                            Margin="5"
+                            Orientation="Horizontal">
+                            <CheckBox
+                                MinWidth="70"
+                                MinHeight="30"
+                                Command="{Binding ToggleSeries0Command}"
+                                Content="Thực đơn"
+                                IsChecked="True" />
+                            <CheckBox
+                                MinWidth="70"
+                                Command="{Binding ToggleSeries1Command}"
+                                Content="Hóa đơn"
+                                IsChecked="True" />
+                            <CheckBox
+                                MinWidth="70"
+                                Command="{Binding ToggleSeries2Command}"
+                                Content="Doanh thu"
+                                IsChecked="True" />
                         </StackPanel>
-                        <lvc:CartesianChart Series="{Binding ColumnSeries}" LegendLocation="Left" Grid.Row="1">
+                        <lvc:CartesianChart
+                            Grid.Row="1"
+                            LegendLocation="Bottom"
+                            Series="{Binding ColumnSeries}">
                             <lvc:CartesianChart.AxisX>
-                                <lvc:Axis Title="Salesman" Labels="{Binding Labels}"></lvc:Axis>
+                                <lvc:Axis Title="Salesman" Labels="{Binding LabelsCol}" />
                             </lvc:CartesianChart.AxisX>
                             <lvc:CartesianChart.AxisY>
-                                <lvc:Axis Title="Sold Apps" LabelFormatter="{Binding Formatter}"></lvc:Axis>
+                                <lvc:Axis Title="Sold Apps" LabelFormatter="{Binding FormatterCol}" />
                             </lvc:CartesianChart.AxisY>
                         </lvc:CartesianChart>
                     </Grid>
@@ -228,4 +529,8 @@
             </Grid>
         </Grid>
     </Grid>
+
+
+
+
 </UserControl>

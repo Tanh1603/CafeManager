@@ -21,8 +21,6 @@ namespace CafeManager.WPF.ViewModels.UserViewModel
         private readonly StaffServices _staffServices;
         private readonly IMapper _mapper;
 
-        public PrintInvoice PrintInvoice { get; } = new();
-
         [ObservableProperty]
         private ObservableCollection<CoffeetableDTO> _listCoffeeTableDTO = [];
 
@@ -55,6 +53,9 @@ namespace CafeManager.WPF.ViewModels.UserViewModel
 
         public ObservableCollection<InvoiceDTO> ListCustomerInvoiceDTO => [.. ListInvoiceDTO.Where(x => x.IsCustomer == true)];
 
+        [ObservableProperty]
+        private CoffeetableDTO? _selectedSwapTable;
+
         public OrderViewModel(IServiceProvider provider)
         {
             _provider = provider;
@@ -70,7 +71,7 @@ namespace CafeManager.WPF.ViewModels.UserViewModel
 
         private async Task LoadData()
         {
-            var dbListCoffeeTable = await _coffeTableServices.GetListCoffeTable();
+            var dbListCoffeeTable = (await _coffeTableServices.GetListCoffeTable()).Where(x => x.Isdeleted == false);
             ListCoffeeTableDTO = [.. _mapper.Map<List<CoffeetableDTO>>(dbListCoffeeTable)];
 
             var dbListFoodCategory = await _foodCategoryServices.GetListFoodCategory();
@@ -115,6 +116,7 @@ namespace CafeManager.WPF.ViewModels.UserViewModel
                     };
                     ListInvoiceDTO.Add(SelectedInvoiceDTO);
                 }
+                else return;
             }
 
             SelectedInvoiceDTO = ListInvoiceDTO.FirstOrDefault(x => x.Coffeetableid == tableDTO.Coffeetableid) ?? new();
@@ -210,7 +212,7 @@ namespace CafeManager.WPF.ViewModels.UserViewModel
                         MyMessageBox.ShowDialog("Thanh toán hóa đơn thành công", MyMessageBox.Buttons.OK, MyMessageBox.Icons.None);
                         SelectedInvoiceDTO = new();
                         var exportInvocie = _mapper.Map<InvoiceDTO>(addInvoice);
-                        Print(_mapper.Map<InvoiceDTO>(addInvoice));
+                        ShowInvoice(_mapper.Map<InvoiceDTO>(addInvoice));
                         OnPropertyChanged(nameof(ListCustomerInvoiceDTO));
                     }
                 }
@@ -221,35 +223,17 @@ namespace CafeManager.WPF.ViewModels.UserViewModel
             }
         }
 
-        private void Print(InvoiceDTO invoiceDTO)
+        private void ShowInvoice(InvoiceDTO invoiceDTO)
         {
-            //// Tạo View và gắn DataContext
-            //var invoiceExportView = new Views.UserView.InvoiceExport();
-            //invoiceExportView.DataContext = this;
-
-            //double width = 500;  // Chiều rộng mong muốn
-            //double height = 600; // Chiều cao mong muốn
-
-            //// Render View ra Bitmap
-            //var bitmap = PrintInvoice.RenderViewToBitmap(invoiceExportView, width, height);
-
-            //// Hiển thị SaveFileDialog
-            //string filePath = PrintInvoice.ShowSaveFileDialog();
-            //if (filePath == null)
-            //{
-            //    return; // Người dùng hủy
-            //}
-
-            //// Lưu PDF
-            //PrintInvoice.SaveBitmapToPdf(bitmap, filePath);
-
-            var invoiceExportViewModel = new InvoiceExportViewModel();
-            invoiceExportViewModel.InvoiceExport = invoiceDTO;
-            InvoiceExport invoiceExportView = new InvoiceExport()
+            InvoiceExportViewModel invoiceExportViewModel = new()
+            {
+                InvoiceExport = invoiceDTO
+            };
+            InvoiceExport invoiceExport = new()
             {
                 DataContext = invoiceExportViewModel,
             };
-            invoiceExportView.Show();
+            invoiceExport.Show();
         }
 
         [RelayCommand]
@@ -294,6 +278,46 @@ namespace CafeManager.WPF.ViewModels.UserViewModel
         [RelayCommand]
         private void SwapTable()
         {
+            if (SelectedSwapTable == null || SelectedInvoiceDTO.Coffeetableid == 0)
+            {
+                MyMessageBox.ShowDialog("Vui lòng chọn bàn để chuyển và tạo hóa đơn");
+                return;
+            }
+            if (SelectedInvoiceDTO.Coffeetableid == null)
+            {
+                MyMessageBox.ShowDialog("Đang chọn hóa đơn mang về vui lòng bàn có hóa đơn");
+                return;
+            }
+            if (SelectedInvoiceDTO.Coffeetableid == SelectedSwapTable.Coffeetableid)
+            {
+                MyMessageBox.ShowDialog("Vui lòng không chọn trùng bàn");
+                return;
+            }
+            else
+            {
+                string res =
+                    MyMessageBox.ShowDialog($"Bạn muốn chuyển hóa đơn {SelectedInvoiceDTO.Coffeetable.TableName} sang {SelectedSwapTable.TableName}", MyMessageBox.Buttons.Yes_No, MyMessageBox.Icons.Question);
+                if (res == "1")
+                {
+                    var exsiting = ListInvoiceDTO.FirstOrDefault(x => x.Coffeetableid == SelectedSwapTable.Coffeetableid);
+                    if (exsiting != null)
+                    {
+                        var tmp = SelectedSwapTable;
+
+                        exsiting.Coffeetableid = SelectedInvoiceDTO.Coffeetableid;
+                        exsiting.Coffeetable = SelectedInvoiceDTO.Coffeetable;
+
+                        SelectedInvoiceDTO.Coffeetableid = tmp.Coffeetableid;
+                        SelectedInvoiceDTO.Coffeetable = tmp;
+                    }
+                    else
+                    {
+                        SelectedInvoiceDTO.Coffeetableid = SelectedSwapTable.Coffeetableid;
+                        SelectedInvoiceDTO.Coffeetable = SelectedSwapTable;
+                    }
+                    OnPropertyChanged(nameof(SelectedInvoiceDTO));
+                }
+            }
         }
 
         [RelayCommand]

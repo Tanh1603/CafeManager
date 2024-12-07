@@ -49,7 +49,15 @@ namespace CafeManager.WPF.ViewModels.AddViewModel
         };
 
         [ObservableProperty]
-        private ImportDetailDTO _currentImportDetail = new() { Materialsupplier = new() { Material = new() } };
+        private ImportDetailDTO _currentImportDetail = new()
+        {
+            Materialsupplier = new()
+            {
+                Material = new(),
+                Manufacturedate = DateTime.Now.Date,
+                Expirationdate = DateTime.Now.Date
+            }
+        };
 
         [ObservableProperty]
         private ObservableCollection<StaffDTO> _listStaff = [];
@@ -130,13 +138,7 @@ namespace CafeManager.WPF.ViewModels.AddViewModel
         {
             IsAdding = false;
             IsUpdating = false;
-            IsAddingImportDetail = true;
-            IsUpdatingImportDetail = false;
-            ModifyImport = new()
-            {
-                Receiveddate = DateTime.Now,
-            };
-            CurrentImportDetail = new() { Materialsupplier = new() { Material = new() } };
+            ClearAddImportDetail();
             ListExisted.Clear();
             listDeletedImportdetail.Clear();
         }
@@ -146,7 +148,15 @@ namespace CafeManager.WPF.ViewModels.AddViewModel
         {
             IsAddingImportDetail = true;
             IsUpdatingImportDetail = false;
-            CurrentImportDetail = new() { Materialsupplier = new() { Material = new() } };
+            CurrentImportDetail = new()
+            {
+                Materialsupplier = new()
+                {
+                    Material = new(),
+                    Manufacturedate = DateTime.Now.Date,
+                    Expirationdate = DateTime.Now.Date
+                }
+            };
         }
 
         [RelayCommand]

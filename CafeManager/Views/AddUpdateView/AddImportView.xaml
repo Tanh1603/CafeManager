@@ -16,7 +16,7 @@
     xmlns:uc="clr-namespace:CafeManager.WPF.Assets.UsersControls"
     xmlns:view="clr-namespace:CafeManager.WPF.Views"
     xmlns:vm="clr-namespace:CafeManager.WPF.ViewModels.AddViewModel"
-    Width="900"
+    Width="940"
     Height="Auto"
     d:DataContext="{d:DesignInstance Type=addviewmodel:AddImportViewModel}"
     mc:Ignorable="d">
@@ -342,10 +342,10 @@
                         ColumnHeaderStyle="{DynamicResource DataGridColumnHeaderStyle1}"
                         ItemsSource="{Binding ListExisted}"
                         RowStyle="{DynamicResource DataGridRowStyle1}"
-                        Style="{DynamicResource DataGridStyle1}"
                         ScrollViewer.CanContentScroll="True"
+                        ScrollViewer.HorizontalScrollBarVisibility="Hidden"
                         ScrollViewer.VerticalScrollBarVisibility="Auto"
-                        ScrollViewer.HorizontalScrollBarVisibility="Hidden">
+                        Style="{DynamicResource DataGridStyle1}">
                         <DataGrid.Columns>
 
                             <DataGridTextColumn
@@ -373,6 +373,12 @@
                                 IsReadOnly="True" />
                             <DataGridTextColumn
                                 Width="*"
+                                Binding="{Binding Materialsupplier.Original}"
+                                CanUserResize="False"
+                                Header="Xuất xứ"
+                                IsReadOnly="True" />
+                            <DataGridTextColumn
+                                Width="*"
                                 Binding="{Binding Materialsupplier.Price, StringFormat={}{0:0}}"
                                 CanUserResize="False"
                                 Header="Giá"
@@ -389,12 +395,17 @@
                                 CanUserResize="False"
                                 Header="Đơn vị"
                                 IsReadOnly="True" />
-
+                            <DataGridTextColumn
+                                Width="auto"
+                                Binding="{Binding Materialsupplier.Manufacturedate, StringFormat=\{0:dd/MM/yyyy\}}"
+                                CanUserResize="False"
+                                Header="NXS"
+                                IsReadOnly="True" />
                             <DataGridTextColumn
                                 Width="auto"
                                 Binding="{Binding Materialsupplier.Expirationdate, StringFormat=\{0:dd/MM/yyyy\}}"
                                 CanUserResize="False"
-                                Header="Ngày hết hạn"
+                                Header="HSD"
                                 IsReadOnly="True" />
 
                             <DataGridTemplateColumn

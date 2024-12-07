@@ -36,13 +36,16 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
         public bool IsDeletedMaterial => !IsGetMaterial;
 
         [ObservableProperty]
+        private ObservableCollection<SupplierDTO> _ListSupplierDTO = [];
+
+        [ObservableProperty]
         private ObservableCollection<MaterialDTO> _listMaterialDTO = [];
 
         [ObservableProperty]
         private ObservableCollection<MaterialDTO> _listDeletedMaterialDTO = [];
 
         [ObservableProperty]
-        private MaterialDTO _selectedMaterial;
+        private MaterialDTO _deletedMaterial;
         #endregion
 
         #region Inventory Delcare
@@ -70,20 +73,68 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
         private List<MaterialSupplierDTO> _filterListInventory = [];
         #endregion
 
-        private string _searchText = string.Empty;
-        public string SearchText
+        #region Filter Declare
+        private SupplierDTO _selectedSupplier;
+        public SupplierDTO SelectedSupplier
         {
-            get => _searchText;
+            get => _selectedSupplier;
             set
             {
-                if (_searchText != value)
+                if (_selectedSupplier != value)
                 {
-                    _searchText = value;
+                    _selectedSupplier = value;
                     FilterInventory();
-                    OnPropertyChanged(nameof(SearchText));
+                    OnPropertyChanged(nameof(SelectedSupplier));
                 }
             }
         }
+
+        private MaterialDTO _selectedMaterial;
+        public MaterialDTO SelectedMaterial
+        {
+            get => _selectedMaterial;
+            set
+            {
+                if (_selectedMaterial != value)
+                {
+                    _selectedMaterial = value;
+                    FilterInventory();
+                    OnPropertyChanged(nameof(SelectedMaterial));
+                }
+            }
+        }
+
+        private DateTime? _filterManufacturedate;
+        public DateTime? FilterManufacturedate
+        {
+            get => _filterManufacturedate;
+            set
+            {
+                if (_filterManufacturedate != value)
+                {
+                    _filterManufacturedate = value;
+                    FilterInventory();
+                    OnPropertyChanged(nameof(FilterManufacturedate));
+                }
+            }
+        }
+
+        private DateTime? _filterExpirationdate;
+        public DateTime? FilterExpirationdate
+        {
+            get => _filterExpirationdate;
+            set
+            {
+                if (_filterExpirationdate != value)
+                {
+                    _filterExpirationdate = value;
+                    FilterInventory();
+                    OnPropertyChanged(nameof(FilterExpirationdate));
+                }
+            }
+        }
+        #endregion
+
         public InventoryViewModel(IServiceProvider provider)
         {
             _provider = provider;
@@ -103,6 +154,7 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
             var dbMaterialSupplier = (await _materialSupplierServices.GetListMaterialSupplier()).ToList().Where(x => x.Isdeleted == false);
             var dbConsumedMaterial = (await _consumedMaterialServices.GetListConsumedMaterial()).ToList().Where(x => x.Isdeleted == false);
             var dbMaterial = await _materialSupplierServices.GetListMaterial();
+            var dbSupplier = (await _materialSupplierServices.GetListSupplier()).ToList().Where(x => x.Isdeleted == false);
 
             var listExistedMaterial = dbMaterial.ToList().Where(x => x.Isdeleted == false); // List vật liệu đang có
             var listDeletedMaterial = dbMaterial.ToList().Where(x => x.Isdeleted == true); // List vật liệu đã ẩn
@@ -111,6 +163,10 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
             ListDeletedMaterialDTO = [.. _mapper.Map<List<MaterialDTO>>(listDeletedMaterial)];
             ListConsumedMaterialDTO = [.. _mapper.Map<List<ConsumedMaterialDTO>>(dbConsumedMaterial)];
             ListInventoryDTO = [.. _mapper.Map<List<MaterialSupplierDTO>>(dbMaterialSupplier)];
+            ListSupplierDTO = [.. _mapper.Map<List<SupplierDTO>>(dbSupplier)];
+
+            ListMaterialDTO.Insert(0, new MaterialDTO { Materialname = "Tất cả", Materialid = -1});
+            ListSupplierDTO.Insert(0, new SupplierDTO { Suppliername = "Tất cả", Supplierid = -1});
 
             _filterListConsumedMaterial = [.. ListConsumedMaterialDTO];
             OnPropertyChanged(nameof(CurrentListConsumedMaterial));
@@ -120,17 +176,22 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
 
         private void FilterInventory()
         {
-            var filterConsumed = ListConsumedMaterialDTO.Where(x => string.IsNullOrWhiteSpace(SearchText)
-            || x.Materialsupplier.Material.Materialname.Contains(SearchText, StringComparison.OrdinalIgnoreCase)
-            || x.Materialsupplier.Supplier.Suppliername.Contains(SearchText) || x.Materialsupplier.Original.Contains(SearchText, StringComparison.OrdinalIgnoreCase)
-            || x.Materialsupplier.Manufacturer.Contains(SearchText, StringComparison.OrdinalIgnoreCase)
-            || x.Materialsupplier.Price.ToString().Contains(SearchText, StringComparison.OrdinalIgnoreCase)).ToList();
+            var filterConsumed = ListConsumedMaterialDTO
+                .Where(x =>
+                    (SelectedMaterial == null || SelectedMaterial.Materialid == -1 || x.Materialsupplier.Material.Materialid == SelectedMaterial.Materialid) &&
+                    (SelectedSupplier == null || SelectedSupplier.Supplierid == -1 || x.Materialsupplier.Supplier.Supplierid == SelectedSupplier.Supplierid) &&
+                    (FilterManufacturedate == null || x.Materialsupplier.Manufacturedate <= FilterManufacturedate) &&
+                    (FilterExpirationdate == null || x.Materialsupplier.Expirationdate <= FilterExpirationdate))
+                .ToList();
 
-            var filterInventory = ListInventoryDTO.Where(x => string.IsNullOrWhiteSpace(SearchText)
-            || x.Material.Materialname.Contains(SearchText, StringComparison.OrdinalIgnoreCase)
-            || x.Supplier.Suppliername.Contains(SearchText) || x.Original.Contains(SearchText, StringComparison.OrdinalIgnoreCase)
-            || x.Manufacturer.Contains(SearchText, StringComparison.OrdinalIgnoreCase)
-            || x.Price.ToString().Contains(SearchText, StringComparison.OrdinalIgnoreCase)).ToList();
+
+            var filterInventory = ListInventoryDTO
+                .Where(x =>
+                    (SelectedMaterial == null || x.Material.Materialid == SelectedMaterial.Materialid) &&
+                    (SelectedSupplier == null || x.Supplier.Supplierid == SelectedSupplier.Supplierid) &&
+                    (FilterManufacturedate == null || x.Manufacturedate <= FilterManufacturedate) &&
+                    (FilterExpirationdate == null || x.Expirationdate <= FilterExpirationdate))
+                .ToList();
 
             _filterListConsumedMaterial = [.. filterConsumed];
             OnPropertyChanged(nameof(CurrentListConsumedMaterial));
@@ -173,7 +234,7 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
                         if (updateSupplierDTO != null)
                         {
                             _mapper.Map(res, updateSupplierDTO);
-                            MyMessageBox.ShowDialog("Sửa nhà cung cấp thành công");
+                            MyMessageBox.ShowDialog("Sửa vật tư cấp thành công");
                             ModifyMaterialVM.ClearValueOfFrom();
                             IsOpenAddMaterial = false;
                         }
@@ -208,7 +269,7 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
         [RelayCommand]
         private void OpenUpdateMaterial()
         {
-            if (SelectedMaterial == null)
+            if (SelectedMaterial == null || SelectedMaterial.Materialid == -1)
             {
                 MyMessageBox.ShowDialog("Hãy chọn vật tư", MyMessageBox.Buttons.OK, MyMessageBox.Icons.Warning);
                 return;
@@ -225,7 +286,7 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
             IsPopupOpen = false;
             try
             {
-                if (SelectedMaterial == null)
+                if (SelectedMaterial == null || SelectedMaterial.Materialid == -1)
                     throw new InvalidOperationException("Hãy chọn vật tư");
 
                 string messageBox = MyMessageBox.ShowDialog("Bạn có muốn ẩn vật tư không?", MyMessageBox.Buttons.Yes_No, MyMessageBox.Icons.Question);
@@ -234,10 +295,10 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
                     bool isDeleted = await _materialSupplierServices.DeleteMaterial(SelectedMaterial.Materialid);
                     if (isDeleted)
                     {
-                        ListMaterialDTO.Remove(SelectedMaterial);
                         ListDeletedMaterialDTO.Add(SelectedMaterial);
+                        ListMaterialDTO.Remove(SelectedMaterial);
                         MyMessageBox.ShowDialog("Ẩn vật tư thanh công");
-                        SelectedMaterial = new();
+                        SelectedMaterial = null;
                     }
                     else
                     {
@@ -256,20 +317,20 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
         {
             try
             {
-                if (SelectedMaterial == null)
+                if (DeletedMaterial == null)
                     throw new InvalidOperationException("Hãy chọn vật tư");
 
                 string messageBox = MyMessageBox.ShowDialog("Bạn có muốn hiển thị vật tư không?", MyMessageBox.Buttons.Yes_No, MyMessageBox.Icons.Question);
                 if (messageBox.Equals("1"))
                 {
-                    SelectedMaterial.Isdeleted = false;
-                    var res = await _materialSupplierServices.UpdateMaterialById(SelectedMaterial.Materialid, _mapper.Map<Material>(SelectedMaterial));
+                    DeletedMaterial.Isdeleted = false;
+                    var res = await _materialSupplierServices.UpdateMaterialById(DeletedMaterial.Materialid, _mapper.Map<Material>(DeletedMaterial));
                     if (res != null)
                     {
-                        ListMaterialDTO.Add(SelectedMaterial);
-                        ListDeletedMaterialDTO.Remove(SelectedMaterial);
+                        ListMaterialDTO.Add(DeletedMaterial);
+                        ListDeletedMaterialDTO.Remove(DeletedMaterial);
                         MyMessageBox.ShowDialog("Hiển thị vật tư thanh công");
-                        SelectedMaterial = new();
+                        DeletedMaterial = null;
                     }
                     else
                     {

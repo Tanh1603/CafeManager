@@ -81,8 +81,6 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
         {
             var filter = ListImport.Where(x => string.IsNullOrWhiteSpace(SearchText)
             || x.Supplier.Suppliername.Contains(SearchText, StringComparison.OrdinalIgnoreCase)
-            || x.Phone.Contains(SearchText) || x.Shippingcompany.Contains(SearchText, StringComparison.OrdinalIgnoreCase)
-            || x.Deliveryperson.Contains(SearchText, StringComparison.OrdinalIgnoreCase)
             || x.Receiveddate.ToString().Contains(SearchText, StringComparison.OrdinalIgnoreCase)
             || x.Staff.Staffname.Contains(SearchText, StringComparison.OrdinalIgnoreCase)).ToList();
 

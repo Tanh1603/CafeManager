@@ -54,185 +54,204 @@
                 VerticalAlignment="Bottom"
                 Background="#f5f5f5" />
 
-            <TextBlock
-                Grid.Row="1"
-                Margin="0,0,215,0"
-                HorizontalAlignment="Right"
-                VerticalAlignment="Center"
-                FontSize="13"
-                FontWeight="SemiBold"
-                Foreground="#602414"
-                Text="Filter by" />
+            <StackPanel Grid.Row="1" Orientation="Horizontal">
+                <Grid
+                    Grid.Row="1"
+                    Margin="10,10,0,10"
+                    HorizontalAlignment="Left">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
 
-            <!--  Filter Textbox  -->
-            <Grid
-                Grid.Row="1"
-                Width="200"
-                HorizontalAlignment="Right">
-                <TextBlock
-                    Margin="15,0"
-                    VerticalAlignment="Center"
-                    Panel.ZIndex="1"
-                    Foreground="#9c6d3f"
-                    IsHitTestVisible="False"
-                    Text="Search in Members..."
-                    Visibility="{Binding ElementName=txtFilter, Path=Text.IsEmpty, Converter={StaticResource BoolToVis}}" />
-                <TextBox
-                    x:Name="txtFilter"
-                    Style="{StaticResource textBoxFilter}"
-                    Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}" />
-                <ma:PackIconMaterial
-                    Width="15"
-                    Height="15"
-                    Margin="0,0,15,0"
-                    HorizontalAlignment="Right"
-                    VerticalAlignment="Center"
-                    Foreground="#d5b096"
-                    Kind="Magnify" />
-            </Grid>
-
-            <Grid
-                Grid.Row="1"
-                Margin="10,10,0,10"
-                HorizontalAlignment="Left">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition />
-                    <ColumnDefinition Width="Auto" />
-                </Grid.ColumnDefinitions>
-
-                <Button
-                    Width="15"
-                    Height="15"
-                    Margin="0,5,10,0"
-                    VerticalAlignment="Center"
-                    Command="{Binding ChangeRoleMaterialCommand}"
-                    Style="{StaticResource closeButton}">
-
-                    <ma:PackIconMaterial
+                    <Button
                         Width="15"
                         Height="15"
-                        Kind="Repeat"
-                        Style="{StaticResource iconApp}" />
-                </Button>
-
-                <Grid Grid.Column="1" Visibility="{Binding IsGetMaterial, Converter={StaticResource BoolToVis}}">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition MinWidth="150" />
-                        <ColumnDefinition Width="auto" />
-                    </Grid.ColumnDefinitions>
-
-                    <ComboBox
-                        Grid.Column="0"
-                        MinWidth="150"
-                        MinHeight="35"
+                        Margin="0,5,10,0"
                         VerticalAlignment="Center"
-                        materialDesign:HintAssist.Hint="Vật liệu"
-                        materialDesign:TextBlockAssist.AutoToolTip="True"
-                        BorderBrush="#602414"
-                        ItemsSource="{Binding ListMaterialDTO}"
-                        SelectedItem="{Binding SelectedMaterial}">
-                        <ComboBox.ItemTemplate>
-                            <DataTemplate>
-                                <Grid>
-                                    <TextBlock
-                                        Margin="0,0,10,0"
-                                        VerticalAlignment="Center"
-                                        Text="{Binding Materialname}"
-                                        TextWrapping="Wrap" />
-                                </Grid>
-                            </DataTemplate>
-                        </ComboBox.ItemTemplate>
-                    </ComboBox>
+                        Command="{Binding ChangeRoleMaterialCommand}"
+                        Style="{StaticResource closeButton}">
 
-                    <Button
-                        Grid.Column="1"
-                        Width="60"
-                        Height="35"
-                        Margin="5,0,0,0"
-                        HorizontalAlignment="Left"
-                        Command="{Binding OpenPopupMaterialViewCommand}"
-                        Style="{StaticResource confirmInfoButton}">
-                        <materialDesign:PopupBox
-                            Grid.Row="2"
-                            Margin="4"
-                            IsPopupOpen="{Binding IsPopupOpen, Mode=TwoWay}"
-                            PopupElevation="Dp4"
-                            PopupHorizontalOffset="40"
-                            PopupUniformCornerRadius="10"
-                            StaysOpen="True">
-                            <materialDesign:PopupBox.ToggleContent>
-                                <Button
-                                    HorizontalAlignment="Center"
-                                    VerticalAlignment="Center"
-                                    Background="Transparent"
-                                    Command="{Binding DataContext.OpenPopupMaterialViewCommand, RelativeSource={RelativeSource AncestorType=local:InventoryView}}"
-                                    Style="{StaticResource confirmInfoButton}">
-                                    <materialDesign:PackIcon
-                                        Width="30"
-                                        Height="30"
-                                        Foreground="White"
-                                        Kind="Plus" />
-                                </Button>
-                            </materialDesign:PopupBox.ToggleContent>
-                            <StackPanel>
-                                <Button
-                                    Command="{Binding OpenAddMaterialCommand}"
-                                    Content="Thêm vật liệu"
-                                    Style="{StaticResource confirmInfoButton}" />
-                                <Button
-                                    Command="{Binding DeleteMaterialCommand}"
-                                    Content="Ẩn vật liệu"
-                                    Style="{StaticResource confirmInfoButton}" />
-                                <Button
-                                    Command="{Binding OpenUpdateMaterialCommand}"
-                                    Content="Sửa vật liệu"
-                                    Style="{StaticResource confirmInfoButton}" />
-                            </StackPanel>
-                        </materialDesign:PopupBox>
+                        <ma:PackIconMaterial
+                            Width="15"
+                            Height="15"
+                            Kind="Repeat"
+                            Style="{StaticResource iconApp}" />
                     </Button>
-                </Grid>
 
-                <!--  Vật liệu đã ẩn  -->
-                <Grid Grid.Column="1" Visibility="{Binding IsDeletedMaterial, Converter={StaticResource BoolToVis}}">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition MinWidth="150" />
-                        <ColumnDefinition Width="auto" />
-                    </Grid.ColumnDefinitions>
+                    <Grid Grid.Column="1" Visibility="{Binding IsGetMaterial, Converter={StaticResource BoolToVis}}">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="auto" />
+                            <ColumnDefinition Width="auto" />
+                        </Grid.ColumnDefinitions>
 
-                    <ComboBox
-                        Grid.Column="0"
-                        MinWidth="150"
-                        MinHeight="35"
-                        VerticalAlignment="Center"
-                        materialDesign:HintAssist.Hint="Vật liệu đã ẩn"
-                        materialDesign:TextBlockAssist.AutoToolTip="True"
-                        BorderBrush="#602414"
-                        ItemsSource="{Binding ListDeletedMaterialDTO}"
-                        SelectedItem="{Binding SelectedMaterial}">
-                        <ComboBox.ItemTemplate>
-                            <DataTemplate>
-                                <Grid>
-                                    <TextBlock
-                                        Margin="0,0,10,0"
+                        <ComboBox
+                            Grid.Column="0"
+                            MinWidth="120"
+                            MinHeight="35"
+                            VerticalAlignment="Center"
+                            materialDesign:HintAssist.Hint="Vật liệu"
+                            materialDesign:TextBlockAssist.AutoToolTip="True"
+                            BorderBrush="#602414"
+                            ItemsSource="{Binding ListMaterialDTO}"
+                            SelectedItem="{Binding SelectedMaterial}">
+
+                            <ComboBox.ItemTemplate>
+                                <DataTemplate>
+                                    <Grid>
+                                        <TextBlock
+                                            Margin="0,0,10,0"
+                                            VerticalAlignment="Center"
+                                            Text="{Binding Materialname, TargetNullValue='Tất cả'}"
+                                            TextWrapping="Wrap" />
+                                    </Grid>
+                                </DataTemplate>
+                            </ComboBox.ItemTemplate>
+                        </ComboBox>
+
+
+                        <Button
+                            Grid.Column="1"
+                            Width="30"
+                            Height="30"
+                            Margin="10,0"
+                            HorizontalAlignment="Left"
+                            Command="{Binding OpenPopupMaterialViewCommand}"
+                            Style="{StaticResource addCircleBtn}">
+                            <materialDesign:PopupBox
+                                Grid.Row="2"
+                                IsPopupOpen="{Binding IsPopupOpen, Mode=TwoWay}"
+                                PopupElevation="Dp4"
+                                PopupHorizontalOffset="40"
+                                PopupUniformCornerRadius="10"
+                                StaysOpen="True">
+
+                                <materialDesign:PopupBox.ToggleContent>
+                                    <Button
+                                        HorizontalAlignment="Center"
                                         VerticalAlignment="Center"
-                                        Text="{Binding Materialname}"
-                                        TextWrapping="Wrap" />
-                                </Grid>
-                            </DataTemplate>
-                        </ComboBox.ItemTemplate>
-                    </ComboBox>
+                                        Background="Transparent"
+                                        Command="{Binding DataContext.OpenPopupMaterialViewCommand, RelativeSource={RelativeSource AncestorType=local:InventoryView}}"
+                                        Style="{StaticResource confirmInfoButton}">
+                                        <materialDesign:PackIcon
+                                            Width="25"
+                                            Height="25"
+                                            Foreground="#d5b096"
+                                            Kind="Plus" />
+                                    </Button>
+                                </materialDesign:PopupBox.ToggleContent>
+                                <StackPanel>
+                                    <Button
+                                        Command="{Binding OpenAddMaterialCommand}"
+                                        Content="Thêm danh mục"
+                                        Style="{StaticResource confirmInfoButton}" />
+                                    <Button
+                                        Command="{Binding DeleteMaterialCommand}"
+                                        Content="Ẩn danh mục"
+                                        Style="{StaticResource confirmInfoButton}" />
+                                    <Button
+                                        Command="{Binding OpenUpdateMaterialCommand}"
+                                        Content="Sửa danh mục"
+                                        Style="{StaticResource confirmInfoButton}" />
+                                </StackPanel>
+                            </materialDesign:PopupBox>
+                        </Button>
+                    </Grid>
 
-                    <Button
-                        Grid.Column="1"
-                        Width="60"
-                        Height="35"
-                        Margin="5,0,0,0"
-                        HorizontalAlignment="Left"
-                        Command="{Binding RestoreMaterialCommand}"
-                        Content="Hiển thị"
-                        Style="{StaticResource confirmInfoButton}" />
+                    <!--  Vật liệu đã ẩn  -->
+                    <Grid Grid.Column="1" Visibility="{Binding IsDeletedMaterial, Converter={StaticResource BoolToVis}}">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="auto" />
+                            <ColumnDefinition Width="auto" />
+                        </Grid.ColumnDefinitions>
+
+                        <ComboBox
+                            Grid.Column="0"
+                            MinWidth="120"
+                            MinHeight="35"
+                            VerticalAlignment="Center"
+                            materialDesign:HintAssist.Hint="Vật liệu đã ẩn"
+                            materialDesign:TextBlockAssist.AutoToolTip="True"
+                            BorderBrush="#602414"
+                            ItemsSource="{Binding ListDeletedMaterialDTO}"
+                            SelectedItem="{Binding DeletedMaterial}">
+                            <ComboBox.ItemTemplate>
+                                <DataTemplate>
+                                    <Grid>
+                                        <TextBlock
+                                            Margin="0,0,10,0"
+                                            VerticalAlignment="Center"
+                                            Text="{Binding Materialname}"
+                                            TextWrapping="Wrap" />
+                                    </Grid>
+                                </DataTemplate>
+                            </ComboBox.ItemTemplate>
+                        </ComboBox>
+
+                        <Button
+                            Grid.Column="1"
+                            Width="30"
+                            Height="30"
+                            Margin="10,0"
+                            HorizontalAlignment="Left"
+                            Command="{Binding RestoreMaterialCommand}"
+                            Style="{StaticResource addCircleBtn}">
+                            <materialDesign:PackIcon
+                                Width="25"
+                                Height="25"
+                                Foreground="#d5b096"
+                                Kind="History" />
+                        </Button>
+                    </Grid>
                 </Grid>
-            </Grid>
+                <ComboBox
+                    MinWidth="120"
+                    MinHeight="35"
+                    VerticalAlignment="Center"
+                    materialDesign:HintAssist.Hint="Nhà cung cấp"
+                    materialDesign:TextBlockAssist.AutoToolTip="True"
+                    BorderBrush="#602414"
+                    ItemsSource="{Binding ListSupplierDTO}"
+                    SelectedItem="{Binding SelectedSupplier}">
+                    <ComboBox.ItemTemplate>
+                        <DataTemplate>
+                            <Grid>
+                                <TextBlock
+                                    Margin="0,0,10,0"
+                                    VerticalAlignment="Center"
+                                    Text="{Binding Suppliername, TargetNullValue='Tất cả'}"
+                                    TextWrapping="Wrap" />
+                            </Grid>
+                        </DataTemplate>
+                    </ComboBox.ItemTemplate>
+                </ComboBox>
+
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock
+                        Margin="10"
+                        VerticalAlignment="Center"
+                        Text="NSX: " />
+                    <DatePicker
+                        Width="120"
+                        VerticalAlignment="Center"
+                        materialDesign:HintAssist.Hint="Chọn ngày"
+                        materialDesign:TextFieldAssist.HasClearButton="True"
+                        SelectedDate="{Binding FilterManufacturedate, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
+                        Style="{StaticResource MaterialDesignFloatingHintDatePicker}" />
+
+                    <TextBlock
+                        Margin="10"
+                        VerticalAlignment="Center"
+                        Text="HSD: " />
+                    <DatePicker
+                        Width="120"
+                        VerticalAlignment="Center"
+                        materialDesign:HintAssist.Hint="Chọn ngày"
+                        materialDesign:TextFieldAssist.HasClearButton="True"
+                        SelectedDate="{Binding FilterExpirationdate, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
+                        Style="{StaticResource MaterialDesignFloatingHintDatePicker}" />
+                </StackPanel>
+            </StackPanel>
 
             <Border Grid.Row="2" VerticalAlignment="Top">
                 <TabControl Style="{DynamicResource tabControlStyle}">
@@ -280,13 +299,13 @@
                                     IsReadOnly="True" />
                                 <DataGridTextColumn
                                     Width="*"
-                                    Binding="{Binding Materialsupplier.Manufacturedate}"
+                                    Binding="{Binding Materialsupplier.Manufacturedate, StringFormat=dd/MM/yyyy}"
                                     CanUserResize="False"
                                     Header="Ngày sản xuất"
                                     IsReadOnly="True" />
                                 <DataGridTextColumn
                                     Width="*"
-                                    Binding="{Binding Materialsupplier.Expirationdate}"
+                                    Binding="{Binding Materialsupplier.Expirationdate, StringFormat=dd/MM/yyyy}"
                                     CanUserResize="False"
                                     Header="Ngày hết hạn"
                                     IsReadOnly="True" />

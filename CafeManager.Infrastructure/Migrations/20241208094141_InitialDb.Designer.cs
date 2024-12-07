@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace CafeManager.Infrastructure.Migrations
 {
     [DbContext(typeof(CafeManagerContext))]
-    [Migration("20241121122120_Fix_Db-import")]
-    partial class Fix_Dbimport
+    [Migration("20241208094141_InitialDb")]
+    partial class InitialDb
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -37,8 +37,8 @@ namespace CafeManager.Infrastructure.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Appuserid"));
 
-                    b.Property<string>("Avatar")
-                        .HasColumnType("text")
+                    b.Property<byte[]>("Avatar")
+                        .HasColumnType("bytea")
                         .HasColumnName("avatar");
 
                     b.Property<string>("Displayname")
@@ -188,8 +188,8 @@ namespace CafeManager.Infrastructure.Migrations
                         .HasColumnType("character varying(100)")
                         .HasColumnName("foodname");
 
-                    b.Property<string>("Imagefood")
-                        .HasColumnType("text")
+                    b.Property<byte[]>("Imagefood")
+                        .HasColumnType("bytea")
                         .HasColumnName("imagefood");
 
                     b.Property<bool?>("Isdeleted")
@@ -313,9 +313,10 @@ namespace CafeManager.Infrastructure.Migrations
                         .HasDefaultValue(false)
                         .HasColumnName("isdeleted");
 
-                    b.Property<int>("Materialid")
+                    b.Property<int>("Materialsupplierid")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("integer")
-                        .HasColumnName("materialid");
+                        .HasColumnName("materialsupplierid");
 
                     b.Property<decimal?>("Quantity")
                         .ValueGeneratedOnAdd()
@@ -329,7 +330,7 @@ namespace CafeManager.Infrastructure.Migrations
 
                     b.HasIndex("Importid");
 
-                    b.HasIndex("Materialid");
+                    b.HasIndex("Materialsupplierid");
 
                     b.ToTable("importdetails", (string)null);
                 });
@@ -727,15 +728,15 @@ namespace CafeManager.Infrastructure.Migrations
                         .IsRequired()
                         .HasConstraintName("fk_importdetails_imports");
 
-                    b.HasOne("CafeManager.Core.Data.Material", "Material")
+                    b.HasOne("CafeManager.Core.Data.Materialsupplier", "Materialsupplier")
                         .WithMany("Importdetails")
-                        .HasForeignKey("Materialid")
+                        .HasForeignKey("Materialsupplierid")
                         .IsRequired()
-                        .HasConstraintName("fk_importdetails_material");
+                        .HasConstraintName("fk_importdetails_materialsupplier");
 
                     b.Navigation("Import");
 
-                    b.Navigation("Material");
+                    b.Navigation("Materialsupplier");
                 });
 
             modelBuilder.Entity("CafeManager.Core.Data.Invoice", b =>
@@ -831,14 +832,14 @@ namespace CafeManager.Infrastructure.Migrations
 
             modelBuilder.Entity("CafeManager.Core.Data.Material", b =>
                 {
-                    b.Navigation("Importdetails");
-
                     b.Navigation("Materialsuppliers");
                 });
 
             modelBuilder.Entity("CafeManager.Core.Data.Materialsupplier", b =>
                 {
                     b.Navigation("Consumedmaterials");
+
+                    b.Navigation("Importdetails");
                 });
 
             modelBuilder.Entity("CafeManager.Core.Data.Staff", b =>

@@ -156,7 +156,7 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
 
         private int pageIndex = 1;
 
-        private int pageSize = 5;
+        private int pageSize = 15;
         private int totalPages = 0;
 
         public string PageUI => $"{pageIndex}/{totalPages}";

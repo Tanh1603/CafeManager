@@ -1,22 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using PdfSharp.Drawing;
+using PdfSharp.Pdf;
+using System.IO;
 using System.Windows;
 using System.Windows.Forms;
-using System.Windows.Media.Imaging;
 using System.Windows.Media;
+using System.Windows.Media.Imaging;
+using System.Drawing.Printing;
 using System.Drawing;
-using System.IO;
-using PdfSharp.Pdf;
-using PdfSharp.Drawing;
 
 namespace CafeManager.WPF.Services
 {
-    public class PrintInvoice
+    public static class PrintInvoiceServices
     {
-        public static string ShowSaveFileDialog()
+        public static string? ShowSaveFileDialog()
         {
             var dialog = new SaveFileDialog
             {
@@ -27,11 +23,12 @@ namespace CafeManager.WPF.Services
 
             if (dialog.ShowDialog() == DialogResult.OK)
             {
-                return dialog.FileName; 
+                return dialog.FileName;
             }
 
-            return null; 
+            return null;
         }
+
         public static BitmapSource RenderViewToBitmap(FrameworkElement element, double width, double height)
         {
             element.Measure(new System.Windows.Size(width, height));
@@ -44,28 +41,44 @@ namespace CafeManager.WPF.Services
             renderBitmap.Render(element);
             return renderBitmap;
         }
+
         public static void SaveBitmapToPdf(BitmapSource bitmap, string outputPath)
         {
-            // Chuyển BitmapSource sang MemoryStream
             var encoder = new PngBitmapEncoder();
             encoder.Frames.Add(BitmapFrame.Create(bitmap));
             using var memoryStream = new MemoryStream();
             encoder.Save(memoryStream);
 
-            // Tạo file PDF
             var pdfDocument = new PdfDocument();
             var page = pdfDocument.AddPage();
             var graphics = XGraphics.FromPdfPage(page);
 
-            // Chèn hình ảnh vào PDF
             using (XImage pdfImage = XImage.FromStream(memoryStream))
             {
                 graphics.DrawImage(pdfImage, 0, 0, page.Width, page.Height);
             }
+            pdfDocument.Save(outputPath);
+        }
 
-                // Lưu file
-                pdfDocument.Save(outputPath);
+        public static void PrintToPrinter(BitmapSource bitmap)
+        {
+            var encoder = new PngBitmapEncoder();
+            encoder.Frames.Add(BitmapFrame.Create(bitmap));
+            using var memoryStream = new MemoryStream();
+            encoder.Save(memoryStream);
+
+            var image = Image.FromStream(memoryStream);
+            PrintDocument printDoc = new PrintDocument();
+            printDoc.PrintPage += (sender, e) =>
+            {
+                e.Graphics.DrawImage(image, 0, 0);
+            };
+            PrintDialog printDialog = new PrintDialog();
+            if (printDialog.ShowDialog() == DialogResult.OK)
+            {
+                printDoc.PrinterSettings = printDialog.PrinterSettings;
+                printDoc.Print();
+            }
         }
     }
-
 }

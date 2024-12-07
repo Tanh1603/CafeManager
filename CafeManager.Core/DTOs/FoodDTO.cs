@@ -16,7 +16,7 @@ namespace CafeManager.Core.DTOs
 
         private decimal _price;
 
-        private BitmapImage _imagefood;
+        private BitmapImage? _imagefood;
 
         private decimal _discountfood;
 
@@ -78,7 +78,7 @@ namespace CafeManager.Core.DTOs
             }
         }
 
-        public BitmapImage Imagefood
+        public BitmapImage? Imagefood
         {
             get => _imagefood;
             set

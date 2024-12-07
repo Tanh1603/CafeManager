@@ -17,7 +17,7 @@ namespace CafeManager.WPF.Services
 
         public async Task<IEnumerable<Coffeetable>> GetListCoffeTable()
         {
-            return await _unitOfWork.CoffeeTableList.GetAllCoffeTableAsync();
+            return await _unitOfWork.CoffeeTableList.GetAll();
         }
 
         public async Task<IEnumerable<Invoice>> GetListInvoicesByCoffeeTableId(int id)

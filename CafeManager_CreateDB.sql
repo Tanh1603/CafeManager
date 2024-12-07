@@ -11,6 +11,13 @@ CREATE TABLE AppUser (
 
     CONSTRAINT PK_AppUserId PRIMARY KEY (AppUserId)
 );
+ALTER TABLE appuser
+ALTER COLUMN avatar TYPE BYTEA USING avatar::bytea;
+
+ALTER TABLE food
+ALTER COLUMN imagefood TYPE BYTEA USING imagefood::bytea;
+
+
 ------------------- Tạo bảng Staff -----------------------
 CREATE TABLE Staff (
     StaffId SERIAL,

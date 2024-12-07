@@ -5,41 +5,42 @@ namespace CafeManager.Core.Services
 {
     public static class ConvertImageServices
     {
-        public static string BitmapImageToBase64(BitmapImage? bitmapImage)
+        public static byte[] BitmapImageToByteArray(BitmapImage? bitmapImage)
         {
             if (bitmapImage == null)
-                return string.Empty;
+            {
+                return [];
+            }
+            byte[] data;
+            var encoder = new PngBitmapEncoder();
+            encoder.Frames.Add(BitmapFrame.Create(bitmapImage));
 
-            // Convert BitmapImage to a MemoryStream
             using (var memoryStream = new MemoryStream())
             {
-                BitmapEncoder encoder = new PngBitmapEncoder();
-                encoder.Frames.Add(BitmapFrame.Create(bitmapImage));
                 encoder.Save(memoryStream);
-                byte[] imageBytes = memoryStream.ToArray();
-
-                // Convert byte array to base64 string
-                return Convert.ToBase64String(imageBytes);
+                data = memoryStream.ToArray();
             }
+
+            return data;
         }
 
-        public static BitmapImage? Base64ToBitmapImage(string base64String)
+        public static BitmapImage? ByteArrayToBitmapImage(byte[] byteArray)
         {
-            if (string.IsNullOrEmpty(base64String))
+            if (byteArray.Length == 0)
             {
                 return null;
             }
-            byte[] imageBytes = Convert.FromBase64String(base64String);
-            using (var stream = new MemoryStream(imageBytes))
+            var bitmapImage = new BitmapImage();
+            using (MemoryStream memoryStream = new(byteArray))
             {
-                BitmapImage image = new BitmapImage();
-                image.BeginInit();
-                image.StreamSource = stream;
-                image.CacheOption = BitmapCacheOption.OnLoad;
-                image.EndInit();
-                image.Freeze();
-                return image;
+                memoryStream.Position = 0; // Đặt lại con trỏ
+                bitmapImage.BeginInit();
+                bitmapImage.StreamSource = memoryStream;
+                bitmapImage.CacheOption = BitmapCacheOption.OnLoad; // Tải toàn bộ dữ liệu vào bộ nhớ
+                bitmapImage.EndInit();
+                bitmapImage.Freeze(); // Đóng băng để tránh thay đổi
             }
+            return bitmapImage;
         }
     }
 }

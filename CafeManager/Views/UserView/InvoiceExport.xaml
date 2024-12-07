@@ -5,6 +5,7 @@
     xmlns:converter="clr-namespace:CafeManager.WPF.Services.Converter"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:local="clr-namespace:CafeManager.WPF.Views.UserView"
+    xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:userviewmodel="clr-namespace:CafeManager.WPF.ViewModels.UserViewModel"
     Width="500"
@@ -154,7 +155,7 @@
                 </ListView>
             </Grid>
 
-            <Grid Grid.Row="4" Margin="0,10,0,0">
+            <Grid Grid.Row="3" Margin="0,10,0,0">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="auto" />
                     <ColumnDefinition Width="*" />
@@ -237,7 +238,7 @@
                 </Grid>
             </Grid>
             <Grid
-                Grid.Row="5"
+                Grid.Row="4"
                 Margin="0,10,0,0"
                 HorizontalAlignment="Center">
                 <TextBlock
@@ -247,6 +248,28 @@
                     Foreground="#844518"
                     Text="Cảm ơn quý khách! Hẹn gặp lại!" />
             </Grid>
+            <StackPanel
+                x:Name="btnChoice"
+                Grid.Row="5"
+                Margin="0,10,0,0"
+                HorizontalAlignment="Center"
+                Orientation="Horizontal">
+                <Button
+                    Name="Print"
+                    Margin="0,0,10,0"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center"
+                    Click="Print_Click">
+                    <materialDesign:PackIcon Kind="Printer" />
+                </Button>
+                <Button
+                    Name="Save"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center"
+                    Click="Save_Click">
+                    <materialDesign:PackIcon Kind="ContentSaveCheck" />
+                </Button>
+            </StackPanel>
         </Grid>
     </Border>
 </Window>

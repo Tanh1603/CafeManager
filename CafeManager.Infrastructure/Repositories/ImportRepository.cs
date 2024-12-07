@@ -34,15 +34,13 @@ namespace CafeManager.Infrastructure.Repositories
                 {
                     if (updateEntities.TryGetValue(existingEntity.Importdetailid, out var newEntity))
                     {
+                        // Xử lý Materialsupplier
+                        if (newEntity.Materialsupplier != null)
+                        {
+                            _cafeManagerContext.Entry(existingEntity.Materialsupplier).CurrentValues.SetValues(newEntity.Materialsupplier);
+                        }
                         // Cập nhật bản ghi nếu tìm thấy
                         _cafeManagerContext.Entry(existingEntity).CurrentValues.SetValues(newEntity);
-
-                        // Xử lý Materialsupplier
-                        var updateMaterialsupplier = await _cafeManagerContext.Materialsuppliers.FindAsync(existingEntity.Materialsupplierid);
-                        if (updateMaterialsupplier != null)
-                        {
-                            _cafeManagerContext.Entry(update).CurrentValues.SetValues(existingEntity.Materialsupplier);
-                        }
                         updateEntities.Remove(existingEntity.Importdetailid);
                     }
                 }

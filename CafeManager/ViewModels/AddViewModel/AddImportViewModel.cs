@@ -181,6 +181,7 @@ namespace CafeManager.WPF.ViewModels.AddViewModel
 
                 if (find != null)
                 {
+                    find.Materialsupplier.Materialid = CurrentImportDetail.Materialsupplier.Materialid;
                     find.Materialsupplier.Material = CurrentImportDetail.Materialsupplier.Material;
                     find.Materialsupplier.Price = CurrentImportDetail.Materialsupplier.Price;
                     find.Materialsupplier.Original = CurrentImportDetail.Materialsupplier.Original;

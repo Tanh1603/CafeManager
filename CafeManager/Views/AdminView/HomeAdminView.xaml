@@ -31,8 +31,8 @@
                 <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
-                <RowDefinition Height="1.5*" />
                 <RowDefinition Height="*" />
+                <RowDefinition Height="1.5*" />
             </Grid.RowDefinitions>
             <Grid Margin="10,20,10,10">
                 <Grid.RowDefinitions>
@@ -56,267 +56,46 @@
                         Background="#f5f5f5" />
 
                 </StackPanel>
-                <Grid Grid.Row="1" Margin="0,5,0,0">
-                    <Border Padding="10" CornerRadius="10">
+
+                <Grid  Grid.Row="1" Margin="0 10 0 0">
+
+                    <Border Padding="10 0 10 0" CornerRadius="10">
                         <Border.Background>
                             <LinearGradientBrush StartPoint="0,0.5" EndPoint="1,0.5">
+                                
                                 <GradientStop Offset="1" Color="#fee3d4" />
                                 <GradientStop Offset="0" Color="#f2ccb7" />
                             </LinearGradientBrush>
                         </Border.Background>
                         <Grid>
                             <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="*" />
-                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
                             </Grid.ColumnDefinitions>
-
-                            <Grid Grid.IsSharedSizeScope="True">
-                                <Grid.RowDefinitions>
-                                    <RowDefinition Height="*" />
-                                    <RowDefinition Height="*" />
-                                    <RowDefinition Height="*" />
-                                </Grid.RowDefinitions>
-                                <Grid Margin="0,0,0,5">
-                                    <Border Padding="5" CornerRadius="10">
-                                        <Border.Background>
-                                            <LinearGradientBrush StartPoint="0,0.5" EndPoint="1,0.5">
-                                                <GradientStop Offset="0" Color="#9c6d3f" />
-                                                <GradientStop Offset="1" Color="#cb925d" />
-                                            </LinearGradientBrush>
-                                        </Border.Background>
-                                        <Grid>
-                                            <Grid.ColumnDefinitions>
-                                                <ColumnDefinition Width="auto" />
-                                                <ColumnDefinition Width="auto" SharedSizeGroup="Label" />
-                                                <ColumnDefinition Width="*" />
-                                            </Grid.ColumnDefinitions>
-                                            <ma:PackIconMaterial
-                                                MinWidth="25"
-                                                MinHeight="25"
-                                                VerticalAlignment="Center"
-                                                Foreground="#fee3d4"
-                                                Kind="Cash" />
-                                            <Grid Grid.Column="1" Margin="10,0,0,0">
-                                                <TextBlock Style="{StaticResource statisText}" Text="Doanh thu: " />
-
-                                            </Grid>
-                                            <Grid Grid.Column="2">
-                                                <TextBlock
-                                                    Foreground="#DEDEDE"
-                                                    Style="{StaticResource statisText}"
-                                                    Text="123" />
-                                            </Grid>
-                                        </Grid>
-
-                                    </Border>
-                                </Grid>
-                                <Grid
-                                    Grid.Row="2"
-                                    Grid.Column="0"
-                                    Margin="0,0,0,5">
-                                    <Border Padding="5" CornerRadius="10">
-                                        <Border.Background>
-                                            <LinearGradientBrush StartPoint="0,0.5" EndPoint="1,0.5">
-                                                <GradientStop Offset="0" Color="#9c6d3f" />
-                                                <GradientStop Offset="1" Color="#cb925d" />
-                                            </LinearGradientBrush>
-                                        </Border.Background>
-                                        <Grid>
-                                            <Grid.ColumnDefinitions>
-                                                <ColumnDefinition Width="auto" />
-                                                <ColumnDefinition Width="auto" SharedSizeGroup="Label" />
-                                                <ColumnDefinition Width="*" />
-                                            </Grid.ColumnDefinitions>
-                                            <ma:PackIconMaterial
-                                                MinWidth="25"
-                                                MinHeight="25"
-                                                VerticalAlignment="Center"
-                                                Foreground="#fee3d4"
-                                                Kind="Truck" />
-                                            <Grid Grid.Column="1" Margin="10,0,0,0">
-                                                <TextBlock Style="{StaticResource statisText}" Text="Nguyên liệu: " />
-
-                                            </Grid>
-                                            <Grid Grid.Column="2">
-                                                <TextBlock
-                                                    Foreground="#DEDEDE"
-                                                    Style="{StaticResource statisText}"
-                                                    Text="123" />
-                                            </Grid>
-                                        </Grid>
-
-                                    </Border>
-                                </Grid>
-                                <Grid
-                                    Grid.Row="1"
-                                    Grid.Column="0"
-                                    Margin="0,0,0,5">
-                                    <Border Padding="5" CornerRadius="10">
-                                        <Border.Background>
-                                            <LinearGradientBrush StartPoint="0,0.5" EndPoint="1,0.5">
-                                                <GradientStop Offset="0" Color="#9c6d3f" />
-                                                <GradientStop Offset="1" Color="#cb925d" />
-                                            </LinearGradientBrush>
-                                        </Border.Background>
-                                        <Grid>
-                                            <Grid.ColumnDefinitions>
-                                                <ColumnDefinition Width="auto" />
-                                                <ColumnDefinition Width="auto" SharedSizeGroup="Label" />
-                                                <ColumnDefinition Width="*" />
-                                            </Grid.ColumnDefinitions>
-                                            <ma:PackIconMaterial
-                                                MinWidth="25"
-                                                MinHeight="25"
-                                                VerticalAlignment="Center"
-                                                Foreground="#fee3d4"
-                                                Kind="InvoiceText" />
-                                            <Grid Grid.Column="1" Margin="10,0,0,0">
-                                                <TextBlock Style="{StaticResource statisText}" Text="Hóa đơn: " />
-
-                                            </Grid>
-                                            <Grid Grid.Column="2">
-                                                <TextBlock
-                                                    Foreground="#DEDEDE"
-                                                    Style="{StaticResource statisText}"
-                                                    Text="123" />
-                                            </Grid>
-                                        </Grid>
-
-                                    </Border>
-                                </Grid>
+                            <Grid >
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="auto"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Text="Từ:" Style="{StaticResource infoText}" FontWeight="Bold"/>
+                                <DatePicker Grid.Column="1" Style="{StaticResource DatePicker}" CalendarStyle="{StaticResource MaterialDesignCalendarPortrait}" Tag="--Chọn ngày--" Margin="0 15 0 15"/>
                             </Grid>
-
-                            <Grid Grid.Column="1" Grid.IsSharedSizeScope="True">
-                                <Grid.RowDefinitions>
-                                    <RowDefinition Height="*" />
-                                    <RowDefinition Height="*" />
-                                    <RowDefinition Height="*" />
-                                </Grid.RowDefinitions>
-                                <Grid Grid.Column="1" Margin="10,0,0,5">
-                                    <Border Padding="5" CornerRadius="10">
-                                        <Border.Background>
-                                            <LinearGradientBrush StartPoint="0,0.5" EndPoint="1,0.5">
-                                                <GradientStop Offset="0" Color="#9c6d3f" />
-                                                <GradientStop Offset="1" Color="#cb925d" />
-                                            </LinearGradientBrush>
-                                        </Border.Background>
-                                        <Grid>
-                                            <Grid.ColumnDefinitions>
-                                                <ColumnDefinition Width="auto" />
-                                                <ColumnDefinition Width="auto" SharedSizeGroup="Label2" />
-                                                <ColumnDefinition Width="*" />
-                                            </Grid.ColumnDefinitions>
-                                            <ma:PackIconMaterial
-                                                MinWidth="25"
-                                                MinHeight="25"
-                                                VerticalAlignment="Center"
-                                                Foreground="#fee3d4"
-                                                Kind="AccountCircle" />
-                                            <Grid Grid.Column="1" Margin="10,0,0,0">
-                                                <TextBlock Style="{StaticResource statisText}" Text="Nhân viên: " />
-
-                                            </Grid>
-                                            <Grid Grid.Column="2">
-                                                <TextBlock
-                                                    Foreground="#DEDEDE"
-                                                    Style="{StaticResource statisText}"
-                                                    Text="123" />
-                                            </Grid>
-                                        </Grid>
-
-                                    </Border>
-                                </Grid>
-                                <Grid
-                                    Grid.Row="1"
-                                    Grid.Column="1"
-                                    Margin="10,0,0,5">
-                                    <Border Padding="5" CornerRadius="10">
-                                        <Border.Background>
-                                            <LinearGradientBrush StartPoint="0,0.5" EndPoint="1,0.5">
-                                                <GradientStop Offset="0" Color="#9c6d3f" />
-                                                <GradientStop Offset="1" Color="#cb925d" />
-                                            </LinearGradientBrush>
-                                        </Border.Background>
-                                        <Grid>
-                                            <Grid.ColumnDefinitions>
-                                                <ColumnDefinition Width="auto" />
-                                                <ColumnDefinition Width="auto" SharedSizeGroup="Label2" />
-                                                <ColumnDefinition Width="*" />
-                                            </Grid.ColumnDefinitions>
-                                            <ma:PackIconMaterial
-                                                MinWidth="25"
-                                                MinHeight="25"
-                                                VerticalAlignment="Center"
-                                                Foreground="#fee3d4"
-                                                Kind="GlassCocktail" />
-                                            <Grid Grid.Column="1" Margin="10,0,0,0">
-                                                <TextBlock Style="{StaticResource statisText}" Text="Thực đơn: " />
-
-                                            </Grid>
-                                            <Grid Grid.Column="2">
-                                                <TextBlock
-                                                    Foreground="#DEDEDE"
-                                                    Style="{StaticResource statisText}"
-                                                    Text="123" />
-                                            </Grid>
-                                        </Grid>
-
-                                    </Border>
-                                </Grid>
-                                <Grid
-                                    Grid.Row="2"
-                                    Grid.Column="1"
-                                    Margin="10,0,0,5">
-                                    <Border Padding="5" CornerRadius="10">
-                                        <Border.Background>
-                                            <LinearGradientBrush StartPoint="0,0.5" EndPoint="1,0.5">
-                                                <GradientStop Offset="0" Color="#9c6d3f" />
-                                                <GradientStop Offset="1" Color="#cb925d" />
-                                            </LinearGradientBrush>
-                                        </Border.Background>
-                                        <Grid>
-                                            <Grid.ColumnDefinitions>
-                                                <ColumnDefinition Width="auto" />
-                                                <ColumnDefinition Width="auto" SharedSizeGroup="Label2" />
-                                                <ColumnDefinition Width="*" />
-                                            </Grid.ColumnDefinitions>
-                                            <ma:PackIconMaterial
-                                                MinWidth="25"
-                                                MinHeight="25"
-                                                VerticalAlignment="Center"
-                                                Foreground="#fee3d4"
-                                                Kind="TableFurniture" />
-                                            <Grid Grid.Column="1" Margin="10,0,0,0">
-                                                <TextBlock Style="{StaticResource statisText}" Text="Bàn: " />
-
-                                            </Grid>
-                                            <Grid Grid.Column="2">
-                                                <TextBlock
-                                                    Foreground="#DEDEDE"
-                                                    Style="{StaticResource statisText}"
-                                                    Text="123" />
-                                            </Grid>
-                                        </Grid>
-
-                                    </Border>
-                                </Grid>
+                            <Grid Grid.Column="1" Margin="10 0 0 0">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="auto"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Text="Đến:" Style="{StaticResource infoText}" FontWeight="Bold"/>
+                                <DatePicker  Grid.Column="1" Style="{StaticResource DatePicker}" CalendarStyle="{StaticResource MaterialDesignCalendarPortrait}" Tag="--Chọn ngày--"/>
                             </Grid>
-
-
-
-
-
                         </Grid>
+
                     </Border>
                 </Grid>
 
-
             </Grid>
-            <Grid
-                Grid.Row="0"
-                Grid.Column="1"
-                Margin="10,0,10,10">
 
+            <Grid Grid.Column="1" Margin="10">
                 <Border Padding="10" CornerRadius="10">
                     <Border.Background>
                         <LinearGradientBrush StartPoint="0,0.5" EndPoint="1,0.5">
@@ -324,12 +103,249 @@
                             <GradientStop Offset="0" Color="#f2ccb7" />
                         </LinearGradientBrush>
                     </Border.Background>
-                    <Calendar
-                        HorizontalAlignment="Stretch"
-                        VerticalAlignment="Stretch"
-                        materialDesign:CalendarAssist.HeaderBackground="#844518"
-                        materialDesign:CalendarAssist.Orientation="Horizontal" />
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
 
+                        <Grid Grid.IsSharedSizeScope="True">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="*" />
+                                <RowDefinition Height="*" />
+                                <RowDefinition Height="*" />
+                            </Grid.RowDefinitions>
+                            <Grid Margin="0,0,0,5">
+                                <Border Padding="5" CornerRadius="10">
+                                    <Border.Background>
+                                        <LinearGradientBrush StartPoint="0,0.5" EndPoint="1,0.5">
+                                            <GradientStop Offset="0" Color="#9c6d3f" />
+                                            <GradientStop Offset="1" Color="#cb925d" />
+                                        </LinearGradientBrush>
+                                    </Border.Background>
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="auto" />
+                                            <ColumnDefinition Width="auto" SharedSizeGroup="Label" />
+                                            <ColumnDefinition Width="*" />
+                                        </Grid.ColumnDefinitions>
+                                        <ma:PackIconMaterial
+                                            MinWidth="25"
+                                            MinHeight="25"
+                                            VerticalAlignment="Center"
+                                            Foreground="#fee3d4"
+                                            Kind="Cash" />
+                                        <Grid Grid.Column="1" Margin="10,0,0,0">
+                                            <TextBlock Style="{StaticResource statisText}" Text="Doanh thu: " />
+
+                                        </Grid>
+                                        <Grid Grid.Column="2">
+                                            <TextBlock
+                                                Foreground="#DEDEDE"
+                                                Style="{StaticResource statisText}"
+                                                Text="123" />
+                                        </Grid>
+                                    </Grid>
+
+                                </Border>
+                            </Grid>
+                            <Grid
+                                Grid.Row="2"
+                                Grid.Column="0"
+                                Margin="0,0,0,5">
+                                <Border Padding="5" CornerRadius="10">
+                                    <Border.Background>
+                                        <LinearGradientBrush StartPoint="0,0.5" EndPoint="1,0.5">
+                                            <GradientStop Offset="0" Color="#9c6d3f" />
+                                            <GradientStop Offset="1" Color="#cb925d" />
+                                        </LinearGradientBrush>
+                                    </Border.Background>
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="auto" />
+                                            <ColumnDefinition Width="auto" SharedSizeGroup="Label" />
+                                            <ColumnDefinition Width="*" />
+                                        </Grid.ColumnDefinitions>
+                                        <ma:PackIconMaterial
+                                            MinWidth="25"
+                                            MinHeight="25"
+                                            VerticalAlignment="Center"
+                                            Foreground="#fee3d4"
+                                            Kind="Truck" />
+                                        <Grid Grid.Column="1" Margin="10,0,0,0">
+                                            <TextBlock Style="{StaticResource statisText}" Text="Nguyên liệu: " />
+
+                                        </Grid>
+                                        <Grid Grid.Column="2">
+                                            <TextBlock
+                                                Foreground="#DEDEDE"
+                                                Style="{StaticResource statisText}"
+                                                Text="123" />
+                                        </Grid>
+                                    </Grid>
+
+                                </Border>
+                            </Grid>
+                            <Grid
+                                Grid.Row="1"
+                                Grid.Column="0"
+                                Margin="0,0,0,5">
+                                <Border Padding="5" CornerRadius="10">
+                                    <Border.Background>
+                                        <LinearGradientBrush StartPoint="0,0.5" EndPoint="1,0.5">
+                                            <GradientStop Offset="0" Color="#9c6d3f" />
+                                            <GradientStop Offset="1" Color="#cb925d" />
+                                        </LinearGradientBrush>
+                                    </Border.Background>
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="auto" />
+                                            <ColumnDefinition Width="auto" SharedSizeGroup="Label" />
+                                            <ColumnDefinition Width="*" />
+                                        </Grid.ColumnDefinitions>
+                                        <ma:PackIconMaterial
+                                            MinWidth="25"
+                                            MinHeight="25"
+                                            VerticalAlignment="Center"
+                                            Foreground="#fee3d4"
+                                            Kind="InvoiceText" />
+                                        <Grid Grid.Column="1" Margin="10,0,0,0">
+                                            <TextBlock Style="{StaticResource statisText}" Text="Hóa đơn: " />
+
+                                        </Grid>
+                                        <Grid Grid.Column="2">
+                                            <TextBlock
+                                                Foreground="#DEDEDE"
+                                                Style="{StaticResource statisText}"
+                                                Text="123" />
+                                        </Grid>
+                                    </Grid>
+
+                                </Border>
+                            </Grid>
+                        </Grid>
+
+                        <Grid Grid.Column="1" Grid.IsSharedSizeScope="True">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="*" />
+                                <RowDefinition Height="*" />
+                                <RowDefinition Height="*" />
+                            </Grid.RowDefinitions>
+                            <Grid Grid.Column="1" Margin="10,0,0,5">
+                                <Border Padding="5" CornerRadius="10">
+                                    <Border.Background>
+                                        <LinearGradientBrush StartPoint="0,0.5" EndPoint="1,0.5">
+                                            <GradientStop Offset="0" Color="#9c6d3f" />
+                                            <GradientStop Offset="1" Color="#cb925d" />
+                                        </LinearGradientBrush>
+                                    </Border.Background>
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="auto" />
+                                            <ColumnDefinition Width="auto" SharedSizeGroup="Label2" />
+                                            <ColumnDefinition Width="*" />
+                                        </Grid.ColumnDefinitions>
+                                        <ma:PackIconMaterial
+                                            MinWidth="25"
+                                            MinHeight="25"
+                                            VerticalAlignment="Center"
+                                            Foreground="#fee3d4"
+                                            Kind="AccountCircle" />
+                                        <Grid Grid.Column="1" Margin="10,0,0,0">
+                                            <TextBlock Style="{StaticResource statisText}" Text="Nhân viên: " />
+
+                                        </Grid>
+                                        <Grid Grid.Column="2">
+                                            <TextBlock
+                                                Foreground="#DEDEDE"
+                                                Style="{StaticResource statisText}"
+                                                Text="123" />
+                                        </Grid>
+                                    </Grid>
+
+                                </Border>
+                            </Grid>
+                            <Grid
+                                Grid.Row="1"
+                                Grid.Column="1"
+                                Margin="10,0,0,5">
+                                <Border Padding="5" CornerRadius="10">
+                                    <Border.Background>
+                                        <LinearGradientBrush StartPoint="0,0.5" EndPoint="1,0.5">
+                                            <GradientStop Offset="0" Color="#9c6d3f" />
+                                            <GradientStop Offset="1" Color="#cb925d" />
+                                        </LinearGradientBrush>
+                                    </Border.Background>
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="auto" />
+                                            <ColumnDefinition Width="auto" SharedSizeGroup="Label2" />
+                                            <ColumnDefinition Width="*" />
+                                        </Grid.ColumnDefinitions>
+                                        <ma:PackIconMaterial
+                                            MinWidth="25"
+                                            MinHeight="25"
+                                            VerticalAlignment="Center"
+                                            Foreground="#fee3d4"
+                                            Kind="GlassCocktail" />
+                                        <Grid Grid.Column="1" Margin="10,0,0,0">
+                                            <TextBlock Style="{StaticResource statisText}" Text="Thực đơn: " />
+
+                                        </Grid>
+                                        <Grid Grid.Column="2">
+                                            <TextBlock
+                                                Foreground="#DEDEDE"
+                                                Style="{StaticResource statisText}"
+                                                Text="123" />
+                                        </Grid>
+                                    </Grid>
+
+                                </Border>
+                            </Grid>
+                            <Grid
+                                Grid.Row="2"
+                                Grid.Column="1"
+                                Margin="10,0,0,5">
+                                <Border Padding="5" CornerRadius="10">
+                                    <Border.Background>
+                                        <LinearGradientBrush StartPoint="0,0.5" EndPoint="1,0.5">
+                                            <GradientStop Offset="0" Color="#9c6d3f" />
+                                            <GradientStop Offset="1" Color="#cb925d" />
+                                        </LinearGradientBrush>
+                                    </Border.Background>
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="auto" />
+                                            <ColumnDefinition Width="auto" SharedSizeGroup="Label2" />
+                                            <ColumnDefinition Width="*" />
+                                        </Grid.ColumnDefinitions>
+                                        <ma:PackIconMaterial
+                                            MinWidth="25"
+                                            MinHeight="25"
+                                            VerticalAlignment="Center"
+                                            Foreground="#fee3d4"
+                                            Kind="TableFurniture" />
+                                        <Grid Grid.Column="1" Margin="10,0,0,0">
+                                            <TextBlock Style="{StaticResource statisText}" Text="Bàn: " />
+
+                                        </Grid>
+                                        <Grid Grid.Column="2">
+                                            <TextBlock
+                                                Foreground="#DEDEDE"
+                                                Style="{StaticResource statisText}"
+                                                Text="123" />
+                                        </Grid>
+                                    </Grid>
+
+                                </Border>
+                            </Grid>
+                        </Grid>
+
+
+
+
+
+                    </Grid>
                 </Border>
             </Grid>
 

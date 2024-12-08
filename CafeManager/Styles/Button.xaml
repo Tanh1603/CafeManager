@@ -77,7 +77,72 @@
             </Trigger>
         </Style.Triggers>
     </Style>
-    
+    <Style x:Key="menuSettingBtn" TargetType="Button">
+        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="Foreground" Value="#dac5b4" />
+        <Setter Property="Margin" Value="0,0,0,5" />
+        <Setter Property="Height" Value="45" />
+        <Setter Property="FocusVisualStyle" Value="{x:Null}" />
+        <Setter Property="Tag" Value="#dac5b4" />
+        <Setter Property="Cursor" Value="Hand" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Button">
+                    <Border
+                        Background="{TemplateBinding Background}"
+                        BorderBrush="Transparent"
+                        BorderThickness="0">
+                        <ContentPresenter HorizontalAlignment="Stretch" VerticalAlignment="Center" />
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+
+        <Style.Triggers>
+            <Trigger Property="IsMouseOver" Value="True">
+                <Setter Property="Foreground" Value="#dedede" />
+
+            </Trigger>
+            <Trigger Property="IsPressed" Value="True">
+                <Setter Property="Foreground" Value="#dedede" />
+
+            </Trigger>
+        </Style.Triggers>
+    </Style>
+
+    <Style x:Key="menuLogOutButton" TargetType="RadioButton">
+        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="Foreground" Value="#dac5b4" />
+        <Setter Property="Margin" Value="0,0,0,5" />
+        <Setter Property="Height" Value="45" />
+        <Setter Property="FocusVisualStyle" Value="{x:Null}" />
+        <Setter Property="Tag" Value="#dac5b4" />
+        <Setter Property="Cursor" Value="Hand" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="RadioButton">
+                    <Border
+                        Background="{TemplateBinding Background}"
+                        BorderBrush="Transparent"
+                        BorderThickness="0">
+                        <ContentPresenter HorizontalAlignment="Stretch" VerticalAlignment="Center" />
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+
+        <Style.Triggers>
+            <Trigger Property="IsMouseOver" Value="True">
+                <Setter Property="Foreground" Value="#dedede" />
+
+            </Trigger>
+            <Trigger Property="IsChecked" Value="True">
+                <Setter Property="Foreground" Value="#dedede" />
+
+            </Trigger>
+        </Style.Triggers>
+    </Style>
+
     <Style x:Key="menuButtonText" TargetType="TextBlock">
         <Setter Property="FontSize" Value="13" />
         <Setter Property="VerticalAlignment" Value="Center" />
@@ -95,7 +160,7 @@
         <Setter Property="Background" Value="#DEDEDE" />
         <Setter Property="Foreground" Value="#dac5b4" />
         <Setter Property="Margin" Value="7" />
-       
+
         <Setter Property="FocusVisualStyle" Value="{x:Null}" />
         <Setter Property="BorderThickness" Value="0" />
         <Setter Property="Template">
@@ -152,9 +217,9 @@
             <Setter.Value>
                 <ControlTemplate TargetType="CheckBox">
                     <Border
-                 Background="{TemplateBinding Background}"
-                 BorderBrush="Transparent"
-                 CornerRadius="15">
+                        Background="{TemplateBinding Background}"
+                        BorderBrush="Transparent"
+                        CornerRadius="15">
                         <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
                     </Border>
                 </ControlTemplate>
@@ -190,22 +255,25 @@
             </Trigger>
         </Style.Triggers>
     </Style>
-        
-    <Style x:Key="statisBtn" TargetType="RadioButton" BasedOn="{StaticResource topMenuButton}">
+
+    <Style
+        x:Key="statisBtn"
+        BasedOn="{StaticResource topMenuButton}"
+        TargetType="RadioButton">
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="RadioButton">
                     <Border
-                Background="{TemplateBinding Background}"
-                BorderBrush="Transparent"
-                CornerRadius="50">
+                        Background="{TemplateBinding Background}"
+                        BorderBrush="Transparent"
+                        CornerRadius="50">
                         <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
                     </Border>
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
     </Style>
-    
+
     <!--#region buttonOrder-->
     <Style x:Key="orderButton" TargetType="Button">
         <Setter Property="Background" Value="Transparent" />
@@ -482,9 +550,9 @@
         x:Key="gridRemoveButton"
         BasedOn="{StaticResource gridEditButton}"
         TargetType="Button">
-    
-        
-  
+
+
+
 
         <Style.Triggers>
             <Trigger Property="IsMouseOver" Value="True">

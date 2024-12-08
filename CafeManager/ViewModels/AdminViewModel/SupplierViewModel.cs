@@ -193,7 +193,7 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
                     {
                         var restore = AllSupplier.First(x => x.Supplierid == supplier.Supplierid);
                         restore.Isdeleted = false;
-                        MyMessageBox.ShowDialog("Hiển thị nhà cung cấp thanh công");
+                        MyMessageBox.ShowDialog("Hiển thị nhà cung cấp thành công");
                         FilterSupplier();
                     }
                     else

@@ -4,6 +4,7 @@ using CafeManager.WPF.ViewModels.AdminViewModel;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Microsoft.Extensions.DependencyInjection;
+using System.Web;
 
 namespace CafeManager.WPF.ViewModels
 {
@@ -15,6 +16,10 @@ namespace CafeManager.WPF.ViewModels
 
         [ObservableProperty]
         private ObservableObject _currentViewModel;
+
+        [ObservableProperty]
+        private SettingAccountViewModel _openSettingAccountVM;
+
 
         [ObservableProperty]
         private AppUserDTO _adminAccount = new();
@@ -33,6 +38,7 @@ namespace CafeManager.WPF.ViewModels
             currentVM = "Home";
             //CurrentViewModel = _provider.GetRequiredService<InventoryViewModel>();
             //currentVM = "Inventory";
+            OpenSettingAccountVM = _provider.GetRequiredService<SettingAccountViewModel>();
             LoadAccount();
             _accountStore.ChangeAccount += _accountStore_ChangeAccount;
         }
@@ -123,6 +129,29 @@ namespace CafeManager.WPF.ViewModels
             {
                 _accountStore.ChangeAccount -= _accountStore_ChangeAccount;
             }
+        }
+
+        [ObservableProperty]
+        private string _selectedOption ="Home" ;
+
+
+
+        [ObservableProperty]
+        private bool _isOpenSetting = false;
+
+
+        [RelayCommand]
+        private void OpenSetting()
+        {
+            IsOpenSetting = true;
+            
+        }
+
+        [RelayCommand]
+        private void CloseSetting()
+        {
+            IsOpenSetting = false;
+            
         }
     }
 }

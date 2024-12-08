@@ -116,7 +116,7 @@
             </Setter.Value>
         </Setter>
         <Style.Triggers>
-            <!-- Khi có lỗi, không thay đổi BorderBrush -->
+            <!--  Khi có lỗi, không thay đổi BorderBrush  -->
             <Trigger Property="Validation.HasError" Value="True">
                 <Setter Property="BorderBrush" Value="Transparent" />
                 <Setter Property="BorderThickness" Value="0" />
@@ -127,8 +127,8 @@
     <Style x:Key="txtBoxDatePicker" TargetType="TextBox">
         <Setter Property="Background" Value="#D9C6B3" />
         <Setter Property="Foreground" Value="#844418" />
-     
-      
+
+
         <Setter Property="FontSize" Value="12" />
         <Setter Property="Padding" Value="10" />
 
@@ -157,19 +157,19 @@
         </Setter>
     </Style>
 
-    
-    
-    
-    
+
+
+
+
     <ControlTemplate x:Key="ErrorMessage">
         <StackPanel>
             <AdornedElementPlaceholder x:Name="textbox" />
 
             <TextBlock
-             Width="{Binding ActualWidth, ElementName=textbox}"
-             Foreground="Red"
-             Text="{Binding [0].ErrorContent}"
-             TextWrapping="Wrap" />
+                Width="{Binding ActualWidth, ElementName=textbox}"
+                Foreground="Red"
+                Text="{Binding [0].ErrorContent}"
+                TextWrapping="Wrap" />
 
 
         </StackPanel>

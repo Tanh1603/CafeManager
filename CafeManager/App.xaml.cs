@@ -1,4 +1,6 @@
-﻿using CafeManager.WPF.HostBuilders;
+﻿using CafeManager.Infrastructure.Models;
+using CafeManager.WPF.HostBuilders;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using System.Windows;

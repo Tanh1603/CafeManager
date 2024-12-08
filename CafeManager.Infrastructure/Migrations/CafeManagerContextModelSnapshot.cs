@@ -34,8 +34,8 @@ namespace CafeManager.Infrastructure.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Appuserid"));
 
-                    b.Property<string>("Avatar")
-                        .HasColumnType("text")
+                    b.Property<byte[]>("Avatar")
+                        .HasColumnType("bytea")
                         .HasColumnName("avatar");
 
                     b.Property<string>("Displayname")
@@ -185,8 +185,8 @@ namespace CafeManager.Infrastructure.Migrations
                         .HasColumnType("character varying(100)")
                         .HasColumnName("foodname");
 
-                    b.Property<string>("Imagefood")
-                        .HasColumnType("text")
+                    b.Property<byte[]>("Imagefood")
+                        .HasColumnType("bytea")
                         .HasColumnName("imagefood");
 
                     b.Property<bool?>("Isdeleted")

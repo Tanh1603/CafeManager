@@ -76,7 +76,7 @@ namespace CafeManager.WPF.ViewModels
                     appuser.Username = Account.Username;
                     appuser.Displayname = Account.Displayname;
                     appuser.Email = Account.Email;
-                    appuser.Avatar = ConvertImageServices.BitmapImageToBase64(Account.Avatar);
+                    appuser.Avatar = ConvertImageServices.BitmapImageToByteArray(Account.Avatar);
                     Appuser? res = await _appUserServices.UpdateAppUser(appuser);
                     if (res != null)
                     {
@@ -105,7 +105,7 @@ namespace CafeManager.WPF.ViewModels
                     if (Account.Username != _accountStore.Account.Username
                 || Account.Displayname != _accountStore.Account.Displayname
                 || Account.Email != _accountStore.Account.Email
-                || ConvertImageServices.BitmapImageToBase64(Account.Avatar) != ConvertImageServices.BitmapImageToBase64(_accountStore.Account.Avatar)
+                || ConvertImageServices.BitmapImageToByteArray(Account.Avatar) != ConvertImageServices.BitmapImageToByteArray(_accountStore.Account.Avatar)
                 )
                     {
                         MyMessageBox.ShowDialog("Vui lòng cập nhật tài khoản trước khi thay đổi mật khẩu");

@@ -13,7 +13,7 @@ namespace CafeManager.Core.DTOs
         private string _displayName;
         private string _email;
         private string _role;
-        private BitmapImage _avatar;
+        private BitmapImage? _avatar;
         private bool _isDeleted;
 
         public int Appuserid
@@ -81,7 +81,7 @@ namespace CafeManager.Core.DTOs
             }
         }
 
-        public BitmapImage Avatar
+        public BitmapImage? Avatar
         {
             get => _avatar;
             set

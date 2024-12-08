@@ -15,7 +15,6 @@ using System.Drawing.Text;
 
 namespace CafeManager.WPF.ViewModels
 {
-    
     public partial class RegisterViewModel : ObservableValidator
     {
         private readonly IServiceProvider _provider;
@@ -43,7 +42,6 @@ namespace CafeManager.WPF.ViewModels
             return new ValidationResult("Tên người dùng chỉ được chứa chữ cái, số và dài từ 3 đến 20 ký tự.");
         }
 
-
         [ObservableProperty]
         [NotifyDataErrorInfo]
         [Required(ErrorMessage = "Tên hiển thị không được để trống.")]
@@ -54,7 +52,6 @@ namespace CafeManager.WPF.ViewModels
 
         public static ValidationResult ValidateDisplayName(string displayName, ValidationContext context)
         {
-           
             var regex = new Regex(@"^[a-zA-Z0-9\s\-]{3,50}$");
 
             if (string.IsNullOrEmpty(displayName) || regex.IsMatch(displayName))
@@ -63,8 +60,6 @@ namespace CafeManager.WPF.ViewModels
             }
             return new ValidationResult("Tên hiển thị chỉ được chứa chữ cái, số, khoảng trắng, dấu gạch ngang và dài từ 3 đến 50 ký tự.");
         }
-        
-
 
         [ObservableProperty]
         [NotifyDataErrorInfo]
@@ -74,10 +69,8 @@ namespace CafeManager.WPF.ViewModels
         [NotifyCanExecuteChangedFor(nameof(RegisterCommand))]
         private string _password;
 
-
         public static ValidationResult ValidatePassword(string password, ValidationContext context)
         {
-            
             var regex = new Regex(@"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,20}$");
 
             if (string.IsNullOrEmpty(password) || regex.IsMatch(password))
@@ -87,16 +80,13 @@ namespace CafeManager.WPF.ViewModels
             return new ValidationResult("Mật khẩu phải chứa ít nhất 1 chữ hoa, 1 chữ thường, 1 số, 1 ký tự đặc biệt và có độ dài từ 8-20 ký tự.");
         }
 
-
         [ObservableProperty]
         [NotifyDataErrorInfo]
         [Required(ErrorMessage = "Email không được để trống.")]
         [CustomValidation(typeof(RegisterViewModel), nameof(ValidateEmail))]
         [NotifyPropertyChangedFor(nameof(CanSubmit))]
         [NotifyCanExecuteChangedFor(nameof(RegisterCommand))]
-
         private string _email;
-
 
         public static ValidationResult ValidateEmail(string email, ValidationContext context)
         {
@@ -122,9 +112,6 @@ namespace CafeManager.WPF.ViewModels
         [ObservableProperty]
         private string _vertificationCode;
 
-
-
-       
         public bool CanSubmit => HasUsernname && HasPassword && HasEmail && HasDisplayname && !HasErrors;
 
         private bool HasUsernname => !string.IsNullOrEmpty(Username);
@@ -133,11 +120,7 @@ namespace CafeManager.WPF.ViewModels
 
         private bool HasEmail => !string.IsNullOrEmpty(Email);
 
-
         private bool HasDisplayname => !string.IsNullOrEmpty(Displayname);
-
-
-
 
         public RegisterViewModel(IServiceProvider provider)
         {
@@ -176,7 +159,7 @@ namespace CafeManager.WPF.ViewModels
                         Password = this.Password,
                         Email = this.Email,
                         Role = (this.Role ?? string.Empty).Equals("Admin") ? 1 : 0,
-                        Avatar = ConvertImageServices.BitmapImageToBase64(this.Avata)
+                        Avatar = ConvertImageServices.BitmapImageToByteArray(this.Avata)
                     };
                     Appuser res = await _appUserServices.Register(appuser);
                     if (res == null)
@@ -197,8 +180,6 @@ namespace CafeManager.WPF.ViewModels
             }
         }
 
-     
-
         [RelayCommand]
         private void NavigateToLogin()
         {
@@ -211,7 +192,5 @@ namespace CafeManager.WPF.ViewModels
             IsOpenVerificationEmail = false;
             VertificationCode = string.Empty;
         }
-
-       
     }
 }

@@ -251,6 +251,21 @@
                         SelectedDate="{Binding FilterExpirationdate, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
                         Style="{StaticResource MaterialDesignFloatingHintDatePicker}" />
                 </StackPanel>
+                <Button
+                    Width="Auto"
+                    Margin="10,0,0,0"
+                    VerticalAlignment="Center"
+                    Command="{Binding FilterAllCommand}"
+                    Content="Hiển thị tất cả"
+                    Style="{StaticResource adjustInfoButton}" />
+
+                <Button
+                    Width="Auto"
+                    Margin="10,0,0,0"
+                    VerticalAlignment="Center"
+                    Command="{Binding FilterExpiringMaterialsCommand}"
+                    Content="Sắp hết hạn"
+                    Style="{StaticResource adjustInfoButton}" />
             </StackPanel>
 
             <Border Grid.Row="2" VerticalAlignment="Top">

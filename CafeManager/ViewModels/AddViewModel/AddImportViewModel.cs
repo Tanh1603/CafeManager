@@ -181,7 +181,7 @@ namespace CafeManager.WPF.ViewModels.AddViewModel
                 else
                 {
                     CurrentImportDetail.Importid = ModifyImport.Importid;
-                    MyMessageBox.Show("Thêm lịch sử lương thành công");
+                    MyMessageBox.Show("Thêm chi tiết đơn hàng thành công");
                     ListExisted.Add(CurrentImportDetail.Clone());
                 }
             }

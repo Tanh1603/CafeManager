@@ -45,7 +45,7 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
         private List<MaterialDTO> _listDeletedMaterialDTO = [];
 
         [ObservableProperty]
-        private MaterialDTO _deletedMaterial;
+        private MaterialDTO? _deletedMaterial;
         #endregion
 
         #region Inventory Delcare
@@ -74,8 +74,8 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
         #endregion
 
         #region Filter Declare
-        private SupplierDTO _selectedSupplier;
-        public SupplierDTO SelectedSupplier
+        private SupplierDTO? _selectedSupplier;
+        public SupplierDTO? SelectedSupplier
         {
             get => _selectedSupplier;
             set
@@ -89,8 +89,8 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
             }
         }
 
-        private MaterialDTO _selectedMaterial;
-        public MaterialDTO SelectedMaterial
+        private MaterialDTO? _selectedMaterial;
+        public MaterialDTO? SelectedMaterial
         {
             get => _selectedMaterial;
             set
@@ -167,9 +167,6 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
 
             await CheckTotalQuantity();
 
-            ListMaterialDTO.Insert(0, new MaterialDTO { Materialname = "Tất cả", Materialid = -1});
-            ListSupplierDTO.Insert(0, new SupplierDTO { Suppliername = "Tất cả", Supplierid = -1});
-
             _filterListConsumedMaterial = [.. ListConsumedMaterialDTO];
             OnPropertyChanged(nameof(CurrentListConsumedMaterial));
             _filterListInventory = [.. ListInventoryDTO];
@@ -200,24 +197,60 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
         {
             var filterConsumed = ListConsumedMaterialDTO
                 .Where(x =>
-                    (SelectedMaterial == null || SelectedMaterial.Materialid == -1 || x.Materialsupplier.Material.Materialid == SelectedMaterial.Materialid) &&
-                    (SelectedSupplier == null || SelectedSupplier.Supplierid == -1 || x.Materialsupplier.Supplier.Supplierid == SelectedSupplier.Supplierid) &&
-                    (FilterManufacturedate == null || x.Materialsupplier.Manufacturedate <= FilterManufacturedate) &&
-                    (FilterExpirationdate == null || x.Materialsupplier.Expirationdate <= FilterExpirationdate))
+                    (SelectedMaterial == null || x.Materialsupplier.Material.Materialid == SelectedMaterial.Materialid) &&
+                    (SelectedSupplier == null || x.Materialsupplier.Supplier.Supplierid == SelectedSupplier.Supplierid) &&
+                    (FilterManufacturedate == null || x.Materialsupplier.Manufacturedate == FilterManufacturedate) &&
+                    (FilterExpirationdate == null || x.Materialsupplier.Expirationdate == FilterExpirationdate))
                 .ToList();
 
 
             var filterInventory = ListInventoryDTO
                 .Where(x =>
-                    (SelectedMaterial == null || SelectedMaterial.Materialid == -1 || x.Material.Materialid == SelectedMaterial.Materialid) &&
-                    (SelectedSupplier == null || SelectedSupplier.Supplierid == -1 || x.Supplier.Supplierid == SelectedSupplier.Supplierid) &&
-                    (FilterManufacturedate == null || x.Manufacturedate <= FilterManufacturedate) &&
-                    (FilterExpirationdate == null || x.Expirationdate <= FilterExpirationdate))
+                    (SelectedMaterial == null || x.Material.Materialid == SelectedMaterial.Materialid) &&
+                    (SelectedSupplier == null || x.Supplier.Supplierid == SelectedSupplier.Supplierid) &&
+                    (FilterManufacturedate == null || x.Manufacturedate == FilterManufacturedate) &&
+                    (FilterExpirationdate == null || x.Expirationdate == FilterExpirationdate))
                 .ToList();
 
             _filterListConsumedMaterial = [.. filterConsumed];
             OnPropertyChanged(nameof(CurrentListConsumedMaterial));
             _filterListInventory = [..  filterInventory];
+            OnPropertyChanged(nameof(CurrentListInventory));
+        }
+
+        [RelayCommand]
+        private void FilterAll()
+        {
+            SelectedMaterial = null;
+            SelectedSupplier = null;
+            FilterManufacturedate = null;
+            FilterExpirationdate = null;
+            FilterInventory();
+        }
+
+        [RelayCommand]
+        private void FilterExpiringMaterials()
+        {
+            FilterManufacturedate = null;
+            FilterExpirationdate = null;
+            var filterInventory = ListInventoryDTO
+               .Where(x =>
+                    (SelectedMaterial == null || x.Material.Materialid == SelectedMaterial.Materialid) &&
+                    (SelectedSupplier == null || x.Supplier.Supplierid == SelectedSupplier.Supplierid) &&
+                   x.Expirationdate >= DateTime.Now &&
+                   (x.Expirationdate - DateTime.Now).TotalDays <= ((x.Expirationdate - x.Manufacturedate).TotalDays * 0.1)
+               ).ToList();
+            var filterConsumed = ListConsumedMaterialDTO
+               .Where(x =>
+                   (SelectedMaterial == null || x.Materialsupplier.Material.Materialid == SelectedMaterial.Materialid) &&
+                   (SelectedSupplier == null || x.Materialsupplier.Supplier.Supplierid == SelectedSupplier.Supplierid) &&
+                   (x.Materialsupplier.Expirationdate >= DateTime.Now) &&
+                   (x.Materialsupplier.Expirationdate - DateTime.Now).TotalDays <= ((x.Materialsupplier.Expirationdate - x.Materialsupplier.Manufacturedate).TotalDays * 0.1)
+               ).ToList();
+
+            _filterListConsumedMaterial = [.. filterConsumed];
+            OnPropertyChanged(nameof(CurrentListConsumedMaterial));
+            _filterListInventory = [.. filterInventory];
             OnPropertyChanged(nameof(CurrentListInventory));
         }
 

@@ -74,6 +74,15 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
         #endregion
 
         #region Filter Declare
+        [ObservableProperty]
+        private bool _isFillterAll = true;
+
+        [ObservableProperty]
+        private bool _isFilterExpiring = false;
+
+        [ObservableProperty]
+        private bool _isFilterExpired = false;
+
         private SupplierDTO? _selectedSupplier;
         public SupplierDTO? SelectedSupplier
         {
@@ -198,19 +207,47 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
             var filterConsumed = ListConsumedMaterialDTO
                 .Where(x =>
                     (SelectedMaterial == null || x.Materialsupplier.Material.Materialid == SelectedMaterial.Materialid) &&
-                    (SelectedSupplier == null || x.Materialsupplier.Supplier.Supplierid == SelectedSupplier.Supplierid) &&
-                    (FilterManufacturedate == null || x.Materialsupplier.Manufacturedate == FilterManufacturedate) &&
-                    (FilterExpirationdate == null || x.Materialsupplier.Expirationdate == FilterExpirationdate))
+                    (SelectedSupplier == null || x.Materialsupplier.Supplier.Supplierid == SelectedSupplier.Supplierid))
                 .ToList();
 
 
             var filterInventory = ListInventoryDTO
                 .Where(x =>
                     (SelectedMaterial == null || x.Material.Materialid == SelectedMaterial.Materialid) &&
-                    (SelectedSupplier == null || x.Supplier.Supplierid == SelectedSupplier.Supplierid) &&
+                    (SelectedSupplier == null || x.Supplier.Supplierid == SelectedSupplier.Supplierid))
+                .ToList();
+
+            if(IsFillterAll)
+            {
+                filterConsumed = filterConsumed.Where(x =>
+                    (FilterManufacturedate == null || x.Materialsupplier.Manufacturedate == FilterManufacturedate) &&
+                    (FilterExpirationdate == null || x.Materialsupplier.Expirationdate == FilterExpirationdate))
+                    .ToList();
+                filterInventory = filterInventory.Where(x =>
                     (FilterManufacturedate == null || x.Manufacturedate == FilterManufacturedate) &&
                     (FilterExpirationdate == null || x.Expirationdate == FilterExpirationdate))
-                .ToList();
+                    .ToList();
+            }
+            else if(IsFilterExpiring)
+            {
+                filterConsumed = filterConsumed.Where(x =>
+                    (x.Materialsupplier.Expirationdate >= DateTime.Now) &&
+                   (x.Materialsupplier.Expirationdate - DateTime.Now).TotalDays <= 15)
+                    .ToList();
+                filterInventory = filterInventory.Where(x =>
+                    (x.Expirationdate >= DateTime.Now) &&
+                    (x.Expirationdate - DateTime.Now).TotalDays <= 15)
+                    .ToList();
+            }
+            else
+            {
+                filterConsumed = filterConsumed.Where(x =>
+                    x.Materialsupplier.Expirationdate < DateTime.Now)
+                    .ToList();
+                filterInventory = filterInventory.Where(x =>
+                    x.Expirationdate < DateTime.Now)
+                    .ToList();
+            }    
 
             _filterListConsumedMaterial = [.. filterConsumed];
             OnPropertyChanged(nameof(CurrentListConsumedMaterial));
@@ -221,37 +258,25 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
         [RelayCommand]
         private void FilterAll()
         {
-            SelectedMaterial = null;
-            SelectedSupplier = null;
-            FilterManufacturedate = null;
-            FilterExpirationdate = null;
+            IsFillterAll = true;
+            IsFilterExpiring = IsFilterExpired = false;
             FilterInventory();
         }
 
         [RelayCommand]
-        private void FilterExpiringMaterials()
+        private void FilterExpiring()
         {
-            FilterManufacturedate = null;
-            FilterExpirationdate = null;
-            var filterInventory = ListInventoryDTO
-               .Where(x =>
-                    (SelectedMaterial == null || x.Material.Materialid == SelectedMaterial.Materialid) &&
-                    (SelectedSupplier == null || x.Supplier.Supplierid == SelectedSupplier.Supplierid) &&
-                   x.Expirationdate >= DateTime.Now &&
-                   (x.Expirationdate - DateTime.Now).TotalDays <= ((x.Expirationdate - x.Manufacturedate).TotalDays * 0.1)
-               ).ToList();
-            var filterConsumed = ListConsumedMaterialDTO
-               .Where(x =>
-                   (SelectedMaterial == null || x.Materialsupplier.Material.Materialid == SelectedMaterial.Materialid) &&
-                   (SelectedSupplier == null || x.Materialsupplier.Supplier.Supplierid == SelectedSupplier.Supplierid) &&
-                   (x.Materialsupplier.Expirationdate >= DateTime.Now) &&
-                   (x.Materialsupplier.Expirationdate - DateTime.Now).TotalDays <= ((x.Materialsupplier.Expirationdate - x.Materialsupplier.Manufacturedate).TotalDays * 0.1)
-               ).ToList();
+            IsFilterExpiring = true;
+            IsFillterAll = IsFilterExpired = false;
+            FilterInventory();
+        }
 
-            _filterListConsumedMaterial = [.. filterConsumed];
-            OnPropertyChanged(nameof(CurrentListConsumedMaterial));
-            _filterListInventory = [.. filterInventory];
-            OnPropertyChanged(nameof(CurrentListInventory));
+        [RelayCommand]
+        private void FilterExpired()
+        {
+            IsFilterExpired = true;
+            IsFilterExpiring = IsFillterAll = false;
+            FilterInventory();
         }
 
         #region Material
@@ -402,7 +427,6 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
         [RelayCommand]
         private void ChangeRoleMaterial()
         {
-            SelectedMaterial = null;
             IsGetMaterial = !IsGetMaterial;
             OnPropertyChanged(nameof(IsDeletedMaterial));
         }

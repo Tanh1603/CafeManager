@@ -21,6 +21,7 @@
     <UserControl.Resources>
         <BooleanToVisibilityConverter x:Key="BoolToVis" />
         <service:RowIndexConverter x:Key="RowIndexConverter" />
+        <service:DateTimeToDateOnlyConverter x:Key="DateTimeToDateOnlyConverter" />
         <DataTemplate DataType="{x:Type vm:AddMaterialViewModel}">
             <addview:AddMaterialView />
         </DataTemplate>
@@ -92,6 +93,7 @@
                             VerticalAlignment="Center"
                             materialDesign:HintAssist.Hint="Vật liệu"
                             materialDesign:TextBlockAssist.AutoToolTip="True"
+                            materialDesign:TextFieldAssist.HasClearButton="True"
                             BorderBrush="#602414"
                             ItemsSource="{Binding ListMaterialDTO}"
                             SelectedItem="{Binding SelectedMaterial}">
@@ -102,7 +104,7 @@
                                         <TextBlock
                                             Margin="0,0,10,0"
                                             VerticalAlignment="Center"
-                                            Text="{Binding Materialname, TargetNullValue='Tất cả'}"
+                                            Text="{Binding Materialname}"
                                             TextWrapping="Wrap" />
                                     </Grid>
                                 </DataTemplate>
@@ -120,6 +122,7 @@
                             Style="{StaticResource addCircleBtn}">
                             <materialDesign:PopupBox
                                 Grid.Row="2"
+                                Padding="0"
                                 IsPopupOpen="{Binding IsPopupOpen, Mode=TwoWay}"
                                 PopupElevation="Dp4"
                                 PopupHorizontalOffset="40"
@@ -172,6 +175,7 @@
                             VerticalAlignment="Center"
                             materialDesign:HintAssist.Hint="Vật liệu đã ẩn"
                             materialDesign:TextBlockAssist.AutoToolTip="True"
+                            materialDesign:TextFieldAssist.HasClearButton="True"
                             BorderBrush="#602414"
                             ItemsSource="{Binding ListDeletedMaterialDTO}"
                             SelectedItem="{Binding DeletedMaterial}">
@@ -210,6 +214,7 @@
                     VerticalAlignment="Center"
                     materialDesign:HintAssist.Hint="Nhà cung cấp"
                     materialDesign:TextBlockAssist.AutoToolTip="True"
+                    materialDesign:TextFieldAssist.HasClearButton="True"
                     BorderBrush="#602414"
                     ItemsSource="{Binding ListSupplierDTO}"
                     SelectedItem="{Binding SelectedSupplier}">
@@ -219,7 +224,7 @@
                                 <TextBlock
                                     Margin="0,0,10,0"
                                     VerticalAlignment="Center"
-                                    Text="{Binding Suppliername, TargetNullValue='Tất cả'}"
+                                    Text="{Binding Suppliername}"
                                     TextWrapping="Wrap" />
                             </Grid>
                         </DataTemplate>
@@ -256,16 +261,27 @@
                     Margin="10,0,0,0"
                     VerticalAlignment="Center"
                     Command="{Binding FilterAllCommand}"
-                    Content="Hiển thị tất cả"
-                    Style="{StaticResource adjustInfoButton}" />
+                    Content="Tất cả"
+                    Style="{StaticResource DynamicButtonStyle}" 
+                    Tag="{Binding IsFillterAll}"/>
 
                 <Button
                     Width="Auto"
                     Margin="10,0,0,0"
                     VerticalAlignment="Center"
-                    Command="{Binding FilterExpiringMaterialsCommand}"
+                    Command="{Binding FilterExpiringCommand}"
                     Content="Sắp hết hạn"
-                    Style="{StaticResource adjustInfoButton}" />
+                    Style="{StaticResource DynamicButtonStyle}"
+                    Tag="{Binding IsFilterExpiring}"/>
+
+                <Button
+                    Width="Auto"
+                    Margin="10,0,0,0"
+                    VerticalAlignment="Center"
+                    Command="{Binding FilterExpiredCommand}"
+                    Content="Hết hạn"
+                    Style="{StaticResource DynamicButtonStyle}" 
+                    Tag="{Binding IsFilterExpired}"/>
             </StackPanel>
 
             <Border Grid.Row="2" VerticalAlignment="Top">
@@ -314,13 +330,13 @@
                                     IsReadOnly="True" />
                                 <DataGridTextColumn
                                     Width="*"
-                                    Binding="{Binding Materialsupplier.Manufacturedate, StringFormat=dd/MM/yyyy}"
+                                    Binding="{Binding Materialsupplier.Manufacturedate, Converter={StaticResource DateTimeToDateOnlyConverter}}"
                                     CanUserResize="False"
                                     Header="Ngày sản xuất"
                                     IsReadOnly="True" />
                                 <DataGridTextColumn
                                     Width="*"
-                                    Binding="{Binding Materialsupplier.Expirationdate, StringFormat=dd/MM/yyyy}"
+                                    Binding="{Binding Materialsupplier.Expirationdate, Converter={StaticResource DateTimeToDateOnlyConverter}}"
                                     CanUserResize="False"
                                     Header="Ngày hết hạn"
                                     IsReadOnly="True" />
@@ -420,13 +436,13 @@
                                     IsReadOnly="True" />
                                 <DataGridTextColumn
                                     Width="*"
-                                    Binding="{Binding Manufacturedate}"
+                                    Binding="{Binding Manufacturedate, Converter={StaticResource DateTimeToDateOnlyConverter}}"
                                     CanUserResize="False"
                                     Header="Ngày sản xuất"
                                     IsReadOnly="True" />
                                 <DataGridTextColumn
                                     Width="*"
-                                    Binding="{Binding Expirationdate}"
+                                    Binding="{Binding Expirationdate, Converter={StaticResource DateTimeToDateOnlyConverter}}"
                                     CanUserResize="False"
                                     Header="Ngày hết hạn"
                                     IsReadOnly="True" />

@@ -138,6 +138,10 @@ namespace CafeManager.WPF.ViewModels.AddViewModel
         {
             IsAdding = false;
             IsUpdating = false;
+            ModifyImport = new()
+            {
+                Receiveddate = DateTime.Now
+            };
             ClearAddImportDetail();
             ListExisted.Clear();
             listDeletedImportdetail.Clear();

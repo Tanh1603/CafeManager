@@ -49,6 +49,7 @@
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="*" />
                                     <ColumnDefinition Width="auto" />
+                                    <ColumnDefinition Width="auto" />
                                 </Grid.ColumnDefinitions>
 
                                 <DatePickerTextBox
@@ -56,11 +57,25 @@
                                     Grid.Column="0"
                                     Margin="5,0,0,0"
                                     Padding="5"
+                                    Background="Transparent"
                                     Style="{StaticResource txtBoxDatePicker}"
                                     Text="{Binding SelectedDate, RelativeSource={RelativeSource TemplatedParent}, StringFormat='{}{0:dd/MM/yyyy}', Mode=TwoWay}" />
                                 <Button
-                                    x:Name="PART_Button"
+                                    x:Name="ClearBtn"
                                     Grid.Column="1"
+                                    Width="20"
+                                    Margin="5,0,0,0"
+                                    Command="{Binding ClearDatePickerPCommand}"
+                                    CommandParameter="{Binding RelativeSource={RelativeSource TemplatedParent}}"
+                                    Style="{StaticResource datePickerButton}">
+                                    <ma:PackIconMaterial
+                                        Width="15"
+                                        Height="15"
+                                        Kind="CloseBox" />
+                                </Button>
+                                <Button
+                                    x:Name="PART_Button"
+                                    Grid.Column="2"
                                     Style="{StaticResource datePickerButton}">
                                     <ma:PackIconMaterial
                                         Width="20"
@@ -94,6 +109,13 @@
                     </Grid>
 
                     <ControlTemplate.Triggers>
+
+
+
+                        <Trigger Property="Text" Value="">
+                            <Setter TargetName="ClearBtn" Property="Visibility" Value="Collapsed" />
+                        </Trigger>
+
                         <Trigger Property="IsMouseOver" Value="True">
                             <Setter TargetName="Border" Property="BorderBrush" Value="#9e7555" />
                         </Trigger>

@@ -27,7 +27,7 @@
         </Grid.RowDefinitions>
         <Grid Grid.Row="0" Grid.Column="0">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="1.2*" />
+                <ColumnDefinition Width="*" />
                 <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
@@ -72,21 +72,21 @@
                                 <ColumnDefinition Width="*"/>
                                 <ColumnDefinition Width="*"/>
                             </Grid.ColumnDefinitions>
-                            <Grid >
+                            <Grid Margin="0 0 5 0">
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="auto"/>
                                     <ColumnDefinition Width="*"/>
                                 </Grid.ColumnDefinitions>
                                 <TextBlock Text="Từ:" Style="{StaticResource infoText}" FontWeight="Bold"/>
-                                <DatePicker Grid.Column="1" Style="{StaticResource DatePicker}" CalendarStyle="{StaticResource MaterialDesignCalendarPortrait}" Tag="--Chọn ngày--" Margin="0 15 0 15"/>
+                                <DatePicker Grid.Column="1" Style="{StaticResource DatePicker}" CalendarStyle="{StaticResource MaterialDesignCalendarPortrait}" Tag="Chọn ngày" Margin="0 15 0 15"/>
                             </Grid>
-                            <Grid Grid.Column="1" Margin="10 0 0 0">
+                            <Grid Grid.Column="1" >
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="auto"/>
                                     <ColumnDefinition Width="*"/>
                                 </Grid.ColumnDefinitions>
                                 <TextBlock Text="Đến:" Style="{StaticResource infoText}" FontWeight="Bold"/>
-                                <DatePicker  Grid.Column="1" Style="{StaticResource DatePicker}" CalendarStyle="{StaticResource MaterialDesignCalendarPortrait}" Tag="--Chọn ngày--"/>
+                                <DatePicker  Grid.Column="1" Style="{StaticResource DatePicker}" CalendarStyle="{StaticResource MaterialDesignCalendarPortrait}" Tag="Chọn ngày"/>
                             </Grid>
                         </Grid>
 

@@ -42,6 +42,7 @@
 
         <!--  Add Button  -->
         <Button
+            Width="130"
             Grid.Row="0"
             Command="{Binding AddTableCommand}"
             Style="{StaticResource addButton}">

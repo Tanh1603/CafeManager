@@ -36,13 +36,13 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
         public bool IsDeletedMaterial => !IsGetMaterial;
 
         [ObservableProperty]
-        private ObservableCollection<SupplierDTO> _ListSupplierDTO = [];
+        private List<SupplierDTO> _ListSupplierDTO = [];
 
         [ObservableProperty]
-        private ObservableCollection<MaterialDTO> _listMaterialDTO = [];
+        private List<MaterialDTO> _listMaterialDTO = [];
 
         [ObservableProperty]
-        private ObservableCollection<MaterialDTO> _listDeletedMaterialDTO = [];
+        private List<MaterialDTO> _listDeletedMaterialDTO = [];
 
         [ObservableProperty]
         private MaterialDTO _deletedMaterial;
@@ -151,19 +151,21 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
 
         private async Task LoadData()
         {
-            var dbMaterialSupplier = (await _materialSupplierServices.GetListMaterialSupplier()).ToList().Where(x => x.Isdeleted == false);
-            var dbConsumedMaterial = (await _consumedMaterialServices.GetListConsumedMaterial()).ToList().Where(x => x.Isdeleted == false);
+            var dbMaterialSupplier = (await _materialSupplierServices.GetListMaterialSupplier()).Where(x => x.Isdeleted == false);
+            var dbConsumedMaterial = (await _consumedMaterialServices.GetListConsumedMaterial()).Where(x => x.Isdeleted == false);
             var dbMaterial = await _materialSupplierServices.GetListMaterial();
-            var dbSupplier = (await _materialSupplierServices.GetListSupplier()).ToList().Where(x => x.Isdeleted == false);
+            var dbSupplier = (await _materialSupplierServices.GetListSupplier()).Where(x => x.Isdeleted == false);
 
-            var listExistedMaterial = dbMaterial.ToList().Where(x => x.Isdeleted == false); // List vật liệu đang có
-            var listDeletedMaterial = dbMaterial.ToList().Where(x => x.Isdeleted == true); // List vật liệu đã ẩn
+            var listExistedMaterial = dbMaterial.Where(x => x.Isdeleted == false); // List vật liệu đang có
+            var listDeletedMaterial = dbMaterial.Where(x => x.Isdeleted == true); // List vật liệu đã ẩn
 
             ListMaterialDTO = [.. _mapper.Map<List<MaterialDTO>>(listExistedMaterial)];
             ListDeletedMaterialDTO = [.. _mapper.Map<List<MaterialDTO>>(listDeletedMaterial)];
             ListConsumedMaterialDTO = [.. _mapper.Map<List<ConsumedMaterialDTO>>(dbConsumedMaterial)];
             ListInventoryDTO = [.. _mapper.Map<List<MaterialSupplierDTO>>(dbMaterialSupplier)];
             ListSupplierDTO = [.. _mapper.Map<List<SupplierDTO>>(dbSupplier)];
+
+            await CheckTotalQuantity();
 
             ListMaterialDTO.Insert(0, new MaterialDTO { Materialname = "Tất cả", Materialid = -1});
             ListSupplierDTO.Insert(0, new SupplierDTO { Suppliername = "Tất cả", Supplierid = -1});
@@ -172,6 +174,26 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
             OnPropertyChanged(nameof(CurrentListConsumedMaterial));
             _filterListInventory = [.. ListInventoryDTO];
             OnPropertyChanged(nameof(CurrentListInventory));
+        }
+
+        private async Task CheckTotalQuantity()
+        {
+            var itemsToRemove = new List<MaterialSupplierDTO>();
+
+            foreach (var item in ListInventoryDTO)
+            {
+                if (item.TotalQuantity == 0)
+                {
+                    var materialsupplier = await _materialSupplierServices.GetMaterialsupplierById(item.Materialsupplierid);
+                    item.Isdeleted = true;
+                    itemsToRemove.Add(item);
+                }
+            }
+
+            foreach (var item in itemsToRemove)
+            {
+                ListInventoryDTO.Remove(item);
+            }
         }
 
         private void FilterInventory()
@@ -187,8 +209,8 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
 
             var filterInventory = ListInventoryDTO
                 .Where(x =>
-                    (SelectedMaterial == null || x.Material.Materialid == SelectedMaterial.Materialid) &&
-                    (SelectedSupplier == null || x.Supplier.Supplierid == SelectedSupplier.Supplierid) &&
+                    (SelectedMaterial == null || SelectedMaterial.Materialid == -1 || x.Material.Materialid == SelectedMaterial.Materialid) &&
+                    (SelectedSupplier == null || SelectedSupplier.Supplierid == -1 || x.Supplier.Supplierid == SelectedSupplier.Supplierid) &&
                     (FilterManufacturedate == null || x.Manufacturedate <= FilterManufacturedate) &&
                     (FilterExpirationdate == null || x.Expirationdate <= FilterExpirationdate))
                 .ToList();
@@ -456,6 +478,7 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
         [RelayCommand]
         private void OpenModifyConsumed_Update(ConsumedMaterialDTO consumedMaterialDTO)
         {
+            SelectedMaterial = null;
             currentQuantity = consumedMaterialDTO.Quantity;
             ModifyConsumedMaterial = consumedMaterialDTO.Clone();
             IsOpenModifyConsumed = true;

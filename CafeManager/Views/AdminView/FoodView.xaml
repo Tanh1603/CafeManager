@@ -76,6 +76,7 @@
                     Grid.Column="0"
                     MinWidth="150"
                     MinHeight="35"
+                   
                     ItemsSource="{Binding ListFoodCategory}"
                     SelectedItem="{Binding SelectedFoodCategory}"
                     Style="{StaticResource ComboBoxStyle}">

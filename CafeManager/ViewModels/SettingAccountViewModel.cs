@@ -9,6 +9,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Microsoft.Extensions.DependencyInjection;
 using System.Windows.Media.Imaging;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement.ToolTip;
 
 namespace CafeManager.WPF.ViewModels
 {
@@ -21,8 +22,14 @@ namespace CafeManager.WPF.ViewModels
         private readonly FileDialogService _fileDialogService;
         private readonly IMapper _mapper;
 
+
+
+
+
         [ObservableProperty]
         private AppUserDTO _account = new();
+
+        public event Action Close;
 
         [ObservableProperty]
         private string _oldPassword = string.Empty;
@@ -180,6 +187,12 @@ namespace CafeManager.WPF.ViewModels
             OldPassword = string.Empty;
             NewPassword = string.Empty;
             ConfirmPassword = string.Empty;
+        }
+
+        [RelayCommand]
+        private void CloseUserControl()
+        {
+            Close?.Invoke();
         }
     }
 }

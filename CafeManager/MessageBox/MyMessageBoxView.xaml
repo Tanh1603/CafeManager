@@ -96,19 +96,20 @@
                     </Grid>
                     <Grid Grid.Row="1">
 
-                        <StackPanel HorizontalAlignment="Right" Orientation="Horizontal">
+                        <Grid HorizontalAlignment="Right">
 
                             <Button
                                 x:Name="bntYes"
                                 Uid="1"
                                 Height="32"
                                 MinWidth="50"
-                                Margin="0,0,10,0"
+                                Margin="0,0,80,0"
                                 HorizontalAlignment="Right"
                                 Click="bntReturnValue_Click"
                                 Content="Yes"
                                 Style="{StaticResource upLoadButton}"
-                                Visibility="Hidden"/>
+                                Visibility="Hidden"
+                               />
                             <Button
                                 x:Name="bntNo"
                                 Uid="0"
@@ -119,18 +120,22 @@
                                 Click="bntReturnValue_Click"
                                 Content="No"
                                 Style="{StaticResource upLoadButton}"
-                                Visibility="Hidden"/>
+                                Visibility="Hidden"
+                                
+                               />
                             <Button
                                 x:Name="bntOk"
                                 Uid="1"
                                 Height="32"
                                 MinWidth="50"
-                                Margin="0,0,10,0"
+                                Margin="0,0,80,0"
                                 HorizontalAlignment="Right"
                                 Click="bntReturnValue_Click"
                                 Content="OK"
                                 Style="{StaticResource upLoadButton}"
-                                Visibility="Hidden"/>
+                                Visibility="Hidden"
+                                
+                                />
                             <Button
                                 x:Name="bntCancel"
                                 Height="32"
@@ -141,8 +146,10 @@
                                 Click="bntReturnValue_Click"
                                 Content="Cancel"
                                 Style="{StaticResource upLoadButton}"
-                                Visibility="Hidden"/>
-                        </StackPanel>
+                                Visibility="Hidden"
+                                
+                              />
+                        </Grid>
                     </Grid>
                 </Grid>
             </Grid>

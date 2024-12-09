@@ -25,21 +25,25 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
         [ObservableProperty]
         private AddImportViewModel _modifyImportVM;
 
-        [ObservableProperty]
-        private decimal _totalPrice = 0;
+        private ObservableCollection<ImportDTO> ListImport = [];
+        public ObservableCollection<ImportDTO> CurrentListImport => [.. _filterListImport];
 
-        [ObservableProperty]
-        private ObservableCollection<Import> _listImport = [];
+        private List<ImportDTO> _filterListImport = [];
+        private string _searchText = string.Empty;
 
-        //[ObservableProperty]
-        //private ObservableCollection<MaterialDetailDTO> _listMaterialDetailDTO = [];
-
-        //[ObservableProperty]
-        //private ObservableCollection<Supplier> _listSupplier = [];
-
-        //[ObservableProperty]
-        //private ObservableCollection<Material> _listMaterial = [];
-
+        public string SearchText
+        {
+            get => _searchText;
+            set
+            {
+                if (_searchText != value)
+                {
+                    _searchText = value;
+                    FilterImport();
+                    OnPropertyChanged(nameof(SearchText));
+                }
+            }
+        }
         public ImportViewModel(IServiceProvider provider)
         {
             _serviceProvider = provider;
@@ -57,76 +61,31 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
 
         private async Task LoadData()
         {
-            var list = (await _materialSupplierServices.GetListSupplier()).ToList().Where(x => x.Isdeleted == false);
-            ModifyImportVM.ListSupplier = [.. ModifyImportVM._mapper.Map<List<SupplierDTO>>(list)];
-
-            var dbListMaterial = (await _materialSupplierServices.GetListMaterial()).ToList().Where(x => x.Isdeleted == false);
-            ModifyImportVM.ListMaterial = [.. ModifyImportVM._mapper.Map<List<MaterialDTO>>(dbListMaterial)];
-
             var dbListStaff = await _staffServices.GetListStaff();
-            ModifyImportVM.ListStaff = new ObservableCollection<Staff>(dbListStaff);
+            ModifyImportVM.ListStaff = [.. _mapper.Map<List<StaffDTO>>(dbListStaff)];
 
-            var importList = await _importServices.GetListImport();
-            ListImport = new ObservableCollection<Import>(importList);
+            var dbListSupplier = (await _materialSupplierServices.GetListSupplier()).Where(x => x.Isdeleted == false);
+            ModifyImportVM.ListSupplier = [.. _mapper.Map<List<SupplierDTO>>(dbListSupplier)];
+
+            var dbListMaterial = (await _materialSupplierServices.GetListMaterial()).Where(x => x.Isdeleted == false);
+            ModifyImportVM.ListMaterial = [.. _mapper.Map<List<MaterialDTO>>(dbListMaterial)];
+
+            var importList = (await _importServices.GetListImport())?.Where(x => x.Isdeleted == false);
+            ListImport = [.. _mapper.Map<List<ImportDTO>>(importList)];
+
+            _filterListImport = [.. ListImport];
+            OnPropertyChanged(nameof(CurrentListImport));
         }
 
-        private async Task LoadDetailData(Import import)
+        private void FilterImport()
         {
-            //var dbImportMaterailDetails = await _importServices.GetListImportDetailByImportId(import.Importid);
-            //ModifyImportVM.CurrentListImportdetail = new ObservableCollection<ImportMaterialDetailDTO>(dbImportMaterailDetails);
-            //ModifyImportVM.ImportPrice = await _importServices.GetImportPriceById(import.Importid);
-        }
+            var filter = ListImport.Where(x => string.IsNullOrWhiteSpace(SearchText)
+            || x.Supplier.Suppliername.Contains(SearchText, StringComparison.OrdinalIgnoreCase)
+            || x.Receiveddate.ToString().Contains(SearchText, StringComparison.OrdinalIgnoreCase)
+            || x.Staff.Staffname.Contains(SearchText, StringComparison.OrdinalIgnoreCase)).ToList();
 
-        private async void ModifyImportVM_ImportChanged(Import import, List<ImportMaterialDetailDTO> importMaterials)
-        {
-            try
-            {
-                if (ModifyImportVM.IsAdding)
-                {
-                    Import? addImport = await _importServices.AddImport(import);
-
-                    if (addImport != null)
-                    {
-                        ListImport.Add(addImport);
-                        IsOpenModifyImportView = false;
-                        MyMessageBox.Show("Thêm thông tin phiếu nhập thành công", MyMessageBox.Buttons.OK, MyMessageBox.Icons.Information);
-                    }
-                    else
-                    {
-                        MyMessageBox.Show("Thêm thông tin phiếu nhập thất bại", MyMessageBox.Buttons.OK, MyMessageBox.Icons.Error);
-                    }
-                }
-                if (ModifyImportVM.IsUpdating)
-                {
-                    if (import != null)
-                    {
-                        //Import? updateImport = await _importServices.GetImportById(import.Importid);
-                        //if (updateImport != null)
-                        //{
-                        //    updateImport.Deliveryperson = import.Deliveryperson;
-                        //    updateImport.Phone = import.Phone;
-                        //    updateImport.Shippingcompany = import.Shippingcompany;
-                        //    updateImport.Receiveddate = import.Receiveddate;
-                        //    updateImport.Staffid = import.Staffid;
-                        //    updateImport.Supplierid = import.Supplierid;
-                        //    await _importServices.UpdateImport(import, importMaterials);
-                        //}
-                        await _importServices.UpdateImport(import, importMaterials);
-                        MyMessageBox.Show("Sửa thông tin phiếu nhập thành công", MyMessageBox.Buttons.OK, MyMessageBox.Icons.Information);
-                    }
-                    else
-                    {
-                        MyMessageBox.Show("Sửa thông tin phiếu nhập thất bại", MyMessageBox.Buttons.OK, MyMessageBox.Icons.Error);
-                    }
-                    IsOpenModifyImportView = false;
-                }
-                ModifyImportVM.ClearValueOfViewModel();
-                ListImport = [.. ListImport];
-            }
-            catch
-            {
-                MyMessageBox.Show("Lỗi", MyMessageBox.Buttons.OK, MyMessageBox.Icons.Warning);
-            }
+            _filterListImport = [.. filter];
+            OnPropertyChanged(nameof(CurrentListImport));
         }
 
         [RelayCommand]
@@ -138,29 +97,27 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
         }
 
         [RelayCommand]
-        private void CloseAddImport()
+        private void CloseModifyImport()
         {
             IsOpenModifyImportView = false;
             ModifyImportVM.ClearValueOfViewModel();
         }
 
         [RelayCommand]
-        private void OpenUpdateImport(Import import)
+        private void OpenUpdateImport(ImportDTO import)
         {
-            ModifyImportVM.RecieveImport(import);
-            _ = LoadDetailData(import);
+            ModifyImportVM.RecieveImport(import.Clone());
             IsOpenModifyImportView = true;
-            //ModifyImportVM.IsAdding = false;
             ModifyImportVM.IsUpdating = true;
             ModifyImportVM.IsAddingImportDetail = true;
         }
 
         [RelayCommand]
-        private async void DeleteImport(Import import)
+        private async void DeleteImport(ImportDTO import)
         {
             try
             {
-                var res = MyMessageBox.ShowDialog("Bạn có muốn xóa chi tiết đơn hàng này ko", MyMessageBox.Buttons.Yes_No_Cancel, MyMessageBox.Icons.Warning);
+                var res = MyMessageBox.ShowDialog("Bạn có muốn xóa chi tiết đơn hàng này ko", MyMessageBox.Buttons.Yes_No, MyMessageBox.Icons.Warning);
                 if (res.Equals("1"))
                 {
                     var isDeleted = await _importServices.DeleteImport(import.Importid);
@@ -175,11 +132,56 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
             {
                 MyMessageBox.Show(ivd.Message, MyMessageBox.Buttons.OK, MyMessageBox.Icons.Warning);
             }
+            FilterImport();
+        }
+
+        private async void ModifyImportVM_ImportChanged(ImportDTO import)
+        {
+            try
+            {
+                if (ModifyImportVM.IsAdding)
+                {
+                    Import? addImport = await _importServices.AddImport(_mapper.Map<Import>(import));
+
+                    if (addImport != null)
+                    {
+                        ListImport.Add(_mapper.Map<ImportDTO>(addImport));
+                        MyMessageBox.Show("Thêm thông tin phiếu nhập thành công", MyMessageBox.Buttons.OK, MyMessageBox.Icons.Information);
+                    }
+                    else
+                    {
+                        MyMessageBox.Show("Thêm thông tin phiếu nhập thất bại", MyMessageBox.Buttons.OK, MyMessageBox.Icons.Error);
+                    }
+                }
+                if (ModifyImportVM.IsUpdating)
+                {
+                    if (import != null)
+                    {
+                        var updateImport = await _importServices.UpdateImport(_mapper.Map<Import>(import));
+                        var res  = ListImport.FirstOrDefault(x => x.Importid == import.Importid);
+                        _mapper.Map(updateImport, res);
+                        MyMessageBox.Show("Sửa thông tin phiếu nhập thành công", MyMessageBox.Buttons.OK, MyMessageBox.Icons.Information);
+                    }
+                    else
+                    {
+                        MyMessageBox.Show("Sửa thông tin phiếu nhập thất bại", MyMessageBox.Buttons.OK, MyMessageBox.Icons.Error);
+                    }
+                }
+                IsOpenModifyImportView = false;
+                ModifyImportVM.ClearValueOfViewModel();
+                FilterImport();
+            }
+            catch
+            {
+                MyMessageBox.Show("Lỗi", MyMessageBox.Buttons.OK, MyMessageBox.Icons.Warning);
+            }
         }
 
         public void Dispose()
         {
             ModifyImportVM.ImportChanged -= ModifyImportVM_ImportChanged;
+            GC.SuppressFinalize(this);
         }
+
     }
 }

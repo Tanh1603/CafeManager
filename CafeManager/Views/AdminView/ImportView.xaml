@@ -4,6 +4,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:addview="clr-namespace:CafeManager.WPF.Views.AddUpdateView"
     xmlns:addviewmodel="clr-namespace:CafeManager.WPF.ViewModels.AddViewModel"
+    xmlns:converter="clr-namespace:CafeManager.WPF.Services.Converter"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:fa="http://schemas.awesome.incremented/wpf/xaml/fontawesome.sharp"
     xmlns:local="clr-namespace:CafeManager.WPF.Views"
@@ -11,7 +12,6 @@
     xmlns:ma="http://metro.mahapps.com/winfx/xaml/iconpacks"
     xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:service="clr-namespace:CafeManager.WPF.Services.Converter"
     xmlns:uc="clr-namespace:CafeManager.WPF.Assets.UsersControls"
     xmlns:view="clr-namespace:CafeManager.WPF.Views"
     d:DesignHeight="450"
@@ -19,7 +19,8 @@
     mc:Ignorable="d">
     <UserControl.Resources>
         <BooleanToVisibilityConverter x:Key="BoolToVis" />
-        <service:RowIndexConverter x:Key="RowIndexConverter" />
+        <converter:RowIndexConverter x:Key="RowIndexConverter" />
+        <converter:CurrencyConverter x:Key="CurrencyConverter" />
         <DataTemplate DataType="{x:Type addviewmodel:AddImportViewModel}">
             <addview:AddImportView />
         </DataTemplate>
@@ -100,9 +101,12 @@
                             Panel.ZIndex="1"
                             Foreground="#9c6d3f"
                             IsHitTestVisible="False"
-                            Text="Search in Members..." />
-                        <!--  Visibility="{Binding ElementName=txtFilter, Path=Text.IsEmpty, Converter={StaticResource BoolToVis}} />"  -->
-                        <TextBox x:Name="txtFilter" Style="{StaticResource textBoxFilter}" />
+                            Text="Search in Members..."
+                            Visibility="{Binding ElementName=txtFilter, Path=Text.IsEmpty, Converter={StaticResource BoolToVis}}" />
+                        <TextBox
+                            x:Name="txtFilter"
+                            Style="{StaticResource textBoxFilter}"
+                            Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}" />
                         <ma:PackIconMaterial
                             Width="15"
                             Height="15"
@@ -115,18 +119,23 @@
                 </StackPanel>
 
                 <!--  Import Datagrid  -->
-                <ScrollViewer
+                <Border
                     Grid.Row="2"
-                    HorizontalScrollBarVisibility="Auto"
-                    VerticalScrollBarVisibility="Hidden">
+                    Width="auto"
+                    Margin="0,10,0,0"
+                    VerticalAlignment="Top">
+
                     <DataGrid
                         x:Name="ImportsDataGrid"
                         VerticalAlignment="Top"
-                        AlternationCount="{Binding ListImport.Count}"
+                        AlternationCount="{Binding CurrentListImport.Count}"
                         CellStyle="{DynamicResource DataGridCellStyle1}"
                         ColumnHeaderStyle="{DynamicResource DataGridColumnHeaderStyle1}"
-                        ItemsSource="{Binding ListImport}"
+                        ItemsSource="{Binding CurrentListImport}"
                         RowStyle="{DynamicResource DataGridRowStyle1}"
+                        ScrollViewer.CanContentScroll="True"
+                        ScrollViewer.HorizontalScrollBarVisibility="Auto"
+                        ScrollViewer.VerticalScrollBarVisibility="Auto"
                         Style="{DynamicResource DataGridStyle1}">
                         <DataGrid.Columns>
 
@@ -141,35 +150,36 @@
                                         RelativeSource="{RelativeSource AncestorType=DataGridRow}" />
                                 </DataGridTextColumn.Binding>
                             </DataGridTextColumn>
-
                             <DataGridTextColumn
-                                Width="150"
+                                Width="*"
                                 Binding="{Binding Supplier.Suppliername}"
                                 CanUserResize="False"
                                 Header="Nhà cung cấp"
                                 IsReadOnly="True" />
-
                             <DataGridTextColumn
-                                Width="150"
+                                Width="*"
                                 Binding="{Binding Deliveryperson}"
                                 CanUserResize="False"
                                 Header="Người giao hàng"
                                 IsReadOnly="True" />
-
                             <DataGridTextColumn
-                                Width="120"
+                                Width="*"
                                 Binding="{Binding Phone}"
                                 CanUserResize="False"
                                 Header="Số điện thoại"
                                 IsReadOnly="True" />
-
                             <DataGridTextColumn
-                                Width="auto"
-                                Binding="{Binding Receiveddate}"
+                                Width="*"
+                                Binding="{Binding Shippingcompany}"
+                                CanUserResize="False"
+                                Header="Công ty giao"
+                                IsReadOnly="True" />
+                            <DataGridTextColumn
+                                Width="*"
+                                Binding="{Binding Receiveddate, StringFormat=dd/MM/yyyy HH:mm:ss}"
                                 CanUserResize="False"
                                 Header="Ngày giao"
                                 IsReadOnly="True" />
-
                             <DataGridTextColumn
                                 Width="auto"
                                 Binding="{Binding Staff.Staffname}"
@@ -181,7 +191,6 @@
                                 Width="auto"
                                 Header="Tùy chỉnh"
                                 IsReadOnly="True">
-
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
                                         <StackPanel Orientation="Horizontal">
@@ -204,10 +213,9 @@
                             </DataGridTemplateColumn>
                         </DataGrid.Columns>
                     </DataGrid>
-                </ScrollViewer>
+                </Border>
             </Grid>
         </Border>
-
         <materialDesign:DialogHost
             Background="Transparent"
             DialogTheme="Inherit"

@@ -133,7 +133,7 @@ namespace CafeManager.Core.DTOs
             }
         }
 
-        public decimal TotalQuantity => (Importdetails?.Sum(x => x.Quantity) ?? 0) - (Consumedmaterials?.Sum(x => x.Quantity) ?? 0);
+        public decimal TotalQuantity => (Importdetails?.Where(x => x.Isdeleted == false).Sum(x => x.Quantity) ?? 0) - (Consumedmaterials?.Where(x => x.Isdeleted == false).Sum(x => x.Quantity) ?? 0);
 
         public MaterialDTO Material
         {

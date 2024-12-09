@@ -142,7 +142,8 @@ namespace CafeManager.Core.DTOs
             }
         }
 
-        public decimal TotalPrice => Importdetails?.Sum(x => x.Quantity * x.Materialsupplier.Price) ?? 0;
+        public decimal TotalPrice => Importdetails?.Where(x => x.Isdeleted == false)
+            .Sum(x => x.Quantity * x.Materialsupplier.Price) ?? 0;
 
         public ImportDTO Clone()
         {

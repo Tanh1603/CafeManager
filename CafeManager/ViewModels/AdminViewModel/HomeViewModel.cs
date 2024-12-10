@@ -157,52 +157,5 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
 
 
 
-        #region handleDatePicker
-
-        [RelayCommand]
-        public void ClearDatePicker(DatePicker datePicker)
-        {
-            if (datePicker != null)
-            {
-                datePicker.SelectedDate = null;
-
-                
-                var textBox = FindChild<DatePickerTextBox>(datePicker);
-                if (textBox != null)
-                {
-                    textBox.Text = string.Empty;
-                }
-            }
-        }
-
-        private T FindChild<T>(DependencyObject parent) where T : DependencyObject
-        {
-            for (int i = 0; i < VisualTreeHelper.GetChildrenCount(parent); i++)
-            {
-                var child = VisualTreeHelper.GetChild(parent, i);
-                if (child is T tChild)
-                    return tChild;
-
-                var result = FindChild<T>(child);
-                if (result != null)
-                    return result;
-            }
-            return null;
-        }
-        #endregion
-
-
-
-        #region handleComboBox
-        [RelayCommand]
-        private void ClearComboBox(ComboBox comboBox)
-        {
-            if (comboBox != null)
-            {
-                comboBox.SelectedItem = null; // Đặt SelectedItem về null
-                comboBox.Text = string.Empty; // Xóa nội dung Text
-            }
-        }
-        #endregion
     }
 }

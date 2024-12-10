@@ -75,9 +75,9 @@
                     Text="Đến:" />
                 <DatePicker
                     Width="140"
-                    materialDesign:TextFieldAssist.HasClearButton="True"
+                    
                     SelectedDate="{Binding EndDate}"
-                    Style="{StaticResource MaterialDesignFilledDatePicker}" />
+                    Style="{StaticResource DatePicker}" />
 
                 <TextBlock
                     Margin="10,0"
@@ -91,7 +91,8 @@
                     materialDesign:TextFieldAssist.HasClearButton="True"
                     SelectedValue="{Binding Status, UpdateSourceTrigger=PropertyChanged}"
                     SelectedValuePath="Content"
-                    Style="{StaticResource MaterialDesignFilledComboBox}">
+                    Style="{StaticResource ComboBoxStyle}"
+                    ItemContainerStyle="{StaticResource ComboBoxItemStyle}">
                     <ComboBoxItem Content="Hóa đơn đã thanh toán" />
                     <ComboBoxItem Content="Hóa đơn đã bị hủy" />
                 </ComboBox>

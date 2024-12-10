@@ -31,7 +31,7 @@
                         FontSize="46"
                         FontWeight="SemiBold"
                         Foreground="#ffffff"
-                        Text="Đăng nhập"
+                        Text="Cafe Manager"
                         TextAlignment="Center" />
                     <Border
                         Width="100"
@@ -166,7 +166,7 @@
                             FontSize="32"
                             FontWeight="Bold"
                             Foreground="#cb925d"
-                            Text="Đăng nhập vào phần mềm" />
+                            Text="Đăng nhập" />
                         <!--  inputs  -->
                         <StackPanel Grid.Row="1" Margin="50,20">
                             <Grid Margin="0,10">
@@ -242,6 +242,7 @@
                                     HorizontalAlignment="Right"
                                     VerticalAlignment="Center"
                                     FontSize="18"
+                                    Background="Transparent"
                                     IsChecked="{Binding IsRememberAccount}">
                                     <TextBlock Margin="0,0,0,3">
 

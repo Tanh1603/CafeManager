@@ -103,8 +103,7 @@ namespace CafeManager.Infrastructure.Repositories
             return newSupplier; // Trả về bản ghi mới tạo
         }
 
-
-        public override async Task<bool> Delete(int id)
+        public override async Task<bool> Delete(int id, CancellationToken token = default)
         {
             var importDeleted = await _cafeManagerContext.Imports.FindAsync(id);
             if (importDeleted != null)

@@ -9,27 +9,21 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Microsoft.Extensions.DependencyInjection;
 using System.Windows.Media.Imaging;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement.ToolTip;
 
 namespace CafeManager.WPF.ViewModels
 {
     public partial class SettingAccountViewModel : ObservableObject
     {
-        private readonly IServiceProvider _provider;
         private readonly AccountStore _accountStore;
         private readonly AppUserServices _appUserServices;
         private readonly EncryptionHelper _encryptionHelper;
         private readonly FileDialogService _fileDialogService;
         private readonly IMapper _mapper;
 
-
-
-
-
         [ObservableProperty]
         private AppUserDTO _account = new();
 
-        public event Action Close;
+        public event Action? Close;
 
         [ObservableProperty]
         private string _oldPassword = string.Empty;
@@ -43,9 +37,9 @@ namespace CafeManager.WPF.ViewModels
         [ObservableProperty]
         private bool _isOpenChangePassWord = false;
 
-        public SettingAccountViewModel(IServiceProvider provider)
+        public SettingAccountViewModel(IServiceScope scope)
         {
-            _provider = provider;
+            var provider = scope.ServiceProvider;
             _accountStore = provider.GetRequiredService<AccountStore>();
             _appUserServices = provider.GetRequiredService<AppUserServices>();
             _encryptionHelper = provider.GetRequiredService<EncryptionHelper>();

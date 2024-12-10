@@ -38,7 +38,7 @@ namespace CafeManager.Infrastructure.Repositories
                             .FirstOrDefaultAsync(x => x.Foodcategoryid == id) ?? null;
         }
 
-        public override async Task<bool> Delete(int id)
+        public override async Task<bool> Delete(int id, CancellationToken token = default)
         {
             var foodCategoryById = await GetFoodCategoryByIdAsync(id);
             if (foodCategoryById == null)

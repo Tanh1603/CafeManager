@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using CafeManager.Core.Data;
 using CafeManager.Core.DTOs;
+using CafeManager.Core.Services;
 using CafeManager.WPF.MessageBox;
 using CafeManager.WPF.Services;
 using CafeManager.WPF.ViewModels.AddViewModel;
@@ -8,14 +9,16 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Microsoft.Extensions.DependencyInjection;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 
 namespace CafeManager.WPF.ViewModels.AdminViewModel
 {
-    public partial class SupplierViewModel : ObservableObject, IDisposable
+    public partial class SupplierViewModel : ObservableObject, IDisposable, IDataViewModel
     {
-        private readonly IServiceProvider _serviceProvider;
         private readonly MaterialSupplierServices _materialSupplierServices;
         private IMapper _mapper;
+        private CancellationTokenSource? _cts;
+        private readonly IServiceScope _scope;
 
         [ObservableProperty]
         private bool _isOpenAddSupplier = false;
@@ -47,23 +50,47 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
             }
         }
 
-        public SupplierViewModel(IServiceProvider provider)
+        public SupplierViewModel(IServiceScope scope)
         {
-            _serviceProvider = provider;
+            _scope = scope;
+            var provider = scope.ServiceProvider;
             _materialSupplierServices = provider.GetRequiredService<MaterialSupplierServices>();
-            _mapper = _serviceProvider.GetRequiredService<IMapper>();
-            ModifySupplierVM = _serviceProvider.GetRequiredService<AddSuppierViewModel>();
+            _mapper = provider.GetRequiredService<IMapper>();
+            ModifySupplierVM = provider.GetRequiredService<AddSuppierViewModel>();
             ModifySupplierVM.ModifySupplierChanged += ModifySupplierVM_ModifySupplierChanged;
-            Task.Run(LoadData);
         }
 
-        private async Task LoadData()
+        public async Task LoadData(CancellationToken token = default)
         {
-            AllSupplier = _mapper.Map<List<SupplierDTO>>(await _materialSupplierServices.GetListSupplier());
-            _filterSupplierList = _mapper.Map<List<SupplierDTO>>(AllSupplier);
+            try
+            {
+                token.ThrowIfCancellationRequested();
+                AllSupplier = _mapper.Map<List<SupplierDTO>>(await _materialSupplierServices.GetListSupplier());
+                _filterSupplierList = _mapper.Map<List<SupplierDTO>>(AllSupplier);
 
-            OnPropertyChanged(nameof(ListExistedSupplier));
-            OnPropertyChanged(nameof(ListDeletedSupplier));
+                OnPropertyChanged(nameof(ListExistedSupplier));
+                OnPropertyChanged(nameof(ListDeletedSupplier));
+            }
+            catch (OperationCanceledException)
+            {
+                Debug.WriteLine("LoadData của SupplierViewModel bị hủy");
+            }
+            finally
+            {
+                if (_cts != null)
+                {
+                    _cts.Cancel();
+                    _cts.Dispose();
+                    _cts = null;
+                }
+            }
+        }
+
+        public void CancelLoadData()
+        {
+            _cts?.Cancel();
+            _cts?.Dispose();
+            _cts = null;
         }
 
         private void FilterSupplier()
@@ -213,6 +240,12 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
             if (ModifySupplierVM != null)
             {
                 ModifySupplierVM.ModifySupplierChanged -= ModifySupplierVM_ModifySupplierChanged;
+            }
+            if (_cts != null)
+            {
+                _cts.Cancel();
+                _cts.Dispose();
+                _cts = null;
             }
             GC.SuppressFinalize(this);
         }

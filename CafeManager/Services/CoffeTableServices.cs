@@ -10,14 +10,21 @@ using System.Threading.Tasks;
 
 namespace CafeManager.WPF.Services
 {
-    public class CoffeTableServices(IServiceProvider provider)
+    public class CoffeTableServices(IUnitOfWork unitOfWork)
     {
-        private IServiceProvider _provider = provider;
-        private IUnitOfWork _unitOfWork = provider.GetRequiredService<IUnitOfWork>();
+        private IUnitOfWork _unitOfWork = unitOfWork;
 
-        public async Task<IEnumerable<Coffeetable>> GetListCoffeTable()
+        public async Task<IEnumerable<Coffeetable>> GetListCoffeTable(CancellationToken token = default)
         {
-            return await _unitOfWork.CoffeeTableList.GetAll();
+            try
+            {
+                token.ThrowIfCancellationRequested();
+                return await _unitOfWork.CoffeeTableList.GetAll(token);
+            }
+            catch (OperationCanceledException)
+            {
+                throw new OperationCanceledException();
+            }
         }
 
         public async Task<IEnumerable<Invoice>> GetListInvoicesByCoffeeTableId(int id)

@@ -1,19 +1,18 @@
 ﻿using AutoMapper;
 using CafeManager.Core.Data;
 using CafeManager.Core.DTOs;
+using CafeManager.Core.Services;
 using CafeManager.WPF.MessageBox;
 using CafeManager.WPF.Services;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Microsoft.Extensions.DependencyInjection;
 using System.Collections.ObjectModel;
 
 namespace CafeManager.WPF.ViewModels.AdminViewModel
 {
-    public partial class TableViewModel : ObservableObject
+    public partial class TableViewModel : ObservableObject, IDataViewModel
     {
-        private readonly IServiceProvider _provider;
         private readonly CoffeTableServices _coffeTableServices;
         private readonly IMapper _mapper;
 
@@ -32,18 +31,24 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
         [ObservableProperty]
         private bool _isOpenModifyTable;
 
-        public TableViewModel(IServiceProvider provider)
+        public TableViewModel(IServiceScope scope)
         {
-            _provider = provider;
+            var provider = scope.ServiceProvider;
             _coffeTableServices = provider.GetRequiredService<CoffeTableServices>();
             _mapper = provider.GetRequiredService<IMapper>();
-            Task.Run(LoadData);
         }
 
-        private async Task LoadData()
+        public async Task LoadData(CancellationToken token = default)
         {
-            var coffeeTables = await _coffeTableServices.GetListCoffeTable();
-            ListTable = [.. _mapper.Map<List<CoffeetableDTO>>(coffeeTables)];
+            try
+            {
+                token.ThrowIfCancellationRequested();
+                var coffeeTables = await _coffeTableServices.GetListCoffeTable(token);
+                ListTable = [.. _mapper.Map<List<CoffeetableDTO>>(coffeeTables)];
+            }
+            catch (OperationCanceledException)
+            {
+            }
         }
 
         [RelayCommand]

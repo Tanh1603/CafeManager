@@ -11,8 +11,8 @@ namespace CafeManager.Infrastructure.Models
 {
     public class UnitOfWork : IUnitOfWork
     {
+        private readonly IDbContextFactory<CafeManagerContext> _dbContextFactory;
         private readonly CafeManagerContext _context;
-
         private IDbContextTransaction _transaction;
         private bool _isTransactionActive;
         private int _transactionDepth = 0;
@@ -52,9 +52,9 @@ namespace CafeManager.Infrastructure.Models
 
         public IConsumedMaterialRepository ConsumedMaterialList { get; private set; }
 
-        public UnitOfWork(IDbContextFactory<CafeManagerContext> dbContextFactory)
+        public UnitOfWork(IDbContextFactory<CafeManagerContext> contextFactory)
         {
-            _context = dbContextFactory.CreateDbContext();
+            _context = contextFactory.CreateDbContext();
 
             FoodCategoryList = new FoodCategoryRepository(_context);
             FoodList = new FoodRepository(_context);
@@ -86,9 +86,10 @@ namespace CafeManager.Infrastructure.Models
 
         public void Dispose()
         {
-            _context.Dispose();
-            _transaction?.Dispose();
-
+            if (_transaction != null)
+            {
+                _transaction.Dispose();
+            }
             GC.SuppressFinalize(this);
         }
 

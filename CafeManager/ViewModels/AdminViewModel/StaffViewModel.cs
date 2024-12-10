@@ -1,20 +1,20 @@
 ﻿using AutoMapper;
 using CafeManager.Core.Data;
 using CafeManager.Core.DTOs;
+using CafeManager.Core.Services;
 using CafeManager.WPF.MessageBox;
 using CafeManager.WPF.Services;
 using CafeManager.WPF.ViewModels.AddViewModel;
 using CommunityToolkit.Mvvm.ComponentModel;
-using CommunityToolkit.Mvvm.DependencyInjection;
 using CommunityToolkit.Mvvm.Input;
 using Microsoft.Extensions.DependencyInjection;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 
 namespace CafeManager.WPF.ViewModels.AdminViewModel
 {
-    public partial class StaffViewModel : ObservableObject, IDisposable
+    public partial class StaffViewModel : ObservableObject, IDisposable, IDataViewModel
     {
-        private readonly IServiceProvider _provider;
         private readonly StaffServices _staffServices;
         private readonly IMapper _mapper;
 
@@ -54,23 +54,30 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
             }
         }
 
-        public StaffViewModel(IServiceProvider provider)
+        public StaffViewModel(IServiceScope scope)
         {
-            _provider = provider;
+            var provider = scope.ServiceProvider;
             _staffServices = provider.GetRequiredService<StaffServices>();
             ModifyStaffVM = provider.GetRequiredService<ModifyStaffViewModel>();
             ModifyStaffVM.StaffChanged += ModifyStaffVM_StaffChanged;
             _mapper = provider.GetRequiredService<IMapper>();
-            Task.Run(LoadData);
         }
 
-        private async Task LoadData()
+        public async Task LoadData(CancellationToken token = default)
         {
-            var dbListStaff = await _staffServices.GetListStaff();
-            AllStaff = new List<StaffDTO>(_mapper.Map<List<StaffDTO>>(dbListStaff));
-            _filterListStaff = [.. AllStaff];
-            OnPropertyChanged(nameof(ListExistedStaff));
-            OnPropertyChanged(nameof(ListDeletedStaff));
+            try
+            {
+                token.ThrowIfCancellationRequested();
+                var dbListStaff = await _staffServices.GetListStaff(token);
+                AllStaff = new List<StaffDTO>(_mapper.Map<List<StaffDTO>>(dbListStaff));
+                _filterListStaff = [.. AllStaff];
+                OnPropertyChanged(nameof(ListExistedStaff));
+                OnPropertyChanged(nameof(ListDeletedStaff));
+            }
+            catch (OperationCanceledException)
+            {
+                Debug.WriteLine("LoadData của StaffViewModel bị hủy");
+            }
         }
 
         private void FilterStaff()

@@ -1,25 +1,25 @@
 ﻿using AutoMapper;
 using CafeManager.Core.Data;
 using CafeManager.Core.DTOs;
+using CafeManager.Core.Services;
 using CafeManager.WPF.MessageBox;
 using CafeManager.WPF.Services;
 using CafeManager.WPF.ViewModels.AddViewModel;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.IdentityModel.Tokens;
+using Newtonsoft.Json.Linq;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.Linq.Expressions;
-using System.Windows;
 
 namespace CafeManager.WPF.ViewModels.AdminViewModel
 {
-    public partial class InvoiceViewModel : ObservableObject
+    public partial class InvoiceViewModel : ObservableObject, IDataViewModel
     {
-        private readonly IServiceProvider _provider;
         private readonly InvoiceServices _invoiceServices;
         private readonly IMapper _mapper;
+        private CancellationToken _token = default;
 
         [ObservableProperty]
         private ModifyInvoiceViewModel _modifyInvoiceVM;
@@ -41,7 +41,7 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
                 {
                     _startDate = value;
                     OnPropertyChanged();
-                    _ = LoadData();
+                    _ = LoadData(_token);
                 }
             }
         }
@@ -57,7 +57,7 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
                 {
                     _endDate = value;
                     OnPropertyChanged();
-                    _ = LoadData();
+                    _ = LoadData(_token);
                 }
             }
         }
@@ -72,7 +72,7 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
                 {
                     _status = value;
                     OnPropertyChanged();
-                    _ = LoadData();
+                    _ = LoadData(_token);
                 }
             }
         }
@@ -87,34 +87,54 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
                 {
                     _paymentMethod = value;
                     OnPropertyChanged();
-                    _ = LoadData();
+                    _ = LoadData(_token);
                 }
             }
         }
 
-        public InvoiceViewModel(IServiceProvider provider)
+        public InvoiceViewModel(IServiceScope scope)
         {
-            _provider = provider;
+            var provider = scope.ServiceProvider;
             _invoiceServices = provider.GetRequiredService<InvoiceServices>();
             _mapper = provider.GetRequiredService<IMapper>();
-
             ModifyInvoiceVM = provider.GetRequiredService<ModifyInvoiceViewModel>();
-            Task.Run(LoadData);
         }
 
-        private async Task LoadData()
+        public async Task LoadData(CancellationToken token = default)
         {
-            Expression<Func<Invoice, bool>> filter = invoice =>
-            (invoice.Isdeleted == false) &&
-            (StartDate == null || invoice.Paymentstartdate >= StartDate) &&
-            (EndDate == null || invoice.Paymentenddate <= EndDate) &&
-            (string.IsNullOrEmpty(Status) || invoice.Paymentstatus.Contains(Status)) &&
-            (string.IsNullOrEmpty(PaymentMethod) || invoice.Paymentmethod.Contains(PaymentMethod));
+            try
+            {
+                if (token == default)
+                {
+                    _token = token;
+                }
+                token.ThrowIfCancellationRequested();
 
-            var dbListInvoice = await _invoiceServices.GetSearchPaginateListInvoice(filter, pageIndex, pageSize);
-            ListInvoiceDTO = [.. _mapper.Map<List<InvoiceDTO>>(dbListInvoice.Item1)];
-            totalPages = (dbListInvoice.Item2 + pageSize - 1) / pageSize;
-            OnPropertyChanged(nameof(PageUI));
+                Expression<Func<Invoice, bool>> filter = invoice =>
+                (invoice.Isdeleted == false) &&
+                (StartDate == null || invoice.Paymentstartdate >= StartDate) &&
+                (EndDate == null || invoice.Paymentenddate <= EndDate) &&
+                (string.IsNullOrEmpty(Status) || invoice.Paymentstatus.Contains(Status)) &&
+                (string.IsNullOrEmpty(PaymentMethod) || invoice.Paymentmethod.Contains(PaymentMethod));
+
+                var dbListInvoice = await _invoiceServices.GetSearchPaginateListInvoice(filter, pageIndex, pageSize, token);
+                ListInvoiceDTO = [.. _mapper.Map<List<InvoiceDTO>>(dbListInvoice.Item1)];
+                totalPages = (dbListInvoice.Item2 + pageSize - 1) / pageSize;
+                OnPropertyChanged(nameof(PageUI));
+            }
+            catch (OperationCanceledException)
+            {
+                Debug.WriteLine("LoadData của InvoiceViewModel bị hủy");
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"An error occurred: {ex.Message}");
+                throw;
+            }
+            finally
+            {
+                token = default;
+            }
         }
 
         [RelayCommand]
@@ -136,7 +156,7 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
                     if (isSuccessDeleted)
                     {
                         MyMessageBox.Show("Xóa hóa đơn thành công");
-                        _ = LoadData();
+                        await LoadData(_token);
                     }
                 }
             }
@@ -165,8 +185,7 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
         private async Task FirstPage()
         {
             pageIndex = 1;
-
-            await LoadData();
+            await LoadData(_token);
         }
 
         [RelayCommand]
@@ -177,7 +196,7 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
                 return;
             }
             pageIndex += 1;
-            await LoadData();
+            await LoadData(_token);
         }
 
         [RelayCommand]
@@ -188,14 +207,14 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
                 return;
             }
             pageIndex -= 1;
-            await LoadData();
+            await LoadData(_token);
         }
 
         [RelayCommand]
         private async Task LastPage()
         {
             pageIndex = totalPages;
-            await LoadData();
+            await LoadData(_token);
         }
 
         #endregion Phân trang

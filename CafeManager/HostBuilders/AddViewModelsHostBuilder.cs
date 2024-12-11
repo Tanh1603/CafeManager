@@ -20,34 +20,34 @@ namespace CafeManager.WPF.HostBuilders
         {
             hostBuilder.ConfigureServices(services =>
             {
-                services.AddTransient<MainViewModel>(provider => new MainViewModel(provider));
-                services.AddTransient<MainAdminViewModel>(provider => new MainAdminViewModel(provider));
-                services.AddTransient<MainUserViewModel>(provider => new MainUserViewModel(provider));
+                services.AddTransient<MainViewModel>();
+                services.AddTransient<MainAdminViewModel>();
+                services.AddTransient<MainUserViewModel>();
 
-                services.AddTransient<AppUserViewModel>(provider => new AppUserViewModel(provider));
-                services.AddTransient<FoodViewModel>(provider => new FoodViewModel(provider));
-                services.AddTransient<HomeViewModel>(provider => new HomeViewModel(provider));
-                services.AddTransient<ImportViewModel>(provider => new ImportViewModel(provider));
-                services.AddTransient<InventoryViewModel>(provider => new InventoryViewModel(provider));
-                services.AddTransient<InvoiceViewModel>(provider => new InvoiceViewModel(provider));
-                services.AddTransient<StaffViewModel>(provider => new StaffViewModel(provider));
-                services.AddTransient<SupplierViewModel>(provider => new SupplierViewModel(provider));
-                services.AddTransient<TableViewModel>(provider => new TableViewModel(provider));
+                services.AddTransient<AppUserViewModel>();
+                services.AddTransient<FoodViewModel>(provider => new FoodViewModel(provider.CreateScope()));
+                services.AddTransient<HomeViewModel>();
+                services.AddTransient<ImportViewModel>(provider => new ImportViewModel(provider.CreateScope()));
+                services.AddTransient<InventoryViewModel>(provider => new InventoryViewModel(provider.CreateScope()));
+                services.AddTransient<InvoiceViewModel>(provider => new InvoiceViewModel(provider.CreateScope()));
+                services.AddTransient<StaffViewModel>(provider => new StaffViewModel(provider.CreateScope()));
+                services.AddTransient<SupplierViewModel>(provider => new SupplierViewModel(provider.CreateScope()));
+                services.AddTransient<TableViewModel>(provider => new TableViewModel(provider.CreateScope()));
 
-                services.AddTransient<LoginViewModel>(provider => new LoginViewModel(provider));
-                services.AddTransient<RegisterViewModel>(provider => new RegisterViewModel(provider));
-                services.AddTransient<SettingAccountViewModel>(provider => new SettingAccountViewModel(provider));
-                services.AddTransient<OrderViewModel>(provider => new OrderViewModel(provider));
+                services.AddTransient<LoginViewModel>();
+                services.AddTransient<RegisterViewModel>();
+                services.AddTransient<SettingAccountViewModel>(provider => new(provider.CreateScope()));
+                services.AddTransient<OrderViewModel>(provider => new OrderViewModel(provider.CreateScope()));
 
-                services.AddTransient<AddSuppierViewModel>(provider => new AddSuppierViewModel(provider));
-                services.AddTransient<AddMaterialViewModel>(provider => new AddMaterialViewModel(provider));
-                services.AddTransient<ModifyFoodViewModel>(provider => new ModifyFoodViewModel(provider));
-                services.AddTransient<AddImportViewModel>(provider => new AddImportViewModel(provider));
-                services.AddTransient<ModifyStaffViewModel>(provider => new ModifyStaffViewModel(provider));
-                services.AddTransient<ModifyInvoiceViewModel>(provider => new ModifyInvoiceViewModel(provider));
+                services.AddTransient<AddSuppierViewModel>();
+                services.AddTransient<AddMaterialViewModel>();
+                services.AddTransient<ModifyFoodViewModel>();
+                services.AddTransient<AddImportViewModel>();
+                services.AddTransient<ModifyStaffViewModel>();
+                services.AddTransient<ModifyInvoiceViewModel>();
 
-                services.AddSingleton<NavigationStore>(provider => new NavigationStore(provider));
-                services.AddSingleton<AccountStore>(provider => new AccountStore(provider));
+                services.AddSingleton<NavigationStore>();
+                services.AddSingleton<AccountStore>();
                 services.AddSingleton<MainWindow>(provider => new MainWindow()
                 {
                     DataContext = provider.GetRequiredService<MainViewModel>()

@@ -12,13 +12,11 @@ namespace CafeManager.WPF.Services
 {
     public class ImportDetailServices
     {
-        private readonly IServiceProvider _provider;
         private readonly IUnitOfWork _unitOfWork;
 
-        public ImportDetailServices(IServiceProvider provider)
+        public ImportDetailServices(IUnitOfWork unitOfWork)
         {
-            _provider = provider;
-            _unitOfWork = _provider.GetRequiredService<IUnitOfWork>();
+            _unitOfWork = unitOfWork;
         }
 
         public async Task<bool> DeleteImportdetail(ImportMaterialDetailDTO importMaterial)
@@ -43,7 +41,7 @@ namespace CafeManager.WPF.Services
             }
         }
 
-            public async Task AddImportDetailArange(List<MaterialSupplierDTO> materialDetailDTOs, Import import, Material addMaterial, Supplier addSupplier)
+        public async Task AddImportDetailArange(List<MaterialSupplierDTO> materialDetailDTOs, Import import, Material addMaterial, Supplier addSupplier)
         {
             //try
             //{

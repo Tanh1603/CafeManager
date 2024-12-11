@@ -1,24 +1,24 @@
 ﻿using AutoMapper;
 using CafeManager.Core.Data;
 using CafeManager.Core.DTOs;
+using CafeManager.Core.Services;
 using CafeManager.WPF.MessageBox;
 using CafeManager.WPF.Services;
 using CafeManager.WPF.ViewModels.AddViewModel;
-using Castle.Components.DictionaryAdapter.Xml;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Microsoft.Extensions.DependencyInjection;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 
 namespace CafeManager.WPF.ViewModels.AdminViewModel
 {
-    public partial class FoodViewModel : ObservableObject, IDisposable
+    public partial class FoodViewModel : ObservableObject, IDisposable, IDataViewModel
     {
-        private readonly IServiceProvider _provider;
         private readonly FoodCategoryServices _foodCategoryServices;
         private readonly FoodServices _foodServices;
-        private readonly FileDialogService _fileDialogService;
         private readonly IMapper _mapper;
+        private CancellationToken _token = default;
 
         [ObservableProperty]
         private ObservableCollection<FoodCategoryDTO> _listFoodCategory = [];
@@ -69,25 +69,35 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
             }
         }
 
-        public FoodViewModel(IServiceProvider provider)
+        public FoodViewModel(IServiceScope scope)
         {
-            _provider = provider;
+            var provider = scope.ServiceProvider;
             _foodCategoryServices = provider.GetRequiredService<FoodCategoryServices>();
             _foodServices = provider.GetRequiredService<FoodServices>();
-            _fileDialogService = provider.GetRequiredService<FileDialogService>();
             _mapper = provider.GetRequiredService<IMapper>();
             ModifyFoodVM = provider.GetRequiredService<ModifyFoodViewModel>();
             ModifyFoodVM.ModifyFoodChanged += ModifyFoodVM_ModifyFoodChanged;
-            Task.Run(LoadData);
         }
 
-        private async Task LoadData()
+        public async Task LoadData(CancellationToken token = default)
         {
-            var dbListFoodCategory = await _foodCategoryServices.GetAllListFoodCategory();
-            ListFoodCategory = [.. _mapper.Map<List<FoodCategoryDTO>>(dbListFoodCategory)];
-            SelectedFoodCategory = ListFoodCategory[0];
-            FilterListFood();
-            ModifyFoodVM.ReceiveListFoodCategory(ListFoodCategory.ToList());
+            try
+            {
+                if (_token == default)
+                {
+                    _token = token;
+                }
+                token.ThrowIfCancellationRequested();
+                var dbListFoodCategory = await _foodCategoryServices.GetAllListFoodCategory(token);
+                ListFoodCategory = [.. _mapper.Map<List<FoodCategoryDTO>>(dbListFoodCategory)];
+                SelectedFoodCategory = ListFoodCategory[0];
+                FilterListFood();
+                ModifyFoodVM.ReceiveListFoodCategory(ListFoodCategory.ToList());
+            }
+            catch (OperationCanceledException)
+            {
+                Debug.WriteLine("LoadData của FoodViewModel bị hủy");
+            }
         }
 
         private void FilterListFood()

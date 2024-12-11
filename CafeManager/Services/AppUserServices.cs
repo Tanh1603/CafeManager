@@ -10,11 +10,11 @@ using System.Reflection;
 
 namespace CafeManager.WPF.Services
 {
-    public class AppUserServices(IServiceProvider provider)
+    public class AppUserServices(IUnitOfWork unitOfWork, IConfiguration configuration, EncryptionHelper encryptionHelper)
     {
-        private readonly IServiceProvider _provider = provider;
-        private readonly IUnitOfWork _unitOfWork = provider.GetRequiredService<IUnitOfWork>();
-        private readonly IConfiguration configuration = provider.GetRequiredService<IConfiguration>();
+        private readonly IUnitOfWork _unitOfWork = unitOfWork;
+        private readonly IConfiguration _configuration = configuration;
+        private readonly EncryptionHelper _encryptionHelper = encryptionHelper;
         public string VerificationCode { get; private set; } = string.Empty;
         public string NewPassWord { get; private set; } = string.Empty;
 
@@ -29,7 +29,7 @@ namespace CafeManager.WPF.Services
                 {
                     throw new InvalidOperationException("Tài khoản đã tồn tại ");
                 }
-                appuser.Password = _provider.GetRequiredService<EncryptionHelper>().EncryptAES(appuser.Password);
+                appuser.Password = _encryptionHelper.EncryptAES(appuser.Password);
                 Appuser newAppuser = await _unitOfWork.AppUserList.Create(appuser);
                 await _unitOfWork.CompleteAsync();
                 await _unitOfWork.CommitTransactionAsync();
@@ -52,7 +52,7 @@ namespace CafeManager.WPF.Services
                 {
                     return (null, false, null);
                 }
-                bool isPasswordMatch = _provider.GetRequiredService<EncryptionHelper>().DecryptAES(exisiting.Password ?? string.Empty)?.Equals(password) ?? false;
+                bool isPasswordMatch = _encryptionHelper.DecryptAES(exisiting.Password ?? string.Empty)?.Equals(password) ?? false;
                 return (exisiting, isPasswordMatch, exisiting?.Role);
             }
             catch
@@ -111,12 +111,12 @@ namespace CafeManager.WPF.Services
 
                 using SmtpClient smtpClient = new("smtp.gmail.com");
                 smtpClient.Port = 587;
-                smtpClient.Credentials = new NetworkCredential(configuration["Email:AdminAccount"], configuration["Email:PassWord"]);
+                smtpClient.Credentials = new NetworkCredential(_configuration["Email:AdminAccount"], configuration["Email:PassWord"]);
                 smtpClient.EnableSsl = true;
 
                 MailMessage mailMessage = new()
                 {
-                    From = new MailAddress(configuration["Email:AdminAccount"], "Cafe Manager App"),
+                    From = new MailAddress(_configuration["Email:AdminAccount"], "Cafe Manager App"),
                     Subject = "Xác thực tài khoản",
                     Body = emailBody,
                     IsBodyHtml = true,
@@ -157,12 +157,12 @@ namespace CafeManager.WPF.Services
 
                 using SmtpClient smtpClient = new("smtp.gmail.com");
                 smtpClient.Port = 587;
-                smtpClient.Credentials = new NetworkCredential(configuration["Email:AdminAccount"], configuration["Email:PassWord"]);
+                smtpClient.Credentials = new NetworkCredential(_configuration["Email:AdminAccount"], configuration["Email:PassWord"]);
                 smtpClient.EnableSsl = true;
 
                 MailMessage mailMessage = new()
                 {
-                    From = new MailAddress(configuration["Email:AdminAccount"], "Cafe Manager App"),
+                    From = new MailAddress(_configuration["Email:AdminAccount"], "Cafe Manager App"),
                     Subject = "Đặt lại mật khẩu",
                     Body = emailBody,
                     IsBodyHtml = true,
@@ -188,7 +188,7 @@ namespace CafeManager.WPF.Services
                 {
                     return false;
                 }
-                res.Password = _provider.GetRequiredService<EncryptionHelper>().EncryptAES(NewPassWord);
+                res.Password = _encryptionHelper.EncryptAES(NewPassWord);
                 await _unitOfWork.AppUserList.Update(res);
                 await _unitOfWork.CompleteAsync();
                 await _unitOfWork.CommitTransactionAsync();

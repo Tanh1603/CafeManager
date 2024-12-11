@@ -17,9 +17,17 @@ namespace CafeManager.WPF.Services
         private readonly IServiceProvider _provider = provider;
         private readonly IUnitOfWork _unitOfWork = provider.GetRequiredService<IUnitOfWork>();
 
-        public async Task<IEnumerable<Consumedmaterial>> GetListConsumedMaterial()
+        public async Task<IEnumerable<Consumedmaterial>> GetListConsumedMaterial(CancellationToken token = default)
         {
-            return await _unitOfWork.ConsumedMaterialList.GetAll();
+            try
+            {
+                token.ThrowIfCancellationRequested();
+                return await _unitOfWork.ConsumedMaterialList.GetAll();
+            }
+            catch (OperationCanceledException)
+            {
+                throw;
+            }
         }
 
         public async Task<Consumedmaterial> AddConsumedmaterial(Consumedmaterial addConsumedMaterial)

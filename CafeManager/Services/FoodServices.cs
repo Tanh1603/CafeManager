@@ -6,13 +6,11 @@ namespace CafeManager.WPF.Services
 {
     public class FoodServices
     {
-        private readonly IServiceProvider _serviceProvider;
         private readonly IUnitOfWork _unitOfWork;
 
-        public FoodServices(IServiceProvider serviceProvider)
+        public FoodServices(IUnitOfWork unitOfWork)
         {
-            _serviceProvider = serviceProvider;
-            _unitOfWork = _serviceProvider.GetRequiredService<IUnitOfWork>();
+            _unitOfWork = unitOfWork;
         }
 
         public async Task<Food?> GetFoodById(int id)
@@ -20,9 +18,17 @@ namespace CafeManager.WPF.Services
             return await _unitOfWork.FoodList.GetById(id);
         }
 
-        public async Task<IEnumerable<Food>> GetAllFood()
+        public async Task<IEnumerable<Food>> GetAllFood(CancellationToken token = default)
         {
-            return await _unitOfWork.FoodList.GetAll();
+            try
+            {
+                token.ThrowIfCancellationRequested();
+                return await _unitOfWork.FoodList.GetAll();
+            }
+            catch (OperationCanceledException)
+            {
+                throw;
+            }
         }
 
         public async Task<Food> CreateFood(Food food)

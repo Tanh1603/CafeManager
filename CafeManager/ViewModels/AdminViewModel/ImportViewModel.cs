@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using CafeManager.Core.Data;
 using CafeManager.Core.DTOs;
+using CafeManager.Core.Services;
 using CafeManager.WPF.MessageBox;
 using CafeManager.WPF.Services;
 using CafeManager.WPF.ViewModels.AddViewModel;
@@ -8,12 +9,12 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Microsoft.Extensions.DependencyInjection;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 
 namespace CafeManager.WPF.ViewModels.AdminViewModel
 {
-    public partial class ImportViewModel : ObservableObject
+    public partial class ImportViewModel : ObservableObject, IDataViewModel
     {
-        private readonly IServiceProvider _serviceProvider;
         private readonly ImportServices _importServices;
         private readonly MaterialSupplierServices _materialSupplierServices;
         private readonly StaffServices _staffServices;
@@ -44,37 +45,44 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
                 }
             }
         }
-        public ImportViewModel(IServiceProvider provider)
-        {
-            _serviceProvider = provider;
 
+        public ImportViewModel(IServiceScope scope)
+        {
+            var provider = scope.ServiceProvider;
             _importServices = provider.GetRequiredService<ImportServices>();
             _staffServices = provider.GetRequiredService<StaffServices>();
             _materialSupplierServices = provider.GetRequiredService<MaterialSupplierServices>();
             _mapper = provider.GetRequiredService<IMapper>();
 
-            ModifyImportVM = _serviceProvider.GetRequiredService<AddImportViewModel>();
+            ModifyImportVM = provider.GetRequiredService<AddImportViewModel>();
             ModifyImportVM.ImportChanged += ModifyImportVM_ImportChanged;
             _isOpenModifyImportView = false;
-            Task.Run(LoadData);
         }
 
-        private async Task LoadData()
+        public async Task LoadData(CancellationToken token = default)
         {
-            var dbListStaff = await _staffServices.GetListStaff();
-            ModifyImportVM.ListStaff = [.. _mapper.Map<List<StaffDTO>>(dbListStaff)];
+            try
+            {
+                token.ThrowIfCancellationRequested();
+                var dbListStaff = await _staffServices.GetListStaff();
+                ModifyImportVM.ListStaff = [.. _mapper.Map<List<StaffDTO>>(dbListStaff)];
 
-            var dbListSupplier = (await _materialSupplierServices.GetListSupplier()).Where(x => x.Isdeleted == false);
-            ModifyImportVM.ListSupplier = [.. _mapper.Map<List<SupplierDTO>>(dbListSupplier)];
+                var dbListSupplier = (await _materialSupplierServices.GetListSupplier()).Where(x => x.Isdeleted == false);
+                ModifyImportVM.ListSupplier = [.. _mapper.Map<List<SupplierDTO>>(dbListSupplier)];
 
-            var dbListMaterial = (await _materialSupplierServices.GetListMaterial()).Where(x => x.Isdeleted == false);
-            ModifyImportVM.ListMaterial = [.. _mapper.Map<List<MaterialDTO>>(dbListMaterial)];
+                var dbListMaterial = (await _materialSupplierServices.GetListMaterial()).Where(x => x.Isdeleted == false);
+                ModifyImportVM.ListMaterial = [.. _mapper.Map<List<MaterialDTO>>(dbListMaterial)];
 
-            var importList = (await _importServices.GetListImport())?.Where(x => x.Isdeleted == false);
-            ListImport = [.. _mapper.Map<List<ImportDTO>>(importList)];
+                var importList = (await _importServices.GetListImport())?.Where(x => x.Isdeleted == false);
+                ListImport = [.. _mapper.Map<List<ImportDTO>>(importList)];
 
-            _filterListImport = [.. ListImport];
-            OnPropertyChanged(nameof(CurrentListImport));
+                _filterListImport = [.. ListImport];
+                OnPropertyChanged(nameof(CurrentListImport));
+            }
+            catch (OperationCanceledException)
+            {
+                Debug.WriteLine("LoadData của ImportViewModel bị hủy");
+            }
         }
 
         private void FilterImport()
@@ -113,7 +121,7 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
         }
 
         [RelayCommand]
-        private async void DeleteImport(ImportDTO import)
+        private async Task DeleteImport(ImportDTO import)
         {
             try
             {
@@ -158,7 +166,7 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
                     if (import != null)
                     {
                         var updateImport = await _importServices.UpdateImport(_mapper.Map<Import>(import));
-                        var res  = ListImport.FirstOrDefault(x => x.Importid == import.Importid);
+                        var res = ListImport.FirstOrDefault(x => x.Importid == import.Importid);
                         _mapper.Map(updateImport, res);
                         MyMessageBox.Show("Sửa thông tin phiếu nhập thành công", MyMessageBox.Buttons.OK, MyMessageBox.Icons.Information);
                     }
@@ -182,6 +190,5 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
             ModifyImportVM.ImportChanged -= ModifyImportVM_ImportChanged;
             GC.SuppressFinalize(this);
         }
-
     }
 }

@@ -10,17 +10,18 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Microsoft.Extensions.DependencyInjection;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 
 namespace CafeManager.WPF.ViewModels.AdminViewModel
 {
-    public partial class InventoryViewModel : ObservableObject
+    public partial class InventoryViewModel : ObservableObject, IDataViewModel, IDisposable
     {
-        private readonly IServiceProvider _provider;
         private readonly MaterialSupplierServices _materialSupplierServices;
         private readonly ConsumedMaterialServices _consumedMaterialServices;
         private readonly IMapper _mapper;
 
         #region Material Declare
+
         [ObservableProperty]
         private bool _isOpenAddMaterial = false;
 
@@ -46,9 +47,11 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
 
         [ObservableProperty]
         private MaterialDTO? _deletedMaterial;
-        #endregion
+
+        #endregion Material Declare
 
         #region Inventory Delcare
+
         [ObservableProperty]
         private bool _isAdding = false;
 
@@ -71,9 +74,11 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
 
         private List<ConsumedMaterialDTO> _filterListConsumedMaterial = [];
         private List<MaterialSupplierDTO> _filterListInventory = [];
-        #endregion
+
+        #endregion Inventory Delcare
 
         #region Filter Declare
+
         [ObservableProperty]
         private bool _isFillterAll = true;
 
@@ -84,6 +89,7 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
         private bool _isFilterExpired = false;
 
         private SupplierDTO? _selectedSupplier;
+
         public SupplierDTO? SelectedSupplier
         {
             get => _selectedSupplier;
@@ -99,6 +105,7 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
         }
 
         private MaterialDTO? _selectedMaterial;
+
         public MaterialDTO? SelectedMaterial
         {
             get => _selectedMaterial;
@@ -114,6 +121,7 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
         }
 
         private DateTime? _filterManufacturedate;
+
         public DateTime? FilterManufacturedate
         {
             get => _filterManufacturedate;
@@ -129,6 +137,7 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
         }
 
         private DateTime? _filterExpirationdate;
+
         public DateTime? FilterExpirationdate
         {
             get => _filterExpirationdate;
@@ -142,44 +151,52 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
                 }
             }
         }
-        #endregion
 
-        public InventoryViewModel(IServiceProvider provider)
+        #endregion Filter Declare
+
+        public InventoryViewModel(IServiceScope scope)
         {
-            _provider = provider;
+            var provider = scope.ServiceProvider;
             _materialSupplierServices = provider.GetRequiredService<MaterialSupplierServices>();
             _consumedMaterialServices = provider.GetRequiredService<ConsumedMaterialServices>();
 
-            ModifyMaterialVM = _provider.GetRequiredService<AddMaterialViewModel>();
+            ModifyMaterialVM = provider.GetRequiredService<AddMaterialViewModel>();
             ModifyMaterialVM.ModifyMaterialChanged += ModifyMaterialVM_ModifyMaterialChanged;
             ModifyMaterialVM.Close += ModifyMaterialVM_Close;
 
             _mapper = provider.GetRequiredService<IMapper>();
-            Task.Run(LoadData);
         }
 
-        private async Task LoadData()
+        public async Task LoadData(CancellationToken token = default)
         {
-            var dbMaterialSupplier = (await _materialSupplierServices.GetListMaterialSupplier()).Where(x => x.Isdeleted == false);
-            var dbConsumedMaterial = (await _consumedMaterialServices.GetListConsumedMaterial()).Where(x => x.Isdeleted == false);
-            var dbMaterial = await _materialSupplierServices.GetListMaterial();
-            var dbSupplier = (await _materialSupplierServices.GetListSupplier()).Where(x => x.Isdeleted == false);
+            try
+            {
+                token.ThrowIfCancellationRequested();
+                var dbMaterialSupplier = (await _materialSupplierServices.GetListMaterialSupplier(token)).Where(x => x.Isdeleted == false);
+                var dbConsumedMaterial = (await _consumedMaterialServices.GetListConsumedMaterial(token)).Where(x => x.Isdeleted == false);
+                var dbMaterial = await _materialSupplierServices.GetListMaterial(token);
+                var dbSupplier = (await _materialSupplierServices.GetListSupplier(token)).Where(x => x.Isdeleted == false);
 
-            var listExistedMaterial = dbMaterial.Where(x => x.Isdeleted == false); // List vật liệu đang có
-            var listDeletedMaterial = dbMaterial.Where(x => x.Isdeleted == true); // List vật liệu đã ẩn
+                var listExistedMaterial = dbMaterial.Where(x => x.Isdeleted == false); // List vật liệu đang có
+                var listDeletedMaterial = dbMaterial.Where(x => x.Isdeleted == true); // List vật liệu đã ẩn
 
-            ListMaterialDTO = [.. _mapper.Map<List<MaterialDTO>>(listExistedMaterial)];
-            ListDeletedMaterialDTO = [.. _mapper.Map<List<MaterialDTO>>(listDeletedMaterial)];
-            ListConsumedMaterialDTO = [.. _mapper.Map<List<ConsumedMaterialDTO>>(dbConsumedMaterial)];
-            ListInventoryDTO = [.. _mapper.Map<List<MaterialSupplierDTO>>(dbMaterialSupplier)];
-            ListSupplierDTO = [.. _mapper.Map<List<SupplierDTO>>(dbSupplier)];
+                ListMaterialDTO = [.. _mapper.Map<List<MaterialDTO>>(listExistedMaterial)];
+                ListDeletedMaterialDTO = [.. _mapper.Map<List<MaterialDTO>>(listDeletedMaterial)];
+                ListConsumedMaterialDTO = [.. _mapper.Map<List<ConsumedMaterialDTO>>(dbConsumedMaterial)];
+                ListInventoryDTO = [.. _mapper.Map<List<MaterialSupplierDTO>>(dbMaterialSupplier)];
+                ListSupplierDTO = [.. _mapper.Map<List<SupplierDTO>>(dbSupplier)];
 
-            await CheckTotalQuantity();
+                await CheckTotalQuantity();
 
-            _filterListConsumedMaterial = [.. ListConsumedMaterialDTO];
-            OnPropertyChanged(nameof(CurrentListConsumedMaterial));
-            _filterListInventory = [.. ListInventoryDTO];
-            OnPropertyChanged(nameof(CurrentListInventory));
+                _filterListConsumedMaterial = [.. ListConsumedMaterialDTO];
+                OnPropertyChanged(nameof(CurrentListConsumedMaterial));
+                _filterListInventory = [.. ListInventoryDTO];
+                OnPropertyChanged(nameof(CurrentListInventory));
+            }
+            catch (OperationCanceledException)
+            {
+                Debug.WriteLine("LoadData của ImportViewModel bị hủy");
+            }
         }
 
         private async Task CheckTotalQuantity()
@@ -210,14 +227,13 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
                     (SelectedSupplier == null || x.Materialsupplier.Supplier.Supplierid == SelectedSupplier.Supplierid))
                 .ToList();
 
-
             var filterInventory = ListInventoryDTO
                 .Where(x =>
                     (SelectedMaterial == null || x.Material.Materialid == SelectedMaterial.Materialid) &&
                     (SelectedSupplier == null || x.Supplier.Supplierid == SelectedSupplier.Supplierid))
                 .ToList();
 
-            if(IsFillterAll)
+            if (IsFillterAll)
             {
                 filterConsumed = filterConsumed.Where(x =>
                     (FilterManufacturedate == null || x.Materialsupplier.Manufacturedate == FilterManufacturedate) &&
@@ -228,7 +244,7 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
                     (FilterExpirationdate == null || x.Expirationdate == FilterExpirationdate))
                     .ToList();
             }
-            else if(IsFilterExpiring)
+            else if (IsFilterExpiring)
             {
                 filterConsumed = filterConsumed.Where(x =>
                     (x.Materialsupplier.Expirationdate >= DateTime.Now) &&
@@ -247,11 +263,11 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
                 filterInventory = filterInventory.Where(x =>
                     x.Expirationdate < DateTime.Now)
                     .ToList();
-            }    
+            }
 
             _filterListConsumedMaterial = [.. filterConsumed];
             OnPropertyChanged(nameof(CurrentListConsumedMaterial));
-            _filterListInventory = [..  filterInventory];
+            _filterListInventory = [.. filterInventory];
             OnPropertyChanged(nameof(CurrentListInventory));
         }
 
@@ -280,6 +296,7 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
         }
 
         #region Material
+
         [RelayCommand]
         private void OpenPopupMaterialView()
         {
@@ -436,7 +453,7 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
         #region ConsumedMaterial
 
         [RelayCommand]
-        private async void SubmitConsumedMaterial()
+        private async Task SubmitConsumedMaterial()
         {
             bool ok = false;
             try
@@ -506,11 +523,11 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
             var materialSupplier = ListInventoryDTO.FirstOrDefault(x => x.Materialsupplierid == ModifyConsumedMaterial.Materialsupplierid);
             if (IsAdding)
             {
-                return materialSupplier.TotalQuantity - ModifyConsumedMaterial.Quantity >= 0;
+                return materialSupplier?.TotalQuantity - ModifyConsumedMaterial.Quantity >= 0;
             }
             if (IsUpdating)
             {
-                return materialSupplier.TotalQuantity - (ModifyConsumedMaterial.Quantity - currentQuantity) >= 0;
+                return materialSupplier?.TotalQuantity - (ModifyConsumedMaterial.Quantity - currentQuantity) >= 0;
             }
             return false;
         }
@@ -581,7 +598,7 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
             ClearValueOfFrom();
         }
 
-        #endregion
+        #endregion ConsumedMaterial
 
         public void Dispose()
         {

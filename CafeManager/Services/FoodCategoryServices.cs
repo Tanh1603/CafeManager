@@ -9,14 +9,20 @@ using System.Threading.Tasks;
 
 namespace CafeManager.WPF.Services
 {
-    public class FoodCategoryServices(IServiceProvider provider)
+    public class FoodCategoryServices(IUnitOfWork unitOfWork)
     {
-        private readonly IServiceProvider _provider = provider;
-        private readonly IUnitOfWork _unitOfWork = provider.GetRequiredService<IUnitOfWork>();
+        private readonly IUnitOfWork _unitOfWork = unitOfWork;
 
         public async Task<IEnumerable<Foodcategory>> GetListFoodCategory()
         {
-            return await _unitOfWork.FoodCategoryList.GetAllFoodCategoryAsync();
+            try
+            {
+                return await _unitOfWork.FoodCategoryList.GetAllFoodCategoryAsync();
+            }
+            catch (Exception)
+            {
+                throw;
+            }
         }
 
         public async Task<IEnumerable<Food>> GetListFoodByFoodCatgoryId(int id)
@@ -24,9 +30,19 @@ namespace CafeManager.WPF.Services
             return await _unitOfWork.FoodCategoryList.GetAllFoodByFoodCatgoryIdAsync(id);
         }
 
-        public async Task<IEnumerable<Foodcategory>> GetAllListFoodCategory()
+        public async Task<IEnumerable<Foodcategory>> GetAllListFoodCategory(CancellationToken token = default)
         {
-            return await _unitOfWork.FoodCategoryList.GetAll();
+            try
+            {
+
+                    token.ThrowIfCancellationRequested();
+                
+                return await _unitOfWork.FoodCategoryList.GetAll(token);
+            }
+            catch (OperationCanceledException)
+            {
+                throw new OperationCanceledException("Dừng lấy food");
+            }
         }
 
         public async Task<Foodcategory?> AddFoodCategory(Foodcategory foodcategory)

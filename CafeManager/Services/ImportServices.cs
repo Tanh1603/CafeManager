@@ -13,10 +13,9 @@ using static System.Windows.Forms.VisualStyles.VisualStyleElement.ListView;
 
 namespace CafeManager.WPF.Services
 {
-    public class ImportServices(IServiceProvider provider)
+    public class ImportServices(IUnitOfWork unitOfWork)
     {
-        private readonly IServiceProvider _provider = provider;
-        private readonly IUnitOfWork _unitOfWork = provider.GetRequiredService<IUnitOfWork>();
+        private readonly IUnitOfWork _unitOfWork = unitOfWork;
 
         public async Task<IEnumerable<Import>?> GetListImport()
         {

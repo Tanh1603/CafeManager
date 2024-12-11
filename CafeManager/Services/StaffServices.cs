@@ -11,18 +11,24 @@ namespace CafeManager.WPF.Services
 {
     public class StaffServices
     {
-        private readonly IServiceProvider _provider;
         private readonly IUnitOfWork _unitOfWork;
 
-        public StaffServices(IServiceProvider provider)
+        public StaffServices(IUnitOfWork unitOfWork)
         {
-            _provider = provider;
-            _unitOfWork = provider.GetRequiredService<IUnitOfWork>();
+            _unitOfWork = unitOfWork;
         }
 
-        public async Task<IEnumerable<Staff>> GetListStaff()
+        public async Task<IEnumerable<Staff>> GetListStaff(CancellationToken token = default)
         {
-            return await _unitOfWork.StaffList.GetAll();
+            try
+            {
+                token.ThrowIfCancellationRequested();
+                return await _unitOfWork.StaffList.GetAll();
+            }
+            catch (OperationCanceledException)
+            {
+                throw;
+            }
         }
 
         public async Task<Staff?> CreateStaff(Staff staff)

@@ -1,17 +1,8 @@
-﻿using CafeManager.Core.Data;
-using CafeManager.Core.DTOs;
-using CafeManager.WPF.Services;
-using CafeManager.WPF.Stores;
+﻿using CafeManager.WPF.Stores;
 using CafeManager.WPF.ViewModels.AdminViewModel;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Microsoft.Extensions.DependencyInjection;
-using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls.Primitives;
 using System.Windows.Controls;
@@ -21,7 +12,6 @@ namespace CafeManager.WPF.ViewModels
 {
     public partial class MainViewModel : ObservableObject, IDisposable
     {
-        private readonly IServiceProvider _provider;
         private readonly NavigationStore _navigationStore;
 
         [ObservableProperty]
@@ -29,12 +19,12 @@ namespace CafeManager.WPF.ViewModels
 
         public MainViewModel(IServiceProvider provider)
         {
-            _provider = provider;
-
-            _navigationStore = _provider.GetRequiredService<NavigationStore>();
+            _navigationStore = provider.GetRequiredService<NavigationStore>();
             _navigationStore.Navigation = CurrentViewModel;
 
-            CurrentViewModel = _provider.GetRequiredService<MainAdminViewModel>();
+            //CurrentViewModel = provider.GetRequiredService<LoginViewModel>();
+            //CurrentViewModel = provider.GetRequiredService<MainAdminViewModel>();
+            CurrentViewModel = provider.GetRequiredService<MainUserViewModel>();
             _navigationStore.NavigationStoreChanged += _navigationStore_NavigationStoreChanged;
         }
 

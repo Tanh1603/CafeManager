@@ -18,19 +18,20 @@ using LiveCharts.Defaults;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 using System.Windows.Media;
+using CafeManager.Core.Services;
 
 namespace CafeManager.WPF.ViewModels.AdminViewModel
 {
-    public partial class HomeViewModel : ObservableObject
+    public partial class HomeViewModel : ObservableObject, IDataViewModel
     {
         private readonly IServiceProvider _provider;
 
         public HomeViewModel(IServiceProvider provider)
         {
             _provider = provider;
-            CreateDynamicVisibility();
-            CreateStackRowSeries();
-            CreatePieSeries();
+            //CreateDynamicVisibility();
+            //CreateStackRowSeries();
+            //CreatePieSeries();
         }
 
         private void CreatePieSeries()
@@ -82,23 +83,18 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
                 }
             };
 
-
-
-
-
-
             LabelsStackRow = new[] { "Chrome", "Mozilla", "Opera", "IE" };
             FormatterStackRow = value => value + " Mill";
         }
 
         private void CreateDynamicVisibility()
         {
-            FoodSeries  =  new ColumnSeries
-                {
-                    Title = "Food",
-                    Values = new ChartValues<double> { 10, 50, 39, 50 }
-                };
-            
+            FoodSeries = new ColumnSeries
+            {
+                Title = "Food",
+                Values = new ChartValues<double> { 10, 50, 39, 50 }
+            };
+
             ProfitSeries = new ColumnSeries
             {
                 Title = "Profit",
@@ -118,13 +114,12 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
             };
             LabelsCol = new[] { "Maria", "Susan", "Charles", "Frida" };
             FormatterCol = value => value.ToString("N");
-
         }
+
         public SeriesCollection PieSeries { get; set; }
         public SeriesCollection StackRowSeries { get; set; }
         public string[] LabelsStackRow { get; set; }
         public Func<double, string> FormatterStackRow { get; set; }
-
 
         public ColumnSeries FoodSeries { get; set; }
         public ColumnSeries ProfitSeries { get; set; }
@@ -132,13 +127,12 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
         public string[] LabelsCol { get; set; }
         public Func<double, string> FormatterCol { get; set; }
 
-
         public SeriesCollection ColumnSeries { get; set; }
+
         [RelayCommand]
         public void ToggleSeries0() => FoodSeries.Visibility = FoodSeries.Visibility == Visibility.Visible
                 ? Visibility.Hidden
                 : Visibility.Visible;
-
 
         [RelayCommand]
         public void ToggleSeries1() =>
@@ -157,5 +151,57 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
 
 
 
+        #region handleDatePicker
+
+        [RelayCommand]
+        public void ClearDatePicker(DatePicker datePicker)
+        {
+            if (datePicker != null)
+            {
+                datePicker.SelectedDate = null;
+
+                var textBox = FindChild<DatePickerTextBox>(datePicker);
+                if (textBox != null)
+                {
+                    textBox.Text = string.Empty;
+                }
+            }
+        }
+
+        private T FindChild<T>(DependencyObject parent) where T : DependencyObject
+        {
+            for (int i = 0; i < VisualTreeHelper.GetChildrenCount(parent); i++)
+            {
+                var child = VisualTreeHelper.GetChild(parent, i);
+                if (child is T tChild)
+                    return tChild;
+
+                var result = FindChild<T>(child);
+                if (result != null)
+                    return result;
+            }
+            return null;
+        }
+
+        #endregion handleDatePicker
+
+        #region handleComboBox
+
+        [RelayCommand]
+        private void ClearComboBox(ComboBox comboBox)
+        {
+            if (comboBox != null)
+            {
+                comboBox.SelectedItem = null; // Đặt SelectedItem về null
+                comboBox.Text = string.Empty; // Xóa nội dung Text
+            }
+        }
+
+        public Task LoadData(CancellationToken token = default)
+        {
+            throw new NotImplementedException();
+        }
+
+        #endregion handleComboBox
     }
 }

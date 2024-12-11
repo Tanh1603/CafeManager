@@ -4,16 +4,23 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace CafeManager.WPF.Services
 {
-    public class MaterialSupplierServices(IServiceProvider provider)
+    public class MaterialSupplierServices(IUnitOfWork unitOfWork)
     {
-        private readonly IServiceProvider _provider = provider;
-        private readonly IUnitOfWork _unitOfWork = provider.GetRequiredService<IUnitOfWork>();
+        private readonly IUnitOfWork _unitOfWork = unitOfWork;
 
         #region Supplier
 
-        public async Task<IEnumerable<Supplier>> GetListSupplier()
+        public async Task<IEnumerable<Supplier>> GetListSupplier(CancellationToken token = default)
         {
-            return await _unitOfWork.SupplierList.GetAll();
+            try
+            {
+                token.ThrowIfCancellationRequested();
+                return await _unitOfWork.SupplierList.GetAll(token);
+            }
+            catch (OperationCanceledException)
+            {
+                throw;
+            }
         }
 
         public async Task<IEnumerable<Supplier>> GetListExistedSupplier()
@@ -100,9 +107,17 @@ namespace CafeManager.WPF.Services
 
         #region Material
 
-        public async Task<IEnumerable<Material>> GetListMaterial()
+        public async Task<IEnumerable<Material>> GetListMaterial(CancellationToken token = default)
         {
-            return await _unitOfWork.MaterialList.GetAll();
+            try
+            {
+                token.ThrowIfCancellationRequested();
+                return await _unitOfWork.MaterialList.GetAll();
+            }
+            catch (OperationCanceledException)
+            {
+                throw;
+            }
         }
 
         public async Task<Material> AddMaterial(Material material)
@@ -213,9 +228,17 @@ namespace CafeManager.WPF.Services
             }
         }
 
-        public async Task<IEnumerable<Materialsupplier>> GetListMaterialSupplier()
+        public async Task<IEnumerable<Materialsupplier>> GetListMaterialSupplier(CancellationToken token = default)
         {
-            return await _unitOfWork.MaterialSupplierList.GetAll();
+            try
+            {
+                token.ThrowIfCancellationRequested();
+                return await _unitOfWork.MaterialSupplierList.GetAll(token);
+            }
+            catch (OperationCanceledException)
+            {
+                throw;
+            }
         }
 
         public async Task<Materialsupplier?> GetMaterialsupplierById(int id)

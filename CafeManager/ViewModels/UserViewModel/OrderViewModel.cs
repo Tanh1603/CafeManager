@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using CafeManager.Core.Data;
 using CafeManager.Core.DTOs;
+using CafeManager.Core.Services;
 using CafeManager.WPF.MessageBox;
 using CafeManager.WPF.Services;
 using CafeManager.WPF.Views.UserView;
@@ -8,12 +9,13 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Microsoft.Extensions.DependencyInjection;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
+using System.Windows;
 
 namespace CafeManager.WPF.ViewModels.UserViewModel
 {
-    public partial class OrderViewModel : ObservableObject, IDisposable
+    public partial class OrderViewModel : ObservableObject, IDisposable, IDataViewModel
     {
-        private readonly IServiceProvider _provider;
         private readonly FoodCategoryServices _foodCategoryServices;
         private readonly FoodServices _foodServices;
         private readonly CoffeTableServices _coffeTableServices;
@@ -27,11 +29,34 @@ namespace CafeManager.WPF.ViewModels.UserViewModel
         [ObservableProperty]
         private ObservableCollection<FoodCategoryDTO> _listFoodCategoryDTO = [];
 
-        [ObservableProperty]
         private FoodCategoryDTO _selectedFoodCategory = new();
 
-        [ObservableProperty]
+        public FoodCategoryDTO SelectedFoodCategory
+        {
+            get => _selectedFoodCategory;
+            set
+            {
+                if (_selectedFoodCategory != value)
+                {
+                    _selectedFoodCategory = value;
+                    ListFoodDTO = [.. value.Foods.Where(x => x.Isdeleted == false) ?? []];
+                }
+            }
+        }
+
         private ObservableCollection<FoodDTO> _listFoodDTO = [];
+
+        public ObservableCollection<FoodDTO> ListFoodDTO
+        {
+            get => _listFoodDTO; set
+            {
+                if (_listFoodDTO != value)
+                {
+                    _listFoodDTO = value;
+                    OnPropertyChanged(nameof(ListFoodDTO));
+                }
+            }
+        }
 
         [ObservableProperty]
         [NotifyPropertyChangedFor(nameof(ListCustomerInvoiceDTO))]
@@ -56,45 +81,36 @@ namespace CafeManager.WPF.ViewModels.UserViewModel
         [ObservableProperty]
         private CoffeetableDTO? _selectedSwapTable;
 
-        public OrderViewModel(IServiceProvider provider)
+        public OrderViewModel(IServiceScope scope)
         {
-            _provider = provider;
+            var provider = scope.ServiceProvider;
             _foodCategoryServices = provider.GetRequiredService<FoodCategoryServices>();
             _foodServices = provider.GetRequiredService<FoodServices>();
             _coffeTableServices = provider.GetRequiredService<CoffeTableServices>();
             _invoiceServices = provider.GetRequiredService<InvoiceServices>();
             _staffServices = provider.GetRequiredService<StaffServices>();
             _mapper = provider.GetRequiredService<IMapper>();
-
-            Task.Run(LoadData);
         }
 
-        private async Task LoadData()
+        public async Task LoadData(CancellationToken token = default)
         {
-            var dbListCoffeeTable = (await _coffeTableServices.GetListCoffeTable()).Where(x => x.Isdeleted == false);
-            ListCoffeeTableDTO = [.. _mapper.Map<List<CoffeetableDTO>>(dbListCoffeeTable)];
-
-            var dbListFoodCategory = await _foodCategoryServices.GetListFoodCategory();
-            ListFoodCategoryDTO = [.. _mapper.Map<List<FoodCategoryDTO>>(dbListFoodCategory)];
-
-            SelectedFoodCategory = ListFoodCategoryDTO[0];
-            if (SelectedFoodCategory != null)
+            try
             {
-                await SeletedFoodCategoryChangedCommand.ExecuteAsync(SelectedFoodCategory);
+                token.ThrowIfCancellationRequested();
+                var dbListCoffeeTable = (await _coffeTableServices.GetListCoffeTable(token)).Where(x => x.Isdeleted == false);
+                var dbListFoodCategory = (await _foodCategoryServices.GetAllListFoodCategory(token)).Where(x => x.Isdeleted == false);
+                var dbStaff = (await _staffServices.GetListStaff(token)).Where(x => x.Isdeleted == false);
+                var dbAllFood = (await _foodServices.GetAllFood(token)).Where(x => x.Isdeleted == false);
+
+                ListCoffeeTableDTO = [.. _mapper.Map<List<CoffeetableDTO>>(dbListCoffeeTable)];
+                ListFoodCategoryDTO = [.. _mapper.Map<List<FoodCategoryDTO>>(dbListFoodCategory)];
+                ListStaffDTO = [.. _mapper.Map<List<StaffDTO>>(dbStaff)];
+                ListFoodDTO = [.. _mapper.Map<List<FoodDTO>>(dbAllFood)];
             }
-
-            var dbStaff = (await _staffServices.GetListStaff()).Where(x => x.Isdeleted == false);
-            ListStaffDTO = [.. _mapper.Map<List<StaffDTO>>(dbStaff)];
-        }
-
-        [RelayCommand]
-        private async Task SeletedFoodCategoryChanged(FoodCategoryDTO foodCategoryDTO)
-        {
-            if (foodCategoryDTO != null)
+            catch (OperationCanceledException oe)
             {
-                var dbListFood =
-                await _foodCategoryServices.GetListFoodByFoodCatgoryId(foodCategoryDTO.Foodcategoryid);
-                ListFoodDTO = [.. _mapper.Map<List<FoodDTO>>(dbListFood)];
+                Debug.WriteLine(oe.Message);
+                throw;
             }
         }
 

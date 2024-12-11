@@ -10,7 +10,7 @@ namespace CafeManager.Infrastructure.Repositories
         {
         }
 
-        public override async Task<bool> Delete(int id)
+        public override async Task<bool> Delete(int id, CancellationToken token = default)
         {
             var listInvoiceDeleted = await GetById(id);
             if (listInvoiceDeleted != null)

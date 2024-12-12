@@ -15,5 +15,7 @@ public partial class Consumedmaterial
 
     public bool? Isdeleted { get; set; }
 
+    public DateOnly Usagedate { get; set; }
+
     public virtual Materialsupplier Materialsupplier { get; set; }
 }

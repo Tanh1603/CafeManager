@@ -750,7 +750,7 @@
         <Setter Property="HorizontalAlignment" Value="Right" />
         <Setter Property="Margin" Value="0,20,0,0" />
         <Setter Property="FontSize" Value="13" />
-        <Setter Property="FontWeight" Value="Normal" />
+        <Setter Property="FontWeight" Value="Bold" />
 
         <Setter Property="Cursor" Value="Hand" />
         <Setter Property="Template">
@@ -771,12 +771,10 @@
             <!--  Trigger khi IsActive = True  -->
             <DataTrigger Binding="{Binding RelativeSource={RelativeSource Self}, Path=Tag}" Value="True">
                 <Setter Property="Opacity" Value="1" />
-                <Setter Property="FontWeight" Value="Bold" />
             </DataTrigger>
             <!--  Trigger khi IsActive = False  -->
             <DataTrigger Binding="{Binding RelativeSource={RelativeSource Self}, Path=Tag}" Value="False">
                 <Setter Property="Opacity" Value="0.5" />
-                <Setter Property="FontWeight" Value="Normal" />
             </DataTrigger>
         </Style.Triggers>
     </Style>

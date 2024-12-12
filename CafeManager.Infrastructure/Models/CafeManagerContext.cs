@@ -113,6 +113,9 @@ public partial class CafeManagerContext : DbContext
                 .HasPrecision(10, 2)
                 .HasDefaultValueSql("0")
                 .HasColumnName("quantity");
+            entity.Property(e => e.Usagedate)
+                .HasDefaultValueSql("now()")
+                .HasColumnName("usagedate");
 
             entity.HasOne(d => d.Materialsupplier).WithMany(p => p.Consumedmaterials)
                 .HasForeignKey(d => d.Materialsupplierid)

@@ -155,6 +155,8 @@ CREATE TABLE ConsumedMaterials (
     CONSTRAINT PK_ConsumedMaterials PRIMARY KEY (ConsumedMaterialId),
     CONSTRAINT PK_ConsumedMaterials_MaterialSupplierId FOREIGN KEY (MaterialSupplierId) REFERENCES MaterialSupplier(MaterialSupplierId)
 );
+ALTER TABLE consumedmaterials
+ADD UsageDate DATE DEFAULT NOW() NOT NULL;
 ------------------- Tạo bảng Imports -----------------------
 CREATE TABLE Imports (
     ImportId SERIAL,

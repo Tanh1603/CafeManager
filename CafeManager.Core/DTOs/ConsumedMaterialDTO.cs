@@ -12,6 +12,7 @@ namespace CafeManager.Core.DTOs
         private decimal _quantity;
         private bool _isdeleted;
         private MaterialSupplierDTO _materialsupplier;
+        private DateOnly _usagedate;
 
         public int Consumedmaterialid
         {
@@ -61,6 +62,18 @@ namespace CafeManager.Core.DTOs
             }
         }
 
+        public DateOnly Usagedate
+        {
+            get => _usagedate; set
+            {
+                if (_usagedate != value)
+                {
+                    _usagedate = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
         public ConsumedMaterialDTO Clone()
         {
             return new ConsumedMaterialDTO
@@ -71,13 +84,6 @@ namespace CafeManager.Core.DTOs
                 Isdeleted = Isdeleted,
                 Materialsupplier = Materialsupplier
             };
-        }
-
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        protected void OnPropertyChanged([CallerMemberName] string propertyName = null)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
     }
 }

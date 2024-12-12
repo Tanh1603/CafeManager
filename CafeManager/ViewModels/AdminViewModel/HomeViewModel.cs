@@ -25,10 +25,16 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
     public partial class HomeViewModel : ObservableObject, IDataViewModel
     {
         private readonly IServiceProvider _provider;
-
+        public IEnumerable<Product> items { get; set; }
         public HomeViewModel(IServiceProvider provider)
         {
             _provider = provider;
+            items = new List<Product>
+        {
+            new Product { Title = "Product 1", Price = 1000 },
+            new Product { Title = "Product 2", Price = 2000 },
+            new Product { Title = "Product 3", Price = 3000 }
+        };
             //CreateDynamicVisibility();
             //CreateStackRowSeries();
             //CreatePieSeries();
@@ -147,8 +153,13 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
                 : Visibility.Visible;
 
 
+        public class Product
+        {
+            public string Title { get; set; }
+            public decimal Price { get; set; }
+        }
 
-
+        
 
 
         #region handleDatePicker

@@ -155,8 +155,8 @@
                     HorizontalAlignment="Center"
                     VerticalAlignment="Center"
                     Panel.ZIndex="2"
-                   Command="{Binding DataContext.ClearComboBoxCommand, RelativeSource={RelativeSource AncestorType=Window}}"
-                     CommandParameter="{Binding RelativeSource={RelativeSource TemplatedParent}}"
+                    Command="{Binding DataContext.ClearComboBoxCommand, RelativeSource={RelativeSource AncestorType=Window}}"
+                    CommandParameter="{Binding RelativeSource={RelativeSource TemplatedParent}}"
                     Style="{StaticResource datePickerButton}"
                     Visibility="Visible">
                     <ma:PackIconMaterial
@@ -174,7 +174,6 @@
                     HorizontalOffset="0"
                     IsOpen="{Binding IsDropDownOpen, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}"
                     Placement="Bottom"
-                  
                     PopupAnimation="{DynamicResource {x:Static SystemParameters.ComboBoxPopupAnimationKey}}"
                     VerticalOffset="0">
 

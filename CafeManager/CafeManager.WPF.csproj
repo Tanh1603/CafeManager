@@ -13,6 +13,7 @@
     <None Remove="Assets\Images\coffee.png" />
     <None Remove="Assets\Images\defaultImage.png" />
     <None Remove="Assets\Images\error.png" />
+    <None Remove="Assets\Images\Icon.ico" />
     <None Remove="Assets\Images\information.png" />
     <None Remove="Assets\Images\invoice.png" />
     <None Remove="Assets\Images\milktea.png" />
@@ -76,6 +77,9 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
     <Resource Include="Assets\Images\error.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assets\Images\Icon.ico">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
     <Resource Include="Assets\Images\information.png">

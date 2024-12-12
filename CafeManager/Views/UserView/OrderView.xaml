@@ -31,7 +31,7 @@
         </Grid.RowDefinitions>
 
         <Grid Grid.Column="0" HorizontalAlignment="Stretch">
-            <Border CornerRadius="5">
+            <Border CornerRadius="5" Height="342" VerticalAlignment="Bottom">
                 <Border.Background>
                     <LinearGradientBrush StartPoint="0,0.5" EndPoint="1,0.5">
                         <GradientStop Offset="1" Color="#fee3d4" />

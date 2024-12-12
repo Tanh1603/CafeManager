@@ -8,8 +8,10 @@ using CafeManager.WPF.ViewModels.AddViewModel;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Microsoft.Extensions.DependencyInjection;
+using Newtonsoft.Json.Linq;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
+using System.Linq.Expressions;
 
 namespace CafeManager.WPF.ViewModels.AdminViewModel
 {
@@ -26,25 +28,56 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
         [ObservableProperty]
         private AddImportViewModel _modifyImportVM;
 
-        private ObservableCollection<ImportDTO> ListImport = [];
-        public ObservableCollection<ImportDTO> CurrentListImport => [.. _filterListImport];
+        [ObservableProperty]
+        private ObservableCollection<ImportDTO> _listImportDTO = [];
+        //public ObservableCollection<ImportDTO> CurrentListImport => [.. _filterListImport];
 
-        private List<ImportDTO> _filterListImport = [];
-        private string _searchText = string.Empty;
+        //private List<ImportDTO> _filterListImport = [];
 
-        public string SearchText
+
+        #region Filter Declare
+        private string SearchText = string.Empty;
+
+        [RelayCommand]
+        private void Search(string searchText)
         {
-            get => _searchText;
+            // Logic xử lý tìm kiếm
+            SearchText = searchText; // Cập nhật nếu cần
+            _ = LoadImport();
+        }
+
+        private DateTime? _startDate;
+
+        public DateTime? StartDate
+        {
+            get => _startDate;
             set
             {
-                if (_searchText != value)
+                if (_startDate != value)
                 {
-                    _searchText = value;
-                    FilterImport();
-                    OnPropertyChanged(nameof(SearchText));
+                    _startDate = value;
+                    OnPropertyChanged();
+                    _ = LoadImport();
                 }
             }
         }
+
+        private DateTime? _endDate;
+
+        public DateTime? EndDate
+        {
+            get => _endDate;
+            set
+            {
+                if (value != _endDate)
+                {
+                    _endDate = value;
+                    OnPropertyChanged();
+                    _ = LoadImport();
+                }
+            }
+        }
+        #endregion
 
         public ImportViewModel(IServiceScope scope)
         {
@@ -73,11 +106,7 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
                 var dbListMaterial = (await _materialSupplierServices.GetListMaterial()).Where(x => x.Isdeleted == false);
                 ModifyImportVM.ListMaterial = [.. _mapper.Map<List<MaterialDTO>>(dbListMaterial)];
 
-                var importList = (await _importServices.GetListImport())?.Where(x => x.Isdeleted == false);
-                ListImport = [.. _mapper.Map<List<ImportDTO>>(importList)];
-
-                _filterListImport = [.. ListImport];
-                OnPropertyChanged(nameof(CurrentListImport));
+                await LoadImport();
             }
             catch (OperationCanceledException)
             {
@@ -85,15 +114,20 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
             }
         }
 
-        private void FilterImport()
+        private async Task LoadImport()
         {
-            var filter = ListImport.Where(x => string.IsNullOrWhiteSpace(SearchText)
-            || x.Supplier.Suppliername.Contains(SearchText, StringComparison.OrdinalIgnoreCase)
-            || x.Receiveddate.ToString().Contains(SearchText, StringComparison.OrdinalIgnoreCase)
-            || x.Staff.Staffname.Contains(SearchText, StringComparison.OrdinalIgnoreCase)).ToList();
+            Expression<Func<Import, bool>> filter = import =>
+                (import.Isdeleted == false) &&
+                (StartDate == null || import.Receiveddate >= StartDate) &&
+                (EndDate == null || import.Receiveddate <= EndDate) &&
+                (string.IsNullOrEmpty(SearchText) ||
+                    import.Supplier.Suppliername.Contains(SearchText) ||
+                    import.Staff.Staffname.Contains(SearchText));
 
-            _filterListImport = [.. filter];
-            OnPropertyChanged(nameof(CurrentListImport));
+            var dbListImport = await _importServices.GetSearchPaginateListImport(filter, pageIndex, pageSize);
+            ListImportDTO = [.. _mapper.Map<List<ImportDTO>>(dbListImport.Item1)];
+            totalPages = (dbListImport.Item2 + pageSize - 1) / pageSize;
+            OnPropertyChanged(nameof(PageUI));
         }
 
         [RelayCommand]
@@ -131,7 +165,7 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
                     var isDeleted = await _importServices.DeleteImport(import.Importid);
                     if (isDeleted)
                     {
-                        ListImport.Remove(import);
+                        ListImportDTO.Remove(import);
                     }
                     MyMessageBox.Show("Xoá chi tiết đơn hàng thành công", MyMessageBox.Buttons.OK, MyMessageBox.Icons.Information);
                 }
@@ -140,7 +174,7 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
             {
                 MyMessageBox.Show(ivd.Message, MyMessageBox.Buttons.OK, MyMessageBox.Icons.Warning);
             }
-            FilterImport();
+            await LoadImport();
         }
 
         private async void ModifyImportVM_ImportChanged(ImportDTO import)
@@ -153,7 +187,7 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
 
                     if (addImport != null)
                     {
-                        ListImport.Add(_mapper.Map<ImportDTO>(addImport));
+                        ListImportDTO.Add(_mapper.Map<ImportDTO>(addImport));
                         MyMessageBox.Show("Thêm thông tin phiếu nhập thành công", MyMessageBox.Buttons.OK, MyMessageBox.Icons.Information);
                     }
                     else
@@ -166,7 +200,7 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
                     if (import != null)
                     {
                         var updateImport = await _importServices.UpdateImport(_mapper.Map<Import>(import));
-                        var res = ListImport.FirstOrDefault(x => x.Importid == import.Importid);
+                        var res = ListImportDTO.FirstOrDefault(x => x.Importid == import.Importid);
                         _mapper.Map(updateImport, res);
                         MyMessageBox.Show("Sửa thông tin phiếu nhập thành công", MyMessageBox.Buttons.OK, MyMessageBox.Icons.Information);
                     }
@@ -177,7 +211,7 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
                 }
                 IsOpenModifyImportView = false;
                 ModifyImportVM.ClearValueOfViewModel();
-                FilterImport();
+                await LoadImport();
             }
             catch
             {
@@ -190,5 +224,52 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
             ModifyImportVM.ImportChanged -= ModifyImportVM_ImportChanged;
             GC.SuppressFinalize(this);
         }
+
+
+        #region Phan trang
+        private int pageIndex = 1;
+
+        private int pageSize = 10;
+        private int totalPages = 0;
+
+        public string PageUI => $"{pageIndex}/{totalPages}";
+
+        [RelayCommand]
+        private async Task FirstPage()
+        {
+            pageIndex = 1;
+
+            await LoadImport();
+        }
+
+        [RelayCommand]
+        private async Task NextPage()
+        {
+            if (pageIndex == totalPages)
+            {
+                return;
+            }
+            pageIndex += 1;
+            await LoadImport();
+        }
+
+        [RelayCommand]
+        private async Task PreviousPage()
+        {
+            if (pageIndex == 1)
+            {
+                return;
+            }
+            pageIndex -= 1;
+            await LoadImport();
+        }
+
+        [RelayCommand]
+        private async Task LastPage()
+        {
+            pageIndex = totalPages;
+            await LoadImport();
+        }
+        #endregion
     }
 }

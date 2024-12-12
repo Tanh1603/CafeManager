@@ -6,6 +6,7 @@ using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Documents;
@@ -101,8 +102,10 @@ namespace CafeManager.WPF.Services
 
                 //await _unitOfWork.ConsumedMaterialList.UpdateById(id, consumedmaterial);
                 var res = await _unitOfWork.ConsumedMaterialList.GetById(id);
-                res.Quantity = consumedmaterial.Quantity;
-
+                if (res != null)
+                {
+                    res.Quantity = consumedmaterial.Quantity;
+                }
                 await _unitOfWork.CompleteAsync();
 
                 _unitOfWork.ClearChangeTracker();
@@ -133,6 +136,12 @@ namespace CafeManager.WPF.Services
                 await _unitOfWork.RollbackTransactionAsync();
                 throw new InvalidOperationException("Lỗi");
             }
+        }
+
+        // ===================== Phan trang =======================
+        public async Task<(IEnumerable<Consumedmaterial>?, int)> GetSearchPaginateListConsumedMaterial(Expression<Func<Consumedmaterial, bool>>? searchPredicate = null, int skip = 0, int take = 20)
+        {
+            return await _unitOfWork.ConsumedMaterialList.GetByPageAsync(skip, take, searchPredicate);
         }
     }
 }

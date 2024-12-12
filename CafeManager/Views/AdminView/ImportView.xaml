@@ -27,19 +27,13 @@
     </UserControl.Resources>
 
     <Grid>
-        <Border Grid.Column="1" CornerRadius="0 10 10 0">
-            <Border.Background>
-                <LinearGradientBrush StartPoint="0,0.5" EndPoint="1,0.5">
-                    <GradientStop Offset="0" Color="#9c6d3f" />
-                    <GradientStop Offset="1" Color="#cb925d" />
-                </LinearGradientBrush>
-            </Border.Background>
-
+        <Border>
             <Grid Margin="10,0">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="auto" />
                     <RowDefinition Height="auto" />
                     <RowDefinition Height="*" />
+                    <RowDefinition Height="auto" />
                 </Grid.RowDefinitions>
 
                 <!--  Page Title  -->
@@ -81,32 +75,57 @@
                     Grid.Row="1"
                     HorizontalAlignment="Right"
                     Orientation="Horizontal">
-                    <TextBlock
-                        Margin="0,0,20,0"
-                        HorizontalAlignment="Right"
-                        VerticalAlignment="Center"
-                        FontSize="13"
-                        FontWeight="SemiBold"
-                        Foreground="#602414"
-                        Text="Filter by" />
+                    <StackPanel
+                        Grid.Row="2"
+                        Margin="0,10,10,0"
+                        Orientation="Horizontal">
+                        <TextBlock
+                            Margin="10,0"
+                            VerticalAlignment="Center"
+                            FontSize="13"
+                            FontWeight="SemiBold"
+                            Foreground="#602414"
+                            Text="Ngày nhập từ:" />
+                        <DatePicker
+                            Width="140"
+                            materialDesign:TextFieldAssist.HasClearButton="True"
+                            SelectedDate="{Binding StartDate}"
+                            Style="{StaticResource MaterialDesignFilledDatePicker}" />
 
+                        <TextBlock
+                            Margin="10,0"
+                            VerticalAlignment="Center"
+                            FontSize="13"
+                            FontWeight="SemiBold"
+                            Foreground="#602414"
+                            Text="Đến:" />
+                        <DatePicker
+                            Width="140"
+                            materialDesign:TextFieldAssist.HasClearButton="True"
+                            SelectedDate="{Binding EndDate}"
+                            Style="{StaticResource MaterialDesignFilledDatePicker}" />
+                    </StackPanel>
                     <!--  Filter Textbox  -->
-                    <Grid
-                        Width="200"
-                        Margin="0,20"
-                        HorizontalAlignment="Right">
+                    <Grid Width="240" HorizontalAlignment="Right">
                         <TextBlock
                             Margin="15,0"
                             VerticalAlignment="Center"
                             Panel.ZIndex="1"
                             Foreground="#9c6d3f"
                             IsHitTestVisible="False"
-                            Text="Search in Members..."
+                            Text="Tìm theo nhà cung cấp/ người nhận"
                             Visibility="{Binding ElementName=txtFilter, Path=Text.IsEmpty, Converter={StaticResource BoolToVis}}" />
                         <TextBox
                             x:Name="txtFilter"
                             Style="{StaticResource textBoxFilter}"
-                            Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}" />
+                            Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}">
+                            <TextBox.InputBindings>
+                                <KeyBinding
+                                    Key="Enter"
+                                    Command="{Binding SearchCommand}"
+                                    CommandParameter="{Binding Text, ElementName=txtFilter}" />
+                            </TextBox.InputBindings>
+                        </TextBox>
                         <ma:PackIconMaterial
                             Width="15"
                             Height="15"
@@ -128,10 +147,10 @@
                     <DataGrid
                         x:Name="ImportsDataGrid"
                         VerticalAlignment="Top"
-                        AlternationCount="{Binding CurrentListImport.Count}"
+                        AlternationCount="{Binding ListImportDTO.Count}"
                         CellStyle="{DynamicResource DataGridCellStyle1}"
                         ColumnHeaderStyle="{DynamicResource DataGridColumnHeaderStyle1}"
-                        ItemsSource="{Binding CurrentListImport}"
+                        ItemsSource="{Binding ListImportDTO}"
                         RowStyle="{DynamicResource DataGridRowStyle1}"
                         ScrollViewer.CanContentScroll="True"
                         ScrollViewer.HorizontalScrollBarVisibility="Auto"
@@ -214,6 +233,44 @@
                         </DataGrid.Columns>
                     </DataGrid>
                 </Border>
+
+                <Grid
+                    Grid.Row="3"
+                    Margin="10"
+                    HorizontalAlignment="Center">
+                    <StackPanel Orientation="Horizontal">
+
+                        <StackPanel.Resources>
+                            <Style BasedOn="{StaticResource MaterialDesignFlatDarkButton}" TargetType="Button">
+                                <Setter Property="Margin" Value="10,0" />
+                            </Style>
+                        </StackPanel.Resources>
+                        <Button Command="{Binding FirstPageCommand}">
+                            <materialDesign:PackIcon Kind="SkipBackwardOutline" />
+                        </Button>
+
+                        <Button Command="{Binding PreviousPageCommand}">
+                            <materialDesign:PackIcon Kind="SkipPreviousOutline" />
+                        </Button>
+
+                        <TextBlock
+                            HorizontalAlignment="Left"
+                            VerticalAlignment="Center"
+                            FontSize="16"
+                            FontWeight="SemiBold"
+                            Foreground="#dac5b4"
+                            Text="{Binding PageUI}" />
+
+                        <Button Command="{Binding NextPageCommand}">
+                            <materialDesign:PackIcon Kind="SkipNextOutline" />
+                        </Button>
+
+                        <Button Command="{Binding LastPageCommand}">
+                            <materialDesign:PackIcon Kind="SkipForwardOutline" />
+                        </Button>
+                    </StackPanel>
+                </Grid>
+
             </Grid>
         </Border>
         <materialDesign:DialogHost

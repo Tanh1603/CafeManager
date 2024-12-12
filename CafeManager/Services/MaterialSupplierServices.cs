@@ -1,6 +1,7 @@
 ﻿using CafeManager.Core.Data;
 using CafeManager.Core.Services;
 using Microsoft.Extensions.DependencyInjection;
+using System.Linq.Expressions;
 
 namespace CafeManager.WPF.Services
 {
@@ -240,11 +241,16 @@ namespace CafeManager.WPF.Services
                 throw;
             }
         }
-
         public async Task<Materialsupplier?> GetMaterialsupplierById(int id)
         {
             var res = await _unitOfWork.MaterialSupplierList.GetById(id);
             return res?.Isdeleted == false ? res : null;
+        }
+
+        // ===================== Phan trang =======================
+        public async Task<(IEnumerable<Materialsupplier>?, int)> GetSearchPaginateListMaterialsupplier(Expression<Func<Materialsupplier, bool>>? searchPredicate = null, int skip = 0, int take = 20)
+        {
+            return await _unitOfWork.MaterialSupplierList.GetByPageAsync(skip, take, searchPredicate);
         }
     }
 }

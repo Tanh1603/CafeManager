@@ -51,7 +51,10 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
         private ModifyFoodViewModel _modifyFoodVM;
 
         [ObservableProperty]
-        private bool _isOpenModifyFCView;
+        private FoodCategoryViewModel _foodCategoryVM;
+
+        [ObservableProperty]
+        private bool _isOpenFoodCategoryView;
 
         private string _searchText = string.Empty;
 
@@ -77,6 +80,7 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
             _mapper = provider.GetRequiredService<IMapper>();
             ModifyFoodVM = provider.GetRequiredService<ModifyFoodViewModel>();
             ModifyFoodVM.ModifyFoodChanged += ModifyFoodVM_ModifyFoodChanged;
+            FoodCategoryVM = provider.GetRequiredService<FoodCategoryViewModel>();
         }
 
         public async Task LoadData(CancellationToken token = default)
@@ -89,8 +93,14 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
                 }
                 token.ThrowIfCancellationRequested();
                 var dbListFoodCategory = await _foodCategoryServices.GetAllListFoodCategory(token);
-                ListFoodCategory = [.. _mapper.Map<List<FoodCategoryDTO>>(dbListFoodCategory)];
+                var listExist = dbListFoodCategory.Where(x => x.Isdeleted == false).ToList();
+                var listDeleted = dbListFoodCategory.Where(x => x.Isdeleted == true).ToList();
+                
+                FoodCategoryVM.ListFoodCategory = [.. _mapper.Map<List<FoodCategoryDTO>>(listExist)];
+                FoodCategoryVM.ListDeletedFoodCategory = [.. _mapper.Map<List<FoodCategoryDTO>>(listDeleted)];
+                ListFoodCategory = [.. _mapper.Map<List<FoodCategoryDTO>>(listExist)];
                 SelectedFoodCategory = ListFoodCategory[0];
+
                 FilterListFood();
                 ModifyFoodVM.ReceiveListFoodCategory(ListFoodCategory.ToList());
             }
@@ -241,11 +251,21 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
         }
 
         [RelayCommand]
-        private void OpenPopupFoodCategoryView()
+        private void OpenFoodCategoryView()
         {
-            IsOpenModifyFCView = true;
+            IsOpenFoodCategoryView = true;
         }
 
+        [RelayCommand]
+        private void CloseFoodCategoryView()
+        {
+            IsOpenFoodCategoryView = false;
+            ListFoodCategory = FoodCategoryVM.ListFoodCategory;
+            if(ListFoodCategory.Count > 0)
+                SelectedFoodCategory = ListFoodCategory[0];
+            OnPropertyChanged(nameof(ListFoodCategory));
+            ModifyFoodVM.ReceiveListFoodCategory(ListFoodCategory.ToList());
+        }
         public void Dispose()
         {
             ModifyFoodVM.ModifyFoodChanged -= ModifyFoodVM_ModifyFoodChanged;

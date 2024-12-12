@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Media.Media3D;
@@ -89,5 +90,11 @@ namespace CafeManager.WPF.Services
         }
 
         #endregion Thêm, xoa, sua import
+
+        // ===================== Phan trang =======================
+        public async Task<(IEnumerable<Import>?, int)> GetSearchPaginateListImport(Expression<Func<Import, bool>>? searchPredicate = null, int skip = 0, int take = 20)
+        {
+            return await _unitOfWork.ImportList.GetByPageAsync(skip, take, searchPredicate);
+        }
     }
 }

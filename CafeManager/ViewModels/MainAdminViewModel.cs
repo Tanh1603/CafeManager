@@ -40,8 +40,14 @@ namespace CafeManager.WPF.ViewModels
             //currentVM = "Home";
             ChangeCurrentViewModel("Home");
             OpenSettingAccountVM = _provider.GetRequiredService<SettingAccountViewModel>();
+            OpenSettingAccountVM.Close += OpenSettingAccountVM_Close;
             LoadAccount();
             _accountStore.ChangeAccount += _accountStore_ChangeAccount;
+        }
+
+        private void OpenSettingAccountVM_Close()
+        {
+            IsOpenSetting = false;
         }
 
         private void _accountStore_ChangeAccount()
@@ -160,10 +166,5 @@ namespace CafeManager.WPF.ViewModels
             IsOpenSetting = true;
         }
 
-        [RelayCommand]
-        private void CloseSetting()
-        {
-            IsOpenSetting = false;
-        }
     }
 }

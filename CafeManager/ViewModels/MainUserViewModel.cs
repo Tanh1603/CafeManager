@@ -33,6 +33,9 @@ namespace CafeManager.WPF.ViewModels
 
         private string currentVM = string.Empty;
 
+
+        [ObservableProperty]
+        private SettingAccountViewModel _openSettingAccountVM;
         public MainUserViewModel(IServiceProvider provider)
         {
             _provider = provider;
@@ -42,7 +45,15 @@ namespace CafeManager.WPF.ViewModels
             //ChangeCurrentViewModelCommand.Execute("OrderFood");
             ChangeCurrentViewModel("OrderFood");
             LoadAccount();
+            currentVM = "OrderFood";
+            OpenSettingAccountVM = _provider.GetRequiredService<SettingAccountViewModel>();
+            OpenSettingAccountVM.Close += OpenSettingAccountVM_Close;
             _accountStore.ChangeAccount += _accountStore_ChangeAccount;
+        }
+
+        private void OpenSettingAccountVM_Close()
+        {
+            IsOpenSetting = false;
         }
 
         private void _accountStore_ChangeAccount()
@@ -112,6 +123,18 @@ namespace CafeManager.WPF.ViewModels
         {
             _navigationStore.Navigation = _provider.GetRequiredService<LoginViewModel>();
         }
+
+        [ObservableProperty]
+        private bool _isOpenSetting = false;
+
+
+        [RelayCommand]
+        private void OpenSetting()
+        {
+            IsOpenSetting = true;
+
+        }
+
 
         public void Dispose()
         {

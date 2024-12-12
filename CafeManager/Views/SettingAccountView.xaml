@@ -45,7 +45,7 @@
                     Grid.Row="0"
                     Margin="0,10"
                     HorizontalAlignment="Right"
-                    Command="{Binding DataContext.CloseSettingCommand, RelativeSource={RelativeSource AncestorType=vm:MainAdminView}}"
+                    Command="{Binding CloseUserControlCommand}"
                     Style="{StaticResource closeButton}">
                     <ma:PackIconMaterial Kind="Close" Style="{StaticResource iconApp}" />
                 </Button>

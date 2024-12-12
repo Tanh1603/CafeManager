@@ -7,6 +7,7 @@
     xmlns:fa="http://schemas.awesome.incremented/wpf/xaml/fontawesome.sharp"
     xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
     xmlns:local="clr-namespace:CafeManager.WPF.Views"
+    xmlns:ma="http://metro.mahapps.com/winfx/xaml/iconpacks"
     xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:uc="clr-namespace:CafeManager.WPF.Assets.UsersControls"
@@ -19,6 +20,7 @@
         <converter:DefaultAccountImageConverter x:Key="DefaultAccountImageConverter" />
         <converter:CornerRadiusClippingConverter x:Key="CornerRadiusClippingConverter" />
     </UserControl.Resources>
+
     <Grid>
         <Grid.Background>
             <LinearGradientBrush StartPoint="0,0.5" EndPoint="1,0.5">
@@ -132,23 +134,129 @@
                         <Grid.RowDefinitions>
                             <RowDefinition Height="auto" />
                             <RowDefinition Height="*" />
+                            <RowDefinition Height="auto" />
                         </Grid.RowDefinitions>
-                        <Grid Grid.Row="0" Margin="5,0">
-                            <ToggleButton
+                        <!--<ToggleButton
                                 x:Name="btnMenu"
-                                HorizontalAlignment="Left"
+                                HorizontalAlignment="Center"
                                 Command="{Binding OpenMenuCommand}"
                                 Cursor="Hand"
                                 Foreground="#ddd1c3"
                                 IsChecked="{Binding IsLeftDrawerOpen}"
-                                Style="{StaticResource MaterialDesignHamburgerToggleButton}" />
+                                Style="{StaticResource MaterialDesignHamburgerToggleButton}" Height="37" VerticalAlignment="Top" />-->
+                        <Grid Margin="5" HorizontalAlignment="Left">
+
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="auto" />
+                                <ColumnDefinition Width="auto" />
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="auto" />
+                                <RowDefinition Height="auto" />
+                            </Grid.RowDefinitions>
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="auto" />
+                                    <ColumnDefinition Width="auto" />
+                                </Grid.ColumnDefinitions>
+                                <Grid Grid.Column="0">
+                                    <Ellipse
+                                        Width="35"
+                                        Height="35"
+                                        HorizontalAlignment="Center"
+                                        VerticalAlignment="Center"
+                                        Fill="#ffffff"
+                                        StrokeThickness="4">
+                                        <Ellipse.Stroke>
+                                            <LinearGradientBrush>
+                                                <GradientStop Offset="0" Color="#cea48c" />
+                                                <GradientStop Offset="1" Color="#b79c8b" />
+                                            </LinearGradientBrush>
+                                        </Ellipse.Stroke>
+                                    </Ellipse>
+
+                                    <Border
+                                        Width="35"
+                                        Height="35"
+                                        ClipToBounds="True"
+                                        CornerRadius="100">
+                                        <Border.Clip>
+                                            <EllipseGeometry
+                                                Center="100,100"
+                                                RadiusX="100"
+                                                RadiusY="100" />
+                                        </Border.Clip>
+                                        <Image
+                                            RenderOptions.BitmapScalingMode="HighQuality"
+                                            Source="{Binding ModifyFood.Imagefood, UpdateSourceTrigger=PropertyChanged}"
+                                            Stretch="UniformToFill" />
+                                    </Border>
+                                </Grid>
+
+                                <StackPanel
+                                    Grid.Column="1"
+                                    Margin="10,0,0,0"
+                                    VerticalAlignment="Center">
+                                    <TextBlock
+                                        FontSize="15"
+                                        Foreground="#f9f9f9"
+                                        Text="vinh co" />
+                                    <TextBlock
+                                        FontSize="15"
+                                        FontWeight="SemiBold"
+                                        Foreground="#ffffff"
+                                        Text="Nhan viên" />
+                                </StackPanel>
+                            </Grid>
+
+
+
+
                         </Grid>
-                        <Grid Grid.Row="1" Background="Transparent">
+                        <Grid Grid.Row="1" Background="Transparent" Margin="10">
                             <ContentControl Content="{Binding CurrentVM}" />
+                        </Grid>
+                        <Grid Grid.Row="2" Margin="10,0,0,0">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="auto" />
+                                <ColumnDefinition Width="auto" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+                           
+                            <Grid Grid.Column="0">
+                                <RadioButton
+                               
+                                    VerticalAlignment="Bottom"
+                                    Command="{Binding SignOutCommand}"
+                                    Style="{StaticResource menuLogOutButton}">
+
+                                    <ma:PackIconMaterial
+                                        Width="30"
+                                        Height="30"
+                                        HorizontalAlignment="Center"
+                                        Kind="Logout" />
+
+
+                                </RadioButton>
+                            </Grid>
                         </Grid>
                     </Grid>
                 </materialDesign:DrawerHost>
             </materialDesign:DialogHost>
         </Grid>
+        <materialDesign:DialogHost
+            DialogTheme="Inherit"
+            IsOpen="{Binding IsOpenSetting}"
+            OverlayBackground="{DynamicResource PrimaryHueDarkBrush}"
+            Placement="Mouse"
+            Style="{StaticResource MaterialDesignEmbeddedDialogHost}">
+            <materialDesign:DialogHost.DialogBackground>
+                <SolidColorBrush Color="Transparent" />
+            </materialDesign:DialogHost.DialogBackground>
+
+            <materialDesign:DialogHost.DialogContent>
+                <ContentControl Content="{Binding OpenSettingAccountVM}" />
+            </materialDesign:DialogHost.DialogContent>
+        </materialDesign:DialogHost>
     </Grid>
 </UserControl>

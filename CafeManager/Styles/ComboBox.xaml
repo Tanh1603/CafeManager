@@ -100,6 +100,9 @@
                         <Trigger Property="IsEnabled" Value="false">
                             <Setter Property="Foreground" Value="#844418" />
                         </Trigger>
+                        <Trigger Property="IsChecked" Value="false">
+                            <Setter Property="Foreground" Value="#844418" />
+                        </Trigger>
                         <!--<MultiDataTrigger>
                             <MultiDataTrigger.Conditions>
                                 <Condition Binding="{Binding IsEnabled, RelativeSource={RelativeSource Self}}" Value="false" />
@@ -152,8 +155,8 @@
                     HorizontalAlignment="Center"
                     VerticalAlignment="Center"
                     Panel.ZIndex="2"
-                   Command="{Binding ClearComboBoxCommand}"
-                     CommandParameter="{Binding RelativeSource={RelativeSource TemplatedParent}}"
+                    Command="{Binding DataContext.ClearComboBoxCommand, RelativeSource={RelativeSource AncestorType=Window}}"
+                    CommandParameter="{Binding RelativeSource={RelativeSource TemplatedParent}}"
                     Style="{StaticResource datePickerButton}"
                     Visibility="Visible">
                     <ma:PackIconMaterial
@@ -171,7 +174,6 @@
                     HorizontalOffset="0"
                     IsOpen="{Binding IsDropDownOpen, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}"
                     Placement="Bottom"
-                    PlacementTarget="{Binding ElementName=ComboBoxStyle}"
                     PopupAnimation="{DynamicResource {x:Static SystemParameters.ComboBoxPopupAnimationKey}}"
                     VerticalOffset="0">
 

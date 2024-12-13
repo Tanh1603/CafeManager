@@ -4,6 +4,9 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Microsoft.Extensions.DependencyInjection;
 using System.Windows;
+using System.Windows.Controls.Primitives;
+using System.Windows.Controls;
+using System.Windows.Media;
 
 namespace CafeManager.WPF.ViewModels
 {
@@ -20,8 +23,8 @@ namespace CafeManager.WPF.ViewModels
             _navigationStore.Navigation = CurrentViewModel;
 
             //CurrentViewModel = provider.GetRequiredService<LoginViewModel>();
+            //CurrentViewModel = provider.GetRequiredService<MainAdminViewModel>();
             CurrentViewModel = provider.GetRequiredService<MainAdminViewModel>();
-            //CurrentViewModel = provider.GetRequiredService<MainUserViewModel>();
             _navigationStore.NavigationStoreChanged += _navigationStore_NavigationStoreChanged;
         }
 
@@ -64,6 +67,57 @@ namespace CafeManager.WPF.ViewModels
         }
 
         #endregion command handle window
+
+
+
+        #region handleDatePicker
+
+        [RelayCommand]
+        public void ClearDatePicker(DatePicker datePicker)
+        {
+            if (datePicker != null)
+            {
+                datePicker.SelectedDate = null;
+
+
+                var textBox = FindChild<DatePickerTextBox>(datePicker);
+                if (textBox != null)
+                {
+                    textBox.Text = string.Empty;
+                }
+            }
+        }
+
+        private T FindChild<T>(DependencyObject parent) where T : DependencyObject
+        {
+            for (int i = 0; i < VisualTreeHelper.GetChildrenCount(parent); i++)
+            {
+                var child = VisualTreeHelper.GetChild(parent, i);
+                if (child is T tChild)
+                    return tChild;
+
+                var result = FindChild<T>(child);
+                if (result != null)
+                    return result;
+            }
+            return null;
+        }
+        #endregion
+
+
+
+        #region handleComboBox
+        [RelayCommand]
+        public void ClearComboBox(ComboBox comboBox)
+
+        {
+            if (comboBox != null)
+            {
+                comboBox.SelectedItem = null; // Đặt SelectedItem về null
+                comboBox.Text = string.Empty; // Xóa nội dung Text
+            }
+        }
+        #endregion
 
         public void Dispose()
         {

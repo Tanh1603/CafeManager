@@ -23,11 +23,16 @@ namespace CafeManager.WPF.Views.AdminView
         public HomeAdminView()
         {
             InitializeComponent();
+           
+
+           
         }
 
         private void CartesianChart_Loaded(object sender, RoutedEventArgs e)
         {
 
         }
-    }
+       
+        
+    };
 }

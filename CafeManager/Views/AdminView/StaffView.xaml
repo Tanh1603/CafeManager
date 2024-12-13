@@ -70,14 +70,7 @@
                 Margin="0,10"
                 HorizontalAlignment="Right"
                 Orientation="Horizontal">
-                <TextBlock
-                    Margin="0,0,10,0"
-                    HorizontalAlignment="Right"
-                    VerticalAlignment="Center"
-                    FontSize="13"
-                    FontWeight="SemiBold"
-                    Foreground="#602414"
-                    Text="Filter by" />
+             
 
                 <!--  Filter Textbox  -->
                 <Grid
@@ -90,11 +83,12 @@
                         Panel.ZIndex="1"
                         Foreground="#9c6d3f"
                         IsHitTestVisible="False"
-                        Text="Search in Members..."
+                        Text="Tìm kiếm nhân viên..."
                         Visibility="{Binding ElementName=txtFilter, Path=Text.IsEmpty, Converter={StaticResource BoolToVis}}" />
                     <TextBox
                         x:Name="txtFilter"
                         Style="{StaticResource textBoxFilter}"
+                        
                         Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}" />
                     <ma:PackIconMaterial
                         Width="15"
@@ -103,6 +97,7 @@
                         HorizontalAlignment="Right"
                         VerticalAlignment="Center"
                         Foreground="#d5b096"
+                        Panel.ZIndex="1"
                         Kind="Magnify" />
                 </Grid>
             </StackPanel>
@@ -119,7 +114,7 @@
                 Grid.Row="3"
                 HorizontalAlignment="Stretch"
                 VerticalAlignment="Stretch"
-                Style="{DynamicResource tabControlStyle}">
+               >
                 <TabItem Header="Đang hiển thị" Style="{DynamicResource tabItemStyle}">
                     <DataGrid
                         VerticalAlignment="Top"

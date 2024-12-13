@@ -33,8 +33,8 @@
 
                 <RowDefinition Height="auto" />
                 <RowDefinition Height="auto" />
-                <!--<RowDefinition Height="auto" />-->
                 <RowDefinition Height="*" />
+                <RowDefinition Height="auto" />
             </Grid.RowDefinitions>
 
             <!--  Page Title  -->
@@ -59,18 +59,20 @@
                 Grid.Row="1"
                 Margin="10"
                 Orientation="Horizontal">
-                <ComboBox
-                    Grid.Column="0"
-                    MinWidth="120"
-                    MinHeight="35"
+                <TextBlock
+                    Margin="10,0"
                     VerticalAlignment="Center"
-                    materialDesign:HintAssist.Hint="Vật liệu"
-                    materialDesign:TextBlockAssist.AutoToolTip="True"
+                    FontSize="13"
+                    FontWeight="SemiBold"
+                    Foreground="#602414"
+                    Text="Vật liệu: " />
+                <ComboBox
+                    Width="150"
                     materialDesign:TextFieldAssist.HasClearButton="True"
-                    BorderBrush="#602414"
                     ItemsSource="{Binding ListMaterialDTO}"
-                    SelectedItem="{Binding SelectedMaterial}">
-
+                    SelectedItem="{Binding SelectedMaterial}"
+                    SelectedValuePath="Content"
+                    Style="{StaticResource MaterialDesignFilledComboBox}">
                     <ComboBox.ItemTemplate>
                         <DataTemplate>
                             <Grid>
@@ -78,23 +80,27 @@
                                     Margin="0,0,10,0"
                                     VerticalAlignment="Center"
                                     Text="{Binding Materialname}"
-                                    TextWrapping="Wrap" />
+                                    TextTrimming="CharacterEllipsis"
+                                    TextWrapping="NoWrap" />
                             </Grid>
                         </DataTemplate>
                     </ComboBox.ItemTemplate>
                 </ComboBox>
 
-                <ComboBox
-                    MinWidth="120"
-                    MinHeight="35"
-                    Margin="10"
+                <TextBlock
+                    Margin="10,0"
                     VerticalAlignment="Center"
-                    materialDesign:HintAssist.Hint="Nhà cung cấp"
-                    materialDesign:TextBlockAssist.AutoToolTip="True"
+                    FontSize="13"
+                    FontWeight="SemiBold"
+                    Foreground="#602414"
+                    Text="Nhà sản xuất: " />
+                <ComboBox
+                    Width="150"
                     materialDesign:TextFieldAssist.HasClearButton="True"
-                    BorderBrush="#602414"
                     ItemsSource="{Binding ListSupplierDTO}"
-                    SelectedItem="{Binding SelectedSupplier}">
+                    SelectedItem="{Binding SelectedSupplier}"
+                    SelectedValuePath="Content"
+                    Style="{StaticResource MaterialDesignFilledComboBox}">
                     <ComboBox.ItemTemplate>
                         <DataTemplate>
                             <Grid>
@@ -102,44 +108,42 @@
                                     Margin="0,0,10,0"
                                     VerticalAlignment="Center"
                                     Text="{Binding Suppliername}"
-                                    TextWrapping="Wrap" />
+                                    TextTrimming="CharacterEllipsis"
+                                    TextWrapping="NoWrap" />
                             </Grid>
                         </DataTemplate>
                     </ComboBox.ItemTemplate>
                 </ComboBox>
 
-                <StackPanel Orientation="Horizontal">
-                    <TextBlock
-                        Margin="10,0"
-                        VerticalAlignment="Center"
-                        FontSize="13"
-                        FontWeight="SemiBold"
-                        Foreground="#602414"
-                        Text="NSX: " />
-                    <DatePicker
-                        Width="120"
-                        VerticalAlignment="Center"
-                        materialDesign:HintAssist.Hint="Chọn ngày"
-                        materialDesign:TextFieldAssist.HasClearButton="True"
-                        SelectedDate="{Binding FilterManufacturedate, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
-                        Style="{StaticResource MaterialDesignFloatingHintDatePicker}" />
+                <TextBlock
+                    Margin="10,0"
+                    VerticalAlignment="Center"
+                    FontSize="13"
+                    FontWeight="SemiBold"
+                    Foreground="#602414"
+                    Text="NSX: " />
+                <DatePicker
+                    Width="120"
+                    VerticalAlignment="Center"
+                    materialDesign:HintAssist.Hint="Chọn ngày"
+                    materialDesign:TextFieldAssist.HasClearButton="True"
+                    SelectedDate="{Binding FilterManufacturedate, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
+                    Style="{StaticResource MaterialDesignFloatingHintDatePicker}" />
 
-                    <TextBlock
-                        Margin="10,0"
-                        VerticalAlignment="Center"
-                        FontSize="13"
-                        FontWeight="SemiBold"
-                        Foreground="#602414"
-                        Text="HSD: " />
-                    <DatePicker
-                        Width="120"
-                        VerticalAlignment="Center"
-                        materialDesign:HintAssist.Hint="Chọn ngày"
-                        materialDesign:TextFieldAssist.HasClearButton="True"
-                        SelectedDate="{Binding FilterExpirationdate, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
-                        Style="{StaticResource MaterialDesignFloatingHintDatePicker}" />
-                </StackPanel>
-
+                <TextBlock
+                    Margin="10,0"
+                    VerticalAlignment="Center"
+                    FontSize="13"
+                    FontWeight="SemiBold"
+                    Foreground="#602414"
+                    Text="HSD: " />
+                <DatePicker
+                    Width="120"
+                    VerticalAlignment="Center"
+                    materialDesign:HintAssist.Hint="Chọn ngày"
+                    materialDesign:TextFieldAssist.HasClearButton="True"
+                    SelectedDate="{Binding FilterExpirationdate, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
+                    Style="{StaticResource MaterialDesignFloatingHintDatePicker}" />
                 <Button
                     Width="Auto"
                     Margin="10,0,0,0"
@@ -174,13 +178,13 @@
                             Margin="0,1,8,0"
                             VerticalAlignment="Center"
                             Kind="Information" />
-                        <TextBlock Text="Chi tiết danh mục" />
+                        <TextBlock Text="Chi tiết vật liệu" />
                     </StackPanel>
                 </Button>
             </StackPanel>
 
             <Border Grid.Row="2" VerticalAlignment="Top">
-                <TabControl Style="{DynamicResource tabControlStyle}" >
+                <TabControl SelectedIndex="{Binding SelectedTabIndex, Mode=TwoWay}" Style="{DynamicResource tabControlStyle}">
                     <TabItem Header="Đã dùng" Style="{DynamicResource tabItemStyle}">
                         <Grid>
                             <Grid.RowDefinitions>
@@ -257,173 +261,179 @@
                                         IsReadOnly="True" />
                                     <DataGridTextColumn
                                         Width="*"
+                                        Binding="{Binding Usagedate, Mode=OneWay}"
+                                        CanUserResize="False"
+                                        Header="Ngày sử dụng"
+                                        IsReadOnly="True" />
+                                    <DataGridTextColumn
+                                        Width="*"
                                         Binding="{Binding Quantity, Mode=OneWay}"
                                         CanUserResize="False"
-                                        Header="Số lượng sử dụng"
+                                        Header="Sử dụng"
                                         IsReadOnly="True" />
                                 </DataGrid.Columns>
                             </DataGrid>
 
-                            <Grid
-                                Grid.Row="1"
-                                Margin="10"
-                                HorizontalAlignment="Center"
-                                VerticalAlignment="Bottom">
-                                <StackPanel Orientation="Horizontal">
-                                    <StackPanel.Resources>
-                                        <Style BasedOn="{StaticResource MaterialDesignFlatDarkButton}" TargetType="Button">
-                                            <Setter Property="Margin" Value="10,0" />
-                                        </Style>
-                                    </StackPanel.Resources>
-                                    <Button Command="{Binding ConsumedFirstPageCommand}">
-                                        <materialDesign:PackIcon Kind="SkipBackwardOutline" />
-                                    </Button>
 
-                                    <Button Command="{Binding ConsumedPreviousPageCommand}">
-                                        <materialDesign:PackIcon Kind="SkipPreviousOutline" />
-                                    </Button>
-
-                                    <TextBlock
-                                        HorizontalAlignment="Left"
-                                        VerticalAlignment="Center"
-                                        FontSize="16"
-                                        FontWeight="SemiBold"
-                                        Foreground="#dac5b4"
-                                        Text="{Binding ConsumedPageUI}" />
-
-                                    <Button Command="{Binding ConsumedNextPageCommand}">
-                                        <materialDesign:PackIcon Kind="SkipNextOutline" />
-                                    </Button>
-
-                                    <Button Command="{Binding ConsumedLastPageCommand}">
-                                        <materialDesign:PackIcon Kind="SkipForwardOutline" />
-                                    </Button>
-                                </StackPanel>
-                            </Grid>
                         </Grid>
                     </TabItem>
                     <TabItem Header="Tồn kho" Style="{DynamicResource tabItemStyle}">
-                        <Grid>
-                            <Grid.RowDefinitions>
-                                <RowDefinition />
-                                <RowDefinition Height="auto" />
-                            </Grid.RowDefinitions>
-                            <DataGrid
-                                Width="auto"
-                                VerticalAlignment="Top"
-                                AlternationCount="{Binding ListInventoryDTO.Count}"
-                                CellStyle="{DynamicResource DataGridCellStyle1}"
-                                ColumnHeaderStyle="{DynamicResource DataGridColumnHeaderStyle1}"
-                                ItemsSource="{Binding ListInventoryDTO}"
-                                RowStyle="{DynamicResource DataGridRowStyle1}"
-                                Style="{DynamicResource DataGridStyle1}">
-                                <DataGrid.Columns>
+                        <DataGrid
+                            Width="auto"
+                            VerticalAlignment="Top"
+                            AlternationCount="{Binding ListInventoryDTO.Count}"
+                            CellStyle="{DynamicResource DataGridCellStyle1}"
+                            ColumnHeaderStyle="{DynamicResource DataGridColumnHeaderStyle1}"
+                            ItemsSource="{Binding ListInventoryDTO}"
+                            RowStyle="{DynamicResource DataGridRowStyle1}"
+                            Style="{DynamicResource DataGridStyle1}">
+                            <DataGrid.Columns>
 
-                                    <DataGridTextColumn
-                                        Width="auto"
-                                        Header="STT"
-                                        IsReadOnly="True">
-                                        <DataGridTextColumn.Binding>
-                                            <Binding
-                                                Converter="{StaticResource RowIndexConverter}"
-                                                Path="(ItemsControl.AlternationIndex)"
-                                                RelativeSource="{RelativeSource AncestorType=DataGridRow}" />
-                                        </DataGridTextColumn.Binding>
-                                    </DataGridTextColumn>
+                                <DataGridTextColumn
+                                    Width="auto"
+                                    Header="STT"
+                                    IsReadOnly="True">
+                                    <DataGridTextColumn.Binding>
+                                        <Binding
+                                            Converter="{StaticResource RowIndexConverter}"
+                                            Path="(ItemsControl.AlternationIndex)"
+                                            RelativeSource="{RelativeSource AncestorType=DataGridRow}" />
+                                    </DataGridTextColumn.Binding>
+                                </DataGridTextColumn>
 
-                                    <DataGridTextColumn
-                                        Width="*"
-                                        Binding="{Binding Material.Materialname}"
-                                        CanUserResize="False"
-                                        Header="Tên vật tư"
-                                        IsReadOnly="True" />
+                                <DataGridTextColumn
+                                    Width="*"
+                                    Binding="{Binding Material.Materialname}"
+                                    CanUserResize="False"
+                                    Header="Tên vật tư"
+                                    IsReadOnly="True" />
 
-                                    <DataGridTextColumn
-                                        Width="*"
-                                        Binding="{Binding Supplier.Suppliername}"
-                                        CanUserResize="False"
-                                        Header="Nhà cung cấp"
-                                        IsReadOnly="True" />
-                                    <DataGridTextColumn
-                                        Width="*"
-                                        Binding="{Binding Manufacturedate, Converter={StaticResource DateTimeToDateOnlyConverter}}"
-                                        CanUserResize="False"
-                                        Header="Ngày sản xuất"
-                                        IsReadOnly="True" />
-                                    <DataGridTextColumn
-                                        Width="*"
-                                        Binding="{Binding Expirationdate, Converter={StaticResource DateTimeToDateOnlyConverter}}"
-                                        CanUserResize="False"
-                                        Header="Ngày hết hạn"
-                                        IsReadOnly="True" />
-                                    <DataGridTextColumn
-                                        Width="*"
-                                        Binding="{Binding Original}"
-                                        CanUserResize="False"
-                                        Header="Nguồn gốc"
-                                        IsReadOnly="True" />
+                                <DataGridTextColumn
+                                    Width="*"
+                                    Binding="{Binding Supplier.Suppliername}"
+                                    CanUserResize="False"
+                                    Header="Nhà cung cấp"
+                                    IsReadOnly="True" />
+                                <DataGridTextColumn
+                                    Width="*"
+                                    Binding="{Binding Manufacturedate, Converter={StaticResource DateTimeToDateOnlyConverter}}"
+                                    CanUserResize="False"
+                                    Header="Ngày sản xuất"
+                                    IsReadOnly="True" />
+                                <DataGridTextColumn
+                                    Width="*"
+                                    Binding="{Binding Expirationdate, Converter={StaticResource DateTimeToDateOnlyConverter}}"
+                                    CanUserResize="False"
+                                    Header="Ngày hết hạn"
+                                    IsReadOnly="True" />
+                                <DataGridTextColumn
+                                    Width="*"
+                                    Binding="{Binding Original}"
+                                    CanUserResize="False"
+                                    Header="Nguồn gốc"
+                                    IsReadOnly="True" />
 
-                                    <DataGridTextColumn
-                                        Width="*"
-                                        Binding="{Binding Manufacturer}"
-                                        CanUserResize="False"
-                                        Header="Nhà sản xuất"
-                                        IsReadOnly="True" />
-                                    <DataGridTextColumn
-                                        Width="*"
-                                        Binding="{Binding Price}"
-                                        CanUserResize="False"
-                                        Header="Giá"
-                                        IsReadOnly="True" />
-                                    <DataGridTextColumn
-                                        Width="*"
-                                        Binding="{Binding TotalQuantity, Mode=OneWay}"
-                                        CanUserResize="False"
-                                        Header="Số lượng"
-                                        IsReadOnly="True" />
-                                </DataGrid.Columns>
-                            </DataGrid>
-
-                            <Grid
-                                Grid.Row="1"
-                                Margin="10"
-                                HorizontalAlignment="Center">
-                                <StackPanel Orientation="Horizontal">
-
-                                    <StackPanel.Resources>
-                                        <Style BasedOn="{StaticResource MaterialDesignFlatDarkButton}" TargetType="Button">
-                                            <Setter Property="Margin" Value="10,0" />
-                                        </Style>
-                                    </StackPanel.Resources>
-                                    <Button Command="{Binding InventoryFirstPageCommand}">
-                                        <materialDesign:PackIcon Kind="SkipBackwardOutline" />
-                                    </Button>
-
-                                    <Button Command="{Binding InventoryPreviousPageCommand}">
-                                        <materialDesign:PackIcon Kind="SkipPreviousOutline" />
-                                    </Button>
-
-                                    <TextBlock
-                                        HorizontalAlignment="Left"
-                                        VerticalAlignment="Center"
-                                        FontSize="16"
-                                        FontWeight="SemiBold"
-                                        Foreground="#dac5b4"
-                                        Text="{Binding InventoryPageUI}" />
-
-                                    <Button Command="{Binding InventoryNextPageCommand}">
-                                        <materialDesign:PackIcon Kind="SkipNextOutline" />
-                                    </Button>
-
-                                    <Button Command="{Binding InventoryLastPageCommand}">
-                                        <materialDesign:PackIcon Kind="SkipForwardOutline" />
-                                    </Button>
-                                </StackPanel>
-                            </Grid>
-                        </Grid>
+                                <DataGridTextColumn
+                                    Width="*"
+                                    Binding="{Binding Manufacturer}"
+                                    CanUserResize="False"
+                                    Header="Nhà sản xuất"
+                                    IsReadOnly="True" />
+                                <DataGridTextColumn
+                                    Width="*"
+                                    Binding="{Binding Price}"
+                                    CanUserResize="False"
+                                    Header="Giá"
+                                    IsReadOnly="True" />
+                                <DataGridTextColumn
+                                    Width="*"
+                                    Binding="{Binding TotalQuantity, Mode=OneWay}"
+                                    CanUserResize="False"
+                                    Header="Số lượng"
+                                    IsReadOnly="True" />
+                            </DataGrid.Columns>
+                        </DataGrid>
                     </TabItem>
                 </TabControl>
             </Border>
+
+            <Grid Grid.Row="3">
+                <!--  ConsumedPage  -->
+                <Grid
+                    Margin="10"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Bottom"
+                    Visibility="{Binding ConsumedPage, Converter={StaticResource BoolToVis}}">
+                    <StackPanel Orientation="Horizontal">
+                        <StackPanel.Resources>
+                            <Style BasedOn="{StaticResource MaterialDesignFlatDarkButton}" TargetType="Button">
+                                <Setter Property="Margin" Value="10,0" />
+                            </Style>
+                        </StackPanel.Resources>
+                        <Button Command="{Binding ConsumedFirstPageCommand}">
+                            <materialDesign:PackIcon Kind="SkipBackwardOutline" />
+                        </Button>
+
+                        <Button Command="{Binding ConsumedPreviousPageCommand}">
+                            <materialDesign:PackIcon Kind="SkipPreviousOutline" />
+                        </Button>
+
+                        <TextBlock
+                            HorizontalAlignment="Left"
+                            VerticalAlignment="Center"
+                            FontSize="16"
+                            FontWeight="SemiBold"
+                            Foreground="#dac5b4"
+                            Text="{Binding ConsumedPageUI}" />
+
+                        <Button Command="{Binding ConsumedNextPageCommand}">
+                            <materialDesign:PackIcon Kind="SkipNextOutline" />
+                        </Button>
+
+                        <Button Command="{Binding ConsumedLastPageCommand}">
+                            <materialDesign:PackIcon Kind="SkipForwardOutline" />
+                        </Button>
+                    </StackPanel>
+                </Grid>
+
+                <!--  InventoryPage  -->
+                <Grid
+                    Margin="10"
+                    HorizontalAlignment="Center"
+                    Visibility="{Binding InventoryPage, Converter={StaticResource BoolToVis}}">
+                    <StackPanel Orientation="Horizontal">
+
+                        <StackPanel.Resources>
+                            <Style BasedOn="{StaticResource MaterialDesignFlatDarkButton}" TargetType="Button">
+                                <Setter Property="Margin" Value="10,0" />
+                            </Style>
+                        </StackPanel.Resources>
+                        <Button Command="{Binding InventoryFirstPageCommand}">
+                            <materialDesign:PackIcon Kind="SkipBackwardOutline" />
+                        </Button>
+
+                        <Button Command="{Binding InventoryPreviousPageCommand}">
+                            <materialDesign:PackIcon Kind="SkipPreviousOutline" />
+                        </Button>
+
+                        <TextBlock
+                            HorizontalAlignment="Left"
+                            VerticalAlignment="Center"
+                            FontSize="16"
+                            FontWeight="SemiBold"
+                            Foreground="#dac5b4"
+                            Text="{Binding InventoryPageUI}" />
+
+                        <Button Command="{Binding InventoryNextPageCommand}">
+                            <materialDesign:PackIcon Kind="SkipNextOutline" />
+                        </Button>
+
+                        <Button Command="{Binding InventoryLastPageCommand}">
+                            <materialDesign:PackIcon Kind="SkipForwardOutline" />
+                        </Button>
+                    </StackPanel>
+                </Grid>
+            </Grid>
         </Grid>
 
         <materialDesign:DialogHost

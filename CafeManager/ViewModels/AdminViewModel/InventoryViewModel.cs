@@ -25,6 +25,24 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
         private readonly ConsumedMaterialServices _consumedMaterialServices;
         private readonly IMapper _mapper;
 
+        private int _selectedTabIndex;
+        public int SelectedTabIndex
+        {
+            get => _selectedTabIndex;
+            set
+            {
+                _selectedTabIndex = value;
+                ConsumedPage = (_selectedTabIndex == 0);
+                InventoryPage = (_selectedTabIndex == 1);
+                OnPropertyChanged();
+            }
+        }
+
+        [ObservableProperty]
+        private bool _consumedPage = true;
+        [ObservableProperty]
+        private bool _inventoryPage = false;
+        
         // ===================== Material Declare =====================
         #region Material Declare
         [ObservableProperty]
@@ -89,6 +107,8 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
                     _selectedSupplier = value;
                     OnPropertyChanged(nameof(SelectedSupplier));
                     _ = LoadInventory();
+                    consumedPageIndex = 1;
+                    inventoryPageIndex = 1;
                 }
             }
         }
@@ -105,6 +125,8 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
                     _selectedMaterial = value;
                     OnPropertyChanged(nameof(SelectedMaterial));
                     _ = LoadInventory();
+                    consumedPageIndex = 1;
+                    inventoryPageIndex = 1;
                 }
             }
         }
@@ -121,6 +143,8 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
                     _filterManufacturedate = value;
                     OnPropertyChanged(nameof(FilterManufacturedate));
                     _ = LoadInventory();
+                    consumedPageIndex = 1;
+                    inventoryPageIndex = 1;
                 }
             }
         }
@@ -137,6 +161,8 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
                     _filterExpirationdate = value;
                     OnPropertyChanged(nameof(FilterExpirationdate));
                     _ = LoadInventory();
+                    consumedPageIndex = 1;
+                    inventoryPageIndex = 1;
                 }
             }
         }
@@ -269,6 +295,8 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
                 IsFilterExpired = false;
             }
             _ = LoadInventory();
+            consumedPageIndex = 1;
+            inventoryPageIndex = 1;
         }
 
         [RelayCommand]
@@ -284,6 +312,8 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
                 IsFilterExpiring = false;
             }
             _ = LoadInventory();
+            consumedPageIndex = 1;
+            inventoryPageIndex = 1;
         }
 
         #region Material

@@ -36,14 +36,36 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
 
 
         #region Filter Declare
-        private string SearchText = string.Empty;
+        private SupplierDTO? _selectedSupplier;
 
-        [RelayCommand]
-        private void Search(string searchText)
+        public SupplierDTO? SelectedSupplier
         {
-            // Logic xử lý tìm kiếm
-            SearchText = searchText; // Cập nhật nếu cần
-            _ = LoadImport();
+            get => _selectedSupplier;
+            set
+            {
+                if (_selectedSupplier != value)
+                {
+                    _selectedSupplier = value;
+                    OnPropertyChanged(nameof(SelectedSupplier));
+                    _ = FirstPage();
+                }
+            }
+        }
+
+        private StaffDTO? _selectedStaff;
+
+        public StaffDTO? SelectedStaff
+        {
+            get => _selectedStaff;
+            set
+            {
+                if (_selectedStaff != value)
+                {
+                    _selectedStaff = value;
+                    OnPropertyChanged(nameof(SelectedStaff));
+                    _ = FirstPage();
+                }
+            }
         }
 
         private DateTime? _startDate;
@@ -57,7 +79,7 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
                 {
                     _startDate = value;
                     OnPropertyChanged();
-                    _ = LoadImport();
+                    _ = FirstPage();
                 }
             }
         }
@@ -73,7 +95,7 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
                 {
                     _endDate = value;
                     OnPropertyChanged();
-                    _ = LoadImport();
+                    _ = FirstPage();
                 }
             }
         }
@@ -120,9 +142,8 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
                 (import.Isdeleted == false) &&
                 (StartDate == null || import.Receiveddate >= StartDate) &&
                 (EndDate == null || import.Receiveddate <= EndDate) &&
-                (string.IsNullOrEmpty(SearchText) ||
-                    import.Supplier.Suppliername.Contains(SearchText) ||
-                    import.Staff.Staffname.Contains(SearchText));
+                (SelectedSupplier == null || import.Supplier.Supplierid == SelectedSupplier.Supplierid) &&
+                (SelectedStaff == null || import.Staff.Staffid == SelectedStaff.Staffid);
 
             var dbListImport = await _importServices.GetSearchPaginateListImport(filter, pageIndex, pageSize);
             ListImportDTO = [.. _mapper.Map<List<ImportDTO>>(dbListImport.Item1)];

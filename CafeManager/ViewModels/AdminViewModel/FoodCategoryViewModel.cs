@@ -20,6 +20,9 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
         private readonly IServiceScope _scope;
 
         [ObservableProperty]
+        private bool _isLoading;
+
+        [ObservableProperty]
         private bool _isAdding = false;
 
         [ObservableProperty]
@@ -44,6 +47,7 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
             _foodcategoryServices = provider.GetRequiredService<FoodCategoryServices>();
             _mapper = provider.GetRequiredService<IMapper>();
         }
+
         [RelayCommand]
         private void OpenAddFoodCategory()
         {
@@ -64,14 +68,16 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
         {
             try
             {
+                IsLoading = true;
                 if (IsAdding)
                 {
                     var addFoodCategory = await _foodcategoryServices.AddFoodCategory(_mapper.Map<Foodcategory>(ModifyFoodCategory));
                     if (addFoodCategory != null)
                     {
                         ListFoodCategory.Add(_mapper.Map<FoodCategoryDTO>(addFoodCategory));
+                        IsOpenModifyFoodCategory = false;
+                        IsLoading = false;
                         MyMessageBox.ShowDialog("Thêm danh mục thực đơn thành công");
-                        ModifyFoodCategory = new();
                     }
                     else
                     {
@@ -87,8 +93,9 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
                         if (updateFoodCategoryDTO != null)
                         {
                             _mapper.Map(res, updateFoodCategoryDTO);
+                            IsOpenModifyFoodCategory = false;
+                            IsLoading = false;
                             MyMessageBox.ShowDialog("Sửa danh mục thực đơn thành công");
-                            ModifyFoodCategory = new();
                         }
                     }
                     else
@@ -102,6 +109,10 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
             {
                 MyMessageBox.ShowDialog(ioe.Message);
             }
+            finally
+            {
+                IsLoading = false;
+            }
         }
 
         [RelayCommand]
@@ -112,11 +123,13 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
                 string messageBox = MyMessageBox.ShowDialog("Bạn có muốn ẩn danh mục không?", MyMessageBox.Buttons.Yes_No, MyMessageBox.Icons.Question);
                 if (messageBox.Equals("1"))
                 {
+                    IsLoading = true;
                     bool isDeleted = await _foodcategoryServices.DeleteFoodCategory(foodCategory.Foodcategoryid);
                     if (isDeleted)
                     {
                         ListDeletedFoodCategory.Add(foodCategory);
                         ListFoodCategory.Remove(foodCategory);
+                        IsLoading = false;
                         MyMessageBox.ShowDialog("Ẩn danh mục thanh công");
                     }
                     else
@@ -129,6 +142,10 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
             {
                 MyMessageBox.ShowDialog(ioe.Message);
             }
+            finally
+            {
+                IsLoading = false;
+            }
         }
 
         [RelayCommand]
@@ -139,12 +156,14 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
                 string messageBox = MyMessageBox.ShowDialog("Bạn có muốn hiển thị danh mục không?", MyMessageBox.Buttons.Yes_No, MyMessageBox.Icons.Question);
                 if (messageBox.Equals("1"))
                 {
+                    IsLoading = true;
                     foodCategory.Isdeleted = false;
                     var res = await _foodcategoryServices.UpdateFoodCategory(_mapper.Map<Foodcategory>(foodCategory));
                     if (res != null)
                     {
                         ListFoodCategory.Add(_mapper.Map<FoodCategoryDTO>(res));
                         ListDeletedFoodCategory.Remove(foodCategory);
+                        IsLoading = false;
                         MyMessageBox.ShowDialog("Hiển thị danh mục thanh công");
                     }
                     else
@@ -157,6 +176,10 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
             {
                 MyMessageBox.ShowDialog(ioe.Message);
             }
+            finally
+            {
+                IsLoading = false;
+            }
         }
 
         [RelayCommand]
@@ -164,7 +187,8 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
         {
             IsOpenModifyFoodCategory = false;
             IsAdding = false;
-            IsUpdating= false;
+            IsUpdating = false;
+            ModifyFoodCategory = new();
         }
 
         public void Dispose()

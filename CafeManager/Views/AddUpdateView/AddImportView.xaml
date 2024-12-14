@@ -440,7 +440,7 @@
                 <Grid Margin="30,10,0,0">
                     <StackPanel Orientation="Horizontal">
                         <TextBlock Text="Tổng giá trị: " />
-                        <TextBlock Text="{Binding ImportPrice, StringFormat={}{0:0}}"/>
+                        <TextBlock Text="{Binding ImportPrice, StringFormat={}{0:0}}" />
                     </StackPanel>
                 </Grid>
 

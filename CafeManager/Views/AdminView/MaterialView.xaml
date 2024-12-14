@@ -250,7 +250,6 @@
                                     </DataGridTextColumn.EditingElementStyle>
                                 </DataGridTextColumn>
 
-
                                 <DataGridTemplateColumn
                                     Width="auto"
                                     Header="Tùy chỉnh"
@@ -290,8 +289,22 @@
                 <materialDesign:DialogHost.DialogContent>
                     <ContentControl Content="{Binding ModifyMaterialVM}" />
                 </materialDesign:DialogHost.DialogContent>
-
             </materialDesign:DialogHost>
+
+            <Grid
+                Background="White"
+                Opacity="0.3"
+                Visibility="{Binding IsLoading, Converter={StaticResource BooleanToVisibilityConverter}}">
+                <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
+                    <TextBlock Style="{StaticResource infoText}" Text="Đang tải tài nguyên.." />
+                    <ProgressBar
+                        Width="50"
+                        Height="50"
+                        IsIndeterminate="True"
+                        Style="{StaticResource MaterialDesignCircularProgressBar}"
+                        Value="35" />
+                </StackPanel>
+            </Grid>
         </Grid>
     </Border>
 </UserControl>

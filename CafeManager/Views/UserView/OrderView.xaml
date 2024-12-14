@@ -30,8 +30,8 @@
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
 
-        <Grid Grid.Column="0" HorizontalAlignment="Stretch">
-            <Border CornerRadius="5" Height="342" VerticalAlignment="Bottom">
+        <Grid Grid.Column="0">
+            <Border CornerRadius="5">
                 <Border.Background>
                     <LinearGradientBrush StartPoint="0,0.5" EndPoint="1,0.5">
                         <GradientStop Offset="1" Color="#fee3d4" />
@@ -100,9 +100,9 @@
                                     MinHeight="35"
                                     FontWeight="Bold"
                                     ItemsSource="{Binding ListFoodCategoryDTO}"
-                                    SelectedItem="{Binding SelectedFoodCategory}"
+                                    SelectedItem="{Binding SelectedFoodCategory, UpdateSourceTrigger=PropertyChanged}"
                                     Style="{StaticResource ComboBoxStyle}"
-                                    Tag="--Danh mục thực đơn--">
+                                    Tag="Danh mục thực đơn">
                                     <ComboBox.ItemContainerStyle>
                                         <Style BasedOn="{StaticResource ComboBoxItemStyle}" TargetType="ComboBoxItem">
                                             <Setter Property="Width" Value="{Binding ActualWidth, ElementName=cbFoodCategory}" />

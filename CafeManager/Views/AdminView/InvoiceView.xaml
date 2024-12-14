@@ -62,6 +62,7 @@
                     Text="Từ:" />
                 <DatePicker
                     Width="140"
+                    VerticalAlignment="Center"
                     materialDesign:TextFieldAssist.HasClearButton="True"
                     SelectedDate="{Binding StartDate}"
                     Style="{StaticResource MaterialDesignFilledDatePicker}" />
@@ -75,7 +76,7 @@
                     Text="Đến:" />
                 <DatePicker
                     Width="140"
-                    
+                    VerticalAlignment="Center"
                     SelectedDate="{Binding EndDate}"
                     Style="{StaticResource DatePicker}" />
 
@@ -89,10 +90,10 @@
                 <ComboBox
                     Width="200"
                     materialDesign:TextFieldAssist.HasClearButton="True"
+                    ItemContainerStyle="{StaticResource ComboBoxItemStyle}"
                     SelectedValue="{Binding Status, UpdateSourceTrigger=PropertyChanged}"
                     SelectedValuePath="Content"
-                    Style="{StaticResource ComboBoxStyle}"
-                    ItemContainerStyle="{StaticResource ComboBoxItemStyle}">
+                    Style="{StaticResource ComboBoxStyle}">
                     <ComboBoxItem Content="Hóa đơn đã thanh toán" />
                     <ComboBoxItem Content="Hóa đơn đã bị hủy" />
                 </ComboBox>
@@ -106,6 +107,7 @@
                     Text="Phương thức thanh toán:" />
                 <ComboBox
                     Width="140"
+                    VerticalAlignment="Center"
                     materialDesign:TextFieldAssist.HasClearButton="True"
                     SelectedValue="{Binding PaymentMethod}"
                     SelectedValuePath="Content"
@@ -273,5 +275,17 @@
                 <ContentControl Content="{Binding ModifyInvoiceVM}" />
             </materialDesign:DialogHost.DialogContent>
         </materialDesign:DialogHost>
+
+        <Grid Background="White" Opacity="0.3" Visibility="{Binding IsLoading, Converter={StaticResource BooleanToVisibilityConverter}}">
+            <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
+                <TextBlock Style="{StaticResource infoText}" Text="Đang tải tài nguyên.." />
+                <ProgressBar
+                    IsIndeterminate="True"
+                    Style="{StaticResource MaterialDesignCircularProgressBar}"
+                    Height="50"
+                    Width="50"
+                    Value="35" />
+            </StackPanel>
+        </Grid>
     </Grid>
 </UserControl>

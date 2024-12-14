@@ -15,7 +15,7 @@ namespace CafeManager.WPF.ViewModels
         private readonly IServiceProvider _provider;
         private readonly NavigationStore _navigationStore;
         private readonly AccountStore _accountStore;
-        private CancellationTokenSource? _cts = default;
+        private CancellationTokenSource _cts = new();
 
         [ObservableProperty]
         private ObservableObject? _currentViewModel;
@@ -60,16 +60,12 @@ namespace CafeManager.WPF.ViewModels
         {
             if (viewModel.Equals(currentVM)) return;
 
-            if (_cts != default)
-            {
-                _cts.Cancel();
-                _cts.Dispose();
-            }
-            _cts = default;
+            _cts?.Cancel();
+            _cts?.Dispose();
+            _cts = new CancellationTokenSource();
 
             try
             {
-                _cts?.Token.ThrowIfCancellationRequested();
                 CurrentViewModel = viewModel switch
                 {
                     "Home" => _provider.GetRequiredService<HomeViewModel>(),
@@ -85,26 +81,21 @@ namespace CafeManager.WPF.ViewModels
                     _ => throw new Exception("Lỗi")
                 };
                 currentVM = viewModel;
-                _cts = new CancellationTokenSource();
-
-                if (CurrentViewModel is IDataViewModel dataViewModel)
+                Task.Run(() =>
                 {
-                    Task.Run(async () =>
+                    try
                     {
-                        try
+                        _cts?.Token.ThrowIfCancellationRequested();
+                        if (CurrentViewModel is IDataViewModel dataViewModel)
                         {
-                            await dataViewModel.LoadData(_cts.Token);
+                            dataViewModel.LoadData(_cts.Token);
                         }
-                        catch (OperationCanceledException)
-                        {
-                            Debug.WriteLine($"LoadData cho ViewModel {viewModel} đã bị hủy.");
-                        }
-                        catch (Exception ex)
-                        {
-                            Debug.WriteLine($"Lỗi khi LoadData cho ViewModel {viewModel}: {ex.Message}");
-                        }
-                    }, _cts.Token);
-                }
+                    }
+                    catch (OperationCanceledException)
+                    {
+                        throw;
+                    }
+                }, _cts.Token);
             }
             catch (OperationCanceledException oe)
             {
@@ -165,6 +156,5 @@ namespace CafeManager.WPF.ViewModels
         {
             IsOpenSetting = true;
         }
-
     }
 }

@@ -19,6 +19,9 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
         private readonly IMapper _mapper;
 
         [ObservableProperty]
+        private bool _isLoading;
+
+        [ObservableProperty]
         private DateOnly? _endWorkingDate = new DateOnly?(DateOnly.FromDateTime(DateTime.Now));
 
         [ObservableProperty]
@@ -68,15 +71,21 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
             try
             {
                 token.ThrowIfCancellationRequested();
+                IsLoading = true;
                 var dbListStaff = await _staffServices.GetListStaff(token);
                 AllStaff = new List<StaffDTO>(_mapper.Map<List<StaffDTO>>(dbListStaff));
                 _filterListStaff = [.. AllStaff];
                 OnPropertyChanged(nameof(ListExistedStaff));
                 OnPropertyChanged(nameof(ListDeletedStaff));
+                IsLoading = false;
             }
             catch (OperationCanceledException)
             {
                 Debug.WriteLine("LoadData của StaffViewModel bị hủy");
+            }
+            finally
+            {
+                IsLoading = false;
             }
         }
 
@@ -144,6 +153,7 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
                     MyMessageBox.Show("Ngày nghỉ việc phải lớn hơn ngày vào làm");
                     return;
                 }
+                IsLoading = true;
                 bool isSuccessDelete = await _staffServices.DeleteStaff(TempDeleteStaff.Staffid, EndWorkingDate);
                 if (isSuccessDelete)
                 {
@@ -152,6 +162,7 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
                     {
                         res.Isdeleted = true;
                         res.Endworkingdate = EndWorkingDate;
+                        IsLoading = false;
                         MyMessageBox.Show("Xóa nhân viên thành công (Nhân viên nghỉ việc)");
                         FilterStaff();
                     }
@@ -172,6 +183,7 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
         {
             try
             {
+                IsLoading = true;
                 if (ModifyStaffVM.IsAdding)
                 {
                     Staff? addStaff =
@@ -179,6 +191,7 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
                     if (addStaff != null)
                     {
                         AllStaff.Add(_mapper.Map<StaffDTO>(addStaff));
+                        IsLoading = false;
                         MyMessageBox.Show("Thêm nhân viên thành công");
                         IsOpenModifyStaffView = false;
                     }
@@ -194,6 +207,7 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
                     {
                         var updateDTO = AllStaff.FirstOrDefault(x => x.Staffid == staff.Staffid);
                         _mapper.Map(res, updateDTO);
+                        IsLoading = false;
                         MyMessageBox.ShowDialog("Sửa nhân viên thành công");
                     }
                     else
@@ -208,6 +222,10 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
             catch (InvalidOperationException ioe)
             {
                 MyMessageBox.ShowDialog(ioe.Message);
+            }
+            finally
+            {
+                IsLoading = false;
             }
         }
 

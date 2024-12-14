@@ -113,7 +113,7 @@ namespace CafeManager.WPF.Services
             try
             {
                 token.ThrowIfCancellationRequested();
-                return await _unitOfWork.MaterialList.GetAll();
+                return await _unitOfWork.MaterialList.GetAll(token);
             }
             catch (OperationCanceledException)
             {
@@ -241,6 +241,7 @@ namespace CafeManager.WPF.Services
                 throw;
             }
         }
+
         public async Task<Materialsupplier?> GetMaterialsupplierById(int id)
         {
             var res = await _unitOfWork.MaterialSupplierList.GetById(id);
@@ -248,9 +249,17 @@ namespace CafeManager.WPF.Services
         }
 
         // ===================== Phan trang =======================
-        public async Task<(IEnumerable<Materialsupplier>?, int)> GetSearchPaginateListMaterialsupplier(Expression<Func<Materialsupplier, bool>>? searchPredicate = null, int skip = 0, int take = 20)
+        public async Task<(IEnumerable<Materialsupplier>?, int)> GetSearchPaginateListMaterialsupplier(Expression<Func<Materialsupplier, bool>>? searchPredicate = null, int skip = 0, int take = 20, CancellationToken token = default)
         {
-            return await _unitOfWork.MaterialSupplierList.GetByPageAsync(skip, take, searchPredicate);
+            try
+            {
+                token.ThrowIfCancellationRequested();
+                return await _unitOfWork.MaterialSupplierList.GetByPageAsync(skip, take, searchPredicate, token);
+            }
+            catch (OperationCanceledException)
+            {
+                throw;
+            }
         }
     }
 }

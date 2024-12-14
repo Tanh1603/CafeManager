@@ -23,6 +23,9 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
         private readonly IMapper _mapper;
 
         [ObservableProperty]
+        private bool _isLoading;
+
+        [ObservableProperty]
         private bool _isOpenModifyImportView;
 
         [ObservableProperty]
@@ -30,12 +33,9 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
 
         [ObservableProperty]
         private ObservableCollection<ImportDTO> _listImportDTO = [];
-        //public ObservableCollection<ImportDTO> CurrentListImport => [.. _filterListImport];
-
-        //private List<ImportDTO> _filterListImport = [];
-
 
         #region Filter Declare
+
         private SupplierDTO? _selectedSupplier;
 
         public SupplierDTO? SelectedSupplier
@@ -47,7 +47,8 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
                 {
                     _selectedSupplier = value;
                     OnPropertyChanged(nameof(SelectedSupplier));
-                    _ = FirstPage();
+                    //_ = FirstPage();
+                    FirstPageCommand.ExecuteAsync(null);
                 }
             }
         }
@@ -63,7 +64,8 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
                 {
                     _selectedStaff = value;
                     OnPropertyChanged(nameof(SelectedStaff));
-                    _ = FirstPage();
+                    //_ = FirstPage();
+                    FirstPageCommand.ExecuteAsync(null);
                 }
             }
         }
@@ -79,7 +81,8 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
                 {
                     _startDate = value;
                     OnPropertyChanged();
-                    _ = FirstPage();
+                    //_ = FirstPage();
+                    FirstPageCommand.ExecuteAsync(null);
                 }
             }
         }
@@ -95,11 +98,13 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
                 {
                     _endDate = value;
                     OnPropertyChanged();
-                    _ = FirstPage();
+                    //_ = FirstPage();
+                    FirstPageCommand.ExecuteAsync(null);
                 }
             }
         }
-        #endregion
+
+        #endregion Filter Declare
 
         public ImportViewModel(IServiceScope scope)
         {
@@ -119,6 +124,7 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
             try
             {
                 token.ThrowIfCancellationRequested();
+                IsLoading = true;
                 var dbListStaff = await _staffServices.GetListStaff();
                 ModifyImportVM.ListStaff = [.. _mapper.Map<List<StaffDTO>>(dbListStaff)];
 
@@ -129,10 +135,15 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
                 ModifyImportVM.ListMaterial = [.. _mapper.Map<List<MaterialDTO>>(dbListMaterial)];
 
                 await LoadImport();
+                IsLoading = false;
             }
             catch (OperationCanceledException)
             {
                 Debug.WriteLine("LoadData của ImportViewModel bị hủy");
+            }
+            finally
+            {
+                IsLoading = false;
             }
         }
 
@@ -183,6 +194,7 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
                 var res = MyMessageBox.ShowDialog("Bạn có muốn xóa chi tiết đơn hàng này ko", MyMessageBox.Buttons.Yes_No, MyMessageBox.Icons.Warning);
                 if (res.Equals("1"))
                 {
+                    IsLoading = true;
                     var isDeleted = await _importServices.DeleteImport(import.Importid);
                     if (isDeleted)
                     {
@@ -196,12 +208,14 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
                 MyMessageBox.Show(ivd.Message, MyMessageBox.Buttons.OK, MyMessageBox.Icons.Warning);
             }
             await LoadImport();
+            IsLoading = false;
         }
 
         private async void ModifyImportVM_ImportChanged(ImportDTO import)
         {
             try
             {
+                IsLoading = true;
                 if (ModifyImportVM.IsAdding)
                 {
                     Import? addImport = await _importServices.AddImport(_mapper.Map<Import>(import));
@@ -209,6 +223,8 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
                     if (addImport != null)
                     {
                         ListImportDTO.Add(_mapper.Map<ImportDTO>(addImport));
+                        await LoadImport();
+                        IsLoading = false;
                         MyMessageBox.Show("Thêm thông tin phiếu nhập thành công", MyMessageBox.Buttons.OK, MyMessageBox.Icons.Information);
                     }
                     else
@@ -223,6 +239,8 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
                         var updateImport = await _importServices.UpdateImport(_mapper.Map<Import>(import));
                         var res = ListImportDTO.FirstOrDefault(x => x.Importid == import.Importid);
                         _mapper.Map(updateImport, res);
+                        await LoadImport();
+                        IsLoading = false;
                         MyMessageBox.Show("Sửa thông tin phiếu nhập thành công", MyMessageBox.Buttons.OK, MyMessageBox.Icons.Information);
                     }
                     else
@@ -232,7 +250,6 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
                 }
                 IsOpenModifyImportView = false;
                 ModifyImportVM.ClearValueOfViewModel();
-                await LoadImport();
             }
             catch
             {
@@ -246,8 +263,8 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
             GC.SuppressFinalize(this);
         }
 
-
         #region Phan trang
+
         private int pageIndex = 1;
 
         private int pageSize = 10;
@@ -259,8 +276,9 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
         private async Task FirstPage()
         {
             pageIndex = 1;
-
+            IsLoading = true;
             await LoadImport();
+            IsLoading = false;
         }
 
         [RelayCommand]
@@ -271,7 +289,9 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
                 return;
             }
             pageIndex += 1;
+            IsLoading = true;
             await LoadImport();
+            IsLoading = false;
         }
 
         [RelayCommand]
@@ -282,15 +302,20 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
                 return;
             }
             pageIndex -= 1;
+            IsLoading = true;
             await LoadImport();
+            IsLoading = false;
         }
 
         [RelayCommand]
         private async Task LastPage()
         {
             pageIndex = totalPages;
+            IsLoading = true;
             await LoadImport();
+            IsLoading = false;
         }
-        #endregion
+
+        #endregion Phan trang
     }
 }

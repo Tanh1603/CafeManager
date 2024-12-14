@@ -4,7 +4,7 @@
         <Setter Property="Background" Value="Transparent" />
         <Setter Property="Foreground" Value="#aaa899" />
         <Setter Property="BorderBrush" Value="Transparent" />
-
+        <Setter Property="MinWidth" Value="200" />
         <Setter Property="BorderThickness" Value="0" />
 
         <Setter Property="Height" Value="50" />

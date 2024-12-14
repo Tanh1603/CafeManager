@@ -21,8 +21,6 @@
     </UserControl.Resources>
     <Grid>
 
-
-
         <materialDesign:DrawerHost
             IsLeftDrawerOpen="{Binding ElementName=btnMenu, Path=IsChecked}"
             LeftDrawerBackground="{DynamicResource SecondaryHueLightBrush}"
@@ -121,7 +119,6 @@
                                             Text="{Binding AdminAccount.Role}" />
                                     </StackPanel>
                                 </Grid>
-
 
                                 <Separator
                                     Grid.Row="1"
@@ -242,17 +239,12 @@
                                     <TextBlock Style="{StaticResource menuButtonText}" Text="Quản lí tài khoản" />
                                 </StackPanel>
                             </RadioButton>
-
-
                         </Grid>
                     </Border>
-
                 </Grid>
             </materialDesign:DrawerHost.LeftDrawerContent>
 
-
-
-            <Border CornerRadius="0 0 20 20">
+            <Border CornerRadius="0 0 10 10">
                 <Border.Background>
                     <LinearGradientBrush StartPoint="0,0.5" EndPoint="1,0.5">
                         <GradientStop Offset="0" Color="#9c6d3f" />
@@ -262,13 +254,10 @@
 
                 <Grid>
 
-
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="auto" />
                         <ColumnDefinition Width="*" />
-
                     </Grid.ColumnDefinitions>
-
 
                     <Border Margin="10" CornerRadius="30">
                         <Border.Background>
@@ -309,7 +298,6 @@
                                 </Grid.RowDefinitions>
                                 <!--  username  -->
 
-
                                 <!--  menu buttons  -->
                                 <RadioButton
                                     Grid.Row="0"
@@ -320,8 +308,6 @@
                                     Style="{StaticResource menuButton}">
 
                                     <fa:IconImage Icon="ChartColumn" Style="{StaticResource menuButtonIcon}" />
-
-
                                 </RadioButton>
 
                                 <RadioButton
@@ -332,8 +318,6 @@
                                     Style="{StaticResource menuButton}">
 
                                     <fa:IconImage Icon="MartiniGlassCitrus" Style="{StaticResource menuButtonIcon}" />
-
-
                                 </RadioButton>
 
                                 <RadioButton
@@ -344,8 +328,6 @@
                                     Style="{StaticResource menuButton}">
 
                                     <fa:IconImage Icon="FileInvoice" Style="{StaticResource menuButtonIcon}" />
-
-
                                 </RadioButton>
 
                                 <RadioButton
@@ -356,8 +338,6 @@
                                     Style="{StaticResource menuButton}">
 
                                     <fa:IconImage Icon="TableCells" Style="{StaticResource menuButtonIcon}" />
-
-
                                 </RadioButton>
 
                                 <RadioButton
@@ -368,8 +348,6 @@
                                     Style="{StaticResource menuButton}">
 
                                     <fa:IconImage Icon="ShoppingCart" Style="{StaticResource menuButtonIcon}" />
-
-
                                 </RadioButton>
 
                                 <RadioButton
@@ -380,7 +358,6 @@
                                     Style="{StaticResource menuButton}">
 
                                     <fa:IconImage Icon="Warehouse" Style="{StaticResource menuButtonIcon}" />
-
                                 </RadioButton>
 
                                 <RadioButton
@@ -391,7 +368,6 @@
                                     Style="{StaticResource menuButton}">
 
                                     <fa:IconImage Icon="Truck" Style="{StaticResource menuButtonIcon}" />
-
                                 </RadioButton>
 
                                 <RadioButton
@@ -402,7 +378,6 @@
                                     Style="{StaticResource menuButton}">
 
                                     <fa:IconImage Icon="Person" Style="{StaticResource menuButtonIcon}" />
-
                                 </RadioButton>
 
                                 <RadioButton
@@ -413,10 +388,7 @@
                                     Style="{StaticResource menuButton}">
 
                                     <fa:IconImage Icon="UserAlt" Style="{StaticResource menuButtonIcon}" />
-
                                 </RadioButton>
-
-
 
                                 <Button
                                     Grid.Row="10"
@@ -429,11 +401,7 @@
                                         Height="23"
                                         HorizontalAlignment="Center"
                                         Kind="Cog" />
-
-
                                 </Button>
-
-
 
                                 <RadioButton
                                     Grid.Row="11"
@@ -446,17 +414,12 @@
                                         Height="23"
                                         HorizontalAlignment="Center"
                                         Kind="Logout" />
-
-
                                 </RadioButton>
-
                             </Grid>
                         </Grid>
                     </Border>
 
-
                     <ContentControl Grid.Column="1" Content="{Binding CurrentViewModel}" />
-
                 </Grid>
             </Border>
         </materialDesign:DrawerHost>

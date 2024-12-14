@@ -34,9 +34,8 @@ namespace CafeManager.WPF.Services
         {
             try
             {
-
-                    token.ThrowIfCancellationRequested();
-                
+                token.ThrowIfCancellationRequested();
+                _unitOfWork.ClearChangeTracker();
                 return await _unitOfWork.FoodCategoryList.GetAll(token);
             }
             catch (OperationCanceledException)
@@ -50,7 +49,7 @@ namespace CafeManager.WPF.Services
             var res = await _unitOfWork.FoodCategoryList.Create(foodcategory);
             if (res != null)
             {
-                _unitOfWork.Complete();
+                await _unitOfWork.CompleteAsync();
             }
             return res;
         }
@@ -60,7 +59,7 @@ namespace CafeManager.WPF.Services
             var res = await _unitOfWork.FoodCategoryList.Update(foodcategory);
             if (res != null)
             {
-                _unitOfWork.Complete();
+                await _unitOfWork.CompleteAsync();
             }
             return res;
         }
@@ -70,7 +69,7 @@ namespace CafeManager.WPF.Services
             var res = await _unitOfWork.FoodCategoryList.Delete(id);
             if (res)
             {
-                _unitOfWork.Complete();
+                await _unitOfWork.CompleteAsync();
             }
             return res;
         }

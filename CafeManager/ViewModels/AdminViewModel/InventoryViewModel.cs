@@ -8,6 +8,7 @@ using CafeManager.WPF.ViewModels.AddViewModel;
 using CafeManager.WPF.Views.AddUpdateView;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using Microsoft.EntityFrameworkCore.Query.SqlExpressions;
 using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json.Linq;
 using PdfSharp;
@@ -19,32 +20,79 @@ using System.Linq.Expressions;
 
 namespace CafeManager.WPF.ViewModels.AdminViewModel
 {
-    public partial class InventoryViewModel : ObservableObject, IDataViewModel, IDisposable
+    public partial class InventoryViewModel : ObservableObject, IDataViewModel
     {
         private readonly MaterialSupplierServices _materialSupplierServices;
         private readonly ConsumedMaterialServices _consumedMaterialServices;
         private readonly IMapper _mapper;
-
+        private CancellationToken _token = default;
         private int _selectedTabIndex;
+        private readonly int PageSize = 15;
+
+        [ObservableProperty]
+        private bool _isLoading;
+
         public int SelectedTabIndex
         {
             get => _selectedTabIndex;
             set
             {
+                switch (value)
+                {
+                    case 0:
+                        consumedPageIndex = 1;
+                        _ = LoadConsumedMaterial(_token);
+                        break;
+
+                    case 1:
+                        inventoryPageIndex = 1;
+                        _ = LoadInventory(_token);
+                        break;
+
+                    case 2:
+                        usedUpPageIndex = 1;
+                        _ = LoadUsedUpeMaterial(_token);
+                        break;
+
+                    case 3:
+                        expiredPageIndex = 1;
+                        _ = LoadExpiredMaterial(_token);
+                        break;
+
+                    default:
+                        break;
+                }
+                ConsumedPage = (value == 0);
+                InventoryPage = (value == 1);
+                UsedUpPage = (value == 2);
+                ExpiredPage = (value == 3);
                 _selectedTabIndex = value;
-                ConsumedPage = (_selectedTabIndex == 0);
-                InventoryPage = (_selectedTabIndex == 1);
-                OnPropertyChanged();
+                OnPropertyChanged(nameof(SelectedTabIndex));
+
+                OnPropertyChanged(nameof(ConsumedPage));
+                OnPropertyChanged(nameof(InventoryPage));
+                OnPropertyChanged(nameof(UsedUpPage));
+                OnPropertyChanged(nameof(ExpiredPage));
             }
         }
 
         [ObservableProperty]
         private bool _consumedPage = true;
+
         [ObservableProperty]
+        [NotifyCanExecuteChangedFor(nameof(FilterExpiringCommand))]
         private bool _inventoryPage = false;
-        
+
+        [ObservableProperty]
+        private bool _expiredPage = false;
+
+        [ObservableProperty]
+        private bool _usedUpPage = false;
+
         // ===================== Material Declare =====================
+
         #region Material Declare
+
         [ObservableProperty]
         private List<MaterialDTO> _listMaterialDTO = [];
 
@@ -60,6 +108,7 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
         #endregion Material Declare
 
         // ===================== Inventory Declare =====================
+
         #region Inventory Delcare
 
         [ObservableProperty]
@@ -71,29 +120,23 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
         [ObservableProperty]
         private ConsumedMaterialDTO _modifyConsumedMaterial = new();
 
-        private decimal currentQuantity;
-
         [ObservableProperty]
         private ObservableCollection<ConsumedMaterialDTO> _listConsumedMaterialDTO = [];
-        //public ObservableCollection<ConsumedMaterialDTO> CurrentListConsumedMaterial => [.. _filterListConsumedMaterial];
 
         [ObservableProperty]
         private ObservableCollection<MaterialSupplierDTO> _listInventoryDTO = [];
-        //public ObservableCollection<MaterialSupplierDTO> CurrentListInventory => [.. _filterListInventory];
 
-        //private List<ConsumedMaterialDTO> _filterListConsumedMaterial = [];
-        //private List<MaterialSupplierDTO> _filterListInventory = [];
+        [ObservableProperty]
+        private ObservableCollection<MaterialSupplierDTO> _listExpriedDTO = [];
+
+        [ObservableProperty]
+        private ObservableCollection<MaterialSupplierDTO> _listUsedUp = [];
 
         #endregion Inventory Delcare
 
         // ===================== Filter Declare =====================
+
         #region Filter Declare
-
-        [ObservableProperty]
-        private bool _isFilterExpiring = false;
-
-        [ObservableProperty]
-        private bool _isFilterExpired = false;
 
         private SupplierDTO? _selectedSupplier;
 
@@ -106,9 +149,7 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
                 {
                     _selectedSupplier = value;
                     OnPropertyChanged(nameof(SelectedSupplier));
-                    _ = LoadInventory();
-                    consumedPageIndex = 1;
-                    inventoryPageIndex = 1;
+                    _ = LoadTableControl();
                 }
             }
         }
@@ -124,9 +165,7 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
                 {
                     _selectedMaterial = value;
                     OnPropertyChanged(nameof(SelectedMaterial));
-                    _ = LoadInventory();
-                    consumedPageIndex = 1;
-                    inventoryPageIndex = 1;
+                    _ = LoadTableControl();
                 }
             }
         }
@@ -142,9 +181,7 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
                 {
                     _filterManufacturedate = value;
                     OnPropertyChanged(nameof(FilterManufacturedate));
-                    _ = LoadInventory();
-                    consumedPageIndex = 1;
-                    inventoryPageIndex = 1;
+                    _ = LoadTableControl();
                 }
             }
         }
@@ -160,14 +197,72 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
                 {
                     _filterExpirationdate = value;
                     OnPropertyChanged(nameof(FilterExpirationdate));
-                    _ = LoadInventory();
-                    consumedPageIndex = 1;
-                    inventoryPageIndex = 1;
+                    _ = LoadTableControl();
                 }
             }
         }
 
         #endregion Filter Declare
+
+        #region Hàm filter
+
+        private Expression<Func<Consumedmaterial, bool>> ConsumedFilter => consum =>
+            (consum.Isdeleted == false) &&
+            (SelectedMaterial == null || consum.Materialsupplier.Materialid == SelectedMaterial.Materialid) &&
+            (SelectedSupplier == null || consum.Materialsupplier.Supplierid == SelectedSupplier.Supplierid) &&
+            (FilterManufacturedate == null || consum.Materialsupplier.Manufacturedate == FilterManufacturedate) &&
+            (FilterExpirationdate == null || consum.Materialsupplier.Expirationdate == FilterExpirationdate);
+
+        private Expression<Func<Materialsupplier, bool>> InventoryFilter => inventory =>
+                        (inventory.Isdeleted == false) &&
+                        (SelectedMaterial == null || inventory.Materialid == SelectedMaterial.Materialid) &&
+                        (SelectedSupplier == null || inventory.Supplierid == SelectedSupplier.Supplierid) &&
+                        (FilterManufacturedate == null || inventory.Manufacturedate == FilterManufacturedate) &&
+                        (FilterExpirationdate == null || inventory.Expirationdate == FilterExpirationdate) &&
+                        (inventory.Expirationdate >= DateTime.Now) &&
+                        (inventory.Importdetails.Where(x => x.Isdeleted == false).Sum(x => x.Quantity) - inventory.Consumedmaterials.Where(x => x.Isdeleted == false).Sum(x => x.Quantity) > 0);
+
+        private Expression<Func<Materialsupplier, bool>> UsedUpFilter => used =>
+                (used.Isdeleted == false) &&
+                (SelectedMaterial == null || used.Materialid == SelectedMaterial.Materialid) &&
+                (SelectedSupplier == null || used.Supplierid == SelectedSupplier.Supplierid) &&
+                (FilterManufacturedate == null || used.Manufacturedate == FilterManufacturedate) &&
+                (FilterExpirationdate == null || used.Expirationdate == FilterExpirationdate) &&
+                (used.Importdetails.Where(x => x.Isdeleted == false).Sum(x => x.Quantity) - used.Consumedmaterials.Where(x => x.Isdeleted == false).Sum(x => x.Quantity) == 0);
+
+        private Expression<Func<Materialsupplier, bool>> ExpiredFilter => expired =>
+                (expired.Isdeleted == false) &&
+                (SelectedMaterial == null || expired.Materialid == SelectedMaterial.Materialid) &&
+                (SelectedSupplier == null || expired.Supplierid == SelectedSupplier.Supplierid) &&
+                (FilterManufacturedate == null || expired.Manufacturedate == FilterManufacturedate) &&
+                (FilterExpirationdate == null || expired.Expirationdate == FilterExpirationdate) &&
+                (expired.Expirationdate < DateTime.Now);
+
+        private async Task LoadTableControl()
+        {
+            if (ConsumedPage)
+            {
+                consumedPageIndex = 1;
+                await LoadConsumedMaterial(_token);
+            }
+            if (InventoryPage)
+            {
+                inventoryPageIndex = 1;
+                await LoadInventory(_token);
+            }
+            if (UsedUpPage)
+            {
+                usedUpPageIndex = 1;
+                await LoadUsedUpeMaterial(_token);
+            }
+            if (ExpiredPage)
+            {
+                expiredPageIndex = 1;
+                await LoadExpiredMaterial(_token);
+            }
+        }
+
+        #endregion Hàm filter
 
         public InventoryViewModel(IServiceScope scope)
         {
@@ -182,6 +277,8 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
         {
             try
             {
+                _token = token;
+                IsLoading = true;
                 token.ThrowIfCancellationRequested();
                 var dbMaterial = await _materialSupplierServices.GetListMaterial(token);
                 var dbSupplier = (await _materialSupplierServices.GetListSupplier(token)).Where(x => x.Isdeleted == false);
@@ -193,130 +290,131 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
                 MaterialVM.ListMaterial = [.. _mapper.Map<List<MaterialDTO>>(listExistedMaterial)];
                 MaterialVM.ListDeletedMaterial = [.. _mapper.Map<List<MaterialDTO>>(listDeletedMaterial)];
                 ListSupplierDTO = [.. _mapper.Map<List<SupplierDTO>>(dbSupplier)];
-                
-                await LoadInventory(token);
+
+                SelectedTabIndex = 0;
             }
             catch (OperationCanceledException)
             {
                 Debug.WriteLine("LoadData của ImportViewModel bị hủy");
             }
+            finally
+            {
+                IsLoading = false;
+            }
         }
-
-        //private async Task CheckTotalQuantity()
-        //{
-        //    var itemsToRemove = new List<MaterialSupplierDTO>();
-
-        //    foreach (var item in ListInventoryDTO)
-        //    {
-        //        if (item.TotalQuantity == 0)
-        //        {
-        //            var materialsupplier = await _materialSupplierServices.GetMaterialsupplierById(item.Materialsupplierid);
-        //            item.Isdeleted = true;
-        //            itemsToRemove.Add(item);
-        //        }
-        //    }
-
-        //    foreach (var item in itemsToRemove)
-        //    {
-        //        ListInventoryDTO.Remove(item);
-        //    }
-        //}
 
         private async Task LoadInventory(CancellationToken token = default)
         {
-            Expression<Func<Consumedmaterial, bool>> consumedFilter;
-            Expression<Func<Materialsupplier, bool>> inventoryFilter;
-            if (IsFilterExpiring)
+            try
             {
-                consumedFilter = consumedMaterial =>
-                    (consumedMaterial.Isdeleted == false) &&
-                    (SelectedMaterial == null || consumedMaterial.Materialsupplier.Material.Materialid == SelectedMaterial.Materialid) &&
-                    (SelectedSupplier == null || consumedMaterial.Materialsupplier.Supplier.Supplierid == SelectedSupplier.Supplierid) &&
-                    (consumedMaterial.Materialsupplier.Expirationdate >= DateTime.Now) &&
-                    ((consumedMaterial.Materialsupplier.Expirationdate - DateTime.Now).TotalDays <= 15);
+                token.ThrowIfCancellationRequested();
+                IsLoading = true;
+                var dbListInventory = await _materialSupplierServices.GetSearchPaginateListMaterialsupplier(InventoryFilter, inventoryPageIndex, PageSize, token);
+                ListInventoryDTO = [.. _mapper.Map<List<MaterialSupplierDTO>>(dbListInventory.Item1)];
+                inventoryTotalPages = (dbListInventory.Item2 + PageSize - 1) / PageSize;
+                OnPropertyChanged(nameof(InventoryPageUI));
+                IsLoading = false;
+            }
+            catch (OperationCanceledException oe)
+            {
+                Debug.WriteLine(oe.Message);
+            }
+            finally
+            {
+                IsLoading = false;
+            }
+        }
 
-                inventoryFilter = inventory =>
+        private async Task LoadConsumedMaterial(CancellationToken token = default)
+        {
+            try
+            {
+                token.ThrowIfCancellationRequested();
+                IsLoading = true;
+                var dbListConsumed = await _consumedMaterialServices.GetSearchPaginateListConsumedMaterial(ConsumedFilter, consumedPageIndex, PageSize, token);
+                ListConsumedMaterialDTO = [.. _mapper.Map<List<ConsumedMaterialDTO>>(dbListConsumed.Item1)];
+                consumedTotalPages = (dbListConsumed.Item2 + PageSize - 1) / PageSize;
+                OnPropertyChanged(nameof(ConsumedPageUI));
+                IsLoading = false;
+            }
+            catch (OperationCanceledException)
+            {
+                throw;
+            }
+            finally
+            {
+                IsLoading = false;
+            }
+        }
+
+        private async Task LoadUsedUpeMaterial(CancellationToken token = default)
+        {
+            try
+            {
+                token.ThrowIfCancellationRequested();
+                IsLoading = true;
+                var dbListUsedUp = await _materialSupplierServices.GetSearchPaginateListMaterialsupplier(UsedUpFilter, usedUpPageIndex, PageSize, token);
+                ListUsedUp = [.. _mapper.Map<List<MaterialSupplierDTO>>(dbListUsedUp.Item1)];
+                usedUpTotalPages = (dbListUsedUp.Item2 + PageSize - 1) / PageSize;
+                OnPropertyChanged(nameof(UsedUpPageUI));
+                IsLoading = false;
+            }
+            catch (OperationCanceledException)
+            {
+                throw;
+            }
+            finally
+            {
+                IsLoading = false;
+            }
+        }
+
+        private async Task LoadExpiredMaterial(CancellationToken token = default)
+        {
+            try
+            {
+                token.ThrowIfCancellationRequested();
+                IsLoading = true;
+                var dbListExpired = await _materialSupplierServices.GetSearchPaginateListMaterialsupplier(ExpiredFilter, expiredPageIndex, PageSize, token);
+                ListExpriedDTO = [.. _mapper.Map<List<MaterialSupplierDTO>>(dbListExpired.Item1)];
+                expiredTotalPages = (dbListExpired.Item2 + PageSize - 1) / PageSize;
+                OnPropertyChanged(nameof(ExpiredPageUI));
+                IsLoading = false;
+            }
+            catch (OperationCanceledException)
+            {
+                throw;
+            }
+            finally { IsLoading = false; }
+        }
+
+        [RelayCommand(CanExecute = nameof(FilterExpiringCanExcute))]
+        private async Task FilterExpiring()
+        {
+            IsLoading = true;
+            Expression<Func<Materialsupplier, bool>> inventoryFilter;
+            inventoryFilter = inventory =>
                 (inventory.Isdeleted == false) &&
                 (SelectedMaterial == null || inventory.Material.Materialid == SelectedMaterial.Materialid) &&
                 (SelectedSupplier == null || inventory.Supplier.Supplierid == SelectedSupplier.Supplierid) &&
-                (inventory.Expirationdate >= DateTime.Now) &&
-                ((inventory.Expirationdate - DateTime.Now).TotalDays <= 15);
-            }
-            else if (IsFilterExpired)
-            {
-                consumedFilter = consumedMaterial =>
-                    (consumedMaterial.Isdeleted == false) &&
-                    (SelectedMaterial == null || consumedMaterial.Materialsupplier.Material.Materialid == SelectedMaterial.Materialid) &&
-                    (SelectedSupplier == null || consumedMaterial.Materialsupplier.Supplier.Supplierid == SelectedSupplier.Supplierid) &&
-                    (consumedMaterial.Materialsupplier.Expirationdate < DateTime.Now);
+                (FilterManufacturedate == null || inventory.Manufacturedate == FilterManufacturedate) &&
+                (inventory.Importdetails.Where(x => x.Isdeleted == false).Sum(x => x.Quantity) - inventory.Consumedmaterials.Where(x => x.Isdeleted == false).Sum(x => x.Quantity) > 0) &&
+            ((inventory.Expirationdate - DateTime.Now).TotalDays <= 15);
 
-                inventoryFilter = inventory =>
-                    (inventory.Isdeleted == false) &&
-                    (SelectedMaterial == null || inventory.Material.Materialid == SelectedMaterial.Materialid) &&
-                    (SelectedSupplier == null || inventory.Supplier.Supplierid == SelectedSupplier.Supplierid) &&
-                    (inventory.Expirationdate < DateTime.Now);
-            }
-            else
-            {
-                consumedFilter = consumedMaterial =>
-                    (consumedMaterial.Isdeleted == false) &&
-                    (SelectedMaterial == null || consumedMaterial.Materialsupplier.Material.Materialid == SelectedMaterial.Materialid) &&
-                    (SelectedSupplier == null || consumedMaterial.Materialsupplier.Supplier.Supplierid == SelectedSupplier.Supplierid) &&
-                    (FilterManufacturedate == null || consumedMaterial.Materialsupplier.Manufacturedate == FilterManufacturedate) &&
-                    (FilterExpirationdate == null || consumedMaterial.Materialsupplier.Expirationdate == FilterExpirationdate);
-
-                inventoryFilter = inventory =>
-                    (inventory.Isdeleted == false) &&
-                    (SelectedMaterial == null || inventory.Material.Materialid == SelectedMaterial.Materialid) &&
-                    (SelectedSupplier == null || inventory.Supplier.Supplierid == SelectedSupplier.Supplierid) &&
-                    (FilterManufacturedate == null || inventory.Manufacturedate == FilterManufacturedate) &&
-                    (FilterExpirationdate == null || inventory.Expirationdate == FilterExpirationdate);
-            }
-            var dbListConsumedMaterial = await _consumedMaterialServices.GetSearchPaginateListConsumedMaterial(consumedFilter, consumedPageIndex, consumedPageSize);
-            var dbListInventory = await _materialSupplierServices.GetSearchPaginateListMaterialsupplier(inventoryFilter, inventoryPageIndex, inventoryPageSize);
+            var dbListInventory = await _materialSupplierServices.GetSearchPaginateListMaterialsupplier(inventoryFilter, inventoryPageIndex, PageSize);
             ListInventoryDTO = [.. _mapper.Map<List<MaterialSupplierDTO>>(dbListInventory.Item1)];
-            ListConsumedMaterialDTO = [.. _mapper.Map<List<ConsumedMaterialDTO>>(dbListConsumedMaterial.Item1)];
-            consumedTotalPages = (dbListConsumedMaterial.Item2 + consumedPageSize - 1) / consumedPageSize;
-            inventoryTotalPages = (dbListInventory.Item2 + inventoryPageSize - 1) / inventoryPageSize;
-            OnPropertyChanged(nameof(ConsumedPageUI));
+            inventoryTotalPages = (dbListInventory.Item2 + PageSize - 1) / PageSize;
             OnPropertyChanged(nameof(InventoryPageUI));
+            IsLoading = false;
         }
 
-        [RelayCommand]
-        private void FilterExpiring()
+        private bool FilterExpiringCanExcute()
         {
-            if (IsFilterExpiring)
-            {
-                IsFilterExpiring = false;
-            }
-            else
-            {
-                IsFilterExpiring = true;
-                IsFilterExpired = false;
-            }
-            _ = LoadInventory();
-            consumedPageIndex = 1;
-            inventoryPageIndex = 1;
-        }
-
-        [RelayCommand]
-        private void FilterExpired()
-        {
-            if (IsFilterExpired)
-            {
-                IsFilterExpired = false;
-            }
-            else
-            {
-                IsFilterExpired = true;
-                IsFilterExpiring = false;
-            }
-            _ = LoadInventory();
-            consumedPageIndex = 1;
-            inventoryPageIndex = 1;
+            return InventoryPage;
         }
 
         #region Material
+
         [RelayCommand]
         private void OpenMaterialView()
         {
@@ -482,15 +580,9 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
 
         #endregion ConsumedMaterial
 
-        public void Dispose()
-        {
-            GC.SuppressFinalize(this);
-        }
-
         #region Phan Trang ConsumedMaterial
-        private int consumedPageIndex = 1;
 
-        private int consumedPageSize = 12;
+        private int consumedPageIndex = 1;
         private int consumedTotalPages = 0;
 
         public string ConsumedPageUI => $"{consumedPageIndex}/{consumedTotalPages}";
@@ -500,7 +592,7 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
         {
             consumedPageIndex = 1;
 
-            await LoadData();
+            await LoadConsumedMaterial(_token);
         }
 
         [RelayCommand]
@@ -511,7 +603,7 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
                 return;
             }
             consumedPageIndex += 1;
-            await LoadData();
+            await LoadConsumedMaterial(_token);
         }
 
         [RelayCommand]
@@ -522,21 +614,21 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
                 return;
             }
             consumedPageIndex -= 1;
-            await LoadData();
+            await LoadConsumedMaterial(_token);
         }
 
         [RelayCommand]
         private async Task ConsumedLastPage()
         {
             consumedPageIndex = consumedTotalPages;
-            await LoadData();
+            await LoadConsumedMaterial(_token);
         }
-        #endregion
+
+        #endregion Phan Trang ConsumedMaterial
 
         #region Phan trang Inventory
-        private int inventoryPageIndex = 1;
 
-        private int inventoryPageSize = 12;
+        private int inventoryPageIndex = 1;
         private int inventoryTotalPages = 0;
 
         public string InventoryPageUI => $"{inventoryPageIndex}/{inventoryTotalPages}";
@@ -546,7 +638,7 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
         {
             inventoryPageIndex = 1;
 
-            await LoadData();
+            await LoadInventory(_token);
         }
 
         [RelayCommand]
@@ -557,7 +649,7 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
                 return;
             }
             inventoryPageIndex += 1;
-            await LoadData();
+            await LoadInventory(_token);
         }
 
         [RelayCommand]
@@ -568,15 +660,108 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
                 return;
             }
             inventoryPageIndex -= 1;
-            await LoadData();
+            await LoadInventory(_token);
         }
 
         [RelayCommand]
         private async Task InventoryLastPage()
         {
             inventoryPageIndex = inventoryTotalPages;
-            await LoadData();
+            await LoadInventory(_token);
         }
-        #endregion
+
+        #endregion Phan trang Inventory
+
+        #region Phan trang Used Up
+
+        private int usedUpPageIndex = 1;
+        private int usedUpTotalPages = 0;
+
+        public string UsedUpPageUI => $"{usedUpPageIndex}/{usedUpTotalPages}";
+
+        [RelayCommand]
+        private async Task UsedUpFirstPage()
+        {
+            usedUpPageIndex = 1;
+
+            await LoadUsedUpeMaterial(_token);
+        }
+
+        [RelayCommand]
+        private async Task UsedUpNextPage()
+        {
+            if (usedUpPageIndex == usedUpTotalPages)
+            {
+                return;
+            }
+            usedUpPageIndex += 1;
+            await LoadUsedUpeMaterial(_token);
+        }
+
+        [RelayCommand]
+        private async Task UsedUpPreviousPage()
+        {
+            if (usedUpPageIndex == 1)
+            {
+                return;
+            }
+            usedUpPageIndex -= 1;
+            await LoadUsedUpeMaterial(_token);
+        }
+
+        [RelayCommand]
+        private async Task UsedUpLastPage()
+        {
+            usedUpPageIndex = usedUpTotalPages;
+            await LoadUsedUpeMaterial(_token);
+        }
+
+        #endregion Phan trang Used Up
+
+        #region Phan trang expired
+
+        private int expiredPageIndex = 1;
+        private int expiredTotalPages = 0;
+
+        public string ExpiredPageUI => $"{expiredPageIndex}/{expiredTotalPages}";
+
+        [RelayCommand]
+        private async Task ExpiredFirstPage()
+        {
+            expiredPageIndex = 1;
+
+            await LoadExpiredMaterial(_token);
+        }
+
+        [RelayCommand]
+        private async Task ExpiredNextPage()
+        {
+            if (expiredPageIndex == expiredTotalPages)
+            {
+                return;
+            }
+            expiredPageIndex += 1;
+            await LoadExpiredMaterial(_token);
+        }
+
+        [RelayCommand]
+        private async Task ExpiredPreviousPage()
+        {
+            if (expiredPageIndex == 1)
+            {
+                return;
+            }
+            expiredPageIndex -= 1;
+            await LoadExpiredMaterial(_token);
+        }
+
+        [RelayCommand]
+        private async Task ExpiredLastPage()
+        {
+            expiredPageIndex = expiredTotalPages;
+            await LoadExpiredMaterial(_token);
+        }
+
+        #endregion Phan trang expired
     }
 }

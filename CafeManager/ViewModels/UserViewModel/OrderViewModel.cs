@@ -22,6 +22,7 @@ namespace CafeManager.WPF.ViewModels.UserViewModel
         private readonly InvoiceServices _invoiceServices;
         private readonly StaffServices _staffServices;
         private readonly IMapper _mapper;
+        private List<FoodDTO> _allFood;
 
         [ObservableProperty]
         private ObservableCollection<CoffeetableDTO> _listCoffeeTableDTO = [];
@@ -39,7 +40,7 @@ namespace CafeManager.WPF.ViewModels.UserViewModel
                 if (_selectedFoodCategory != value)
                 {
                     _selectedFoodCategory = value;
-                    ListFoodDTO = [.. value.Foods.Where(x => x.Isdeleted == false) ?? []];
+                    ListFoodDTO = value == null ? [.. _allFood] : [.. value.Foods.Where(x => x.Isdeleted == false) ?? []];
                 }
             }
         }
@@ -106,6 +107,7 @@ namespace CafeManager.WPF.ViewModels.UserViewModel
                 ListFoodCategoryDTO = [.. _mapper.Map<List<FoodCategoryDTO>>(dbListFoodCategory)];
                 ListStaffDTO = [.. _mapper.Map<List<StaffDTO>>(dbStaff)];
                 ListFoodDTO = [.. _mapper.Map<List<FoodDTO>>(dbAllFood)];
+                _allFood = [.. _mapper.Map<List<FoodDTO>>(dbAllFood)];
             }
             catch (OperationCanceledException oe)
             {

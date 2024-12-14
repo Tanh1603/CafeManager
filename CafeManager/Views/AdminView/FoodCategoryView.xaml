@@ -61,7 +61,10 @@
                     Text="Danh mục thực đơn" />
 
                 <!--  Add Button  -->
-                <Button Grid.Row="1" Command="{Binding OpenAddFoodCategoryCommand}" Style="{StaticResource addButton}">
+                <Button
+                    Grid.Row="1"
+                    Command="{Binding OpenAddFoodCategoryCommand}"
+                    Style="{StaticResource addButton}">
                     <StackPanel Orientation="Horizontal">
                         <ma:PackIconMaterial
                             Width="11"
@@ -112,7 +115,12 @@
                                     </DataGridTextColumn.Binding>
                                 </DataGridTextColumn>
 
-                                <DataGridTextColumn Width="*" Binding="{Binding Foodcategoryname}" CanUserResize="False" Header="Tên danh mục" IsReadOnly="True">
+                                <DataGridTextColumn
+                                    Width="*"
+                                    Binding="{Binding Foodcategoryname}"
+                                    CanUserResize="False"
+                                    Header="Tên danh mục"
+                                    IsReadOnly="True">
                                     <DataGridTextColumn.ElementStyle>
                                         <Style TargetType="TextBlock">
                                             <Setter Property="HorizontalAlignment" Value="Center" />
@@ -177,7 +185,12 @@
                                     </DataGridTextColumn.Binding>
                                 </DataGridTextColumn>
 
-                                <DataGridTextColumn Width="*" Binding="{Binding Foodcategoryname}" CanUserResize="False" Header="Tên danh mục" IsReadOnly="True">
+                                <DataGridTextColumn
+                                    Width="*"
+                                    Binding="{Binding Foodcategoryname}"
+                                    CanUserResize="False"
+                                    Header="Tên danh mục"
+                                    IsReadOnly="True">
                                     <DataGridTextColumn.ElementStyle>
                                         <Style TargetType="TextBlock">
                                             <Setter Property="HorizontalAlignment" Value="Center" />
@@ -191,7 +204,7 @@
                                         </Style>
                                     </DataGridTextColumn.EditingElementStyle>
                                 </DataGridTextColumn>
-                                
+
                                 <DataGridTemplateColumn
                                     Width="auto"
                                     Header="Tùy chỉnh"
@@ -282,7 +295,6 @@
                                     Width="140"
                                     VerticalAlignment="Center"
                                     Text="{Binding ModifyFoodCategory.Foodcategoryname, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" />
-
                             </Grid>
 
                             <Button
@@ -300,6 +312,21 @@
                     </Border>
                 </materialDesign:DialogHost.DialogContent>
             </materialDesign:DialogHost>
+
+            <Grid
+                Background="White"
+                Opacity="0.3"
+                Visibility="{Binding IsLoading, Converter={StaticResource BooleanToVisibilityConverter}}">
+                <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
+                    <TextBlock Style="{StaticResource infoText}" Text="Đang tải tài nguyên.." />
+                    <ProgressBar
+                        Width="50"
+                        Height="50"
+                        IsIndeterminate="True"
+                        Style="{StaticResource MaterialDesignCircularProgressBar}"
+                        Value="35" />
+                </StackPanel>
+            </Grid>
         </Grid>
     </Border>
 </UserControl>

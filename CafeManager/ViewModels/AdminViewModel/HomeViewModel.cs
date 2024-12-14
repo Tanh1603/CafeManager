@@ -26,6 +26,7 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
     {
         private readonly IServiceProvider _provider;
         public IEnumerable<Product> items { get; set; }
+
         public HomeViewModel(IServiceProvider provider)
         {
             _provider = provider;
@@ -152,15 +153,11 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
                 ? Visibility.Hidden
                 : Visibility.Visible;
 
-
         public class Product
         {
             public string Title { get; set; }
             public decimal Price { get; set; }
         }
-
-        
-
 
         #region handleDatePicker
 
@@ -210,7 +207,8 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
 
         public Task LoadData(CancellationToken token = default)
         {
-            throw new NotImplementedException();
+            token.ThrowIfCancellationRequested();
+            return Task.CompletedTask;
         }
 
         #endregion handleComboBox

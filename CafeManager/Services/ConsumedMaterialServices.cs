@@ -138,10 +138,17 @@ namespace CafeManager.WPF.Services
             }
         }
 
-        // ===================== Phan trang =======================
-        public async Task<(IEnumerable<Consumedmaterial>?, int)> GetSearchPaginateListConsumedMaterial(Expression<Func<Consumedmaterial, bool>>? searchPredicate = null, int skip = 0, int take = 20)
+        public async Task<(IEnumerable<Consumedmaterial>?, int)> GetSearchPaginateListConsumedMaterial(Expression<Func<Consumedmaterial, bool>>? searchPredicate = null, int skip = 0, int take = 20, CancellationToken token = default)
         {
-            return await _unitOfWork.ConsumedMaterialList.GetByPageAsync(skip, take, searchPredicate);
+            try
+            {
+                token.ThrowIfCancellationRequested();
+                return await _unitOfWork.ConsumedMaterialList.GetByPageAsync(skip, take, searchPredicate);
+            }
+            catch (OperationCanceledException)
+            {
+                throw;
+            }
         }
     }
 }

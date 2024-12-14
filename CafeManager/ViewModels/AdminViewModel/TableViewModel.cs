@@ -16,6 +16,9 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
         private readonly CoffeTableServices _coffeTableServices;
         private readonly IMapper _mapper;
 
+        [ObservableProperty]
+        private bool _isLoading;
+
         public ObservableCollection<int> TypeTable { get; } = [2, 4, 6, 8, 10];
 
         [ObservableProperty]
@@ -43,11 +46,17 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
             try
             {
                 token.ThrowIfCancellationRequested();
+                IsLoading = true;
                 var coffeeTables = await _coffeTableServices.GetListCoffeTable(token);
                 ListTable = [.. _mapper.Map<List<CoffeetableDTO>>(coffeeTables)];
+                IsLoading = false;
             }
             catch (OperationCanceledException)
             {
+            }
+            finally
+            {
+                IsLoading = false;
             }
         }
 
@@ -81,10 +90,12 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
             var res = ListTable.FirstOrDefault(x => x.Coffeetableid == dTO.Coffeetableid);
             if (res != null)
             {
+                IsLoading = true;
                 res.Isdeleted = true;
                 var delete = await _coffeTableServices.DeleteCoffeeTable(dTO.Coffeetableid);
                 if (delete)
                 {
+                    IsLoading = false;
                     MyMessageBox.ShowDialog("Ẩn bàn thành công");
                 }
             }
@@ -96,10 +107,12 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
             var res = ListTable.FirstOrDefault(x => x.Coffeetableid == dTO.Coffeetableid);
             if (res != null)
             {
+                IsLoading = true;
                 res.Isdeleted = false;
                 var show = await _coffeTableServices.UpdateCoffeeTable(_mapper.Map<Coffeetable>(res));
                 if (show != null)
                 {
+                    IsLoading = false;
                     MyMessageBox.ShowDialog("Hiện bàn thành công");
                 }
             }
@@ -110,12 +123,14 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
         {
             try
             {
+                IsLoading = true;
                 if (isAdding)
                 {
                     var tmp = _mapper.Map<Coffeetable>(Table);
                     var addTable = await _coffeTableServices.AddCoffeTable(tmp);
                     if (addTable != null)
                     {
+                        IsLoading = false;
                         MyMessageBox.ShowDialog("Thêm bàn thành công");
                         ListTable.Add(_mapper.Map<CoffeetableDTO>(addTable));
                     }
@@ -128,6 +143,7 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
                         var tmp = ListTable.FirstOrDefault(x => x.Coffeetableid == Table.Coffeetableid);
                         if (tmp != null)
                         {
+                            IsLoading = false;
                             _mapper.Map(updateTable, tmp);
                             MyMessageBox.ShowDialog("Sửa bàn thành công");
                         }
@@ -142,6 +158,10 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
             catch (Exception)
             {
                 throw;
+            }
+            finally
+            {
+                IsLoading = false;
             }
         }
     }

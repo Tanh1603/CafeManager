@@ -458,7 +458,7 @@ public partial class CafeManagerContext : DbContext
     {
         base.OnConfiguring(optionsBuilder);
         optionsBuilder.UseLazyLoadingProxies();
-        optionsBuilder.ConfigureLoggingCacheTime(TimeSpan.FromSeconds(5));
+        optionsBuilder.EnableSensitiveDataLogging();
     }
     partial void OnModelCreatingPartial(ModelBuilder modelBuilder);
 }

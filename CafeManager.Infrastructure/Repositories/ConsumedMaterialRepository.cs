@@ -10,12 +10,5 @@ namespace CafeManager.Infrastructure.Repositories
         public ConsumedMaterialRepository(CafeManagerContext cafeManagerContext) : base(cafeManagerContext)
         {
         }
-
-        public async Task<IEnumerable<Consumedmaterial>> GetAllConsumedMaterialsAsync()
-        {
-            return await _cafeManagerContext.Consumedmaterials
-                .Where(x => x.Isdeleted == false)
-                .Include(x => x.Materialsupplier).ToListAsync();
-        }
     }
 }

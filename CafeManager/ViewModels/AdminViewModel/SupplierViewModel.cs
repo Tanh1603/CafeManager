@@ -17,8 +17,9 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
     {
         private readonly MaterialSupplierServices _materialSupplierServices;
         private IMapper _mapper;
-        private CancellationTokenSource? _cts;
-        private readonly IServiceScope _scope;
+
+        [ObservableProperty]
+        private bool _isLoading;
 
         [ObservableProperty]
         private bool _isOpenAddSupplier = false;
@@ -52,7 +53,6 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
 
         public SupplierViewModel(IServiceScope scope)
         {
-            _scope = scope;
             var provider = scope.ServiceProvider;
             _materialSupplierServices = provider.GetRequiredService<MaterialSupplierServices>();
             _mapper = provider.GetRequiredService<IMapper>();
@@ -65,6 +65,7 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
             try
             {
                 token.ThrowIfCancellationRequested();
+                IsLoading = true;
                 AllSupplier = _mapper.Map<List<SupplierDTO>>(await _materialSupplierServices.GetListSupplier());
                 _filterSupplierList = _mapper.Map<List<SupplierDTO>>(AllSupplier);
 
@@ -77,20 +78,8 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
             }
             finally
             {
-                if (_cts != null)
-                {
-                    _cts.Cancel();
-                    _cts.Dispose();
-                    _cts = null;
-                }
+                IsLoading = false;
             }
-        }
-
-        public void CancelLoadData()
-        {
-            _cts?.Cancel();
-            _cts?.Dispose();
-            _cts = null;
         }
 
         private void FilterSupplier()
@@ -113,16 +102,18 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
         {
             try
             {
+                IsLoading = true;
                 if (ModifySupplierVM.IsAdding)
                 {
                     var addSupplier = await _materialSupplierServices.AddSupplier(_mapper.Map<Supplier>(obj));
                     if (addSupplier != null)
                     {
                         AllSupplier.Add(_mapper.Map<SupplierDTO>(addSupplier));
-                        MyMessageBox.ShowDialog("Thêm nhà cung cấp thành công");
                         FilterSupplier();
                         ModifySupplierVM.ClearValueOfFrom();
                         IsOpenAddSupplier = false;
+                        IsLoading = false;
+                        MyMessageBox.ShowDialog("Thêm nhà cung cấp thành công");
                     }
                     else
                     {
@@ -138,10 +129,11 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
                         if (updateSupplierDTO != null)
                         {
                             _mapper.Map(res, updateSupplierDTO);
-                            MyMessageBox.ShowDialog("Sửa nhà cung cấp thành công");
                             FilterSupplier();
                             ModifySupplierVM.ClearValueOfFrom();
                             IsOpenAddSupplier = false;
+                            IsLoading = false;
+                            MyMessageBox.ShowDialog("Sửa nhà cung cấp thành công");
                         }
                     }
                     else
@@ -153,6 +145,10 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
             catch (InvalidOperationException ioe)
             {
                 MyMessageBox.ShowDialog(ioe.Message);
+            }
+            finally
+            {
+                IsLoading = false;
             }
         }
 
@@ -186,11 +182,13 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
                 string messageBox = MyMessageBox.ShowDialog("Bạn có muốn ẩn nhà cung cấp không?", MyMessageBox.Buttons.Yes_No, MyMessageBox.Icons.Question);
                 if (messageBox.Equals("1"))
                 {
+                    IsLoading = true;
                     bool isDeleted = await _materialSupplierServices.DeleteSupplier(supplier.Supplierid);
                     if (isDeleted)
                     {
                         var deleted = AllSupplier.First(x => x.Supplierid == supplier.Supplierid);
                         deleted.Isdeleted = true;
+                        IsLoading = false;
                         MyMessageBox.ShowDialog("Ẩn nhà cung cấp thanh công");
                         FilterSupplier();
                     }
@@ -204,6 +202,10 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
             {
                 MyMessageBox.ShowDialog(ioe.Message);
             }
+            finally
+            {
+                IsLoading = false;
+            }
         }
 
         [RelayCommand]
@@ -214,12 +216,14 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
                 string messageBox = MyMessageBox.ShowDialog("Bạn có muốn hiển thị nhà cung cấp không?", MyMessageBox.Buttons.Yes_No, MyMessageBox.Icons.Question);
                 if (messageBox.Equals("1"))
                 {
+                    IsLoading = true;
                     supplier.Isdeleted = false;
                     var res = await _materialSupplierServices.UpdateSupplier(_mapper.Map<Supplier>(supplier));
                     if (res != null)
                     {
                         var restore = AllSupplier.First(x => x.Supplierid == supplier.Supplierid);
                         restore.Isdeleted = false;
+                        IsLoading = false;
                         MyMessageBox.ShowDialog("Hiển thị nhà cung cấp thành công");
                         FilterSupplier();
                     }
@@ -240,12 +244,6 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
             if (ModifySupplierVM != null)
             {
                 ModifySupplierVM.ModifySupplierChanged -= ModifySupplierVM_ModifySupplierChanged;
-            }
-            if (_cts != null)
-            {
-                _cts.Cancel();
-                _cts.Dispose();
-                _cts = null;
             }
             GC.SuppressFinalize(this);
         }

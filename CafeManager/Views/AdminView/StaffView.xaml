@@ -70,7 +70,6 @@
                 Margin="0,10"
                 HorizontalAlignment="Right"
                 Orientation="Horizontal">
-             
 
                 <!--  Filter Textbox  -->
                 <Grid
@@ -88,7 +87,6 @@
                     <TextBox
                         x:Name="txtFilter"
                         Style="{StaticResource textBoxFilter}"
-                        
                         Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}" />
                     <ma:PackIconMaterial
                         Width="15"
@@ -96,8 +94,8 @@
                         Margin="0,0,15,0"
                         HorizontalAlignment="Right"
                         VerticalAlignment="Center"
-                        Foreground="#d5b096"
                         Panel.ZIndex="1"
+                        Foreground="#d5b096"
                         Kind="Magnify" />
                 </Grid>
             </StackPanel>
@@ -113,8 +111,7 @@
             <TabControl
                 Grid.Row="3"
                 HorizontalAlignment="Stretch"
-                VerticalAlignment="Stretch"
-               >
+                VerticalAlignment="Stretch">
                 <TabItem Header="Đang hiển thị" Style="{DynamicResource tabItemStyle}">
                     <DataGrid
                         VerticalAlignment="Top"
@@ -409,5 +406,20 @@
                 </Border>
             </materialDesign:DialogHost.DialogContent>
         </materialDesign:DialogHost>
+
+        <Grid
+            Background="White"
+            Opacity="0.3"
+            Visibility="{Binding IsLoading, Converter={StaticResource BooleanToVisibilityConverter}}">
+            <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
+                <TextBlock Style="{StaticResource infoText}" Text="Đang tải tài nguyên.." />
+                <ProgressBar
+                    Width="50"
+                    Height="50"
+                    IsIndeterminate="True"
+                    Style="{StaticResource MaterialDesignCircularProgressBar}"
+                    Value="35" />
+            </StackPanel>
+        </Grid>
     </Grid>
 </UserControl>

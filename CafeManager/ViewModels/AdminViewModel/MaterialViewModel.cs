@@ -17,7 +17,9 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
     {
         private MaterialSupplierServices _materialSupplierServices;
         private IMapper _mapper;
-        private readonly IServiceScope _scope;
+
+        [ObservableProperty]
+        private bool _isLoading;
 
         [ObservableProperty]
         private bool _isOpenModifyMaterial = false;
@@ -33,7 +35,6 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
 
         public MaterialViewModel(IServiceScope scope)
         {
-            _scope = scope;
             var provider = scope.ServiceProvider;
             _materialSupplierServices = provider.GetRequiredService<MaterialSupplierServices>();
             _mapper = provider.GetRequiredService<IMapper>();
@@ -42,6 +43,7 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
             ModifyMaterialVM.ModifyMaterialChanged += ModifyMaterialVM_ModifyMaterialChanged;
             ModifyMaterialVM.Close += ModifyMaterialVM_Close;
         }
+
         private void ModifyMaterialVM_Close()
         {
             IsOpenModifyMaterial = false;
@@ -68,12 +70,15 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
         {
             try
             {
+                IsLoading = true;
                 if (ModifyMaterialVM.IsAdding)
                 {
                     var addMaterial = await _materialSupplierServices.AddMaterial(_mapper.Map<Material>(obj));
                     if (addMaterial != null)
                     {
                         ListMaterial.Add(_mapper.Map<MaterialDTO>(addMaterial));
+                        IsOpenModifyMaterial = false;
+                        IsLoading = false;
                         MyMessageBox.ShowDialog("Thêm vật tư cấp thành công");
                     }
                     else
@@ -90,8 +95,9 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
                         if (updateSupplierDTO != null)
                         {
                             _mapper.Map(res, updateSupplierDTO);
+                            IsOpenModifyMaterial = false;
+                            IsLoading = false;
                             MyMessageBox.ShowDialog("Sửa vật tư cấp thành công");
-                            
                         }
                     }
                     else
@@ -99,12 +105,15 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
                         MyMessageBox.ShowDialog("Sửa nhà cung cấp thất bại");
                     }
                 }
-                IsOpenModifyMaterial = false;
                 ModifyMaterialVM.ClearValueOfFrom();
             }
             catch (InvalidOperationException ioe)
             {
                 MyMessageBox.ShowDialog(ioe.Message);
+            }
+            finally
+            {
+                IsLoading = false;
             }
         }
 
@@ -116,11 +125,13 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
                 string messageBox = MyMessageBox.ShowDialog("Bạn có muốn ẩn vật liệu không không?", MyMessageBox.Buttons.Yes_No, MyMessageBox.Icons.Question);
                 if (messageBox.Equals("1"))
                 {
+                    IsLoading = true;
                     bool isDeleted = await _materialSupplierServices.DeleteMaterial(material.Materialid);
                     if (isDeleted)
                     {
                         ListDeletedMaterial.Add(material);
                         ListMaterial.Remove(material);
+                        IsLoading = false;
                         MyMessageBox.ShowDialog("Ẩn vật liệu thanh công");
                     }
                     else
@@ -133,6 +144,10 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
             {
                 MyMessageBox.ShowDialog(ioe.Message);
             }
+            finally
+            {
+                IsLoading = false;
+            }
         }
 
         [RelayCommand]
@@ -143,12 +158,14 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
                 string messageBox = MyMessageBox.ShowDialog("Bạn có muốn hiển thị vật liệu không?", MyMessageBox.Buttons.Yes_No, MyMessageBox.Icons.Question);
                 if (messageBox.Equals("1"))
                 {
+                    IsLoading = true;
                     material.Isdeleted = false;
                     var res = await _materialSupplierServices.UpdateMaterial(_mapper.Map<Material>(material));
                     if (res != null)
                     {
                         ListMaterial.Add(_mapper.Map<MaterialDTO>(res));
                         ListDeletedMaterial.Remove(material);
+                        IsLoading = false;
                         MyMessageBox.ShowDialog("Hiển thị vật liệu thanh công");
                     }
                     else
@@ -160,6 +177,10 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
             catch (InvalidOperationException ioe)
             {
                 MyMessageBox.ShowDialog(ioe.Message);
+            }
+            finally
+            {
+                IsLoading = false;
             }
         }
 

@@ -8,7 +8,6 @@ using CafeManager.WPF.ViewModels.AddViewModel;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Microsoft.Extensions.DependencyInjection;
-using Newtonsoft.Json.Linq;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Linq.Expressions;
@@ -20,6 +19,9 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
         private readonly InvoiceServices _invoiceServices;
         private readonly IMapper _mapper;
         private CancellationToken _token = default;
+
+        [ObservableProperty]
+        private bool _isLoading;
 
         [ObservableProperty]
         private ModifyInvoiceViewModel _modifyInvoiceVM;
@@ -110,6 +112,7 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
                 }
                 token.ThrowIfCancellationRequested();
 
+                IsLoading = true;
                 Expression<Func<Invoice, bool>> filter = invoice =>
                 (invoice.Isdeleted == false) &&
                 (StartDate == null || invoice.Paymentstartdate >= StartDate) &&
@@ -121,6 +124,7 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
                 ListInvoiceDTO = [.. _mapper.Map<List<InvoiceDTO>>(dbListInvoice.Item1)];
                 totalPages = (dbListInvoice.Item2 + pageSize - 1) / pageSize;
                 OnPropertyChanged(nameof(PageUI));
+                IsLoading = false;
             }
             catch (OperationCanceledException)
             {
@@ -133,7 +137,7 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
             }
             finally
             {
-                token = default;
+                IsLoading = false;
             }
         }
 
@@ -152,9 +156,11 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
                 string messageBox = MyMessageBox.ShowDialog("Bạn có muốn xóa hóa đơn này không?", MyMessageBox.Buttons.Yes_No, MyMessageBox.Icons.Question);
                 if (messageBox.Equals("1"))
                 {
+                    IsLoading = true;
                     bool isSuccessDeleted = await _invoiceServices.DeleteInvoice(invoiceDTO.Invoiceid);
                     if (isSuccessDeleted)
                     {
+                        IsLoading = false;
                         MyMessageBox.Show("Xóa hóa đơn thành công");
                         await LoadData(_token);
                     }

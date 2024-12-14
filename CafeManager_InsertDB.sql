@@ -1,43 +1,92 @@
-INSERT INTO Supplier (SupplierName, RepresentativeSupplier, Phone, Email, Address, Notes, IsDeleted)
-VALUES 
-('Công ty TNHH Nguyên Liệu Việt', 'Nguyễn Văn A', '0123456789', 'nguyenlieuviet@gmail.com', '123 Đường ABC, Quận 1, TP.HCM', 'Chuyên cung cấp nguyên liệu thực phẩm', FALSE),
-('Công ty CP Vật Tư Miền Nam', 'Trần Thị B', '0987654321', 'vatmumiennam@gmail.com', '456 Đường XYZ, Quận 3, TP.HCM', 'Chuyên cung cấp vật tư xây dựng', FALSE),
-('Công ty TNHH Phát Triển Đông Á', 'Phạm Văn C', '0901234567', 'dongadevelopment@gmail.com', '789 Đường DEF, Quận 5, TP.HCM', 'Nhà phân phối đa ngành', FALSE);
+-- Insert 50 Suppliers
+DO $$
+BEGIN
+    FOR i IN 1..50 LOOP
+        INSERT INTO Supplier (SupplierName, RepresentativeSupplier, Phone, Email, Address, Notes, IsDeleted)
+        VALUES (
+            CONCAT('Supplier ', i),
+            CONCAT('Representative ', i),
+            CONCAT('09', i, '456789'),
+            CONCAT('supplier', i, '@example.com'),
+            CONCAT(i, ' Street, City'),
+            'Notes for supplier ' || i,
+            FALSE
+        );
+    END LOOP;
+END $$;
 
-INSERT INTO Material (MaterialName, Unit, IsDeleted)
-VALUES 
-('Xi măng', 'Bao 50kg', FALSE),
-('Thép xây dựng', 'Tấn', FALSE),
-('Gạch men', 'Hộp', FALSE),
-('Cát xây dựng', 'Khối', FALSE),
-('Đá xây dựng', 'Khối', FALSE);
+-- Insert 50 Materials
+DO $$
+BEGIN
+    FOR i IN 1..50 LOOP
+        INSERT INTO Material (MaterialName, Unit, IsDeleted)
+        VALUES (
+            CONCAT('Material ', i),
+            CASE WHEN i % 2 = 0 THEN 'kg' ELSE 'pack' END,
+            FALSE
+        );
+    END LOOP;
+END $$;
 
-INSERT INTO MaterialSupplier (MaterialId, SupplierId, ManufactureDate, ExpirationDate, Original, Manufacturer, Price, IsDeleted)
-VALUES 
-(1, 1, '2024-01-01 00:00:00', '2026-01-01 00:00:00', 'Việt Nam', 'Công ty Xi măng Hà Tiên', 85000, FALSE),
-(2, 2, '2023-06-15 00:00:00', '2025-06-15 00:00:00', 'Việt Nam', 'Công ty Thép Việt Nhật', 13000000, FALSE),
-(3, 3, '2024-05-01 00:00:00', '2027-05-01 00:00:00', 'Trung Quốc', 'Công ty Gạch Hoa Đông', 300000, FALSE),
-(4, 1, '2024-03-20 00:00:00', '2025-03-20 00:00:00', 'Việt Nam', 'Công ty Cát Bình Thuận', 120000, FALSE),
-(5, 2, '2024-07-01 00:00:00', '2025-07-01 00:00:00', 'Việt Nam', 'Công ty Đá Đồng Nai', 150000, FALSE);
+-- Insert 50 MaterialSuppliers
+DO $$
+BEGIN
+    FOR i IN 1..50 LOOP
+        INSERT INTO MaterialSupplier (MaterialId, SupplierId, ManufactureDate, ExpirationDate, Original, Manufacturer, Price, IsDeleted)
+        VALUES (
+            i, -- Valid MaterialId
+            i, -- Valid SupplierId
+            NOW() - INTERVAL '1 year',
+            NOW() + INTERVAL '1 year',
+            'Country ' || i,
+            CONCAT('Manufacturer ', i),
+            (i * 10.00),
+            FALSE
+        );
+    END LOOP;
+END $$;
 
-INSERT INTO ConsumedMaterials (MaterialSupplierId, Quantity, IsDeleted)
-VALUES 
-(1, 500, FALSE),
-(2, 20, FALSE),
-(3, 200, FALSE),
-(4, 1000, FALSE),
-(5, 800, FALSE);
+-- Insert 50 ConsumedMaterials
+DO $$
+BEGIN
+    FOR i IN 1..50 LOOP
+        INSERT INTO ConsumedMaterials (MaterialSupplierId, Quantity, UsageDate, IsDeleted)
+        VALUES (
+            i, -- Match MaterialSupplierId
+            (i * 5.00),
+            NOW() - INTERVAL '1 day' * i,
+            FALSE
+        );
+    END LOOP;
+END $$;
 
-INSERT INTO Imports (DeliveryPerson, Phone, ShippingCompany, ReceivedDate, StaffId, SupplierId, IsDeleted)
-VALUES 
-('Nguyễn Văn D', '0934567890', 'Công ty Vận tải Thành Công', '2024-11-15 10:00:00', 1, 1, FALSE),
-('Trần Thị E', '0912345678', 'Công ty Vận tải Hòa Bình', '2024-11-18 14:30:00', 2, 2, FALSE),
-('Phạm Văn F', '0923456789', 'Công ty Vận tải Bắc Nam', '2024-11-20 09:15:00', 3, 3, FALSE);
+-- Insert 50 Imports
+DO $$
+BEGIN
+    FOR i IN 1..50 LOOP
+        INSERT INTO Imports (DeliveryPerson, Phone, ShippingCompany, ReceivedDate, StaffId, SupplierId, IsDeleted)
+        VALUES (
+            CONCAT('Delivery ', i),
+            CONCAT('09', i, '123456'),
+            CONCAT('Shipping Company ', i),
+            NOW() - INTERVAL '1 day' * i,
+            1,
+            i, -- Match SupplierId
+            FALSE
+        );
+    END LOOP;
+END $$;
 
-INSERT INTO ImportDetails (ImportId, MaterialId, Quantity, IsDeleted)
-VALUES 
-(1, 1, 300, FALSE),
-(1, 4, 500, FALSE),
-(2, 2, 15, FALSE),
-(2, 5, 200, FALSE),
-(3, 3, 100, FALSE);
+-- Insert 50 ImportDetails
+DO $$
+BEGIN
+    FOR i IN 1..50 LOOP
+        INSERT INTO ImportDetails (ImportId, MaterialSupplierId, Quantity, IsDeleted)
+        VALUES (
+            i, -- Match ImportId
+            i, -- Match MaterialSupplierId
+            (i * 10.00),
+            FALSE
+        );
+    END LOOP;
+END $$;

@@ -82,7 +82,8 @@
                     MinHeight="35"
                     ItemsSource="{Binding ListFoodCategory}"
                     SelectedItem="{Binding SelectedFoodCategory}"
-                    Style="{StaticResource ComboBoxStyle}">
+                    Style="{StaticResource ComboBoxStyle}"
+                    Tag="Danh mục thực đơn">
                     <ComboBox.ItemContainerStyle>
                         <Style BasedOn="{StaticResource ComboBoxItemStyle}" TargetType="ComboBoxItem">
                             <Setter Property="Width" Value="{Binding ActualWidth, ElementName=cbFoodCategory}" />
@@ -97,7 +98,6 @@
                         </DataTemplate>
                     </ComboBox.ItemTemplate>
                 </ComboBox>
-
                 <Button
                     Grid.Column="1"
                     Width="140"
@@ -198,7 +198,7 @@
                 </ItemsControl>
             </ScrollViewer>
         </Grid>
-        
+
         <materialDesign:DialogHost
             Background="Transparent"
             DialogTheme="Inherit"
@@ -230,5 +230,17 @@
                 <ContentControl Content="{Binding FoodCategoryVM}" />
             </materialDesign:DialogHost.DialogContent>
         </materialDesign:DialogHost>
+
+        <Grid Background="White" Opacity="0.3" Visibility="{Binding IsLoading, Converter={StaticResource BooleanToVisibilityConverter}}">
+            <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
+                <TextBlock Style="{StaticResource infoText}" Text="Đang tải tài nguyên.." />
+                <ProgressBar
+                    IsIndeterminate="True"
+                    Style="{StaticResource MaterialDesignCircularProgressBar}"
+                    Height="50"
+                    Width="50"
+                    Value="35" />
+            </StackPanel>
+        </Grid>
     </Grid>
 </UserControl>

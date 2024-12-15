@@ -26,9 +26,18 @@
         <views:SettingAccountView />
     </DataTemplate>
 
+    
     <DataTemplate DataType="{x:Type userviewmodels:OrderViewModel}">
         <userviews:OrderView />
-
+    </DataTemplate>
+    <DataTemplate DataType="{x:Type userviewmodels:DistributionMaterialViewModel}">
+        <userviews:DistributionMaterialView />
+    </DataTemplate>
+    <DataTemplate DataType="{x:Type addviewmodels:RequestMaterialViewModel}">
+        <addupdateview:RequestMaterialView />
+    </DataTemplate>
+    <DataTemplate DataType="{x:Type addviewmodels:SelectInventoryViewModel}">
+        <addupdateview:SelectInventoryView />
     </DataTemplate>
 
 
@@ -60,9 +69,18 @@
     <DataTemplate DataType="{x:Type admdinviewmodels:HomeViewModel}">
         <adminviews:HomeAdminView />
     </DataTemplate>
+    <DataTemplate DataType="{x:Type admdinviewmodels:MaterialViewModel}">
+        <adminviews:MaterialView />
+    </DataTemplate>
+    <DataTemplate DataType="{x:Type admdinviewmodels:FoodCategoryViewModel}">
+        <adminviews:FoodCategoryView />
+    </DataTemplate>
 
     <DataTemplate DataType="{x:Type addviewmodels:AddSuppierViewModel}">
         <addupdateview:AddSupplierView />
+    </DataTemplate>
+    <DataTemplate DataType="{x:Type addviewmodels:AddMaterialViewModel}">
+        <addupdateview:AddMaterialView />
     </DataTemplate>
     <DataTemplate DataType="{x:Type addviewmodels:ModifyFoodViewModel}">
         <addupdateview:ModifyFoodView />

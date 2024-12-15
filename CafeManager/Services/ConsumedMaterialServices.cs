@@ -31,45 +31,22 @@ namespace CafeManager.WPF.Services
             }
         }
 
-        public async Task<Consumedmaterial> AddConsumedmaterial(Consumedmaterial addConsumedMaterial)
+        public async Task<Consumedmaterial> AddConsumedMaterial(Consumedmaterial consumedmaterial)
         {
             try
             {
                 await _unitOfWork.BeginTransactionAsync();
-                var consumedMaterial = (await _unitOfWork.ConsumedMaterialList.GetAll())
-                    .FirstOrDefault(x => x.Materialsupplierid == addConsumedMaterial.Materialsupplierid);
-
-                if (consumedMaterial != null)
-                {
-                    if (consumedMaterial.Isdeleted == true)
-                    {
-                        consumedMaterial.Isdeleted = false;
-                        consumedMaterial.Quantity = addConsumedMaterial.Quantity;
-                    }
-                    else
-                    {
-                        consumedMaterial.Quantity += addConsumedMaterial.Quantity;
-                    }
-                    await _unitOfWork.CompleteAsync();
-                    //_unitOfWork.ClearChangeTracker();
-
-                    await _unitOfWork.CommitTransactionAsync();
-                    return consumedMaterial;
-                }
-                else
-                {
-                    var list = await _unitOfWork.ConsumedMaterialList.Create(addConsumedMaterial);
-                    await _unitOfWork.CompleteAsync();
-                    _unitOfWork.ClearChangeTracker();
-
-                    await _unitOfWork.CommitTransactionAsync();
-                    return list;
-                }
+                consumedmaterial.Materialsupplier = null;
+                var addConsumedMaterial = await _unitOfWork.ConsumedMaterialList.Create(consumedmaterial);
+                await _unitOfWork.CompleteAsync();
+                _unitOfWork.ClearChangeTracker();
+                await _unitOfWork.CommitTransactionAsync();
+                return addConsumedMaterial;
             }
-            catch (Exception)
+            catch (Exception ex)
             {
                 await _unitOfWork.RollbackTransactionAsync();
-                throw new InvalidOperationException("Lỗi.");
+                throw new InvalidOperationException("Thêm chi tiết sử dụng thất bại.", ex);
             }
         }
 
@@ -141,6 +118,12 @@ namespace CafeManager.WPF.Services
         // ===================== Phan trang =======================
         public async Task<(IEnumerable<Consumedmaterial>?, int)> GetSearchPaginateListConsumedMaterial(Expression<Func<Consumedmaterial, bool>>? searchPredicate = null, int skip = 0, int take = 20)
         {
+            return await _unitOfWork.ConsumedMaterialList.GetByPageAsync(skip, take, searchPredicate);
+        }
+
+        public async Task<(IEnumerable<Consumedmaterial>?, int)> GetSearchPaginateListConsumedMaterialAlter(Expression<Func<Consumedmaterial, bool>>? searchPredicate = null, int skip = 0, int take = 20)
+        {
+            _unitOfWork.ClearChangeTracker();
             return await _unitOfWork.ConsumedMaterialList.GetByPageAsync(skip, take, searchPredicate);
         }
     }

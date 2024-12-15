@@ -82,7 +82,8 @@ namespace CafeManager.Core.DTOs
                 Materialsupplierid = Materialsupplierid,
                 Quantity = Quantity,
                 Isdeleted = Isdeleted,
-                Materialsupplier = Materialsupplier
+                Materialsupplier = Materialsupplier,
+                Usagedate = Usagedate
             };
         }
     }

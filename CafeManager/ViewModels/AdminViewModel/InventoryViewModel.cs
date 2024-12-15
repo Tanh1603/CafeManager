@@ -176,26 +176,6 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
             }
         }
 
-        //private async Task CheckTotalQuantity()
-        //{
-        //    var itemsToRemove = new List<MaterialSupplierDTO>();
-
-        //    foreach (var item in ListInventoryDTO)
-        //    {
-        //        if (item.TotalQuantity == 0)
-        //        {
-        //            var materialsupplier = await _materialSupplierServices.GetMaterialsupplierById(item.Materialsupplierid);
-        //            item.Isdeleted = true;
-        //            itemsToRemove.Add(item);
-        //        }
-        //    }
-
-        //    foreach (var item in itemsToRemove)
-        //    {
-        //        ListInventoryDTO.Remove(item);
-        //    }
-        //}
-
         private async Task LoadInventory(CancellationToken token = default)
         {
             Expression<Func<Consumedmaterial, bool>> consumedFilter;

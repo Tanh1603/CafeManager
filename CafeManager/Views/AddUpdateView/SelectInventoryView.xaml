@@ -1,0 +1,275 @@
+﻿<UserControl
+    x:Class="CafeManager.WPF.Views.AddUpdateView.SelectInventoryView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:fa="http://schemas.awesome.incremented/wpf/xaml/fontawesome.sharp"
+    xmlns:local="clr-namespace:CafeManager.WPF.Views.AddUpdateView"
+    xmlns:lvc="clr-namespace:LiveCharts.Wpf;assembly=LiveCharts.Wpf"
+    xmlns:ma="http://metro.mahapps.com/winfx/xaml/iconpacks"
+    xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:service="clr-namespace:CafeManager.WPF.Services.Converter"
+    xmlns:uc="clr-namespace:CafeManager.WPF.Assets.UsersControls"
+    xmlns:userview="clr-namespace:CafeManager.WPF.Views.UserView"
+    xmlns:vm="clr-namespace:CafeManager.WPF.ViewModels.AddViewModel"
+    Width="1024"
+    Height="520"
+    mc:Ignorable="d">
+    <UserControl.Resources>
+        <BooleanToVisibilityConverter x:Key="BoolToVis" />
+        <service:RowIndexConverter x:Key="RowIndexConverter" />
+        <service:DateTimeToDateOnlyConverter x:Key="DateTimeToDateOnlyConverter" />
+    </UserControl.Resources>
+    <Border BorderThickness="4" CornerRadius="10">
+        <Border.Background>
+            <LinearGradientBrush StartPoint="0,0.5" EndPoint="1,0.5">
+                <GradientStop Offset="0" Color="#9c6d3f" />
+                <GradientStop Offset="1" Color="#cb925d" />
+            </LinearGradientBrush>
+        </Border.Background>
+        <Border.BorderBrush>
+            <LinearGradientBrush StartPoint="0,0.5">
+                <GradientStop Offset="0" Color="#5e2313" />
+                <GradientStop Offset="0.5" Color="#65402e" />
+                <GradientStop Offset="1" Color="#7c4e37" />
+            </LinearGradientBrush>
+        </Border.BorderBrush>
+        <Grid>
+            <Grid Margin="10">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="auto" />
+                    <RowDefinition Height="auto" />
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="auto" />
+                </Grid.RowDefinitions>
+
+                <Button
+                    Grid.Row="0"
+                    HorizontalAlignment="Right"
+                    Command="{Binding DataContext.CloseSelectInventoryViewCommand, RelativeSource={RelativeSource AncestorType=userview:DistributionMaterialView}}"
+                    Style="{StaticResource closeButton}">
+                    <ma:PackIconMaterial Kind="Close" Style="{StaticResource iconApp}" />
+                </Button>
+                <!--  Page Title  -->
+                <TextBlock
+                    Grid.Row="0"
+                    Margin="10"
+                    HorizontalAlignment="Left"
+                    FontSize="32"
+                    FontWeight="SemiBold"
+                    Foreground="#ddd1c3"
+                    Text="Thông tin vật liệu" />
+
+                <!--  Add Button  -->
+                <StackPanel Grid.Row="1" Orientation="Horizontal">
+                    <TextBlock
+                        Margin="10,0"
+                        VerticalAlignment="Center"
+                        FontSize="13"
+                        FontWeight="SemiBold"
+                        Foreground="#602414"
+                        Text="Vật liệu: " />
+                    <ComboBox
+                        Width="150"
+                        materialDesign:TextFieldAssist.HasClearButton="True"
+                        ItemsSource="{Binding ListMaterialDTO}"
+                        SelectedItem="{Binding SelectedMaterial}"
+                        SelectedValuePath="Content"
+                        Style="{StaticResource MaterialDesignFilledComboBox}">
+                        <ComboBox.ItemTemplate>
+                            <DataTemplate>
+                                <Grid>
+                                    <TextBlock
+                                        Margin="0,0,10,0"
+                                        VerticalAlignment="Center"
+                                        Text="{Binding Materialname}"
+                                        TextTrimming="CharacterEllipsis"
+                                        TextWrapping="NoWrap" />
+                                </Grid>
+                            </DataTemplate>
+                        </ComboBox.ItemTemplate>
+                    </ComboBox>
+
+                    <TextBlock
+                        Margin="10,0"
+                        VerticalAlignment="Center"
+                        FontSize="13"
+                        FontWeight="SemiBold"
+                        Foreground="#602414"
+                        Text="Nhà sản xuất: " />
+                    <ComboBox
+                        Width="150"
+                        materialDesign:TextFieldAssist.HasClearButton="True"
+                        ItemsSource="{Binding ListSupplierDTO}"
+                        SelectedItem="{Binding SelectedSupplier}"
+                        SelectedValuePath="Content"
+                        Style="{StaticResource MaterialDesignFilledComboBox}">
+                        <ComboBox.ItemTemplate>
+                            <DataTemplate>
+                                <Grid>
+                                    <TextBlock
+                                        Margin="0,0,10,0"
+                                        VerticalAlignment="Center"
+                                        Text="{Binding Suppliername}"
+                                        TextTrimming="CharacterEllipsis"
+                                        TextWrapping="NoWrap" />
+                                </Grid>
+                            </DataTemplate>
+                        </ComboBox.ItemTemplate>
+                    </ComboBox>
+                </StackPanel>
+
+                <!--  FoodCategory Datagrid  -->
+                <Border Grid.Row="2" Margin="0,10,0,0">
+                    <DataGrid
+                        Width="auto"
+                        VerticalAlignment="Top"
+                        AlternationCount="{Binding ListInventoryDTO.Count}"
+                        CellStyle="{DynamicResource DataGridCellStyle1}"
+                        ColumnHeaderStyle="{DynamicResource DataGridColumnHeaderStyle1}"
+                        ItemsSource="{Binding ListInventoryDTO}"
+                        RowStyle="{DynamicResource DataGridRowStyle1}"
+                        Style="{DynamicResource DataGridStyle1}">
+                        <DataGrid.Columns>
+
+                            <DataGridTextColumn
+                                Width="auto"
+                                Header="STT"
+                                IsReadOnly="True">
+                                <DataGridTextColumn.Binding>
+                                    <Binding
+                                        Converter="{StaticResource RowIndexConverter}"
+                                        Path="(ItemsControl.AlternationIndex)"
+                                        RelativeSource="{RelativeSource AncestorType=DataGridRow}" />
+                                </DataGridTextColumn.Binding>
+                            </DataGridTextColumn>
+
+                            <DataGridTextColumn
+                                Width="*"
+                                Binding="{Binding Material.Materialname}"
+                                CanUserResize="False"
+                                Header="Tên vật tư"
+                                IsReadOnly="True" />
+
+                            <DataGridTextColumn
+                                Width="*"
+                                Binding="{Binding Supplier.Suppliername}"
+                                CanUserResize="False"
+                                Header="Nhà cung cấp"
+                                IsReadOnly="True" />
+                            <DataGridTextColumn
+                                Width="*"
+                                Binding="{Binding Expirationdate, Converter={StaticResource DateTimeToDateOnlyConverter}}"
+                                CanUserResize="False"
+                                Header="Ngày hết hạn"
+                                IsReadOnly="True" />
+                            <DataGridTextColumn
+                                Width="*"
+                                Binding="{Binding Original}"
+                                CanUserResize="False"
+                                Header="Nguồn gốc"
+                                IsReadOnly="True" />
+
+                            <DataGridTextColumn
+                                Width="*"
+                                Binding="{Binding Manufacturer}"
+                                CanUserResize="False"
+                                Header="Nhà sản xuất"
+                                IsReadOnly="True" />
+                            <DataGridTextColumn
+                                Width="*"
+                                Binding="{Binding Price}"
+                                CanUserResize="False"
+                                Header="Giá"
+                                IsReadOnly="True" />
+                            <DataGridTextColumn
+                                Width="*"
+                                Binding="{Binding TotalQuantity, Mode=OneWay}"
+                                CanUserResize="False"
+                                Header="Tồn kho"
+                                IsReadOnly="True" />
+                            <DataGridTextColumn
+                                Width="*"
+                                Binding="{Binding Material.Unit, Mode=OneWay}"
+                                CanUserResize="False"
+                                Header="Đơn vị"
+                                IsReadOnly="True" />
+                            <DataGridTemplateColumn
+                                Width="auto"
+                                Header="Thao tác"
+                                IsReadOnly="True">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <StackPanel Orientation="Horizontal">
+                                            <Button
+                                                Command="{Binding DataContext.ChooseItemCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                                CommandParameter="{Binding}"
+                                                Style="{StaticResource gridEditButton}">
+                                                <TextBlock VerticalAlignment="Center" Text="Chọn" />
+                                            </Button>
+                                        </StackPanel>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </Border>
+
+                <Grid
+                    Grid.Row="3"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Bottom">
+                    <StackPanel Orientation="Horizontal">
+                        <StackPanel.Resources>
+                            <Style BasedOn="{StaticResource MaterialDesignFlatDarkButton}" TargetType="Button">
+                                <Setter Property="Margin" Value="10,0" />
+                            </Style>
+                        </StackPanel.Resources>
+                        <Button Command="{Binding FirstPageCommand}">
+                            <materialDesign:PackIcon Kind="SkipBackwardOutline" />
+                        </Button>
+
+                        <Button Command="{Binding PreviousPageCommand}">
+                            <materialDesign:PackIcon Kind="SkipPreviousOutline" />
+                        </Button>
+
+                        <TextBlock
+                            HorizontalAlignment="Left"
+                            VerticalAlignment="Center"
+                            FontSize="16"
+                            FontWeight="SemiBold"
+                            Foreground="#dac5b4"
+                            Text="{Binding PageUI}" />
+
+                        <Button Command="{Binding NextPageCommand}">
+                            <materialDesign:PackIcon Kind="SkipNextOutline" />
+                        </Button>
+
+                        <Button Command="{Binding LastPageCommand}">
+                            <materialDesign:PackIcon Kind="SkipForwardOutline" />
+                        </Button>
+                    </StackPanel>
+                </Grid>
+            </Grid>
+
+            <materialDesign:DialogHost
+                Grid.ColumnSpan="2"
+                Background="Transparent"
+                DialogTheme="Inherit"
+                IsOpen="{Binding IsOpenModifyMaterial}"
+                OverlayBackground="{DynamicResource PrimaryHueDarkBrush}"
+                Style="{StaticResource MaterialDesignEmbeddedDialogHost}">
+
+                <materialDesign:DialogHost.DialogBackground>
+                    <SolidColorBrush Color="Transparent" />
+                </materialDesign:DialogHost.DialogBackground>
+
+                <materialDesign:DialogHost.DialogContent>
+                    <ContentControl Content="{Binding ModifyMaterialVM}" />
+                </materialDesign:DialogHost.DialogContent>
+
+            </materialDesign:DialogHost>
+        </Grid>
+    </Border>
+</UserControl>

@@ -80,7 +80,6 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
         private bool _consumedPage = true;
 
         [ObservableProperty]
-        [NotifyCanExecuteChangedFor(nameof(FilterExpiringCommand))]
         private bool _inventoryPage = false;
 
         [ObservableProperty]
@@ -202,6 +201,21 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
             }
         }
 
+        private DateTime? _selectedUsageDate;
+
+        public DateTime? SelectedUsageDate
+        {
+            get => _selectedUsageDate; set
+            {
+                if (value != _selectedUsageDate)
+                {
+                    _selectedUsageDate = value;
+                    OnPropertyChanged();
+                    _ = LoadTableControl();
+                }
+            }
+        }
+
         #endregion Filter Declare
 
         #region Hàm filter
@@ -211,7 +225,8 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
             (SelectedMaterial == null || consum.Materialsupplier.Materialid == SelectedMaterial.Materialid) &&
             (SelectedSupplier == null || consum.Materialsupplier.Supplierid == SelectedSupplier.Supplierid) &&
             (FilterManufacturedate == null || consum.Materialsupplier.Manufacturedate == FilterManufacturedate) &&
-            (FilterExpirationdate == null || consum.Materialsupplier.Expirationdate == FilterExpirationdate);
+            (FilterExpirationdate == null || consum.Materialsupplier.Expirationdate == FilterExpirationdate) &&
+            (SelectedUsageDate == null || (consum.Usagedate.Day == SelectedUsageDate.Value.Day && consum.Usagedate.Month == SelectedUsageDate.Value.Month && consum.Usagedate.Year == SelectedUsageDate.Value.Year));
 
         private Expression<Func<Materialsupplier, bool>> InventoryFilter => inventory =>
                         (inventory.Isdeleted == false) &&
@@ -388,7 +403,7 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
             finally { IsLoading = false; }
         }
 
-        [RelayCommand(CanExecute = nameof(FilterExpiringCanExcute))]
+        [RelayCommand]
         private async Task FilterExpiring()
         {
             IsLoading = true;
@@ -406,11 +421,6 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
             inventoryTotalPages = (dbListInventory.Item2 + PageSize - 1) / PageSize;
             OnPropertyChanged(nameof(InventoryPageUI));
             IsLoading = false;
-        }
-
-        private bool FilterExpiringCanExcute()
-        {
-            return InventoryPage;
         }
 
         #region Material

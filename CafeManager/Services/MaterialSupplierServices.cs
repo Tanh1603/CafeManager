@@ -261,5 +261,11 @@ namespace CafeManager.WPF.Services
                 throw;
             }
         }
+
+        public async Task<(IEnumerable<Materialsupplier>?, int)> GetSearchPaginateListMaterialsupplierAlter(Expression<Func<Materialsupplier, bool>>? searchPredicate = null, int skip = 0, int take = 20)
+        {
+            _unitOfWork.ClearChangeTracker();
+            return await _unitOfWork.MaterialSupplierList.GetByPageAsync(skip, take, searchPredicate);
+        }
     }
 }

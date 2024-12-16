@@ -24,12 +24,6 @@
     <UserControl.Resources>
         <BooleanToVisibilityConverter x:Key="BoolToVis" />
         <service:RowIndexConverter x:Key="RowIndexConverter" />
-        <DataTemplate DataType="{x:Type vm:AddMaterialViewModel}">
-            <addview:AddMaterialView />
-        </DataTemplate>
-        <DataTemplate DataType="{x:Type vm:AddSuppierViewModel}">
-            <addview:AddSupplierView />
-        </DataTemplate>
     </UserControl.Resources>
 
     <Grid>

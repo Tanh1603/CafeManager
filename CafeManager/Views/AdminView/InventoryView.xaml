@@ -21,9 +21,6 @@
         <BooleanToVisibilityConverter x:Key="BoolToVis" />
         <service:RowIndexConverter x:Key="RowIndexConverter" />
         <service:DateTimeToDateOnlyConverter x:Key="DateTimeToDateOnlyConverter" />
-        <DataTemplate DataType="{x:Type vm:MaterialViewModel}">
-            <local:MaterialView />
-        </DataTemplate>
     </UserControl.Resources>
 
     <Grid>
@@ -141,7 +138,27 @@
                     materialDesign:TextFieldAssist.HasClearButton="True"
                     SelectedDate="{Binding FilterExpirationdate, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
                     Style="{StaticResource MaterialDesignFloatingHintDatePicker}" />
+
+                <StackPanel Orientation="Horizontal"
+                            Visibility="{Binding ConsumedPage, Converter={StaticResource BoolToVis}}">
+                    <TextBlock
+                    Margin="10,0"
+                    VerticalAlignment="Center"
+                    FontSize="13"
+                    FontWeight="SemiBold"
+                    Foreground="#602414"
+                    Text="Ngày sử dụng: " />
+
+                    <DatePicker
+                    Width="120"
+                    VerticalAlignment="Center"
+                    materialDesign:HintAssist.Hint="Chọn ngày"
+                    materialDesign:TextFieldAssist.HasClearButton="True"
+                    SelectedDate="{Binding SelectedUsageDate, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
+                    Style="{StaticResource MaterialDesignFloatingHintDatePicker}" />
+                </StackPanel>
                 <Button
+                    Visibility="{Binding InventoryPage, Converter={StaticResource BoolToVis}}"
                     Width="Auto"
                     Margin="10,0,0,0"
                     VerticalAlignment="Center"

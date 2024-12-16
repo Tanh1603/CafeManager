@@ -7,6 +7,7 @@ using CommunityToolkit.Mvvm.Input;
 using Microsoft.Extensions.DependencyInjection;
 using System.Diagnostics;
 using System.Web;
+using System.Windows;
 
 namespace CafeManager.WPF.ViewModels
 {
@@ -36,8 +37,6 @@ namespace CafeManager.WPF.ViewModels
             _provider = provider;
             _navigationStore = _provider.GetRequiredService<NavigationStore>();
             _accountStore = provider.GetRequiredService<AccountStore>();
-            //CurrentViewModel = _provider.GetRequiredService<HomeViewModel>();
-            //currentVM = "Home";
             ChangeCurrentViewModel("Home");
             OpenSettingAccountVM = _provider.GetRequiredService<SettingAccountViewModel>();
             OpenSettingAccountVM.Close += OpenSettingAccountVM_Close;
@@ -81,14 +80,14 @@ namespace CafeManager.WPF.ViewModels
                     _ => throw new Exception("Lỗi")
                 };
                 currentVM = viewModel;
-                Task.Run(() =>
+                Task.Run(async () =>
                 {
                     try
                     {
                         _cts?.Token.ThrowIfCancellationRequested();
                         if (CurrentViewModel is IDataViewModel dataViewModel)
                         {
-                            dataViewModel.LoadData(_cts.Token);
+                            await dataViewModel.LoadData(_cts.Token);
                         }
                     }
                     catch (OperationCanceledException)
@@ -116,6 +115,7 @@ namespace CafeManager.WPF.ViewModels
         {
             _navigationStore.Navigation = _provider.GetRequiredService<LoginViewModel>();
             _accountStore.ClearAccount();
+            Application.Current.MainWindow.WindowState = WindowState.Normal;
         }
 
         private void LoadAccount()

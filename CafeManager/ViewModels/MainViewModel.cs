@@ -22,9 +22,9 @@ namespace CafeManager.WPF.ViewModels
             _navigationStore = provider.GetRequiredService<NavigationStore>();
             _navigationStore.Navigation = CurrentViewModel;
 
-            //CurrentViewModel = provider.GetRequiredService<LoginViewModel>();
+            CurrentViewModel = provider.GetRequiredService<LoginViewModel>();
             //CurrentViewModel = provider.GetRequiredService<MainAdminViewModel>();
-            CurrentViewModel = provider.GetRequiredService<MainAdminViewModel>();
+            //CurrentViewModel = provider.GetRequiredService<MainAdminViewModel>();
             _navigationStore.NavigationStoreChanged += _navigationStore_NavigationStoreChanged;
         }
 
@@ -68,8 +68,6 @@ namespace CafeManager.WPF.ViewModels
 
         #endregion command handle window
 
-
-
         #region handleDatePicker
 
         [RelayCommand]
@@ -78,7 +76,6 @@ namespace CafeManager.WPF.ViewModels
             if (datePicker != null)
             {
                 datePicker.SelectedDate = null;
-
 
                 var textBox = FindChild<DatePickerTextBox>(datePicker);
                 if (textBox != null)
@@ -102,11 +99,11 @@ namespace CafeManager.WPF.ViewModels
             }
             return null;
         }
-        #endregion
 
-
+        #endregion handleDatePicker
 
         #region handleComboBox
+
         [RelayCommand]
         public void ClearComboBox(ComboBox comboBox)
 
@@ -117,7 +114,8 @@ namespace CafeManager.WPF.ViewModels
                 comboBox.Text = string.Empty; // Xóa nội dung Text
             }
         }
-        #endregion
+
+        #endregion handleComboBox
 
         public void Dispose()
         {

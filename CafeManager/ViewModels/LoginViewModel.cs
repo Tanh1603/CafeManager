@@ -13,6 +13,7 @@ using CafeManager.WPF.MessageBox;
 using CafeManager.Core.Services;
 using AutoMapper;
 using CafeManager.Core.DTOs;
+using System.Windows;
 
 namespace CafeManager.WPF.ViewModels
 {
@@ -67,8 +68,6 @@ namespace CafeManager.WPF.ViewModels
         private bool HasUsername => !string.IsNullOrEmpty(Username);
         private bool HasPassword => !string.IsNullOrEmpty(Password);
 
-
-
         [RelayCommand(CanExecute = nameof(CanLogin))]
         private async Task Login()
         {
@@ -82,6 +81,7 @@ namespace CafeManager.WPF.ViewModels
                     {
                         _provider.GetRequiredService<AccountStore>().SetAccount(_mapper.Map<AppUserDTO>(appuser));
                         _navigationStore.Navigation = role == 1 ? _provider.GetRequiredService<MainAdminViewModel>() : _provider.GetRequiredService<MainUserViewModel>();
+                        Application.Current.MainWindow.WindowState = WindowState.Maximized;
                     }
                     if (IsRememberAccount)
                     {

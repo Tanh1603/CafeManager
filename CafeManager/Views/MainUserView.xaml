@@ -91,8 +91,8 @@
                                                     <Image
                                                         RenderOptions.BitmapScalingMode="HighQuality"
                                                         Source="{Binding UserAccount.Avatar, Converter={StaticResource DefaultAccountImageConverter}}"
-                                                        Stretch="UniformToFill" 
-                                                        StretchDirection="DownOnly"/>
+                                                        Stretch="UniformToFill"
+                                                        StretchDirection="DownOnly" />
                                                 </Border>
                                             </Grid>
 
@@ -113,7 +113,6 @@
                                             </StackPanel>
                                         </Grid>
 
-
                                         <Separator
                                             Grid.Row="1"
                                             Width="130"
@@ -123,7 +122,6 @@
                                             VerticalAlignment="Bottom"
                                             Background="#ffffff" />
                                     </Grid>
-
 
                                     <!--  menu buttons  -->
                                     <RadioButton
@@ -135,6 +133,17 @@
                                         <StackPanel Orientation="Horizontal">
                                             <fa:IconImage Icon="ChartColumn" Style="{StaticResource menuButtonIcon}" />
                                             <TextBlock Style="{StaticResource menuButtonText}" Text="Đặt món" />
+                                        </StackPanel>
+                                    </RadioButton>
+
+                                    <RadioButton
+                                        MinWidth="200"
+                                        Command="{Binding ChangeCurrentViewModelCommand}"
+                                        CommandParameter="DistributionMaterial"
+                                        Style="{StaticResource menuButton}">
+                                        <StackPanel Orientation="Horizontal">
+                                            <fa:IconImage Icon="ChartColumn" Style="{StaticResource menuButtonIcon}" />
+                                            <TextBlock Style="{StaticResource menuButtonText}" Text="Phân phối vật tư" />
                                         </StackPanel>
                                     </RadioButton>
 
@@ -165,7 +174,6 @@
                         <Grid.RowDefinitions>
                             <RowDefinition Height="auto" />
                             <RowDefinition Height="*" />
-
                         </Grid.RowDefinitions>
                         <ToggleButton
                             x:Name="btnMenu"
@@ -185,11 +193,8 @@
                             Background="Transparent">
                             <ContentControl Content="{Binding CurrentVM}" />
                         </Grid>
-
                     </Grid>
-
                 </materialDesign:DrawerHost>
-
             </materialDesign:DialogHost>
             <materialDesign:DialogHost
                 Panel.ZIndex="1"
@@ -207,6 +212,5 @@
                 </materialDesign:DialogHost.DialogContent>
             </materialDesign:DialogHost>
         </Grid>
-
     </Grid>
 </UserControl>

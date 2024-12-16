@@ -33,9 +33,9 @@ namespace CafeManager.WPF.ViewModels
 
         private string currentVM = string.Empty;
 
-
         [ObservableProperty]
         private SettingAccountViewModel _openSettingAccountVM;
+
         public MainUserViewModel(IServiceProvider provider)
         {
             _provider = provider;
@@ -88,6 +88,7 @@ namespace CafeManager.WPF.ViewModels
                 {
                     "OrderFood" => _provider.GetRequiredService<OrderViewModel>(),
                     "Setting" => _provider.GetRequiredService<SettingAccountViewModel>(),
+                    "DistributionMaterial" => _provider.GetRequiredService<DistributionMaterialViewModel>(),
                     _ => throw new InvalidOperationException("Lỗi")
                 };
 
@@ -127,14 +128,11 @@ namespace CafeManager.WPF.ViewModels
         [ObservableProperty]
         private bool _isOpenSetting = false;
 
-
         [RelayCommand]
         private void OpenSetting()
         {
             IsOpenSetting = true;
-
         }
-
 
         public void Dispose()
         {

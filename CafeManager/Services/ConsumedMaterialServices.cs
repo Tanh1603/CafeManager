@@ -71,31 +71,6 @@ namespace CafeManager.WPF.Services
             }
         }
 
-        public async Task<Consumedmaterial?> UpdateConsumedMaterialById(int id, Consumedmaterial consumedmaterial)
-        {
-            try
-            {
-                await _unitOfWork.BeginTransactionAsync();
-
-                //await _unitOfWork.ConsumedMaterialList.UpdateById(id, consumedmaterial);
-                var res = await _unitOfWork.ConsumedMaterialList.GetById(id);
-                if (res != null)
-                {
-                    res.Quantity = consumedmaterial.Quantity;
-                }
-                await _unitOfWork.CompleteAsync();
-
-                _unitOfWork.ClearChangeTracker();
-                await _unitOfWork.CommitTransactionAsync();
-                return res;
-            }
-            catch (Exception ex)
-            {
-                await _unitOfWork.RollbackTransactionAsync();
-                throw new InvalidOperationException("Sửa vật liệu đã dùng liệu thất bại.", ex);
-            }
-        }
-
         public async Task<bool> DeleteConsumedmaterial(int id)
         {
             try
@@ -126,12 +101,6 @@ namespace CafeManager.WPF.Services
             {
                 throw;
             }
-        }
-
-        public async Task<(IEnumerable<Consumedmaterial>?, int)> GetSearchPaginateListConsumedMaterialAlter(Expression<Func<Consumedmaterial, bool>>? searchPredicate = null, int skip = 0, int take = 20)
-        {
-            _unitOfWork.ClearChangeTracker();
-            return await _unitOfWork.ConsumedMaterialList.GetByPageAsync(skip, take, searchPredicate);
         }
     }
 }

@@ -35,7 +35,6 @@ namespace CafeManager.WPF.HostBuilders
                 services.AddTransient<StaffViewModel>(provider => new StaffViewModel(provider.CreateScope()));
                 services.AddTransient<SupplierViewModel>(provider => new SupplierViewModel(provider.CreateScope()));
                 services.AddTransient<TableViewModel>(provider => new TableViewModel(provider.CreateScope()));
-                
 
                 services.AddTransient<LoginViewModel>();
                 services.AddTransient<RegisterViewModel>();
@@ -44,6 +43,7 @@ namespace CafeManager.WPF.HostBuilders
                 services.AddTransient<DistributionMaterialViewModel>(provider => new DistributionMaterialViewModel(provider.CreateScope()));
                 services.AddTransient<RequestMaterialViewModel>(provider => new RequestMaterialViewModel(provider.CreateScope()));
                 services.AddTransient<SelectInventoryViewModel>(provider => new SelectInventoryViewModel(provider.CreateScope()));
+                services.AddTransient<IncidentTableViewModel>(provider => new(provider.CreateScope()));
 
                 services.AddTransient<AddSuppierViewModel>();
                 services.AddTransient<AddMaterialViewModel>();

@@ -26,9 +26,13 @@ namespace CafeManager.WPF.ViewModels.UserViewModel
         private readonly IMapper _mapper;
 
         [ObservableProperty]
+        private bool _isLoading;
+
+        [ObservableProperty]
         private List<MaterialDTO> _listMaterialDTO = [];
 
         #region Inventory Delcare
+
         [ObservableProperty]
         private bool _isOpenReturnMaterial;
 
@@ -56,8 +60,11 @@ namespace CafeManager.WPF.ViewModels.UserViewModel
         #endregion Inventory Delcare
 
         // ===================== Filter Declare =====================
+
         #region Filter Declare
+
         private MaterialDTO? _selectedMaterial;
+
         public MaterialDTO? SelectedMaterial
         {
             get => _selectedMaterial;
@@ -88,7 +95,13 @@ namespace CafeManager.WPF.ViewModels.UserViewModel
             }
         }
 
+        private Expression<Func<Consumedmaterial, bool>> ConsumedMaterialFilter => consumedMaterial =>
+            (consumedMaterial.Isdeleted == false) &&
+            (SelectedMaterial == null || consumedMaterial.Materialsupplier.Materialid == SelectedMaterial.Materialid) &&
+            (FilterUseDate == null || FilterUseDate == consumedMaterial.Usagedate.ToDateTime(TimeOnly.MinValue));
+
         #endregion Filter Declare
+
         public DistributionMaterialViewModel(IServiceScope scope)
         {
             var provider = scope.ServiceProvider;
@@ -109,33 +122,52 @@ namespace CafeManager.WPF.ViewModels.UserViewModel
             try
             {
                 token.ThrowIfCancellationRequested();
+                IsLoading = true;
+                await Task.Delay(10000, token);
                 var dbMaterial = (await _materialSupplierServices.GetListMaterial(token)).Where(x => x.Isdeleted == false).ToList();
                 var dbSupplier = (await _materialSupplierServices.GetListExistedSupplier()).ToList();
                 var dbInventory = (await _materialSupplierServices.GetListMaterialSupplier(token)).Where(x => x.Isdeleted == false).ToList();
 
                 ListMaterialDTO = [.. _mapper.Map<List<MaterialDTO>>(dbMaterial)];
                 await LoadConsumedMaterial(token);
-
                 SelectInventoryVM.ReceiveListMaterial(ListMaterialDTO);
                 SelectInventoryVM.ReceiveListSupplier([.. _mapper.Map<List<SupplierDTO>>(dbSupplier)]);
+                IsLoading = false;
             }
             catch (OperationCanceledException)
             {
-                Debug.WriteLine("LoadData của ImportViewModel bị hủy");
+                throw new OperationCanceledException("LoadData DistributionViewModel bị hủy");
+            }
+            finally
+            {
+                IsLoading = false;
             }
         }
+
         private async Task LoadConsumedMaterial(CancellationToken token = default)
         {
-            Expression<Func<Consumedmaterial, bool>> filter = consumedMaterial =>
-                (consumedMaterial.Isdeleted == false) &&
-                (SelectedMaterial == null || consumedMaterial.Materialsupplier.Materialid == SelectedMaterial.Materialid) &&
-                (FilterUseDate == null || FilterUseDate == consumedMaterial.Usagedate.ToDateTime(TimeOnly.MinValue));
-
-
-            var dblistConsumedMaterial = await _consumedMaterialServices.GetSearchPaginateListConsumedMaterialAlter(filter, pageIndex, pageSize);
-            ListConsumedMaterialDTO = [.. _mapper.Map<List<ConsumedMaterialDTO>>(dblistConsumedMaterial.Item1)];
-            totalPages = (dblistConsumedMaterial.Item2 + pageSize - 1) / pageSize;
-            OnPropertyChanged(nameof(PageUI));
+            try
+            {
+                token.ThrowIfCancellationRequested();
+                IsLoading = true;
+                var dblistConsumedMaterial = await _consumedMaterialServices.GetSearchPaginateListConsumedMaterial(ConsumedMaterialFilter, pageIndex, pageSize, token);
+                ListConsumedMaterialDTO = [.. _mapper.Map<List<ConsumedMaterialDTO>>(dblistConsumedMaterial.Item1)];
+                totalPages = (dblistConsumedMaterial.Item2 + pageSize - 1) / pageSize;
+                OnPropertyChanged(nameof(PageUI));
+                IsLoading = false;
+            }
+            catch (OperationCanceledException)
+            {
+                throw;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            finally
+            {
+                IsLoading = false;
+            }
         }
 
         #region Open/Close View
@@ -183,7 +215,7 @@ namespace CafeManager.WPF.ViewModels.UserViewModel
                 await LoadConsumedMaterial();
             }
             IsOpenRequestMaterialView = false;
-            RequestMaterialVM.ClearValue(); 
+            RequestMaterialVM.ClearValue();
         }
 
         [RelayCommand]
@@ -233,7 +265,8 @@ namespace CafeManager.WPF.ViewModels.UserViewModel
                 MyMessageBox.ShowDialog(ioe.Message, MyMessageBox.Buttons.OK, MyMessageBox.Icons.Warning);
             }
         }
-        #endregion
+
+        #endregion Open/Close View
 
         public void Dispose()
         {
@@ -244,6 +277,7 @@ namespace CafeManager.WPF.ViewModels.UserViewModel
         }
 
         #region Phan Trang ConsumedMaterial
+
         private int pageIndex = 1;
 
         private int pageSize = 8;
@@ -287,7 +321,7 @@ namespace CafeManager.WPF.ViewModels.UserViewModel
             pageIndex = totalPages;
             await LoadConsumedMaterial();
         }
-        #endregion
 
+        #endregion Phan Trang ConsumedMaterial
     }
 }

@@ -131,7 +131,7 @@
                                         IsChecked="True"
                                         Style="{StaticResource menuButton}">
                                         <StackPanel Orientation="Horizontal">
-                                            <fa:IconImage Icon="ChartColumn" Style="{StaticResource menuButtonIcon}" />
+                                            <fa:IconImage Icon="BowlFood" Style="{StaticResource menuButtonIcon}" />
                                             <TextBlock Style="{StaticResource menuButtonText}" Text="Đặt món" />
                                         </StackPanel>
                                     </RadioButton>
@@ -142,8 +142,19 @@
                                         CommandParameter="DistributionMaterial"
                                         Style="{StaticResource menuButton}">
                                         <StackPanel Orientation="Horizontal">
-                                            <fa:IconImage Icon="ChartColumn" Style="{StaticResource menuButtonIcon}" />
+                                            <fa:IconImage Icon="Marker" Style="{StaticResource menuButtonIcon}" />
                                             <TextBlock Style="{StaticResource menuButtonText}" Text="Phân phối vật tư" />
+                                        </StackPanel>
+                                    </RadioButton>
+
+                                    <RadioButton
+                                        MinWidth="200"
+                                        Command="{Binding ChangeCurrentViewModelCommand}"
+                                        CommandParameter="IncidentTable"
+                                        Style="{StaticResource menuButton}">
+                                        <StackPanel Orientation="Horizontal">
+                                            <fa:IconImage Icon="Table" Style="{StaticResource menuButtonIcon}" />
+                                            <TextBlock Style="{StaticResource menuButtonText}" Text="Báo có sự cố bàn" />
                                         </StackPanel>
                                     </RadioButton>
 

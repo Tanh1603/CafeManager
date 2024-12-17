@@ -26,7 +26,6 @@
         <views:SettingAccountView />
     </DataTemplate>
 
-    
     <DataTemplate DataType="{x:Type userviewmodels:OrderViewModel}">
         <userviews:OrderView />
     </DataTemplate>
@@ -39,8 +38,9 @@
     <DataTemplate DataType="{x:Type addviewmodels:SelectInventoryViewModel}">
         <addupdateview:SelectInventoryView />
     </DataTemplate>
-
-
+    <DataTemplate DataType="{x:Type userviewmodels:IncidentTableViewModel}">
+        <userviews:incidentTableView />
+    </DataTemplate>
 
     <DataTemplate DataType="{x:Type admdinviewmodels:AppUserViewModel}">
         <adminviews:AppUserView />

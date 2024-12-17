@@ -16,7 +16,7 @@ namespace CafeManager.WPF.ViewModels
         private readonly IServiceProvider _provider;
         private readonly NavigationStore _navigationStore;
         private readonly AccountStore _accountStore;
-        private CancellationTokenSource _cts = new();
+        private CancellationTokenSource? _cts = default;
 
         [ObservableProperty]
         private ObservableObject? _currentViewModel;
@@ -65,36 +65,29 @@ namespace CafeManager.WPF.ViewModels
 
             try
             {
-                CurrentViewModel = viewModel switch
+                _cts.Token.ThrowIfCancellationRequested();
+                Application.Current.Dispatcher.InvokeAsync(() =>
                 {
-                    "Home" => _provider.GetRequiredService<HomeViewModel>(),
-                    "Food" => _provider.GetRequiredService<FoodViewModel>(),
-                    "Invoice" => _provider.GetRequiredService<InvoiceViewModel>(),
-                    "Table" => _provider.GetRequiredService<TableViewModel>(),
-                    "Import" => _provider.GetRequiredService<ImportViewModel>(),
-                    "Inventory" => _provider.GetRequiredService<InventoryViewModel>(),
-                    "Supplier" => _provider.GetRequiredService<SupplierViewModel>(),
-                    "Staff" => _provider.GetRequiredService<StaffViewModel>(),
-                    "AppUser" => _provider.GetRequiredService<AppUserViewModel>(),
-                    "Setting" => _provider.GetRequiredService<SettingAccountViewModel>(),
-                    _ => throw new Exception("Lỗi")
-                };
-                currentVM = viewModel;
-                Task.Run(async () =>
-                {
-                    try
+                    CurrentViewModel = viewModel switch
                     {
-                        _cts?.Token.ThrowIfCancellationRequested();
-                        if (CurrentViewModel is IDataViewModel dataViewModel)
-                        {
-                            await dataViewModel.LoadData(_cts.Token);
-                        }
-                    }
-                    catch (OperationCanceledException)
+                        "Home" => _provider.GetRequiredService<HomeViewModel>(),
+                        "Food" => _provider.GetRequiredService<FoodViewModel>(),
+                        "Invoice" => _provider.GetRequiredService<InvoiceViewModel>(),
+                        "Table" => _provider.GetRequiredService<TableViewModel>(),
+                        "Import" => _provider.GetRequiredService<ImportViewModel>(),
+                        "Inventory" => _provider.GetRequiredService<InventoryViewModel>(),
+                        "Supplier" => _provider.GetRequiredService<SupplierViewModel>(),
+                        "Staff" => _provider.GetRequiredService<StaffViewModel>(),
+                        "AppUser" => _provider.GetRequiredService<AppUserViewModel>(),
+                        "Setting" => _provider.GetRequiredService<SettingAccountViewModel>(),
+                        _ => throw new Exception("Lỗi")
+                    };
+                    currentVM = viewModel;
+                    if (CurrentViewModel is IDataViewModel dataViewModel)
                     {
-                        throw;
+                        dataViewModel.LoadData(_cts.Token);
                     }
-                }, _cts.Token);
+                }, System.Windows.Threading.DispatcherPriority.Loaded, _cts.Token);
             }
             catch (OperationCanceledException oe)
             {
@@ -113,6 +106,9 @@ namespace CafeManager.WPF.ViewModels
         [RelayCommand]
         private void SignOut()
         {
+            _cts?.Cancel();
+            _cts?.Dispose();
+            _cts = default;
             _navigationStore.Navigation = _provider.GetRequiredService<LoginViewModel>();
             _accountStore.ClearAccount();
             Application.Current.MainWindow.WindowState = WindowState.Normal;

@@ -53,9 +53,18 @@ namespace CafeManager.WPF.Services
 
         public async Task<Coffeetable?> UpdateCoffeeTable(Coffeetable coffeetable)
         {
-            var res = await _unitOfWork.CoffeeTableList.Update(coffeetable);
-            _unitOfWork.Complete();
-            return res;
+            try
+            {
+                await _unitOfWork.BeginTransactionAsync();
+                var res = await _unitOfWork.CoffeeTableList.Update(coffeetable);
+                await _unitOfWork.CompleteAsync();
+                await _unitOfWork.CommitTransactionAsync();
+                return res;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
         }
 
         public async Task<bool> DeleteCoffeeTable(int id)

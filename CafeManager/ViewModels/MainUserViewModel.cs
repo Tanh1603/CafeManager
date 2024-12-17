@@ -1,17 +1,12 @@
-﻿using CafeManager.Core.Data;
-using CafeManager.Core.DTOs;
-using CafeManager.WPF.Services;
+﻿using CafeManager.Core.DTOs;
+using CafeManager.Core.Services;
 using CafeManager.WPF.Stores;
+using CafeManager.WPF.ViewModels.UserViewModel;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Microsoft.Extensions.DependencyInjection;
-using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.Windows;
-using CafeManager.WPF.MessageBox;
-using CafeManager.WPF.Assets.UsersControls;
-using CafeManager.WPF.ViewModels.UserViewModel;
-using System.Windows.Media.Imaging;
-using CafeManager.Core.Services;
 
 namespace CafeManager.WPF.ViewModels
 {
@@ -21,6 +16,14 @@ namespace CafeManager.WPF.ViewModels
         private readonly NavigationStore _navigationStore;
         private readonly AccountStore _accountStore;
         private CancellationTokenSource? _cts = default;
+
+        private Dictionary<string, ObservableObject> _lazyViews => new()
+        {
+            ["OrderFood"] = _provider.GetRequiredService<OrderViewModel>(),
+            ["Setting"] = _provider.GetRequiredService<SettingAccountViewModel>(),
+            ["DistributionMaterial"] = _provider.GetRequiredService<DistributionMaterialViewModel>(),
+            ["IncidentTable"] = _provider.GetRequiredService<IncidentTableViewModel>(),
+        };
 
         [ObservableProperty]
         private ObservableObject? _currentVM;
@@ -43,7 +46,6 @@ namespace CafeManager.WPF.ViewModels
             _accountStore = provider.GetRequiredService<AccountStore>();
             ChangeCurrentViewModel("OrderFood");
             LoadAccount();
-            currentVM = "OrderFood";
             OpenSettingAccountVM = _provider.GetRequiredService<SettingAccountViewModel>();
             OpenSettingAccountVM.Close += OpenSettingAccountVM_Close;
             _accountStore.ChangeAccount += _accountStore_ChangeAccount;
@@ -72,46 +74,38 @@ namespace CafeManager.WPF.ViewModels
         {
             if (currentVM.Equals(choice)) return;
 
-            if (_cts != default)
-            {
-                _cts.Cancel();
-                _cts.Dispose();
-            }
-            _cts = default;
+            _cts?.Cancel();
+            _cts?.Dispose();
+            _cts = new CancellationTokenSource();
 
             try
             {
-                _cts?.Token.ThrowIfCancellationRequested();
-                CurrentVM = choice switch
-                {
-                    "OrderFood" => _provider.GetRequiredService<OrderViewModel>(),
-                    "Setting" => _provider.GetRequiredService<SettingAccountViewModel>(),
-                    "DistributionMaterial" => _provider.GetRequiredService<DistributionMaterialViewModel>(),
-                    _ => throw new InvalidOperationException("Lỗi")
-                };
-
-                _cts = new();
-
-                if (CurrentVM is IDataViewModel dataVM)
-                {
-                    Task.Run(async () =>
-                    {
-                        await dataVM.LoadData(_cts.Token);
-                    }, _cts.Token);
-                }
+                _cts.Token.ThrowIfCancellationRequested();
+                Application.Current.Dispatcher.InvokeAsync(() =>
+               {
+                   _cts.Token.ThrowIfCancellationRequested();
+                   CurrentVM = choice switch
+                   {
+                       "OrderFood" => _provider.GetRequiredService<OrderViewModel>(),
+                       "Setting" => _provider.GetRequiredService<SettingAccountViewModel>(),
+                       "DistributionMaterial" => _provider.GetRequiredService<DistributionMaterialViewModel>(),
+                       "IncidentTable" => _provider.GetRequiredService<IncidentTableViewModel>(),
+                       _ => throw new Exception("Lỗi")
+                   };
+                   currentVM = choice;
+                   if (CurrentVM is IDataViewModel dataVM)
+                   {
+                       dataVM.LoadData(_cts.Token);
+                   }
+               }, System.Windows.Threading.DispatcherPriority.Loaded, _cts.Token);
             }
             catch (OperationCanceledException)
             {
-                throw;
+                Debug.Print("Tác vụ thay đổi ViewModel đã bị hủy.");
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                throw;
-            }
-            finally
-            {
-                currentVM = choice;
-                IsLeftDrawerOpen = false;
+                Debug.Print($"Lỗi khi thay đổi ViewModel: {ex.Message}");
             }
         }
 
@@ -124,6 +118,9 @@ namespace CafeManager.WPF.ViewModels
         [RelayCommand]
         private void SignOut()
         {
+            _cts?.Cancel();
+            _cts?.Dispose();
+            _cts = default;
             _navigationStore.Navigation = _provider.GetRequiredService<LoginViewModel>();
             Application.Current.MainWindow.WindowState = WindowState.Normal;
         }

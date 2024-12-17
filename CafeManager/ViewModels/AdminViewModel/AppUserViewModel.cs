@@ -35,25 +35,6 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
         [ObservableProperty]
         private UpdateAppUserViewModel _updateAppUserVM;
 
-        #region Filter Declare
-
-        private string? _role;
-
-        public string? Role
-        {
-            get => _role; set
-            {
-                if (_role != value)
-                {
-                    _role = value;
-                    OnPropertyChanged();
-                    _ = LoadData(_token);
-                }
-            }
-        }
-
-        #endregion Filter Declare
-
         public AppUserViewModel(IServiceScope scope)
         {
             var provider = scope.ServiceProvider;
@@ -76,10 +57,9 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
             {
                 token.ThrowIfCancellationRequested();
                 IsLoading = true;
-                int userRole = (Role == "Admin" ? 1 : 0);
                 Expression<Func<Appuser, bool>> filter = appuser =>
                     (appuser.Isdeleted == false) &&
-                    (Role == null || userRole ==appuser.Role);
+                    (appuser.Role == 0);
                 var dbListAppuser = await _appUserServices.GetSearchPaginateListAppuser(filter, pageIndex, pageSize);
                 ListAppUserDTO = [.. _mapper.Map<List<AppUserDTO>>(dbListAppuser.Item1)];
                 DecryptPassword();
@@ -125,10 +105,6 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
         {
             try
             {
-                if(appUser.Role == "Admin")
-                {
-                    throw new InvalidOperationException("Không thể xoá tài khoản Admin");
-                }    
                 var res = MyMessageBox.ShowDialog("Bạn có muốn xóa tài khoản này ko", MyMessageBox.Buttons.Yes_No, MyMessageBox.Icons.Warning);
                 if (res.Equals("1"))
                 {

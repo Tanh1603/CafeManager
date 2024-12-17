@@ -118,108 +118,102 @@
             </StackPanel>
 
             <!--  Invoice Datagrid  -->
-            <Border
+
+            <DataGrid
+                x:Name="SuppliersDataGrid"
                 Grid.Row="3"
-                Width="auto"
                 Margin="0,10,0,0"
-                BorderBrush="#602414"
-                BorderThickness="2"
-                CornerRadius="10">
+                VerticalAlignment="Top"
+                AlternationCount="{Binding ListInvoiceDTO.Count}"
+                CellStyle="{DynamicResource DataGridCellStyle1}"
+                ColumnHeaderStyle="{DynamicResource DataGridColumnHeaderStyle1}"
+                ItemsSource="{Binding ListInvoiceDTO}"
+                RowStyle="{DynamicResource DataGridRowStyle1}"
+                Style="{DynamicResource DataGridStyle1}">
+                <DataGrid.Columns>
 
-                <DataGrid
-                    x:Name="SuppliersDataGrid"
-                    VerticalAlignment="Top"
-                    AlternationCount="{Binding ListInvoiceDTO.Count}"
-                    CellStyle="{DynamicResource DataGridCellStyle1}"
-                    ColumnHeaderStyle="{DynamicResource DataGridColumnHeaderStyle1}"
-                    ItemsSource="{Binding ListInvoiceDTO}"
-                    RowStyle="{DynamicResource DataGridRowStyle1}"
-                    Style="{DynamicResource DataGridStyle1}">
-                    <DataGrid.Columns>
+                    <DataGridTextColumn
+                        Width="auto"
+                        Header="STT"
+                        IsReadOnly="True">
+                        <DataGridTextColumn.Binding>
+                            <Binding
+                                Converter="{StaticResource RowIndexConverter}"
+                                Path="(ItemsControl.AlternationIndex)"
+                                RelativeSource="{RelativeSource AncestorType=DataGridRow}" />
+                        </DataGridTextColumn.Binding>
+                    </DataGridTextColumn>
+                    <DataGridTextColumn
+                        Width="*"
+                        Binding="{Binding Paymentstartdate, StringFormat=dd/MM/yyyy HH:mm}"
+                        CanUserResize="False"
+                        Header="Ngày tạo hóa đơn"
+                        IsReadOnly="True" />
+                    <DataGridTextColumn
+                        Width="*"
+                        Binding="{Binding Paymentenddate, StringFormat=dd/MM/yyyy HH:mm}"
+                        CanUserResize="False"
+                        Header="Ngày thanh toán"
+                        IsReadOnly="True" />
+                    <DataGridTextColumn
+                        Width="*"
+                        Binding="{Binding Paymentstatus}"
+                        CanUserResize="False"
+                        Header="Trạng thái"
+                        IsReadOnly="True" />
+                    <DataGridTextColumn
+                        Width="*"
+                        Binding="{Binding Paymentmethod}"
+                        CanUserResize="False"
+                        Header="Phương thức"
+                        IsReadOnly="True" />
+                    <DataGridTextColumn
+                        Width="auto"
+                        Binding="{Binding Discountinvoice, StringFormat='{}{0:0}%'}"
+                        CanUserResize="False"
+                        Header="Giảm giá"
+                        IsReadOnly="True" />
 
-                        <DataGridTextColumn
-                            Width="auto"
-                            Header="STT"
-                            IsReadOnly="True">
-                            <DataGridTextColumn.Binding>
-                                <Binding
-                                    Converter="{StaticResource RowIndexConverter}"
-                                    Path="(ItemsControl.AlternationIndex)"
-                                    RelativeSource="{RelativeSource AncestorType=DataGridRow}" />
-                            </DataGridTextColumn.Binding>
-                        </DataGridTextColumn>
-                        <DataGridTextColumn
-                            Width="*"
-                            Binding="{Binding Paymentstartdate, StringFormat=dd/MM/yyyy HH:mm}"
-                            CanUserResize="False"
-                            Header="Ngày tạo hóa đơn"
-                            IsReadOnly="True" />
-                        <DataGridTextColumn
-                            Width="*"
-                            Binding="{Binding Paymentenddate, StringFormat=dd/MM/yyyy HH:mm}"
-                            CanUserResize="False"
-                            Header="Ngày thanh toán"
-                            IsReadOnly="True" />
-                        <DataGridTextColumn
-                            Width="*"
-                            Binding="{Binding Paymentstatus}"
-                            CanUserResize="False"
-                            Header="Trạng thái"
-                            IsReadOnly="True" />
-                        <DataGridTextColumn
-                            Width="*"
-                            Binding="{Binding Paymentmethod}"
-                            CanUserResize="False"
-                            Header="Phương thức"
-                            IsReadOnly="True" />
-                        <DataGridTextColumn
-                            Width="auto"
-                            Binding="{Binding Discountinvoice, StringFormat='{}{0:0}%'}"
-                            CanUserResize="False"
-                            Header="Giảm giá"
-                            IsReadOnly="True" />
+                    <DataGridTextColumn
+                        Width="auto"
+                        Binding="{Binding Staff.Staffname}"
+                        CanUserResize="False"
+                        Header="Người tạo hóa đơn"
+                        IsReadOnly="True" />
 
-                        <DataGridTextColumn
-                            Width="auto"
-                            Binding="{Binding Staff.Staffname}"
-                            CanUserResize="False"
-                            Header="Người tạo hóa đơn"
-                            IsReadOnly="True" />
+                    <DataGridTextColumn
+                        Width="auto"
+                        Binding="{Binding CustomerOrTable, Mode=OneWay}"
+                        CanUserResize="False"
+                        Header="Bàn(Khách)"
+                        IsReadOnly="True" />
 
-                        <DataGridTextColumn
-                            Width="auto"
-                            Binding="{Binding CustomerOrTable, Mode=OneWay}"
-                            CanUserResize="False"
-                            Header="Bàn(Khách)"
-                            IsReadOnly="True" />
-
-                        <DataGridTemplateColumn
-                            Width="auto"
-                            Header="Tùy chỉnh"
-                            IsReadOnly="True">
-                            <DataGridTemplateColumn.CellTemplate>
-                                <DataTemplate>
-                                    <StackPanel Orientation="Horizontal">
-                                        <Button
-                                            Command="{Binding DataContext.InfoInvoiceCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
-                                            CommandParameter="{Binding}"
-                                            Style="{StaticResource gridEditButton}">
-                                            <ma:PackIconMaterial Kind="Information" Style="{StaticResource gridButtonIcon}" />
-                                        </Button>
-                                        <Button
-                                            Margin="5,0,0,0"
-                                            Command="{Binding DataContext.DeleteInvoiceCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
-                                            CommandParameter="{Binding}"
-                                            Style="{StaticResource gridRemoveButton}">
-                                            <ma:PackIconMaterial Kind="DeleteOutline" Style="{StaticResource gridButtonIcon}" />
-                                        </Button>
-                                    </StackPanel>
-                                </DataTemplate>
-                            </DataGridTemplateColumn.CellTemplate>
-                        </DataGridTemplateColumn>
-                    </DataGrid.Columns>
-                </DataGrid>
-            </Border>
+                    <DataGridTemplateColumn
+                        Width="auto"
+                        Header="Tùy chỉnh"
+                        IsReadOnly="True">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <StackPanel Orientation="Horizontal">
+                                    <Button
+                                        Command="{Binding DataContext.InfoInvoiceCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                        CommandParameter="{Binding}"
+                                        Style="{StaticResource gridEditButton}">
+                                        <ma:PackIconMaterial Kind="Information" Style="{StaticResource gridButtonIcon}" />
+                                    </Button>
+                                    <Button
+                                        Margin="5,0,0,0"
+                                        Command="{Binding DataContext.DeleteInvoiceCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                        CommandParameter="{Binding}"
+                                        Style="{StaticResource gridRemoveButton}">
+                                        <ma:PackIconMaterial Kind="DeleteOutline" Style="{StaticResource gridButtonIcon}" />
+                                    </Button>
+                                </StackPanel>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                </DataGrid.Columns>
+            </DataGrid>
 
             <Grid
                 Grid.Row="4"
@@ -276,14 +270,17 @@
             </materialDesign:DialogHost.DialogContent>
         </materialDesign:DialogHost>
 
-        <Grid Background="White" Opacity="0.3" Visibility="{Binding IsLoading, Converter={StaticResource BooleanToVisibilityConverter}}">
+        <Grid
+            Background="White"
+            Opacity="0.3"
+            Visibility="{Binding IsLoading, Converter={StaticResource BooleanToVisibilityConverter}}">
             <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
                 <TextBlock Style="{StaticResource infoText}" Text="Đang tải tài nguyên.." />
                 <ProgressBar
+                    Width="50"
+                    Height="50"
                     IsIndeterminate="True"
                     Style="{StaticResource MaterialDesignCircularProgressBar}"
-                    Height="50"
-                    Width="50"
                     Value="35" />
             </StackPanel>
         </Grid>

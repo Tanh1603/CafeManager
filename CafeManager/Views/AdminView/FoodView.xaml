@@ -30,6 +30,7 @@
             <!--  Page Title  -->
             <TextBlock
                 Grid.Row="0"
+                Margin="0,20,0,10"
                 HorizontalAlignment="Left"
                 FontSize="32"
                 FontWeight="SemiBold"
@@ -58,7 +59,7 @@
                 Grid.Row="0"
                 Width="200"
                 Height="1"
-                Margin="0,5,0,0"
+              
                 HorizontalAlignment="Left"
                 VerticalAlignment="Bottom"
                 Background="#f5f5f5" />
@@ -75,8 +76,7 @@
                 <ComboBox
                     Name="cbFoodCategory"
                     Grid.Column="0"
-                    MinWidth="150"
-                    MinHeight="35"
+                    Width="200"
                     ItemsSource="{Binding ListFoodCategory}"
                     SelectedItem="{Binding SelectedFoodCategory}"
                     Style="{StaticResource ComboBoxStyle}"
@@ -228,14 +228,17 @@
             </materialDesign:DialogHost.DialogContent>
         </materialDesign:DialogHost>
 
-        <Grid Background="White" Opacity="0.3" Visibility="{Binding IsLoading, Converter={StaticResource BooleanToVisibilityConverter}}">
+        <Grid
+            Background="White"
+            Opacity="0.3"
+            Visibility="{Binding IsLoading, Converter={StaticResource BooleanToVisibilityConverter}}">
             <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
                 <TextBlock Style="{StaticResource infoText}" Text="Đang tải tài nguyên.." />
                 <ProgressBar
+                    Width="50"
+                    Height="50"
                     IsIndeterminate="True"
                     Style="{StaticResource MaterialDesignCircularProgressBar}"
-                    Height="50"
-                    Width="50"
                     Value="35" />
             </StackPanel>
         </Grid>

@@ -1,6 +1,8 @@
 ﻿using CafeManager.Core.Data;
+using System.Collections;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 using System.Runtime.CompilerServices;
 
 #nullable disable
@@ -9,6 +11,8 @@ namespace CafeManager.Core.DTOs
 {
     public class SupplierDTO : BaseDTO
     {
+        
+        
         private int _supplierid;
 
         private string _suppliername;
@@ -36,16 +40,17 @@ namespace CafeManager.Core.DTOs
                 OnPropertyChanged();
             }
         }
-
+        
         public string Suppliername
         {
             get => _suppliername; set
             {
                 _suppliername = value;
+                
                 OnPropertyChanged();
             }
         }
-
+        
         public string Representativesupplier
         {
             get => _representativesupplier; set
@@ -54,7 +59,7 @@ namespace CafeManager.Core.DTOs
                 OnPropertyChanged();
             }
         }
-
+   
         public string Phone
         {
             get => _phone; set
@@ -124,6 +129,10 @@ namespace CafeManager.Core.DTOs
             }
         }
 
+        public bool HasErrors => throw new NotImplementedException();
+
+        public event EventHandler<DataErrorsChangedEventArgs> ErrorsChanged;
+
         public SupplierDTO Clone()
         {
             return new SupplierDTO
@@ -142,5 +151,8 @@ namespace CafeManager.Core.DTOs
                 Materialsuppliers = Materialsuppliers
             };
         }
+
+        
+        
     }
 }

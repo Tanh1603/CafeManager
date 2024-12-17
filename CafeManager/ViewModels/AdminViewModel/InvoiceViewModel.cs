@@ -8,17 +8,23 @@ using CafeManager.WPF.ViewModels.AddViewModel;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.IdentityModel.Tokens;
+using System.Collections;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq.Expressions;
 
 namespace CafeManager.WPF.ViewModels.AdminViewModel
 {
-    public partial class InvoiceViewModel : ObservableObject, IDataViewModel
+    public partial class InvoiceViewModel : ObservableObject , IDataViewModel, INotifyDataErrorInfo
     {
         private readonly InvoiceServices _invoiceServices;
         private readonly IMapper _mapper;
         private CancellationToken _token = default;
+
+        private readonly ErrorViewModel _errorViewModel;
 
         [ObservableProperty]
         private bool _isLoading;
@@ -42,8 +48,28 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
                 if (_startDate != value)
                 {
                     _startDate = value;
+                    ValidateDates();
+                   
                     OnPropertyChanged();
+                   
                     _ = LoadData(_token);
+                }
+            }
+        }
+
+        private void ValidateDates()
+        {
+            // Xóa lỗi trước đó cho cả hai trường
+            _errorViewModel.RemoveErrors(nameof(StartDate));
+            _errorViewModel.RemoveErrors(nameof(EndDate));
+
+            // Thêm lỗi mới nếu StartDate lớn hơn EndDate
+            if (StartDate.HasValue && EndDate.HasValue)
+            {
+                if (StartDate.Value > EndDate.Value)
+                {
+                    _errorViewModel.AddError(nameof(StartDate), "Ngày bắt đầu không được lớn hơn ngày kết thúc");
+                    _errorViewModel.AddError(nameof(EndDate), "Ngày kết thúc không được nhỏ hơn ngày bắt đầu");
                 }
             }
         }
@@ -58,7 +84,9 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
                 if (value != _endDate)
                 {
                     _endDate = value;
+                    ValidateDates();
                     OnPropertyChanged();
+                   
                     _ = LoadData(_token);
                 }
             }
@@ -73,6 +101,8 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
                 if (_status != value)
                 {
                     _status = value;
+                 
+
                     OnPropertyChanged();
                     _ = LoadData(_token);
                 }
@@ -100,6 +130,13 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
             _invoiceServices = provider.GetRequiredService<InvoiceServices>();
             _mapper = provider.GetRequiredService<IMapper>();
             ModifyInvoiceVM = provider.GetRequiredService<ModifyInvoiceViewModel>();
+            _errorViewModel = new ErrorViewModel();
+            _errorViewModel.ErrorsChanged += _errorViewModel_ErrorsChanged;
+        }
+
+        private void _errorViewModel_ErrorsChanged(object? sender, DataErrorsChangedEventArgs e)
+        {
+            ErrorsChanged?.Invoke(this, e);
         }
 
         public async Task LoadData(CancellationToken token = default)
@@ -185,6 +222,7 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
         private int pageSize = 15;
         private int totalPages = 0;
 
+
         public string PageUI => $"{pageIndex}/{totalPages}";
 
         [RelayCommand]
@@ -224,5 +262,15 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
         }
 
         #endregion Phân trang
+
+        public event EventHandler<DataErrorsChangedEventArgs>? ErrorsChanged;
+        public IEnumerable GetErrors(string propertyName)
+        {
+            return _errorViewModel.GetErrors(propertyName);
+        }
+        public bool HasErrors => _errorViewModel.HasErrors;
+
+
+       
     }
 }

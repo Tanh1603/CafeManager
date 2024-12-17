@@ -8,6 +8,8 @@ using CafeManager.WPF.Views.UserView;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.VisualBasic;
+using System.Buffers;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Windows;
@@ -26,6 +28,7 @@ namespace CafeManager.WPF.ViewModels.UserViewModel
 
         [ObservableProperty]
         private ObservableCollection<CoffeetableDTO> _listCoffeeTableDTO = [];
+  
 
         [ObservableProperty]
         private ObservableCollection<FoodCategoryDTO> _listFoodCategoryDTO = [];
@@ -99,6 +102,10 @@ namespace CafeManager.WPF.ViewModels.UserViewModel
             {
                 token.ThrowIfCancellationRequested();
                 var dbListCoffeeTable = (await _coffeTableServices.GetListCoffeTable(token)).Where(x => x.Isdeleted == false);
+                foreach (var table in dbListCoffeeTable)
+                {
+                    table.Statustable = "Trống";  // Trạng thái ban đầu của bàn là "Trống"
+                }
                 var dbListFoodCategory = (await _foodCategoryServices.GetAllListFoodCategory(token)).Where(x => x.Isdeleted == false);
                 var dbStaff = (await _staffServices.GetListStaff(token)).Where(x => x.Isdeleted == false);
                 var dbAllFood = (await _foodServices.GetAllFood(token)).Where(x => x.Isdeleted == false);
@@ -126,6 +133,9 @@ namespace CafeManager.WPF.ViewModels.UserViewModel
                     MyMessageBox.ShowDialog($"Bạn muốn tạo hóa đơn cho {tableDTO.TableName} ?", MyMessageBox.Buttons.Yes_No, MyMessageBox.Icons.Question);
                 if (messageBox.Equals("1"))
                 {
+                    tableDTO.Statustable = "Đang sử dụng";
+
+                   
                     SelectedInvoiceDTO = new InvoiceDTO()
                     {
                         Coffeetableid = tableDTO.Coffeetableid,
@@ -140,6 +150,7 @@ namespace CafeManager.WPF.ViewModels.UserViewModel
             SelectedInvoiceDTO = ListInvoiceDTO.FirstOrDefault(x => x.Coffeetableid == tableDTO.Coffeetableid) ?? new();
             OnPropertyChanged(nameof(SelectedInvoiceDTO.Coffeetable.TableName));
         }
+
 
         [RelayCommand]
         private void ChooseFood(FoodDTO foodDTO)
@@ -226,6 +237,13 @@ namespace CafeManager.WPF.ViewModels.UserViewModel
                     var addInvoice = await AddInvoiceToDataBase("Hóa đơn đã thanh toán");
                     if (addInvoice != null)
                     {
+                        if (SelectedInvoiceDTO.IsCoffeeTable)
+                        {
+                            var tableDTO = SelectedInvoiceDTO.Coffeetable;
+                            tableDTO.Statustable = "Trống"; // Cập nhật trạng thái bàn về "Trống"
+
+                           
+                        }
                         ListInvoiceDTO.Remove(SelectedInvoiceDTO);
                         MyMessageBox.ShowDialog("Thanh toán hóa đơn thành công", MyMessageBox.Buttons.OK, MyMessageBox.Icons.None);
                         SelectedInvoiceDTO = new();
@@ -303,7 +321,7 @@ namespace CafeManager.WPF.ViewModels.UserViewModel
             }
             if (SelectedInvoiceDTO.Coffeetableid == null)
             {
-                MyMessageBox.ShowDialog("Đang chọn hóa đơn mang về vui lòng bàn có hóa đơn");
+                MyMessageBox.ShowDialog("Đang chọn hóa đơn mang về vui lòng chọn bàn có hóa đơn");
                 return;
             }
             if (SelectedInvoiceDTO.Coffeetableid == SelectedSwapTable.Coffeetableid)

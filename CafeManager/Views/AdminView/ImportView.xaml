@@ -82,11 +82,18 @@
                     Foreground="#602414"
                     Text="Nhà cung cấp:" />
                 <ComboBox
+                    x:Name="cbsupplier"
                     Width="160"
                     materialDesign:TextFieldAssist.HasClearButton="True"
                     ItemsSource="{Binding ModifyImportVM.ListSupplier}"
                     SelectedItem="{Binding SelectedSupplier}"
-                    Style="{StaticResource MaterialDesignFilledComboBox}">
+                    Style="{StaticResource ComboBoxStyle}">
+                    <ComboBox.ItemContainerStyle>
+                        <Style BasedOn="{StaticResource ComboBoxItemStyle}" TargetType="ComboBoxItem">
+                            <Setter Property="Width" Value="{Binding ActualWidth, ElementName=cbsupplier}" />
+                            <Setter Property="Height" Value="{Binding ActualHeight, ElementName=cbsupplier}" />
+                        </Style>
+                    </ComboBox.ItemContainerStyle>
                     <ComboBox.ItemTemplate>
                         <DataTemplate>
                             <Grid>
@@ -109,11 +116,18 @@
                     Foreground="#602414"
                     Text="Người nhận:" />
                 <ComboBox
+                    x:Name="cbreceiver"
                     Width="150"
                     materialDesign:TextFieldAssist.HasClearButton="True"
                     ItemsSource="{Binding ModifyImportVM.ListStaff}"
                     SelectedItem="{Binding SelectedStaff}"
-                    Style="{StaticResource MaterialDesignFilledComboBox}">
+                    Style="{StaticResource ComboBoxStyle}">
+                    <ComboBox.ItemContainerStyle>
+                        <Style BasedOn="{StaticResource ComboBoxItemStyle}" TargetType="ComboBoxItem">
+                            <Setter Property="Width" Value="{Binding ActualWidth, ElementName=cbreceiver}" />
+                            <Setter Property="Height" Value="{Binding ActualHeight, ElementName=cbreceiver}" />
+                        </Style>
+                    </ComboBox.ItemContainerStyle>
                     <ComboBox.ItemTemplate>
                         <DataTemplate>
                             <Grid>
@@ -135,10 +149,13 @@
                     Foreground="#602414"
                     Text="Ngày nhập từ:" />
                 <DatePicker
-                    Width="140"
+                    Width="170"
                     materialDesign:TextFieldAssist.HasClearButton="True"
+                    CalendarStyle="{StaticResource MaterialDesignCalendarPortrait}"
                     SelectedDate="{Binding StartDate}"
-                    Style="{StaticResource MaterialDesignFilledDatePicker}" />
+                    Style="{StaticResource DatePicker}"
+                    Tag="Chọn ngày"
+                     Validation.ErrorTemplate="{StaticResource ErrorMessage}"/>
 
                 <TextBlock
                     Margin="10,0"
@@ -148,17 +165,20 @@
                     Foreground="#602414"
                     Text="Đến:" />
                 <DatePicker
-                    Width="140"
+                    Width="170"
                     materialDesign:TextFieldAssist.HasClearButton="True"
+                    CalendarStyle="{StaticResource MaterialDesignCalendarPortrait}"
                     SelectedDate="{Binding EndDate}"
-                    Style="{StaticResource MaterialDesignFilledDatePicker}" />
+                    Style="{StaticResource DatePicker}"
+                    Tag="Chọn ngày"
+                     Validation.ErrorTemplate="{StaticResource ErrorMessage}"/>
             </StackPanel>
 
             <!--  Import Datagrid  -->
             <Border
                 Grid.Row="2"
                 Width="auto"
-                Margin="0,10,0,0"
+                Margin="0,20,0,0"
                 VerticalAlignment="Top">
 
                 <DataGrid

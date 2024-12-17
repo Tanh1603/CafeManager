@@ -134,7 +134,7 @@
 
 
 
-
+        <Setter Property="MinWidth" Value="140"/>
         <Setter Property="VerticalAlignment" Value="Center" />
         <Setter Property="Template">
             <Setter.Value>
@@ -162,16 +162,41 @@
 
 
     <ControlTemplate x:Key="ErrorMessage">
+
         <StackPanel>
-            <AdornedElementPlaceholder x:Name="textbox" />
+            <Border BorderBrush="Red" BorderThickness="1">
+
+                <AdornedElementPlaceholder x:Name="textbox" />
+            </Border>
 
             <TextBlock
                 Width="{Binding ActualWidth, ElementName=textbox}"
                 Foreground="Red"
                 Text="{Binding [0].ErrorContent}"
                 TextWrapping="Wrap" />
-
-
         </StackPanel>
+
+
+
     </ControlTemplate>
+    <ControlTemplate x:Key="ErrorMessageReg">
+
+        <StackPanel>
+            
+
+               <AdornedElementPlaceholder x:Name="textbox" />
+            
+
+            <TextBlock
+            Width="{Binding ActualWidth, ElementName=textbox}"
+            Foreground="Red"
+            Text="{Binding [0].ErrorContent}"
+            TextWrapping="Wrap" />
+        </StackPanel>
+
+
+
+    </ControlTemplate>
+
+    <FontFamily x:Key="coffe">pack://application:,,,/Assets/Fonts/#Butter Chicken</FontFamily>
 </ResourceDictionary>

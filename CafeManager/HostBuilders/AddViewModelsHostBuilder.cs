@@ -24,7 +24,7 @@ namespace CafeManager.WPF.HostBuilders
                 services.AddTransient<MainAdminViewModel>();
                 services.AddTransient<MainUserViewModel>();
 
-                services.AddTransient<AppUserViewModel>();
+                services.AddTransient<AppUserViewModel>(provider => new AppUserViewModel(provider.CreateScope()));
                 services.AddTransient<FoodViewModel>(provider => new FoodViewModel(provider.CreateScope()));
                 services.AddTransient<FoodCategoryViewModel>(provider => new FoodCategoryViewModel(provider.CreateScope()));
                 services.AddTransient<HomeViewModel>();
@@ -51,6 +51,7 @@ namespace CafeManager.WPF.HostBuilders
                 services.AddTransient<AddImportViewModel>();
                 services.AddTransient<ModifyStaffViewModel>();
                 services.AddTransient<ModifyInvoiceViewModel>();
+                services.AddTransient<UpdateAppUserViewModel>(provider => new(provider.CreateScope()));
 
                 services.AddSingleton<NavigationStore>();
                 services.AddSingleton<AccountStore>();

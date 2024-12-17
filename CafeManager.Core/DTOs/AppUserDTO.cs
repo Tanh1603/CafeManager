@@ -10,6 +10,7 @@ namespace CafeManager.Core.DTOs
     {
         private int _appUserId;
         private string _username;
+        private string _password;
         private string _displayName;
         private string _email;
         private string _role;
@@ -37,6 +38,19 @@ namespace CafeManager.Core.DTOs
                 if (_username != value)
                 {
                     _username = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
+        public string Password
+        {
+            get => _password;
+            set
+            {
+                if (_password != value)
+                {
+                    _password = value;
                     OnPropertyChanged();
                 }
             }
@@ -117,6 +131,7 @@ namespace CafeManager.Core.DTOs
                 Displayname = Displayname,
                 Email = Email,
                 Role = Role,
+                Password = Password,
                 Avatar = Avatar,
                 Isdeleted = Isdeleted
             };

@@ -41,7 +41,6 @@
     </DataTemplate>
 
 
-
     <DataTemplate DataType="{x:Type admdinviewmodels:AppUserViewModel}">
         <adminviews:AppUserView />
     </DataTemplate>
@@ -76,6 +75,10 @@
         <adminviews:FoodCategoryView />
     </DataTemplate>
 
+
+    <DataTemplate DataType="{x:Type addviewmodels:UpdateAppUserViewModel}">
+        <addupdateview:UpdateAppUserView />
+    </DataTemplate>
     <DataTemplate DataType="{x:Type addviewmodels:AddSuppierViewModel}">
         <addupdateview:AddSupplierView />
     </DataTemplate>

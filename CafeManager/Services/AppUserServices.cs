@@ -1,9 +1,11 @@
 ﻿using CafeManager.Core.Data;
+using CafeManager.Core.DTOs;
 using CafeManager.Core.Services;
 using CafeManager.WPF.Stores;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System.IO;
+using System.Linq.Expressions;
 using System.Net;
 using System.Net.Mail;
 using System.Reflection;
@@ -224,6 +226,37 @@ namespace CafeManager.WPF.Services
                 _unitOfWork.ClearChangeTracker();
                 throw new InvalidOperationException("Lỗi");
             }
+        }
+
+        public async Task<bool> DeleteAppUser(int id)
+        {
+            try
+            {
+                await _unitOfWork.BeginTransactionAsync();
+
+                var deleted = await _unitOfWork.AppUserList.Delete(id);
+                if (deleted == false)
+                {
+                    throw new InvalidOperationException("Lỗi.");
+                }
+                await _unitOfWork.CompleteAsync();
+                await _unitOfWork.CommitTransactionAsync();
+                return deleted;
+            }
+            catch (Exception ex)
+            {
+                await _unitOfWork.RollbackTransactionAsync();
+                throw new InvalidOperationException("Xoá tài khoản thất bại.", ex);
+            }
+        }
+
+        // ===================== Phan trang =======================
+        public async Task<(IEnumerable<Appuser>?, int)> GetSearchPaginateListAppuser(Expression<Func<Appuser, bool>>? searchPredicate = null, int skip = 0, int take = 20)
+        {
+            _unitOfWork.ClearChangeTracker();
+            var listPage = await _unitOfWork.AppUserList.GetByPageAsync(skip, take, searchPredicate);
+
+            return listPage;
         }
     }
 }

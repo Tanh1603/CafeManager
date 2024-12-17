@@ -1,69 +1,23 @@
-﻿using System.Collections.ObjectModel;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
+using System.Collections.ObjectModel;
 
 #nullable disable
 
 namespace CafeManager.Core.DTOs
 {
-    public class MaterialDTO : BaseDTO
+    public partial class MaterialDTO : BaseDTO
     {
+        [ObservableProperty]
         private int materialid;
+
+        [ObservableProperty]
         private string materialname;
+
+        [ObservableProperty]
         private string unit;
-        private bool isdeleted;
 
+        [ObservableProperty]
         private ObservableCollection<MaterialSupplierDTO> _materialsuppliers = [];
-
-        public int Materialid
-        {
-            get => materialid;
-            set
-            {
-                materialid = value;
-                OnPropertyChanged();
-            }
-        }
-
-        public string Materialname
-        {
-            get => materialname;
-            set
-            {
-                materialname = value;
-                OnPropertyChanged();
-            }
-        }
-
-        public string Unit
-        {
-            get => unit;
-            set
-            {
-                unit = value;
-                OnPropertyChanged();
-            }
-        }
-
-        public bool Isdeleted
-        {
-            get => isdeleted; set
-            {
-                isdeleted = value;
-                OnPropertyChanged();
-            }
-        }
-
-        public ObservableCollection<MaterialSupplierDTO> Materialsuppliers
-        {
-            get => _materialsuppliers;
-            set
-            {
-                if (_materialsuppliers != value)
-                {
-                    _materialsuppliers = value;
-                    OnPropertyChanged();
-                }
-            }
-        }
 
         public MaterialDTO Clone()
         {

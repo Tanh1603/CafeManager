@@ -1,78 +1,28 @@
-﻿using System.ComponentModel;
+﻿using CafeManager.Core.Data;
+using CommunityToolkit.Mvvm.ComponentModel;
+using System.ComponentModel;
 using System.Runtime.CompilerServices;
 
 #nullable disable
 
 namespace CafeManager.Core.DTOs
 {
-    public class ConsumedMaterialDTO : BaseDTO
+    public partial class ConsumedMaterialDTO : BaseDTO
     {
+        [ObservableProperty]
         private int _consumedmaterialid;
-        private int _materialsuppplierid;
+
+        [ObservableProperty]
+        private int _materialsupplierid;
+
+        [ObservableProperty]
         private decimal _quantity;
-        private bool _isdeleted;
+
+        [ObservableProperty]
         private MaterialSupplierDTO _materialsupplier;
+
+        [ObservableProperty]
         private DateOnly _usagedate;
-
-        public int Consumedmaterialid
-        {
-            get => _consumedmaterialid; set
-            {
-                _consumedmaterialid = value;
-                OnPropertyChanged();
-            }
-        }
-
-        public int Materialsupplierid
-        {
-            get => _materialsuppplierid; set
-            {
-                _materialsuppplierid = value;
-                OnPropertyChanged();
-            }
-        }
-
-        public decimal Quantity
-        {
-            get => _quantity; set
-            {
-                _quantity = value;
-                OnPropertyChanged();
-            }
-        }
-
-        public bool Isdeleted
-        {
-            get => _isdeleted; set
-            {
-                _isdeleted = value;
-                OnPropertyChanged();
-            }
-        }
-
-        public MaterialSupplierDTO Materialsupplier
-        {
-            get => _materialsupplier; set
-            {
-                if (_materialsupplier != value)
-                {
-                    _materialsupplier = value;
-                    OnPropertyChanged();
-                }
-            }
-        }
-
-        public DateOnly Usagedate
-        {
-            get => _usagedate; set
-            {
-                if (_usagedate != value)
-                {
-                    _usagedate = value;
-                    OnPropertyChanged();
-                }
-            }
-        }
 
         public ConsumedMaterialDTO Clone()
         {

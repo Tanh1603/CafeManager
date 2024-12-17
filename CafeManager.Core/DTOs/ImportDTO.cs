@@ -1,146 +1,43 @@
-﻿using System.Collections.ObjectModel;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
+using System.Collections.ObjectModel;
+using System.ComponentModel.DataAnnotations;
 
 #nullable disable
 
 namespace CafeManager.Core.DTOs
 {
-    public class ImportDTO : BaseDTO
+    public partial class ImportDTO : BaseDTO
     {
+        [ObservableProperty]
         private int _importid;
+
+        [ObservableProperty]
         private string _deliveryperson;
+
+        [ObservableProperty]
         private string _phone;
+
+        [ObservableProperty]
         private string _shippingcompany;
+
+        [ObservableProperty]
         private DateTime _receiveddate;
+
+        [ObservableProperty]
         private int _staffid;
+
+        [ObservableProperty]
         private int _supplierid;
-        private bool _isdeleted;
 
+        [ObservableProperty]
         private SupplierDTO _supplier;
+
+        [ObservableProperty]
         private StaffDTO _staff;
+
+        [ObservableProperty]
+        [NotifyPropertyChangedFor(nameof(TotalPrice))]
         private ObservableCollection<ImportDetailDTO> _importdetails = [];
-
-        public int Importid
-        {
-            get => _importid;
-            set
-            {
-                _importid = value;
-                OnPropertyChanged();
-            }
-        }
-
-        public string Deliveryperson
-        {
-            get => _deliveryperson;
-            set
-            {
-                _deliveryperson = value;
-                OnPropertyChanged();
-            }
-        }
-
-        public string Phone
-        {
-            get => _phone;
-            set
-            {
-                _phone = value;
-                OnPropertyChanged();
-            }
-        }
-
-        public string Shippingcompany
-        {
-            get => _shippingcompany;
-            set
-            {
-                _shippingcompany = value;
-                OnPropertyChanged();
-            }
-        }
-
-        public DateTime Receiveddate
-        {
-            get => _receiveddate;
-            set
-            {
-                _receiveddate = value;
-                OnPropertyChanged();
-            }
-        }
-
-        public bool Isdeleted
-        {
-            get => _isdeleted;
-            set
-            {
-                if (_isdeleted != value)
-                {
-                    _isdeleted = value;
-                    OnPropertyChanged();
-                }
-            }
-        }
-
-        public int Staffid
-        {
-            get => _staffid;
-            set
-            {
-                _staffid = value;
-                OnPropertyChanged();
-            }
-        }
-
-        public int Supplierid
-        {
-            get => _supplierid;
-            set
-            {
-                _supplierid = value;
-                OnPropertyChanged();
-            }
-        }
-
-        public SupplierDTO Supplier
-        {
-            get => _supplier;
-            set
-            {
-                if (_supplier != value)
-                {
-                    _supplier = value;
-                    OnPropertyChanged();
-                }
-            }
-        }
-
-        public StaffDTO Staff
-        {
-            get => _staff;
-            set
-            {
-                if (_staff != value)
-                {
-                    _staff = value;
-                    OnPropertyChanged();
-                }
-            }
-        }
-
-        public ObservableCollection<ImportDetailDTO> Importdetails
-        {
-            get => _importdetails;
-            set
-            {
-                if (_importdetails != value)
-                {
-                    _importdetails = value;
-                    OnPropertyChanged();
-                    OnPropertyChanged(nameof(TotalPrice));
-                }
-            }
-        }
 
         public decimal TotalPrice => Importdetails?.Where(x => x.Isdeleted == false)
             .Sum(x => x.Quantity * x.Materialsupplier.Price) ?? 0;

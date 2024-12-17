@@ -154,7 +154,7 @@
                                 Foreground="#9b442a"
                                 Style="{StaticResource MaterialDesignFloatingHintTextBox}"
                                 Text="{Binding Username, Mode=TwoWay}"
-                                Validation.ErrorTemplate="{StaticResource ErrorMessage}" />
+                                Validation.ErrorTemplate="{StaticResource ErrorMessageReg}" />
                         </Grid>
                         <Grid Margin="0,15">
                             <Grid.ColumnDefinitions>
@@ -181,8 +181,8 @@
                                 FontWeight="SemiBold"
                                 Foreground="#9b442a"
                                 Style="{StaticResource MaterialDesignFloatingHintRevealPasswordBox}"
-                                Validation.ErrorTemplate="{StaticResource ErrorMessage}" />
-                           
+                                Validation.ErrorTemplate="{StaticResource ErrorMessageReg}" />
+
                         </Grid>
 
 
@@ -212,7 +212,7 @@
                                 Foreground="#9b442a"
                                 Style="{StaticResource MaterialDesignFloatingHintTextBox}"
                                 Text="{Binding Email, Mode=TwoWay}"
-                                Validation.ErrorTemplate="{StaticResource ErrorMessage}" />
+                                Validation.ErrorTemplate="{StaticResource ErrorMessageReg}" />
                         </Grid>
 
                         <Grid Margin="0,15">
@@ -240,7 +240,7 @@
                                 Foreground="#9b442a"
                                 Style="{StaticResource MaterialDesignFloatingHintTextBox}"
                                 Text="{Binding Displayname, Mode=TwoWay}"
-                                Validation.ErrorTemplate="{StaticResource ErrorMessage}" />
+                                Validation.ErrorTemplate="{StaticResource ErrorMessageReg}" />
                         </Grid>
 
 
@@ -301,21 +301,20 @@
                                     FontWeight="Bold"
                                     Foreground="#9b442a"
                                     Text="Mã xác thực" />
-                              
 
-                                    <TextBox
-                                        Width="170"
-                                        VerticalAlignment="Center"
-                                        FontSize="20"
-                                        Style="{StaticResource textbox}"
-                                        Text="{Binding VertificationCode}" />
-                             
+
+                                <TextBox
+                                    Width="170"
+                                    VerticalAlignment="Center"
+                                    FontSize="20"
+                                    Style="{StaticResource textbox}"
+                                    Text="{Binding VertificationCode}" />
+
                             </StackPanel>
                             <Button
                                 Margin="10,20"
                                 HorizontalAlignment="Right"
                                 Command="{Binding SubmitRegisterCommand}"
-                                
                                 Style="{StaticResource adjustInfoButton}">
                                 <StackPanel HorizontalAlignment="Center" Orientation="Horizontal">
                                     <ma:PackIconMaterial VerticalAlignment="Center" Kind="CheckBold" />

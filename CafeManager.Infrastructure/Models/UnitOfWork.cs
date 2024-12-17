@@ -11,7 +11,6 @@ namespace CafeManager.Infrastructure.Models
 {
     public class UnitOfWork : IUnitOfWork
     {
-        private readonly IDbContextFactory<CafeManagerContext> _dbContextFactory;
         private readonly CafeManagerContext _context;
         private IDbContextTransaction _transaction;
         private bool _isTransactionActive;

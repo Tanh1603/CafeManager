@@ -194,7 +194,7 @@ namespace CafeManager.Infrastructure.Repositories
             {
                 throw new OperationCanceledException();
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 return (Enumerable.Empty<T>(), 0);
             }

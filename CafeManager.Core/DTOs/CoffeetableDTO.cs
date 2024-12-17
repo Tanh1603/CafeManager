@@ -1,4 +1,5 @@
 ﻿using CafeManager.Core.Data;
+using CommunityToolkit.Mvvm.ComponentModel;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 
@@ -6,79 +7,23 @@ using System.Runtime.CompilerServices;
 
 namespace CafeManager.Core.DTOs
 {
-    public class CoffeetableDTO : BaseDTO
+    public partial class CoffeetableDTO : BaseDTO
     {
+        [ObservableProperty]
         private int coffeetableid;
 
+        [ObservableProperty]
+        [NotifyPropertyChangedFor(nameof(TableName))]
         private int _tablenumber;
 
+        [ObservableProperty]
         private int _seatingcapacity;
 
+        [ObservableProperty]
         private string _statustable;
 
+        [ObservableProperty]
         private string _notes;
-
-        private bool _isdeleted;
-
-        public int Coffeetableid
-        {
-            get => coffeetableid;
-            set
-            {
-                coffeetableid = value;
-                OnPropertyChanged();
-            }
-        }
-
-        public int Seatingcapacity
-        {
-            get => _seatingcapacity;
-            set
-            {
-                _seatingcapacity = value;
-                OnPropertyChanged();
-            }
-        }
-
-        public string Statustable
-        {
-            get => _statustable; set
-            {
-                _statustable = value;
-                OnPropertyChanged();
-            }
-        }
-
-        public string Notes
-        {
-            get => _notes;
-            set
-            {
-                _notes = value;
-                OnPropertyChanged();
-            }
-        }
-
-        public bool Isdeleted
-        {
-            get => _isdeleted;
-            set
-            {
-                _isdeleted = value;
-                OnPropertyChanged();
-            }
-        }
-
-        public int Tablenumber
-        {
-            get => _tablenumber;
-            set
-            {
-                _tablenumber = value;
-                OnPropertyChanged();
-                OnPropertyChanged(nameof(TableName));
-            }
-        }
 
         public string TableName => $"Bàn {Tablenumber}";
 

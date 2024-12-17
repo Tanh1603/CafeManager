@@ -11,8 +11,8 @@
     xmlns:uc="clr-namespace:CafeManager.WPF.Assets.UsersControls"
     xmlns:viewmodels="clr-namespace:CafeManager.WPF.ViewModels"
     xmlns:views="clr-namespace:CafeManager.WPF.Views"
-    mc:Ignorable="d"
-    Width="500">
+    Width="500"
+    mc:Ignorable="d">
     <Border
         BorderThickness="4"
         ClipToBounds="True"
@@ -102,32 +102,38 @@
                     Grid.Row="0"
                     Grid.Column="1"
                     Hint="CTY TNHH..."
-                    Text="{Binding ModifySupplier.Suppliername, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"  Validation.ErrorTemplate="{StaticResource ErrorMessage}" />
+                    Text="{Binding ModifySupplier.Suppliername, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
+                    Validation.ErrorTemplate="{StaticResource ErrorMessage}" />
                 <uc:infoTextInput
                     Grid.Row="1"
                     Grid.Column="1"
                     Hint="Nguyễn Văn A"
-                    Text="{Binding ModifySupplier.Representativesupplier, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"  Validation.ErrorTemplate="{StaticResource ErrorMessage}" />
+                    Text="{Binding ModifySupplier.Representativesupplier, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
+                    Validation.ErrorTemplate="{StaticResource ErrorMessage}" />
                 <uc:infoTextInput
                     Grid.Row="2"
                     Grid.Column="1"
                     Hint="0377929994"
-                    Text="{Binding ModifySupplier.Phone, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"  Validation.ErrorTemplate="{StaticResource ErrorMessage}" />
+                    Text="{Binding ModifySupplier.Phone, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
+                    Validation.ErrorTemplate="{StaticResource ErrorMessage}" />
                 <uc:infoTextInput
                     Grid.Row="3"
                     Grid.Column="1"
                     Hint="23520189@gmail.com"
-                    Text="{Binding ModifySupplier.Email, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"  Validation.ErrorTemplate="{StaticResource ErrorMessage}" />
+                    Text="{Binding ModifySupplier.Email, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
+                    Validation.ErrorTemplate="{StaticResource ErrorMessage}" />
                 <uc:infoTextInput
                     Grid.Row="4"
                     Grid.Column="1"
                     Hint="Địa chỉ"
-                    Text="{Binding ModifySupplier.Address, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"    Validation.ErrorTemplate="{StaticResource ErrorMessage}"/>
+                    Text="{Binding ModifySupplier.Address, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
+                    Validation.ErrorTemplate="{StaticResource ErrorMessage}" />
                 <uc:infoTextInput
                     Grid.Row="5"
                     Grid.Column="1"
                     Hint="More..."
-                    Text="{Binding ModifySupplier.Notes, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" Validation.ErrorTemplate="{StaticResource ErrorMessage}" />
+                    Text="{Binding ModifySupplier.Notes, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
+                    Validation.ErrorTemplate="{StaticResource ErrorMessage}" />
             </Grid>
 
             <Button

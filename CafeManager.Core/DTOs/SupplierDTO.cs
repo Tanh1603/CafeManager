@@ -1,4 +1,5 @@
 ﻿using CafeManager.Core.Data;
+using CommunityToolkit.Mvvm.ComponentModel;
 using System.Collections;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
@@ -9,129 +10,46 @@ using System.Runtime.CompilerServices;
 
 namespace CafeManager.Core.DTOs
 {
-    public class SupplierDTO : BaseDTO
+    public partial class SupplierDTO : BaseDTO
     {
-        
-        
+        [ObservableProperty]
         private int _supplierid;
 
+        [ObservableProperty]
+        [NotifyDataErrorInfo]
+        [Required(ErrorMessage = "Không được trống")]
         private string _suppliername;
 
+        [ObservableProperty]
+        [NotifyDataErrorInfo]
+        [Required(ErrorMessage = "Không được trống")]
         private string _representativesupplier;
 
+        [ObservableProperty]
+        [NotifyDataErrorInfo]
+        [Required(ErrorMessage = "Không được trống")]
         private string _phone;
 
+        [ObservableProperty]
+        [NotifyDataErrorInfo]
+        [Required(ErrorMessage = "Không được trống")]
         private string _email;
 
+        [ObservableProperty]
+        [NotifyDataErrorInfo]
+        [Required(ErrorMessage = "Không được trống")]
         private string _address;
 
+        [ObservableProperty]
+        [NotifyDataErrorInfo]
+        [Required(ErrorMessage = "Không được trống")]
         private string _notes;
 
-        private bool _isdeleted;
-
+        [ObservableProperty]
         private ObservableCollection<ImportDTO> _imports = [];
+
+        [ObservableProperty]
         private ObservableCollection<MaterialSupplierDTO> _materialsuppliers = [];
-
-        public int Supplierid
-        {
-            get => _supplierid; set
-            {
-                _supplierid = value;
-                OnPropertyChanged();
-            }
-        }
-        
-        public string Suppliername
-        {
-            get => _suppliername; set
-            {
-                _suppliername = value;
-                
-                OnPropertyChanged();
-            }
-        }
-        
-        public string Representativesupplier
-        {
-            get => _representativesupplier; set
-            {
-                _representativesupplier = value;
-                OnPropertyChanged();
-            }
-        }
-   
-        public string Phone
-        {
-            get => _phone; set
-            {
-                _phone = value;
-                OnPropertyChanged();
-            }
-        }
-
-        public string Email
-        {
-            get => _email; set
-            {
-                _email = value;
-                OnPropertyChanged();
-            }
-        }
-
-        public string Address
-        {
-            get => _address; set
-            {
-                _address = value;
-                OnPropertyChanged();
-            }
-        }
-
-        public string Notes
-        {
-            get => _notes; set
-            {
-                _notes = value;
-                OnPropertyChanged();
-            }
-        }
-
-        public bool Isdeleted
-        {
-            get => _isdeleted; set
-            {
-                _isdeleted = value;
-                OnPropertyChanged();
-            }
-        }
-
-        public ObservableCollection<ImportDTO> Imports
-        {
-            get => _imports; set
-            {
-                if (_imports != value)
-                {
-                    _imports = value;
-                    OnPropertyChanged();
-                }
-            }
-        }
-
-        public ObservableCollection<MaterialSupplierDTO> Materialsuppliers
-        {
-            get => _materialsuppliers; set
-            {
-                if (_materialsuppliers != value)
-                {
-                    _materialsuppliers = value;
-                    OnPropertyChanged();
-                }
-            }
-        }
-
-        public bool HasErrors => throw new NotImplementedException();
-
-        public event EventHandler<DataErrorsChangedEventArgs> ErrorsChanged;
 
         public SupplierDTO Clone()
         {
@@ -151,8 +69,5 @@ namespace CafeManager.Core.DTOs
                 Materialsuppliers = Materialsuppliers
             };
         }
-
-        
-        
     }
 }

@@ -23,16 +23,11 @@ namespace CafeManager.WPF.ViewModels.AddViewModel
 
         [ObservableProperty]
         private SupplierDTO _modifySupplier = new();
-        
-        
-
-       
-
-        
 
         public event Action<SupplierDTO>? ModifySupplierChanged;
 
         public event Action Close;
+
         public event EventHandler<DataErrorsChangedEventArgs>? ErrorsChanged;
 
         public AddSuppierViewModel(IServiceProvider provider)
@@ -65,7 +60,5 @@ namespace CafeManager.WPF.ViewModels.AddViewModel
         {
             Close?.Invoke();
         }
-
-       
     }
 }

@@ -107,6 +107,10 @@ namespace CafeManager.WPF.ViewModels
             {
                 Debug.Print($"Lỗi khi thay đổi ViewModel: {ex.Message}");
             }
+            finally
+            {
+                IsLeftDrawerOpen = false;
+            }
         }
 
         [RelayCommand]

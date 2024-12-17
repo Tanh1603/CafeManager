@@ -1,4 +1,5 @@
-﻿using System.ComponentModel;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
+using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Windows.Media.Imaging;
 
@@ -6,120 +7,28 @@ using System.Windows.Media.Imaging;
 
 namespace CafeManager.Core.DTOs
 {
-    public class AppUserDTO : BaseDTO
+    public partial class AppUserDTO : BaseDTO
     {
-        private int _appUserId;
+        [ObservableProperty]
+        private int _appuserid;
+
+        [ObservableProperty]
         private string _username;
+
+        [ObservableProperty]
         private string _password;
-        private string _displayName;
+
+        [ObservableProperty]
+        private string _displayname;
+
+        [ObservableProperty]
         private string _email;
+
+        [ObservableProperty]
         private string _role;
+
+        [ObservableProperty]
         private BitmapImage? _avatar;
-        private bool _isDeleted;
-
-        public int Appuserid
-        {
-            get => _appUserId;
-            set
-            {
-                if (_appUserId != value)
-                {
-                    _appUserId = value;
-                    OnPropertyChanged();
-                }
-            }
-        }
-
-        public string Username
-        {
-            get => _username;
-            set
-            {
-                if (_username != value)
-                {
-                    _username = value;
-                    OnPropertyChanged();
-                }
-            }
-        }
-
-        public string Password
-        {
-            get => _password;
-            set
-            {
-                if (_password != value)
-                {
-                    _password = value;
-                    OnPropertyChanged();
-                }
-            }
-        }
-
-        public string Displayname
-        {
-            get => _displayName;
-            set
-            {
-                if (_displayName != value)
-                {
-                    _displayName = value;
-                    OnPropertyChanged();
-                }
-            }
-        }
-
-        public string Email
-        {
-            get => _email;
-            set
-            {
-                if (_email != value)
-                {
-                    _email = value;
-                    OnPropertyChanged();
-                }
-            }
-        }
-
-        public string Role
-        {
-            get => _role;
-            set
-            {
-                if (_role != value)
-                {
-                    _role = value;
-                    OnPropertyChanged();
-                }
-            }
-        }
-
-        public BitmapImage? Avatar
-        {
-            get => _avatar;
-            set
-            {
-                if (_avatar != value)
-                {
-                    _avatar = value;
-                    OnPropertyChanged();
-                }
-            }
-        }
-
-        public bool Isdeleted
-        {
-            get => _isDeleted;
-            set
-            {
-                if (_isDeleted != value)
-                {
-                    _isDeleted = value;
-                    OnPropertyChanged();
-                }
-            }
-        }
 
         public AppUserDTO Clone()
         {

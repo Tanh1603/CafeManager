@@ -123,7 +123,6 @@ namespace CafeManager.WPF.ViewModels.UserViewModel
             {
                 token.ThrowIfCancellationRequested();
                 IsLoading = true;
-                await Task.Delay(10000, token);
                 var dbMaterial = (await _materialSupplierServices.GetListMaterial(token)).Where(x => x.Isdeleted == false).ToList();
                 var dbSupplier = (await _materialSupplierServices.GetListExistedSupplier()).ToList();
                 var dbInventory = (await _materialSupplierServices.GetListMaterialSupplier(token)).Where(x => x.Isdeleted == false).ToList();

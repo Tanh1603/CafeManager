@@ -1,4 +1,5 @@
 ﻿using CafeManager.Core.Data;
+using CommunityToolkit.Mvvm.ComponentModel;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
@@ -7,185 +8,49 @@ using System.Runtime.CompilerServices;
 
 namespace CafeManager.Core.DTOs
 {
-    public class MaterialSupplierDTO : BaseDTO
+    public partial class MaterialSupplierDTO : BaseDTO
     {
+        [ObservableProperty]
         private int _materialsupplierid;
-        private int materialid;
-        private int supplierid;
-        private DateTime _manufacturedate;
-        private DateTime _expirationdate;
-        private string _original;
-        private string _manufacturer;
-        private decimal _price;
-        private bool _isdeleted;
 
+        [ObservableProperty]
+        private int materialid;
+
+        [ObservableProperty]
+        private int supplierid;
+
+        [ObservableProperty]
+        private DateTime _manufacturedate;
+
+        [ObservableProperty]
+        private DateTime _expirationdate;
+
+        [ObservableProperty]
+        private string _original;
+
+        [ObservableProperty]
+        private string _manufacturer;
+
+        [ObservableProperty]
+        private decimal _price;
+
+        [ObservableProperty]
+        [NotifyPropertyChangedFor(nameof(TotalQuantity))]
         private MaterialDTO _material;
+
+        [ObservableProperty]
+        [NotifyPropertyChangedFor(nameof(TotalQuantity))]
         private SupplierDTO _supplier;
+
+        [ObservableProperty]
+        [NotifyPropertyChangedFor(nameof(TotalQuantity))]
         private ObservableCollection<ConsumedMaterialDTO> _consumedmaterials = [];
+
+        [ObservableProperty]
+        [NotifyPropertyChangedFor(nameof(TotalQuantity))]
         private ObservableCollection<ImportDetailDTO> _importdetails = [];
 
-        public int Materialsupplierid
-        {
-            get => _materialsupplierid;
-            set
-            {
-                if (_materialsupplierid != value)
-                {
-                    _materialsupplierid = value;
-                    OnPropertyChanged();
-                }
-            }
-        }
-
-        public int Materialid
-        {
-            get => materialid; set
-            {
-                materialid = value;
-                OnPropertyChanged();
-            }
-        }
-
-        public int Supplierid
-        {
-            get => supplierid; set
-            {
-                supplierid = value;
-                OnPropertyChanged();
-            }
-        }
-
-        public DateTime Manufacturedate
-        {
-            get => _manufacturedate;
-            set
-            {
-                if (_manufacturedate != value)
-                {
-                    _manufacturedate = value;
-                    OnPropertyChanged();
-                }
-            }
-        }
-
-        public DateTime Expirationdate
-        {
-            get => _expirationdate;
-            set
-            {
-                if (_expirationdate != value)
-                {
-                    _expirationdate = value;
-                    OnPropertyChanged();
-                }
-            }
-        }
-
-        public string Original
-        {
-            get => _original;
-            set
-            {
-                if (_original != value)
-                {
-                    _original = value;
-                    OnPropertyChanged();
-                }
-            }
-        }
-
-        public string Manufacturer
-        {
-            get => _manufacturer;
-            set
-            {
-                if (_manufacturer != value)
-                {
-                    _manufacturer = value;
-                    OnPropertyChanged();
-                }
-            }
-        }
-
-        public decimal Price
-        {
-            get => _price;
-            set
-            {
-                if (_price != value)
-                {
-                    _price = value;
-                    OnPropertyChanged();
-                }
-            }
-        }
-
-        public bool Isdeleted
-        {
-            get => _isdeleted;
-            set
-            {
-                if (_isdeleted != value)
-                {
-                    _isdeleted = value;
-                    OnPropertyChanged();
-                }
-            }
-        }
-
         public decimal TotalQuantity => (Importdetails?.Where(x => x.Isdeleted == false).Sum(x => x.Quantity) ?? 0) - (Consumedmaterials?.Where(x => x.Isdeleted == false).Sum(x => x.Quantity) ?? 0);
-
-        public MaterialDTO Material
-        {
-            get => _material; set
-            {
-                if (_material != value)
-                {
-                    _material = value;
-                    OnPropertyChanged();
-                    OnPropertyChanged(nameof(TotalQuantity));
-                }
-            }
-        }
-
-        public SupplierDTO Supplier
-        {
-            get => _supplier; set
-            {
-                if (_supplier != value)
-                {
-                    _supplier = value;
-                    OnPropertyChanged();
-                    OnPropertyChanged(nameof(TotalQuantity));
-                }
-            }
-        }
-
-        public ObservableCollection<ConsumedMaterialDTO> Consumedmaterials
-        {
-            get => _consumedmaterials; set
-            {
-                if (_consumedmaterials != value)
-                {
-                    _consumedmaterials = value;
-                    OnPropertyChanged();
-                    OnPropertyChanged(nameof(TotalQuantity));
-                }
-            }
-        }
-
-        public ObservableCollection<ImportDetailDTO> Importdetails
-        {
-            get => _importdetails; set
-            {
-                if (_importdetails != value)
-                {
-                    _importdetails = value;
-                    OnPropertyChanged();
-                    OnPropertyChanged(nameof(TotalQuantity));
-                }
-            }
-        }
 
         public MaterialSupplierDTO Clone()
         {

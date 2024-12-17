@@ -27,11 +27,6 @@ namespace CafeManager.WPF.Services
             }
         }
 
-        public async Task<IEnumerable<Invoice>> GetListInvoicesByCoffeeTableId(int id)
-        {
-            return await _unitOfWork.CoffeeTableList.GetAllInvoicesByCoffeeTableIdAsync(id);
-        }
-
         public async Task<Coffeetable?> AddCoffeTable(Coffeetable coffeetable)
         {
             try
@@ -72,6 +67,11 @@ namespace CafeManager.WPF.Services
             var res = await _unitOfWork.CoffeeTableList.Delete(id);
             _unitOfWork.Complete();
             return res;
+        }
+
+        public async Task<int> GetTotalTable()
+        {
+            return await _unitOfWork.CoffeeTableList.GetTotalTable();
         }
     }
 }

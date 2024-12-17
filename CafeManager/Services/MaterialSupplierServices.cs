@@ -267,5 +267,10 @@ namespace CafeManager.WPF.Services
             _unitOfWork.ClearChangeTracker();
             return await _unitOfWork.MaterialSupplierList.GetByPageAsync(skip, take, searchPredicate);
         }
+
+        public async Task<int> GetTotalMaterialSuplier()
+        {
+            return await _unitOfWork.MaterialSupplierList.GetToTalMaterialSupplier();
+        }
     }
 }

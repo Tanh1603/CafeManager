@@ -16,18 +16,9 @@ namespace CafeManager.Infrastructure.Repositories
         {
         }
 
-        public async Task<IEnumerable<Food>> GetAllListFood()
+        public async Task<int> GetTotalFood()
         {
-            return await _cafeManagerContext.Foods.Where(x => x.Isdeleted == false)
-                .Include(x => x.Invoicedetails).Include(x => x.Foodcategory).Where(x => x.Foodcategory.Isdeleted == false).ToListAsync();
-        }
-
-        public async Task<Food> GetFoodById(int id)
-        {
-            return await _cafeManagerContext.Foods
-                .Where(x => x.Isdeleted == false)
-                .Include(x => x.Invoicedetails)
-                .Include(x => x.Foodcategory).FirstOrDefaultAsync(x => x.Foodid == id);
+            return await _cafeManagerContext.Foods.Where(x => x.Isdeleted == false).CountAsync();
         }
     }
 }

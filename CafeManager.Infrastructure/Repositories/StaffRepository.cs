@@ -43,5 +43,12 @@ namespace CafeManager.Infrastructure.Repositories
 
             return update;
         }
+
+        public async Task<int> GetStaffFromTo(DateOnly from, DateOnly to)
+        {
+            return await _cafeManagerContext.Staff
+                .Where(x => x.Startworkingdate >= from &&
+            x.Startworkingdate <= to && x.Endworkingdate <= from && x.Endworkingdate >= to).CountAsync();
+        }
     }
 }

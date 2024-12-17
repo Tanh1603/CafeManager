@@ -17,7 +17,7 @@
     d:DesignWidth="1300"
     mc:Ignorable="d">
     <UserControl.Resources>
-        <converter:CurrencyConverter x:Key="CurrencyConverter"/>
+        <converter:CurrencyConverter x:Key="CurrencyConverter" />
     </UserControl.Resources>
     <Grid Margin="10">
         <Grid.ColumnDefinitions>
@@ -25,11 +25,11 @@
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
-          
+
             <RowDefinition Height="1.5*" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
-        
+
         <Grid Grid.Row="0" Grid.Column="0">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*" />
@@ -59,7 +59,6 @@
                         HorizontalAlignment="Left"
                         VerticalAlignment="Bottom"
                         Background="#f5f5f5" />
-
                 </StackPanel>
 
                 <Grid  Grid.Row="1" Margin="0 10 0 0">
@@ -67,37 +66,39 @@
                     <Border Padding="10 0 10 0" CornerRadius="10">
                         <Border.Background>
                             <LinearGradientBrush StartPoint="0,0.5" EndPoint="1,0.5">
-                                
+
                                 <GradientStop Offset="1" Color="#fee3d4" />
                                 <GradientStop Offset="0" Color="#f2ccb7" />
                             </LinearGradientBrush>
                         </Border.Background>
                         <Grid>
                             <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="*"/>
-                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="*" />
                             </Grid.ColumnDefinitions>
                             <Grid Margin="0 0 5 0">
                                 <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="auto"/>
-                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="auto" />
+                                    <ColumnDefinition Width="*" />
                                 </Grid.ColumnDefinitions>
-                                <TextBlock Text="Từ:" Style="{StaticResource infoText}" FontWeight="Bold"/>
-                                <DatePicker Grid.Column="1" Style="{StaticResource DatePicker}" CalendarStyle="{StaticResource MaterialDesignCalendarPortrait}" Tag="Chọn ngày" Margin="0 15 0 15"/>
+                                <TextBlock Text="Từ:" Style="{StaticResource infoText}" FontWeight="Bold" />
+                                <DatePicker
+                                    SelectedDate="{Binding From}"
+                                    Grid.Column="1" Style="{StaticResource DatePicker}" CalendarStyle="{StaticResource MaterialDesignCalendarPortrait}" Tag="Chọn ngày" Margin="0 15 0 15" />
                             </Grid>
-                            <Grid Grid.Column="1" >
+                            <Grid Grid.Column="1">
                                 <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="auto"/>
-                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="auto" />
+                                    <ColumnDefinition Width="*" />
                                 </Grid.ColumnDefinitions>
-                                <TextBlock Text="Đến:" Style="{StaticResource infoText}" FontWeight="Bold"/>
-                                <DatePicker  Grid.Column="1" Style="{StaticResource DatePicker}" CalendarStyle="{StaticResource MaterialDesignCalendarPortrait}" Tag="Chọn ngày"/>
+                                <TextBlock Text="Đến:" Style="{StaticResource infoText}" FontWeight="Bold" />
+                                <DatePicker
+                                    SelectedDate="{Binding To}"
+                                    Grid.Column="1" Style="{StaticResource DatePicker}" CalendarStyle="{StaticResource MaterialDesignCalendarPortrait}" Tag="Chọn ngày" />
                             </Grid>
                         </Grid>
-
                     </Border>
                 </Grid>
-
             </Grid>
 
             <Grid Grid.Column="1" Margin="10">
@@ -142,16 +143,14 @@
                                             Kind="Cash" />
                                         <Grid Grid.Column="1" Margin="10,0,0,0">
                                             <TextBlock Style="{StaticResource statisText}" Text="Doanh thu: " />
-
                                         </Grid>
                                         <Grid Grid.Column="2">
                                             <TextBlock
                                                 Foreground="#DEDEDE"
                                                 Style="{StaticResource statisText}"
-                                                Text="123" />
+                                                Text="{Binding Revenue}" />
                                         </Grid>
                                     </Grid>
-
                                 </Border>
                             </Grid>
                             <Grid
@@ -179,16 +178,14 @@
                                             Kind="Truck" />
                                         <Grid Grid.Column="1" Margin="10,0,0,0">
                                             <TextBlock Style="{StaticResource statisText}" Text="Nguyên liệu: " />
-
                                         </Grid>
                                         <Grid Grid.Column="2">
                                             <TextBlock
                                                 Foreground="#DEDEDE"
                                                 Style="{StaticResource statisText}"
-                                                Text="123" />
+                                                Text="{Binding TotalMaterialSupplier}" />
                                         </Grid>
                                     </Grid>
-
                                 </Border>
                             </Grid>
                             <Grid
@@ -216,16 +213,14 @@
                                             Kind="InvoiceText" />
                                         <Grid Grid.Column="1" Margin="10,0,0,0">
                                             <TextBlock Style="{StaticResource statisText}" Text="Hóa đơn: " />
-
                                         </Grid>
                                         <Grid Grid.Column="2">
                                             <TextBlock
                                                 Foreground="#DEDEDE"
                                                 Style="{StaticResource statisText}"
-                                                Text="123" />
+                                                Text="{Binding TotalInvoice}" />
                                         </Grid>
                                     </Grid>
-
                                 </Border>
                             </Grid>
                         </Grid>
@@ -258,16 +253,14 @@
                                             Kind="AccountCircle" />
                                         <Grid Grid.Column="1" Margin="10,0,0,0">
                                             <TextBlock Style="{StaticResource statisText}" Text="Nhân viên: " />
-
                                         </Grid>
                                         <Grid Grid.Column="2">
                                             <TextBlock
                                                 Foreground="#DEDEDE"
                                                 Style="{StaticResource statisText}"
-                                                Text="123" />
+                                                Text="{Binding TotalStaff}" />
                                         </Grid>
                                     </Grid>
-
                                 </Border>
                             </Grid>
                             <Grid
@@ -295,16 +288,14 @@
                                             Kind="GlassCocktail" />
                                         <Grid Grid.Column="1" Margin="10,0,0,0">
                                             <TextBlock Style="{StaticResource statisText}" Text="Thực đơn: " />
-
                                         </Grid>
                                         <Grid Grid.Column="2">
                                             <TextBlock
                                                 Foreground="#DEDEDE"
                                                 Style="{StaticResource statisText}"
-                                                Text="123" />
+                                                Text="{Binding TotalFood}" />
                                         </Grid>
                                     </Grid>
-
                                 </Border>
                             </Grid>
                             <Grid
@@ -332,24 +323,17 @@
                                             Kind="TableFurniture" />
                                         <Grid Grid.Column="1" Margin="10,0,0,0">
                                             <TextBlock Style="{StaticResource statisText}" Text="Bàn: " />
-
                                         </Grid>
                                         <Grid Grid.Column="2">
                                             <TextBlock
                                                 Foreground="#DEDEDE"
                                                 Style="{StaticResource statisText}"
-                                                Text="123" />
+                                                Text="{Binding TotalTable}" />
                                         </Grid>
                                     </Grid>
-
                                 </Border>
                             </Grid>
                         </Grid>
-
-
-
-
-
                     </Grid>
                 </Border>
             </Grid>
@@ -365,13 +349,11 @@
                             <GradientStop Offset="0" Color="#f2ccb7" />
                         </LinearGradientBrush>
                     </Border.Background>
-                    
-
                 </Border>
             </Grid>
         </Grid>
-        <Grid Grid.Column="1" Margin="10,0,10,10" >
-            <Border CornerRadius="10" >
+        <Grid Grid.Column="1" Margin="10,0,10,10">
+            <Border CornerRadius="10">
                 <Border.Background>
                     <LinearGradientBrush StartPoint="0,0.5" EndPoint="1,0.5">
                         <GradientStop Offset="1" Color="#7A4E36" />
@@ -380,49 +362,39 @@
                 </Border.Background>
                 <Grid>
                     <Grid.RowDefinitions>
-                        <RowDefinition Height="auto"/>
-                        <RowDefinition Height="*"/>
-
+                        <RowDefinition Height="auto" />
+                        <RowDefinition Height="*" />
                     </Grid.RowDefinitions>
                     <Grid Margin="0 10 0 0">
-                        <TextBlock Text="Thực đơn yêu thích" HorizontalAlignment="Center" Foreground="#dac5b4" FontSize="28" FontWeight="Bold"/>
+                        <TextBlock Text="Thực đơn yêu thích" HorizontalAlignment="Center" Foreground="#dac5b4" FontSize="28" FontWeight="Bold" />
                     </Grid>
-                    <ListBox x:Name="listbox" Grid.Row="1" ItemsSource="{Binding items}" >
-                       
+                    <ListBox x:Name="listbox" Grid.Row="1" ItemsSource="{Binding items}">
+
                         <ListBox.ItemTemplate>
-                            
+
                             <DataTemplate>
                                 <Border Padding="5" HorizontalAlignment="Stretch">
 
-
                                     <Grid Width="{Binding ActualWidth, ElementName=listbox}">
                                         <Grid.ColumnDefinitions>
-                                            <ColumnDefinition Width="auto"/>
+                                            <ColumnDefinition Width="auto" />
 
-                                            <ColumnDefinition Width="*"/>
-                                            <ColumnDefinition Width="*"/>
-
+                                            <ColumnDefinition Width="*" />
+                                            <ColumnDefinition Width="*" />
                                         </Grid.ColumnDefinitions>
                                         <Grid Width="45" Height="45" Margin="25 0 0 0">
-                                            <Border CornerRadius="10" Background="#612e0f"/>
-                                            <ma:PackIconMaterial Kind="Cake" Foreground="#dac5b4" Width="25" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-
+                                            <Border CornerRadius="10" Background="#612e0f" />
+                                            <ma:PackIconMaterial Kind="Cake" Foreground="#dac5b4" Width="25" HorizontalAlignment="Center" VerticalAlignment="Center" />
                                         </Grid>
 
                                         <Grid Grid.Column="1" Margin="10 0 0 0" HorizontalAlignment="Stretch">
 
-
-                                            <TextBlock Text="{Binding Title}" FontSize="14" FontWeight="Bold" Foreground="#dac5b4" VerticalAlignment="Center" HorizontalAlignment="Left"/>
-                                      
-                                            
-
-
+                                            <TextBlock Text="{Binding Title}" FontSize="14" FontWeight="Bold" Foreground="#dac5b4" VerticalAlignment="Center" HorizontalAlignment="Left" />
                                         </Grid>
 
                                         <Grid Grid.Column="2">
-                                            <TextBlock Text="{Binding Price, Converter={StaticResource CurrencyConverter}}" FontSize="14"  Foreground="#dac5b4" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                                            <TextBlock Text="{Binding Price, Converter={StaticResource CurrencyConverter}}" FontSize="14"  Foreground="#dac5b4" VerticalAlignment="Center" HorizontalAlignment="Center" />
                                         </Grid>
-                       
                                     </Grid>
                                 </Border>
                             </DataTemplate>
@@ -445,7 +417,6 @@
                         </LinearGradientBrush>
                     </Border.Background>
 
-
                     <lvc:CartesianChart
                         LegendLocation="Bottom"
                         Loaded="CartesianChart_Loaded"
@@ -457,12 +428,8 @@
                             <lvc:Axis Title="Usage" Labels="{Binding LabelsStackRow}" />
                         </lvc:CartesianChart.AxisY>
                     </lvc:CartesianChart>
-
-
-
                 </Border>
             </Grid>
-
 
             <Grid Grid.Column="1" Margin="10">
                 <Border Padding="10" CornerRadius="10">
@@ -514,8 +481,4 @@
             </Grid>
         </Grid>
     </Grid>
-
-
-
-
 </UserControl>

@@ -19,26 +19,102 @@ using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 using System.Windows.Media;
 using CafeManager.Core.Services;
+using Microsoft.Extensions.DependencyInjection;
+using CafeManager.WPF.Services;
 
 namespace CafeManager.WPF.ViewModels.AdminViewModel
 {
     public partial class HomeViewModel : ObservableObject, IDataViewModel
     {
-        private readonly IServiceProvider _provider;
+        private readonly InvoiceServices _invoiceServices;
+        private readonly CoffeTableServices _coffeTableServices;
+        private readonly StaffServices _staffServices;
+        private readonly FoodServices _foodServices;
+        private readonly MaterialSupplierServices _materialSupplierServices;
+
+        [ObservableProperty]
+        private decimal _revenue = 0;
+
+        [ObservableProperty]
+        private int _totalInvoice;
+
+        [ObservableProperty]
+        private int _totalMaterialSupplier;
+
+        [ObservableProperty]
+        private int _totalStaff;
+
+        [ObservableProperty]
+        private int _totalFood;
+
+        [ObservableProperty]
+        private int _totalTable;
+
+        private DateTime _from = new(DateTime.Now.Year, DateTime.Now.Month, 1);
+
+        public DateTime From
+        {
+            get => _from; set
+            {
+                if (_from != value)
+                {
+                    _from = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
+        private DateTime _to = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1).AddMonths(1).AddDays(-1);
+
+        public DateTime To
+        {
+            get => _to; set
+            {
+                if (_to != value)
+                {
+                    _to = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
         public IEnumerable<Product> items { get; set; }
 
-        public HomeViewModel(IServiceProvider provider)
+        public HomeViewModel(IServiceScope scope)
         {
-            _provider = provider;
-            items = new List<Product>
-        {
-            new Product { Title = "Product 1", Price = 1000 },
-            new Product { Title = "Product 2", Price = 2000 },
-            new Product { Title = "Product 3", Price = 3000 }
-        };
+            var provider = scope.ServiceProvider;
+            _invoiceServices = provider.GetRequiredService<InvoiceServices>();
+            _coffeTableServices = provider.GetRequiredService<CoffeTableServices>();
+            _staffServices = provider.GetRequiredService<StaffServices>();
+            _foodServices = provider.GetRequiredService<FoodServices>();
+            _materialSupplierServices = provider.GetRequiredService<MaterialSupplierServices>();
+
+            //    items = new List<Product>
+            //{
+            //    new Product { Title = "Product 1", Price = 1000 },
+            //    new Product { Title = "Product 2", Price = 2000 },
+            //    new Product { Title = "Product 3", Price = 3000 }
+            //};
             //CreateDynamicVisibility();
             //CreateStackRowSeries();
             //CreatePieSeries();
+        }
+
+        public async Task LoadData(CancellationToken token = default)
+        {
+            try
+            {
+                Revenue = await _invoiceServices.GetRevenue(new(From.Year, From.Month, From.Day), new(To.Year, To.Month, To.Day));
+                TotalStaff = await _staffServices.GetTotalStaff(new(From.Year, From.Month, From.Day), new(To.Year, To.Month, To.Day));
+                TotalInvoice = await _invoiceServices.GetTotalInvoice(From, To);
+                TotalFood = await _foodServices.GetTotalFood();
+                TotalMaterialSupplier = await _materialSupplierServices.GetTotalMaterialSuplier();
+                TotalTable = await _coffeTableServices.GetTotalTable();
+            }
+            catch (Exception)
+            {
+                throw;
+            }
         }
 
         private void CreatePieSeries()
@@ -203,12 +279,6 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
                 comboBox.SelectedItem = null; // Đặt SelectedItem về null
                 comboBox.Text = string.Empty; // Xóa nội dung Text
             }
-        }
-
-        public Task LoadData(CancellationToken token = default)
-        {
-            token.ThrowIfCancellationRequested();
-            return Task.CompletedTask;
         }
 
         #endregion handleComboBox

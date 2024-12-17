@@ -89,5 +89,10 @@ namespace CafeManager.WPF.Services
                 throw new InvalidOperationException("Lỗi khi xóa nhân viên");
             }
         }
+
+        public async Task<int> GetTotalStaff(DateOnly from, DateOnly to)
+        {
+            return await _unitOfWork.StaffList.GetStaffFromTo(from, to);
+        }
     }
 }

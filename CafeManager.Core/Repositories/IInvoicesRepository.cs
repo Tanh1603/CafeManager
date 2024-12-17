@@ -10,5 +10,8 @@ namespace CafeManager.Core.Repositories
 {
     public interface IInvoicesRepository : IRepository<Invoice>
     {
+        Task<int> GetTotalInvoiceFromTo(DateTime from, DateTime to, CancellationToken token = default);
+
+        Task<decimal> GetTotalRevenueFromTo(DateTime from, DateTime to);
     }
 }

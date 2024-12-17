@@ -1,6 +1,7 @@
 ﻿using CafeManager.Core.Data;
 using CafeManager.Core.Repositories;
 using CafeManager.Infrastructure.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace CafeManager.Infrastructure.Repositories
 {
@@ -23,6 +24,19 @@ namespace CafeManager.Infrastructure.Repositories
                 return true;
             }
             return false;
+        }
+
+        public async Task<int> GetTotalInvoiceFromTo(DateTime from, DateTime to, CancellationToken token = default)
+        {
+            return await _cafeManagerContext
+                .Invoices.Where(x => x.Isdeleted == false && x.Paymentstartdate >= from && x.Paymentstartdate <= to).CountAsync();
+        }
+
+        public async Task<decimal> GetTotalRevenueFromTo(DateTime from, DateTime to)
+        {
+            var list = await _cafeManagerContext.Invoices.Where(x => x.Isdeleted == false && x.Paymentstartdate >= from && x.Paymentstartdate <= to).ToListAsync();
+
+            return list.Sum(x => x.Invoicedetails.Sum(x => x.Quantity * x.Food.Price)) ?? 0;
         }
     }
 }

@@ -10,5 +10,10 @@ namespace CafeManager.Infrastructure.Repositories
         public MaterialSupplierRepository(CafeManagerContext cafeManagerContext) : base(cafeManagerContext)
         {
         }
+
+        public async Task<int> GetToTalMaterialSupplier()
+        {
+            return await _cafeManagerContext.Materialsuppliers.Where(x => x.Isdeleted == false).CountAsync();
+        }
     }
 }

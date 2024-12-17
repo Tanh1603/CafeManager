@@ -52,5 +52,15 @@ namespace CafeManager.WPF.Services
         }
 
         #endregion Thêm xóa, sửa, tìm kiếm, sắp sếp, phân trang
+
+        public async Task<decimal> GetRevenue(DateTime from, DateTime to)
+        {
+            return await _unitOfWork.InvoiceList.GetTotalRevenueFromTo(from, to);
+        }
+
+        public async Task<int> GetTotalInvoice(DateTime from, DateTime to)
+        {
+            return await _unitOfWork.InvoiceList.GetTotalInvoiceFromTo(from, to);
+        }
     }
 }

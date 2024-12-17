@@ -88,5 +88,10 @@ namespace CafeManager.WPF.Services
                 throw new InvalidOperationException("Xóa thức ăn thất bại.");
             }
         }
+
+        public async Task<int> GetTotalFood()
+        {
+            return await _unitOfWork.FoodList.GetTotalFood();
+        }
     }
 }

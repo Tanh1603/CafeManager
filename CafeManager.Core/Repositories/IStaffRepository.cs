@@ -10,5 +10,7 @@ namespace CafeManager.Core.Repositories
     public interface IStaffRepository : IRepository<Staff>
     {
         Task<Staff?> UpdateStaffWithListSatffSalaryHistory(Staff staff);
+
+        Task<int> GetStaffFromTo(DateOnly from, DateOnly to);
     }
 }

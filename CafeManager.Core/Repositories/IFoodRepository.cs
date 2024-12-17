@@ -9,8 +9,6 @@ namespace CafeManager.Core.Repositories
 {
     public interface IFoodRepository : IRepository<Food>
     {
-        Task<Food> GetFoodById(int id);
-
-        Task<IEnumerable<Food>> GetAllListFood();
+        Task<int> GetTotalFood();
     }
 }

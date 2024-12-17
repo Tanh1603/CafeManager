@@ -21,9 +21,6 @@
         <BooleanToVisibilityConverter x:Key="BoolToVis" />
         <converter:RowIndexConverter x:Key="RowIndexConverter" />
         <converter:CurrencyConverter x:Key="CurrencyConverter" />
-        <DataTemplate DataType="{x:Type addviewmodel:AddImportViewModel}">
-            <addview:AddImportView />
-        </DataTemplate>
     </UserControl.Resources>
 
     <Grid>

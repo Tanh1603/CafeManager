@@ -298,7 +298,7 @@
                                     <TextBox
                                         Width="140"
                                         VerticalAlignment="Center"
-                                        Text="{Binding CurrentImportDetail.Quantity, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" />
+                                        Text="{Binding CurrentImportDetail.Quantity, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay, StringFormat='F2'}" />
                                 </StackPanel>
 
                                 <Button

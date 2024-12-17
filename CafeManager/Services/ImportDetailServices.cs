@@ -19,13 +19,13 @@ namespace CafeManager.WPF.Services
             _unitOfWork = unitOfWork;
         }
 
-        public async Task<bool> DeleteImportdetail(ImportMaterialDetailDTO importMaterial)
+        public async Task<bool> DeleteImportdetail(int id)
         {
             try
             {
                 await _unitOfWork.BeginTransactionAsync();
 
-                var deleted = await _unitOfWork.ImportDetailList.Delete(importMaterial.Importdetailid);
+                var deleted = await _unitOfWork.ImportDetailList.Delete(id);
                 if (deleted == false)
                 {
                     throw new InvalidOperationException("Lỗi.");

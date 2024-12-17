@@ -165,7 +165,7 @@
                             <DataGridTemplateColumn Header="Yêu cầu">
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
-                                        <TextBox Width="100" Text="{Binding Quantity, UpdateSourceTrigger=PropertyChanged}" />
+                                        <TextBox Width="100" Text="{Binding Quantity, UpdateSourceTrigger=PropertyChanged, StringFormat='F2'}" />
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
                             </DataGridTemplateColumn>

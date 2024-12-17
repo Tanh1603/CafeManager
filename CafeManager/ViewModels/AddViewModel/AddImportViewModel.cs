@@ -49,6 +49,9 @@ namespace CafeManager.WPF.ViewModels.AddViewModel
         };
 
         [ObservableProperty]
+        private decimal _importPrice = 0;
+
+        [ObservableProperty]
         private ImportDetailDTO _currentImportDetail = new()
         {
             Materialsupplier = new()
@@ -78,8 +81,6 @@ namespace CafeManager.WPF.ViewModels.AddViewModel
         [ObservableProperty]
         private object _selectedViewModel;
 
-        //private ImportDetailDTO updateImportdetail;
-
         [ObservableProperty]
         private AddMaterialViewModel _addMaterialVM;
 
@@ -105,7 +106,7 @@ namespace CafeManager.WPF.ViewModels.AddViewModel
         public void RecieveImport(ImportDTO import)
         {
             ModifyImport = import;
-
+            ImportPrice = import.TotalPrice;
             // Clone danh sách ImportDetails và các tham chiếu liên quan
             ListExisted = new ObservableCollection<ImportDetailDTO>(
                 ModifyImport.Importdetails.Where(x => !x.Isdeleted)
@@ -142,6 +143,7 @@ namespace CafeManager.WPF.ViewModels.AddViewModel
             {
                 Receiveddate = DateTime.Now
             };
+            ImportPrice = 0;
             ClearAddImportDetail();
             ListExisted.Clear();
             listDeletedImportdetail.Clear();
@@ -176,7 +178,7 @@ namespace CafeManager.WPF.ViewModels.AddViewModel
                     x.Materialsupplier.Manufacturer == CurrentImportDetail.Materialsupplier.Manufacturer &&
                     x.Materialsupplier.Manufacturedate == CurrentImportDetail.Materialsupplier.Manufacturedate &&
                     x.Materialsupplier.Expirationdate == CurrentImportDetail.Materialsupplier.Expirationdate);
-
+                ImportPrice += CurrentImportDetail.Quantity * CurrentImportDetail.Materialsupplier.Price;
                 if (existedMateirlasupplier != null)
                 {
                     MyMessageBox.Show("Chi tiết đã tồn tại, đã thêm số lượng");
@@ -195,6 +197,8 @@ namespace CafeManager.WPF.ViewModels.AddViewModel
 
                 if (find != null)
                 {
+                    ImportPrice += (CurrentImportDetail.Quantity * CurrentImportDetail.Materialsupplier.Price
+                        - find.Quantity * find.Materialsupplier.Price);
                     find.Materialsupplier.Materialid = CurrentImportDetail.Materialsupplier.Materialid;
                     find.Materialsupplier.Material = CurrentImportDetail.Materialsupplier.Material;
                     find.Materialsupplier.Price = CurrentImportDetail.Materialsupplier.Price;
@@ -214,7 +218,7 @@ namespace CafeManager.WPF.ViewModels.AddViewModel
         }
 
         [RelayCommand]
-        private async void DeleteImportDetail(ImportDetailDTO importDetail)
+        private void DeleteImportDetail(ImportDetailDTO importDetail)
         {
             var res = MyMessageBox.ShowDialog("Bạn có muốn xóa chi tiết đơn hàng này ko", MyMessageBox.Buttons.Yes_No, MyMessageBox.Icons.Warning);
             if (res.Equals("1"))
@@ -223,7 +227,8 @@ namespace CafeManager.WPF.ViewModels.AddViewModel
                 if (deleted != null)
                 {
                     deleted.Isdeleted = true;
-                    if(IsUpdating)
+                    ImportPrice -= deleted.Quantity * deleted.Materialsupplier.Price;
+                    if (IsUpdating)
                     {
                         listDeletedImportdetail.Add(deleted);
                     }
@@ -333,12 +338,12 @@ namespace CafeManager.WPF.ViewModels.AddViewModel
 
             if (IsAdding)
             {
-                ModifyImport.Importdetails = [.. ModifyImport.Importdetails.Where(x => x.Isdeleted == false)];
+                ModifyImport.Importdetails = [.. ModifyImport.Importdetails?.Where(x => x.Isdeleted == false)];
                 ImportChanged?.Invoke(ModifyImport.Clone());
             }
             if (IsUpdating)
             {
-                ModifyImport.Importdetails.ToList().ForEach(x => x.Importid = ModifyImport.Importid);
+                ModifyImport.Importdetails?.ToList().ForEach(x => x.Importid = ModifyImport.Importid);
                 ImportChanged?.Invoke(ModifyImport.Clone());
             }
             listDeletedImportdetail.Clear();

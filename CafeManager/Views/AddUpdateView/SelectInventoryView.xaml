@@ -252,24 +252,6 @@
                     </StackPanel>
                 </Grid>
             </Grid>
-
-            <materialDesign:DialogHost
-                Grid.ColumnSpan="2"
-                Background="Transparent"
-                DialogTheme="Inherit"
-                IsOpen="{Binding IsOpenModifyMaterial}"
-                OverlayBackground="{DynamicResource PrimaryHueDarkBrush}"
-                Style="{StaticResource MaterialDesignEmbeddedDialogHost}">
-
-                <materialDesign:DialogHost.DialogBackground>
-                    <SolidColorBrush Color="Transparent" />
-                </materialDesign:DialogHost.DialogBackground>
-
-                <materialDesign:DialogHost.DialogContent>
-                    <ContentControl Content="{Binding ModifyMaterialVM}" />
-                </materialDesign:DialogHost.DialogContent>
-
-            </materialDesign:DialogHost>
         </Grid>
     </Border>
 </UserControl>

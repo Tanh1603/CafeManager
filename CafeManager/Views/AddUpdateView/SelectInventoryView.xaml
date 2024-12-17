@@ -24,8 +24,8 @@
     <Border BorderThickness="4" CornerRadius="10">
         <Border.Background>
             <LinearGradientBrush StartPoint="0,0.5" EndPoint="1,0.5">
-                <GradientStop Offset="0" Color="#9c6d3f" />
-                <GradientStop Offset="1" Color="#cb925d" />
+                <GradientStop Offset="0" Color="#d4b096" />
+                <GradientStop Offset="1" Color="#dac5b4" />
             </LinearGradientBrush>
         </Border.Background>
         <Border.BorderBrush>
@@ -58,7 +58,7 @@
                     HorizontalAlignment="Left"
                     FontSize="32"
                     FontWeight="SemiBold"
-                    Foreground="#ddd1c3"
+                    Foreground="#5f2414"
                     Text="Thông tin vật liệu" />
 
                 <!--  Add Button  -->
@@ -71,21 +71,27 @@
                         Foreground="#602414"
                         Text="Vật liệu: " />
                     <ComboBox
+                        x:Name="cbmaterial"
                         Width="150"
                         materialDesign:TextFieldAssist.HasClearButton="True"
                         ItemsSource="{Binding ListMaterialDTO}"
                         SelectedItem="{Binding SelectedMaterial}"
                         SelectedValuePath="Content"
-                        Style="{StaticResource MaterialDesignFilledComboBox}">
+                        Style="{StaticResource ComboBoxStyle}">
+                        <ComboBox.ItemContainerStyle>
+                            <Style BasedOn="{StaticResource ComboBoxItemStyle}" TargetType="ComboBoxItem">
+                                <Setter Property="Width" Value="{Binding ActualWidth, ElementName=cbmaterial}" />
+                                <Setter Property="Height" Value="{Binding ActualHeight, ElementName=cbmaterial}" />
+                            </Style>
+                        </ComboBox.ItemContainerStyle>
                         <ComboBox.ItemTemplate>
                             <DataTemplate>
                                 <Grid>
                                     <TextBlock
-                                        Margin="0,0,10,0"
-                                        VerticalAlignment="Center"
+                                       
                                         Text="{Binding Materialname}"
-                                        TextTrimming="CharacterEllipsis"
-                                        TextWrapping="NoWrap" />
+                                        TextTrimming="CharacterEllipsis"/>
+
                                 </Grid>
                             </DataTemplate>
                         </ComboBox.ItemTemplate>
@@ -99,18 +105,25 @@
                         Foreground="#602414"
                         Text="Nhà sản xuất: " />
                     <ComboBox
+                        x:Name="cbsupplier"
                         Width="150"
                         materialDesign:TextFieldAssist.HasClearButton="True"
                         ItemsSource="{Binding ListSupplierDTO}"
                         SelectedItem="{Binding SelectedSupplier}"
                         SelectedValuePath="Content"
-                        Style="{StaticResource MaterialDesignFilledComboBox}">
+                        Style="{StaticResource ComboBoxStyle}">
+                        <ComboBox.ItemContainerStyle>
+                            <Style BasedOn="{StaticResource ComboBoxItemStyle}" TargetType="ComboBoxItem">
+                                <Setter Property="Width" Value="{Binding ActualWidth, ElementName=cbsupplier}" />
+                                <Setter Property="Height" Value="{Binding ActualHeight, ElementName=cbsupplier}" />
+
+                            </Style>
+                        </ComboBox.ItemContainerStyle>
                         <ComboBox.ItemTemplate>
                             <DataTemplate>
                                 <Grid>
                                     <TextBlock
-                                        Margin="0,0,10,0"
-                                        VerticalAlignment="Center"
+                                      
                                         Text="{Binding Suppliername}"
                                         TextTrimming="CharacterEllipsis"
                                         TextWrapping="NoWrap" />

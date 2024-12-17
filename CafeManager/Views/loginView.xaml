@@ -32,6 +32,7 @@
                         FontWeight="SemiBold"
                         Foreground="#ffffff"
                         Text="Cafe Manager"
+                        FontFamily="{StaticResource coffe}"
                         TextAlignment="Center" />
                     <Border
                         Width="100"

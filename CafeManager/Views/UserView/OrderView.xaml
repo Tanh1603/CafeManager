@@ -62,38 +62,103 @@
                         <TabItem Header="Bàn" Style="{StaticResource tabItemStyle}">
                             <Grid Margin="10">
 
-                                <ScrollViewer HorizontalScrollBarVisibility="Hidden" VerticalScrollBarVisibility="Hidden">
-                                    <ItemsControl ItemsSource="{Binding ListCoffeeTableDTO}">
-                                        <ItemsControl.ItemsPanel>
-                                            <ItemsPanelTemplate>
-                                                <WrapPanel Width="800" />
-                                            </ItemsPanelTemplate>
-                                        </ItemsControl.ItemsPanel>
-                                        <ItemsControl.ItemTemplate>
-                                            <DataTemplate>
-                                                <uc:InfoTable
-                                                    Margin="0,10,10,0"
-                                                    IsButtonVisible="False"
-                                                    Text="{Binding TableName}">
-                                                    <i:Interaction.Triggers>
-                                                        <i:EventTrigger EventName="MouseLeftButtonDown">
-                                                            <i:InvokeCommandAction Command="{Binding DataContext.ChooseTableCommand, RelativeSource={RelativeSource AncestorType=local:OrderView}}" CommandParameter="{Binding}" />
-                                                        </i:EventTrigger>
-                                                    </i:Interaction.Triggers>
-                                                </uc:InfoTable>
-                                            </DataTemplate>
-                                        </ItemsControl.ItemTemplate>
-                                    </ItemsControl>
-                                </ScrollViewer>
-                            </Grid>
-                        </TabItem>
-                        <TabItem Header="Menu" Style="{StaticResource tabItemStyle}">
-                            <Grid Margin="10">
-                                <Grid.RowDefinitions>
-                                    <RowDefinition Height="auto" />
-                                    <RowDefinition Height="*" />
-                                </Grid.RowDefinitions>
-                                <StackPanel Grid.Row="0" Orientation="Horizontal">
+                            <ScrollViewer HorizontalScrollBarVisibility="Hidden" VerticalScrollBarVisibility="Hidden">
+                                <ItemsControl ItemsSource="{Binding ListCoffeeTableDTO}">
+                                    <ItemsControl.ItemsPanel>
+                                        <ItemsPanelTemplate>
+                                            <WrapPanel Width="800" />
+                                        </ItemsPanelTemplate>
+                                    </ItemsControl.ItemsPanel>
+                                    <ItemsControl.ItemTemplate>
+                                        <DataTemplate>
+                                           
+                                            <Border
+                                                Width="200"
+                                                Margin="20"
+                                                Padding="20"
+                                                HorizontalAlignment="Left"
+                                                BorderThickness="3"
+                                                CornerRadius="25">
+                                                <Border.Style>
+                                                    <Style TargetType="Border">
+                                                        <Setter Property="Cursor" Value="Hand"/>
+                                                        <Style.Triggers>
+                                                            <DataTrigger Binding="{Binding Statustable}" Value="Đang sử dụng">
+                                                                <Setter Property="BorderBrush" Value="Red" />
+                                                                <Setter Property="Opacity" Value="0.5" />
+                                                                <Setter Property="BorderBrush" Value="DarkGray" />
+                                                                <Setter Property="Background" Value="LightGray" />
+                                                               
+                                                            </DataTrigger>
+                                                        </Style.Triggers>
+                                                    </Style>
+                                                </Border.Style>
+                                                <Border.BorderBrush>
+                                                    <LinearGradientBrush StartPoint="0, 0.5">
+                                                        <GradientStop Offset="0" Color="#c69a5d" />
+                                                        <GradientStop Offset="0.5" Color="#cb925d" />
+
+                                                        <GradientStop Offset="1" Color="#d4b096" />
+                                                    </LinearGradientBrush>
+                                                </Border.BorderBrush>
+                                                <Border.Background>
+                                                    <LinearGradientBrush StartPoint="0,0.5" EndPoint="1,0.5">
+                                                        <GradientStop Offset="1" Color="#fee3d4" />
+                                                        <GradientStop Offset="0" Color="#f2ccb7" />
+                                                    </LinearGradientBrush>
+                                                </Border.Background>
+                                                <Grid>
+                                                    <Grid.RowDefinitions>
+                                                        <RowDefinition Height="160" />
+                                                        <RowDefinition Height="*" />
+                                                    </Grid.RowDefinitions>
+                                                    <Border
+                                                        Grid.Row="0"
+                                                        BorderBrush="Transparent"
+                                                        CornerRadius="10 10 0 0">
+                                                        <Border.Background>
+                                                            <ImageBrush
+                                                                ImageSource="/Assets/Images/table.png"
+                                                                RenderOptions.BitmapScalingMode="HighQuality"
+                                                                Stretch="UniformToFill" />
+                                                        </Border.Background>
+
+                                                    </Border>
+                                                    <Grid Grid.Row="1" Margin="0,10,0,0">
+
+                                                        <TextBlock
+                                                            Margin="10,0,0,0"
+                                                            HorizontalAlignment="Center"
+                                                            FontSize="18"
+                                                            FontWeight="Bold"
+                                                            Foreground="#612e0f"
+                                                            Text="{Binding TableName}" />
+
+
+
+
+                                                    </Grid>
+
+                                                </Grid>
+                                                <i:Interaction.Triggers>
+                                                    <i:EventTrigger EventName="MouseLeftButtonDown">
+                                                        <i:InvokeCommandAction Command="{Binding DataContext.ChooseTableCommand, RelativeSource={RelativeSource AncestorType=local:OrderView}}" CommandParameter="{Binding}" />
+                                                    </i:EventTrigger>
+                                                </i:Interaction.Triggers>
+                                            </Border>
+                                        </DataTemplate>
+                                    </ItemsControl.ItemTemplate>
+                                </ItemsControl>
+                            </ScrollViewer>
+                        </Grid>
+                    </TabItem>
+                    <TabItem Header="Menu" Style="{StaticResource tabItemStyle}">
+                        <Grid Margin="10">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="auto" />
+                                <RowDefinition Height="*" />
+                            </Grid.RowDefinitions>
+                            <StackPanel Grid.Row="0" Orientation="Horizontal">
 
                                     <ComboBox
                                         Name="cbFoodCategory"
@@ -241,19 +306,19 @@
                                             </Style>
                                         </StackPanel.Style>
 
-                                        <materialDesign:PackIcon
-                                            Width="30"
-                                            Height="30"
-                                            VerticalAlignment="Center"
-                                            Kind="TableFurniture" />
-                                        <TextBlock
-                                            Width="70"
-                                            Margin="5,0,5,0"
-                                            HorizontalAlignment="Center"
-                                            VerticalAlignment="Center"
-                                            FontSize="20"
-                                            Text="{Binding SelectedInvoiceDTO.Coffeetable.TableName}" />
-                                    </StackPanel>
+                                    <materialDesign:PackIcon
+                                        Width="30"
+                                        Height="30"
+                                        VerticalAlignment="Center"
+                                        Kind="TableFurniture" />
+                                    <TextBlock
+                                        Width="70"
+                                        Margin="5,0,5,0"
+                                        HorizontalAlignment="Center"
+                                        VerticalAlignment="Center"
+                                        FontSize="20"
+                                        Text="{Binding SelectedInvoiceDTO.Coffeetable.TableName}" />
+                                </StackPanel>
 
                                     <StackPanel
                                         Grid.Column="0"

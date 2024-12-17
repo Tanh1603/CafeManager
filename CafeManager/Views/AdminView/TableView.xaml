@@ -29,6 +29,7 @@
             <!--  Page Title  -->
             <TextBlock
                 Grid.Row="0"
+                Margin="0 20 0 10"
                 HorizontalAlignment="Left"
                 FontSize="32"
                 FontWeight="SemiBold"
@@ -36,7 +37,7 @@
                 Text="Bàn" />
             <Separator
                 Grid.Row="0"
-                Width="100"
+                Width="70"
                 Height="1"
                 HorizontalAlignment="Left"
                 VerticalAlignment="Bottom"
@@ -66,20 +67,25 @@
                 <ItemsControl ItemsSource="{Binding ListTable}">
                     <ItemsControl.ItemsPanel>
                         <ItemsPanelTemplate>
-                            <WrapPanel MinWidth="990" MaxWidth="1100" />
+                            <WrapPanel
+                               
+                                MinWidth="990"
+                                MaxWidth="1100" />
                         </ItemsPanelTemplate>
                     </ItemsControl.ItemsPanel>
                     <ItemsControl.ItemTemplate>
                         <DataTemplate>
+            
                             <Border
-                                Margin="10"
-                                Padding="10"
-                                BorderThickness="2"
-                                CornerRadius="10">
-
+                                Width="225"
+                                Margin="20"
+                                Padding="20"
+                                HorizontalAlignment="Left"
+                                BorderThickness="3"
+                                CornerRadius="25">
                                 <Border.Style>
                                     <Style TargetType="Border">
-                                        <Setter Property="BorderBrush" Value="Wheat" />
+
                                         <Style.Triggers>
                                             <DataTrigger Binding="{Binding Isdeleted}" Value="true">
                                                 <Setter Property="BorderBrush" Value="Red" />
@@ -87,56 +93,88 @@
                                         </Style.Triggers>
                                     </Style>
                                 </Border.Style>
-                                <StackPanel Width="120">
-                                    <Border>
-                                        <Image
-                                            Height="auto"
-                                            RenderOptions.BitmapScalingMode="HighQuality"
-                                            SnapsToDevicePixels="True"
-                                            Source="/Assets/Images/coffee.png"
-                                            Stretch="UniformToFill" />
-                                    </Border>
-                                    <Grid>
-                                        <Grid.ColumnDefinitions>
-                                            <ColumnDefinition Width="*" />
-                                            <ColumnDefinition Width="*" />
-                                        </Grid.ColumnDefinitions>
+                                <Border.BorderBrush>
+                                    <LinearGradientBrush StartPoint="0, 0.5">
+                                        <GradientStop Offset="0" Color="#c69a5d" />
+                                        <GradientStop Offset="0.5" Color="#cb925d" />
 
-                                        <TextBlock
-                                            Grid.Column="0"
-                                            HorizontalAlignment="Center"
-                                            VerticalAlignment="Center"
-                                            FontSize="16"
-                                            Text="{Binding TableName}"
-                                            TextWrapping="WrapWithOverflow" />
-                                        <materialDesign:PopupBox
-                                            Grid.Column="1"
-                                            Padding="0"
-                                            HorizontalAlignment="Right"
-                                            PopupUniformCornerRadius="10"
-                                            StaysOpen="False">
-                                            <materialDesign:PopupBox.PopupContent>
-                                                <StackPanel Background="Wheat">
-                                                    <Button
-                                                        Command="{Binding DataContext.DeleteTableCommand, RelativeSource={RelativeSource AncestorType=local:TableView}}"
-                                                        CommandParameter="{Binding}"
-                                                        Content="Ẩn bàn"
-                                                        Cursor="Hand" />
-                                                    <Button
-                                                        Command="{Binding DataContext.ShowTableCommand, RelativeSource={RelativeSource AncestorType=local:TableView}}"
-                                                        CommandParameter="{Binding}"
-                                                        Content="Hiện bàn"
-                                                        Cursor="Hand" />
-                                                    <Button
-                                                        Command="{Binding DataContext.OpenUpdateTableCommand, RelativeSource={RelativeSource AncestorType=local:TableView}}"
-                                                        CommandParameter="{Binding}"
-                                                        Content="Sửa thông tin"
-                                                        Cursor="Hand" />
-                                                </StackPanel>
-                                            </materialDesign:PopupBox.PopupContent>
-                                        </materialDesign:PopupBox>
+                                        <GradientStop Offset="1" Color="#d4b096" />
+                                    </LinearGradientBrush>
+                                </Border.BorderBrush>
+                                <Border.Background>
+                                    <LinearGradientBrush StartPoint="0,0.5" EndPoint="1,0.5">
+                                        <GradientStop Offset="1" Color="#fee3d4" />
+                                        <GradientStop Offset="0" Color="#f2ccb7" />
+                                    </LinearGradientBrush>
+                                </Border.Background>
+                                <Grid>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="160" />
+                                        <RowDefinition Height="*" />
+                                    </Grid.RowDefinitions>
+                                    <Border
+                                        Grid.Row="0"
+                                        BorderBrush="Transparent"
+                                        CornerRadius="10 10 0 0">
+                                        <Border.Background>
+                                            <ImageBrush
+                                                ImageSource="/Assets/Images/table.png"
+                                                RenderOptions.BitmapScalingMode="HighQuality"
+                                                Stretch="UniformToFill" />
+                                        </Border.Background>
+
+                                    </Border>
+                                    <Grid Grid.Row="1" Margin="0,10,0,0">
+                                        <Grid>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="*" />
+                                                <ColumnDefinition Width="*" />
+                                            </Grid.ColumnDefinitions>
+                                            <TextBlock
+                                                Margin="10,0,0,0"
+                                                HorizontalAlignment="Left"
+                                                FontSize="18"
+                                                FontWeight="Bold"
+                                                Foreground="#612e0f"
+                                                Text="{Binding TableName}" />
+                                            <materialDesign:PopupBox
+                                                Grid.Column="1"
+                                                Padding="0"
+                                                HorizontalAlignment="Right"
+                                                PopupUniformCornerRadius="10"
+                                                StaysOpen="False">
+                                                <materialDesign:PopupBox.PopupContent>
+                                                    <StackPanel Background="#d4b096">
+                                                        <Button
+                                                            Command="{Binding DataContext.DeleteTableCommand, RelativeSource={RelativeSource AncestorType=local:TableView}}"
+                                                            CommandParameter="{Binding}"
+                                                            Content="Ẩn bàn"
+                                                            Cursor="Hand"
+                                                            FontWeight="Bold"
+                                                            Foreground="#612e0f" />
+                                                        <Button
+                                                            Command="{Binding DataContext.ShowTableCommand, RelativeSource={RelativeSource AncestorType=local:TableView}}"
+                                                            CommandParameter="{Binding}"
+                                                            Content="Hiện bàn"
+                                                            Cursor="Hand"
+                                                            FontWeight="Bold"
+                                                            Foreground="#612e0f" />
+                                                        <Button
+                                                            Command="{Binding DataContext.OpenUpdateTableCommand, RelativeSource={RelativeSource AncestorType=local:TableView}}"
+                                                            CommandParameter="{Binding}"
+                                                            Content="Sửa thông tin"
+                                                            Cursor="Hand"
+                                                            FontWeight="Bold"
+                                                            Foreground="#612e0f" />
+                                                    </StackPanel>
+                                                </materialDesign:PopupBox.PopupContent>
+                                            </materialDesign:PopupBox>
+
+                                        </Grid>
                                     </Grid>
-                                </StackPanel>
+
+                                </Grid>
+
                             </Border>
                         </DataTemplate>
                     </ItemsControl.ItemTemplate>
@@ -156,6 +194,7 @@
 
             <materialDesign:DialogHost.DialogContent>
                 <Border
+                    HorizontalAlignment="Left"
                     BorderThickness="4"
                     ClipToBounds="True"
                     CornerRadius="10">
@@ -210,12 +249,20 @@
                                 Style="{StaticResource infoText}"
                                 Text="Số chổ ngồi: " />
                             <ComboBox
+                                x:Name="cbtabel"
                                 Grid.Row="1"
                                 Grid.Column="1"
                                 Width="100"
                                 HorizontalAlignment="Left"
                                 ItemsSource="{Binding TypeTable}"
-                                SelectedItem="{Binding Table.Seatingcapacity, Mode=TwoWay}">
+                                SelectedItem="{Binding Table.Seatingcapacity, Mode=TwoWay}"
+                                Style="{StaticResource ComboBoxStyle}">
+                                <ComboBox.ItemContainerStyle>
+                                    <Style BasedOn="{StaticResource ComboBoxItemStyle}" TargetType="ComboBoxItem">
+                                        <Setter Property="Width" Value="{Binding ActualWidth, ElementName=cbtabel}" />
+                                        <Setter Property="Height" Value="{Binding ActualHeight, ElementName=cbtabel}" />
+                                    </Style>
+                                </ComboBox.ItemContainerStyle>
                                 <ComboBox.ItemTemplate>
                                     <DataTemplate>
                                         <TextBlock Text="{Binding Converter={StaticResource SeatingConverter}}" />
@@ -263,14 +310,17 @@
             </materialDesign:DialogHost.DialogContent>
         </materialDesign:DialogHost>
 
-        <Grid Background="White" Opacity="0.3" Visibility="{Binding IsLoading, Converter={StaticResource BooleanToVisibilityConverter}}">
+        <Grid
+            Background="White"
+            Opacity="0.3"
+            Visibility="{Binding IsLoading, Converter={StaticResource BooleanToVisibilityConverter}}">
             <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
                 <TextBlock Style="{StaticResource infoText}" Text="Đang tải tài nguyên.." />
                 <ProgressBar
+                    Width="50"
+                    Height="50"
                     IsIndeterminate="True"
                     Style="{StaticResource MaterialDesignCircularProgressBar}"
-                    Height="50"
-                    Width="50"
                     Value="35" />
             </StackPanel>
         </Grid>

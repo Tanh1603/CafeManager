@@ -16,6 +16,7 @@
     xmlns:uc="clr-namespace:CafeManager.WPF.Assets.UsersControls"
     xmlns:viewmodels="clr-namespace:CafeManager.WPF.ViewModels"
     xmlns:views="clr-namespace:CafeManager.WPF.Views"
+    Width="910"
     mc:Ignorable="d">
 
     <UserControl.Resources>
@@ -106,6 +107,7 @@
                                 FontSize="24"
                                 FontWeight="SemiBold"
                                 Foreground="#5f2414"
+                                Margin="10"
                                 Text="Thông tin nhân viên" />
 
                             <Grid Margin="5,0,5,0" IsEnabled="{Binding IsEnable}">
@@ -124,6 +126,7 @@
                                     <RowDefinition Height="Auto" />
                                     <RowDefinition Height="Auto" />
                                     <RowDefinition Height="Auto" />
+
                                 </Grid.RowDefinitions>
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="auto" />
@@ -177,15 +180,22 @@
                                     Text="{Binding ModifyStaff.Phone, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" />
 
                                 <ComboBox
+                                    x:Name="cbgender"
                                     Grid.Row="2"
                                     Grid.Column="1"
-                                    Width="140"
-                                    Margin="5,0,0,0"
-                                    HorizontalAlignment="Left"
+                                    Margin="5"
+                                    HorizontalAlignment="Stretch"
                                     IsReadOnly="{Binding IsStaffDeleted}"
                                     SelectedValue="{Binding ModifyStaff.Sex, Mode=TwoWay}"
                                     SelectedValuePath="Tag"
-                                    Style="{StaticResource MaterialDesignOutlinedComboBox}">
+                                    Style="{StaticResource ComboBoxStyle}">
+                                    <ComboBox.ItemContainerStyle>
+                                        <Style BasedOn="{StaticResource ComboBoxItemStyle}" TargetType="ComboBoxItem">
+                                            <Setter Property="Width" Value="{Binding ActualWidth, ElementName=cbgender}" />
+                                            <Setter Property="Height" Value="{Binding ActualHeight, ElementName=cbgender}" />
+
+                                        </Style>
+                                    </ComboBox.ItemContainerStyle>
                                     <ComboBoxItem Content="Nam" Tag="True" />
                                     <ComboBoxItem Content="Nữ" Tag="False" />
                                 </ComboBox>
@@ -193,12 +203,12 @@
                                 <DatePicker
                                     Grid.Row="3"
                                     Grid.Column="1"
-                                    Width="140"
                                     Height="50"
                                     Margin="5"
-                                    HorizontalAlignment="Left"
+                                    HorizontalAlignment="Stretch"
+                                    CalendarStyle="{StaticResource MaterialDesignCalendarPortrait}"
                                     SelectedDate="{Binding ModifyStaff.Birthday, Converter={StaticResource DateOnlyToDateTimeConverter}, StringFormat=dd-MM-yyyy}"
-                                    Style="{StaticResource MaterialDesignOutlinedDatePicker}" />
+                                    Style="{StaticResource DatePicker}" />
 
                                 <uc:infoTextInput
                                     Grid.Row="4"
@@ -215,12 +225,12 @@
                                 <DatePicker
                                     Grid.Row="6"
                                     Grid.Column="1"
-                                    Width="140"
                                     Height="50"
                                     Margin="5"
-                                    HorizontalAlignment="Left"
+                                    HorizontalAlignment="Stretch"
+                                    CalendarStyle="{StaticResource MaterialDesignCalendarPortrait}"
                                     SelectedDate="{Binding ModifyStaff.Startworkingdate, Converter={StaticResource DateOnlyToDateTimeConverter}}"
-                                    Style="{StaticResource MaterialDesignOutlinedDatePicker}" />
+                                    Style="{StaticResource DatePicker}" />
 
                                 <DatePicker
                                     x:Name="EndworkingDatePicker"
@@ -260,6 +270,7 @@
                                 FontSize="24"
                                 FontWeight="SemiBold"
                                 Foreground="#5f2414"
+                                Margin="10"
                                 Text="Thông tin lương" />
                             <ListView
                                 Grid.Row="1"
@@ -272,29 +283,7 @@
                                         <GridViewColumn Header="Tùy chỉnh">
                                             <GridViewColumn.CellTemplate>
                                                 <DataTemplate>
-                                                    <StackPanel Grid.Column="1" Orientation="Horizontal">
-
-                                                        <Grid>
-                                                            <Grid.Resources>
-                                                                <Style TargetType="Grid">
-                                                                    <Setter Property="Visibility" Value="Visible" />
-                                                                    <Style.Triggers>
-                                                                        <DataTrigger Binding="{Binding DataContext.IsEnable, RelativeSource={RelativeSource AncestorType=local:ModifyStaffView}}" Value="False">
-                                                                            <Setter Property="Visibility" Value="Collapsed" />
-                                                                        </DataTrigger>
-                                                                    </Style.Triggers>
-                                                                </Style>
-                                                            </Grid.Resources>
-                                                            <Button
-                                                                x:Name="BtnDelete"
-                                                                Padding="2"
-                                                                HorizontalAlignment="Center"
-                                                                Background="Transparent"
-                                                                Command="{Binding DataContext.DeleteStaffSalaryHistoryCommand, RelativeSource={RelativeSource AncestorType=local:ModifyStaffView}}"
-                                                                CommandParameter="{Binding}">
-                                                                <ma:PackIconMaterial Kind="TrashCan" Style="{StaticResource infoFoodIcon}" />
-                                                            </Button>
-                                                        </Grid>
+                                                    <StackPanel Grid.Column="1" Orientation="Horizontal" >
                                                         <Grid>
                                                             <Grid.Resources>
                                                                 <Style TargetType="Grid">
@@ -310,12 +299,34 @@
                                                                 x:Name="BtnUpdate"
                                                                 Padding="2"
                                                                 HorizontalAlignment="Center"
-                                                                Background="Transparent"
                                                                 Command="{Binding DataContext.OpenUpdateStaffSalaryHistoryCommand, RelativeSource={RelativeSource AncestorType=local:ModifyStaffView}}"
-                                                                CommandParameter="{Binding}">
-                                                                <ma:PackIconMaterial Kind="Pencil" Style="{StaticResource infoFoodIcon}" />
+                                                                CommandParameter="{Binding}"
+                                                                Style="{StaticResource gridEditButton}">
+                                                                <ma:PackIconMaterial Kind="Pencil" Style="{StaticResource gridButtonIcon}" />
                                                             </Button>
                                                         </Grid>
+                                                        <Grid Margin="10 0 0 0">
+                                                            <Grid.Resources>
+                                                                <Style TargetType="Grid">
+                                                                    <Setter Property="Visibility" Value="Visible" />
+                                                                    <Style.Triggers>
+                                                                        <DataTrigger Binding="{Binding DataContext.IsEnable, RelativeSource={RelativeSource AncestorType=local:ModifyStaffView}}" Value="False">
+                                                                            <Setter Property="Visibility" Value="Collapsed" />
+                                                                        </DataTrigger>
+                                                                    </Style.Triggers>
+                                                                </Style>
+                                                            </Grid.Resources>
+                                                            <Button
+                                                                x:Name="BtnDelete"
+                                                                Padding="2"
+                                                                HorizontalAlignment="Center"
+                                                                Command="{Binding DataContext.DeleteStaffSalaryHistoryCommand, RelativeSource={RelativeSource AncestorType=local:ModifyStaffView}}"
+                                                                CommandParameter="{Binding}"
+                                                                Style="{StaticResource gridRemoveButton}">
+                                                                <ma:PackIconMaterial Kind="TrashCan" Style="{StaticResource gridButtonIcon}" />
+                                                            </Button>
+                                                        </Grid>
+
                                                     </StackPanel>
                                                 </DataTemplate>
                                             </GridViewColumn.CellTemplate>

@@ -9,18 +9,21 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json.Linq;
+using System.Collections;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq.Expressions;
 
 namespace CafeManager.WPF.ViewModels.AdminViewModel
 {
-    public partial class ImportViewModel : ObservableObject, IDataViewModel
+    public partial class ImportViewModel : ObservableObject, IDataViewModel, INotifyDataErrorInfo
     {
         private readonly ImportServices _importServices;
         private readonly MaterialSupplierServices _materialSupplierServices;
         private readonly StaffServices _staffServices;
         private readonly IMapper _mapper;
+        private readonly ErrorViewModel _errorViewModel;
 
         [ObservableProperty]
         private bool _isLoading;
@@ -53,6 +56,8 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
             }
         }
 
+
+
         private StaffDTO? _selectedStaff;
 
         public StaffDTO? SelectedStaff
@@ -63,6 +68,7 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
                 if (_selectedStaff != value)
                 {
                     _selectedStaff = value;
+
                     OnPropertyChanged(nameof(SelectedStaff));
                     //_ = FirstPage();
                     FirstPageCommand.ExecuteAsync(null);
@@ -80,9 +86,28 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
                 if (_startDate != value)
                 {
                     _startDate = value;
+                   ValidateDates();
+
                     OnPropertyChanged();
                     //_ = FirstPage();
                     FirstPageCommand.ExecuteAsync(null);
+                }
+            }
+        }
+
+        private void ValidateDates()
+        {
+            // Xóa lỗi trước đó cho cả hai trường
+            _errorViewModel.RemoveErrors(nameof(StartDate));
+            _errorViewModel.RemoveErrors(nameof(EndDate));
+
+            // Thêm lỗi mới nếu StartDate lớn hơn EndDate
+            if (StartDate.HasValue && EndDate.HasValue)
+            {
+                if (StartDate.Value > EndDate.Value)
+                {
+                    _errorViewModel.AddError(nameof(StartDate), "Ngày bắt đầu không được lớn hơn ngày kết thúc");
+                    _errorViewModel.AddError(nameof(EndDate), "Ngày kết thúc không được nhỏ hơn ngày bắt đầu");
                 }
             }
         }
@@ -97,6 +122,7 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
                 if (value != _endDate)
                 {
                     _endDate = value;
+                    ValidateDates();
                     OnPropertyChanged();
                     //_ = FirstPage();
                     FirstPageCommand.ExecuteAsync(null);
@@ -116,7 +142,14 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
 
             ModifyImportVM = provider.GetRequiredService<AddImportViewModel>();
             ModifyImportVM.ImportChanged += ModifyImportVM_ImportChanged;
+            _errorViewModel = new ErrorViewModel();
+            _errorViewModel.ErrorsChanged += _errorViewModel_ErrorsChanged;
             _isOpenModifyImportView = false;
+        }
+
+        private void _errorViewModel_ErrorsChanged(object? sender, DataErrorsChangedEventArgs e)
+        {
+            ErrorsChanged?.Invoke(this, e);
         }
 
         public async Task LoadData(CancellationToken token = default)
@@ -262,6 +295,8 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
             ModifyImportVM.ImportChanged -= ModifyImportVM_ImportChanged;
             GC.SuppressFinalize(this);
         }
+        
+        
 
         #region Phan trang
 
@@ -270,7 +305,11 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
         private int pageSize = 10;
         private int totalPages = 0;
 
+        public event EventHandler<DataErrorsChangedEventArgs>? ErrorsChanged;
+
         public string PageUI => $"{pageIndex}/{totalPages}";
+
+        public bool HasErrors => _errorViewModel.HasErrors;
 
         [RelayCommand]
         private async Task FirstPage()
@@ -314,6 +353,11 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
             IsLoading = true;
             await LoadImport();
             IsLoading = false;
+        }
+
+        public IEnumerable GetErrors(string? propertyName)
+        {
+            return _errorViewModel.GetErrors(propertyName);
         }
 
         #endregion Phan trang

@@ -1,4 +1,5 @@
 ﻿using System.Collections.ObjectModel;
+using System.ComponentModel.DataAnnotations;
 
 #nullable disable
 
@@ -28,7 +29,7 @@ namespace CafeManager.Core.DTOs
                 OnPropertyChanged();
             }
         }
-
+        
         public string Deliveryperson
         {
             get => _deliveryperson;

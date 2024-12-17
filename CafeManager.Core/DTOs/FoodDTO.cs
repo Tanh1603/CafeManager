@@ -1,12 +1,15 @@
 ﻿using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Windows.Media.Imaging;
+using System.ComponentModel.DataAnnotations;
+using System.Windows.Controls;
+
 
 #nullable disable
 
 namespace CafeManager.Core.DTOs
 {
-    public class FoodDTO : BaseDTO
+    public class FoodDTO : BaseDTO 
     {
         private int _foodid;
 
@@ -72,6 +75,7 @@ namespace CafeManager.Core.DTOs
                 if (_price != value)
                 {
                     _price = value;
+                    
                     OnPropertyChanged();
                     OnPropertyChanged(nameof(PriceDiscount));
                 }

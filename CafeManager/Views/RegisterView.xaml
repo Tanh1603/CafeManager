@@ -154,7 +154,7 @@
                                 Foreground="#9b442a"
                                 Style="{StaticResource MaterialDesignFloatingHintTextBox}"
                                 Text="{Binding Username, Mode=TwoWay}"
-                                Validation.ErrorTemplate="{StaticResource ErrorMessage}" />
+                                Validation.ErrorTemplate="{StaticResource ErrorMessageReg}" />
                         </Grid>
                         <Grid Margin="0,15">
                             <Grid.ColumnDefinitions>
@@ -181,7 +181,7 @@
                                 FontWeight="SemiBold"
                                 Foreground="#9b442a"
                                 Style="{StaticResource MaterialDesignFloatingHintRevealPasswordBox}"
-                                Validation.ErrorTemplate="{StaticResource ErrorMessage}" />
+                                Validation.ErrorTemplate="{StaticResource ErrorMessageReg}" />
                            
                         </Grid>
 
@@ -212,7 +212,7 @@
                                 Foreground="#9b442a"
                                 Style="{StaticResource MaterialDesignFloatingHintTextBox}"
                                 Text="{Binding Email, Mode=TwoWay}"
-                                Validation.ErrorTemplate="{StaticResource ErrorMessage}" />
+                                Validation.ErrorTemplate="{StaticResource ErrorMessageReg}" />
                         </Grid>
 
                         <Grid Margin="0,15">
@@ -240,7 +240,7 @@
                                 Foreground="#9b442a"
                                 Style="{StaticResource MaterialDesignFloatingHintTextBox}"
                                 Text="{Binding Displayname, Mode=TwoWay}"
-                                Validation.ErrorTemplate="{StaticResource ErrorMessage}" />
+                                Validation.ErrorTemplate="{StaticResource ErrorMessageReg}" />
                         </Grid>
 
 

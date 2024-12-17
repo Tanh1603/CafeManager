@@ -58,7 +58,9 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
             _mapper = provider.GetRequiredService<IMapper>();
             ModifySupplierVM = provider.GetRequiredService<AddSuppierViewModel>();
             ModifySupplierVM.ModifySupplierChanged += ModifySupplierVM_ModifySupplierChanged;
+            ModifySupplierVM.Close += ModifySupplierVM_Close;
         }
+
 
         public async Task LoadData(CancellationToken token = default)
         {
@@ -167,12 +169,19 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
             ModifySupplierVM.RecieveSupplierDTO(supplier);
         }
 
-        [RelayCommand]
-        private void CloseModifySupplier()
+        //[RelayCommand]
+        //private void CloseModifySupplier()
+        //{
+        //    IsOpenAddSupplier = false;
+        //    ModifySupplierVM.ClearValueOfFrom();
+        //}
+
+        private void ModifySupplierVM_Close()
         {
             IsOpenAddSupplier = false;
             ModifySupplierVM.ClearValueOfFrom();
         }
+
 
         [RelayCommand]
         private async Task DeleteSupplier(SupplierDTO supplier)

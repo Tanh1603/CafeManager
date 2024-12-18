@@ -453,7 +453,7 @@
                                 MinHeight="30"
                                 Style="{StaticResource chkchart}"
                                 Command="{Binding ToggleSeries0Command}"
-                                Content="Thực đơn"
+                                Content="Nhập hàng"
                                 IsChecked="True" />
                             <CheckBox
                                 MinWidth="70"

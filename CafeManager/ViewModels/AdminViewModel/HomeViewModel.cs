@@ -89,27 +89,31 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
             _foodServices = provider.GetRequiredService<FoodServices>();
             _materialSupplierServices = provider.GetRequiredService<MaterialSupplierServices>();
 
-            //    items = new List<Product>
-            //{
-            //    new Product { Title = "Product 1", Price = 1000 },
-            //    new Product { Title = "Product 2", Price = 2000 },
-            //    new Product { Title = "Product 3", Price = 3000 }
-            //};
-            //CreateDynamicVisibility();
-            //CreateStackRowSeries();
-            //CreatePieSeries();
+            items = new List<Product>
+            {
+                new Product { Title = "Product 1", Price = 1000 },
+                new Product { Title = "Product 2", Price = 2000 },
+                new Product { Title = "Product 3", Price = 3000 }
+            };
+            CreateDynamicVisibility();
+            CreateStackRowSeries();
+            CreatePieSeries();
         }
 
         public async Task LoadData(CancellationToken token = default)
         {
             try
             {
-                Revenue = await _invoiceServices.GetRevenue(new(From.Year, From.Month, From.Day), new(To.Year, To.Month, To.Day));
-                TotalStaff = await _staffServices.GetTotalStaff(new(From.Year, From.Month, From.Day), new(To.Year, To.Month, To.Day));
-                TotalInvoice = await _invoiceServices.GetTotalInvoice(From, To);
-                TotalFood = await _foodServices.GetTotalFood();
-                TotalMaterialSupplier = await _materialSupplierServices.GetTotalMaterialSuplier();
-                TotalTable = await _coffeTableServices.GetTotalTable();
+                Revenue = await _invoiceServices.GetRevenue(From, To, token);
+                TotalStaff = await _staffServices.GetTotalStaff(From, To, token);
+                TotalInvoice = await _invoiceServices.GetTotalInvoice(From, To, token);
+                TotalFood = await _foodServices.GetTotalFood(token);
+                TotalMaterialSupplier = await _materialSupplierServices.GetTotalMaterialSuplier(token);
+                TotalTable = await _coffeTableServices.GetTotalTable(token);
+            }
+            catch (OperationCanceledException)
+            {
+                throw;
             }
             catch (Exception)
             {

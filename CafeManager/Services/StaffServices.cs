@@ -90,9 +90,36 @@ namespace CafeManager.WPF.Services
             }
         }
 
-        public async Task<int> GetTotalStaff(DateOnly from, DateOnly to)
+        public async Task<int> GetTotalStaff(DateTime from, DateTime to, CancellationToken token = default)
         {
-            return await _unitOfWork.StaffList.GetStaffFromTo(from, to);
+            try
+            {
+                return await _unitOfWork.StaffList.GetStaffFromTo(from, to, token);
+            }
+            catch (OperationCanceledException)
+            {
+                throw;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        public async Task<decimal> GetTotalSalaryFromTo(DateTime from, DateTime to, CancellationToken token = default)
+        {
+            try
+            {
+                return await _unitOfWork.StaffList.GetTotalSalaryFromTo(from, to, token);
+            }
+            catch (OperationCanceledException)
+            {
+                throw;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
         }
     }
 }

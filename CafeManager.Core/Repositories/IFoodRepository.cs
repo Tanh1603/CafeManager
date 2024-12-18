@@ -9,6 +9,6 @@ namespace CafeManager.Core.Repositories
 {
     public interface IFoodRepository : IRepository<Food>
     {
-        Task<int> GetTotalFood();
+        Task<int> GetTotalFood(CancellationToken token = default);
     }
 }

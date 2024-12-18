@@ -268,9 +268,20 @@ namespace CafeManager.WPF.Services
             return await _unitOfWork.MaterialSupplierList.GetByPageAsync(skip, take, searchPredicate);
         }
 
-        public async Task<int> GetTotalMaterialSuplier()
+        public async Task<int> GetTotalMaterialSuplier(CancellationToken token = default)
         {
-            return await _unitOfWork.MaterialSupplierList.GetToTalMaterialSupplier();
+            try
+            {
+                return await _unitOfWork.MaterialSupplierList.GetToTalMaterialSupplier(token);
+            }
+            catch (OperationCanceledException)
+            {
+                throw;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
         }
     }
 }

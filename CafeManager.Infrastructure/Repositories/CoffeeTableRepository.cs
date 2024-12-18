@@ -16,9 +16,20 @@ namespace CafeManager.Infrastructure.Repositories
         {
         }
 
-        public Task<int> GetTotalTable()
+        public async Task<int> GetTotalTable(CancellationToken token = default)
         {
-            return _cafeManagerContext.Coffeetables.CountAsync();
+            try
+            {
+                return await _cafeManagerContext.Coffeetables.CountAsync(token);
+            }
+            catch (OperationCanceledException)
+            {
+                throw;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
         }
     }
 }

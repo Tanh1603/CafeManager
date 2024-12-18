@@ -44,11 +44,74 @@ namespace CafeManager.Infrastructure.Repositories
             return update;
         }
 
-        public async Task<int> GetStaffFromTo(DateOnly from, DateOnly to)
+        public async Task<int> GetStaffFromTo(DateTime from, DateTime to, CancellationToken token = default)
         {
-            return await _cafeManagerContext.Staff
-                .Where(x => x.Startworkingdate >= from &&
-            x.Startworkingdate <= to && x.Endworkingdate <= from && x.Endworkingdate >= to).CountAsync();
+            try
+            {
+                DateOnly fromDO = new(from.Year, from.Month, from.Day);
+                DateOnly toDO = new(to.Year, to.Month, to.Day);
+
+                return await _cafeManagerContext.Staff.Where(x => x.Isdeleted == false && x.Startworkingdate >= fromDO && x.Startworkingdate <= toDO).CountAsync(token);
+            }
+            catch (OperationCanceledException)
+            {
+                throw;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        public async Task<decimal> GetTotalSalaryFromTo(DateTime from, DateTime to, CancellationToken token = default)
+        {
+            try
+            {
+                DateOnly fromDO = new(from.Year, from.Month, from.Day);
+                DateOnly toDO = new(to.Year, to.Month, to.Day);
+                decimal sum = decimal.Zero;
+                var list = await _cafeManagerContext.Staff.Where(x => x.Isdeleted == false && x.Startworkingdate >= fromDO && x.Startworkingdate <= toDO).ToListAsync(token);
+
+                foreach (var staff in list)
+                {
+                    var salaryHistories = staff.Staffsalaryhistories
+                            .OrderBy(h => h.Effectivedate)
+                            .ToList();
+
+                    var salariesInRange = salaryHistories.Where(h => h.Effectivedate >= fromDO && h.Effectivedate <= toDO).ToList();
+
+                    if (salariesInRange.Any())
+                    {
+                        foreach (var salary in salariesInRange)
+                        {
+                            sum += salary.Salary;
+                        }
+                    }
+                    else
+                    {
+                        var previousSalary = salaryHistories
+                            .Where(h => h.Effectivedate < fromDO)
+                            .OrderByDescending(h => h.Effectivedate)
+                            .FirstOrDefault();
+
+                        if (previousSalary != null)
+                        {
+                            // Tính số tháng từ from -> to
+                            int monthsInRange = ((toDO.Year - fromDO.Year) * 12) + (toDO.Month - fromDO.Month) + 1;
+                            sum += previousSalary.Salary * monthsInRange;
+                        }
+                    }
+                }
+                return sum;
+            }
+            catch (OperationCanceledException)
+            {
+                throw;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
         }
     }
 }

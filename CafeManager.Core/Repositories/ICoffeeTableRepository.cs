@@ -9,6 +9,6 @@ namespace CafeManager.Core.Repositories
 {
     public interface ICoffeeTableRepository : IRepository<Coffeetable>
     {
-        Task<int> GetTotalTable();
+        Task<int> GetTotalTable(CancellationToken token = default);
     }
 }

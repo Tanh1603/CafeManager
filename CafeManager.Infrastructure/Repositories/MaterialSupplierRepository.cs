@@ -11,9 +11,20 @@ namespace CafeManager.Infrastructure.Repositories
         {
         }
 
-        public async Task<int> GetToTalMaterialSupplier()
+        public async Task<int> GetToTalMaterialSupplier(CancellationToken token = default)
         {
-            return await _cafeManagerContext.Materialsuppliers.Where(x => x.Isdeleted == false).CountAsync();
+            try
+            {
+                return await _cafeManagerContext.Materialsuppliers.Where(x => x.Isdeleted == false).CountAsync(token);
+            }
+            catch (OperationCanceledException)
+            {
+                throw;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
         }
     }
 }

@@ -452,12 +452,12 @@
                                 MinWidth="70"
                                 MinHeight="30"
                                 Command="{Binding ToggleSeries0Command}"
-                                Content="Thực đơn"
+                                Content="Nhập hàng"
                                 IsChecked="True" />
                             <CheckBox
                                 MinWidth="70"
                                 Command="{Binding ToggleSeries1Command}"
-                                Content="Hóa đơn"
+                                Content="Nhân viên"
                                 IsChecked="True" />
                             <CheckBox
                                 MinWidth="70"

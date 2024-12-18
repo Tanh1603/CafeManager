@@ -12,6 +12,6 @@ namespace CafeManager.Core.Repositories
     {
         Task<int> GetTotalInvoiceFromTo(DateTime from, DateTime to, CancellationToken token = default);
 
-        Task<decimal> GetTotalRevenueFromTo(DateTime from, DateTime to);
+        Task<decimal> GetTotalRevenueFromTo(DateTime from, DateTime to, CancellationToken token = default);
     }
 }

@@ -69,9 +69,20 @@ namespace CafeManager.WPF.Services
             return res;
         }
 
-        public async Task<int> GetTotalTable()
+        public async Task<int> GetTotalTable(CancellationToken token = default)
         {
-            return await _unitOfWork.CoffeeTableList.GetTotalTable();
+            try
+            {
+                return await _unitOfWork.CoffeeTableList.GetTotalTable(token);
+            }
+            catch (OperationCanceledException)
+            {
+                throw;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
         }
     }
 }

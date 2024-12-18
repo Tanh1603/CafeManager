@@ -4,6 +4,6 @@ namespace CafeManager.Core.Repositories
 {
     public interface IMaterialSupplierRepository : IRepository<Materialsupplier>
     {
-        Task<int> GetToTalMaterialSupplier();
+        Task<int> GetToTalMaterialSupplier(CancellationToken token = default);
     }
 }

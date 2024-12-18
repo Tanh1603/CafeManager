@@ -89,9 +89,20 @@ namespace CafeManager.WPF.Services
             }
         }
 
-        public async Task<int> GetTotalFood()
+        public async Task<int> GetTotalFood(CancellationToken token = default)
         {
-            return await _unitOfWork.FoodList.GetTotalFood();
+            try
+            {
+                return await _unitOfWork.FoodList.GetTotalFood(token);
+            }
+            catch (OperationCanceledException)
+            {
+                throw;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
         }
     }
 }

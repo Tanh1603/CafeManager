@@ -53,14 +53,36 @@ namespace CafeManager.WPF.Services
 
         #endregion Thêm xóa, sửa, tìm kiếm, sắp sếp, phân trang
 
-        public async Task<decimal> GetRevenue(DateTime from, DateTime to)
+        public async Task<decimal> GetRevenue(DateTime from, DateTime to, CancellationToken token = default)
         {
-            return await _unitOfWork.InvoiceList.GetTotalRevenueFromTo(from, to);
+            try
+            {
+                return await _unitOfWork.InvoiceList.GetTotalRevenueFromTo(from, to);
+            }
+            catch (OperationCanceledException)
+            {
+                throw;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
         }
 
-        public async Task<int> GetTotalInvoice(DateTime from, DateTime to)
+        public async Task<int> GetTotalInvoice(DateTime from, DateTime to, CancellationToken token = default)
         {
-            return await _unitOfWork.InvoiceList.GetTotalInvoiceFromTo(from, to);
+            try
+            {
+                return await _unitOfWork.InvoiceList.GetTotalInvoiceFromTo(from, to, token);
+            }
+            catch (OperationCanceledException)
+            {
+                throw;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
         }
     }
 }

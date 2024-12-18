@@ -103,37 +103,37 @@
                     Grid.Column="1"
                     Hint="CTY TNHH..."
                     Text="{Binding ModifySupplier.Suppliername, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
-                    Validation.ErrorTemplate="{StaticResource ErrorMessage}" />
+                    Validation.ErrorTemplate="{StaticResource ErrorMessageReg}" />
                 <uc:infoTextInput
                     Grid.Row="1"
                     Grid.Column="1"
                     Hint="Nguyễn Văn A"
                     Text="{Binding ModifySupplier.Representativesupplier, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
-                    Validation.ErrorTemplate="{StaticResource ErrorMessage}" />
+                    Validation.ErrorTemplate="{StaticResource ErrorMessageReg}" />
                 <uc:infoTextInput
                     Grid.Row="2"
                     Grid.Column="1"
                     Hint="0377929994"
                     Text="{Binding ModifySupplier.Phone, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
-                    Validation.ErrorTemplate="{StaticResource ErrorMessage}" />
+                    Validation.ErrorTemplate="{StaticResource ErrorMessageReg}" />
                 <uc:infoTextInput
                     Grid.Row="3"
                     Grid.Column="1"
                     Hint="23520189@gmail.com"
                     Text="{Binding ModifySupplier.Email, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
-                    Validation.ErrorTemplate="{StaticResource ErrorMessage}" />
+                    Validation.ErrorTemplate="{StaticResource ErrorMessageReg}" />
                 <uc:infoTextInput
                     Grid.Row="4"
                     Grid.Column="1"
                     Hint="Địa chỉ"
                     Text="{Binding ModifySupplier.Address, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
-                    Validation.ErrorTemplate="{StaticResource ErrorMessage}" />
+                    Validation.ErrorTemplate="{StaticResource ErrorMessageReg}" />
                 <uc:infoTextInput
                     Grid.Row="5"
                     Grid.Column="1"
                     Hint="More..."
                     Text="{Binding ModifySupplier.Notes, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
-                    Validation.ErrorTemplate="{StaticResource ErrorMessage}" />
+                    Validation.ErrorTemplate="{StaticResource ErrorMessageReg}" />
             </Grid>
 
             <Button

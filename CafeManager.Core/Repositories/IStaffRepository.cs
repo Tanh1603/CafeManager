@@ -11,6 +11,8 @@ namespace CafeManager.Core.Repositories
     {
         Task<Staff?> UpdateStaffWithListSatffSalaryHistory(Staff staff);
 
-        Task<int> GetStaffFromTo(DateOnly from, DateOnly to);
+        Task<int> GetStaffFromTo(DateTime from, DateTime to, CancellationToken token = default);
+
+        Task<decimal> GetTotalSalaryFromTo(DateTime from, DateTime to, CancellationToken token = default);
     }
 }

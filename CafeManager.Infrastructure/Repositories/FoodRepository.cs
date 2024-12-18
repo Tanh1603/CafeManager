@@ -16,9 +16,20 @@ namespace CafeManager.Infrastructure.Repositories
         {
         }
 
-        public async Task<int> GetTotalFood()
+        public async Task<int> GetTotalFood(CancellationToken token = default)
         {
-            return await _cafeManagerContext.Foods.Where(x => x.Isdeleted == false).CountAsync();
+            try
+            {
+                return await _cafeManagerContext.Foods.Where(x => x.Isdeleted == false).CountAsync(token);
+            }
+            catch (OperationCanceledException)
+            {
+                throw;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
         }
     }
 }

@@ -209,7 +209,7 @@
         </Style.Triggers>
     </Style>
 
-    <Style TargetType="CheckBox">
+    <Style x:Key="chkchart" TargetType="CheckBox">
         <Setter Property="Background" Value="#DEDEDE" />
         <Setter Property="Foreground" Value="#dac5b4" />
         <Setter Property="Margin" Value="7" />
@@ -460,6 +460,16 @@
                     </Setter.Value>
                 </Setter>
             </Trigger>
+            <Trigger Property="IsEnabled" Value="False">
+                <Setter Property="Background" Value="#D3D3D3"/>
+             
+                <Setter Property="Foreground" Value="Gray"/>
+                
+                <Setter Property="BorderBrush" Value="#A9A9A9"/>
+                
+                <Setter Property="Opacity" Value="0.7"/>
+               
+            </Trigger>
         </Style.Triggers>
     </Style>
     <Style
@@ -475,6 +485,18 @@
         TargetType="Button">
         <Setter Property="MinWidth" Value="120" />
         <Setter Property="MinHeight" Value="45" />
+        <Style.Triggers>
+            <Trigger Property="IsEnabled" Value="False">
+                <Setter Property="Background" Value="#D3D3D3"/>
+
+                <Setter Property="Foreground" Value="Gray"/>
+
+                <Setter Property="BorderBrush" Value="#A9A9A9"/>
+
+                <Setter Property="Opacity" Value="0.7"/>
+
+            </Trigger>
+        </Style.Triggers>
     </Style>
 
     <Style x:Key="datePickerButton" TargetType="Button">

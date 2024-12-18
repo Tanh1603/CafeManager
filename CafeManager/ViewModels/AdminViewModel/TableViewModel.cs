@@ -25,7 +25,9 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
         private ObservableCollection<CoffeetableDTO> _listTable = [];
 
         [ObservableProperty]
-        private CoffeetableDTO _table = new();
+        [NotifyPropertyChangedFor(nameof(CanSubmit))]
+        [NotifyCanExecuteChangedFor(nameof(ModifyTableCommand))]
+        private CoffeetableDTO _table;
 
         private bool isAdding = false;
 
@@ -39,6 +41,13 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
             var provider = scope.ServiceProvider;
             _coffeTableServices = provider.GetRequiredService<CoffeTableServices>();
             _mapper = provider.GetRequiredService<IMapper>();
+            Table = new CoffeetableDTO();
+            Table.ErrorsChanged += Table_ErrorsChanged;
+        }
+
+        private void Table_ErrorsChanged(object? sender, System.ComponentModel.DataErrorsChangedEventArgs e)
+        {
+            OnPropertyChanged(nameof(CanSubmit));
         }
 
         public async Task LoadData(CancellationToken token = default)
@@ -118,7 +127,9 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
             }
         }
 
-        [RelayCommand]
+        public bool CanSubmit => !Table.HasErrors;
+
+        [RelayCommand(CanExecute =nameof(CanSubmit))]
         private async Task ModifyTable()
         {
             try

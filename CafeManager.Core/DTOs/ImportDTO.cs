@@ -12,15 +12,25 @@ namespace CafeManager.Core.DTOs
         private int _importid;
 
         [ObservableProperty]
+        [NotifyDataErrorInfo]
+        [Required(ErrorMessage = "Không được trống")]
         private string _deliveryperson;
 
         [ObservableProperty]
+        [NotifyDataErrorInfo]
+        [Required(ErrorMessage = "Không được trống")]
+        [RegularExpression(@"^0[0-9]{9,10}$",
+        ErrorMessage = "SĐT không hợp lệ.")]
         private string _phone;
 
         [ObservableProperty]
+        [NotifyDataErrorInfo]
+        [Required(ErrorMessage = "Không được trống")]
         private string _shippingcompany;
 
         [ObservableProperty]
+        [NotifyDataErrorInfo]
+        [Required(ErrorMessage = "Không được trống")]
         private DateTime _receiveddate;
 
         [ObservableProperty]

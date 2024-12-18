@@ -149,6 +149,7 @@
     <Style x:Key="DataGridCellStyle1" TargetType="{x:Type DataGridCell}">
         <Setter Property="Background" Value="Transparent" />
         <Setter Property="VerticalAlignment" Value="Center" />
+        <Setter Property="HorizontalAlignment" Value="Center" />
         <Setter Property="FocusVisualStyle" Value="{x:Null}" />
         <Setter Property="Margin" Value="15,0" />
         <Setter Property="Template">
@@ -284,11 +285,11 @@
         </Setter>
         <Style.Triggers>
             <Trigger Property="IsMouseOver" Value="True">
-                <Setter Property="Background" Value="#612e0f" />
+                <Setter Property="Background" Value="#AE7250" />
                 <Setter Property="Foreground" Value="#ffffff" />
             </Trigger>
             <Trigger Property="IsSelected" Value="True">
-                <Setter Property="Background" Value="#612e0f" />
+                <Setter Property="Background" Value="#AE7250" />
                 <Setter Property="Foreground" Value="#ffffff" />
             </Trigger>
             <MultiTrigger>

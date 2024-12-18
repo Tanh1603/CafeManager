@@ -14,26 +14,34 @@ using System.Threading.Tasks;
 
 namespace CafeManager.WPF.ViewModels.AddViewModel
 {
-    public partial class AddSuppierViewModel : ObservableObject
+    public partial class AddSuppierViewModel : ObservableValidator
     {
         private readonly IServiceProvider _provider;
-        private readonly ErrorViewModel _errorViewModel;
+
         public bool IsUpdating { get; set; } = false;
         public bool IsAdding { get; set; } = false;
 
         [ObservableProperty]
-        private SupplierDTO _modifySupplier = new();
+        [NotifyPropertyChangedFor(nameof(CanSubmit))]
+        [NotifyCanExecuteChangedFor(nameof(SubmitCommand))]
+        private SupplierDTO _modifySupplier;
 
         public event Action<SupplierDTO>? ModifySupplierChanged;
 
         public event Action Close;
 
-        public event EventHandler<DataErrorsChangedEventArgs>? ErrorsChanged;
 
         public AddSuppierViewModel(IServiceProvider provider)
         {
             _provider = provider;
-            _errorViewModel = new ErrorViewModel();
+            ModifySupplier = new SupplierDTO();
+            ModifySupplier.ErrorsChanged += ModifySupplier_ErrorsChanged;
+           
+        }
+
+        private void ModifySupplier_ErrorsChanged(object? sender, DataErrorsChangedEventArgs e)
+        {
+            OnPropertyChanged(nameof(CanSubmit));
         }
 
         public void RecieveSupplierDTO(SupplierDTO supplier)
@@ -48,7 +56,14 @@ namespace CafeManager.WPF.ViewModels.AddViewModel
             IsUpdating = false;
         }
 
-        [RelayCommand]
+
+        public bool CanSubmit => !ModifySupplier.HasErrors;
+
+
+
+
+
+        [RelayCommand(CanExecute =nameof(CanSubmit))]
         private void Submit()
         {
             ModifySupplierChanged?.Invoke(ModifySupplier.Clone());

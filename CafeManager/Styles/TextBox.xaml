@@ -84,7 +84,7 @@
         <Setter Property="MinHeight" Value="38" />
         <Setter Property="FontSize" Value="12" />
         <Setter Property="Padding" Value="10" />
-        <Setter Property="Margin" Value="0,10" />
+
 
 
 
@@ -110,6 +110,11 @@
                         </Trigger>
                         <Trigger Property="IsKeyboardFocused" Value="True">
                             <Setter TargetName="border" Property="BorderBrush" Value="#9e7555" />
+                        </Trigger>
+                        <Trigger Property="Validation.HasError" Value="True">
+                            <Setter TargetName="border" Property="BorderBrush" Value="Red" />
+                            <Setter TargetName="border" Property="BorderThickness" Value="2" />
+                            <Setter TargetName="border" Property="ToolTip" Value="{Binding RelativeSource={RelativeSource Self}, Path=(Validation.Errors)[0].ErrorContent}" />
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
@@ -164,7 +169,10 @@
     <ControlTemplate x:Key="ErrorMessage">
 
         <StackPanel>
-            <Border BorderBrush="Red" BorderThickness="1">
+            <Border
+                BorderBrush="Red"
+                BorderThickness="2"
+                CornerRadius="5">
 
                 <AdornedElementPlaceholder x:Name="textbox" />
             </Border>
@@ -184,11 +192,11 @@
         <StackPanel>
 
 
-            <AdornedElementPlaceholder x:Name="textbox" />
+            <AdornedElementPlaceholder x:Name="textbox1" />
 
 
             <TextBlock
-                Width="{Binding ActualWidth, ElementName=textbox}"
+                Width="{Binding ActualWidth, ElementName=textbox1}"
                 Foreground="Red"
                 Text="{Binding [0].ErrorContent}"
                 TextWrapping="Wrap" />
@@ -197,6 +205,8 @@
 
 
     </ControlTemplate>
+
+
 
     <FontFamily x:Key="coffe">pack://application:,,,/Assets/Fonts/#Butter Chicken</FontFamily>
 </ResourceDictionary>

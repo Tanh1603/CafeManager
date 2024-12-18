@@ -29,7 +29,7 @@
             <!--  Page Title  -->
             <TextBlock
                 Grid.Row="0"
-                Margin="0 20 0 10"
+                Margin="0,20,0,10"
                 HorizontalAlignment="Left"
                 FontSize="32"
                 FontWeight="SemiBold"
@@ -67,15 +67,12 @@
                 <ItemsControl ItemsSource="{Binding ListTable}">
                     <ItemsControl.ItemsPanel>
                         <ItemsPanelTemplate>
-                            <WrapPanel
-                               
-                                MinWidth="990"
-                                MaxWidth="1100" />
+                            <WrapPanel MinWidth="990" MaxWidth="1100" />
                         </ItemsPanelTemplate>
                     </ItemsControl.ItemsPanel>
                     <ItemsControl.ItemTemplate>
                         <DataTemplate>
-            
+
                             <Border
                                 Width="225"
                                 Margin="20"
@@ -241,7 +238,9 @@
                             <uc:infoTextInput
                                 Grid.Row="0"
                                 Grid.Column="1"
-                                Text="{Binding Table.Tablenumber, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" />
+                                Margin="0,10,0,20"
+                                Text="{Binding Table.Tablenumber, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
+                                Validation.ErrorTemplate="{StaticResource ErrorMessage}" />
 
                             <TextBlock
                                 Grid.Row="1"
@@ -253,10 +252,12 @@
                                 Grid.Row="1"
                                 Grid.Column="1"
                                 Width="100"
+                                Margin="0,0,0,20"
                                 HorizontalAlignment="Left"
                                 ItemsSource="{Binding TypeTable}"
                                 SelectedItem="{Binding Table.Seatingcapacity, Mode=TwoWay}"
-                                Style="{StaticResource ComboBoxStyle}">
+                                Style="{StaticResource ComboBoxStyle}"
+                                Validation.ErrorTemplate="{StaticResource ErrorMessage}">
                                 <ComboBox.ItemContainerStyle>
                                     <Style BasedOn="{StaticResource ComboBoxItemStyle}" TargetType="ComboBoxItem">
                                         <Setter Property="Width" Value="{Binding ActualWidth, ElementName=cbtabel}" />
@@ -275,10 +276,25 @@
                                 Grid.Column="0"
                                 Style="{StaticResource infoText}"
                                 Text="Trạng thái: " />
-                            <uc:infoTextInput
+                            <ComboBox
+                                x:Name="cbstatus"
                                 Grid.Row="2"
                                 Grid.Column="1"
-                                Text="{Binding Table.Statustable, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" />
+                                Margin="0,0,0,20"
+                                SelectedValue="{Binding Table.Statustable, Mode=TwoWay}"
+                                Style="{StaticResource ComboBoxStyle}"
+                                Validation.ErrorTemplate="{StaticResource ErrorMessage}">
+                                <ComboBox.ItemContainerStyle>
+                                    <Style BasedOn="{StaticResource ComboBoxItemStyle}" TargetType="ComboBoxItem">
+                                        <Setter Property="Width" Value="{Binding ActualWidth, ElementName=cbstatus}" />
+                                        <Setter Property="Height" Value="{Binding ActualHeight, ElementName=cbstatus}" />
+
+                                    </Style>
+
+                                </ComboBox.ItemContainerStyle>
+                                <ComboBoxItem Content="Trống" />
+                                <ComboBoxItem Content="Đang sử dụng" />
+                            </ComboBox>
 
                             <TextBlock
                                 Grid.Row="3"

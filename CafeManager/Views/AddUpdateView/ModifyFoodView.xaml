@@ -139,10 +139,15 @@
                     <uc:infoTextInput
                         Grid.Row="0"
                         Grid.Column="1"
+                        Margin="0,10,0,20"
                         Hint="trà sữa, trà chanh,..."
-                        Text="{Binding ModifyFood.Foodname, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" />
+                        Text="{Binding ModifyFood.Foodname, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
+                        Validation.ErrorTemplate="{StaticResource ErrorMessage}" />
 
-                    <Grid Grid.Row="1" Grid.Column="1">
+                    <Grid
+                        Grid.Row="1"
+                        Grid.Column="1"
+                        Margin="0,0,0,20">
                         <ComboBox
                             x:Name="cbFoodCategory"
                             FontWeight="Regular"
@@ -168,13 +173,17 @@
                     <uc:infoTextInput
                         Grid.Row="2"
                         Grid.Column="1"
+                        Margin="0,0,0,20"
                         Hint="20000,..."
-                        Text="{Binding ModifyFood.Price, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" />
+                        Text="{Binding ModifyFood.Price, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
+                        Validation.ErrorTemplate="{StaticResource ErrorMessage}" />
                     <uc:infoTextInput
                         Grid.Row="3"
                         Grid.Column="1"
+                        Margin="0,0,0,20"
                         Hint="15%"
-                        Text="{Binding ModifyFood.Discountfood, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" />
+                        Text="{Binding ModifyFood.Discountfood, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
+                        Validation.ErrorTemplate="{StaticResource ErrorMessage}" />
                 </Grid>
                 <Button
                     Grid.Row="3"

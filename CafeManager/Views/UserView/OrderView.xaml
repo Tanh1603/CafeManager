@@ -429,6 +429,7 @@
                                 RowStyle="{DynamicResource DataGridRowStyle1}"
                                 ScrollViewer.HorizontalScrollBarVisibility="auto"
                                 ScrollViewer.VerticalScrollBarVisibility="Hidden"
+                                Background="#AF7C5D"
                                 Style="{DynamicResource DataGridStyle1}">
 
                                 <DataGrid.Columns>
@@ -453,7 +454,7 @@
                                                     <TextBlock
                                                         HorizontalAlignment="Center"
                                                         FontSize="16"
-                                                        Foreground="#612e0f"
+                                                        
                                                         Text="{Binding Food.Foodname}" />
                                                 </Grid>
                                             </DataTemplate>
@@ -465,7 +466,7 @@
                                             <DataTemplate>
                                                 <Grid HorizontalAlignment="Center">
                                                     <materialDesign:NumericUpDown
-                                                        Foreground="#612e0f"
+                                                        
                                                         Minimum="1"
                                                         Value="{Binding Quantity, UpdateSourceTrigger=PropertyChanged}">
                                                         <materialDesign:NumericUpDown.IncreaseContent>
@@ -497,7 +498,7 @@
                                             <DataTemplate>
                                                 <TextBlock
                                                     HorizontalAlignment="Center"
-                                                    Foreground="#612e0f"
+                                                    
                                                     Text="{Binding Food.PriceDiscount, Mode=OneWay, Converter={StaticResource CurrencyConverter}}" />
                                             </DataTemplate>
                                         </DataGridTemplateColumn.CellTemplate>

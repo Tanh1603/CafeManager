@@ -451,17 +451,22 @@
                             <CheckBox
                                 MinWidth="70"
                                 MinHeight="30"
+                                Style="{StaticResource chkchart}"
                                 Command="{Binding ToggleSeries0Command}"
                                 Content="Thực đơn"
                                 IsChecked="True" />
                             <CheckBox
                                 MinWidth="70"
                                 Command="{Binding ToggleSeries1Command}"
+                                Style="{StaticResource chkchart}"
+                                
                                 Content="Hóa đơn"
                                 IsChecked="True" />
                             <CheckBox
                                 MinWidth="70"
                                 Command="{Binding ToggleSeries2Command}"
+                                Style="{StaticResource chkchart}"
+                                
                                 Content="Doanh thu"
                                 IsChecked="True" />
                         </StackPanel>

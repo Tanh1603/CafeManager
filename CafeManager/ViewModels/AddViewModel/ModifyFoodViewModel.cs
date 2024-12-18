@@ -10,18 +10,21 @@ using System.Windows.Media.Imaging;
 
 namespace CafeManager.WPF.ViewModels.AddViewModel
 {
-    public partial class ModifyFoodViewModel : ObservableObject
+    public partial class ModifyFoodViewModel : ObservableValidator
     {
         private readonly IServiceProvider _provider;
         private readonly FileDialogService _fileDialogService;
 
         [ObservableProperty]
-        public FoodDTO _modifyFood = new();
+        [NotifyPropertyChangedFor(nameof(CanSubmit))]
+        [NotifyCanExecuteChangedFor(nameof(SubmitCommand))]
+        public FoodDTO _modifyFood;
 
         [ObservableProperty]
         private FoodCategoryDTO? _selectedFoodCategory = new();
 
         [ObservableProperty]
+
         private ObservableCollection<FoodCategoryDTO> _listFoodCategory = [];
 
         public bool IsUpdating { get; set; } = false;
@@ -33,6 +36,14 @@ namespace CafeManager.WPF.ViewModels.AddViewModel
         {
             _provider = provider;
             _fileDialogService = _provider.GetRequiredService<FileDialogService>();
+            ModifyFood = new FoodDTO();
+            ModifyFood.ErrorsChanged += ModifyFood_ErrorsChanged;
+
+        }
+
+        private void ModifyFood_ErrorsChanged(object? sender, System.ComponentModel.DataErrorsChangedEventArgs e)
+        {
+            OnPropertyChanged(nameof(CanSubmit));
         }
 
         public void ReceiveFood(FoodDTO foodDTO)
@@ -52,7 +63,9 @@ namespace CafeManager.WPF.ViewModels.AddViewModel
             IsUpdating = false;
         }
 
-        [RelayCommand]
+        public bool CanSubmit => !ModifyFood.HasErrors;
+
+        [RelayCommand(CanExecute = nameof(CanSubmit))]
         private void Submit()
         {
             if (SelectedFoodCategory != null)

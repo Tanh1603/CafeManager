@@ -29,7 +29,8 @@
                         FontSize="42"
                         FontWeight="SemiBold"
                         Foreground="#ffffff"
-                        Text="Đăng kí" />
+                        FontFamily="{StaticResource coffe}"
+                        Text="Cafe Manager" />
                     <materialDesign:PackIcon
                         Width="100"
                         Height="100"
@@ -127,7 +128,7 @@
                         FontSize="32"
                         FontWeight="Bold"
                         Foreground="#cb925d"
-                        Text="Đăng kí tài khoản" />
+                        Text="Đăng kí" />
                     <StackPanel Grid.Row="1" Margin="0,20">
                         <Grid Margin="0,15">
                             <Grid.ColumnDefinitions>
@@ -200,6 +201,7 @@
                                 Foreground="#9b442a"
                                 Kind="EmailAdd" />
                             <TextBox
+                                
                                 Grid.Column="1"
                                 MinHeight="50"
                                 Margin="10,0"

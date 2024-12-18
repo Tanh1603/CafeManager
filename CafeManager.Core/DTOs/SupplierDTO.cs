@@ -28,11 +28,15 @@ namespace CafeManager.Core.DTOs
         [ObservableProperty]
         [NotifyDataErrorInfo]
         [Required(ErrorMessage = "Không được trống")]
+        [RegularExpression(@"^0[0-9]{9,10}$",
+        ErrorMessage = "SĐT không hợp lệ.")]
         private string _phone;
 
         [ObservableProperty]
         [NotifyDataErrorInfo]
         [Required(ErrorMessage = "Không được trống")]
+        [RegularExpression(@"^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$",
+        ErrorMessage = "Email không đúng định dạng")]
         private string _email;
 
         [ObservableProperty]

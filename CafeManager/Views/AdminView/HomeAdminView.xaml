@@ -12,12 +12,14 @@
     xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:uc="clr-namespace:CafeManager.WPF.Assets.UsersControls"
+    Name="dashboardview"
     d:DataContext="{d:DesignInstance Type=adminviewmodel:HomeViewModel}"
     d:DesignHeight="700"
     d:DesignWidth="1300"
     mc:Ignorable="d">
     <UserControl.Resources>
         <converter:CurrencyConverter x:Key="CurrencyConverter" />
+        <converter:EqualsConverter x:Key="EqualsConverter" />
 
     </UserControl.Resources>
     <Grid>
@@ -365,20 +367,96 @@
                                 <GradientStop Offset="0" Color="#f2ccb7" />
                             </LinearGradientBrush>
                         </Border.Background>
-                        <lvc:CartesianChart
-                            
-                            Series="{Binding RevenueSeries}"
-                            Zoom="{Binding ZoomingMode}">
-                            <lvc:CartesianChart.AxisX>
-                                <lvc:Axis
-                                    Title="Date Range"
-                                    LabelFormatter="{Binding XFormatter}"
-                                     />
-                            </lvc:CartesianChart.AxisX>
-                            <lvc:CartesianChart.AxisY>
-                                <lvc:Axis Title="Revenue" LabelFormatter="{Binding YFormatter}" />
-                            </lvc:CartesianChart.AxisY>
-                        </lvc:CartesianChart>
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="auto" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+                            <StackPanel VerticalAlignment="Center">
+                                <RadioButton
+                                    Width="30"
+                                    Height="30"
+                                    Command="{Binding ChangeTopicCommand}"
+                                    CommandParameter="Revenue"
+                                    IsChecked="{Binding SelectedTopic, Converter={StaticResource EqualsConverter}, ConverterParameter='Revenue', Mode=TwoWay}"
+                                    Style="{StaticResource statisBtn}">
+                                    <ma:PackIconMaterial Kind="Cash" />
+                                </RadioButton>
+                                <RadioButton
+                                    Width="30"
+                                    Height="30"
+                                    Command="{Binding ChangeTopicCommand}"
+                                    CommandParameter="Invoice"
+                                    IsChecked="{Binding SelectedTopic, Converter={StaticResource EqualsConverter}, ConverterParameter='Invoice', Mode=TwoWay}"
+                                    Style="{StaticResource statisBtn}">
+                                    <ma:PackIconMaterial Kind="InvoiceText" />
+                                </RadioButton>
+                                <RadioButton
+                                    Width="30"
+                                    Height="30"
+                                    Command="{Binding ChangeTopicCommand}"
+                                    CommandParameter="Import"
+                                    IsChecked="{Binding SelectedTopic, Converter={StaticResource EqualsConverter}, ConverterParameter='Import', Mode=TwoWay}"
+                                    Style="{StaticResource statisBtn}">
+                                    <ma:PackIconMaterial Kind="AccountCircle" />
+                                </RadioButton>
+                            </StackPanel>
+                            <Grid Grid.Column="1">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="auto" />
+                                    <RowDefinition Height="*" />
+                                </Grid.RowDefinitions>
+                                <StackPanel
+                                    HorizontalAlignment="Right"
+                                    VerticalAlignment="Bottom"
+                                    Orientation="Horizontal">
+                                    <RadioButton
+                                        Command="{Binding ChangeTimeChartZoomCommand}"
+                                        CommandParameter="Daily"
+                                        Content="Ngày"
+                                        IsChecked="{Binding SelectedTimeChartZoom, Converter={StaticResource EqualsConverter}, ConverterParameter='Daily', Mode=TwoWay}"
+                                        Style="{StaticResource topMenuButton}" />
+                                    <RadioButton
+                                        Command="{Binding ChangeTimeChartZoomCommand}"
+                                        CommandParameter="Monthly"
+                                        Content="Tháng"
+                                        IsChecked="{Binding SelectedTimeChartZoom, Converter={StaticResource EqualsConverter}, ConverterParameter='Monthly', Mode=TwoWay}"
+                                        Style="{StaticResource topMenuButton}" />
+                                    <RadioButton
+                                        Command="{Binding ChangeTimeChartZoomCommand}"
+                                        CommandParameter="Yearly"
+                                        Content="Năm"
+                                        IsChecked="{Binding SelectedTimeChartZoom, Converter={StaticResource EqualsConverter}, ConverterParameter='Yearly', Mode=TwoWay}"
+                                        Style="{StaticResource topMenuButton}" />
+
+                                </StackPanel>
+                                <lvc:CartesianChart
+                                    Grid.Row="1"
+                                    LegendLocation="Bottom"
+                                    Pan="X"
+                                    Series="{Binding ChartZoomCollection}"
+                                    Zoom="{Binding ZoomingMode}"
+                                    ZoomingSpeed="0.5">
+
+                                    <lvc:CartesianChart.AxisX>
+                                        <lvc:Axis
+                                            LabelFormatter="{Binding XFormatterChartZoom}"
+                                            Labels="{Binding LabelChartZoom}"
+                                            />
+                                    </lvc:CartesianChart.AxisX>
+                                    <lvc:CartesianChart.AxisY>
+                                        <lvc:Axis
+                                            Title="Số lượng"
+                                            Foreground="#612e0f"
+                                            LabelFormatter="{Binding YFormatterChartZoom}"        
+                                            MinValue="0" 
+                                            
+                                            
+                                            />
+                                    </lvc:CartesianChart.AxisY>
+                                </lvc:CartesianChart>
+                            </Grid>
+                        </Grid>
                     </Border>
                 </Grid>
             </Grid>
@@ -387,7 +465,7 @@
                     <Border.Background>
                         <LinearGradientBrush StartPoint="0,0.5" EndPoint="1,0.5">
                             <GradientStop Offset="1" Color="#7A4E36" />
-                            <GradientStop Offset="0" Color="#66402F" />
+                            <GradientStop Offset="0" Color="#886255" />
                         </LinearGradientBrush>
                     </Border.Background>
                     <Grid>
@@ -403,10 +481,10 @@
                                 Foreground="#dac5b4"
                                 Text="Thực đơn yêu thích" />
                         </Grid>
-                        <!--<ListBox
+                        <ListBox
                             x:Name="listbox"
                             Grid.Row="1"
-                            ItemsSource="{Binding items}">
+                            ItemsSource="{Binding MostSoldFood}">
 
                             <ListBox.ItemTemplate>
 
@@ -444,7 +522,7 @@
                                                     FontSize="14"
                                                     FontWeight="Bold"
                                                     Foreground="#dac5b4"
-                                                    Text="{Binding Title}" />
+                                                    Text="{Binding Foodname}" />
                                             </Grid>
 
                                             <Grid Grid.Column="2">
@@ -459,7 +537,7 @@
                                     </Border>
                                 </DataTemplate>
                             </ListBox.ItemTemplate>
-                        </ListBox>-->
+                        </ListBox>
                     </Grid>
                 </Border>
             </Grid>
@@ -492,7 +570,7 @@
                 </Grid>
 
                 <Grid Grid.Column="1" Margin="10">
-                    <!--<Border Padding="10" CornerRadius="10">
+                    <Border Padding="10" CornerRadius="10">
                         <Border.Background>
                             <LinearGradientBrush StartPoint="0,0.5" EndPoint="1,0.5">
                                 <GradientStop Offset="1" Color="#fee3d4" />
@@ -505,42 +583,37 @@
                                 <RowDefinition Height="*" />
                             </Grid.RowDefinitions>
                             <StackPanel
-                                Grid.Row="0"
-                                Margin="5"
+                                HorizontalAlignment="Left"
+                                VerticalAlignment="Bottom"
                                 Orientation="Horizontal">
-                                <CheckBox
-                                    MinWidth="70"
-                                    MinHeight="30"
-                                    Command="{Binding ToggleSeries0Command}"
-                                    Content="Nhập hàng"
-                                    IsChecked="True"
-                                    Style="{StaticResource chkchart}" />
-                                <CheckBox
-                                    MinWidth="70"
-                                    Command="{Binding ToggleSeries1Command}"
-                                    Content="Hóa đơn"
-                                    IsChecked="True"
-                                    Style="{StaticResource chkchart}" />
-                                <CheckBox
-                                    MinWidth="70"
-                                    Command="{Binding ToggleSeries2Command}"
-                                    Content="Doanh thu"
-                                    IsChecked="True"
-                                    Style="{StaticResource chkchart}" />
+
+                                <RadioButton
+                                    Command="{Binding ChangeTimeChartColCommand}"
+                                    CommandParameter="Monthly"
+                                    Content="Tháng"
+                                    IsChecked="{Binding SelectedTimeChartCol, Converter={StaticResource EqualsConverter}, ConverterParameter='Monthly', Mode=TwoWay}"
+                                    Style="{StaticResource topMenuButton}" />
+                                <RadioButton
+                                    Command="{Binding ChangeTimeChartColCommand}"
+                                    CommandParameter="Yearly"
+                                    Content="Năm"
+                                    IsChecked="{Binding SelectedTimeChartCol, Converter={StaticResource EqualsConverter}, ConverterParameter='Yearly', Mode=TwoWay}"
+                                    Style="{StaticResource topMenuButton}" />
+
                             </StackPanel>
                             <lvc:CartesianChart
                                 Grid.Row="1"
                                 LegendLocation="Bottom"
-                                Series="{Binding ColumnSeries}">
+                                Series="{Binding ChartColumnCollection}">
                                 <lvc:CartesianChart.AxisX>
-                                    <lvc:Axis Title="Salesman" Labels="{Binding LabelsCol}" />
+                                    <lvc:Axis Title="Quản lí chi tiêu" Labels="{Binding LabelChartCol}" LabelFormatter="{Binding XFormatterChartCol}" />
                                 </lvc:CartesianChart.AxisX>
                                 <lvc:CartesianChart.AxisY>
-                                    <lvc:Axis Title="Sold Apps" LabelFormatter="{Binding FormatterCol}" />
+                                    <lvc:Axis Title="Số lượng" MinValue="0" Foreground="#612e0f" />
                                 </lvc:CartesianChart.AxisY>
                             </lvc:CartesianChart>
                         </Grid>
-                    </Border>-->
+                    </Border>
                 </Grid>
             </Grid>
 

@@ -26,7 +26,7 @@ namespace CafeManager.Core.DTOs
         [NotifyDataErrorInfo]
         [Required(ErrorMessage = "Không được trống")]
         [Range(0, double.MaxValue, ErrorMessage = "Giá phải lớn hơn 0")]
-        [RegularExpression(@"^\d+(\.\d{1,2})?$", ErrorMessage = "Giá phải là số")]
+        
         [NotifyPropertyChangedFor(nameof(PriceDiscount))]
         private decimal _price;
 

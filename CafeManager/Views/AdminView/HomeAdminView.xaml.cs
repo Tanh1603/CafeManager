@@ -1,4 +1,6 @@
-﻿using System;
+﻿using CafeManager.WPF.ViewModels.AdminViewModel;
+using LiveCharts.Wpf.Charts.Base;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -23,9 +25,9 @@ namespace CafeManager.WPF.Views.AdminView
         public HomeAdminView()
         {
             InitializeComponent();
-           
+            
 
-           
+
         }
 
         private void CartesianChart_Loaded(object sender, RoutedEventArgs e)
@@ -33,9 +35,8 @@ namespace CafeManager.WPF.Views.AdminView
 
         }
 
-        private void RevenueChart_MouseWheel(object sender, MouseWheelEventArgs e)
-        {
+  
 
-        }
+        
     };
 }

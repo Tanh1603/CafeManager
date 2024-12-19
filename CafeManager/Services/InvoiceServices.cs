@@ -105,7 +105,7 @@ namespace CafeManager.WPF.Services
         {
             try
             {
-                return await _unitOfWork.InvoiceList.GetRevenueByDay(from, to);
+                return await _unitOfWork.InvoiceList.GetRevenueByDay(from, to, token);
             }
             catch (OperationCanceledException)
             {
@@ -113,6 +113,64 @@ namespace CafeManager.WPF.Services
             }
             catch (Exception)
             {
+                throw;
+            }
+        }
+
+        public async Task<List<int>> GetTotalInvoiceByDay(DateTime from, DateTime to, CancellationToken token = default)
+        {
+            try
+            {
+                return await _unitOfWork.InvoiceList.GetTotalInvoiceByDay(from, to, token);
+            }
+            catch (OperationCanceledException)
+            {
+                throw;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        public async Task<List<int>> GetTotalInvoiceByMonth(DateTime from, DateTime to, CancellationToken token = default)
+        {
+            try
+            {
+                return await _unitOfWork.InvoiceList.GetTotalInvoiceByMonth(from, to, token);
+            }
+            catch (OperationCanceledException)
+            {
+                throw;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        public async Task<List<decimal>> GetRevenueByYear(DateTime from, DateTime to, CancellationToken token = default)
+        {
+            try
+            {
+                return await _unitOfWork.InvoiceList.GetRevenueByYear(from, to, token);
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+        }
+
+        public async Task<List<int>> GetTotalInvoiceByYear(DateTime from, DateTime to, CancellationToken token = default)
+        {
+            try
+            {
+                return await _unitOfWork.InvoiceList.GetTotalInvoiceByYear(from, to, token);
+            }
+            catch (Exception)
+            {
+
                 throw;
             }
         }

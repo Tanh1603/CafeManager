@@ -2,6 +2,7 @@
 using CafeManager.Core.Services;
 using Microsoft.Extensions.DependencyInjection;
 using System.Linq.Expressions;
+using System.Security.RightsManagement;
 
 namespace CafeManager.WPF.Services
 {
@@ -74,6 +75,37 @@ namespace CafeManager.WPF.Services
             try
             {
                 return await _unitOfWork.InvoiceList.GetTotalInvoiceFromTo(from, to, token);
+            }
+            catch (OperationCanceledException)
+            {
+                throw;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+        public async Task<List<decimal>> GetRevenueByMonth(DateTime from, DateTime to, CancellationToken token = default)
+        {
+            try
+            {
+                return await _unitOfWork.InvoiceList.GetRevenueByMonth(from, to, token);
+            }
+            catch (OperationCanceledException)
+            {
+                throw;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        public async Task<List<decimal>> GetRevenueByDay(DateTime from, DateTime to, CancellationToken token = default)
+        {
+            try
+            {
+                return await _unitOfWork.InvoiceList.GetRevenueByDay(from, to);
             }
             catch (OperationCanceledException)
             {

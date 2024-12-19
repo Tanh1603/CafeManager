@@ -32,7 +32,10 @@ namespace CafeManager.WPF.Views.AdminView
         {
 
         }
-       
-        
+
+        private void RevenueChart_MouseWheel(object sender, MouseWheelEventArgs e)
+        {
+
+        }
     };
 }

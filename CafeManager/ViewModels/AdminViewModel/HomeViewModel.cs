@@ -32,6 +32,11 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
         private readonly FoodServices _foodServices;
         private readonly MaterialSupplierServices _materialSupplierServices;
 
+
+        private CancellationToken _token = default;
+        [ObservableProperty]
+        private bool _isLoading;
+
         [ObservableProperty]
         private decimal _revenue = 0;
 
@@ -50,6 +55,24 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
         [ObservableProperty]
         private int _totalTable;
 
+        [ObservableProperty]
+        private List<decimal> _revenueDay;
+
+        [ObservableProperty]
+        private List<decimal> _revenueMonth;
+
+        [ObservableProperty]
+        private SeriesCollection _revenueSeries;
+
+        [ObservableProperty]
+        private Func<double, string> _xFormatter;
+
+        [ObservableProperty]
+        private Func<double, string> _yFormatter;
+
+        [ObservableProperty]
+        
+
         private DateTime _from = new(DateTime.Now.Year, DateTime.Now.Month, 1);
 
         public DateTime From
@@ -60,6 +83,7 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
                 {
                     _from = value;
                     OnPropertyChanged();
+                    _ = LoadData(_token);
                 }
             }
         }
@@ -74,11 +98,18 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
                 {
                     _to = value;
                     OnPropertyChanged();
+                    _ = LoadData(_token);
                 }
             }
         }
+        [ObservableProperty]
+        private ZoomingOptions _zoomingMode;
 
-        public IEnumerable<Product> items { get; set; }
+        [ObservableProperty]
+        private int _xMin;
+
+        [ObservableProperty]
+        private int _xMax;
 
         public HomeViewModel(IServiceScope scope)
         {
@@ -89,27 +120,25 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
             _foodServices = provider.GetRequiredService<FoodServices>();
             _materialSupplierServices = provider.GetRequiredService<MaterialSupplierServices>();
 
-            items = new List<Product>
-            {
-                new Product { Title = "Product 1", Price = 1000 },
-                new Product { Title = "Product 2", Price = 2000 },
-                new Product { Title = "Product 3", Price = 3000 }
-            };
-            CreateDynamicVisibility();
-            CreateStackRowSeries();
-            CreatePieSeries();
+        
         }
 
         public async Task LoadData(CancellationToken token = default)
         {
             try
             {
+                IsLoading = true;
                 Revenue = await _invoiceServices.GetRevenue(From, To, token);
                 TotalStaff = await _staffServices.GetTotalStaff(From, To, token);
                 TotalInvoice = await _invoiceServices.GetTotalInvoice(From, To, token);
                 TotalFood = await _foodServices.GetTotalFood(token);
                 TotalMaterialSupplier = await _materialSupplierServices.GetTotalMaterialSuplier(token);
                 TotalTable = await _coffeTableServices.GetTotalTable(token);
+                await LoadChartZoom(From, To, token);
+               
+
+
+                IsLoading = false;
             }
             catch (OperationCanceledException)
             {
@@ -121,123 +150,62 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
             }
         }
 
-        private void CreatePieSeries()
+        public async Task LoadChartZoom(DateTime from, DateTime to, CancellationToken token)
         {
-            PieSeries = new SeriesCollection
+            
+
+            RevenueDay = await _invoiceServices.GetRevenueByDay(from, to, token);
+
+            
+
+            RevenueSeries = new SeriesCollection
+        {
+            new LineSeries
             {
-                new PieSeries
-                {
-                    Title = "Chrome",
-                    Values = new ChartValues<ObservableValue> { new ObservableValue(8) },
-                    DataLabels = true
-                },
-                new PieSeries
-                {
-                    Title = "Mozilla",
-                    Values = new ChartValues<ObservableValue> { new ObservableValue(6) },
-                    DataLabels = true
-                },
-                new PieSeries
-                {
-                    Title = "Opera",
-                    Values = new ChartValues<ObservableValue> { new ObservableValue(10) },
-                    DataLabels = true
-                },
-                new PieSeries
-                {
-                    Title = "Explorer",
-                    Values = new ChartValues<ObservableValue> { new ObservableValue(4) },
-                    DataLabels = true
-                }
+                Title = "Revenue by Day",
+                Values = new ChartValues<decimal>(RevenueDay),
+                PointGeometry = DefaultGeometries.Circle,
+                PointGeometrySize = 5
+            }
+        };
+            XMin = 0;
+            XMax = (to - from).Days;
+
+            XFormatter = val =>
+            {
+                var date = from.AddDays(val);
+                return date.ToString("dd MMM");
             };
+
+            YFormatter = val => val.ToString("C");
+            ZoomingMode = ZoomingOptions.X;
+
         }
 
-        private void CreateStackRowSeries()
-        {
-            StackRowSeries = new SeriesCollection
-            {
-                new StackedRowSeries
-                {
-                    Values = new ChartValues<double> {4, 5, 6, 8},
-                    StackMode = StackMode.Values, // this is not necessary, values is the default stack mode
-                    DataLabels = true
-                },
-                new StackedRowSeries
-                {
-                    Values = new ChartValues<double> {2, 5, 6, 7},
-                    StackMode = StackMode.Values,
-                    DataLabels = true
-                }
-            };
 
-            LabelsStackRow = new[] { "Chrome", "Mozilla", "Opera", "IE" };
-            FormatterStackRow = value => value + " Mill";
-        }
 
-        private void CreateDynamicVisibility()
-        {
-            FoodSeries = new ColumnSeries
-            {
-                Title = "Food",
-                Values = new ChartValues<double> { 10, 50, 39, 50 }
-            };
 
-            ProfitSeries = new ColumnSeries
-            {
-                Title = "Profit",
-                Values = new ChartValues<double> { 10, 50, 39, 50 }
-            };
-            InvoiceSeries = new ColumnSeries
-            {
-                Title = "Invoice",
-                Values = new ChartValues<double> { 10, 50, 39, 50 }
-            };
 
-            ColumnSeries = new SeriesCollection
-            {
-                FoodSeries,
-                ProfitSeries,
-                InvoiceSeries
-            };
-            LabelsCol = new[] { "Maria", "Susan", "Charles", "Frida" };
-            FormatterCol = value => value.ToString("N");
-        }
 
-        public SeriesCollection PieSeries { get; set; }
-        public SeriesCollection StackRowSeries { get; set; }
-        public string[] LabelsStackRow { get; set; }
-        public Func<double, string> FormatterStackRow { get; set; }
 
-        public ColumnSeries FoodSeries { get; set; }
-        public ColumnSeries ProfitSeries { get; set; }
-        public ColumnSeries InvoiceSeries { get; set; }
-        public string[] LabelsCol { get; set; }
-        public Func<double, string> FormatterCol { get; set; }
+        //[RelayCommand]
+        //public void ToggleSeries0() => FoodSeries.Visibility = FoodSeries.Visibility == Visibility.Visible
+        //        ? Visibility.Hidden
+        //        : Visibility.Visible;
 
-        public SeriesCollection ColumnSeries { get; set; }
+        //[RelayCommand]
+        //public void ToggleSeries1() =>
+        //   ProfitSeries.Visibility = ProfitSeries.Visibility == Visibility.Visible
+        //        ? Visibility.Hidden
+        //        : Visibility.Visible;
 
-        [RelayCommand]
-        public void ToggleSeries0() => FoodSeries.Visibility = FoodSeries.Visibility == Visibility.Visible
-                ? Visibility.Hidden
-                : Visibility.Visible;
+        //[RelayCommand]
+        //public void ToggleSeries2() =>
+        //    InvoiceSeries.Visibility = InvoiceSeries.Visibility == Visibility.Visible
+        //        ? Visibility.Hidden
+        //        : Visibility.Visible;
 
-        [RelayCommand]
-        public void ToggleSeries1() =>
-           ProfitSeries.Visibility = ProfitSeries.Visibility == Visibility.Visible
-                ? Visibility.Hidden
-                : Visibility.Visible;
 
-        [RelayCommand]
-        public void ToggleSeries2() =>
-            InvoiceSeries.Visibility = InvoiceSeries.Visibility == Visibility.Visible
-                ? Visibility.Hidden
-                : Visibility.Visible;
-
-        public class Product
-        {
-            public string Title { get; set; }
-            public decimal Price { get; set; }
-        }
 
         #region handleDatePicker
 

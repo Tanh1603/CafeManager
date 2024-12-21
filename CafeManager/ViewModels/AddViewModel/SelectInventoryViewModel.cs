@@ -25,6 +25,9 @@ namespace CafeManager.WPF.ViewModels.AddViewModel
         private readonly IMapper _mapper;
 
         [ObservableProperty]
+        private bool _isLoading;
+
+        [ObservableProperty]
         private List<MaterialSupplierDTO> _listInventoryDTO = [];
 
         [ObservableProperty]
@@ -49,7 +52,7 @@ namespace CafeManager.WPF.ViewModels.AddViewModel
                 {
                     _selectedMaterial = value;
                     OnPropertyChanged(nameof(SelectedMaterial));
-                    _ = FirstPage();
+                    FirstPageCommand.ExecuteAsync(null);
                 }
             }
         }
@@ -65,7 +68,7 @@ namespace CafeManager.WPF.ViewModels.AddViewModel
                 {
                     _selectedSupplier = value;
                     OnPropertyChanged(nameof(SelectedSupplier));
-                    _ = FirstPage();
+                    FirstPageCommand.ExecuteAsync(null);
                 }
             }
         }
@@ -142,8 +145,9 @@ namespace CafeManager.WPF.ViewModels.AddViewModel
         private async Task FirstPage()
         {
             pageIndex = 1;
-
+            IsLoading = true;
             await LoadData();
+            IsLoading = false;
         }
 
         [RelayCommand]
@@ -154,7 +158,9 @@ namespace CafeManager.WPF.ViewModels.AddViewModel
                 return;
             }
             pageIndex += 1;
+            IsLoading = true;
             await LoadData();
+            IsLoading = false;
         }
 
         [RelayCommand]
@@ -165,14 +171,18 @@ namespace CafeManager.WPF.ViewModels.AddViewModel
                 return;
             }
             pageIndex -= 1;
+            IsLoading = true;
             await LoadData();
+            IsLoading = false;
         }
 
         [RelayCommand]
         private async Task LastPage()
         {
             pageIndex = totalPages;
+            IsLoading = true;
             await LoadData();
+            IsLoading = false;
         }
         #endregion
 

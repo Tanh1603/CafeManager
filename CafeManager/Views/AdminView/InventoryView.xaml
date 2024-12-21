@@ -63,7 +63,7 @@
                     Foreground="#602414"
                     Text="Vật liệu: " />
                 <ComboBox
-                    Width="150"
+                    Width="140"
                     materialDesign:TextFieldAssist.HasClearButton="True"
                     ItemsSource="{Binding ListMaterialDTO}"
                     SelectedItem="{Binding SelectedMaterial}"
@@ -90,7 +90,7 @@
                     Foreground="#602414"
                     Text="Nhà sản xuất: " />
                 <ComboBox
-                    Width="150"
+                    Width="140"
                     materialDesign:TextFieldAssist.HasClearButton="True"
                     ItemsSource="{Binding ListSupplierDTO}"
                     SelectedItem="{Binding SelectedSupplier}"
@@ -117,7 +117,7 @@
                     Foreground="#602414"
                     Text="NSX: " />
                 <DatePicker
-                    Width="120"
+                    Width="110"
                     VerticalAlignment="Center"
                     materialDesign:HintAssist.Hint="Chọn ngày"
                     materialDesign:TextFieldAssist.HasClearButton="True"
@@ -132,7 +132,7 @@
                     Foreground="#602414"
                     Text="HSD: " />
                 <DatePicker
-                    Width="120"
+                    Width="110"
                     VerticalAlignment="Center"
                     materialDesign:HintAssist.Hint="Chọn ngày"
                     materialDesign:TextFieldAssist.HasClearButton="True"

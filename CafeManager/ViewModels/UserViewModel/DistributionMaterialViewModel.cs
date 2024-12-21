@@ -26,6 +26,9 @@ namespace CafeManager.WPF.ViewModels.UserViewModel
         private readonly IMapper _mapper;
 
         [ObservableProperty]
+        private bool _isLoading;
+
+        [ObservableProperty]
         private List<MaterialDTO> _listMaterialDTO = [];
 
         #region Inventory Delcare
@@ -67,7 +70,7 @@ namespace CafeManager.WPF.ViewModels.UserViewModel
                 {
                     _selectedMaterial = value;
                     OnPropertyChanged(nameof(SelectedMaterial));
-                    _ = FirstPage();
+                    FirstPageCommand.ExecuteAsync(null);
                 }
             }
         }
@@ -83,7 +86,7 @@ namespace CafeManager.WPF.ViewModels.UserViewModel
                 {
                     _filterUseDate = value;
                     OnPropertyChanged(nameof(FilterUseDate));
-                    _ = FirstPage();
+                    FirstPageCommand.ExecuteAsync(null);
                 }
             }
         }
@@ -109,6 +112,7 @@ namespace CafeManager.WPF.ViewModels.UserViewModel
             try
             {
                 token.ThrowIfCancellationRequested();
+                _isLoading = true;
                 var dbMaterial = (await _materialSupplierServices.GetListMaterial(token)).Where(x => x.Isdeleted == false).ToList();
                 var dbSupplier = (await _materialSupplierServices.GetListExistedSupplier()).ToList();
                 var dbInventory = (await _materialSupplierServices.GetListMaterialSupplier(token)).Where(x => x.Isdeleted == false).ToList();
@@ -118,10 +122,15 @@ namespace CafeManager.WPF.ViewModels.UserViewModel
 
                 SelectInventoryVM.ReceiveListMaterial(ListMaterialDTO);
                 SelectInventoryVM.ReceiveListSupplier([.. _mapper.Map<List<SupplierDTO>>(dbSupplier)]);
+                IsLoading = false;
             }
             catch (OperationCanceledException)
             {
                 Debug.WriteLine("LoadData của ImportViewModel bị hủy");
+            }
+            finally
+            {
+                IsLoading = false;
             }
         }
         private async Task LoadConsumedMaterial(CancellationToken token = default)
@@ -255,8 +264,9 @@ namespace CafeManager.WPF.ViewModels.UserViewModel
         private async Task FirstPage()
         {
             pageIndex = 1;
-
+            IsLoading = true;
             await LoadConsumedMaterial();
+            IsLoading = false;
         }
 
         [RelayCommand]
@@ -267,7 +277,9 @@ namespace CafeManager.WPF.ViewModels.UserViewModel
                 return;
             }
             pageIndex += 1;
+            IsLoading = true;
             await LoadConsumedMaterial();
+            IsLoading = false;
         }
 
         [RelayCommand]
@@ -278,14 +290,18 @@ namespace CafeManager.WPF.ViewModels.UserViewModel
                 return;
             }
             pageIndex -= 1;
+            IsLoading = true;
             await LoadConsumedMaterial();
+            IsLoading = false;
         }
 
         [RelayCommand]
         private async Task LastPage()
         {
             pageIndex = totalPages;
+            IsLoading = true;
             await LoadConsumedMaterial();
+            IsLoading = false;
         }
         #endregion
 

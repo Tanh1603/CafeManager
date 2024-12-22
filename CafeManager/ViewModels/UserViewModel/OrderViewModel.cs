@@ -25,6 +25,9 @@ namespace CafeManager.WPF.ViewModels.UserViewModel
         private List<FoodDTO> _allFood;
 
         [ObservableProperty]
+        private bool _isLoading;
+
+        [ObservableProperty]
         private ObservableCollection<CoffeetableDTO> _listCoffeeTableDTO = [];
 
         [ObservableProperty]
@@ -98,6 +101,7 @@ namespace CafeManager.WPF.ViewModels.UserViewModel
             try
             {
                 token.ThrowIfCancellationRequested();
+                IsLoading = true;
                 var dbListCoffeeTable = (await _coffeTableServices.GetListCoffeTable(token)).Where(x => x.Isdeleted == false);
                 var dbListFoodCategory = (await _foodCategoryServices.GetAllListFoodCategory(token)).Where(x => x.Isdeleted == false);
                 var dbStaff = (await _staffServices.GetListStaff(token)).Where(x => x.Isdeleted == false);
@@ -108,11 +112,16 @@ namespace CafeManager.WPF.ViewModels.UserViewModel
                 ListStaffDTO = [.. _mapper.Map<List<StaffDTO>>(dbStaff)];
                 ListFoodDTO = [.. _mapper.Map<List<FoodDTO>>(dbAllFood)];
                 _allFood = [.. _mapper.Map<List<FoodDTO>>(dbAllFood)];
+                IsLoading = false;
             }
             catch (OperationCanceledException oe)
             {
                 Debug.WriteLine(oe.Message);
                 throw;
+            }
+            finally
+            {
+                IsLoading = false;
             }
         }
 
@@ -187,17 +196,23 @@ namespace CafeManager.WPF.ViewModels.UserViewModel
         {
             try
             {
+                IsLoading = true;
                 SelectedInvoiceDTO.Staffid = SelectedStaffDTO.Staffid;
                 SelectedInvoiceDTO.Paymentenddate = DateTime.Now;
                 SelectedInvoiceDTO.Paymentmethod = SelectedPaymentMethod;
                 SelectedInvoiceDTO.Paymentstatus = statusInvoice;
                 Invoice addInvoice = _mapper.Map<Invoice>(SelectedInvoiceDTO);
                 var res = await _invoiceServices.CreateInvoice(addInvoice);
+                IsLoading = false;
                 return res;
             }
             catch (InvalidOperationException ioe)
             {
                 throw new InvalidOperationException(ioe.Message);
+            }
+            finally
+            {
+                IsLoading = false;
             }
         }
 
@@ -223,6 +238,7 @@ namespace CafeManager.WPF.ViewModels.UserViewModel
 
                 if (messageBox.Equals("1"))
                 {
+                    IsLoading = true;
                     var addInvoice = await AddInvoiceToDataBase("Hóa đơn đã thanh toán");
                     if (addInvoice != null)
                     {
@@ -232,12 +248,17 @@ namespace CafeManager.WPF.ViewModels.UserViewModel
                         var exportInvocie = _mapper.Map<InvoiceDTO>(addInvoice);
                         ShowInvoice(_mapper.Map<InvoiceDTO>(addInvoice));
                         OnPropertyChanged(nameof(ListCustomerInvoiceDTO));
+                        IsLoading = false;
                     }
                 }
             }
             catch (InvalidOperationException ioe)
             {
                 MyMessageBox.Show(ioe.Message);
+            }
+            finally
+            {
+                IsLoading = false;
             }
         }
 
@@ -277,6 +298,7 @@ namespace CafeManager.WPF.ViewModels.UserViewModel
 
                 if (messageBox.Equals("1"))
                 {
+                    IsLoading = true;
                     var cancelInvoice = await AddInvoiceToDataBase("Hóa đơn đã bị hủy");
                     if (cancelInvoice != null)
                     {
@@ -285,11 +307,16 @@ namespace CafeManager.WPF.ViewModels.UserViewModel
                         SelectedInvoiceDTO = new();
                         OnPropertyChanged(nameof(ListCustomerInvoiceDTO));
                     }
+                    IsLoading = false;
                 }
             }
             catch (InvalidOperationException ioe)
             {
                 MyMessageBox.Show(ioe.Message);
+            }
+            finally
+            {
+                IsLoading = false;
             }
         }
 

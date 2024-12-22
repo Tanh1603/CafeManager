@@ -252,18 +252,8 @@
                     </StackPanel>
                 </Grid>
             </Grid>
-            
-            <Grid Background="White" Opacity="0.3" Visibility="{Binding IsLoading, Converter={StaticResource BooleanToVisibilityConverter}}">
-                <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
-                    <TextBlock Style="{StaticResource infoText}" Text="Đang tải tài nguyên.." />
-                    <ProgressBar
-                    IsIndeterminate="True"
-                    Style="{StaticResource MaterialDesignCircularProgressBar}"
-                    Height="50"
-                    Width="50"
-                    Value="35" />
-                </StackPanel>
-            </Grid>
+
+            <uc:LoadingData Visibility="{Binding IsLoading, Converter={StaticResource BooleanToVisibilityConverter}}" />
         </Grid>
     </Border>
 </UserControl>

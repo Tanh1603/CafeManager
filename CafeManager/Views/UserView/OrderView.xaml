@@ -607,5 +607,6 @@
                 </Grid>
             </Border>
         </Grid>
+        <uc:LoadingData Visibility="{Binding IsLoading, Converter={StaticResource BooleanToVisibilityConverter}}" />
     </Grid>
 </UserControl>

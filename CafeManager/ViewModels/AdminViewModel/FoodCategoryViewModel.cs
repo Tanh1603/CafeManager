@@ -81,7 +81,7 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
                     }
                     else
                     {
-                        MyMessageBox.Show("Thêm dnah mục thực đơn cấp thất bại");
+                        MyMessageBox.Show("Thêm danh mục thực đơn cấp thất bại");
                     }
                 }
                 if (IsUpdating)

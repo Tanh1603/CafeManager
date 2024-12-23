@@ -76,7 +76,7 @@ namespace CafeManager.WPF.Services
             catch (Exception ex)
             {
                 await _unitOfWork.RollbackTransactionAsync();
-                throw new InvalidOperationException("Xoá vật liệu liệu thất bại.", ex);
+                throw new InvalidOperationException("Xoá nhà cung cấp thất bại.", ex);
             }
         }
 

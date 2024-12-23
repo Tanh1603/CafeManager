@@ -30,11 +30,7 @@ namespace CafeManager.WPF.Views.AdminView
 
         }
 
-        private void CartesianChart_Loaded(object sender, RoutedEventArgs e)
-        {
-
-        }
-
+       
   
 
         

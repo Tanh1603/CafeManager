@@ -118,7 +118,7 @@
                                 <Button
                                     x:Name="BtnDelete"
                                     Click="BtnDelete_Click"
-                                    Style="{StaticResource infoFoodBtn}">
+                                    Style="{StaticResource deleteFoodBtn}">
                                     <ma:PackIconMaterial Kind="TrashCan" Style="{StaticResource infoFoodIcon}" />
                                 </Button>
 

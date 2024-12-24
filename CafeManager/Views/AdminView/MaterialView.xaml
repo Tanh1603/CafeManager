@@ -28,8 +28,8 @@
     <Border BorderThickness="4" CornerRadius="10">
         <Border.Background>
             <LinearGradientBrush StartPoint="0,0.5" EndPoint="1,0.5">
-                <GradientStop Offset="0" Color="#9c6d3f" />
-                <GradientStop Offset="1" Color="#cb925d" />
+                <GradientStop Offset="0" Color="#d4b096" />
+                <GradientStop Offset="1" Color="#dac5b4" />
             </LinearGradientBrush>
         </Border.Background>
         <Border.BorderBrush>

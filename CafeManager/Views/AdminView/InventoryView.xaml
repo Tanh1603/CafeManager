@@ -15,7 +15,7 @@
     xmlns:uc="clr-namespace:CafeManager.WPF.Assets.UsersControls"
     xmlns:view="clr-namespace:CafeManager.WPF.Views"
     xmlns:vm="clr-namespace:CafeManager.WPF.ViewModels.AdminViewModel"
-    d:DesignHeight="450"
+    d:DesignWidth="1300"
     mc:Ignorable="d">
     <UserControl.Resources>
         <BooleanToVisibilityConverter x:Key="BoolToVis" />
@@ -184,8 +184,8 @@
 
                 <Button
                     Grid.Column="1"
-                    Width="140"
-                    Margin="10,0"
+                    Width="120"
+                    Margin="5,0"
                     HorizontalAlignment="Left"
                     Command="{Binding OpenMaterialViewCommand}"
                     Style="{StaticResource addButton}">
@@ -193,7 +193,7 @@
                         <ma:PackIconMaterial
                             Width="11"
                             Height="11"
-                            Margin="0,1,8,0"
+                            Margin="0,0,5,0"
                             VerticalAlignment="Center"
                             Kind="Information" />
                         <TextBlock Text="Chi tiết vật liệu" />

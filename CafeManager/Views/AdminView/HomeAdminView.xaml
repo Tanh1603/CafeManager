@@ -63,7 +63,7 @@
                     </StackPanel>
 
                 </Grid>
-                <Grid Grid.Row="1" Margin="0,30,0,0">
+                <Grid Grid.Row="1" Margin="0,20,0,0">
 
                     <Border Padding="10,0,10,0" CornerRadius="10">
                         <Border.Background>
@@ -93,7 +93,9 @@
                                     CalendarStyle="{StaticResource MaterialDesignCalendarPortrait}"
                                     SelectedDate="{Binding From}"
                                     Style="{StaticResource DatePicker}"
-                                    Tag="Chọn ngày" />
+                                    Tag="Chọn ngày"
+                                    Validation.ErrorTemplate="{StaticResource ErrorMessage}"
+                                     />
                             </Grid>
                             <Grid Grid.Column="1">
                                 <Grid.ColumnDefinitions>
@@ -109,7 +111,8 @@
                                     CalendarStyle="{StaticResource MaterialDesignCalendarPortrait}"
                                     SelectedDate="{Binding To}"
                                     Style="{StaticResource DatePicker}"
-                                    Tag="Chọn ngày" />
+                                    Tag="Chọn ngày"
+                                    Validation.ErrorTemplate="{StaticResource ErrorMessage}"/>
                             </Grid>
                         </Grid>
                     </Border>
@@ -266,7 +269,7 @@
                                         <TextBlock
                                             Foreground="#DEDEDE"
                                             Style="{StaticResource statisText}"
-                                            Text="{Binding Total}" />
+                                            Text="{Binding TotalStaff}" />
                                     </StackPanel>
                                 </Grid>
                                 <Grid

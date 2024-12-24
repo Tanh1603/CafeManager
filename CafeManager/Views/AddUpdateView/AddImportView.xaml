@@ -76,6 +76,7 @@
                                     <ColumnDefinition />
                                 </Grid.ColumnDefinitions>
                                 <TextBlock
+                                    Margin="0,5,0,0"
                                     HorizontalAlignment="Left"
                                     FontSize="18"
                                     FontWeight="SemiBold"
@@ -93,16 +94,26 @@
                             <StackPanel Margin="5,0,5,0">
                                 <StackPanel Orientation="Horizontal">
                                     <ComboBox
+                                        x:Name="cbsupplier"
                                         Width="220"
                                         materialDesign:HintAssist.Hint="Nhà cung cấp"
                                         DisplayMemberPath="Suppliername"
                                         ItemsSource="{Binding ListSupplier}"
                                         SelectedItem="{Binding ModifyImport.Supplier, Mode=TwoWay}"
                                         SelectedValue="{Binding ModifyImport.Supplierid, Mode=TwoWay}"
-                                        SelectedValuePath="Supplierid" />
+                                        SelectedValuePath="Supplierid"
+                                        Style="{StaticResource ComboBoxStyle}"
+                                        Tag="Nhà cung cấp">
+                                        <ComboBox.ItemContainerStyle>
+                                            <Style BasedOn="{StaticResource ComboBoxItemStyle}" TargetType="ComboBoxItem">
+                                                <Setter Property="Width" Value="{Binding ActualWidth, ElementName=cbsupplier}" />
+                                                <Setter Property="Height" Value="{Binding ActualHeight, ElementName=cbsupplier}" />
+                                            </Style>
+                                        </ComboBox.ItemContainerStyle>
+                                    </ComboBox>
 
                                     <Button
-                                        Width="70"
+                                        Width="90"
                                         Height="25"
                                         Margin="10,5,5,5"
                                         Command="{Binding OpenAddSupplierCommand}"
@@ -120,49 +131,81 @@
                                 </StackPanel>
 
                                 <StackPanel Orientation="Horizontal">
-                                    <TextBlock VerticalAlignment="Bottom" Text="Người giao: " />
+                                    <TextBlock
+                                        VerticalAlignment="Center"
+                                        FontWeight="Bold"
+                                        Foreground="#844418"
+                                        Text="Người giao: " />
                                     <TextBox
                                         Width="150"
                                         VerticalAlignment="Center"
+                                        Style="{StaticResource textbox}"
                                         Text="{Binding ModifyImport.Deliveryperson, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" />
-                                    <TextBlock VerticalAlignment="Bottom" Text="Điện thoại: " />
-                                    <TextBox
-                                        Width="100"
+                                    <TextBlock
                                         VerticalAlignment="Center"
+                                        FontWeight="Bold"
+                                        Foreground="#844418"
+                                        Text="Điện thoại: " />
+                                    <TextBox
+                                        Width="130"
+                                        VerticalAlignment="Center"
+                                        Style="{StaticResource textbox}"
                                         Text="{Binding ModifyImport.Phone, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" />
 
                                 </StackPanel>
 
-                                <StackPanel Orientation="Horizontal">
-                                    <TextBlock VerticalAlignment="Bottom" Text="Công ty giao: " />
-                                    <TextBox
-                                        Width="200"
+                                <StackPanel Margin="0,5,0,0" Orientation="Horizontal">
+                                    <TextBlock
                                         VerticalAlignment="Center"
+                                        FontWeight="Bold"
+                                        Foreground="#844418"
+                                        Text="Công ty giao: " />
+                                    <TextBox
+                                        VerticalAlignment="Center"
+                                        Style="{StaticResource textbox}"
                                         Text="{Binding ModifyImport.Shippingcompany, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" />
                                 </StackPanel>
 
                                 <StackPanel Orientation="Horizontal">
-                                    <TextBlock VerticalAlignment="Bottom" Text="Người nhận: " />
+                                    <TextBlock
+                                        VerticalAlignment="Center"
+                                        FontWeight="Bold"
+                                        Foreground="#844418"
+                                        Text="Người nhận: " />
                                     <ComboBox
+                                        x:Name="cbstaff"
                                         Width="220"
-                                        materialDesign:HintAssist.Hint="Nhân viên"
                                         DisplayMemberPath="Staffname"
                                         ItemsSource="{Binding ListStaff}"
                                         SelectedItem="{Binding ModifyImport.Staff, Mode=TwoWay}"
                                         SelectedValue="{Binding ModifyImport.Staffid, Mode=TwoWay}"
-                                        SelectedValuePath="Staffid" />
+                                        SelectedValuePath="Staffid"
+                                        Style="{StaticResource ComboBoxStyle}">
+                                        <ComboBox.ItemContainerStyle>
+                                            <Style BasedOn="{StaticResource ComboBoxItemStyle}" TargetType="ComboBoxItem">
+                                                <Setter Property="Width" Value="{Binding ActualWidth, ElementName=cbstaff}" />
+                                                <Setter Property="Height" Value="{Binding ActualHeight, ElementName=cbstaff}" />
+                                            </Style>
+                                        </ComboBox.ItemContainerStyle>
+                                    </ComboBox>
+
                                 </StackPanel>
 
-                                <StackPanel Orientation="Horizontal">
-                                    <TextBlock VerticalAlignment="Bottom" Text="Ngày giao: " />
+                                <StackPanel Margin="0,5,0,10" Orientation="Horizontal">
+                                    <TextBlock
+                                        VerticalAlignment="Center"
+                                        FontWeight="Bold"
+                                        Foreground="#844418"
+                                        Text="Ngày giao: " />
                                     <DatePicker
-                                        Width="100"
+                                        Width="120"
                                         Margin="10,0,0,0"
                                         HorizontalAlignment="Left"
                                         materialDesign:HintAssist.Hint="Pick Date"
                                         materialDesign:TextFieldAssist.HasClearButton="True"
+                                        CalendarStyle="{StaticResource MaterialDesignCalendarPortrait}"
                                         SelectedDate="{Binding ModifyImport.Receiveddate, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
-                                        Style="{StaticResource MaterialDesignFloatingHintDatePicker}" />
+                                        Style="{StaticResource DatePicker}" />
 
                                     <materialDesign:TimePicker
                                         x:Name="PresetTimePicker"
@@ -171,6 +214,7 @@
                                         Padding="0,10,0,0"
                                         materialDesign:HintAssist.Hint="Pick Time"
                                         materialDesign:TextFieldAssist.HasClearButton="True"
+                                        FontWeight="Bold"
                                         Is24Hours="True"
                                         SelectedTime="{Binding ModifyImport.Receiveddate, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" />
                                 </StackPanel>
@@ -195,6 +239,7 @@
                                     <ColumnDefinition />
                                 </Grid.ColumnDefinitions>
                                 <TextBlock
+                                    Margin="0,5,0,0"
                                     HorizontalAlignment="Left"
                                     FontSize="18"
                                     FontWeight="SemiBold"
@@ -221,16 +266,26 @@
                             <!--  Nhà cung cấp và vật liệu  -->
                             <StackPanel Orientation="Horizontal">
                                 <ComboBox
+                                    x:Name="cbmaterial"
                                     Width="220"
-                                    materialDesign:HintAssist.Hint="Vật liệu"
                                     DisplayMemberPath="Materialname"
                                     ItemsSource="{Binding ListMaterial}"
                                     SelectedItem="{Binding CurrentImportDetail.Materialsupplier.Material, Mode=TwoWay}"
                                     SelectedValue="{Binding CurrentImportDetail.Materialsupplier.Materialid, Mode=TwoWay}"
-                                    SelectedValuePath="Materialid" />
+                                    SelectedValuePath="Materialid"
+                                    Style="{StaticResource ComboBoxStyle}"
+                                    Tag="Vật liệu">
+                                    <ComboBox.ItemContainerStyle>
+                                        <Style BasedOn="{StaticResource ComboBoxItemStyle}" TargetType="ComboBoxItem">
+                                            <Setter Property="Width" Value="{Binding ActualWidth, ElementName=cbmaterial}" />
+                                            <Setter Property="Height" Value="{Binding ActualHeight, ElementName=cbmaterial}" />
+
+                                        </Style>
+                                    </ComboBox.ItemContainerStyle>
+                                </ComboBox>
 
                                 <Button
-                                    Width="70"
+                                    Width="90"
                                     Height="25"
                                     Margin="10,5,5,5"
                                     HorizontalAlignment="Center"
@@ -252,64 +307,99 @@
                             <!--  Chi tiết đơn hàng  -->
                             <StackPanel>
                                 <StackPanel Orientation="Horizontal">
-                                    <TextBlock VerticalAlignment="Bottom" Text="NSX: " />
+                                    <TextBlock
+                                        VerticalAlignment="Center"
+                                        FontWeight="Bold"
+                                        Foreground="#844418"
+                                        Text="NSX: " />
                                     <DatePicker
-                                        Width="120"
+                                        Width="130"
                                         Margin="10,0,10,0"
                                         HorizontalAlignment="Left"
                                         materialDesign:HintAssist.Hint="Pick Date"
                                         materialDesign:TextFieldAssist.HasClearButton="True"
                                         SelectedDate="{Binding CurrentImportDetail.Materialsupplier.Manufacturedate, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
-                                        Style="{StaticResource MaterialDesignFloatingHintDatePicker}" />
+                                        Style="{StaticResource DatePicker}" />
 
-                                    <TextBlock VerticalAlignment="Bottom" Text="HSD: " />
+                                    <TextBlock
+                                        VerticalAlignment="Center"
+                                        FontWeight="Bold"
+                                        Foreground="#844418"
+                                        Text="HSD: " />
                                     <DatePicker
-                                        Width="120"
+                                        Width="130"
                                         Margin="10,0,0,0"
                                         HorizontalAlignment="Left"
                                         materialDesign:HintAssist.Hint="Pick Date"
                                         materialDesign:TextFieldAssist.HasClearButton="True"
+                                        CalendarStyle="{StaticResource MaterialDesignCalendarPortrait}"
                                         SelectedDate="{Binding CurrentImportDetail.Materialsupplier.Expirationdate, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
-                                        Style="{StaticResource MaterialDesignFloatingHintDatePicker}" />
+                                        Style="{StaticResource DatePicker}" />
                                 </StackPanel>
 
-                                <StackPanel Orientation="Horizontal">
-                                    <TextBlock VerticalAlignment="Bottom" Text="Nhà sản xuất: " />
+                                <StackPanel Margin="0,5,0,0" Orientation="Horizontal">
+                                    <TextBlock
+                                        VerticalAlignment="Center"
+                                        FontWeight="Bold"
+                                        Foreground="#844418"
+                                        Text="Nhà sản xuất: " />
                                     <TextBox
                                         Width="140"
                                         VerticalAlignment="Center"
+                                        Style="{StaticResource textbox}"
                                         Text="{Binding CurrentImportDetail.Materialsupplier.Manufacturer, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" />
 
-                                    <TextBlock VerticalAlignment="Bottom" Text="Xuất xứ: " />
+                                    <TextBlock
+                                        VerticalAlignment="Center"
+                                        FontWeight="Bold"
+                                        Foreground="#844418"
+                                        Text="Xuất xứ: " />
                                     <TextBox
                                         Width="120"
                                         VerticalAlignment="Center"
+                                        Style="{StaticResource textbox}"
                                         Text="{Binding CurrentImportDetail.Materialsupplier.Original, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" />
                                 </StackPanel>
 
-                                <StackPanel Orientation="Horizontal">
-                                    <TextBlock VerticalAlignment="Bottom" Text="Giá: " />
+                                <StackPanel Margin="0,5,0,0" Orientation="Horizontal">
+                                    <TextBlock
+                                        VerticalAlignment="Center"
+                                        FontWeight="Bold"
+                                        Foreground="#844418"
+                                        Text="Giá: " />
                                     <TextBox
                                         Width="140"
                                         VerticalAlignment="Center"
+                                        Style="{StaticResource textbox}"
                                         Text="{Binding CurrentImportDetail.Materialsupplier.Price, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" />
 
-                                    <TextBlock VerticalAlignment="Bottom" Text="Số lượng: " />
+                                    <TextBlock
+                                        VerticalAlignment="Center"
+                                        FontWeight="Bold"
+                                        Foreground="#844418"
+                                        Text="Số lượng: " />
                                     <TextBox
                                         Width="140"
                                         VerticalAlignment="Center"
+                                        Style="{StaticResource textbox}"
                                         Text="{Binding CurrentImportDetail.Quantity, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay, StringFormat='F2'}" />
                                 </StackPanel>
 
                                 <Button
                                     Width="80"
                                     Height="25"
-                                    Margin="0,5,10,5"
+                                    Margin="0,10,10,5"
                                     HorizontalAlignment="Right"
                                     VerticalAlignment="Center"
                                     Command="{Binding ModifyImportDetailCommand}"
                                     Style="{StaticResource addButton}">
                                     <StackPanel Orientation="Horizontal">
+                                        <ma:PackIconMaterial
+                                            Width="11"
+                                            Height="11"
+                                            Margin="0,1,5,0"
+                                            VerticalAlignment="Center"
+                                            Kind="Check" />
                                         <TextBlock FontSize="11" Text="Xác nhận" />
                                     </StackPanel>
                                 </Button>
@@ -433,8 +523,8 @@
                 <!--  Tổng giá trị  -->
                 <Grid Margin="30,10,0,0">
                     <StackPanel Orientation="Horizontal">
-                        <TextBlock Text="Tổng giá trị: " />
-                        <TextBlock Text="{Binding ImportPrice, StringFormat={}{0:0}}" />
+                        <TextBlock Text="Tổng giá trị: " FontSize="20" FontWeight="Bold" Foreground="#844418" />
+                        <TextBlock Text="{Binding ImportPrice, StringFormat={}{0:0}}" FontSize="20" FontWeight="Bold" />
                     </StackPanel>
                 </Grid>
 

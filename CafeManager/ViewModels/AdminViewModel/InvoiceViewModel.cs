@@ -48,17 +48,18 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
                 if (_startDate != value)
                 {
                     _startDate = value;
-                    ValidateDates();
-                   
-                    OnPropertyChanged();
-                   
-                    _ = LoadData(_token);
+                    if (!ValidateDates())
+                    {
+                        OnPropertyChanged();
+                        _ = LoadData(_token);
+                    }
                 }
             }
         }
 
-        private void ValidateDates()
+        private bool ValidateDates()
         {
+            bool hasError = false;
             // Xóa lỗi trước đó cho cả hai trường
             _errorViewModel.RemoveErrors(nameof(StartDate));
             _errorViewModel.RemoveErrors(nameof(EndDate));
@@ -70,8 +71,10 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
                 {
                     _errorViewModel.AddError(nameof(StartDate), "Ngày bắt đầu không được lớn hơn ngày kết thúc");
                     _errorViewModel.AddError(nameof(EndDate), "Ngày kết thúc không được nhỏ hơn ngày bắt đầu");
+                    hasError = true;
                 }
             }
+                return hasError;
         }
 
         private DateTime? _endDate;
@@ -84,10 +87,11 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
                 if (value != _endDate)
                 {
                     _endDate = value;
-                    ValidateDates();
-                    OnPropertyChanged();
-                   
-                    _ = LoadData(_token);
+                    if (!ValidateDates())
+                    {
+                        OnPropertyChanged();
+                        _ = LoadData(_token);
+                    }
                 }
             }
         }

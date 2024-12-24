@@ -534,8 +534,9 @@
                                     Style="{StaticResource infoText}"
                                     Text="Giảm giá:  " />
                                 <TextBox
+                                    Margin="0 10 0 0"
                                     Width="70"
-                                    MinWidth="20"
+                                    
                                     Style="{StaticResource textbox}"
                                     Text="{Binding SelectedInvoiceDTO.Discountinvoice}" />
                             </StackPanel>
@@ -546,13 +547,22 @@
                                 HorizontalAlignment="Right">
                                 <TextBlock Style="{StaticResource infoText}" Text="Phương thức:" />
                                 <ComboBox
+                                    x:Name="cbpayment"
                                     MinWidth="160"
                                     IsReadOnly="True"
-                                    ItemContainerStyle="{StaticResource ComboBoxItemStyle}"
+                                   
                                     SelectedIndex="0"
                                     SelectedValue="{Binding SelectedPaymentMethod}"
                                     SelectedValuePath="Content"
-                                    Style="{StaticResource ComboBoxStyle}">
+                                    Style="{StaticResource ComboBoxStyle}"
+                                    FontWeight="Bold">
+                                    <ComboBox.ItemContainerStyle>
+                                        <Style BasedOn="{StaticResource ComboBoxItemStyle}" TargetType="ComboBoxItem">
+                                            <Setter Property="Width" Value="{Binding ActualWidth, ElementName=cbpayment}" />
+                                            <Setter Property="Height" Value="{Binding ActualHeight, ElementName=cbpayment}" />
+
+                                        </Style>
+                                    </ComboBox.ItemContainerStyle>
                                     <ComboBoxItem Content="Tiền mặt" />
                                     <ComboBoxItem Content="Chuyển khoản" />
                                 </ComboBox>
@@ -564,6 +574,7 @@
                                 HorizontalAlignment="Center">
                                 <TextBlock Style="{StaticResource infoText}" Text="Tổng tiền: " />
                                 <TextBox
+                                    Margin="0 10 0 0"
                                     MinWidth="60"
                                     IsReadOnly="True"
                                     Style="{StaticResource textbox}"
@@ -613,12 +624,20 @@
                                     </StackPanel>
                                 </Button>
                                 <ComboBox
+                                    x:Name="cbswaptable"
                                     MinWidth="100"
                                     MaxHeight="300"
-                                    ItemContainerStyle="{StaticResource ComboBoxItemStyle}"
+                                
                                     ItemsSource="{Binding ListCoffeeTableDTO}"
                                     SelectedItem="{Binding SelectedSwapTable}"
                                     Style="{StaticResource ComboBoxStyle}">
+                                    <ComboBox.ItemContainerStyle>
+                                        <Style BasedOn="{StaticResource ComboBoxItemStyle}" TargetType="ComboBoxItem">
+                                            <Setter Property="Width" Value="{Binding ActualWidth, ElementName=cbswaptable}" />
+                                            <Setter Property="Height" Value="{Binding ActualHeight, ElementName=cbswaptable}" />
+
+                                        </Style>
+                                    </ComboBox.ItemContainerStyle>
                                     <ComboBox.ItemTemplate>
                                         <DataTemplate>
                                             <TextBlock

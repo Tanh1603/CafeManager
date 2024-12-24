@@ -120,5 +120,178 @@ namespace CafeManager.Infrastructure.Repositories
 
             return false;
         }
-    }
-}
+
+        public async Task<List<decimal>> GetTotalMaterialByDay(DateTime from, DateTime to, CancellationToken token = default)
+        {
+            try
+            {
+                var imports = await _cafeManagerContext.Imports.Where(x => x.Isdeleted == false && x.Receiveddate >= from && x.Receiveddate <= to).ToListAsync(token);
+                var allDates = Enumerable.Range(0, (to - from).Days + 1).Select(i => from.AddDays(i)).ToList();
+
+                var totalByDay = imports.Where(i => i.Importdetails != null) // Lấy tất cả chi tiết nhập kho
+                                        .GroupBy(id => id.Receiveddate.Date) // Nhóm theo ngày nhập kho
+                                        .ToDictionary(
+                                            g => g.Key,
+                                            g => g.Sum(x => x.Importdetails.Sum(d => d.Quantity)) ?? 0
+                                        );
+
+
+                var totalMaterialByDay = allDates.Select(date => { return totalByDay.ContainsKey(date) ? totalByDay[date] : 0; }).ToList();
+
+                return totalMaterialByDay;
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+        }
+
+        public async Task<List<decimal>> GetTotalMaterialByMonth(DateTime from, DateTime to, CancellationToken token = default)
+        {
+            try
+            {
+                var imports = await _cafeManagerContext.Imports.Where(x => x.Isdeleted == false && x.Receiveddate >= from && x.Receiveddate <= to).ToListAsync(token);
+                var allMonths = Enumerable.Range(0, ((to.Year - from.Year) * 12 + to.Month - from.Month) + 1)
+                            .Select(i => new DateTime(from.Year, from.Month, 1).AddMonths(i))
+                                       .ToList();
+
+                var totalByMonth = imports.Where(i => i.Importdetails != null) // Lấy tất cả chi tiết nhập kho
+                                        .GroupBy(i => new DateTime(i.Receiveddate.Year, i.Receiveddate.Month, 1)) // Nhóm theo ngày nhập kho
+                                        .ToDictionary(
+                                            g => g.Key,
+                                            g => g.Sum(x => x.Importdetails.Sum(d => d.Quantity)) ?? 0
+                                        );
+
+
+                var totalMaterialByMonth = allMonths.Select(date => { return totalByMonth.ContainsKey(date) ? totalByMonth[date] : 0; }).ToList();
+
+                return totalMaterialByMonth;
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+        }
+
+        public async Task<List<decimal>> GetTotalMaterialByYear(DateTime from, DateTime to, CancellationToken token = default)
+        {
+            try
+            {
+                var imports = await _cafeManagerContext.Imports.Where(x => x.Isdeleted == false && x.Receiveddate >= from && x.Receiveddate <= to).ToListAsync(token);
+
+
+                var allYears = Enumerable.Range(from.Year, (to.Year - from.Year) + 1).ToList();
+
+
+                var totalByYear = imports.Where(i => i.Importdetails != null)
+                    .GroupBy(i => new DateTime(i.Receiveddate.Year, 1, 1))
+                    .ToDictionary(
+                        g => g.Key.Year,  // Lấy năm làm key
+                        g => g.Sum(x => x.Importdetails.Sum(d => d.Quantity)) ?? 0
+                    );
+
+
+                var totalMaterialByYear = allYears.Select(year => totalByYear.ContainsKey(year)
+                    ? totalByYear[year]
+                    : 0).ToList();
+
+                return totalMaterialByYear;
+            }
+            catch (OperationCanceledException)
+            {
+                throw;
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+        }
+    
+
+        public async Task<List<decimal>> GetTotalMaterialCostByMonth(DateTime from, DateTime to, CancellationToken token = default)
+        {
+            try
+            {
+                // Truy vấn các import trong khoảng thời gian
+                var imports = await _cafeManagerContext.Imports
+                    .Where(x => x.Isdeleted == false && x.Receiveddate >= from && x.Receiveddate <= to)
+                    .Include(i => i.Importdetails) // Include Importdetails để tính tổng giá trị
+                    .ThenInclude(d => d.Materialsupplier) // Include Materialsupplier để lấy đơn giá (hoặc lấy thông tin giá từ Material)
+                    .ToListAsync(token);
+
+                // Tạo danh sách tất cả các tháng trong khoảng thời gian
+                var allMonths = Enumerable.Range(0, ((to.Year - from.Year) * 12 + to.Month - from.Month) + 1)
+                             .Select(i => new DateTime(from.Year, from.Month, 1).AddMonths(i))
+                             .ToList();
+
+                // Tính tổng tiền cho từng tháng
+                var totalByMonth = imports.Where(i => i.Importdetails != null) // Lấy tất cả chi tiết nhập kho
+                    .GroupBy(i => new DateTime(i.Receiveddate.Year, i.Receiveddate.Month, 1)) // Nhóm theo tháng
+                    .ToDictionary(
+                        g => g.Key,
+                        g => g.Sum(x => x.Importdetails.Sum(d => (d.Quantity ?? 0) * (d.Materialsupplier?.Price ?? 0))) // Tính tổng tiền (số lượng * đơn giá)
+                    );
+
+                // Dự phòng cho những tháng không có dữ liệu, tính giá trị 0
+                var totalMaterialCostByMonth = allMonths.Select(date =>
+                    totalByMonth.ContainsKey(date) ? totalByMonth[date] : 0
+                ).ToList();
+
+                return totalMaterialCostByMonth;
+            }
+            catch (OperationCanceledException)
+            {
+                throw;
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+        }
+
+        public async Task<List<decimal>> GetTotalMaterialCostByYear(DateTime from, DateTime to, CancellationToken token = default)
+        {
+            try
+            {
+                var imports = await _cafeManagerContext.Imports
+            .Where(x => x.Isdeleted == false && x.Receiveddate >= from && x.Receiveddate <= to)
+            .Include(i => i.Importdetails) // Include Importdetails để tính tổng giá trị
+            .ThenInclude(d => d.Materialsupplier) // Include Materialsupplier để lấy đơn giá
+            .ToListAsync(token);
+
+                // Tính danh sách các năm trong khoảng thời gian
+                var allYears = Enumerable.Range(from.Year, to.Year - from.Year + 1).ToList();
+
+                // Tính tổng tiền theo năm
+                var totalByYear = imports
+                    .Where(i => i.Importdetails != null) // Lấy tất cả chi tiết nhập kho
+                    .GroupBy(i => i.Receiveddate.Year) // Nhóm theo năm
+                    .ToDictionary(
+                        g => g.Key, // Key là năm
+                        g => g.Sum(i => i.Importdetails.Sum(d =>
+                            (d.Quantity ?? 0) * (d.Materialsupplier?.Price ?? 0))) // Tổng tiền
+                    );
+
+                // Đảm bảo các năm không có nhập liệu thì giá trị là 0
+                var totalMaterialCostByYear = allYears
+                    .Select(year => totalByYear.ContainsKey(year) ? totalByYear[year] : 0)
+                    .ToList();
+                return totalMaterialCostByYear;
+            }
+            catch (OperationCanceledException)
+            {
+                throw;
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+        }
+
+
+    } }

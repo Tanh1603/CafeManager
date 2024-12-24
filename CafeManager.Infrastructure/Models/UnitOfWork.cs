@@ -5,13 +5,13 @@ using CafeManager.Infrastructure.Repositories;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
 
+#nullable disable
+
 namespace CafeManager.Infrastructure.Models
 {
     public class UnitOfWork : IUnitOfWork
     {
         private readonly CafeManagerContext _context;
-        private readonly IDbContextFactory<CafeManagerContext> dbContextFactory;
-
         private IDbContextTransaction _transaction;
         private bool _isTransactionActive;
         private int _transactionDepth = 0;
@@ -39,7 +39,7 @@ namespace CafeManager.Infrastructure.Models
 
         public ISupplierRepository SupplierList { get; private set; }
 
-        public IRepository<Materialsupplier> MaterialSupplierList { get; private set; }
+        public IMaterialSupplierRepository MaterialSupplierList { get; private set; }
 
         #endregion Import
 
@@ -49,9 +49,11 @@ namespace CafeManager.Infrastructure.Models
 
         public IRepository<Staffsalaryhistory> StaffSalaryHistoryList { get; private set; }
 
-        public UnitOfWork(IDbContextFactory<CafeManagerContext> dbContextFactory)
+        public IConsumedMaterialRepository ConsumedMaterialList { get; private set; }
+
+        public UnitOfWork(IDbContextFactory<CafeManagerContext> contextFactory)
         {
-            _context = dbContextFactory.CreateDbContext();
+            _context = contextFactory.CreateDbContext();
 
             FoodCategoryList = new FoodCategoryRepository(_context);
             FoodList = new FoodRepository(_context);
@@ -63,7 +65,8 @@ namespace CafeManager.Infrastructure.Models
             ImportDetailList = new Repository<Importdetail>(_context);
             MaterialList = new MaterialRepository(_context);
             SupplierList = new SupplierRepository(_context);
-            MaterialSupplierList = new Repository<Materialsupplier>(_context);
+            MaterialSupplierList = new MaterialSupplierRepository(_context);
+            ConsumedMaterialList = new ConsumedMaterialRepository(_context);
 
             StaffList = new StaffRepository(_context);
             AppUserList = new AppUserRepository(_context);
@@ -82,9 +85,10 @@ namespace CafeManager.Infrastructure.Models
 
         public void Dispose()
         {
-            _context.Dispose();
-            _transaction?.Dispose();
-
+            if (_transaction != null)
+            {
+                _transaction.Dispose();
+            }
             GC.SuppressFinalize(this);
         }
 

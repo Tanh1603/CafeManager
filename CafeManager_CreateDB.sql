@@ -11,6 +11,13 @@ CREATE TABLE AppUser (
 
     CONSTRAINT PK_AppUserId PRIMARY KEY (AppUserId)
 );
+ALTER TABLE appuser
+ALTER COLUMN avatar TYPE BYTEA USING avatar::bytea;
+
+ALTER TABLE food
+ALTER COLUMN imagefood TYPE BYTEA USING imagefood::bytea;
+
+
 ------------------- Tạo bảng Staff -----------------------
 CREATE TABLE Staff (
     StaffId SERIAL,
@@ -141,13 +148,15 @@ CREATE TABLE MaterialSupplier (
 ------------------- Tạo bảng ConsumedMaterials -----------------------
 CREATE TABLE ConsumedMaterials (
     ConsumedMaterialId SERIAL,
-    MaterialId INT,
+    MaterialSupplierId INT,
     Quantity DECIMAL(10, 2) DEFAULT 0,
     IsDeleted BOOLEAN DEFAULT FALSE,
 
     CONSTRAINT PK_ConsumedMaterials PRIMARY KEY (ConsumedMaterialId),
-    CONSTRAINT PK_ConsumedMaterials_Material FOREIGN KEY (MaterialId) REFERENCES Material(MaterialId)
+    CONSTRAINT PK_ConsumedMaterials_MaterialSupplierId FOREIGN KEY (MaterialSupplierId) REFERENCES MaterialSupplier(MaterialSupplierId)
 );
+ALTER TABLE consumedmaterials
+ADD UsageDate DATE DEFAULT NOW() NOT NULL;
 ------------------- Tạo bảng Imports -----------------------
 CREATE TABLE Imports (
     ImportId SERIAL,
@@ -167,19 +176,11 @@ CREATE TABLE Imports (
 CREATE TABLE ImportDetails (
     ImportDetailId SERIAL,
     ImportId INT NOT NULL,
-	MaterialId INT NOT NULL,
+	MaterialSupplierId INT NOT NULL,
 	Quantity DECIMAL(10, 2) DEFAULT 0,
 	IsDeleted BOOLEAN DEFAULT FALSE,
 	
     CONSTRAINT PK_ImportDetails PRIMARY KEY (ImportDetailId),
     CONSTRAINT FK_ImportDetails_Imports FOREIGN KEY (ImportId) REFERENCES Imports(ImportId),
-    CONSTRAINT FK_ImportDetails_Material FOREIGN KEY (MaterialId) REFERENCES Material(MaterialId)
+    CONSTRAINT FK_ImportDetails_MaterialSupplier FOREIGN KEY (MaterialSupplierId) REFERENCES MaterialSuplier(MaterialSupplierId)
 );
-
-DROP TABLE importdetails;
-DROP TABLE imports;
-DROP TABLE invoicedetails;
-DROP TABLE invoices;
-DROP TABLE staff;
-DROP TABLE staffsalaryhistory;
-

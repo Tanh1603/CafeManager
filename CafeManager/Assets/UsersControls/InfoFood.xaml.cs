@@ -66,6 +66,19 @@ namespace CafeManager.WPF.Assets.UsersControls
         public static readonly DependencyProperty DiscountfoodProperty =
             DependencyProperty.Register("Discountfood", typeof(decimal?), typeof(InfoFood));
 
+
+        public static readonly DependencyProperty IsButtonVisibleProperty =
+       DependencyProperty.Register("IsButtonVisible", typeof(bool), typeof(InfoFood),
+       new PropertyMetadata(true)); // Mặc định là true
+
+        public bool IsButtonVisible
+        {
+            get => (bool)GetValue(IsButtonVisibleProperty);
+            set => SetValue(IsButtonVisibleProperty, value);
+        }
+
+
+
         public static readonly RoutedEvent UpdateFoodEvent = EventManager.RegisterRoutedEvent("UpdateFood", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(InfoFood));
 
         public event RoutedEventHandler UpdateFood

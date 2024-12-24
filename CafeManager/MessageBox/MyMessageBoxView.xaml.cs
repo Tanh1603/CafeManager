@@ -57,16 +57,16 @@ namespace CafeManager.WPF.MessageBox
             switch (icon)
             {
                 case MyMessageBox.Icons.Information:
-                    iconPath = "Icons/Information.png";
+                    iconPath = "/Assets/Images/information.png";
                     break;
                 case MyMessageBox.Icons.Warning:
-                    iconPath = "Icons/Warning.png";
+                    iconPath = "/Assets/Images/warning.png";
                     break;
                 case MyMessageBox.Icons.Error:
-                    iconPath = "Icons/Error.png";
+                    iconPath = "/Assets/Images/error.png";
                     break;
                 case MyMessageBox.Icons.Question:
-                    iconPath = "Icons/Question.png";
+                    iconPath = "/Assets/Images/question.png";
                     break;
                 default:
                     messIcon.Visibility = Visibility.Collapsed;
@@ -96,11 +96,6 @@ namespace CafeManager.WPF.MessageBox
         private void bntReturnValue_Click(object sender, RoutedEventArgs e)
         {
             ReturnString = ((Button)sender).Uid.ToString();
-            Close();
-        }
-
-        private void bntCancel_Click(object sender, RoutedEventArgs e)
-        {
             Close();
         }
     }

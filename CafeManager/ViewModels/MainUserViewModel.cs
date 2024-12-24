@@ -1,16 +1,12 @@
-﻿using CafeManager.Core.Data;
-using CafeManager.Core.DTOs;
-using CafeManager.WPF.Services;
+﻿using CafeManager.Core.DTOs;
+using CafeManager.Core.Services;
 using CafeManager.WPF.Stores;
+using CafeManager.WPF.ViewModels.UserViewModel;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Microsoft.Extensions.DependencyInjection;
-using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.Windows;
-using CafeManager.WPF.MessageBox;
-using CafeManager.WPF.Assets.UsersControls;
-using CafeManager.WPF.ViewModels.UserViewModel;
-using System.Windows.Media.Imaging;
 
 namespace CafeManager.WPF.ViewModels
 {
@@ -19,9 +15,18 @@ namespace CafeManager.WPF.ViewModels
         private readonly IServiceProvider _provider;
         private readonly NavigationStore _navigationStore;
         private readonly AccountStore _accountStore;
+        private CancellationTokenSource? _cts = default;
+
+        private Dictionary<string, ObservableObject> _lazyViews => new()
+        {
+            ["OrderFood"] = _provider.GetRequiredService<OrderViewModel>(),
+            ["Setting"] = _provider.GetRequiredService<SettingAccountViewModel>(),
+            ["DistributionMaterial"] = _provider.GetRequiredService<DistributionMaterialViewModel>(),
+            ["IncidentTable"] = _provider.GetRequiredService<IncidentTableViewModel>(),
+        };
 
         [ObservableProperty]
-        private ObservableObject _currentVM;
+        private ObservableObject? _currentVM;
 
         [ObservableProperty]
         private AppUserDTO _userAccount = new();
@@ -31,15 +36,24 @@ namespace CafeManager.WPF.ViewModels
 
         private string currentVM = string.Empty;
 
+        [ObservableProperty]
+        private SettingAccountViewModel _openSettingAccountVM;
+
         public MainUserViewModel(IServiceProvider provider)
         {
             _provider = provider;
             _navigationStore = provider.GetRequiredService<NavigationStore>();
             _accountStore = provider.GetRequiredService<AccountStore>();
-            CurrentVM = _provider.GetRequiredService<OrderViewModel>();
+            ChangeCurrentViewModel("OrderFood");
             LoadAccount();
-            currentVM = "OrderFood";
+            OpenSettingAccountVM = _provider.GetRequiredService<SettingAccountViewModel>();
+            OpenSettingAccountVM.Close += OpenSettingAccountVM_Close;
             _accountStore.ChangeAccount += _accountStore_ChangeAccount;
+        }
+
+        private void OpenSettingAccountVM_Close()
+        {
+            IsOpenSetting = false;
         }
 
         private void _accountStore_ChangeAccount()
@@ -60,22 +74,43 @@ namespace CafeManager.WPF.ViewModels
         {
             if (currentVM.Equals(choice)) return;
 
-            switch (choice)
+            _cts?.Cancel();
+            _cts?.Dispose();
+            _cts = new CancellationTokenSource();
+
+            try
             {
-                case "OrderFood":
-                    CurrentVM = _provider.GetRequiredService<OrderViewModel>();
-                    IsLeftDrawerOpen = false;
-                    break;
-
-                case "Setting":
-                    CurrentVM = _provider.GetRequiredService<SettingAccountViewModel>();
-                    IsLeftDrawerOpen = false;
-                    break;
-
-                default:
-                    break;
+                _cts.Token.ThrowIfCancellationRequested();
+                Application.Current.Dispatcher.InvokeAsync(() =>
+               {
+                   _cts.Token.ThrowIfCancellationRequested();
+                   CurrentVM = choice switch
+                   {
+                       "OrderFood" => _provider.GetRequiredService<OrderViewModel>(),
+                       "Setting" => _provider.GetRequiredService<SettingAccountViewModel>(),
+                       "DistributionMaterial" => _provider.GetRequiredService<DistributionMaterialViewModel>(),
+                       "IncidentTable" => _provider.GetRequiredService<IncidentTableViewModel>(),
+                       _ => throw new Exception("Lỗi")
+                   };
+                   currentVM = choice;
+                   if (CurrentVM is IDataViewModel dataVM)
+                   {
+                       dataVM.LoadData(_cts.Token);
+                   }
+               }, System.Windows.Threading.DispatcherPriority.Loaded, _cts.Token);
             }
-            currentVM = choice;
+            catch (OperationCanceledException)
+            {
+                Debug.Print("Tác vụ thay đổi ViewModel đã bị hủy.");
+            }
+            catch (Exception ex)
+            {
+                Debug.Print($"Lỗi khi thay đổi ViewModel: {ex.Message}");
+            }
+            finally
+            {
+                IsLeftDrawerOpen = false;
+            }
         }
 
         [RelayCommand]
@@ -87,7 +122,20 @@ namespace CafeManager.WPF.ViewModels
         [RelayCommand]
         private void SignOut()
         {
+            _cts?.Cancel();
+            _cts?.Dispose();
+            _cts = default;
             _navigationStore.Navigation = _provider.GetRequiredService<LoginViewModel>();
+            Application.Current.MainWindow.WindowState = WindowState.Normal;
+        }
+
+        [ObservableProperty]
+        private bool _isOpenSetting = false;
+
+        [RelayCommand]
+        private void OpenSetting()
+        {
+            IsOpenSetting = true;
         }
 
         public void Dispose()
@@ -95,6 +143,12 @@ namespace CafeManager.WPF.ViewModels
             if (_accountStore != null)
             {
                 _accountStore.ChangeAccount -= _accountStore_ChangeAccount;
+            }
+            if (_cts != default)
+            {
+                _cts.Cancel();
+                _cts.Dispose();
+                _cts = default;
             }
         }
     }

@@ -15,7 +15,7 @@ public partial class Food
 
     public decimal? Price { get; set; }
 
-    public string Imagefood { get; set; }
+    public byte[] Imagefood { get; set; }
 
     public decimal? Discountfood { get; set; }
 

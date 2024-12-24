@@ -1,0 +1,275 @@
+﻿<Window
+    x:Class="CafeManager.WPF.Views.UserView.InvoiceExport"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:converter="clr-namespace:CafeManager.WPF.Services.Converter"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="clr-namespace:CafeManager.WPF.Views.UserView"
+    xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:userviewmodel="clr-namespace:CafeManager.WPF.ViewModels.UserViewModel"
+    Width="500"
+    Height="600"
+    WindowStartupLocation="CenterScreen"
+    mc:Ignorable="d">
+    <Window.Resources>
+        <converter:CurrencyConverter x:Key="CurrencyConverter" />
+    </Window.Resources>
+    <Border Padding="20" Background="wheat">
+
+        <Grid>
+
+            <Grid.RowDefinitions>
+                <RowDefinition Height="auto" />
+                <RowDefinition Height="auto" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="auto" />
+                <RowDefinition Height="auto" />
+                <RowDefinition Height="auto" />
+            </Grid.RowDefinitions>
+            <Grid Grid.Row="0">
+                <Border
+                    Width="50"
+                    Height="50"
+                    Margin="10,5,10,5"
+                    HorizontalAlignment="Left"
+                    CornerRadius="50">
+                    <Border.Background>
+                        <LinearGradientBrush StartPoint="0,0" EndPoint="1,2">
+                            <GradientStop Offset="0" Color="#d5b096" />
+                            <GradientStop Offset="1" Color="#d3b7ff" />
+                        </LinearGradientBrush>
+                    </Border.Background>
+                    <Image
+                        Width="30"
+                        Height="30"
+                        HorizontalAlignment="Center"
+                        RenderOptions.BitmapScalingMode="HighQuality"
+                        SnapsToDevicePixels="True"
+                        Source="/Assets/Images/coffee.png"
+                        Stretch="Uniform" />
+                </Border>
+            </Grid>
+            <Grid Grid.Row="1" Grid.IsSharedSizeScope="True">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="auto" />
+                    <RowDefinition Height="auto" />
+                    <RowDefinition Height="auto" />
+                    <RowDefinition Height="auto" />
+                    <RowDefinition Height="auto" />
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="auto" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <TextBlock
+                    FontSize="32"
+                    FontStyle="Italic"
+                    FontWeight="Bold"
+                    Foreground="#844518"
+                    Text="Hóa đơn" />
+                <Grid Grid.Row="1" Margin="0,10,0,0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="auto" SharedSizeGroup="label" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+                    <TextBlock
+                        FontSize="16"
+                        Foreground="#844518"
+                        Text="Hóa đơn: " />
+                    <TextBlock
+                        Grid.Column="1"
+                        FontSize="16"
+                        Text="{Binding InvoiceExport.Invoiceid}" />
+                </Grid>
+                <Grid Grid.Row="2">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="auto" SharedSizeGroup="label" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+                    <TextBlock
+                        FontSize="16"
+                        Foreground="#844518"
+                        Text="Bàn: " />
+                    <TextBlock
+                        Grid.Column="1"
+                        FontSize="16"
+                        Text="{Binding InvoiceExport.Coffeetable.Tablenumber}" />
+                </Grid>
+                <Grid Grid.Row="3">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="auto" SharedSizeGroup="label" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+                    <TextBlock
+                        FontSize="16"
+                        Foreground="Brown"
+                        Text="Ngày:" />
+                    <TextBlock
+                        Grid.Column="1"
+                        FontSize="16"
+                        Text="{Binding InvoiceExport.Paymentstartdate, StringFormat=dd/MM/yyyy}" />
+                </Grid>
+                <Grid Grid.Row="4">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="auto" SharedSizeGroup="label" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+                    <TextBlock
+                        FontSize="16"
+                        Foreground="Brown"
+                        Text="Giờ vào:" />
+                    <TextBlock
+                        Grid.Column="1"
+                        FontSize="16"
+                        Text="{Binding InvoiceExport.Paymentstartdate, StringFormat=hh:mm:ss}" />
+                </Grid>
+                <Grid
+                    Grid.Row="4"
+                    Grid.Column="1"
+                    HorizontalAlignment="Right">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="auto" SharedSizeGroup="label" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+                    <TextBlock
+                        FontSize="16"
+                        Foreground="Brown"
+                        Text="Giờ ra: " />
+                    <TextBlock
+                        Grid.Column="1"
+                        FontSize="16"
+                        Text="{Binding InvoiceExport.Paymentenddate, StringFormat=hh:mm:ss}" />
+                </Grid>
+            </Grid>
+            <Grid Grid.Row="2">
+                <ListView ItemsSource="{Binding InvoiceExport.Invoicedetails, Mode=TwoWay}">
+                    <ListView.View>
+                        <GridView>
+
+                            <GridViewColumn DisplayMemberBinding="{Binding Food.Foodname, Mode=TwoWay}" Header="Tên món ăn" />
+                            <GridViewColumn DisplayMemberBinding="{Binding Quantity, Mode=TwoWay}" Header="Số lượng" />
+                            <GridViewColumn DisplayMemberBinding="{Binding Food.PriceDiscount, Converter={StaticResource CurrencyConverter}, Mode=OneWay}" Header="Đơn giá" />
+                        </GridView>
+                    </ListView.View>
+                </ListView>
+            </Grid>
+
+            <Grid Grid.Row="3" Margin="0,10,0,0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="auto" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="auto" />
+                    <RowDefinition Height="auto" />
+                    <RowDefinition Height="auto" />
+                </Grid.RowDefinitions>
+                <Grid Grid.Row="0" Grid.IsSharedSizeScope="True">
+                    <StackPanel>
+                        <TextBlock
+                            FontSize="16"
+                            FontWeight="Bold"
+                            Foreground="#844518"
+                            Text="Liên hệ" />
+                        <Grid Margin="0,10,0,0">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="auto" SharedSizeGroup="label" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+                            <TextBlock FontSize="14" Text="Email:  " />
+                            <TextBlock
+                                Grid.Column="1"
+                                FontSize="14"
+                                Text="cafeManager@gmail.com" />
+                        </Grid>
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="auto" SharedSizeGroup="label" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+                            <TextBlock FontSize="14" Text="SĐT:" />
+                            <TextBlock
+                                Grid.Column="1"
+                                FontSize="14"
+                                Text="0377929994" />
+                        </Grid>
+                    </StackPanel>
+                </Grid>
+                <Grid
+                    Grid.Column="1"
+                    Margin="0,0,20,0"
+                    HorizontalAlignment="Right"
+                    Grid.IsSharedSizeScope="True">
+
+                    <StackPanel>
+                        <TextBlock
+                            FontSize="16"
+                            FontWeight="Bold"
+                            Foreground="#844518"
+                            Text="Khấu trừ" />
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="auto" SharedSizeGroup="label" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+                            <TextBlock FontSize="16" Text="Mã giảm giá:" />
+                            <TextBlock
+                                Grid.Column="1"
+                                FontSize="16"
+                                Text="{Binding InvoiceExport.Discountinvoice, StringFormat={} {0:0}%}" />
+                        </Grid>
+                        <Separator
+                            Width="80"
+                            Margin="0,20,0,0"
+                            Foreground="Black" />
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="auto" SharedSizeGroup="label" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+                            <TextBlock FontSize="16" Text="Tổng tiền:" />
+                            <TextBlock
+                                Grid.Column="1"
+                                FontSize="16"
+                                Text="{Binding InvoiceExport.TotalPrice, Mode=OneWay, Converter={StaticResource CurrencyConverter}}" />
+                        </Grid>
+                    </StackPanel>
+                </Grid>
+            </Grid>
+            <Grid
+                Grid.Row="4"
+                Margin="0,10,0,0"
+                HorizontalAlignment="Center">
+                <TextBlock
+                    FontSize="16"
+                    FontStyle="Italic"
+                    FontWeight="Bold"
+                    Foreground="#844518"
+                    Text="Cảm ơn quý khách! Hẹn gặp lại!" />
+            </Grid>
+            <StackPanel
+                x:Name="btnChoice"
+                Grid.Row="5"
+                Margin="0,10,0,0"
+                HorizontalAlignment="Center"
+                Orientation="Horizontal">
+                <Button
+                    Name="Print"
+                    Margin="0,0,10,0"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center"
+                    Click="Print_Click">
+                    <materialDesign:PackIcon Kind="Printer" />
+                </Button>
+                <Button
+                    Name="Save"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center"
+                    Click="Save_Click">
+                    <materialDesign:PackIcon Kind="ContentSaveCheck" />
+                </Button>
+            </StackPanel>
+        </Grid>
+    </Border>
+</Window>

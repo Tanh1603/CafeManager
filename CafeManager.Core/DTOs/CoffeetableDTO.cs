@@ -1,103 +1,56 @@
 ﻿using CafeManager.Core.Data;
+using CommunityToolkit.Mvvm.ComponentModel;
 using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 using System.Runtime.CompilerServices;
+
+#nullable disable
 
 namespace CafeManager.Core.DTOs
 {
-    public class CoffeetableDTO : INotifyPropertyChanged
+    public partial class CoffeetableDTO : BaseDTO
     {
+        [ObservableProperty]
         private int coffeetableid;
 
+        [ObservableProperty]
+        [NotifyDataErrorInfo]
+        [Required(ErrorMessage = "Không được trống")]
+        [Range(1, int.MaxValue, ErrorMessage = "Số phải lớn hơn 0")]
+        [RegularExpression(@"^\d+$", ErrorMessage = "Số bàn phải là số nguyên")]
+        [NotifyPropertyChangedFor(nameof(TableName))]
         private int _tablenumber;
 
-        private int? _seatingcapacity;
+        [ObservableProperty]
+        [NotifyDataErrorInfo]
+        [Required(ErrorMessage = "Không được trống")]
+        private int _seatingcapacity;
 
+        [ObservableProperty]
+        [NotifyDataErrorInfo]
+        [Required(ErrorMessage = "Không được trống")]
         private string _statustable;
 
+        [ObservableProperty]
         private string _notes;
 
-        private bool? _isdeleted;
-
-        public int Coffeetableid
-        {
-            get => coffeetableid;
-            set
-            {
-                coffeetableid = value;
-                OnPropertyChanged();
-            }
-        }
-
-        public int? Seatingcapacity
-        {
-            get => _seatingcapacity;
-            set
-            {
-                _seatingcapacity = value;
-                OnPropertyChanged();
-            }
-        }
-
-        public string Statustable
-        {
-            get => _statustable; set
-            {
-                _statustable = value;
-                OnPropertyChanged();
-            }
-        }
-
-        public string Notes
-        {
-            get => _notes;
-            set
-            {
-                _notes = value;
-                OnPropertyChanged();
-            }
-        }
-
-        public bool? Isdeleted
-        {
-            get => _isdeleted;
-            set
-            {
-                _isdeleted = value;
-                OnPropertyChanged();
-            }
-        }
-
-        public int Tablenumber
-        {
-            get => _tablenumber;
-            set
-            {
-                _tablenumber = value;
-                OnPropertyChanged();
-                OnPropertyChanged(nameof(TableName));
-            }
-        }
-
         public string TableName => $"Bàn {Tablenumber}";
+
+        [ObservableProperty]
+        private bool _isEmpty = true;
 
         public CoffeetableDTO Clone()
         {
             return new CoffeetableDTO()
             {
-                Coffeetableid = this.Coffeetableid,
-                Tablenumber = this.Tablenumber,
-                Seatingcapacity = this.Seatingcapacity,
-                Statustable = this.Statustable,
-                Notes = this.Notes,
-                Isdeleted = this.Isdeleted,
+                Id = Id,
+                Coffeetableid = Coffeetableid,
+                Tablenumber = Tablenumber,
+                Seatingcapacity = Seatingcapacity,
+                Statustable = Statustable,
+                Notes = Notes,
+                Isdeleted = Isdeleted,
             };
-        }
-
-        public event PropertyChangedEventHandler? PropertyChanged;
-
-        protected void OnPropertyChanged([CallerMemberName] string? propertyName = null)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
     }
 }

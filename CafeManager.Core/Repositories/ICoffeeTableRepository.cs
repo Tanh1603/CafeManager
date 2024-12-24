@@ -9,10 +9,6 @@ namespace CafeManager.Core.Repositories
 {
     public interface ICoffeeTableRepository : IRepository<Coffeetable>
     {
-        Task<IEnumerable<Invoice>> GetAllInvoicesByCoffeeTableIdAsync(int id);
-
-        Task<Coffeetable?> GetCoffeeTableByIdAsync(int id);
-
-        Task<IEnumerable<Coffeetable>> GetAllCoffeTableAsync();
+        Task<int> GetTotalTable(CancellationToken token = default);
     }
 }

@@ -10,25 +10,38 @@ using System.Threading.Tasks;
 
 namespace CafeManager.WPF.Services
 {
-    public class CoffeTableServices
+    public class CoffeTableServices(IUnitOfWork unitOfWork)
     {
-        private IServiceProvider _provider;
-        private IUnitOfWork _unitOfWork;
+        private IUnitOfWork _unitOfWork = unitOfWork;
 
-        public CoffeTableServices(IServiceProvider provider)
+        public async Task<IEnumerable<Coffeetable>> GetListCoffeTable(CancellationToken token = default)
         {
-            _provider = provider;
-            _unitOfWork = provider.GetRequiredService<IUnitOfWork>();
+            try
+            {
+                _unitOfWork.ClearChangeTracker();
+                return await _unitOfWork.CoffeeTableList.GetAll(token);
+            }
+            catch (OperationCanceledException)
+            {
+                throw;
+            }
         }
 
-        public async Task<IEnumerable<Coffeetable>> GetListCoffeTable()
+        public async Task<IEnumerable<Coffeetable>> GetListExistCoffeeTable(CancellationToken token = default)
         {
-            return await _unitOfWork.CoffeeTableList.GetAllCoffeTableAsync();
-        }
-
-        public async Task<IEnumerable<Invoice>> GetListInvoicesByCoffeeTableId(int id)
-        {
-            return await _unitOfWork.CoffeeTableList.GetAllInvoicesByCoffeeTableIdAsync(id);
+            try
+            {
+                _unitOfWork.ClearChangeTracker();
+                return await _unitOfWork.CoffeeTableList.GetAllExistedAsync(token);
+            }
+            catch (OperationCanceledException)
+            {
+                throw;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
         }
 
         public async Task<Coffeetable?> AddCoffeTable(Coffeetable coffeetable)
@@ -39,22 +52,31 @@ namespace CafeManager.WPF.Services
 
                 var res = await _unitOfWork.CoffeeTableList.Create(coffeetable);
                 await _unitOfWork.CompleteAsync();
+                _unitOfWork.ClearChangeTracker();
                 await _unitOfWork.CommitTransactionAsync();
                 return res;
             }
             catch (Exception)
             {
                 await _unitOfWork.RollbackTransactionAsync();
-                _unitOfWork.ClearChangeTracker();
                 throw;
             }
         }
 
-        public Coffeetable? UpdateCoffeeTable(Coffeetable coffeetable)
+        public async Task<Coffeetable?> UpdateCoffeeTable(Coffeetable coffeetable)
         {
-            var res = _unitOfWork.CoffeeTableList.Update(coffeetable);
-            _unitOfWork.Complete();
-            return res;
+            try
+            {
+                await _unitOfWork.BeginTransactionAsync();
+                var res = await _unitOfWork.CoffeeTableList.Update(coffeetable);
+                await _unitOfWork.CompleteAsync();
+                await _unitOfWork.CommitTransactionAsync();
+                return res;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
         }
 
         public async Task<bool> DeleteCoffeeTable(int id)
@@ -62,6 +84,22 @@ namespace CafeManager.WPF.Services
             var res = await _unitOfWork.CoffeeTableList.Delete(id);
             _unitOfWork.Complete();
             return res;
+        }
+
+        public async Task<int> GetTotalTable(CancellationToken token = default)
+        {
+            try
+            {
+                return await _unitOfWork.CoffeeTableList.GetTotalTable(token);
+            }
+            catch (OperationCanceledException)
+            {
+                throw;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
         }
     }
 }

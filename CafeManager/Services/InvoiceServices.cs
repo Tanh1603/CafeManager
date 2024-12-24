@@ -1,41 +1,14 @@
 ﻿using CafeManager.Core.Data;
 using CafeManager.Core.Services;
 using Microsoft.Extensions.DependencyInjection;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Linq.Expressions;
-using System.Text;
-using System.Threading.Tasks;
+using System.Security.RightsManagement;
 
 namespace CafeManager.WPF.Services
 {
-    public class InvoiceServices
+    public class InvoiceServices(IUnitOfWork unitOfWork)
     {
-        private readonly IServiceProvider _provider;
-        private readonly IUnitOfWork _unitOfWork;
-
-        public InvoiceServices(IServiceProvider provider)
-        {
-            _provider = provider;
-            _unitOfWork = provider.GetRequiredService<IUnitOfWork>();
-        }
-
-        // Hàm load tất cả bill
-        public async Task<IEnumerable<Invoice>> GetListInvoices()
-        {
-            return await _unitOfWork.InvoiceList.GetAllInvoiceAsync();
-        }
-
-        public async Task<Invoice?> GetInvoiceById(int id)
-        {
-            return await _unitOfWork.InvoiceList.GetInvoicesByIdAsync(id);
-        }
-
-        public async Task<IEnumerable<Invoicedetail>?> GetListIvoiceDetailByInvoiceId(int id)
-        {
-            return await _unitOfWork.InvoiceList.GetAllInvoiceDetailByInvoiceIdAsync(id);
-        }
+        private readonly IUnitOfWork _unitOfWork = unitOfWork;
 
         #region Thêm xóa, sửa, tìm kiếm, sắp sếp, phân trang
 
@@ -52,7 +25,6 @@ namespace CafeManager.WPF.Services
             catch (Exception)
             {
                 await _unitOfWork.RollbackTransactionAsync();
-                _unitOfWork.ClearChangeTracker();
                 throw new InvalidOperationException("Lỗi");
             }
         }
@@ -67,84 +39,139 @@ namespace CafeManager.WPF.Services
             return res;
         }
 
-        public Invoice? UpdateInvoice(Invoice invoice)
+        public async Task<(IEnumerable<Invoice>?, int)> GetSearchPaginateListInvoice(Expression<Func<Invoice, bool>>? searchPredicate = null, int skip = 0, int take = 20, CancellationToken token = default)
         {
             try
             {
-                var res = _unitOfWork.InvoiceList.Update(invoice);
-                if (res != null)
-                {
-                    _unitOfWork.Complete();
-                }
-                return res;
+                token.ThrowIfCancellationRequested();
+                return await _unitOfWork.InvoiceList.GetByPageAsync(skip, take, searchPredicate, token);
             }
-            catch (Exception)
+            catch (OperationCanceledException)
             {
-                _unitOfWork.ClearChangeTracker();
-                throw new InvalidOperationException("Lỗi");
+                throw new OperationCanceledException("Dừng lấy hóa đơn");
             }
-        }
-
-        public async Task<IEnumerable<Invoice>?> GetSearchSortPaginateListInvoice(Expression<Func<Invoice, bool>>? searchPredicate = null,
-                                                            Expression<Func<Invoice, object>>? sortKeySelector = null,
-                                                            bool ascending = true, int skip = 0, int take = 20)
-        {
-            return await _unitOfWork.InvoiceList.SearchSortPaginateAsync(searchPredicate, sortKeySelector, ascending, skip, take);
         }
 
         #endregion Thêm xóa, sửa, tìm kiếm, sắp sếp, phân trang
 
-        #region tính toán doanh thu của bill
-
-        public async Task<decimal?> GetTotalPriceByInvoiceId(int id)
-        {
-            var res = await _unitOfWork.InvoiceList.GetAllInvoiceDetailByInvoiceIdAsync(id);
-            return CaculateTotalPriceFromInvoiceDetail(res);
-        }
-
-        public decimal? CaculateTotalPriceFromInvoiceDetail(IEnumerable<Invoicedetail>? invoicedetail)
-        {
-            return invoicedetail?.Sum(x =>
-            {
-                decimal? discountInvoice = (100 - x.Invoice.Discountinvoice) / 100;
-                decimal? foodPrice = x.Food.Price;
-                decimal? foodDiscount = (100 - x.Food.Discountfood) / 100;
-                decimal? quantity = x.Quantity;
-
-                return discountInvoice * foodDiscount * foodPrice * quantity;
-            }) ?? decimal.Zero;
-        }
-
-        public async Task<decimal?> GetTotalPriceFromAllInvoices()
-        {
-            decimal? totalMoney = decimal.Zero;
-            var listInvoices = await _unitOfWork.InvoiceList.GetAllInvoiceAsync();
-            foreach (var invoice in listInvoices)
-            {
-                totalMoney += CaculateTotalPriceFromInvoiceDetail(invoice.Invoicedetails);
-            }
-
-            return totalMoney;
-        }
-
-        #endregion tính toán doanh thu của bill
-
-        public async Task<IEnumerable<Invoicedetail>> AddArangeListInvoiceDetail(IEnumerable<Invoicedetail> invoicedetail)
+        public async Task<decimal> GetRevenue(DateTime from, DateTime to, CancellationToken token = default)
         {
             try
             {
-                await _unitOfWork.BeginTransactionAsync();
-                var res = await _unitOfWork.InvoiceDetail.AddArange(invoicedetail);
-
-                await _unitOfWork.CompleteAsync();
-                await _unitOfWork.CommitTransactionAsync();
-                return res;
+                return await _unitOfWork.InvoiceList.GetTotalRevenueFromTo(from, to);
+            }
+            catch (OperationCanceledException)
+            {
+                throw;
             }
             catch (Exception)
             {
-                await _unitOfWork.RollbackTransactionAsync();
-                _unitOfWork.ClearChangeTracker();
-                throw new InvalidOperationException("Lỗi");
+                throw;
+            }
+        }
+
+        public async Task<int> GetTotalInvoice(DateTime from, DateTime to, CancellationToken token = default)
+        {
+            try
+            {
+                return await _unitOfWork.InvoiceList.GetTotalInvoiceFromTo(from, to, token);
+            }
+            catch (OperationCanceledException)
+            {
+                throw;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+        public async Task<List<decimal>> GetRevenueByMonth(DateTime from, DateTime to, CancellationToken token = default)
+        {
+            try
+            {
+                return await _unitOfWork.InvoiceList.GetRevenueByMonth(from, to, token);
+            }
+            catch (OperationCanceledException)
+            {
+                throw;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        public async Task<List<decimal>> GetRevenueByDay(DateTime from, DateTime to, CancellationToken token = default)
+        {
+            try
+            {
+                return await _unitOfWork.InvoiceList.GetRevenueByDay(from, to, token);
+            }
+            catch (OperationCanceledException)
+            {
+                throw;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        public async Task<List<int>> GetTotalInvoiceByDay(DateTime from, DateTime to, CancellationToken token = default)
+        {
+            try
+            {
+                return await _unitOfWork.InvoiceList.GetTotalInvoiceByDay(from, to, token);
+            }
+            catch (OperationCanceledException)
+            {
+                throw;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        public async Task<List<int>> GetTotalInvoiceByMonth(DateTime from, DateTime to, CancellationToken token = default)
+        {
+            try
+            {
+                return await _unitOfWork.InvoiceList.GetTotalInvoiceByMonth(from, to, token);
+            }
+            catch (OperationCanceledException)
+            {
+                throw;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        public async Task<List<decimal>> GetRevenueByYear(DateTime from, DateTime to, CancellationToken token = default)
+        {
+            try
+            {
+                return await _unitOfWork.InvoiceList.GetRevenueByYear(from, to, token);
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+        }
+
+        public async Task<List<int>> GetTotalInvoiceByYear(DateTime from, DateTime to, CancellationToken token = default)
+        {
+            try
+            {
+                return await _unitOfWork.InvoiceList.GetTotalInvoiceByYear(from, to, token);
+            }
+            catch (Exception)
+            {
+
+                throw;
             }
         }
     }

@@ -9,10 +9,6 @@ namespace CafeManager.Core.Repositories
 {
     public interface IFoodCategoryRepository : IRepository<Foodcategory>
     {
-        Task<IEnumerable<Foodcategory>> GetAllFoodCategoryAsync();
-
-        Task<Foodcategory?> GetFoodCategoryByIdAsync(int id);
-
-        Task<IEnumerable<Food>> GetAllFoodByFoodCatgoryIdAsync(int id);
+        Task<IEnumerable<Foodcategory>> GetAllExistFoodCategoryAsync(CancellationToken token = default);
     }
 }

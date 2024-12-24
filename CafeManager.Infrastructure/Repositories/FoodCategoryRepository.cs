@@ -16,31 +16,25 @@ namespace CafeManager.Infrastructure.Repositories
         {
         }
 
-        public async Task<IEnumerable<Food>> GetAllFoodByFoodCatgoryIdAsync(int id)
+        public async Task<IEnumerable<Foodcategory>> GetAllExistFoodCategoryAsync(CancellationToken token = default)
         {
-            var category = await _cafeManagerContext.Set<Foodcategory>()
-                .Include(fc => fc.Foods)
-                .Where(x => x.Isdeleted == false)
-                .FirstOrDefaultAsync(x => x.Foodcategoryid == id);
-
-            return category?.Foods.Where(x => x.Isdeleted == false) ?? Enumerable.Empty<Food>();
+            try
+            {
+                return await _cafeManagerContext.Set<Foodcategory>().Include(x => x.Foods.Where(f => f.Isdeleted == false)).Where(x => x.Isdeleted == false).ToListAsync(token);
+            }
+            catch (OperationCanceledException)
+            {
+                throw;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
         }
 
-        public async Task<IEnumerable<Foodcategory>> GetAllFoodCategoryAsync()
+        public override async Task<bool> Delete(int id, CancellationToken token = default)
         {
-            return await _cafeManagerContext.Set<Foodcategory>().Include(x => x.Foods).Where(x => x.Isdeleted == false).ToListAsync();
-        }
-
-        public async Task<Foodcategory?> GetFoodCategoryByIdAsync(int id)
-        {
-            return await _cafeManagerContext.Set<Foodcategory>()
-                            .Include(x => x.Foods).Where(x => x.Isdeleted == false)
-                            .FirstOrDefaultAsync(x => x.Foodcategoryid == id) ?? null;
-        }
-
-        public override async Task<bool> Delete(int id)
-        {
-            var foodCategoryById = await GetFoodCategoryByIdAsync(id);
+            var foodCategoryById = await GetById(id);
             if (foodCategoryById == null)
             {
                 return false;

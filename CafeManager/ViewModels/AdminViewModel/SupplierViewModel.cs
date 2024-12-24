@@ -1,147 +1,258 @@
-﻿using CafeManager.Core.Data;
+﻿using AutoMapper;
+using CafeManager.Core.Data;
+using CafeManager.Core.DTOs;
+using CafeManager.Core.Services;
+using CafeManager.WPF.MessageBox;
 using CafeManager.WPF.Services;
 using CafeManager.WPF.ViewModels.AddViewModel;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Microsoft.Extensions.DependencyInjection;
 using System.Collections.ObjectModel;
-using CafeManager.WPF.MessageBox;
+using System.Diagnostics;
 
 namespace CafeManager.WPF.ViewModels.AdminViewModel
 {
-    public partial class SupplierViewModel : ObservableObject, IDisposable
+    public partial class SupplierViewModel : ObservableObject, IDisposable, IDataViewModel
     {
-        private readonly IServiceProvider _serviceProvider;
         private readonly MaterialSupplierServices _materialSupplierServices;
+        private IMapper _mapper;
 
         [ObservableProperty]
-        private bool _isOpenAddSupplier;
+        private bool _isLoading;
 
         [ObservableProperty]
-        private ObservableCollection<Supplier> _listSupplier = [];
+        private bool _isOpenAddSupplier = false;
+
+        private List<SupplierDTO> AllSupplier = [];
+
+        private List<SupplierDTO> _filterSupplierList = [];
+
+        public ObservableCollection<SupplierDTO> ListExistedSupplier => [.. _filterSupplierList.Where(x => x.Isdeleted == false) ?? []];
+
+        public ObservableCollection<SupplierDTO> ListDeletedSupplier => [.. _filterSupplierList.Where(x => x.Isdeleted == true) ?? []];
 
         [ObservableProperty]
-        private AddSuppierViewModel _addSupplierVM;
+        private AddSuppierViewModel _modifySupplierVM;
 
-        public SupplierViewModel(IServiceProvider provider)
+        private string _searchText = string.Empty;
+
+        public string SearchText
         {
-            _serviceProvider = provider;
-            _materialSupplierServices = provider.GetRequiredService<MaterialSupplierServices>();
-
-            AddSupplierVM = _serviceProvider.GetRequiredService<AddSuppierViewModel>();
-            AddSupplierVM.AddSupplierChanged += AddSupplierVM_AddSupplierChanged;
-            AddSupplierVM.UpdateSupplierNameChanged += AddSupplierVM_UpdateSupplierNameChanged;
-            AddSupplierVM.Close += AddSupplierVM_Close; ;
-
-            _ = LoadData();
-        }
-
-        private void AddSupplierVM_Close()
-        {
-            IsOpenAddSupplier = false;
-        }
-
-        private async void AddSupplierVM_UpdateSupplierNameChanged(Supplier obj)
-        {
-            try
+            get => _searchText;
+            set
             {
-                IsOpenAddSupplier = false;
-                Supplier oldSupplier = await _materialSupplierServices.GetSupplierById(obj.Supplierid);
-                Supplier? tmp = ListSupplier.FirstOrDefault(x => x.Supplierid == obj.Supplierid);
-
-                oldSupplier.Suppliername = obj.Suppliername;
-                oldSupplier.Representativesupplier = obj.Representativesupplier;
-                oldSupplier.Address = obj.Address;
-                oldSupplier.Email = obj.Email;
-                oldSupplier.Phone = obj.Phone;
-                oldSupplier.Notes = obj.Notes;
-
-                var newSupplier = _materialSupplierServices.UpdateSupplier(oldSupplier);
-                if (newSupplier != null)
+                if (_searchText != value)
                 {
-                    tmp = newSupplier;
-                    ListSupplier = new(ListSupplier);
-                    MyMessageBox.Show("Cập nhật nhà cung cấp thành công", MyMessageBox.Buttons.OK, MyMessageBox.Icons.Information);
+                    _searchText = value;
+                    FilterSupplier();
+                    OnPropertyChanged(nameof(SearchText));
                 }
             }
-            catch (InvalidOperationException ex)
-            {
-                MyMessageBox.Show(ex.Message, MyMessageBox.Buttons.OK,MyMessageBox.Icons.Warning);
-            }
         }
 
-        private async void AddSupplierVM_AddSupplierChanged(Supplier obj)
+        public SupplierViewModel(IServiceScope scope)
+        {
+            var provider = scope.ServiceProvider;
+            _materialSupplierServices = provider.GetRequiredService<MaterialSupplierServices>();
+            _mapper = provider.GetRequiredService<IMapper>();
+            ModifySupplierVM = provider.GetRequiredService<AddSuppierViewModel>();
+            ModifySupplierVM.ModifySupplierChanged += ModifySupplierVM_ModifySupplierChanged;
+            ModifySupplierVM.Close += ModifySupplierVM_Close;
+        }
+
+
+        public async Task LoadData(CancellationToken token = default)
         {
             try
             {
-                IsOpenAddSupplier = false;
-                var addedSupplier = await _materialSupplierServices.AddSupplier(obj);
-                ListSupplier.Add(addedSupplier);
+                token.ThrowIfCancellationRequested();
+                IsLoading = true;
+                AllSupplier = _mapper.Map<List<SupplierDTO>>(await _materialSupplierServices.GetListSupplier());
+                _filterSupplierList = _mapper.Map<List<SupplierDTO>>(AllSupplier);
 
-                MyMessageBox.Show("Thêm nhà cung cấp thành công",MyMessageBox.Buttons.OK,MyMessageBox.Icons.Information);
+                OnPropertyChanged(nameof(ListExistedSupplier));
+                OnPropertyChanged(nameof(ListDeletedSupplier));
             }
-            catch (InvalidOperationException ex)
+            catch (OperationCanceledException)
             {
-                MyMessageBox.Show(ex.Message, MyMessageBox.Buttons.OK, MyMessageBox.Icons.Warning);
+                Debug.WriteLine("LoadData của SupplierViewModel bị hủy");
+            }
+            finally
+            {
+                IsLoading = false;
             }
         }
 
-        private async Task LoadData()
+        private void FilterSupplier()
         {
-            var list = await _materialSupplierServices.GetListSupplier();
-            ListSupplier = new ObservableCollection<Supplier>(list);
+            var filtered = AllSupplier.Where(x =>
+                string.IsNullOrWhiteSpace(SearchText) ||
+                x.Suppliername.Contains(SearchText, StringComparison.OrdinalIgnoreCase) ||
+                x.Representativesupplier.Contains(SearchText, StringComparison.OrdinalIgnoreCase) ||
+                x.Phone.Contains(SearchText) ||
+                x.Email.Contains(SearchText) ||
+                x.Address.Contains(SearchText) ||
+                x.Notes.Contains(SearchText)
+                ).ToList();
+            _filterSupplierList = [.. filtered];
+            OnPropertyChanged(nameof(ListExistedSupplier));
+            OnPropertyChanged(nameof(ListDeletedSupplier));
+        }
+
+        private async void ModifySupplierVM_ModifySupplierChanged(SupplierDTO obj)
+        {
+            try
+            {
+                IsLoading = true;
+                if (ModifySupplierVM.IsAdding)
+                {
+                    var addSupplier = await _materialSupplierServices.AddSupplier(_mapper.Map<Supplier>(obj));
+                    if (addSupplier != null)
+                    {
+                        AllSupplier.Add(_mapper.Map<SupplierDTO>(addSupplier));
+                        FilterSupplier();
+                        ModifySupplierVM.ClearValueOfFrom();
+                        IsOpenAddSupplier = false;
+                        IsLoading = false;
+                        MyMessageBox.ShowDialog("Thêm nhà cung cấp thành công");
+                    }
+                    else
+                    {
+                        MyMessageBox.Show("Thêm nhà cung cấp thất bại");
+                    }
+                }
+                if (ModifySupplierVM.IsUpdating)
+                {
+                    var res = await _materialSupplierServices.UpdateSupplier(_mapper.Map<Supplier>(obj));
+                    if (res != null)
+                    {
+                        var updateSupplierDTO = AllSupplier.FirstOrDefault(x => x.Supplierid == res.Supplierid);
+                        if (updateSupplierDTO != null)
+                        {
+                            _mapper.Map(res, updateSupplierDTO);
+                            FilterSupplier();
+                            ModifySupplierVM.ClearValueOfFrom();
+                            IsOpenAddSupplier = false;
+                            IsLoading = false;
+                            MyMessageBox.ShowDialog("Sửa nhà cung cấp thành công");
+                        }
+                    }
+                    else
+                    {
+                        MyMessageBox.ShowDialog("Sửa nhà cung cấp thất bại");
+                    }
+                }
+            }
+            catch (InvalidOperationException ioe)
+            {
+                MyMessageBox.ShowDialog(ioe.Message);
+            }
+            finally
+            {
+                IsLoading = false;
+            }
         }
 
         [RelayCommand]
         private void OpenAddSupplier()
         {
             IsOpenAddSupplier = true;
-            AddSupplierVM.IsAdding = true;
-            AddSupplierVM.IsUpdating = false;
-
-            AddSupplierVM.Suppliername = string.Empty;
-            AddSupplierVM.Representativesupplier = string.Empty;
-            AddSupplierVM.Address = string.Empty;
-            AddSupplierVM.Email = string.Empty;
-            AddSupplierVM.Phone = string.Empty;
-            AddSupplierVM.Notes = string.Empty;
+            ModifySupplierVM.IsAdding = true;
         }
 
-        private bool _isUpdateSupplierChangedRegistered = false;
-
         [RelayCommand]
-        private void UpdateSupplier(Supplier supplier)
+        private void OpenUpdateSupplier(SupplierDTO supplier)
         {
             IsOpenAddSupplier = true;
-            AddSupplierVM.HandleSupplierFromParent(supplier);
-            AddSupplierVM.IsUpdating = true;
-            AddSupplierVM.IsAdding = false;
+            ModifySupplierVM.IsUpdating = true;
+            ModifySupplierVM.RecieveSupplierDTO(supplier);
         }
 
+        //[RelayCommand]
+        //private void CloseModifySupplier()
+        //{
+        //    IsOpenAddSupplier = false;
+        //    ModifySupplierVM.ClearValueOfFrom();
+        //}
+
+        private void ModifySupplierVM_Close()
+        {
+            IsOpenAddSupplier = false;
+            ModifySupplierVM.ClearValueOfFrom();
+        }
+
+
         [RelayCommand]
-        private async Task DeleteSupplier(Supplier supplier)
+        private async Task DeleteSupplier(SupplierDTO supplier)
         {
             try
             {
-                var isDeleted = await _materialSupplierServices.DeleteSupplier(supplier.Supplierid);
-                if (isDeleted)
+                string messageBox = MyMessageBox.ShowDialog("Bạn có muốn ẩn nhà cung cấp không?", MyMessageBox.Buttons.Yes_No, MyMessageBox.Icons.Question);
+                if (messageBox.Equals("1"))
                 {
-                    ListSupplier.Remove(supplier);
+                    IsLoading = true;
+                    bool isDeleted = await _materialSupplierServices.DeleteSupplier(supplier.Supplierid);
+                    if (isDeleted)
+                    {
+                        var deleted = AllSupplier.First(x => x.Supplierid == supplier.Supplierid);
+                        deleted.Isdeleted = true;
+                        IsLoading = false;
+                        MyMessageBox.ShowDialog("Ẩn nhà cung cấp thanh công");
+                        FilterSupplier();
+                    }
+                    else
+                    {
+                        MyMessageBox.ShowDialog("Ẩn nhà cung cấp thất bại");
+                    }
                 }
             }
-            catch (InvalidOperationException ivd)
+            catch (InvalidOperationException ioe)
             {
-                MyMessageBox.Show(ivd.Message, MyMessageBox.Buttons.OK, MyMessageBox.Icons.Warning);
+                MyMessageBox.ShowDialog(ioe.Message);
+            }
+            finally
+            {
+                IsLoading = false;
+            }
+        }
+
+        [RelayCommand]
+        private async Task RestoreSupplier(SupplierDTO supplier)
+        {
+            try
+            {
+                string messageBox = MyMessageBox.ShowDialog("Bạn có muốn hiển thị nhà cung cấp không?", MyMessageBox.Buttons.Yes_No, MyMessageBox.Icons.Question);
+                if (messageBox.Equals("1"))
+                {
+                    IsLoading = true;
+                    supplier.Isdeleted = false;
+                    var res = await _materialSupplierServices.UpdateSupplier(_mapper.Map<Supplier>(supplier));
+                    if (res != null)
+                    {
+                        var restore = AllSupplier.First(x => x.Supplierid == supplier.Supplierid);
+                        restore.Isdeleted = false;
+                        IsLoading = false;
+                        MyMessageBox.ShowDialog("Hiển thị nhà cung cấp thành công");
+                        FilterSupplier();
+                    }
+                    else
+                    {
+                        MyMessageBox.ShowDialog("Hiển thị nhà cung cấp thất bại");
+                    }
+                }
+            }
+            catch (InvalidOperationException ioe)
+            {
+                MyMessageBox.ShowDialog(ioe.Message);
             }
         }
 
         public void Dispose()
         {
-            if (AddSupplierVM != null)
+            if (ModifySupplierVM != null)
             {
-                AddSupplierVM.AddSupplierChanged -= AddSupplierVM_AddSupplierChanged;
-                AddSupplierVM.UpdateSupplierNameChanged -= AddSupplierVM_UpdateSupplierNameChanged;
-                AddSupplierVM.Close -= AddSupplierVM_Close;
+                ModifySupplierVM.ModifySupplierChanged -= ModifySupplierVM_ModifySupplierChanged;
             }
             GC.SuppressFinalize(this);
         }

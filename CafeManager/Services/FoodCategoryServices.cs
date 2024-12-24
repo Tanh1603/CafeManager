@@ -9,30 +9,42 @@ using System.Threading.Tasks;
 
 namespace CafeManager.WPF.Services
 {
-    public class FoodCategoryServices
+    public class FoodCategoryServices(IUnitOfWork unitOfWork)
     {
-        private readonly IServiceProvider _provider;
-        private readonly IUnitOfWork _unitOfWork;
+        private readonly IUnitOfWork _unitOfWork = unitOfWork;
 
-        public FoodCategoryServices(IServiceProvider provider)
+        public async Task<IEnumerable<Foodcategory>> GetAllListFoodCategory(CancellationToken token = default)
         {
-            _provider = provider;
-            _unitOfWork = provider.GetRequiredService<IUnitOfWork>();
+            try
+            {
+                _unitOfWork.ClearChangeTracker();
+                return await _unitOfWork.FoodCategoryList.GetAll(token);
+            }
+            catch (OperationCanceledException)
+            {
+                throw new OperationCanceledException("Dừng lấy food");
+            }
+            catch (Exception)
+            {
+                throw;
+            }
         }
 
-        public async Task<IEnumerable<Foodcategory>> GetListFoodCategory()
+        public async Task<IEnumerable<Foodcategory>> GetAllListExistFoodCategory(CancellationToken token)
         {
-            return await _unitOfWork.FoodCategoryList.GetAllFoodCategoryAsync();
-        }
-
-        public async Task<IEnumerable<Food>> GetListFoodByFoodCatgoryId(int id)
-        {
-            return await _unitOfWork.FoodCategoryList.GetAllFoodByFoodCatgoryIdAsync(id);
-        }
-
-        public async Task<IEnumerable<Foodcategory>> GetAllListFoodCategory()
-        {
-            return await _unitOfWork.FoodCategoryList.GetAll();
+            try
+            {
+                _unitOfWork.ClearChangeTracker();
+                return await _unitOfWork.FoodCategoryList.GetAllExistFoodCategoryAsync(token);
+            }
+            catch (OperationCanceledException)
+            {
+                throw;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
         }
 
         public async Task<Foodcategory?> AddFoodCategory(Foodcategory foodcategory)
@@ -40,17 +52,17 @@ namespace CafeManager.WPF.Services
             var res = await _unitOfWork.FoodCategoryList.Create(foodcategory);
             if (res != null)
             {
-                _unitOfWork.Complete();
+                await _unitOfWork.CompleteAsync();
             }
             return res;
         }
 
-        public Foodcategory? UpdateFoodCategory(Foodcategory foodcategory)
+        public async Task<Foodcategory?> UpdateFoodCategory(Foodcategory foodcategory)
         {
-            var res = _unitOfWork.FoodCategoryList.Update(foodcategory);
+            var res = await _unitOfWork.FoodCategoryList.Update(foodcategory);
             if (res != null)
             {
-                _unitOfWork.Complete();
+                await _unitOfWork.CompleteAsync();
             }
             return res;
         }
@@ -60,7 +72,7 @@ namespace CafeManager.WPF.Services
             var res = await _unitOfWork.FoodCategoryList.Delete(id);
             if (res)
             {
-                _unitOfWork.Complete();
+                await _unitOfWork.CompleteAsync();
             }
             return res;
         }

@@ -10,12 +10,5 @@ namespace CafeManager.Core.Repositories
 {
     public interface IMaterialRepository : IRepository<Material>
     {
-        Task<IEnumerable<Material>> GetAllMaterialAsync();
-
-        Task<IEnumerable<MaterialDetailDTO>> GetAllMaterialWithDetail();
-
-        Task<IEnumerable<MaterialDetailDTO>> GetAllUsedMaterial();
-
-        Task<Material> GetMaterialById(int id);
     }
 }

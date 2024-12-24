@@ -11,13 +11,13 @@ public partial class Importdetail
 
     public int Importid { get; set; }
 
-    public int Materialid { get; set; }
-
     public decimal? Quantity { get; set; }
 
     public bool? Isdeleted { get; set; }
 
+    public int Materialsupplierid { get; set; }
+
     public virtual Import Import { get; set; }
 
-    public virtual Material Material { get; set; }
+    public virtual Materialsupplier Materialsupplier { get; set; }
 }

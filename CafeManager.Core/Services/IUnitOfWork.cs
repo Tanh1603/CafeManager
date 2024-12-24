@@ -21,7 +21,8 @@ namespace CafeManager.Core.Services
         IRepository<Importdetail> ImportDetailList { get; }
         IMaterialRepository MaterialList { get; }
         ISupplierRepository SupplierList { get; }
-        IRepository<Materialsupplier> MaterialSupplierList { get; }
+        IMaterialSupplierRepository MaterialSupplierList { get; }
+        IConsumedMaterialRepository ConsumedMaterialList { get; }
 
         IStaffRepository StaffList { get; }
         IAppUserRepository AppUserList { get; }

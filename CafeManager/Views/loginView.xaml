@@ -5,6 +5,7 @@
     xmlns:converter="clr-namespace:CafeManager.WPF.Services.Converter"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:local="clr-namespace:CafeManager.WPF.Views.AdminView"
+    xmlns:ma="http://metro.mahapps.com/winfx/xaml/iconpacks"
     xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:viewmodels="clr-namespace:CafeManager.WPF.ViewModels"
@@ -27,10 +28,11 @@
             <Grid Grid.Column="0">
                 <StackPanel Margin="20" VerticalAlignment="Top">
                     <TextBlock
+                        FontFamily="{StaticResource coffe}"
                         FontSize="46"
                         FontWeight="SemiBold"
                         Foreground="#ffffff"
-                        Text="Đăng nhập"
+                        Text="Cafe Manager"
                         TextAlignment="Center" />
                     <Border
                         Width="100"
@@ -165,7 +167,7 @@
                             FontSize="32"
                             FontWeight="Bold"
                             Foreground="#cb925d"
-                            Text="Đăng nhập vào phần mềm" />
+                            Text="Đăng nhập" />
                         <!--  inputs  -->
                         <StackPanel Grid.Row="1" Margin="50,20">
                             <Grid Margin="0,10">
@@ -236,19 +238,64 @@
                                         Text="Quên mật khẩu"
                                         TextDecorations="Underline" />
                                 </Button>
-                                <CheckBox
-                                    Margin="0,10,0,20"
-                                    HorizontalAlignment="Right"
-                                    VerticalAlignment="Center"
-                                    FontSize="18"
-                                    IsChecked="{Binding IsRememberAccount}">
-                                    <TextBlock Margin="0,0,0,3">
+                                <Grid HorizontalAlignment="Right">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="auto" />
+                                        <ColumnDefinition Width="*" />
+                                    </Grid.ColumnDefinitions>
+                                    <CheckBox
+                                        Margin="0,0,0,2"
+                                        HorizontalAlignment="Center"
+                                        VerticalAlignment="Center"
+                                        Background="#844518"
+                                        FontSize="20"
+                                        IsChecked="{Binding IsRememberAccount}" />
+
+                                    <TextBlock
+                                        Grid.Column="1"
+                                        Margin="0,0,0,3"
+                                        HorizontalAlignment="Center"
+                                        VerticalAlignment="Center"
+                                        FontSize="18">
 
                                         <Run FontWeight="Bold" Foreground="#844518">Nhớ tài khoản</Run>
                                     </TextBlock>
-                                </CheckBox>
+                                </Grid>
                             </Grid>
 
+                            <!--<Grid>
+                                <materialDesign:Card
+                                    Width="300"
+                                    Height="70"
+                                    Margin="20"
+                                    Padding="10"
+                                    Background="#844518"
+                                    UniformCornerRadius="15">
+                                    <ProgressBar
+                                        Width="40"
+                                        Height="40"
+                                        Foreground="#ffffff"
+                                        IsIndeterminate="True"
+                                        Style="{StaticResource MaterialDesignCircularProgressBar}"
+                                        Value="50" />
+                                </materialDesign:Card>
+
+                                <Button
+                                    Width="300"
+                                    Height="70"
+                                    Margin="20"
+                                    HorizontalAlignment="Center"
+                                    materialDesign:ButtonAssist.CornerRadius="15"
+                                    Background="#844518"
+                                    BorderBrush="Transparent"
+                                    Command="{Binding LoginCommand}"
+                                    Content="Đăng nhập"
+                                    FontSize="18"
+                                    FontWeight="Bold"
+                                    Foreground="#ffffff"
+                                    IsDefault="True"
+                                    Visibility="{Binding IsLoading, Converter={StaticResource BooleanToVisibilityConverter}}" />
+                            </Grid>-->
                             <Button
                                 Width="300"
                                 Height="70"
@@ -258,11 +305,48 @@
                                 Background="#844518"
                                 BorderBrush="Transparent"
                                 Command="{Binding LoginCommand}"
-                                Content="Đăng nhập"
-                                FontSize="18"
-                                FontWeight="Bold"
-                                Foreground="#ffffff"
-                                IsDefault="True" />
+                                IsDefault="True">
+                                <Grid>
+                                    <Grid>
+                                        <Grid.Style>
+                                            <Style TargetType="Grid">
+                                                <Setter Property="Visibility" Value="Visible" />
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding IsLoading}" Value="True">
+                                                        <Setter Property="Visibility" Value="Collapsed" />
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </Grid.Style>
+                                        <TextBlock
+                                            FontSize="18"
+                                            FontWeight="Bold"
+                                            Foreground="#ffffff"
+                                            Text="Đăng nhập" />
+                                    </Grid>
+
+                                    <Grid>
+                                        <Grid.Style>
+                                            <Style TargetType="Grid">
+                                                <Setter Property="Visibility" Value="Collapsed" />
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding IsLoading}" Value="True">
+                                                        <Setter Property="Visibility" Value="Visible" />
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </Grid.Style>
+
+                                        <ProgressBar
+                                            Width="40"
+                                            Height="40"
+                                            Foreground="#ffffff"
+                                            IsIndeterminate="True"
+                                            Style="{StaticResource MaterialDesignCircularProgressBar}"
+                                            Value="50" />
+                                    </Grid>
+                                </Grid>
+                            </Button>
 
                             <TextBlock
                                 Margin="0,20,0,30"
@@ -288,74 +372,99 @@
             OverlayBackground="{DynamicResource PrimaryHueDarkBrush}"
             Placement="Mouse"
             Style="{StaticResource MaterialDesignEmbeddedDialogHost}">
+            <materialDesign:DialogHost.DialogBackground>
+                <SolidColorBrush Color="Transparent" />
+            </materialDesign:DialogHost.DialogBackground>
             <materialDesign:DialogHost.DialogContent>
-                <StackPanel
-                    MinWidth="400"
-                    HorizontalAlignment="Center" VerticalAlignment="Center">
-                    <Button
-                        HorizontalAlignment="Right"
-                        Background="OrangeRed"
-                        Command="{Binding CloseOpenResetPassWordCommand}">
-                        <materialDesign:PackIcon Kind="Close" />
-                    </Button>
-                    <Grid Margin="0,10">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="auto" />
-                            <ColumnDefinition Width="*" />
-                        </Grid.ColumnDefinitions>
-                        <materialDesign:PackIcon
-                            MinWidth="30"
-                            MinHeight="30"
-                            HorizontalAlignment="Center"
-                            VerticalAlignment="Center"
-                            Foreground="#9b442a"
-                            Kind="User" />
-                        <TextBox
-                            Grid.Column="1"
-                            MinHeight="50"
-                            Margin="10,0"
-                            materialDesign:HintAssist.FloatingOffset="0,-20"
-                            materialDesign:HintAssist.Hint="Tài khoản"
-                            BorderBrush="Transparent"
-                            BorderThickness="0,0,0,1.5"
-                            FontSize="20"
-                            FontWeight="SemiBold"
-                            Foreground="#9b442a"
-                            Style="{StaticResource MaterialDesignFloatingHintTextBox}"
-                            Text="{Binding ResetUser}" />
-                    </Grid>
-                    <Grid Margin="0,10">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="auto" />
-                            <ColumnDefinition Width="*" />
-                        </Grid.ColumnDefinitions>
-                        <materialDesign:PackIcon
-                            MinWidth="30"
-                            MinHeight="30"
-                            HorizontalAlignment="Center"
-                            VerticalAlignment="Center"
-                            Foreground="#9b442a"
-                            Kind="User" />
-                        <TextBox
-                            Grid.Column="1"
-                            MinHeight="50"
-                            Margin="10,0"
-                            materialDesign:HintAssist.FloatingOffset="0,-20"
-                            materialDesign:HintAssist.Hint="Email"
-                            BorderBrush="Transparent"
-                            BorderThickness="0,0,0,1.5"
-                            FontSize="20"
-                            FontWeight="SemiBold"
-                            Foreground="#9b442a"
-                            Style="{StaticResource MaterialDesignFloatingHintTextBox}"
-                            Text="{Binding ResetEmail}" />
-                    </Grid>
-                    <Button
+                <Border
+                    BorderBrush="#602414"
+                    BorderThickness="4"
+                    CornerRadius="10">
+                    <Border.Background>
+                        <LinearGradientBrush StartPoint="0,0.5" EndPoint="1,0.5">
+                            <GradientStop Offset="0" Color="#d4b096" />
+                            <GradientStop Offset="1" Color="#dac5b4" />
+                        </LinearGradientBrush>
+                    </Border.Background>
+                    <StackPanel
+                        MinWidth="400"
                         Margin="10"
-                        HorizontalAlignment="Right"
-                        Command="{Binding SubmitResetPassWordCommand}"
-                        Content="Xác nhận" />
-                </StackPanel>
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center">
+                        <Button
+                            Margin="10"
+                            HorizontalAlignment="Right"
+                            Command="{Binding CloseOpenResetPassWordCommand}"
+                            Style="{StaticResource closeButton}">
+                            <ma:PackIconMaterial Kind="Close" Style="{StaticResource iconApp}" />
+                        </Button>
+                        <Grid Margin="0,10">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="auto" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+                            <materialDesign:PackIcon
+                                MinWidth="30"
+                                MinHeight="30"
+                                HorizontalAlignment="Center"
+                                VerticalAlignment="Center"
+                                Foreground="#9b442a"
+                                Kind="User" />
+                            <TextBox
+                                Grid.Column="1"
+                                MinHeight="50"
+                                Margin="10,0"
+                                materialDesign:HintAssist.FloatingOffset="0,-20"
+                                materialDesign:HintAssist.Hint="Tài khoản"
+                                BorderBrush="Transparent"
+                                BorderThickness="0,0,0,1.5"
+                                FontSize="20"
+                                FontWeight="SemiBold"
+                                Foreground="#9b442a"
+                                Style="{StaticResource MaterialDesignFloatingHintTextBox}"
+                                Text="{Binding ResetUser}" />
+                        </Grid>
+                        <Grid Margin="0,10">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="auto" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+                            <materialDesign:PackIcon
+                                MinWidth="30"
+                                MinHeight="30"
+                                HorizontalAlignment="Center"
+                                VerticalAlignment="Center"
+                                Foreground="#9b442a"
+                                Kind="Email" />
+                            <TextBox
+                                Grid.Column="1"
+                                MinHeight="50"
+                                Margin="10,0"
+                                materialDesign:HintAssist.FloatingOffset="0,-20"
+                                materialDesign:HintAssist.Hint="Email"
+                                BorderBrush="Transparent"
+                                BorderThickness="0,0,0,1.5"
+                                FontSize="20"
+                                FontWeight="SemiBold"
+                                Foreground="#9b442a"
+                                Style="{StaticResource MaterialDesignFloatingHintTextBox}"
+                                Text="{Binding ResetEmail}" />
+                        </Grid>
+                        <Button
+                            Margin="10"
+                            HorizontalAlignment="Right"
+                            Command="{Binding SubmitResetPassWordCommand}"
+                            Style="{StaticResource adjustInfoButton}">
+                            <StackPanel HorizontalAlignment="Center" Orientation="Horizontal">
+                                <ma:PackIconMaterial VerticalAlignment="Center" Kind="CheckBold" />
+                                <TextBlock
+                                    Margin="10,0,0,0"
+                                    FontWeight="SemiBold"
+                                    Text="Xác nhận" />
+                            </StackPanel>
+                        </Button>
+                    </StackPanel>
+                </Border>
             </materialDesign:DialogHost.DialogContent>
         </materialDesign:DialogHost>
     </Grid>

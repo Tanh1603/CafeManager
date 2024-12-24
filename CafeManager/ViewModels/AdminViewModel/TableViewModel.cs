@@ -1,73 +1,178 @@
-﻿using CafeManager.Core.Data;
+﻿using AutoMapper;
+using CafeManager.Core.Data;
+using CafeManager.Core.DTOs;
+using CafeManager.Core.Services;
 using CafeManager.WPF.MessageBox;
 using CafeManager.WPF.Services;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Microsoft.Extensions.DependencyInjection;
-using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
 
 namespace CafeManager.WPF.ViewModels.AdminViewModel
 {
-    public partial class TableViewModel : ObservableObject
+    public partial class TableViewModel : ObservableObject, IDataViewModel
     {
-        private readonly IServiceProvider _provider;
         private readonly CoffeTableServices _coffeTableServices;
+        private readonly IMapper _mapper;
 
         [ObservableProperty]
-        private ObservableCollection<object> _listTable = new();
+        private bool _isLoading;
 
-        public TableViewModel(IServiceProvider provider)
+        public ObservableCollection<int> TypeTable { get; } = [2, 4, 6, 8, 10];
+
+        [ObservableProperty]
+        private ObservableCollection<CoffeetableDTO> _listTable = [];
+
+        [ObservableProperty]
+        [NotifyPropertyChangedFor(nameof(CanSubmit))]
+        [NotifyCanExecuteChangedFor(nameof(ModifyTableCommand))]
+        private CoffeetableDTO _table;
+
+        private bool isAdding = false;
+
+        private bool isUpdating = false;
+
+        [ObservableProperty]
+        private bool _isOpenModifyTable;
+
+        public TableViewModel(IServiceScope scope)
         {
-            _provider = provider;
+            var provider = scope.ServiceProvider;
             _coffeTableServices = provider.GetRequiredService<CoffeTableServices>();
-            _ = LoadData();
+            _mapper = provider.GetRequiredService<IMapper>();
+            Table = new CoffeetableDTO();
+            Table.ErrorsChanged += Table_ErrorsChanged;
         }
 
-        private async Task LoadData()
+        private void Table_ErrorsChanged(object? sender, System.ComponentModel.DataErrorsChangedEventArgs e)
         {
-            var coffeeTables = await _coffeTableServices.GetListCoffeTable();
-            foreach (var x in coffeeTables)
+            OnPropertyChanged(nameof(CanSubmit));
+        }
+
+        public async Task LoadData(CancellationToken token = default)
+        {
+            try
             {
-                ListTable.Add(new
-                {
-                    Tablename = $"Bàn {x.Tablenumber}",
-                    Statustable = x.Statustable,
-                    Notes = x.Notes,
-                    Coffeetableid = x.Coffeetableid,
-                    Invoices = x.Invoices
-                });
+                token.ThrowIfCancellationRequested();
+                IsLoading = true;
+                var coffeeTables = await _coffeTableServices.GetListCoffeTable(token);
+                ListTable = [.. _mapper.Map<List<CoffeetableDTO>>(coffeeTables)];
+                IsLoading = false;
+            }
+            catch (OperationCanceledException)
+            {
+            }
+            finally
+            {
+                IsLoading = false;
             }
         }
 
         [RelayCommand]
-        private async Task AddTable()
+        private void OpenAddTable()
+        {
+            IsOpenModifyTable = true;
+            isAdding = true;
+        }
+
+        [RelayCommand]
+        private void OpenUpdateTable(CoffeetableDTO dTO)
+        {
+            IsOpenModifyTable = true;
+            isUpdating = true;
+            Table = dTO.Clone();
+        }
+
+        [RelayCommand]
+        private void CloseModifyTable()
+        {
+            IsOpenModifyTable = false;
+            Table = new();
+            isUpdating = false;
+            isAdding = false;
+        }
+
+        [RelayCommand]
+        private async Task DeleteTable(CoffeetableDTO dTO)
+        {
+            var res = ListTable.FirstOrDefault(x => x.Coffeetableid == dTO.Coffeetableid);
+            if (res != null)
+            {
+                IsLoading = true;
+                res.Isdeleted = true;
+                var delete = await _coffeTableServices.DeleteCoffeeTable(dTO.Coffeetableid);
+                if (delete)
+                {
+                    IsLoading = false;
+                    MyMessageBox.ShowDialog("Ẩn bàn thành công");
+                }
+            }
+        }
+
+        [RelayCommand]
+        private async Task ShowTable(CoffeetableDTO dTO)
+        {
+            var res = ListTable.FirstOrDefault(x => x.Coffeetableid == dTO.Coffeetableid);
+            if (res != null)
+            {
+                IsLoading = true;
+                res.Isdeleted = false;
+                var show = await _coffeTableServices.UpdateCoffeeTable(_mapper.Map<Coffeetable>(res));
+                if (show != null)
+                {
+                    IsLoading = false;
+                    MyMessageBox.ShowDialog("Hiện bàn thành công");
+                }
+            }
+        }
+
+        public bool CanSubmit => !Table.HasErrors;
+
+        [RelayCommand(CanExecute =nameof(CanSubmit))]
+        private async Task ModifyTable()
         {
             try
             {
-                var res = await _coffeTableServices.AddCoffeTable(new Coffeetable()
+                IsLoading = true;
+                if (isAdding)
                 {
-                    Tablenumber = ListTable.Count + 1,
-                });
-                if (res != null)
-                {
-                    MyMessageBox.ShowDialog("Thêm bàn thành công", MyMessageBox.Buttons.OK, MyMessageBox.Icons.Information);
-                    ListTable.Add(new
+                    var tmp = _mapper.Map<Coffeetable>(Table);
+                    var addTable = await _coffeTableServices.AddCoffeTable(tmp);
+                    if (addTable != null)
                     {
-                        Tablename = $"Bàn {ListTable.Count + 1}",
-                    });
+                        IsLoading = false;
+                        MyMessageBox.ShowDialog("Thêm bàn thành công");
+                        ListTable.Add(_mapper.Map<CoffeetableDTO>(addTable));
+                    }
                 }
+                if (isUpdating)
+                {
+                    var updateTable = await _coffeTableServices.UpdateCoffeeTable(_mapper.Map<Coffeetable>(Table));
+                    if (updateTable != null)
+                    {
+                        var tmp = ListTable.FirstOrDefault(x => x.Coffeetableid == Table.Coffeetableid);
+                        if (tmp != null)
+                        {
+                            IsLoading = false;
+                            _mapper.Map(updateTable, tmp);
+                            MyMessageBox.ShowDialog("Sửa bàn thành công");
+                        }
+                    }
+                }
+
+                Table = new();
+                isUpdating = false;
+                isAdding = false;
+                IsOpenModifyTable = false;
             }
             catch (Exception)
             {
                 throw;
+            }
+            finally
+            {
+                IsLoading = false;
             }
         }
     }

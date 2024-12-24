@@ -5,7 +5,6 @@ using CafeManager.WPF.Stores;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System.IO;
-using System.Linq.Expressions;
 using System.Net;
 using System.Net.Mail;
 using System.Reflection;

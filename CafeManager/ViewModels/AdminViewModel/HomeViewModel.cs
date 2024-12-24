@@ -25,10 +25,13 @@ using LiveChartsCore.SkiaSharpView;
 using LiveChartsCore.Kernel.Sketches;
 using Microsoft.Identity.Client;
 using CafeManager.Core.DTOs;
+using System.ComponentModel;
+using System.Collections;
+using System.Reflection.Metadata.Ecma335;
 
 namespace CafeManager.WPF.ViewModels.AdminViewModel
 {
-    public partial class HomeViewModel : ObservableObject, IDataViewModel
+    public partial class HomeViewModel : ObservableObject, IDataViewModel, INotifyDataErrorInfo
     {
         private readonly InvoiceServices _invoiceServices;
         private readonly CoffeTableServices _coffeTableServices;
@@ -36,6 +39,7 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
         private readonly FoodServices _foodServices;
         private readonly ImportServices _importServices;
         private readonly MaterialSupplierServices _materialSupplierServices;
+        private readonly ErrorViewModel _errorViewModel;
 
 
         private CancellationToken _token = default;
@@ -146,12 +150,31 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
                 if (_from != value)
                 {
                     _from = value;
-                    OnPropertyChanged();
-                    _ = LoadData(_token);
+                    if (!ValidateDates())
+                    {
+                        OnPropertyChanged();
+                        _ = LoadData(_token);
+                    }
                 }
             }
         }
+        private bool ValidateDates()
+        {
+            bool hasError = false;
+            _errorViewModel.RemoveErrors(nameof(From));
+            _errorViewModel.RemoveErrors(nameof(To));
 
+         
+          
+                if (From > To)
+                {
+                    _errorViewModel.AddError(nameof(From), "Ngày bắt đầu không được lớn hơn ngày kết thúc");
+                    _errorViewModel.AddError(nameof(To), "Ngày kết thúc không được nhỏ hơn ngày bắt đầu");
+                    hasError = true;
+                }
+            return hasError;
+            
+        }
         private DateTime _to = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1).AddMonths(1).AddDays(-1);
 
         public DateTime To
@@ -161,11 +184,18 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
                 if (_to != value)
                 {
                     _to = value;
-                    OnPropertyChanged();
-                    _ = LoadData(_token);
+
+                    if (!ValidateDates())
+                    {
+                        OnPropertyChanged();
+                        _ = LoadData(_token);
+                    }
                 }
             }
         }
+
+        public bool HasErrors => _errorViewModel.HasErrors;
+
         [ObservableProperty]
         private ZoomingOptions _zoomingMode;
 
@@ -179,6 +209,8 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
         [ObservableProperty]
         private List<FoodDTO> _mostSoldFood;
 
+        public event EventHandler<DataErrorsChangedEventArgs>? ErrorsChanged;
+
         public HomeViewModel(IServiceScope scope)
         {
             var provider = scope.ServiceProvider;
@@ -188,7 +220,14 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
             _foodServices = provider.GetRequiredService<FoodServices>();
             _materialSupplierServices = provider.GetRequiredService<MaterialSupplierServices>();
             _importServices = provider.GetRequiredService<ImportServices>();
+            _errorViewModel = new ErrorViewModel();
+            _errorViewModel.ErrorsChanged += _errorViewModel_ErrorsChanged;
 
+        }
+
+        private void _errorViewModel_ErrorsChanged(object? sender, DataErrorsChangedEventArgs e)
+        {
+            ErrorsChanged?.Invoke(this, e);
         }
 
         public async Task LoadData(CancellationToken token = default)
@@ -594,7 +633,9 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
             _ = LoadColumnSeries(From, To);
         }
 
-
-
+        public IEnumerable GetErrors(string? propertyName)
+        {
+            return _errorViewModel.GetErrors(propertyName);
+        }
     }
 }

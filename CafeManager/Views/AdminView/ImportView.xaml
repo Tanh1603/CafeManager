@@ -15,7 +15,7 @@
     xmlns:uc="clr-namespace:CafeManager.WPF.Assets.UsersControls"
     xmlns:view="clr-namespace:CafeManager.WPF.Views"
     d:DesignHeight="450"
-    d:DesignWidth="800"
+ 
     mc:Ignorable="d">
     <UserControl.Resources>
         <BooleanToVisibilityConverter x:Key="BoolToVis" />

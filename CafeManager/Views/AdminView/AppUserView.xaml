@@ -42,7 +42,7 @@
 
             <Separator
                 Grid.Row="0"
-                Width="200"
+                Width="250"
                 Height="1"
                 HorizontalAlignment="Left"
                 VerticalAlignment="Bottom"
@@ -61,7 +61,7 @@
                     </ItemsControl.ItemsPanel>
                     <ItemsControl.ItemTemplate>
                         <DataTemplate>
-                            <Border
+                            <!--<Border
                                 Margin="10"
                                 Padding="10"
                                 BorderThickness="2"
@@ -112,6 +112,110 @@
                                         </materialDesign:PopupBox>
                                     </Grid>
                                 </StackPanel>
+                            </Border>-->
+                            <Border
+                                Width="225"
+                                Margin="20"
+                                Padding="20"
+                                BorderThickness="3"
+                                CornerRadius="10">
+                                <Border.Style>
+                                    <Style TargetType="Border">
+
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding Isdeleted}" Value="true">
+                                                <Setter Property="BorderBrush" Value="Red" />
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </Border.Style>
+
+                                <Border.Background>
+                                    <LinearGradientBrush StartPoint="0,0.5" EndPoint="1,0.5">
+                                        <GradientStop Offset="1" Color="#fee3d4" />
+                                        <GradientStop Offset="0" Color="#f2ccb7" />
+                                    </LinearGradientBrush>
+                                </Border.Background>
+                                <Grid>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="auto" />
+                                        <RowDefinition Height="auto" />
+                                    </Grid.RowDefinitions>
+                                    <Grid>
+                                        <Ellipse
+                                            Width="160"
+                                            Height="160"
+                                            HorizontalAlignment="Center"
+                                            VerticalAlignment="Bottom"
+                                            Fill="#ffffff"
+                                            StrokeThickness="4">
+                                            <Ellipse.Stroke>
+                                                <LinearGradientBrush>
+                                                    <GradientStop Offset="0" Color="#cea48c" />
+                                                    <GradientStop Offset="1" Color="#b79c8b" />
+                                                </LinearGradientBrush>
+                                            </Ellipse.Stroke>
+                                        </Ellipse>
+
+                                        <Border
+                                            Width="160"
+                                            Height="160"
+                                            ClipToBounds="True"
+                                            CornerRadius="100">
+                                            <Border.Clip>
+                                                <EllipseGeometry
+                                                    Center="80,80"
+                                                    RadiusX="100"
+                                                    RadiusY="100" />
+                                            </Border.Clip>
+                                            <Border.Background>
+                                                <ImageBrush ImageSource="{Binding Avatar}" />
+                                            </Border.Background>
+                                        </Border>
+                                    </Grid>
+                                    <Grid Grid.Row="1" Margin="0,20,0,0">
+                                        <Grid>
+                                            <Grid.RowDefinitions>
+                                                <RowDefinition Height="auto"/>
+                                                <RowDefinition Height="auto"/>
+                                            </Grid.RowDefinitions>
+                                            <Grid HorizontalAlignment="Center" VerticalAlignment="Center">
+
+                                                <TextBlock
+                                                    FontSize="18"
+                                                    FontWeight="Bold"
+                                                    Foreground="#612e0f"
+                                                    Text="{Binding Displayname}"
+                                                    TextWrapping="WrapWithOverflow"/>
+                                            </Grid>
+
+
+
+                                            <Grid Grid.Row="1">
+                                                <StackPanel Orientation="Horizontal" Margin="0 10 0 0" HorizontalAlignment="Center">
+                                                    <Button
+                                                        x:Name="BtnUpdate"
+                                                        Command="{Binding DataContext.OpenUpdateAppUserCommand, RelativeSource={RelativeSource AncestorType=local:AppUserView}}"
+                                                        CommandParameter="{Binding}"
+                                                        Style="{StaticResource infoFoodBtn}">
+                                                        <ma:PackIconMaterial Kind="Pencil" Style="{StaticResource infoFoodIcon}" />
+                                                    </Button>
+                                                    <Button
+                                                        x:Name="BtnDelete"
+                                                        Command="{Binding DataContext.DeleteAppUserCommand, RelativeSource={RelativeSource AncestorType=local:AppUserView}}"
+                                                        CommandParameter="{Binding}"
+                                                        Style="{StaticResource deleteFoodBtn}" >
+                                                        <ma:PackIconMaterial Kind="TrashCan" Style="{StaticResource infoFoodIcon}" />
+                                                    </Button>
+
+                                                </StackPanel>
+                                            </Grid>
+
+                                        </Grid>
+                                    </Grid>
+
+                                </Grid>
+
                             </Border>
                         </DataTemplate>
                     </ItemsControl.ItemTemplate>

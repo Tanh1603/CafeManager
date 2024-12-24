@@ -87,10 +87,7 @@
                         <ComboBox.ItemTemplate>
                             <DataTemplate>
                                 <Grid>
-                                    <TextBlock
-                                       
-                                        Text="{Binding Materialname}"
-                                        TextTrimming="CharacterEllipsis"/>
+                                    <TextBlock Text="{Binding Materialname}" TextTrimming="CharacterEllipsis" />
 
                                 </Grid>
                             </DataTemplate>
@@ -123,7 +120,6 @@
                             <DataTemplate>
                                 <Grid>
                                     <TextBlock
-                                      
                                         Text="{Binding Suppliername}"
                                         TextTrimming="CharacterEllipsis"
                                         TextWrapping="NoWrap" />

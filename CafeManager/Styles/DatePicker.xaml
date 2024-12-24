@@ -61,10 +61,12 @@
                                     x:Name="PART_TextBox"
                                     Grid.Column="0"
                                     Margin="5,0,0,0"
+                                   
                                     Padding="5"
                                     Background="Transparent"
                                     Style="{StaticResource txtBoxDatePicker}"
-                                    Text="{Binding SelectedDate, RelativeSource={RelativeSource TemplatedParent}, StringFormat='{}{0:dd/MM/yyyy}', Mode=TwoWay}" />
+                                    Text="{Binding SelectedDate, RelativeSource={RelativeSource TemplatedParent}, StringFormat='{}{0:dd/MM/yyyy}', Mode=TwoWay}"
+                                    />
                                 <Button
                                     x:Name="ClearBtn"
                                     Grid.Column="1"

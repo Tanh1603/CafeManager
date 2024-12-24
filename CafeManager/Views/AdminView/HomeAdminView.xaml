@@ -63,7 +63,7 @@
                     </StackPanel>
 
                 </Grid>
-                <Grid Grid.Row="1" Margin="0,30,0,0">
+                <Grid Grid.Row="1" Margin="0,20,0,0">
 
                     <Border Padding="10,0,10,0" CornerRadius="10">
                         <Border.Background>
@@ -93,7 +93,9 @@
                                     CalendarStyle="{StaticResource MaterialDesignCalendarPortrait}"
                                     SelectedDate="{Binding From}"
                                     Style="{StaticResource DatePicker}"
-                                    Tag="Chọn ngày" />
+                                    Tag="Chọn ngày"
+                                    Validation.ErrorTemplate="{StaticResource ErrorMessage}"
+                                     />
                             </Grid>
                             <Grid Grid.Column="1">
                                 <Grid.ColumnDefinitions>
@@ -109,7 +111,8 @@
                                     CalendarStyle="{StaticResource MaterialDesignCalendarPortrait}"
                                     SelectedDate="{Binding To}"
                                     Style="{StaticResource DatePicker}"
-                                    Tag="Chọn ngày" />
+                                    Tag="Chọn ngày"
+                                    Validation.ErrorTemplate="{StaticResource ErrorMessage}"/>
                             </Grid>
                         </Grid>
                     </Border>
@@ -619,20 +622,21 @@
 
 
             </Grid>
-            <!--<Grid
-            Background="White"
-            Opacity="0.3"
-            Visibility="{Binding IsLoading, Converter={StaticResource BooleanToVisibilityConverter}}">
+            
+        </Grid>
+        <Grid
+    Background="White"
+    Opacity="0.3"
+    Visibility="{Binding IsLoading, Converter={StaticResource BooleanToVisibilityConverter}}">
             <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
                 <TextBlock Style="{StaticResource infoText}" Text="Đang tải tài nguyên.." />
                 <ProgressBar
-                    Width="50"
-                    Height="50"
-                    IsIndeterminate="True"
-                    Style="{StaticResource MaterialDesignCircularProgressBar}"
-                    Value="35" />
+            Width="50"
+            Height="50"
+            IsIndeterminate="True"
+            Style="{StaticResource MaterialDesignCircularProgressBar}"
+            Value="35" />
             </StackPanel>
-        </Grid>-->
         </Grid>
     </Grid>
 </UserControl>

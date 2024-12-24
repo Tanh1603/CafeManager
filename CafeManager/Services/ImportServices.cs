@@ -4,108 +4,29 @@ using CafeManager.Core.Services;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Media.Media3D;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement.ListView;
 
 namespace CafeManager.WPF.Services
 {
-    public class ImportServices
+    public class ImportServices(IUnitOfWork unitOfWork)
     {
-        private readonly IServiceProvider _provider;
-        private readonly IUnitOfWork _unitOfWork;
-
-        public ImportServices(IServiceProvider provider)
-        {
-            _provider = provider;
-            _unitOfWork = provider.GetRequiredService<IUnitOfWork>();
-        }
+        private readonly IUnitOfWork _unitOfWork = unitOfWork;
 
         public async Task<IEnumerable<Import>?> GetListImport()
         {
-            return await _unitOfWork.ImportList.GetAllImportsAsync();
+            return await _unitOfWork.ImportList.GetAll();
         }
 
-        //public async Task<IEnumerable<MaterialDetailDTO>?> GetListImportDetailByImportId(int id)
-        //{
-        //    var listImport = await _unitOfWork.ImportList.GetAllImportsDetailsByImportIdAsync(id);
-        //    var res = listImport.Where(x => x.Isdeleted == false)
-        //        .Select(x => new MaterialDetailDTO
-        //        {
-        //            Materialname = x.Material?.Materialname,
-
-        //            Suppliername = x.Import.Supplier?.Suppliername,
-        //            Unit = x.Material?.Unit,
-        //            Quantity = x.Quantity ?? 0,
-        //            Price = x.Material?.Materialsuppliers.FirstOrDefault(f => f.Supplierid == x.Import.Supplierid && f.Materialid == x.Materialid)?.Price ?? 0,
-        //            Original = x.Material?.Materialsuppliers.FirstOrDefault(f => f.Supplierid == x.Import.Supplierid && f.Materialid == x.Materialid)?.Original,
-
-        //            Manufacturer = x.Material?.Materialsuppliers.FirstOrDefault(f => f.Supplierid == x.Import.Supplierid && f.Materialid == x.Materialid)?.Manufacturer,
-
-        //            Manufacturedate =
-        //            (DateTime)(x.Material?.Materialsuppliers.FirstOrDefault(f => f.Supplierid == x.Import.Supplierid && f.Materialid == x.Materialid)?.Manufacturedate),
-
-        //            Expirationdate =
-        //            (DateTime)(x.Material?.Materialsuppliers.FirstOrDefault(f => f.Supplierid == x.Import.Supplierid && f.Materialid == x.Materialid)?.Expirationdate),
-        //        });
-        //    return res;
-        //}
-        public async Task<IEnumerable<MaterialDetailDTO>?> GetListImportDetailByImportId(int id)
+        public async Task<Import?> GetImportById(int id)
         {
-            var listImport = await _unitOfWork.ImportList.GetAllImportsDetailsByImportIdAsync(id);
-
-            var res = listImport
-                .Select(x =>
-                {
-                    // Lấy đối tượng MaterialSupplier đầu tiên phù hợp để tái sử dụng
-                    var materialSupplier = x.Material?.Materialsuppliers
-                        .FirstOrDefault(f => f.Supplierid == x.Import.Supplierid && f.Materialid == x.Materialid);
-
-                    return new MaterialDetailDTO
-                    {
-                        Materialname = x.Material?.Materialname,
-                        Suppliername = x.Import.Supplier?.Suppliername,
-                        Unit = x.Material?.Unit,
-                        Quantity = x.Quantity ?? 0,
-                        Price = materialSupplier?.Price ?? 0,
-                        Original = materialSupplier?.Original,
-                        Manufacturer = materialSupplier?.Manufacturer,
-                        Manufacturedate = materialSupplier?.Manufacturedate ?? DateTime.Now,
-                        Expirationdate = materialSupplier?.Expirationdate ?? DateTime.Now
-                    };
-                });
-
-            return res;
+            return await _unitOfWork.ImportList.GetById(id);
         }
-
-        #region Tính toán dữ liệu
-
-        private decimal CaculatePriceOfListImportdetai(IEnumerable<Importdetail> importdetails)
-        {
-            return importdetails.Sum(
-                    x => (x.Quantity ?? 0) * (x.Material?.Materialsuppliers
-                        .FirstOrDefault(f => f.Supplierid == x.Import.Supplierid && f.Materialid == x.Materialid)?.Price ?? 0)
-                );
-        }
-
-        public async Task<decimal> GetTotalPriceImports()
-        {
-            var listImport = await _unitOfWork.ImportList.GetAllImportsAsync();
-            return listImport.Sum(x => CaculatePriceOfListImportdetai(x.Importdetails));
-        }
-
-        public async Task<decimal> GetTotalPriceImportById(int id)
-        {
-            var listImportDetailById = await _unitOfWork.ImportList.GetAllImportsDetailsByImportIdAsync(id);
-            return CaculatePriceOfListImportdetai(listImportDetailById);
-        }
-
-        public async Task<Import> GetImportById(int id)
-        {
-            return await _unitOfWork.ImportList.GetImportById(id);
-        }
-
-        #endregion Tính toán dữ liệu
 
         #region Thêm, xoa, sua import
 
@@ -115,17 +36,11 @@ namespace CafeManager.WPF.Services
             {
                 await _unitOfWork.BeginTransactionAsync();
 
-                var list = await _unitOfWork.ImportList.Create(import);
-
-                if (list == null)
-                {
-                    throw new InvalidOperationException("Lỗi.");
-                }
-
+                var addimport = await _unitOfWork.ImportList.Create(import);
                 await _unitOfWork.CompleteAsync();
-
+                _unitOfWork.ClearChangeTracker();
                 await _unitOfWork.CommitTransactionAsync();
-                return list;
+                return addimport;
             }
             catch (Exception ex)
             {
@@ -134,11 +49,22 @@ namespace CafeManager.WPF.Services
             }
         }
 
-        public Import? Update(Import import)
+        public async Task<Import?> UpdateImport(Import import)
         {
-            var res = _unitOfWork.ImportList.Update(import);
-            _unitOfWork.Complete();
-            return res;
+            try
+            {
+                await _unitOfWork.BeginTransactionAsync();
+                await _unitOfWork.ImportList.UpdateStaffWithListImportDetail(import);
+                await _unitOfWork.CompleteAsync();
+                _unitOfWork.ClearChangeTracker();
+                await _unitOfWork.CommitTransactionAsync();
+                return await _unitOfWork.ImportList.GetById(import.Importid);
+            }
+            catch (Exception)
+            {
+                await _unitOfWork.RollbackTransactionAsync();
+                throw new InvalidOperationException("Lỗi khi sửa phiếu nhập");
+            }
         }
 
         public async Task<bool> DeleteImport(int id)
@@ -164,5 +90,79 @@ namespace CafeManager.WPF.Services
         }
 
         #endregion Thêm, xoa, sua import
+
+        // ===================== Phan trang =======================
+        public async Task<(IEnumerable<Import>?, int)> GetSearchPaginateListImport(Expression<Func<Import, bool>>? searchPredicate = null, int skip = 0, int take = 20)
+        {
+            return await _unitOfWork.ImportList.GetByPageAsync(skip, take, searchPredicate);
+        }
+
+
+        public async Task<List<decimal>> GetTotalMaterialByDay(DateTime from, DateTime to, CancellationToken token = default)
+        {
+
+            try
+            {
+                return await _unitOfWork.ImportList.GetTotalMaterialByDay(from, to, token);
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+        }
+
+        public async Task<List<decimal>> GetTotalMaterialByMonth(DateTime from, DateTime to, CancellationToken token = default)
+        {
+
+            try
+            {
+                return await _unitOfWork.ImportList.GetTotalMaterialByMonth(from, to, token);
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+        }
+
+        public async Task<List<decimal>> GetTotalMaterialByYear(DateTime from, DateTime to, CancellationToken token = default)
+        {
+            try
+            {
+                return await _unitOfWork.ImportList.GetTotalMaterialByYear(from, to, token);    
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+        }
+
+        public async Task<List<decimal>> GetTotalMaterialCostByMonth(DateTime from, DateTime to, CancellationToken token = default)
+        {
+            try
+            {
+                return await _unitOfWork.ImportList.GetTotalMaterialCostByMonth(from, to, token);
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+        }
+
+        public async Task<List<decimal>> GetTotalMaterialCostByYear(DateTime from, DateTime to, CancellationToken token = default)
+        {
+            try
+            {
+                return await _unitOfWork.ImportList.GetTotalMaterialCostByYear(from, to, token);
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+        }
     }
 }

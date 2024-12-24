@@ -1,24 +1,25 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Linq.Expressions;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Linq.Expressions;
 
 namespace CafeManager.Core.Repositories
 {
     public interface IRepository<T> where T : class
     {
-        Task<T> Create(T entity);
+        Task<T> Create(T entity, CancellationToken token = default);
 
-        T? Update(T? entity);
+        Task<T?> Update(T entity, CancellationToken token = default);
 
-        Task<bool> Delete(int id);
+        Task<bool> Delete(int id, CancellationToken token = default);
 
-        Task<IEnumerable<T>> AddArange(IEnumerable<T> entities);
+        Task<IEnumerable<T>> AddArange(IEnumerable<T> entities, CancellationToken token = default);
 
-        Task<IEnumerable<T>> GetAll();
+        Task<IEnumerable<T>> GetAll(CancellationToken token = default);
 
-        Task<T?> GetById(int id);
+        Task<IEnumerable<T>> GetAllExistedAsync(CancellationToken token = default);
+
+        Task<IEnumerable<T>> GetAllDeletedAsync(CancellationToken token = default);
+
+        Task<T?> GetById(int id, CancellationToken token = default);
+
+        Task<(IEnumerable<T> Items, int TotalCount)> GetByPageAsync(int pageIndex, int pageSize, Expression<Func<T, bool>>? filter = null, CancellationToken token = default);
     }
 }

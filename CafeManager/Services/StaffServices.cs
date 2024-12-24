@@ -11,28 +11,45 @@ namespace CafeManager.WPF.Services
 {
     public class StaffServices
     {
-        private readonly IServiceProvider _provider;
         private readonly IUnitOfWork _unitOfWork;
 
-        public StaffServices(IServiceProvider provider)
+        public StaffServices(IUnitOfWork unitOfWork)
         {
-            _provider = provider;
-            _unitOfWork = provider.GetRequiredService<IUnitOfWork>();
+            _unitOfWork = unitOfWork;
         }
 
-        public async Task<IEnumerable<Staff>> GetListStaff()
+        public async Task<IEnumerable<Staff>> GetListStaff(CancellationToken token = default)
         {
-            return await _unitOfWork.StaffList.GetAllStaffAsync();
+            try
+            {
+                _unitOfWork.ClearChangeTracker();
+                return await _unitOfWork.StaffList.GetAll(token);
+            }
+            catch (OperationCanceledException)
+            {
+                throw;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
         }
 
-        public async Task<IEnumerable<Staff>> GetListStaffDeleted()
+        public async Task<IEnumerable<Staff>> GetListExistStaff(CancellationToken token = default)
         {
-            return await _unitOfWork.StaffList.GetAllStaffDeletedAsync();
-        }
-
-        public async Task<Staff?> GetStaffById(int id)
-        {
-            return await _unitOfWork.StaffList.GetStaffById(id);
+            try
+            {
+                _unitOfWork.ClearChangeTracker();
+                return await _unitOfWork.StaffList.GetAllExistedAsync();
+            }
+            catch (OperationCanceledException)
+            {
+                throw;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
         }
 
         public async Task<Staff?> CreateStaff(Staff staff)
@@ -42,72 +59,31 @@ namespace CafeManager.WPF.Services
                 await _unitOfWork.BeginTransactionAsync();
                 Staff res = await _unitOfWork.StaffList.Create(staff);
                 await _unitOfWork.CompleteAsync();
-
+                _unitOfWork.ClearChangeTracker();
                 await _unitOfWork.CommitTransactionAsync();
                 return res;
             }
             catch (Exception)
             {
                 await _unitOfWork.RollbackTransactionAsync();
-                _unitOfWork.ClearChangeTracker();
                 throw new InvalidOperationException("Lỗi khi thêm nhân viên");
             }
         }
 
-        public async Task<Staff?> UpdateStaff(Staff staff, List<Staffsalaryhistory>? updateStaffSalaryHitory)
+        public async Task<Staff?> UpdateStaff(Staff staff)
         {
             try
             {
                 await _unitOfWork.BeginTransactionAsync();
-                var res = _unitOfWork.StaffList.Update(staff);
-                List<Staffsalaryhistory> existingHistories = (await _unitOfWork.StaffSalaryHistoryList.GetAll())
-                                        .Where(x => x.Isdeleted == false && x.Staffid == staff.Staffid).ToList();
-                if (updateStaffSalaryHitory != null && updateStaffSalaryHitory.Count > 0)
-                {
-                    var newHistoryIds = updateStaffSalaryHitory.Where(x => x.Staffsalaryhistoryid != 0)
-                        .Select(x => x.Staffsalaryhistoryid).ToHashSet();
-                    foreach (var existingHistory in existingHistories)
-                    {
-                        if (!newHistoryIds.Contains(existingHistory.Staffsalaryhistoryid))
-                        {
-                            existingHistory.Isdeleted = true;
-                        }
-                    }
-                    foreach (var newHistory in updateStaffSalaryHitory)
-                    {
-                        if (newHistory.Staffsalaryhistoryid == 0)
-                        {
-                            await _unitOfWork.StaffSalaryHistoryList.Create(new()
-                            {
-                                Staffid = staff.Staffid,
-                                Salary = newHistory.Salary,
-                                Effectivedate = newHistory.Effectivedate,
-                            });
-                        }
-                        else
-                        {
-                            var existingHistory = existingHistories
-                                .FirstOrDefault(x => x.Isdeleted == false && x.Staffsalaryhistoryid == newHistory.Staffsalaryhistoryid);
-                            if (existingHistory != null && existingHistory != newHistory)
-                            {
-                                existingHistory.Salary = newHistory.Salary;
-                                existingHistory.Effectivedate = newHistory.Effectivedate;
-                            }
-                        }
-                    }
-                }
-                else
-                {
-                    existingHistories.ForEach(x => x.Isdeleted = true);
-                }
+                var res = await _unitOfWork.StaffList.UpdateStaffWithListSatffSalaryHistory(staff);
                 await _unitOfWork.CompleteAsync();
+                _unitOfWork.ClearChangeTracker();
                 await _unitOfWork.CommitTransactionAsync();
                 return res;
             }
             catch (Exception)
             {
                 await _unitOfWork.RollbackTransactionAsync();
-                _unitOfWork.ClearChangeTracker();
                 throw new InvalidOperationException("Lỗi khi sửa nhân viên");
             }
         }
@@ -117,21 +93,79 @@ namespace CafeManager.WPF.Services
             try
             {
                 await _unitOfWork.BeginTransactionAsync();
-                var deletedStaff = await _unitOfWork.StaffList.GetStaffById(id);
-                if (deletedStaff != null)
+                var deletedStaff = (await _unitOfWork.StaffList.GetById(id));
+                if (deletedStaff != null && deletedStaff.Isdeleted == false)
                 {
                     deletedStaff.Endworkingdate = dateOnly;
                 }
                 bool res = await _unitOfWork.StaffList.Delete(id);
                 await _unitOfWork.CompleteAsync();
+                _unitOfWork.ClearChangeTracker();
                 await _unitOfWork.CommitTransactionAsync();
                 return res;
             }
             catch (Exception)
             {
                 await _unitOfWork.RollbackTransactionAsync();
-                _unitOfWork.ClearChangeTracker();
                 throw new InvalidOperationException("Lỗi khi xóa nhân viên");
+            }
+        }
+
+        public async Task<int> GetTotalStaff(DateTime from, DateTime to, CancellationToken token = default)
+        {
+            try
+            {
+                return await _unitOfWork.StaffList.GetStaffFromTo(from, to, token);
+            }
+            catch (OperationCanceledException)
+            {
+                throw;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        public async Task<decimal> GetTotalSalaryFromTo(DateTime from, DateTime to, CancellationToken token = default)
+        {
+            try
+            {
+                return await _unitOfWork.StaffList.GetTotalSalaryFromTo(from, to, token);
+            }
+            catch (OperationCanceledException)
+            {
+                throw;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        public async Task<List<decimal>> GetTotalSalaryByMonth(DateTime from, DateTime to, CancellationToken token = default)
+        {
+            try
+            {
+                return await _unitOfWork.StaffList.GetTotalSalaryByMonth(from, to, token);
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+        }
+
+        public async Task<List<decimal>> GetTotalSalaryByYear(DateTime from, DateTime to, CancellationToken token = default)
+        {
+            try
+            {
+                return await _unitOfWork.StaffList.GetTotalSalaryByYear(from, to, token);
+            }
+            catch (Exception)
+            {
+
+                throw;
             }
         }
     }

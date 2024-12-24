@@ -68,6 +68,7 @@
                         Background="{TemplateBinding Background}"
                         BorderBrush="{TemplateBinding BorderBrush}"
                         BorderThickness="{TemplateBinding BorderThickness}"
+                        CornerRadius="10"
                         SnapsToDevicePixels="True">
                         <ScrollViewer x:Name="DG_ScrollViewer" Focusable="false">
                             <ScrollViewer.Template>
@@ -83,6 +84,7 @@
                                             <RowDefinition Height="*" />
                                             <RowDefinition Height="Auto" />
                                         </Grid.RowDefinitions>
+
                                         <Button
                                             Width="{Binding CellsPanelHorizontalOffset, RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}"
                                             Command="{x:Static DataGrid.SelectAllCommand}"
@@ -90,10 +92,13 @@
                                             Style="{DynamicResource {ComponentResourceKey ResourceId=DataGridSelectAllButtonStyle,
                                                                                           TypeInTargetAssembly={x:Type DataGrid}}}"
                                             Visibility="{Binding HeadersVisibility, ConverterParameter={x:Static DataGridHeadersVisibility.All}, Converter={x:Static DataGrid.HeadersVisibilityConverter}, RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}" />
+
+
                                         <DataGridColumnHeadersPresenter
                                             x:Name="PART_ColumnHeadersPresenter"
                                             Grid.Column="1"
                                             Visibility="{Binding HeadersVisibility, ConverterParameter={x:Static DataGridHeadersVisibility.Column}, Converter={x:Static DataGrid.HeadersVisibilityConverter}, RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}" />
+
                                         <ScrollContentPresenter
                                             x:Name="PART_ScrollContentPresenter"
                                             Grid.Row="1"
@@ -144,6 +149,7 @@
     <Style x:Key="DataGridCellStyle1" TargetType="{x:Type DataGridCell}">
         <Setter Property="Background" Value="Transparent" />
         <Setter Property="VerticalAlignment" Value="Center" />
+        <Setter Property="HorizontalAlignment" Value="Center" />
         <Setter Property="FocusVisualStyle" Value="{x:Null}" />
         <Setter Property="Margin" Value="15,0" />
         <Setter Property="Template">
@@ -161,7 +167,7 @@
 
     </Style>
     <Style x:Key="ColumnHeaderGripperStyle" TargetType="{x:Type Thumb}">
-        <Setter Property="Width" Value="8" />
+
         <Setter Property="Background" Value="Transparent" />
         <Setter Property="Cursor" Value="SizeWE" />
         <Setter Property="Template">
@@ -179,7 +185,7 @@
         <Setter Property="Padding" Value="15,0" />
         <Setter Property="Height" Value="30" />
         <Setter Property="FontWeight" Value="SemiBold" />
-
+        <Setter Property="HorizontalAlignment" Value="Stretch" />
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type DataGridColumnHeader}">
@@ -187,9 +193,9 @@
                         <theme:DataGridHeaderBorder
                             Padding="{TemplateBinding Padding}"
                             Background="#844418"
-                            BorderBrush="#844418"
-                            BorderThickness="{TemplateBinding BorderThickness}"
-                            CornerRadius="5 5 0 0"
+                            BorderBrush="Transparent"
+                            BorderThickness="0"
+                            CornerRadius="10 10 0 0"
                             IsClickable="{TemplateBinding CanUserSort}"
                             IsHovered="{TemplateBinding IsMouseOver}"
                             IsPressed="{TemplateBinding IsPressed}"
@@ -197,7 +203,7 @@
                             SeparatorVisibility="{TemplateBinding SeparatorVisibility}"
                             SortDirection="{TemplateBinding SortDirection}">
                             <ContentPresenter
-                                HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                HorizontalAlignment="Center"
                                 VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
                                 RecognizesAccessKey="True"
                                 SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
@@ -279,11 +285,11 @@
         </Setter>
         <Style.Triggers>
             <Trigger Property="IsMouseOver" Value="True">
-                <Setter Property="Background" Value="#612e0f" />
+                <Setter Property="Background" Value="#AE7250" />
                 <Setter Property="Foreground" Value="#ffffff" />
             </Trigger>
             <Trigger Property="IsSelected" Value="True">
-                <Setter Property="Background" Value="#612e0f" />
+                <Setter Property="Background" Value="#AE7250" />
                 <Setter Property="Foreground" Value="#ffffff" />
             </Trigger>
             <MultiTrigger>

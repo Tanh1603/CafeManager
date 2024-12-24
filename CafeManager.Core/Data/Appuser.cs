@@ -19,7 +19,7 @@ public partial class Appuser
 
     public int? Role { get; set; }
 
-    public string Avatar { get; set; }
+    public byte[] Avatar { get; set; }
 
     public bool? Isdeleted { get; set; }
 }

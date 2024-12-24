@@ -22,7 +22,7 @@
 
     <Grid>
 
-        <Grid Margin="20,10">
+        <Grid Margin="10,0">
             <Grid.RowDefinitions>
 
                 <RowDefinition Height="auto" />
@@ -34,6 +34,7 @@
             <!--  Page Title  -->
             <TextBlock
                 Grid.Row="0"
+                Margin="0 20 0 10"
                 HorizontalAlignment="Left"
                 FontSize="32"
                 FontWeight="SemiBold"
@@ -57,7 +58,7 @@
                 Grid.Row="0"
                 Width="200"
                 Height="1"
-                Margin="0,10,0,0"
+              
                 HorizontalAlignment="Left"
                 VerticalAlignment="Bottom"
                 Background="#f5f5f5" />
@@ -86,7 +87,10 @@
                     IsHitTestVisible="False"
                     Text="Search in Members..."
                     Visibility="{Binding ElementName=txtFilter, Path=Text.IsEmpty, Converter={StaticResource BoolToVis}}" />
-                <TextBox x:Name="txtFilter" Style="{StaticResource textBoxFilter}" />
+                <TextBox
+                    x:Name="txtFilter"
+                    Style="{StaticResource textBoxFilter}"
+                    Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}" />
                 <ma:PackIconMaterial
                     Width="15"
                     Height="15"
@@ -98,113 +102,217 @@
             </Grid>
 
             <!--  Supplier Datagrid  -->
-            <Border
-                    Grid.Row="3"
-                    Width="auto"
+            <!--<Border
+                Grid.Row="3"
+                Width="auto"
+                BorderBrush="#602414"
+                BorderThickness="2"
+                CornerRadius="10">-->
+            <TabControl
+                Grid.Row="3"
+                HorizontalAlignment="Stretch"
+                VerticalAlignment="Stretch"
+                Style="{DynamicResource tabControlStyle}">
+                <TabItem Header="Đang hiển thị" Style="{DynamicResource tabItemStyle}">
+                    <DataGrid
+                        VerticalAlignment="Top"
+                        AlternationCount="{Binding ListExistedSupplier.Count}"
+                        CellStyle="{DynamicResource DataGridCellStyle1}"
+                        ColumnHeaderStyle="{DynamicResource DataGridColumnHeaderStyle1}"
+                        ItemsSource="{Binding ListExistedSupplier}"
+                        RowStyle="{DynamicResource DataGridRowStyle1}"
+                        Style="{DynamicResource DataGridStyle1}">
+                        <DataGrid.Columns>
 
-                    BorderBrush="#602414"
-                    BorderThickness="2"
-                    CornerRadius="10">
+                            <DataGridTextColumn
+                                Width="auto"
+                                Header="STT"
+                                IsReadOnly="True">
+                                <DataGridTextColumn.Binding>
+                                    <Binding
+                                        Converter="{StaticResource RowIndexConverter}"
+                                        Path="(ItemsControl.AlternationIndex)"
+                                        RelativeSource="{RelativeSource AncestorType=DataGridRow}" />
+                                </DataGridTextColumn.Binding>
+                            </DataGridTextColumn>
 
-                <DataGrid
-                    x:Name="SuppliersDataGrid"
-                    VerticalAlignment="Top"
-                    AlternationCount="{Binding ListSupplier.Count}"
-                    CellStyle="{DynamicResource DataGridCellStyle1}"
-                    ColumnHeaderStyle="{DynamicResource DataGridColumnHeaderStyle1}"
-                    ItemsSource="{Binding ListSupplier}"
-                    RowStyle="{DynamicResource DataGridRowStyle1}"
-                    Style="{DynamicResource DataGridStyle1}">
-                    <DataGrid.Columns>
+                            <DataGridTextColumn
+                                Width="*"
+                                Binding="{Binding Suppliername}"
+                                CanUserResize="False"
+                                Header="Nhà cung cấp"
+                                IsReadOnly="True" />
 
-                        <DataGridTextColumn
-                            Width="auto"
-                            Header="STT"
-                            IsReadOnly="True">
-                            <DataGridTextColumn.Binding>
-                                <Binding
-                                    Converter="{StaticResource RowIndexConverter}"
-                                    Path="(ItemsControl.AlternationIndex)"
-                                    RelativeSource="{RelativeSource AncestorType=DataGridRow}" />
-                            </DataGridTextColumn.Binding>
-                        </DataGridTextColumn>
+                            <DataGridTextColumn
+                                Width="*"
+                                Binding="{Binding Representativesupplier}"
+                                CanUserResize="False"
+                                Header="Người đại diện"
+                                IsReadOnly="True" />
+                            <DataGridTextColumn
+                                Width="*"
+                                Binding="{Binding Phone}"
+                                CanUserResize="False"
+                                Header="Số điện thoại"
+                                IsReadOnly="True" />
+                            <DataGridTextColumn
+                                Width="*"
+                                Binding="{Binding Email}"
+                                CanUserResize="False"
+                                Header="Email"
+                                IsReadOnly="True" />
+                            <DataGridTextColumn
+                                Width="*"
+                                Binding="{Binding Address}"
+                                CanUserResize="False"
+                                Header="Địa chỉ"
+                                IsReadOnly="True" />
 
-                        <DataGridTextColumn
-                            Width="*"
-                            Binding="{Binding Suppliername}"
-                            CanUserResize="False"
-                            Header="Nhà cung cấp"
-                            IsReadOnly="True" />
+                            <DataGridTextColumn
+                                Width="*"
+                                Binding="{Binding Notes}"
+                                CanUserResize="False"
+                                Header="Thông tin khác"
+                                IsReadOnly="True" />
 
-                        <DataGridTextColumn
-                            Width="*"
-                            Binding="{Binding Representativesupplier}"
-                            CanUserResize="False"
-                            Header="Người đại diện"
-                            IsReadOnly="True" />
-                        <DataGridTextColumn
-                            Width="*"
-                            Binding="{Binding Phone}"
-                            CanUserResize="False"
-                            Header="Số điện thoại"
-                            IsReadOnly="True" />
-                        <DataGridTextColumn
-                            Width="*"
-                            Binding="{Binding Email}"
-                            CanUserResize="False"
-                            Header="Email"
-                            IsReadOnly="True" />
-                        <DataGridTextColumn
-                            Width="*"
-                            Binding="{Binding Address}"
-                            CanUserResize="False"
-                            Header="Địa chỉ"
-                            IsReadOnly="True" />
+                            <DataGridTemplateColumn
+                                Width="auto"
+                                Header="Tùy chỉnh"
+                                IsReadOnly="True">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <StackPanel Orientation="Horizontal">
+                                            <Button
+                                                Command="{Binding DataContext.OpenUpdateSupplierCommand, RelativeSource={RelativeSource AncestorType=local:SupplierView}}"
+                                                CommandParameter="{Binding}"
+                                                Style="{StaticResource gridEditButton}">
+                                                <ma:PackIconMaterial Kind="PencilOutline" Style="{StaticResource gridButtonIcon}" />
+                                            </Button>
+                                            <Button
+                                                Margin="5,0,0,0"
+                                                Command="{Binding DataContext.DeleteSupplierCommand, RelativeSource={RelativeSource AncestorType=local:SupplierView}}"
+                                                CommandParameter="{Binding}"
+                                                Style="{StaticResource gridRemoveButton}">
+                                                <ma:PackIconMaterial Kind="DeleteOutline" Style="{StaticResource gridButtonIcon}" />
+                                            </Button>
+                                        </StackPanel>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </TabItem>
+                <TabItem Header="Đã ẩn" Style="{DynamicResource tabItemStyle}">
+                    <DataGrid
+                        VerticalAlignment="Top"
+                        AlternationCount="{Binding ListDeletedSupplier.Count}"
+                        CellStyle="{DynamicResource DataGridCellStyle1}"
+                        ColumnHeaderStyle="{DynamicResource DataGridColumnHeaderStyle1}"
+                        ItemsSource="{Binding ListDeletedSupplier}"
+                        RowStyle="{DynamicResource DataGridRowStyle1}"
+                        Style="{DynamicResource DataGridStyle1}">
+                        <DataGrid.Columns>
 
-                        <DataGridTextColumn
-                            Width="*"
-                            Binding="{Binding Notes}"
-                            CanUserResize="False"
-                            Header="Thông tin khác"
-                            IsReadOnly="True" />
+                            <DataGridTextColumn
+                                Width="auto"
+                                Header="STT"
+                                IsReadOnly="True">
+                                <DataGridTextColumn.Binding>
+                                    <Binding
+                                        Converter="{StaticResource RowIndexConverter}"
+                                        Path="(ItemsControl.AlternationIndex)"
+                                        RelativeSource="{RelativeSource AncestorType=DataGridRow}" />
+                                </DataGridTextColumn.Binding>
+                            </DataGridTextColumn>
 
-                        <DataGridTemplateColumn
-                            Width="auto"
-                            Header="Tùy chỉnh"
-                            IsReadOnly="True">
-                            <DataGridTemplateColumn.CellTemplate>
-                                <DataTemplate>
-                                    <StackPanel Orientation="Horizontal">
-                                        <Button
-                                            Command="{Binding DataContext.UpdateSupplierCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
-                                            CommandParameter="{Binding}"
-                                            Style="{StaticResource gridEditButton}">
-                                            <ma:PackIconMaterial Kind="PencilOutline" Style="{StaticResource gridButtonIcon}" />
-                                        </Button>
-                                        <Button
-                                            Margin="5,0,0,0"
-                                            Command="{Binding DataContext.DeleteSupplierCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
-                                            CommandParameter="{Binding}"
-                                            Style="{StaticResource gridRemoveButton}">
-                                            <ma:PackIconMaterial Kind="DeleteOutline" Style="{StaticResource gridButtonIcon}" />
-                                        </Button>
-                                    </StackPanel>
-                                </DataTemplate>
-                            </DataGridTemplateColumn.CellTemplate>
-                        </DataGridTemplateColumn>
-                    </DataGrid.Columns>
-                </DataGrid>
-            </Border>
+                            <DataGridTextColumn
+                                Width="*"
+                                Binding="{Binding Suppliername}"
+                                CanUserResize="False"
+                                Header="Nhà cung cấp"
+                                IsReadOnly="True" />
+
+                            <DataGridTextColumn
+                                Width="*"
+                                Binding="{Binding Representativesupplier}"
+                                CanUserResize="False"
+                                Header="Người đại diện"
+                                IsReadOnly="True" />
+                            <DataGridTextColumn
+                                Width="*"
+                                Binding="{Binding Phone}"
+                                CanUserResize="False"
+                                Header="Số điện thoại"
+                                IsReadOnly="True" />
+                            <DataGridTextColumn
+                                Width="*"
+                                Binding="{Binding Email}"
+                                CanUserResize="False"
+                                Header="Email"
+                                IsReadOnly="True" />
+                            <DataGridTextColumn
+                                Width="*"
+                                Binding="{Binding Address}"
+                                CanUserResize="False"
+                                Header="Địa chỉ"
+                                IsReadOnly="True" />
+
+                            <DataGridTextColumn
+                                Width="*"
+                                Binding="{Binding Notes}"
+                                CanUserResize="False"
+                                Header="Thông tin khác"
+                                IsReadOnly="True" />
+
+                            <DataGridTemplateColumn
+                                Width="auto"
+                                Header="Tùy chỉnh"
+                                IsReadOnly="True">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <StackPanel Orientation="Horizontal">
+                                            <Button
+                                                Command="{Binding DataContext.RestoreSupplierCommand, RelativeSource={RelativeSource AncestorType=local:SupplierView}}"
+                                                CommandParameter="{Binding}"
+                                                Style="{StaticResource gridEditButton}">
+                                                <ma:PackIconMaterial Kind="Restore" Style="{StaticResource gridButtonIcon}" />
+                                            </Button>
+                                        </StackPanel>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </TabItem>
+            </TabControl>
+            <!--</Border>-->
         </Grid>
 
-        <materialDesign:DialogHost ClipToBounds="False" IsOpen="{Binding IsOpenAddSupplier}">
+        <materialDesign:DialogHost
+            DialogTheme="Inherit"
+            IsOpen="{Binding IsOpenAddSupplier}"
+            OverlayBackground="{DynamicResource PrimaryHueDarkBrush}"
+            Placement="Mouse"
+            Style="{StaticResource MaterialDesignEmbeddedDialogHost}">
             <materialDesign:DialogHost.DialogBackground>
                 <SolidColorBrush Color="Transparent" />
             </materialDesign:DialogHost.DialogBackground>
 
             <materialDesign:DialogHost.DialogContent>
-                <ContentControl Content="{Binding AddSupplierVM}" />
+                <ContentControl Content="{Binding ModifySupplierVM}" />
             </materialDesign:DialogHost.DialogContent>
         </materialDesign:DialogHost>
+
+        <Grid Background="White" Opacity="0.3" Visibility="{Binding IsLoading, Converter={StaticResource BooleanToVisibilityConverter}}">
+            <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
+                <TextBlock Style="{StaticResource infoText}" Text="Đang tải tài nguyên.." />
+                <ProgressBar
+                    IsIndeterminate="True"
+                    Style="{StaticResource MaterialDesignCircularProgressBar}"
+                    Height="50"
+                    Width="50"
+                    Value="35" />
+            </StackPanel>
+        </Grid>
     </Grid>
 </UserControl>

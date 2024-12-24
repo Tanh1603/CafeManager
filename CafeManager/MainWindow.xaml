@@ -15,6 +15,7 @@
     MinHeight="700"
     AllowsTransparency="True"
     Background="Transparent"
+    Icon="/Assets/Images/Icon.ico"
     Style="{StaticResource MaterialDesignWindow}"
     WindowStartupLocation="CenterScreen"
     WindowStyle="none"
@@ -51,8 +52,8 @@
                     </i:EventTrigger>
                 </i:Interaction.Triggers>
                 <Border
-                    Width="35"
-                    Height="35"
+                    Width="27"
+                    Height="27"
                     Margin="10,5,10,5"
                     HorizontalAlignment="Left"
                     CornerRadius="50">
@@ -63,19 +64,20 @@
                         </LinearGradientBrush>
                     </Border.Background>
                     <Image
-                        Width="15"
-                        Height="15"
+                        Width="21"
+                        Margin="0,7,0,7"
                         HorizontalAlignment="Center"
                         RenderOptions.BitmapScalingMode="HighQuality"
                         SnapsToDevicePixels="True"
                         Source="/Assets/Images/coffee.png"
                         Stretch="Uniform" />
                 </Border>
+                <TextBlock Text="Cafe Manager" Foreground="#fee3d4" FontWeight="SemiBold" FontSize="18"  HorizontalAlignment="Left" VerticalAlignment="Center" Margin="50 0 0 0"/>
                 <StackPanel HorizontalAlignment="Right" Orientation="Horizontal">
 
                     <Button Command="{Binding MiniMizeWindownCommand}" Style="{StaticResource windowButton}">
                         <ma:PackIconMaterial
-                            Margin="0,20,0,0"
+                            Margin="0,15,0,0"
                             Kind="WindowMinimize"
                             Style="{StaticResource iconApp}" />
                     </Button>

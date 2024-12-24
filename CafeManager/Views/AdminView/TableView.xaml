@@ -16,148 +16,324 @@
     mc:Ignorable="d">
     <UserControl.Resources>
         <BooleanToVisibilityConverter x:Key="BoolToVis" />
+        <converter:SeatingConverter x:Key="SeatingConverter" />
+        <converter:IntToStringConverter x:Key="IntToStringConverter" />
     </UserControl.Resources>
-    <Grid Margin="20,10">
-        <Grid.RowDefinitions>
-            <RowDefinition Height="auto" />
-            <RowDefinition Height="auto" />
-            <RowDefinition Height="*" />
-        </Grid.RowDefinitions>
+    <Grid>
+        <Grid Margin="10,0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="auto" />
+                <RowDefinition Height="auto" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
 
-        <!--  Page Title  -->
-        <TextBlock
-            Grid.Row="0"
-            HorizontalAlignment="Left"
-            FontSize="32"
-            FontWeight="SemiBold"
-            Foreground="#ddd1c3"
-            Text="Bàn" />
-        <Separator
-            Grid.Row="0"
-            Width="100"
-            Height="1"
-            HorizontalAlignment="Left"
-            VerticalAlignment="Bottom"
-            Background="#f5f5f5" />
+            <!--  Page Title  -->
+            <TextBlock
+                Grid.Row="0"
+                Margin="0,20,0,10"
+                HorizontalAlignment="Left"
+                FontSize="32"
+                FontWeight="SemiBold"
+                Foreground="#ddd1c3"
+                Text="Bàn" />
+            <Separator
+                Grid.Row="0"
+                Width="70"
+                Height="1"
+                HorizontalAlignment="Left"
+                VerticalAlignment="Bottom"
+                Background="#f5f5f5" />
 
-        <!--  Add Button  -->
-        <Button
-            Grid.Row="0"
-            Command="{Binding AddTableCommand}"
-            Style="{StaticResource addButton}">
-            <StackPanel Orientation="Horizontal">
-                <ma:PackIconMaterial
-                    Width="11"
-                    Height="11"
-                    Margin="0,1,8,0"
-                    VerticalAlignment="Center"
-                    Kind="Plus" />
-                <TextBlock Text="Thêm bàn" />
-            </StackPanel>
-        </Button>
-
-        <Grid
-            Grid.Row="1"
-            Grid.ColumnSpan="2"
-            Margin="0,10,0,10"
-            HorizontalAlignment="Right">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="auto" />
-                <ColumnDefinition Width="*" />
-            </Grid.ColumnDefinitions>
-
-            <StackPanel
-                Grid.Column="1"
-                HorizontalAlignment="Right"
-                Orientation="Horizontal">
-                <TextBlock
-                    Margin="10,0,20,0"
-                    VerticalAlignment="Center"
-                    FontSize="13"
-                    FontWeight="SemiBold"
-                    Foreground="#602414"
-                    Text="Filter by" />
-
-                <!--  Filter Textbox  -->
-                <Grid Width="200" Margin="0,10,0,0">
-                    <TextBlock
-                        Margin="15,0"
-                        VerticalAlignment="Center"
-                        Panel.ZIndex="1"
-                        Foreground="#9c6d3f"
-                        IsHitTestVisible="False"
-                        Text="Tìm kiếm..."
-                        Visibility="{Binding ElementName=txtFilter, Path=Text.IsEmpty, Converter={StaticResource BoolToVis}}" />
-                    <TextBox x:Name="txtFilter" Style="{StaticResource textBoxFilter}" />
+            <!--  Add Button  -->
+            <Button
+                Grid.Row="0"
+                Command="{Binding OpenAddTableCommand}"
+                Style="{StaticResource addButton}">
+                <StackPanel Orientation="Horizontal">
                     <ma:PackIconMaterial
-                        Width="15"
-                        Height="15"
-                        Margin="0,0,15,0"
-                        HorizontalAlignment="Right"
+                        Width="11"
+                        Height="11"
+                        Margin="0,1,8,0"
                         VerticalAlignment="Center"
-                        Foreground="#d5b096"
-                        Kind="Magnify" />
-                </Grid>
-            </StackPanel>
+                        Kind="Plus" />
+                    <TextBlock Text="Thêm bàn" />
+                </StackPanel>
+            </Button>
+
+            <ScrollViewer
+                Grid.Row="2"
+                VerticalAlignment="Top"
+                HorizontalScrollBarVisibility="Auto"
+                VerticalScrollBarVisibility="Auto">
+                <ItemsControl ItemsSource="{Binding ListTable}">
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <WrapPanel MinWidth="990" MaxWidth="1100" />
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+
+                            <Border
+                                Width="225"
+                                Margin="20"
+                                Padding="20"
+                                HorizontalAlignment="Left"
+                                BorderThickness="3"
+                                CornerRadius="25">
+                                <Border.Style>
+                                    <Style TargetType="Border">
+
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding Isdeleted}" Value="true">
+                                                <Setter Property="BorderBrush" Value="Red" />
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </Border.Style>
+                                <Border.BorderBrush>
+                                    <LinearGradientBrush StartPoint="0, 0.5">
+                                        <GradientStop Offset="0" Color="#c69a5d" />
+                                        <GradientStop Offset="0.5" Color="#cb925d" />
+
+                                        <GradientStop Offset="1" Color="#d4b096" />
+                                    </LinearGradientBrush>
+                                </Border.BorderBrush>
+                                <Border.Background>
+                                    <LinearGradientBrush StartPoint="0,0.5" EndPoint="1,0.5">
+                                        <GradientStop Offset="1" Color="#fee3d4" />
+                                        <GradientStop Offset="0" Color="#f2ccb7" />
+                                    </LinearGradientBrush>
+                                </Border.Background>
+                                <Grid>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="160" />
+                                        <RowDefinition Height="*" />
+                                    </Grid.RowDefinitions>
+                                    <Border
+                                        Grid.Row="0"
+                                        BorderBrush="Transparent"
+                                        CornerRadius="10 10 0 0">
+                                        <Border.Background>
+                                            <ImageBrush
+                                                ImageSource="/Assets/Images/table.png"
+                                                RenderOptions.BitmapScalingMode="HighQuality"
+                                                Stretch="UniformToFill" />
+                                        </Border.Background>
+                                    </Border>
+                                    <Grid Grid.Row="1" Margin="0,10,0,0">
+                                        <Grid>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="*" />
+                                                <ColumnDefinition Width="*" />
+                                            </Grid.ColumnDefinitions>
+                                            <TextBlock
+                                                Margin="10,0,0,0"
+                                                HorizontalAlignment="Left"
+                                                FontSize="18"
+                                                FontWeight="Bold"
+                                                Foreground="#612e0f"
+                                                Text="{Binding TableName}" />
+                                            <materialDesign:PopupBox
+                                                Grid.Column="1"
+                                                Padding="0"
+                                                HorizontalAlignment="Right"
+                                                PopupUniformCornerRadius="10"
+                                                StaysOpen="False">
+                                                <materialDesign:PopupBox.PopupContent>
+                                                    <StackPanel Background="#d4b096">
+                                                        <Button
+                                                            Command="{Binding DataContext.DeleteTableCommand, RelativeSource={RelativeSource AncestorType=local:TableView}}"
+                                                            CommandParameter="{Binding}"
+                                                            Content="Ẩn bàn"
+                                                            Cursor="Hand"
+                                                            FontWeight="Bold"
+                                                            Foreground="#612e0f" />
+                                                        <Button
+                                                            Command="{Binding DataContext.ShowTableCommand, RelativeSource={RelativeSource AncestorType=local:TableView}}"
+                                                            CommandParameter="{Binding}"
+                                                            Content="Hiện bàn"
+                                                            Cursor="Hand"
+                                                            FontWeight="Bold"
+                                                            Foreground="#612e0f" />
+                                                        <Button
+                                                            Command="{Binding DataContext.OpenUpdateTableCommand, RelativeSource={RelativeSource AncestorType=local:TableView}}"
+                                                            CommandParameter="{Binding}"
+                                                            Content="Sửa thông tin"
+                                                            Cursor="Hand"
+                                                            FontWeight="Bold"
+                                                            Foreground="#612e0f" />
+                                                    </StackPanel>
+                                                </materialDesign:PopupBox.PopupContent>
+                                            </materialDesign:PopupBox>
+                                        </Grid>
+                                    </Grid>
+                                </Grid>
+                            </Border>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </ScrollViewer>
         </Grid>
 
-        <ScrollViewer
-            Grid.Row="2"
-            VerticalAlignment="Top"
-            HorizontalScrollBarVisibility="Auto"
-            VerticalScrollBarVisibility="Auto">
-            <ItemsControl ItemsSource="{Binding ListTable}">
-                <ItemsControl.ItemsPanel>
-                    <ItemsPanelTemplate>
-                        <WrapPanel MinWidth="990" MaxWidth="1100" />
-                    </ItemsPanelTemplate>
-                </ItemsControl.ItemsPanel>
-                <ItemsControl.ItemTemplate>
-                    <DataTemplate>
-                        <Border
-                            Margin="10"
-                            Padding="10"
-                            BorderBrush="Wheat"
-                            BorderThickness="2"
-                            CornerRadius="10">
-                            <StackPanel Width="120">
-                                <Border>
-                                    <Image
-                                        Height="auto"
-                                        RenderOptions.BitmapScalingMode="HighQuality"
-                                        SnapsToDevicePixels="True"
-                                        Source="/Assets/Images/coffee.png"
-                                        Stretch="UniformToFill" />
-                                </Border>
-                                <Grid>
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="*" />
-                                        <ColumnDefinition Width="*" />
-                                    </Grid.ColumnDefinitions>
+        <materialDesign:DialogHost
+            DialogTheme="Inherit"
+            IsOpen="{Binding IsOpenModifyTable}"
+            OverlayBackground="{DynamicResource PrimaryHueDarkBrush}"
+            Placement="Mouse"
+            Style="{StaticResource MaterialDesignEmbeddedDialogHost}">
+            <materialDesign:DialogHost.DialogBackground>
+                <SolidColorBrush Color="Transparent" />
+            </materialDesign:DialogHost.DialogBackground>
 
-                                    <TextBlock
-                                        Grid.Column="0"
-                                        HorizontalAlignment="Center"
-                                        VerticalAlignment="Center"
-                                        FontSize="16"
-                                        Text="{Binding Tablename}"
-                                        TextWrapping="WrapWithOverflow" />
-                                    <materialDesign:PopupBox
-                                        Grid.Column="1"
-                                        HorizontalAlignment="Right"
-                                        PopupUniformCornerRadius="10"
-                                        StaysOpen="True">
-                                        <StackPanel>
-                                            <Button Content="Xóa" />
-                                            <Button Content="Thông tin chi tiết" />
-                                        </StackPanel>
-                                    </materialDesign:PopupBox>
-                                </Grid>
+            <materialDesign:DialogHost.DialogContent>
+                <Border
+                    HorizontalAlignment="Left"
+                    BorderThickness="4"
+                    ClipToBounds="True"
+                    CornerRadius="10">
+                    <Border.Background>
+                        <LinearGradientBrush StartPoint="0,0.5" EndPoint="1,0.5">
+                            <GradientStop Offset="0" Color="#d4b096" />
+                            <GradientStop Offset="1" Color="#dac5b4" />
+                        </LinearGradientBrush>
+                    </Border.Background>
+                    <Border.BorderBrush>
+                        <LinearGradientBrush StartPoint="0,0.5">
+                            <GradientStop Offset="0" Color="#5e2313" />
+                            <GradientStop Offset="0.5" Color="#65402e" />
+                            <GradientStop Offset="1" Color="#7c4e37" />
+                        </LinearGradientBrush>
+                    </Border.BorderBrush>
+                    <StackPanel Margin="10">
+                        <Button
+                            Grid.Row="0"
+                            Grid.ColumnSpan="2"
+                            Margin="0,10"
+                            HorizontalAlignment="Right"
+                            Command="{Binding CloseModifyTableCommand}"
+                            Style="{StaticResource closeButton}">
+                            <ma:PackIconMaterial Kind="Close" Style="{StaticResource iconApp}" />
+                        </Button>
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition />
+                                <RowDefinition />
+                                <RowDefinition />
+                                <RowDefinition />
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="auto" />
+                                <ColumnDefinition Width="*" MinWidth="100" />
+                            </Grid.ColumnDefinitions>
+
+                            <TextBlock
+                                Grid.Row="0"
+                                Grid.Column="0"
+                                Style="{StaticResource infoText}"
+                                Text="Bàn số: " />
+                            <uc:infoTextInput
+                                Grid.Row="0"
+                                Grid.Column="1"
+                                Margin="0,10,0,20"
+                                Text="{Binding Table.Tablenumber, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay, Converter={StaticResource IntToStringConverter}}"
+                                Validation.ErrorTemplate="{StaticResource ErrorMessage}" />
+
+                            <TextBlock
+                                Grid.Row="1"
+                                Grid.Column="0"
+                                Style="{StaticResource infoText}"
+                                Text="Số chổ ngồi: " />
+                            <ComboBox
+                                x:Name="cbtabel"
+                                Grid.Row="1"
+                                Grid.Column="1"
+                                Width="100"
+                                Margin="0,0,0,20"
+                                HorizontalAlignment="Left"
+                                ItemsSource="{Binding TypeTable}"
+                                SelectedItem="{Binding Table.Seatingcapacity, Mode=TwoWay}"
+                                Style="{StaticResource ComboBoxStyle}"
+                                Validation.ErrorTemplate="{StaticResource ErrorMessage}">
+                                <ComboBox.ItemContainerStyle>
+                                    <Style BasedOn="{StaticResource ComboBoxItemStyle}" TargetType="ComboBoxItem">
+                                        <Setter Property="Width" Value="{Binding ActualWidth, ElementName=cbtabel}" />
+                                        <Setter Property="Height" Value="{Binding ActualHeight, ElementName=cbtabel}" />
+                                    </Style>
+                                </ComboBox.ItemContainerStyle>
+                                <ComboBox.ItemTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding Converter={StaticResource SeatingConverter}}" />
+                                    </DataTemplate>
+                                </ComboBox.ItemTemplate>
+                            </ComboBox>
+
+                            <TextBlock
+                                Grid.Row="2"
+                                Grid.Column="0"
+                                Style="{StaticResource infoText}"
+                                Text="Trạng thái: " />
+                            <ComboBox
+                                x:Name="cbstatus"
+                                Grid.Row="2"
+                                Grid.Column="1"
+                                Margin="0,0,0,20"
+                                SelectedValue="{Binding Table.Statustable, Mode=TwoWay}"
+                                Style="{StaticResource ComboBoxStyle}"
+                                Validation.ErrorTemplate="{StaticResource ErrorMessage}">
+                                <ComboBox.ItemContainerStyle>
+                                    <Style BasedOn="{StaticResource ComboBoxItemStyle}" TargetType="ComboBoxItem">
+                                        <Setter Property="Width" Value="{Binding ActualWidth, ElementName=cbstatus}" />
+                                        <Setter Property="Height" Value="{Binding ActualHeight, ElementName=cbstatus}" />
+                                    </Style>
+                                </ComboBox.ItemContainerStyle>
+                                <ComboBoxItem Content="Trống" />
+                                <ComboBoxItem Content="Đang sử dụng" />
+                            </ComboBox>
+
+                            <TextBlock
+                                Grid.Row="3"
+                                Grid.Column="0"
+                                Style="{StaticResource infoText}"
+                                Text="Ghi chú:" />
+                            <uc:infoTextInput
+                                Grid.Row="3"
+                                Grid.Column="1"
+                                Text="{Binding Table.Notes, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" />
+                        </Grid>
+                        <Button
+                            Grid.Row="5"
+                            Grid.ColumnSpan="2"
+                            Margin="0,10"
+                            HorizontalAlignment="Right"
+                            Command="{Binding ModifyTableCommand}"
+                            Style="{StaticResource confirmInfoButton}">
+                            <StackPanel HorizontalAlignment="Center" Orientation="Horizontal">
+                                <ma:PackIconMaterial VerticalAlignment="Center" Kind="CheckBold" />
+                                <TextBlock
+                                    Margin="10,0,0,0"
+                                    FontWeight="SemiBold"
+                                    Text="Xác nhận" />
                             </StackPanel>
-                        </Border>
-                    </DataTemplate>
-                </ItemsControl.ItemTemplate>
-            </ItemsControl>
-        </ScrollViewer>
+                        </Button>
+                    </StackPanel>
+                </Border>
+            </materialDesign:DialogHost.DialogContent>
+        </materialDesign:DialogHost>
+
+        <Grid
+            Background="White"
+            Opacity="0.3"
+            Visibility="{Binding IsLoading, Converter={StaticResource BooleanToVisibilityConverter}}">
+            <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
+                <TextBlock Style="{StaticResource infoText}" Text="Đang tải tài nguyên.." />
+                <ProgressBar
+                    Width="50"
+                    Height="50"
+                    IsIndeterminate="True"
+                    Style="{StaticResource MaterialDesignCircularProgressBar}"
+                    Value="35" />
+            </StackPanel>
+        </Grid>
     </Grid>
 </UserControl>

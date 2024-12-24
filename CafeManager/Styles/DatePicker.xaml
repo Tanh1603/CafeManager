@@ -1,13 +1,21 @@
 ﻿<ResourceDictionary
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:ma="http://metro.mahapps.com/winfx/xaml/iconpacks">
+    xmlns:ad="clr-namespace:CafeManager.WPF.ViewModels.AdminViewModel"
+    xmlns:ma="http://metro.mahapps.com/winfx/xaml/iconpacks"
+    xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes">
+
+
+
+
 
     <Style x:Key="DatePickerCalender" TargetType="Calendar">
         <Setter Property="Foreground" Value="#66171a" />
         <Setter Property="Background" Value="#d5b096" />
         <Setter Property="BorderBrush" Value="#9e7555" />
         <Setter Property="BorderThickness" Value="2" />
+        <Setter Property="HorizontalAlignment" Value="Stretch" />
+        <Setter Property="VerticalAlignment" Value="Stretch" />
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="Calendar">
@@ -26,8 +34,8 @@
         </Setter>
     </Style>
     <Style x:Key="DatePicker" TargetType="DatePicker">
-        <Setter Property="Margin" Value="0,10" />
-        <Setter Property="HorizontalAlignment" Value="Center" />
+
+        <Setter Property="HorizontalAlignment" Value="Stretch" />
         <Setter Property="VerticalAlignment" Value="Center" />
         <Setter Property="Template">
             <Setter.Value>
@@ -35,8 +43,8 @@
                     <Grid>
                         <Border
                             x:Name="Border"
-                            Width="170"
-                            Height="38"
+                            HorizontalAlignment="{TemplateBinding HorizontalAlignment}"
+                            VerticalAlignment="{TemplateBinding VerticalAlignment}"
                             Background="#d5b096"
                             BorderBrush="Transparent"
                             BorderThickness="2"
@@ -45,13 +53,34 @@
                             <Grid>
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="*" />
-                                    <ColumnDefinition Width="45" />
+                                    <ColumnDefinition Width="auto" />
+                                    <ColumnDefinition Width="auto" />
                                 </Grid.ColumnDefinitions>
 
-
+                                <DatePickerTextBox
+                                    x:Name="PART_TextBox"
+                                    Grid.Column="0"
+                                    Margin="5,0,0,0"
+                                    Padding="5"
+                                    Background="Transparent"
+                                    Style="{StaticResource txtBoxDatePicker}"
+                                    Text="{Binding SelectedDate, RelativeSource={RelativeSource TemplatedParent}, StringFormat='{}{0:dd/MM/yyyy}', Mode=TwoWay}" />
+                                <Button
+                                    x:Name="ClearBtn"
+                                    Grid.Column="1"
+                                    Width="20"
+                                    Margin="5,0,0,0"
+                                    Command="{Binding DataContext.ClearDatePickerCommand, RelativeSource={RelativeSource AncestorType=Window}}"
+                                    CommandParameter="{Binding RelativeSource={RelativeSource TemplatedParent}}"
+                                    Style="{StaticResource datePickerButton}">
+                                    <ma:PackIconMaterial
+                                        Width="15"
+                                        Height="15"
+                                        Kind="CloseBox" />
+                                </Button>
                                 <Button
                                     x:Name="PART_Button"
-                                    Grid.Column="1"
+                                    Grid.Column="2"
                                     Style="{StaticResource datePickerButton}">
                                     <ma:PackIconMaterial
                                         Width="20"
@@ -64,22 +93,48 @@
                                     HorizontalOffset="0"
                                     Placement="Bottom"
                                     PlacementTarget="{Binding ElementName=PART_TextBox}"
-                                    StaysOpen="False">
+                                    StaysOpen="False" />
 
-                                    <Calendar
-                                        x:Name="PART_Calendar"
-                                        SelectedDate="{Binding SelectedDate, StringFormat='{}{0:dd/mm/yyyy}', Mode=TwoWay}"
-                                        Style="{StaticResource DatePickerCalender}" />
-                                </Popup>
-
-
+                                <TextBlock
+                                    x:Name="Watermark"
+                                    Margin="22,0,22,0"
+                                    VerticalAlignment="Center"
+                                    Panel.ZIndex="1"
+                                    FontWeight="Bold"
+                                    Foreground="#844418"
+                                    Text="{Binding Tag, RelativeSource={RelativeSource TemplatedParent}}"
+                                    Visibility="Collapsed" />
                             </Grid>
                         </Border>
 
 
                     </Grid>
 
+                    <ControlTemplate.Triggers>
 
+
+
+                        <Trigger Property="Text" Value="">
+                            <Setter TargetName="ClearBtn" Property="Visibility" Value="Collapsed" />
+                        </Trigger>
+
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter TargetName="Border" Property="BorderBrush" Value="#9e7555" />
+                        </Trigger>
+
+                        <Trigger Property="IsKeyboardFocused" Value="True">
+                            <Setter TargetName="Border" Property="BorderBrush" Value="#9e7555" />
+                        </Trigger>
+
+                        <MultiTrigger>
+                            <MultiTrigger.Conditions>
+                                <Condition Property="Text" Value="" />
+                                <Condition Property="SelectedDate" Value="{x:Null}" />
+                                <Condition SourceName="PART_TextBox" Property="IsFocused" Value="False" />
+                            </MultiTrigger.Conditions>
+                            <Setter TargetName="Watermark" Property="Visibility" Value="Visible" />
+                        </MultiTrigger>
+                    </ControlTemplate.Triggers>
                 </ControlTemplate>
             </Setter.Value>
         </Setter>

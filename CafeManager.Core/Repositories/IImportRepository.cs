@@ -9,9 +9,16 @@ namespace CafeManager.Core.Repositories
 {
     public interface IImportRepository : IRepository<Import>
     {
-        Task<Import> GetImportById(int id);
-        Task<IEnumerable<Import>> GetAllImportsAsync();
+        public Task<Import> UpdateStaffWithListImportDetail(Import import);
 
-        Task<IEnumerable<Importdetail>> GetAllImportsDetailsByImportIdAsync(int id);
+        Task<List<decimal>> GetTotalMaterialByDay(DateTime from, DateTime to, CancellationToken token = default);
+
+        Task<List<decimal>> GetTotalMaterialByMonth(DateTime from, DateTime to, CancellationToken token = default);
+
+        Task<List<decimal>> GetTotalMaterialByYear(DateTime from, DateTime to, CancellationToken token = default);
+
+        Task<List<decimal>> GetTotalMaterialCostByMonth(DateTime from, DateTime to, CancellationToken token = default);
+
+        Task<List<decimal>> GetTotalMaterialCostByYear(DateTime from, DateTime to, CancellationToken token = default);
     }
 }

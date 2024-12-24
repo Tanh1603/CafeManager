@@ -9,10 +9,14 @@ namespace CafeManager.Core.Repositories
 {
     public interface IStaffRepository : IRepository<Staff>
     {
-        Task<IEnumerable<Staff>> GetAllStaffAsync();
+        Task<Staff?> UpdateStaffWithListSatffSalaryHistory(Staff staff);
 
-        Task<IEnumerable<Staff>> GetAllStaffDeletedAsync();
+        Task<int> GetStaffFromTo(DateTime from, DateTime to, CancellationToken token = default);
 
-        Task<Staff?> GetStaffById(int id);
+        Task<decimal> GetTotalSalaryFromTo(DateTime from, DateTime to, CancellationToken token = default);
+
+        Task<List<decimal>> GetTotalSalaryByMonth(DateTime from, DateTime to, CancellationToken token = default);
+
+        Task<List<decimal>> GetTotalSalaryByYear(DateTime from, DateTime to, CancellationToken token = default);
     }
 }

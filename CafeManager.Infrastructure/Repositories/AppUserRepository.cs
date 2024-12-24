@@ -18,7 +18,7 @@ namespace CafeManager.Infrastructure.Repositories
 
         public async Task<Appuser?> GetAppUserByUserName(string name)
         {
-            return await _cafeManagerContext.Appusers.FirstOrDefaultAsync(x => x.Username.Equals(name));
+            return await _cafeManagerContext.Appusers.FirstOrDefaultAsync(x => x.Username.Equals(name) && x.Isdeleted == false);
         }
     }
 }

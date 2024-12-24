@@ -1,29 +1,33 @@
-﻿using CafeManager.Core.Data;
+﻿using AutoMapper;
+using CafeManager.Core.Data;
 using CafeManager.Core.DTOs;
 using CafeManager.Core.Services;
 using CafeManager.WPF.MessageBox;
 using CafeManager.WPF.Services;
 using CafeManager.WPF.ViewModels.AddViewModel;
-using CommunityToolkit.Mvvm.Collections;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Microsoft.Extensions.DependencyInjection;
-using System;
+using Microsoft.IdentityModel.Tokens;
+using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Input;
+using System.ComponentModel;
+using System.Diagnostics;
+using System.Linq.Expressions;
 
 namespace CafeManager.WPF.ViewModels.AdminViewModel
 {
-    public partial class InvoiceViewModel : ObservableObject
+    public partial class InvoiceViewModel : ObservableObject , IDataViewModel, INotifyDataErrorInfo
     {
-        private readonly IServiceProvider _provider;
         private readonly InvoiceServices _invoiceServices;
+        private readonly IMapper _mapper;
+        private CancellationToken _token = default;
+
+        private readonly ErrorViewModel _errorViewModel;
+
+        [ObservableProperty]
+        private bool _isLoading;
 
         [ObservableProperty]
         private ModifyInvoiceViewModel _modifyInvoiceVM;
@@ -34,23 +38,148 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
         [ObservableProperty]
         private ObservableCollection<InvoiceDTO> _listInvoiceDTO = [];
 
-        public InvoiceViewModel(IServiceProvider provider)
-        {
-            _provider = provider;
-            _invoiceServices = provider.GetRequiredService<InvoiceServices>();
-            ModifyInvoiceVM = provider.GetRequiredService<ModifyInvoiceViewModel>();
+        private DateTime? _startDate;
 
-            Task.Run(LoadData);
+        public DateTime? StartDate
+        {
+            get => _startDate;
+            set
+            {
+                if (_startDate != value)
+                {
+                    _startDate = value;
+                    ValidateDates();
+                   
+                    OnPropertyChanged();
+                   
+                    _ = LoadData(_token);
+                }
+            }
         }
 
-        private async Task LoadData()
+        private void ValidateDates()
         {
-            var dbListInvoice = await _invoiceServices.GetListInvoices();
-            ListInvoiceDTO = [.. dbListInvoice.Select(x => InvoiceMapper.ToDTO(x))];
+            // Xóa lỗi trước đó cho cả hai trường
+            _errorViewModel.RemoveErrors(nameof(StartDate));
+            _errorViewModel.RemoveErrors(nameof(EndDate));
+
+            // Thêm lỗi mới nếu StartDate lớn hơn EndDate
+            if (StartDate.HasValue && EndDate.HasValue)
+            {
+                if (StartDate.Value > EndDate.Value)
+                {
+                    _errorViewModel.AddError(nameof(StartDate), "Ngày bắt đầu không được lớn hơn ngày kết thúc");
+                    _errorViewModel.AddError(nameof(EndDate), "Ngày kết thúc không được nhỏ hơn ngày bắt đầu");
+                }
+            }
+        }
+
+        private DateTime? _endDate;
+
+        public DateTime? EndDate
+        {
+            get => _endDate;
+            set
+            {
+                if (value != _endDate)
+                {
+                    _endDate = value;
+                    ValidateDates();
+                    OnPropertyChanged();
+                   
+                    _ = LoadData(_token);
+                }
+            }
+        }
+
+        private string? _status;
+
+        public string? Status
+        {
+            get => _status; set
+            {
+                if (_status != value)
+                {
+                    _status = value;
+                 
+
+                    OnPropertyChanged();
+                    _ = LoadData(_token);
+                }
+            }
+        }
+
+        private string? _paymentMethod;
+
+        public string? PaymentMethod
+        {
+            get => _paymentMethod; set
+            {
+                if (_paymentMethod != value)
+                {
+                    _paymentMethod = value;
+                    OnPropertyChanged();
+                    _ = LoadData(_token);
+                }
+            }
+        }
+
+        public InvoiceViewModel(IServiceScope scope)
+        {
+            var provider = scope.ServiceProvider;
+            _invoiceServices = provider.GetRequiredService<InvoiceServices>();
+            _mapper = provider.GetRequiredService<IMapper>();
+            ModifyInvoiceVM = provider.GetRequiredService<ModifyInvoiceViewModel>();
+            _errorViewModel = new ErrorViewModel();
+            _errorViewModel.ErrorsChanged += _errorViewModel_ErrorsChanged;
+        }
+
+        private void _errorViewModel_ErrorsChanged(object? sender, DataErrorsChangedEventArgs e)
+        {
+            ErrorsChanged?.Invoke(this, e);
+        }
+
+        public async Task LoadData(CancellationToken token = default)
+        {
+            try
+            {
+                if (token == default)
+                {
+                    _token = token;
+                }
+                token.ThrowIfCancellationRequested();
+
+                IsLoading = true;
+                Expression<Func<Invoice, bool>> filter = invoice =>
+                (invoice.Isdeleted == false) &&
+                (StartDate == null || invoice.Paymentstartdate >= StartDate) &&
+                (EndDate == null || invoice.Paymentenddate <= EndDate) &&
+                (string.IsNullOrEmpty(Status) || invoice.Paymentstatus.Contains(Status)) &&
+                (string.IsNullOrEmpty(PaymentMethod) || invoice.Paymentmethod.Contains(PaymentMethod));
+
+                var dbListInvoice = await _invoiceServices.GetSearchPaginateListInvoice(filter, pageIndex, pageSize, token);
+                ListInvoiceDTO = [.. _mapper.Map<List<InvoiceDTO>>(dbListInvoice.Item1)];
+                totalPages = (dbListInvoice.Item2 + pageSize - 1) / pageSize;
+                OnPropertyChanged(nameof(PageUI));
+                IsLoading = false;
+            }
+            catch (OperationCanceledException)
+            {
+                Debug.WriteLine("LoadData của InvoiceViewModel bị hủy");
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"An error occurred: {ex.Message}");
+                throw;
+            }
+            finally
+            {
+                IsLoading = false;
+            }
         }
 
         [RelayCommand]
-        private void UpdateInvoice(InvoiceDTO invoiceDTO)
+        private void InfoInvoice(InvoiceDTO invoiceDTO)
         {
             IsOpenModifyInvoiceVM = true;
             ModifyInvoiceVM.RecieveInvoiceDTO(invoiceDTO.Clone());
@@ -61,14 +190,16 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
         {
             try
             {
-                string messageBox = MyMessageBox.ShowDialog("Bạn có muốn xóa hóa đơn này không?");
+                string messageBox = MyMessageBox.ShowDialog("Bạn có muốn xóa hóa đơn này không?", MyMessageBox.Buttons.Yes_No, MyMessageBox.Icons.Question);
                 if (messageBox.Equals("1"))
                 {
+                    IsLoading = true;
                     bool isSuccessDeleted = await _invoiceServices.DeleteInvoice(invoiceDTO.Invoiceid);
                     if (isSuccessDeleted)
                     {
+                        IsLoading = false;
                         MyMessageBox.Show("Xóa hóa đơn thành công");
-                        ListInvoiceDTO.Remove(invoiceDTO);
+                        await LoadData(_token);
                     }
                 }
             }
@@ -83,5 +214,63 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
         {
             IsOpenModifyInvoiceVM = false;
         }
+
+        #region Phân trang
+
+        private int pageIndex = 1;
+
+        private int pageSize = 15;
+        private int totalPages = 0;
+
+
+        public string PageUI => $"{pageIndex}/{totalPages}";
+
+        [RelayCommand]
+        private async Task FirstPage()
+        {
+            pageIndex = 1;
+            await LoadData(_token);
+        }
+
+        [RelayCommand]
+        private async Task NextPage()
+        {
+            if (pageIndex == totalPages)
+            {
+                return;
+            }
+            pageIndex += 1;
+            await LoadData(_token);
+        }
+
+        [RelayCommand]
+        private async Task PreviousPage()
+        {
+            if (pageIndex == 1)
+            {
+                return;
+            }
+            pageIndex -= 1;
+            await LoadData(_token);
+        }
+
+        [RelayCommand]
+        private async Task LastPage()
+        {
+            pageIndex = totalPages;
+            await LoadData(_token);
+        }
+
+        #endregion Phân trang
+
+        public event EventHandler<DataErrorsChangedEventArgs>? ErrorsChanged;
+        public IEnumerable GetErrors(string propertyName)
+        {
+            return _errorViewModel.GetErrors(propertyName);
+        }
+        public bool HasErrors => _errorViewModel.HasErrors;
+
+
+       
     }
 }

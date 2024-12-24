@@ -10,6 +10,7 @@
     xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:uc="clr-namespace:CafeManager.WPF.Assets.UsersControls"
+    xmlns:viewmodel="clr-namespace:CafeManager.WPF.ViewModels.AdminViewModel"
     Name="foodview"
     d:DesignHeight="740"
     d:DesignWidth="1080"
@@ -19,7 +20,7 @@
         <converter:ResponsiveWidthConverter x:Key="ResponsiveWidthConverter" />
     </UserControl.Resources>
     <Grid>
-        <Grid Margin="20,10">
+        <Grid Margin="10,0">
             <Grid.RowDefinitions>
                 <RowDefinition Height="auto" />
                 <RowDefinition Height="auto" />
@@ -29,6 +30,7 @@
             <!--  Page Title  -->
             <TextBlock
                 Grid.Row="0"
+                Margin="0,20,0,10"
                 HorizontalAlignment="Left"
                 FontSize="32"
                 FontWeight="SemiBold"
@@ -57,12 +59,15 @@
                 Grid.Row="0"
                 Width="200"
                 Height="1"
-                Margin="0,10,0,0"
+              
                 HorizontalAlignment="Left"
                 VerticalAlignment="Bottom"
                 Background="#f5f5f5" />
 
-            <Grid Grid.Row="1" Grid.ColumnSpan="2">
+            <Grid
+                Grid.Row="1"
+                Grid.ColumnSpan="2"
+                Margin="0,10">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="auto" />
                     <ColumnDefinition Width="auto" />
@@ -71,70 +76,42 @@
                 <ComboBox
                     Name="cbFoodCategory"
                     Grid.Column="0"
-                    MinWidth="150"
-                    MinHeight="35"
-                    VerticalAlignment="Center"
-                    materialDesign:HintAssist.Hint="Danh mục món ăn"
-                    materialDesign:TextBlockAssist.AutoToolTip="True"
-                    BorderBrush="#602414"
+                    Width="200"
                     ItemsSource="{Binding ListFoodCategory}"
-                    SelectedItem="{Binding SelectedFoodCategory}">
-
-                    <i:Interaction.Triggers>
-                        <i:EventTrigger EventName="SelectionChanged">
-                            <i:InvokeCommandAction Command="{Binding SelectedFoodCategoryChangeCommand}" CommandParameter="{Binding ElementName=cbFoodCategory, Path=SelectedItem, UpdateSourceTrigger=PropertyChanged}" />
-                        </i:EventTrigger>
-                    </i:Interaction.Triggers>
-
+                    SelectedItem="{Binding SelectedFoodCategory}"
+                    Style="{StaticResource ComboBoxStyle}"
+                    Tag="Danh mục thực đơn">
+                    <ComboBox.ItemContainerStyle>
+                        <Style BasedOn="{StaticResource ComboBoxItemStyle}" TargetType="ComboBoxItem">
+                            <Setter Property="Width" Value="{Binding ActualWidth, ElementName=cbFoodCategory}" />
+                            <Setter Property="Height" Value="{Binding ActualHeight, ElementName=cbFoodCategory}" />
+                        </Style>
+                    </ComboBox.ItemContainerStyle>
                     <ComboBox.ItemTemplate>
 
                         <DataTemplate>
-                            <Grid>
-                                <TextBlock
-                                    Margin="0,0,10,0"
-                                    VerticalAlignment="Center"
-                                    Text="{Binding Foodcategoryname}"
-                                    TextWrapping="Wrap" />
-                            </Grid>
+
+                            <TextBlock Text="{Binding Foodcategoryname}" TextWrapping="Wrap" />
                         </DataTemplate>
                     </ComboBox.ItemTemplate>
                 </ComboBox>
-
                 <Button
                     Grid.Column="1"
-                    Width="60"
-                    Height="35"
+                    Width="140"
+                    Height="40"
+                    Margin="10,0"
                     HorizontalAlignment="Left"
-                    Command="{Binding OpenPopupFoodCategoryViewCommand}"
-                    Style="{StaticResource confirmInfoButton}">
-                    <materialDesign:PopupBox
-                        Grid.Row="2"
-                        Margin="4"
-                        IsPopupOpen="{Binding IsOpenModifyFCView, Mode=OneWay}"
-                        PopupElevation="Dp4"
-                        PopupHorizontalOffset="40"
-                        PopupUniformCornerRadius="10"
-                        StaysOpen="True">
-                        <materialDesign:PopupBox.ToggleContent>
-                            <Button
-                                HorizontalAlignment="Center"
-                                VerticalAlignment="Center"
-                                Background="Transparent"
-                                Command="{Binding DataContext.OpenPopupFoodCategoryViewCommand, RelativeSource={RelativeSource AncestorType=local:FoodView}}"
-                                Style="{StaticResource confirmInfoButton}">
-                                <materialDesign:PackIcon
-                                    Width="30"
-                                    Height="30"
-                                    Foreground="White"
-                                    Kind="Plus" />
-                            </Button>
-                        </materialDesign:PopupBox.ToggleContent>
-                        <StackPanel>
-                            <Button Content="Thêm danh mục" Style="{StaticResource confirmInfoButton}" />
-                            <Button Content="Ẩn danh mục" Style="{StaticResource confirmInfoButton}" />
-                            <Button Content="Sửa danh mục" Style="{StaticResource confirmInfoButton}" />
-                        </StackPanel>
-                    </materialDesign:PopupBox>
+                    Command="{Binding OpenFoodCategoryViewCommand}"
+                    Style="{StaticResource addButton}">
+                    <StackPanel Orientation="Horizontal">
+                        <ma:PackIconMaterial
+                            Width="11"
+                            Height="11"
+                            Margin="0,1,8,0"
+                            VerticalAlignment="Center"
+                            Kind="Information" />
+                        <TextBlock Text="Chi tiết danh mục" />
+                    </StackPanel>
                 </Button>
 
                 <StackPanel
@@ -160,7 +137,10 @@
                             IsHitTestVisible="False"
                             Text="Tìm kiếm..."
                             Visibility="{Binding ElementName=txtFilter, Path=Text.IsEmpty, Converter={StaticResource BoolToVis}}" />
-                        <TextBox x:Name="txtFilter" Style="{StaticResource textBoxFilter}" />
+                        <TextBox
+                            x:Name="txtFilter"
+                            Style="{StaticResource textBoxFilter}"
+                            Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}" />
                         <ma:PackIconMaterial
                             Width="15"
                             Height="15"
@@ -215,6 +195,7 @@
                 </ItemsControl>
             </ScrollViewer>
         </Grid>
+
         <materialDesign:DialogHost
             Background="Transparent"
             DialogTheme="Inherit"
@@ -230,5 +211,36 @@
                 <ContentControl Content="{Binding ModifyFoodVM}" />
             </materialDesign:DialogHost.DialogContent>
         </materialDesign:DialogHost>
+
+        <materialDesign:DialogHost
+            Background="Transparent"
+            DialogTheme="Inherit"
+            IsOpen="{Binding IsOpenFoodCategoryView}"
+            OverlayBackground="{DynamicResource PrimaryHueDarkBrush}"
+            Placement="Mouse"
+            Style="{StaticResource MaterialDesignEmbeddedDialogHost}">
+            <materialDesign:DialogHost.DialogBackground>
+                <SolidColorBrush Color="Transparent" />
+            </materialDesign:DialogHost.DialogBackground>
+
+            <materialDesign:DialogHost.DialogContent>
+                <ContentControl Content="{Binding FoodCategoryVM}" />
+            </materialDesign:DialogHost.DialogContent>
+        </materialDesign:DialogHost>
+
+        <Grid
+            Background="White"
+            Opacity="0.3"
+            Visibility="{Binding IsLoading, Converter={StaticResource BooleanToVisibilityConverter}}">
+            <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
+                <TextBlock Style="{StaticResource infoText}" Text="Đang tải tài nguyên.." />
+                <ProgressBar
+                    Width="50"
+                    Height="50"
+                    IsIndeterminate="True"
+                    Style="{StaticResource MaterialDesignCircularProgressBar}"
+                    Value="35" />
+            </StackPanel>
+        </Grid>
     </Grid>
 </UserControl>

@@ -2,91 +2,202 @@
 using CafeManager.Infrastructure.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
-using Microsoft.Extensions.DependencyInjection;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Linq.Expressions;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace CafeManager.Infrastructure.Repositories
 {
-    public class Repository<T> : IRepository<T> where T : class
+    public class Repository<T>(CafeManagerContext cafeManagerContext) : IRepository<T> where T : class
     {
-        protected CafeManagerContext _cafeManagerContext;
+        protected CafeManagerContext _cafeManagerContext
+            = cafeManagerContext;
 
-        public Repository(CafeManagerContext cafeManagerContext)
+        public virtual async Task<T> Create(T entity, CancellationToken token = default)
         {
-            _cafeManagerContext = cafeManagerContext;
-        }
-
-        public virtual async Task<T> Create(T entity)
-        {
-            EntityEntry<T> entityEntry = await _cafeManagerContext.Set<T>().AddAsync(entity);
-            return entityEntry.Entity;
-        }
-
-        public virtual T? Update(T? entity)
-        {
-            var existingEntity = _cafeManagerContext.Set<T>().Local.FirstOrDefault(e => e == entity);
-
-            if (existingEntity != null)
+            try
             {
-                _cafeManagerContext.Entry(existingEntity).CurrentValues.SetValues(entity);
+                token.ThrowIfCancellationRequested();
+                EntityEntry<T> entityEntry = await _cafeManagerContext.Set<T>().AddAsync(entity, token);
+                return entityEntry.Entity;
             }
-            else
+            catch (OperationCanceledException)
             {
-                _cafeManagerContext.Set<T>().Attach(entity);
-                _cafeManagerContext.Entry(entity).State = EntityState.Modified;
+                throw new OperationCanceledException();
             }
-
-            return entity;
         }
 
-        public virtual async Task<bool> Delete(int id)
+        public virtual async Task<T?> Update(T entity, CancellationToken token = default)
         {
-            var entity = await _cafeManagerContext.Set<T>().FindAsync(id);
-            if (entity != null)
+            try
             {
-                var property = typeof(T).GetProperty("Isdeleted");
-                if (property != null)
+                var entityType = _cafeManagerContext.Model.FindEntityType(typeof(T));
+                var primaryKey = entityType?.FindPrimaryKey();
+                var keyProperty = primaryKey?.Properties[0];
+                var keyValue = keyProperty?.PropertyInfo?.GetValue(entity);
+                token.ThrowIfCancellationRequested();
+                var existingEntity = await _cafeManagerContext.Set<T>().FindAsync(keyValue, token);
+
+                if (existingEntity != null)
                 {
-                    property.SetValue(entity, true);
-                    return true;
+                    _cafeManagerContext.Entry(existingEntity).CurrentValues.SetValues(entity);
                 }
+                return entity;
             }
-            return false;
-        }
-
-        private bool IsEntityNotDeleted(T entity)
-        {
-            var property = typeof(T).GetProperty("Isdeleted");
-            if (property != null)
+            catch (OperationCanceledException)
             {
-                var isDeletedValue = property.GetValue(entity) as bool?;
-                return isDeletedValue != true;
+                throw new OperationCanceledException();
             }
-            return true;
         }
 
-        public async Task<IEnumerable<T>> AddArange(IEnumerable<T> entities)
+        public virtual async Task<bool> Delete(int id, CancellationToken token = default)
         {
-            if (entities == null || !entities.Any())
-                return Enumerable.Empty<T>();
-
-            await _cafeManagerContext.AddRangeAsync(entities);
-            return entities;
+            try
+            {
+                token.ThrowIfCancellationRequested();
+                var entity = await _cafeManagerContext.Set<T>().FindAsync(id, token);
+                if (entity != null)
+                {
+                    var property = typeof(T).GetProperty("Isdeleted");
+                    if (property != null)
+                    {
+                        property.SetValue(entity, true);
+                        return true;
+                    }
+                }
+                return false;
+            }
+            catch (OperationCanceledException)
+            {
+                throw new OperationCanceledException();
+            }
         }
 
-        public async Task<IEnumerable<T>> GetAll()
+        public async Task<IEnumerable<T>> AddArange(IEnumerable<T> entities, CancellationToken token = default)
         {
-            return await _cafeManagerContext.Set<T>().ToListAsync();
+            try
+            {
+                if (entities == null || !entities.Any())
+                    return [];
+                token.ThrowIfCancellationRequested();
+                await _cafeManagerContext.AddRangeAsync(entities, token);
+                return entities;
+            }
+            catch (OperationCanceledException)
+            {
+                throw new OperationCanceledException();
+            }
         }
 
-        public async Task<T?> GetById(int id)
+        public async Task<IEnumerable<T>> GetAll(CancellationToken token = default)
         {
-            return await _cafeManagerContext.Set<T>().FindAsync(id);
+            try
+            {
+                token.ThrowIfCancellationRequested();
+                return await _cafeManagerContext.Set<T>().ToListAsync(token);
+            }
+            catch (OperationCanceledException)
+            {
+                throw new OperationCanceledException();
+            }
+        }
+
+        public async Task<T?> GetById(int id, CancellationToken token = default)
+        {
+            try
+            {
+                token.ThrowIfCancellationRequested();
+                return await _cafeManagerContext.Set<T>().FindAsync(id, token);
+            }
+            catch (OperationCanceledException)
+            {
+                throw new OperationCanceledException();
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        public async Task<IEnumerable<T>> GetAllExistedAsync(CancellationToken token = default)
+        {
+            try
+            {
+                token.ThrowIfCancellationRequested();
+                var entities = await _cafeManagerContext.Set<T>().ToListAsync(token);
+                var filteredEntities = entities
+                    .Where(entity =>
+                    {
+                        var isDeletedProperty = typeof(T).GetProperty("Isdeleted");
+
+                        if (isDeletedProperty != null && isDeletedProperty.PropertyType == typeof(bool?))
+                        {
+                            var isDeletedValue = (bool?)isDeletedProperty.GetValue(entity);
+                            return isDeletedValue == false;
+                        }
+
+                        return false;
+                    });
+
+                return filteredEntities;
+            }
+            catch (OperationCanceledException)
+            {
+                throw new OperationCanceledException();
+            }
+        }
+
+        public async Task<IEnumerable<T>> GetAllDeletedAsync(CancellationToken token = default)
+        {
+            try
+            {
+                token.ThrowIfCancellationRequested();
+                var entities = await _cafeManagerContext.Set<T>().ToListAsync(token);
+                var filteredEntities = entities
+                    .Where(entity =>
+                    {
+                        var isDeletedProperty = typeof(T).GetProperty("Isdeleted");
+
+                        if (isDeletedProperty != null && isDeletedProperty.PropertyType == typeof(bool?))
+                        {
+                            var isDeletedValue = (bool?)isDeletedProperty.GetValue(entity);
+                            return isDeletedValue != false;
+                        }
+
+                        return false;
+                    });
+
+                return filteredEntities;
+            }
+            catch (OperationCanceledException)
+            {
+                throw new OperationCanceledException();
+            }
+        }
+
+        public async Task<(IEnumerable<T> Items, int TotalCount)> GetByPageAsync(int pageIndex, int pageSize, Expression<Func<T, bool>>? filter = null, CancellationToken token = default)
+        {
+            try
+            {
+                token.ThrowIfCancellationRequested();
+                IQueryable<T> query = _cafeManagerContext.Set<T>();
+
+                if (filter != null)
+                {
+                    query = query.Where(filter);
+                };
+
+                int totalCount = await query.CountAsync(token);
+                List<T> items = await query.Skip((pageIndex - 1) * pageSize).Take(pageSize).ToListAsync(token);
+
+                return (items, totalCount);
+            }
+            catch (OperationCanceledException)
+            {
+                throw new OperationCanceledException();
+            }
+            catch (Exception)
+            {
+                return (Enumerable.Empty<T>(), 0);
+            }
         }
     }
 }

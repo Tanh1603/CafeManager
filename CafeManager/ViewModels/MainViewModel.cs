@@ -1,23 +1,17 @@
-﻿using CafeManager.Core.Data;
-using CafeManager.Core.DTOs;
-using CafeManager.WPF.Services;
-using CafeManager.WPF.Stores;
+﻿using CafeManager.WPF.Stores;
+using CafeManager.WPF.ViewModels.AdminViewModel;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Microsoft.Extensions.DependencyInjection;
-using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Controls.Primitives;
+using System.Windows.Controls;
+using System.Windows.Media;
 
 namespace CafeManager.WPF.ViewModels
 {
     public partial class MainViewModel : ObservableObject, IDisposable
     {
-        private readonly IServiceProvider _provider;
         private readonly NavigationStore _navigationStore;
 
         [ObservableProperty]
@@ -25,12 +19,12 @@ namespace CafeManager.WPF.ViewModels
 
         public MainViewModel(IServiceProvider provider)
         {
-            _provider = provider;
-
-            _navigationStore = _provider.GetRequiredService<NavigationStore>();
+            _navigationStore = provider.GetRequiredService<NavigationStore>();
             _navigationStore.Navigation = CurrentViewModel;
 
-            CurrentViewModel = _provider.GetRequiredService<LoginViewModel>();
+            CurrentViewModel = provider.GetRequiredService<LoginViewModel>();
+            //CurrentViewModel = provider.GetRequiredService<MainAdminViewModel>();
+            //CurrentViewModel = provider.GetRequiredService<MainUserViewModel>();
             _navigationStore.NavigationStoreChanged += _navigationStore_NavigationStoreChanged;
         }
 
@@ -73,6 +67,55 @@ namespace CafeManager.WPF.ViewModels
         }
 
         #endregion command handle window
+
+        #region handleDatePicker
+
+        [RelayCommand]
+        public void ClearDatePicker(DatePicker datePicker)
+        {
+            if (datePicker != null)
+            {
+                datePicker.SelectedDate = null;
+
+                var textBox = FindChild<DatePickerTextBox>(datePicker);
+                if (textBox != null)
+                {
+                    textBox.Text = string.Empty;
+                }
+            }
+        }
+
+        private T FindChild<T>(DependencyObject parent) where T : DependencyObject
+        {
+            for (int i = 0; i < VisualTreeHelper.GetChildrenCount(parent); i++)
+            {
+                var child = VisualTreeHelper.GetChild(parent, i);
+                if (child is T tChild)
+                    return tChild;
+
+                var result = FindChild<T>(child);
+                if (result != null)
+                    return result;
+            }
+            return null;
+        }
+
+        #endregion handleDatePicker
+
+        #region handleComboBox
+
+        [RelayCommand]
+        public void ClearComboBox(ComboBox comboBox)
+
+        {
+            if (comboBox != null)
+            {
+                comboBox.SelectedItem = null; // Đặt SelectedItem về null
+                comboBox.Text = string.Empty; // Xóa nội dung Text
+            }
+        }
+
+        #endregion handleComboBox
 
         public void Dispose()
         {

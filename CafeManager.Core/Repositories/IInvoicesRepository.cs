@@ -10,16 +10,20 @@ namespace CafeManager.Core.Repositories
 {
     public interface IInvoicesRepository : IRepository<Invoice>
     {
-        Task<IEnumerable<Invoice>> GetAllInvoiceAsync();
+        Task<int> GetTotalInvoiceFromTo(DateTime from, DateTime to, CancellationToken token = default);
 
-        Task<Invoice?> GetInvoicesByIdAsync(int id);
+        Task<decimal> GetTotalRevenueFromTo(DateTime from, DateTime to, CancellationToken token = default);
 
-        Task<IEnumerable<Invoicedetail>?> GetAllInvoiceDetailByInvoiceIdAsync(int id);
+        Task<List<decimal>> GetRevenueByDay(DateTime from, DateTime to, CancellationToken token = default);
 
-        Task<Coffeetable?> GetCoffeTableByInvoiceIdAsync(int id);
+        Task<List<decimal>> GetRevenueByMonth(DateTime from, DateTime to, CancellationToken token = default);
 
-        Task<IEnumerable<Invoice>?> SearchSortPaginateAsync(Expression<Func<Invoice, bool>>? searchPredicate,
-                                                            Expression<Func<Invoice, object>>? sortKeySelector,
-                                                            bool ascending, int skip, int take);
+        Task<List<decimal>> GetRevenueByYear(DateTime from, DateTime to, CancellationToken token = default);
+
+        Task<List<int>> GetTotalInvoiceByDay(DateTime from, DateTime to, CancellationToken token = default);
+
+        Task<List<int>> GetTotalInvoiceByMonth(DateTime from, DateTime to, CancellationToken token = default);
+
+        Task<List<int>> GetTotalInvoiceByYear(DateTime from, DateTime to, CancellationToken token = default);
     }
 }

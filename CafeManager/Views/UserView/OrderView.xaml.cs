@@ -24,5 +24,7 @@ namespace CafeManager.WPF.Views.UserView
         {
             InitializeComponent();
         }
+
+       
     }
 }

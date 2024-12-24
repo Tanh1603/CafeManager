@@ -4,6 +4,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:addview="clr-namespace:CafeManager.WPF.Views.AddUpdateView"
     xmlns:addviewmodel="clr-namespace:CafeManager.WPF.ViewModels.AddViewModel"
+    xmlns:converter="clr-namespace:CafeManager.WPF.Services.Converter"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:fa="http://schemas.awesome.incremented/wpf/xaml/fontawesome.sharp"
     xmlns:local="clr-namespace:CafeManager.WPF.Views"
@@ -11,33 +12,30 @@
     xmlns:ma="http://metro.mahapps.com/winfx/xaml/iconpacks"
     xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:service="clr-namespace:CafeManager.WPF.Services.Converter"
     xmlns:uc="clr-namespace:CafeManager.WPF.Assets.UsersControls"
     xmlns:view="clr-namespace:CafeManager.WPF.Views"
     d:DesignHeight="450"
     d:DesignWidth="800"
     mc:Ignorable="d">
-
     <UserControl.Resources>
         <BooleanToVisibilityConverter x:Key="BoolToVis" />
-        <service:RowIndexConverter x:Key="RowIndexConverter" />
-        <DataTemplate DataType="{x:Type addviewmodel:AddImportViewModel}">
-            <addview:AddImportView />
-        </DataTemplate>
+        <converter:RowIndexConverter x:Key="RowIndexConverter" />
+        <converter:CurrencyConverter x:Key="CurrencyConverter" />
     </UserControl.Resources>
 
     <Grid>
-
-        <Grid Margin="20,10">
+        <Grid Margin="10,0">
             <Grid.RowDefinitions>
                 <RowDefinition Height="auto" />
                 <RowDefinition Height="auto" />
                 <RowDefinition Height="*" />
+                <RowDefinition Height="auto" />
             </Grid.RowDefinitions>
 
             <!--  Page Title  -->
             <TextBlock
                 Grid.Row="0"
+                Margin="0,20,0,10"
                 HorizontalAlignment="Left"
                 FontSize="32"
                 FontWeight="SemiBold"
@@ -48,7 +46,7 @@
             <Button
                 Grid.Row="0"
                 HorizontalAlignment="Right"
-                Command="{Binding OpenAddImportCommand}"
+                Command="{Binding OpenModifyImportCommand}"
                 Style="{StaticResource addButton}">
                 <StackPanel Orientation="Horizontal">
                     <ma:PackIconMaterial
@@ -71,144 +69,272 @@
 
             <StackPanel
                 Grid.Row="1"
-                Margin="0,10"
-                HorizontalAlignment="Right"
+                Margin="10"
                 Orientation="Horizontal">
                 <TextBlock
-                    Margin="0,0,20,0"
-                    HorizontalAlignment="Right"
+                    Margin="10,0"
                     VerticalAlignment="Center"
                     FontSize="13"
                     FontWeight="SemiBold"
                     Foreground="#602414"
-                    Text="Filter by" />
+                    Text="Nhà cung cấp:" />
+                <ComboBox
+                    x:Name="cbsupplier"
+                    Width="160"
+                    materialDesign:TextFieldAssist.HasClearButton="True"
+                    ItemsSource="{Binding ModifyImportVM.ListSupplier}"
+                    SelectedItem="{Binding SelectedSupplier}"
+                    Style="{StaticResource ComboBoxStyle}">
+                    <ComboBox.ItemContainerStyle>
+                        <Style BasedOn="{StaticResource ComboBoxItemStyle}" TargetType="ComboBoxItem">
+                            <Setter Property="Width" Value="{Binding ActualWidth, ElementName=cbsupplier}" />
+                            <Setter Property="Height" Value="{Binding ActualHeight, ElementName=cbsupplier}" />
+                        </Style>
+                    </ComboBox.ItemContainerStyle>
+                    <ComboBox.ItemTemplate>
+                        <DataTemplate>
+                            <Grid>
+                                <TextBlock
+                                    Margin="0,0,10,0"
+                                    VerticalAlignment="Center"
+                                    Text="{Binding Suppliername}"
+                                    TextTrimming="CharacterEllipsis"
+                                    TextWrapping="NoWrap" />
+                            </Grid>
+                        </DataTemplate>
+                    </ComboBox.ItemTemplate>
+                </ComboBox>
 
-                <!--  Filter Textbox  -->
-                <Grid Width="200" HorizontalAlignment="Right">
-                    <TextBlock
-                        Margin="15,0"
-                        VerticalAlignment="Center"
-                        Panel.ZIndex="1"
-                        Foreground="#9c6d3f"
-                        IsHitTestVisible="False"
-                        Text="Search in Members..." />
-                    <!--  Visibility="{Binding ElementName=txtFilter, Path=Text.IsEmpty, Converter={StaticResource BoolToVis}} />"  -->
-                    <TextBox x:Name="txtFilter" Style="{StaticResource textBoxFilter}" />
-                    <ma:PackIconMaterial
-                        Width="15"
-                        Height="15"
-                        Margin="0,0,15,0"
-                        HorizontalAlignment="Right"
-                        VerticalAlignment="Center"
-                        Foreground="#d5b096"
-                        Kind="Magnify" />
-                </Grid>
+                <TextBlock
+                    Margin="10,0"
+                    VerticalAlignment="Center"
+                    FontSize="13"
+                    FontWeight="SemiBold"
+                    Foreground="#602414"
+                    Text="Người nhận:" />
+                <ComboBox
+                    x:Name="cbreceiver"
+                    Width="150"
+                    materialDesign:TextFieldAssist.HasClearButton="True"
+                    ItemsSource="{Binding ModifyImportVM.ListStaff}"
+                    SelectedItem="{Binding SelectedStaff}"
+                    Style="{StaticResource ComboBoxStyle}">
+                    <ComboBox.ItemContainerStyle>
+                        <Style BasedOn="{StaticResource ComboBoxItemStyle}" TargetType="ComboBoxItem">
+                            <Setter Property="Width" Value="{Binding ActualWidth, ElementName=cbreceiver}" />
+                            <Setter Property="Height" Value="{Binding ActualHeight, ElementName=cbreceiver}" />
+                        </Style>
+                    </ComboBox.ItemContainerStyle>
+                    <ComboBox.ItemTemplate>
+                        <DataTemplate>
+                            <Grid>
+                                <TextBlock
+                                    Margin="0,0,10,0"
+                                    VerticalAlignment="Center"
+                                    Text="{Binding Staffname}"
+                                    TextTrimming="CharacterEllipsis"
+                                    TextWrapping="NoWrap" />
+                            </Grid>
+                        </DataTemplate>
+                    </ComboBox.ItemTemplate>
+                </ComboBox>
+                <TextBlock
+                    Margin="10,0,10,0"
+                    VerticalAlignment="Center"
+                    FontSize="13"
+                    FontWeight="SemiBold"
+                    Foreground="#602414"
+                    Text="Ngày nhập từ:" />
+                <DatePicker
+                    Width="170"
+                    materialDesign:TextFieldAssist.HasClearButton="True"
+                    CalendarStyle="{StaticResource MaterialDesignCalendarPortrait}"
+                    SelectedDate="{Binding StartDate}"
+                    Style="{StaticResource DatePicker}"
+                    Tag="Chọn ngày"
+                     Validation.ErrorTemplate="{StaticResource ErrorMessage}"/>
+
+                <TextBlock
+                    Margin="10,0"
+                    VerticalAlignment="Center"
+                    FontSize="13"
+                    FontWeight="SemiBold"
+                    Foreground="#602414"
+                    Text="Đến:" />
+                <DatePicker
+                    Width="170"
+                    materialDesign:TextFieldAssist.HasClearButton="True"
+                    CalendarStyle="{StaticResource MaterialDesignCalendarPortrait}"
+                    SelectedDate="{Binding EndDate}"
+                    Style="{StaticResource DatePicker}"
+                    Tag="Chọn ngày"
+                     Validation.ErrorTemplate="{StaticResource ErrorMessage}"/>
             </StackPanel>
 
             <!--  Import Datagrid  -->
             <Border
-                Grid.Row="3"
+                Grid.Row="2"
                 Width="auto"
-                BorderBrush="#602414"
-                BorderThickness="2"
-                CornerRadius="10">
-                <ScrollViewer VerticalScrollBarVisibility="Auto">
-                    <DataGrid
-                        x:Name="ImportsDataGrid"
-                        VerticalAlignment="Top"
-                        AlternationCount="{Binding ListImport.Count}"
-                        CellStyle="{DynamicResource DataGridCellStyle1}"
-                        ColumnHeaderStyle="{DynamicResource DataGridColumnHeaderStyle1}"
-                        ItemsSource="{Binding ListImport}"
-                        RowStyle="{DynamicResource DataGridRowStyle1}"
-                        Style="{DynamicResource DataGridStyle1}">
-                        <DataGrid.Columns>
+                Margin="0,20,0,0"
+                VerticalAlignment="Top">
 
-                            <DataGridTextColumn
-                                Width="auto"
-                                Header="STT"
-                                IsReadOnly="True">
-                                <DataGridTextColumn.Binding>
-                                    <Binding
-                                        Converter="{StaticResource RowIndexConverter}"
-                                        Path="(ItemsControl.AlternationIndex)"
-                                        RelativeSource="{RelativeSource AncestorType=DataGridRow}" />
-                                </DataGridTextColumn.Binding>
-                            </DataGridTextColumn>
+                <DataGrid
+                    x:Name="ImportsDataGrid"
+                    VerticalAlignment="Top"
+                    AlternationCount="{Binding ListImportDTO.Count}"
+                    CellStyle="{DynamicResource DataGridCellStyle1}"
+                    ColumnHeaderStyle="{DynamicResource DataGridColumnHeaderStyle1}"
+                    ItemsSource="{Binding ListImportDTO}"
+                    RowStyle="{DynamicResource DataGridRowStyle1}"
+                    ScrollViewer.CanContentScroll="True"
+                    ScrollViewer.HorizontalScrollBarVisibility="Auto"
+                    ScrollViewer.VerticalScrollBarVisibility="Auto"
+                    Style="{DynamicResource DataGridStyle1}">
+                    <DataGrid.Columns>
 
-                            <DataGridTextColumn
-                                Width="*"
-                                Binding="{Binding Deliveryperson}"
-                                CanUserResize="False"
-                                Header="Người giao hàng"
-                                IsReadOnly="True" />
+                        <DataGridTextColumn
+                            Width="auto"
+                            Header="STT"
+                            IsReadOnly="True">
+                            <DataGridTextColumn.Binding>
+                                <Binding
+                                    Converter="{StaticResource RowIndexConverter}"
+                                    Path="(ItemsControl.AlternationIndex)"
+                                    RelativeSource="{RelativeSource AncestorType=DataGridRow}" />
+                            </DataGridTextColumn.Binding>
+                        </DataGridTextColumn>
+                        <DataGridTextColumn
+                            Width="*"
+                            Binding="{Binding Supplier.Suppliername}"
+                            CanUserResize="False"
+                            Header="Nhà cung cấp"
+                            IsReadOnly="True" />
+                        <DataGridTextColumn
+                            Width="*"
+                            Binding="{Binding Deliveryperson}"
+                            CanUserResize="False"
+                            Header="Người giao hàng"
+                            IsReadOnly="True" />
+                        <DataGridTextColumn
+                            Width="*"
+                            Binding="{Binding Phone}"
+                            CanUserResize="False"
+                            Header="Số điện thoại"
+                            IsReadOnly="True" />
+                        <DataGridTextColumn
+                            Width="*"
+                            Binding="{Binding Shippingcompany}"
+                            CanUserResize="False"
+                            Header="Công ty giao"
+                            IsReadOnly="True" />
+                        <DataGridTextColumn
+                            Width="*"
+                            Binding="{Binding Receiveddate, StringFormat=dd/MM/yyyy HH:mm:ss}"
+                            CanUserResize="False"
+                            Header="Ngày giao"
+                            IsReadOnly="True" />
+                        <DataGridTextColumn
+                            Width="auto"
+                            Binding="{Binding Staff.Staffname}"
+                            CanUserResize="False"
+                            Header="Người nhận"
+                            IsReadOnly="True" />
 
-                            <DataGridTextColumn
-                                Width="*"
-                                Binding="{Binding Phone}"
-                                CanUserResize="False"
-                                Header="Số điện thoại"
-                                IsReadOnly="True" />
-                            <DataGridTextColumn
-                                Width="*"
-                                Binding="{Binding Receiveddate}"
-                                CanUserResize="False"
-                                Header="Ngày giao"
-                                IsReadOnly="True" />
-
-                            <DataGridTextColumn
-                                Width="*"
-                                Binding="{Binding Receiver}"
-                                CanUserResize="False"
-                                Header="Người nhận"
-                                IsReadOnly="True" />
-
-                            <DataGridTemplateColumn
-                                Width="auto"
-                                Header="Tùy chỉnh"
-                                IsReadOnly="True">
-
-                                <DataGridTemplateColumn.CellTemplate>
-                                    <DataTemplate>
-                                        <StackPanel Orientation="Horizontal">
-                                            <Button
-                                                Command="{Binding DataContext.OpenImportDetailCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
-                                                CommandParameter="{Binding}"
-                                                Style="{StaticResource gridEditButton}">
-                                                <ma:PackIconMaterial Kind="PencilOutline" Style="{StaticResource gridButtonIcon}" />
-                                            </Button>
-                                            <Button
-                                                Margin="5,0,0,0"
-                                                Command="{Binding DataContext.DeleteImportCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
-                                                CommandParameter="{Binding}"
-                                                Style="{StaticResource gridRemoveButton}">
-                                                <ma:PackIconMaterial Kind="DeleteOutline" Style="{StaticResource gridButtonIcon}" />
-                                            </Button>
-                                        </StackPanel>
-                                    </DataTemplate>
-                                </DataGridTemplateColumn.CellTemplate>
-                            </DataGridTemplateColumn>
-                        </DataGrid.Columns>
-                    </DataGrid>
-                </ScrollViewer>
+                        <DataGridTemplateColumn
+                            Width="auto"
+                            Header="Tùy chỉnh"
+                            IsReadOnly="True">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <StackPanel Orientation="Horizontal">
+                                        <Button
+                                            Command="{Binding DataContext.OpenUpdateImportCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                            CommandParameter="{Binding}"
+                                            Style="{StaticResource gridEditButton}">
+                                            <ma:PackIconMaterial Kind="PencilOutline" Style="{StaticResource gridButtonIcon}" />
+                                        </Button>
+                                        <Button
+                                            Margin="5,0,0,0"
+                                            Command="{Binding DataContext.DeleteImportCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                            CommandParameter="{Binding}"
+                                            Style="{StaticResource gridRemoveButton}">
+                                            <ma:PackIconMaterial Kind="DeleteOutline" Style="{StaticResource gridButtonIcon}" />
+                                        </Button>
+                                    </StackPanel>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                    </DataGrid.Columns>
+                </DataGrid>
             </Border>
-        </Grid>
 
+            <Grid
+                Grid.Row="3"
+                Margin="10"
+                HorizontalAlignment="Center">
+                <StackPanel Orientation="Horizontal">
+
+                    <StackPanel.Resources>
+                        <Style BasedOn="{StaticResource MaterialDesignFlatDarkButton}" TargetType="Button">
+                            <Setter Property="Margin" Value="10,0" />
+                        </Style>
+                    </StackPanel.Resources>
+                    <Button Command="{Binding FirstPageCommand}">
+                        <materialDesign:PackIcon Kind="SkipBackwardOutline" />
+                    </Button>
+
+                    <Button Command="{Binding PreviousPageCommand}">
+                        <materialDesign:PackIcon Kind="SkipPreviousOutline" />
+                    </Button>
+
+                    <TextBlock
+                        HorizontalAlignment="Left"
+                        VerticalAlignment="Center"
+                        FontSize="16"
+                        FontWeight="SemiBold"
+                        Foreground="#dac5b4"
+                        Text="{Binding PageUI}" />
+
+                    <Button Command="{Binding NextPageCommand}">
+                        <materialDesign:PackIcon Kind="SkipNextOutline" />
+                    </Button>
+
+                    <Button Command="{Binding LastPageCommand}">
+                        <materialDesign:PackIcon Kind="SkipForwardOutline" />
+                    </Button>
+                </StackPanel>
+            </Grid>
+        </Grid>
         <materialDesign:DialogHost
             Background="Transparent"
-            CloseOnClickAway="True"
             DialogTheme="Inherit"
-            IsOpen="{Binding IsOpenAddImport}"
+            IsOpen="{Binding IsOpenModifyImportView}"
             OverlayBackground="{DynamicResource PrimaryHueDarkBrush}"
             Placement="Mouse"
             Style="{StaticResource MaterialDesignEmbeddedDialogHost}">
+
             <materialDesign:DialogHost.DialogBackground>
                 <SolidColorBrush Color="Transparent" />
             </materialDesign:DialogHost.DialogBackground>
 
             <materialDesign:DialogHost.DialogContent>
-                <ContentControl Content="{Binding AddImportVM}" />
+                <ContentControl Content="{Binding ModifyImportVM}" />
             </materialDesign:DialogHost.DialogContent>
         </materialDesign:DialogHost>
+
+        <Grid
+            Background="White"
+            Opacity="0.3"
+            Visibility="{Binding IsLoading, Converter={StaticResource BooleanToVisibilityConverter}}">
+            <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
+                <TextBlock Style="{StaticResource infoText}" Text="Đang tải tài nguyên.." />
+                <ProgressBar
+                    Width="50"
+                    Height="50"
+                    IsIndeterminate="True"
+                    Style="{StaticResource MaterialDesignCircularProgressBar}"
+                    Value="35" />
+            </StackPanel>
+        </Grid>
     </Grid>
 </UserControl>

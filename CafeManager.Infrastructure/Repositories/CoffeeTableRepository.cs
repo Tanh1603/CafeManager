@@ -16,23 +16,20 @@ namespace CafeManager.Infrastructure.Repositories
         {
         }
 
-        public async Task<Coffeetable?> GetCoffeeTableByIdAsync(int id)
+        public async Task<int> GetTotalTable(CancellationToken token = default)
         {
-            return await _cafeManagerContext.Set<Coffeetable>().Where(x => x.Isdeleted == false)
-                .Include(x => x.Invoices).FirstOrDefaultAsync(x => x.Coffeetableid == id);
-        }
-
-        public async Task<IEnumerable<Coffeetable>> GetAllCoffeTableAsync()
-        {
-            return await _cafeManagerContext.Set<Coffeetable>().Where(x => x.Isdeleted == false).ToListAsync();
-        }
-
-        public async Task<IEnumerable<Invoice>> GetAllInvoicesByCoffeeTableIdAsync(int id)
-        {
-            var res = await _cafeManagerContext.Set<Coffeetable>().Where(x => x.Isdeleted == false)
-                            .Include(x => x.Invoices)
-                            .FirstOrDefaultAsync(x => x.Coffeetableid == id);
-            return res?.Invoices?.Where(x => x.Isdeleted == false) ?? Enumerable.Empty<Invoice>();
+            try
+            {
+                return await _cafeManagerContext.Coffeetables.CountAsync(token);
+            }
+            catch (OperationCanceledException)
+            {
+                throw;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
         }
     }
 }

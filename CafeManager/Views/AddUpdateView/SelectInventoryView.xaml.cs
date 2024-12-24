@@ -13,14 +13,14 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace CafeManager.WPF.Assets.UsersControls
+namespace CafeManager.WPF.Views.AddUpdateView
 {
     /// <summary>
-    /// Interaction logic for InfoTable.xaml
+    /// Interaction logic for SelectInventoryView.xaml
     /// </summary>
-    public partial class InfoTable : UserControl
+    public partial class SelectInventoryView : UserControl
     {
-        public InfoTable()
+        public SelectInventoryView()
         {
             InitializeComponent();
         }

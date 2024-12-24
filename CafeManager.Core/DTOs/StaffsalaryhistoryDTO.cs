@@ -1,101 +1,31 @@
-﻿using System.ComponentModel;
-using System.Runtime.CompilerServices;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
 
 namespace CafeManager.Core.DTOs
 {
-    public class StaffsalaryhistoryDTO : INotifyPropertyChanged
+    public partial class StaffsalaryhistoryDTO : BaseDTO
     {
+        [ObservableProperty]
         private int _staffsalaryhistoryid;
 
-        public int Staffsalaryhistoryid
-        {
-            get => _staffsalaryhistoryid;
-            set
-            {
-                if (_staffsalaryhistoryid != value)
-                {
-                    _staffsalaryhistoryid = value;
-                    OnPropertyChanged();
-                }
-            }
-        }
-
+        [ObservableProperty]
         private int _staffid;
 
-        public int Staffid
-        {
-            get => _staffid;
-            set
-            {
-                if (_staffid != value)
-                {
-                    _staffid = value;
-                    OnPropertyChanged();
-                }
-            }
-        }
-
+        [ObservableProperty]
         private decimal _salary;
 
-        public decimal Salary
-        {
-            get => _salary;
-            set
-            {
-                if (_salary != value)
-                {
-                    _salary = value;
-                    OnPropertyChanged();
-                }
-            }
-        }
-
-        private DateOnly _effectivedate;
-
-        public DateOnly Effectivedate
-        {
-            get => _effectivedate;
-            set
-            {
-                if (_effectivedate != value)
-                {
-                    _effectivedate = value;
-                    OnPropertyChanged();
-                }
-            }
-        }
-
-        private bool? _isdeleted;
-
-        public bool? Isdeleted
-        {
-            get => _isdeleted;
-            set
-            {
-                if (_isdeleted != value)
-                {
-                    _isdeleted = value;
-                    OnPropertyChanged();
-                }
-            }
-        }
+        [ObservableProperty]
+        private DateOnly _effectivedate = DateOnly.FromDateTime(DateTime.Now);
 
         public StaffsalaryhistoryDTO Clone()
         {
             return new StaffsalaryhistoryDTO
             {
-                Staffsalaryhistoryid = this.Staffsalaryhistoryid,
-                Staffid = this.Staffid,
-                Salary = this.Salary,
-                Effectivedate = this.Effectivedate
+                Id = Id,
+                Staffsalaryhistoryid = Staffsalaryhistoryid,
+                Staffid = Staffid,
+                Salary = Salary,
+                Effectivedate = Effectivedate
             };
-        }
-
-        public event PropertyChangedEventHandler? PropertyChanged;
-
-        protected void OnPropertyChanged([CallerMemberName] string propertyName = null)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
     }
 }

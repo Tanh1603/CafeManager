@@ -32,6 +32,22 @@ namespace CafeManager.WPF.Services
             }
         }
 
+        public async Task<IEnumerable<Food>> GetAllExistFood(CancellationToken token = default)
+        {
+            try
+            {
+                return await _unitOfWork.FoodList.GetAllExistedAsync(token);
+            }
+            catch (OperationCanceledException)
+            {
+                throw;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
         public async Task<Food> CreateFood(Food food)
         {
             try

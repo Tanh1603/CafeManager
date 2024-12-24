@@ -25,6 +25,9 @@ namespace CafeManager.WPF.ViewModels
         private readonly IMapper _mapper;
 
         [ObservableProperty]
+        private bool _isLoading;
+
+        [ObservableProperty]
         [NotifyPropertyChangedFor(nameof(CanLogin))]
         [NotifyCanExecuteChangedFor(nameof(LoginCommand))]
         private string _username = string.Empty;
@@ -73,41 +76,58 @@ namespace CafeManager.WPF.ViewModels
         {
             try
             {
-                (Appuser? appuser, bool isSuccessLogin, int? role) = await _appUserServices.Login(Username, Password);
-                if (isSuccessLogin && role != null && appuser != null)
+                IsLoading = true;
+                await Task.Run(async () =>
                 {
-                    string dialogResult = MyMessageBox.ShowDialog("Đăng nhập thành công", MyMessageBox.Buttons.Yes_No, MyMessageBox.Icons.Information);
-                    if (dialogResult == "1")
+                    (Appuser? appuser, bool isSuccessLogin, int? role) = await _appUserServices.Login(Username, Password);
+                    if (isSuccessLogin && role != null && appuser != null)
                     {
-                        _provider.GetRequiredService<AccountStore>().SetAccount(_mapper.Map<AppUserDTO>(appuser));
-                        _navigationStore.Navigation = role == 1 ? _provider.GetRequiredService<MainAdminViewModel>() : _provider.GetRequiredService<MainUserViewModel>();
-                        Application.Current.MainWindow.WindowState = WindowState.Maximized;
+                        Application.Current.Dispatcher.Invoke(() =>
+                        {
+                            string dialogResult = MyMessageBox.ShowDialog("Đăng nhập thành công", MyMessageBox.Buttons.Yes_No, MyMessageBox.Icons.Information);
+                            if (dialogResult == "1")
+                            {
+                                _provider.GetRequiredService<AccountStore>().SetAccount(_mapper.Map<AppUserDTO>(appuser));
+                                _navigationStore.Navigation = role == 1 ? _provider.GetRequiredService<MainAdminViewModel>() : _provider.GetRequiredService<MainUserViewModel>();
+                                Application.Current.MainWindow.WindowState = WindowState.Maximized;
+                            }
+                            if (IsRememberAccount)
+                            {
+                                Properties.Settings.Default.UserName = Username;
+                                Properties.Settings.Default.PassWord = _provider.GetRequiredService<EncryptionHelper>().EncryptAES(Password);
+                                Properties.Settings.Default.RememberAccount = true;
+                                Properties.Settings.Default.Save();
+                            }
+                            else
+                            {
+                                Properties.Settings.Default.RememberAccount = false;
+                                Properties.Settings.Default.Save();
+                            }
+                        });
                     }
-                    if (IsRememberAccount)
+                    else if (isSuccessLogin == false && role == null)
                     {
-                        Properties.Settings.Default.UserName = Username;
-                        Properties.Settings.Default.PassWord = _provider.GetRequiredService<EncryptionHelper>().EncryptAES(Password);
-                        Properties.Settings.Default.RememberAccount = true;
-                        Properties.Settings.Default.Save();
+                        Application.Current.Dispatcher.Invoke(() =>
+                        {
+                            MyMessageBox.ShowDialog("Tài khoản không tồn tại", MyMessageBox.Buttons.OK, MyMessageBox.Icons.Error);
+                        });
                     }
                     else
                     {
-                        Properties.Settings.Default.RememberAccount = false;
-                        Properties.Settings.Default.Save();
+                        Application.Current.Dispatcher.Invoke(() =>
+                        {
+                            MyMessageBox.ShowDialog("Đăng nhập thất bại", MyMessageBox.Buttons.OK, MyMessageBox.Icons.Error);
+                        });
                     }
-                }
-                else if (isSuccessLogin == false && role == null)
-                {
-                    MyMessageBox.ShowDialog("Tài khoản không tồn tại", MyMessageBox.Buttons.OK, MyMessageBox.Icons.Error);
-                }
-                else
-                {
-                    MyMessageBox.ShowDialog("Đăng nhập thất bại", MyMessageBox.Buttons.OK, MyMessageBox.Icons.Error);
-                }
+                });
             }
             catch (InvalidOperationException ioe)
             {
                 MyMessageBox.ShowDialog(ioe.Message, MyMessageBox.Buttons.OK, MyMessageBox.Icons.Warning);
+            }
+            finally
+            {
+                IsLoading = false;
             }
         }
 

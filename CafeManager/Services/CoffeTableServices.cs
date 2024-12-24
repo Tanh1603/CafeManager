@@ -18,12 +18,29 @@ namespace CafeManager.WPF.Services
         {
             try
             {
-                token.ThrowIfCancellationRequested();
+                _unitOfWork.ClearChangeTracker();
                 return await _unitOfWork.CoffeeTableList.GetAll(token);
             }
             catch (OperationCanceledException)
             {
-                throw new OperationCanceledException();
+                throw;
+            }
+        }
+
+        public async Task<IEnumerable<Coffeetable>> GetListExistCoffeeTable(CancellationToken token = default)
+        {
+            try
+            {
+                _unitOfWork.ClearChangeTracker();
+                return await _unitOfWork.CoffeeTableList.GetAllExistedAsync(token);
+            }
+            catch (OperationCanceledException)
+            {
+                throw;
+            }
+            catch (Exception)
+            {
+                throw;
             }
         }
 

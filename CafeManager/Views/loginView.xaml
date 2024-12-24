@@ -242,25 +242,60 @@
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition Width="auto" />
                                         <ColumnDefinition Width="*" />
-
                                     </Grid.ColumnDefinitions>
                                     <CheckBox
-                                        
-                                        
+                                        Margin="0,0,0,2"
                                         HorizontalAlignment="Center"
                                         VerticalAlignment="Center"
                                         Background="#844518"
-                                        Margin="0 0 0 2"
                                         FontSize="20"
                                         IsChecked="{Binding IsRememberAccount}" />
 
-                                    <TextBlock Margin="0,0,0,3" Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="18">
+                                    <TextBlock
+                                        Grid.Column="1"
+                                        Margin="0,0,0,3"
+                                        HorizontalAlignment="Center"
+                                        VerticalAlignment="Center"
+                                        FontSize="18">
 
                                         <Run FontWeight="Bold" Foreground="#844518">Nhớ tài khoản</Run>
                                     </TextBlock>
                                 </Grid>
                             </Grid>
 
+                            <!--<Grid>
+                                <materialDesign:Card
+                                    Width="300"
+                                    Height="70"
+                                    Margin="20"
+                                    Padding="10"
+                                    Background="#844518"
+                                    UniformCornerRadius="15">
+                                    <ProgressBar
+                                        Width="40"
+                                        Height="40"
+                                        Foreground="#ffffff"
+                                        IsIndeterminate="True"
+                                        Style="{StaticResource MaterialDesignCircularProgressBar}"
+                                        Value="50" />
+                                </materialDesign:Card>
+
+                                <Button
+                                    Width="300"
+                                    Height="70"
+                                    Margin="20"
+                                    HorizontalAlignment="Center"
+                                    materialDesign:ButtonAssist.CornerRadius="15"
+                                    Background="#844518"
+                                    BorderBrush="Transparent"
+                                    Command="{Binding LoginCommand}"
+                                    Content="Đăng nhập"
+                                    FontSize="18"
+                                    FontWeight="Bold"
+                                    Foreground="#ffffff"
+                                    IsDefault="True"
+                                    Visibility="{Binding IsLoading, Converter={StaticResource BooleanToVisibilityConverter}}" />
+                            </Grid>-->
                             <Button
                                 Width="300"
                                 Height="70"
@@ -270,11 +305,48 @@
                                 Background="#844518"
                                 BorderBrush="Transparent"
                                 Command="{Binding LoginCommand}"
-                                Content="Đăng nhập"
-                                FontSize="18"
-                                FontWeight="Bold"
-                                Foreground="#ffffff"
-                                IsDefault="True" />
+                                IsDefault="True">
+                                <Grid>
+                                    <Grid>
+                                        <Grid.Style>
+                                            <Style TargetType="Grid">
+                                                <Setter Property="Visibility" Value="Visible" />
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding IsLoading}" Value="True">
+                                                        <Setter Property="Visibility" Value="Collapsed" />
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </Grid.Style>
+                                        <TextBlock
+                                            FontSize="18"
+                                            FontWeight="Bold"
+                                            Foreground="#ffffff"
+                                            Text="Đăng nhập" />
+                                    </Grid>
+
+                                    <Grid>
+                                        <Grid.Style>
+                                            <Style TargetType="Grid">
+                                                <Setter Property="Visibility" Value="Collapsed" />
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding IsLoading}" Value="True">
+                                                        <Setter Property="Visibility" Value="Visible" />
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </Grid.Style>
+
+                                        <ProgressBar
+                                            Width="40"
+                                            Height="40"
+                                            Foreground="#ffffff"
+                                            IsIndeterminate="True"
+                                            Style="{StaticResource MaterialDesignCircularProgressBar}"
+                                            Value="50" />
+                                    </Grid>
+                                </Grid>
+                            </Button>
 
                             <TextBlock
                                 Margin="0,20,0,30"

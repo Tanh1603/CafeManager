@@ -36,6 +36,9 @@ namespace CafeManager.Core.DTOs
 
         public string TableName => $"Bàn {Tablenumber}";
 
+        [ObservableProperty]
+        private bool _isEmpty = true;
+
         public CoffeetableDTO Clone()
         {
             return new CoffeetableDTO()

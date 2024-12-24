@@ -6,8 +6,8 @@
     xmlns:ma="http://metro.mahapps.com/winfx/xaml/iconpacks"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:uc="clr-namespace:CafeManager.WPF.Assets.UsersControls"
-    mc:Ignorable="d"
-    Width="400">
+    Width="400"
+    mc:Ignorable="d">
     <Border BorderThickness="4" CornerRadius="10">
         <Border.Background>
             <LinearGradientBrush StartPoint="0,0.5" EndPoint="1,0.5">
@@ -74,13 +74,17 @@
                 <uc:infoTextInput
                     Grid.Row="0"
                     Grid.Column="1"
+                    Margin="0,10"
                     Hint="đường, sữa,..."
-                    Text="{Binding ModifyMaterial.Materialname, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" />
+                    Text="{Binding ModifyMaterial.Materialname, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
+                    Validation.ErrorTemplate="{StaticResource ErrorMessageReg}" />
                 <uc:infoTextInput
                     Grid.Row="1"
                     Grid.Column="1"
+                    Margin="0,10"
                     Hint="kg, gói"
-                    Text="{Binding ModifyMaterial.Unit, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" />
+                    Text="{Binding ModifyMaterial.Unit, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
+                    Validation.ErrorTemplate="{StaticResource ErrorMessageReg}" />
             </Grid>
 
             <Button

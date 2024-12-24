@@ -19,6 +19,8 @@ namespace CafeManager.WPF.ViewModels.AddViewModel
         public bool IsAdding { get; set; } = false;
 
         [ObservableProperty]
+        [NotifyPropertyChangedFor(nameof(CanSubmit))]
+        [NotifyCanExecuteChangedFor(nameof(SubmitCommand))]
         private MaterialDTO _modifyMaterial = new();
 
         public event Action<MaterialDTO> ModifyMaterialChanged;
@@ -42,12 +44,14 @@ namespace CafeManager.WPF.ViewModels.AddViewModel
             IsUpdating = false;
         }
 
-        [RelayCommand]
+        [RelayCommand(CanExecute = nameof(CanSubmit))]
         private void Submit()
         {
             ModifyMaterialChanged?.Invoke(ModifyMaterial.Clone());
             ClearValueOfFrom();
         }
+
+        public bool CanSubmit => !ModifyMaterial.GetErrors().Any();
 
         [RelayCommand]
         private void CloseUserControl()

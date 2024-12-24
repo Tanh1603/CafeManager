@@ -23,6 +23,6 @@
             x:Name="textBox"
             IsReadOnly="{Binding ElementName=InfoTextInput, Path=IsReadOnly}"
             Style="{StaticResource textbox}"
-            Text="{Binding ElementName=InfoTextInput, Path=Text, Mode=TwoWay}" />
+            Text="{Binding ElementName=InfoTextInput, Path=Text, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
     </Grid>
 </UserControl>

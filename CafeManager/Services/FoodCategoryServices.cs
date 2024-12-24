@@ -13,11 +13,16 @@ namespace CafeManager.WPF.Services
     {
         private readonly IUnitOfWork _unitOfWork = unitOfWork;
 
-        public async Task<IEnumerable<Foodcategory>> GetListFoodCategory()
+        public async Task<IEnumerable<Foodcategory>> GetAllListFoodCategory(CancellationToken token = default)
         {
             try
             {
-                return await _unitOfWork.FoodCategoryList.GetAllFoodCategoryAsync();
+                _unitOfWork.ClearChangeTracker();
+                return await _unitOfWork.FoodCategoryList.GetAll(token);
+            }
+            catch (OperationCanceledException)
+            {
+                throw new OperationCanceledException("Dừng lấy food");
             }
             catch (Exception)
             {
@@ -25,22 +30,20 @@ namespace CafeManager.WPF.Services
             }
         }
 
-        public async Task<IEnumerable<Food>> GetListFoodByFoodCatgoryId(int id)
-        {
-            return await _unitOfWork.FoodCategoryList.GetAllFoodByFoodCatgoryIdAsync(id);
-        }
-
-        public async Task<IEnumerable<Foodcategory>> GetAllListFoodCategory(CancellationToken token = default)
+        public async Task<IEnumerable<Foodcategory>> GetAllListExistFoodCategory(CancellationToken token)
         {
             try
             {
-                token.ThrowIfCancellationRequested();
                 _unitOfWork.ClearChangeTracker();
-                return await _unitOfWork.FoodCategoryList.GetAll(token);
+                return await _unitOfWork.FoodCategoryList.GetAllExistFoodCategoryAsync(token);
             }
             catch (OperationCanceledException)
             {
-                throw new OperationCanceledException("Dừng lấy food");
+                throw;
+            }
+            catch (Exception)
+            {
+                throw;
             }
         }
 

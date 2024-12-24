@@ -7,7 +7,6 @@
         <Setter Property="Padding" Value="15,10" />
         <Setter Property="VerticalAlignment" Value="Center" />
 
-
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="TextBoxBase">
@@ -27,14 +26,12 @@
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsMouseOver" Value="True">
                             <Setter TargetName="border" Property="BorderBrush" Value="#9b442a" />
-
                         </Trigger>
                         <Trigger Property="IsKeyboardFocused" Value="True">
                             <Setter TargetName="border" Property="BorderBrush" Value="#9b442a" />
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
-
             </Setter.Value>
         </Setter>
     </Style>
@@ -63,14 +60,12 @@
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsMouseOver" Value="True">
                             <Setter TargetName="border" Property="BorderBrush" Value="#9b442a" />
-
                         </Trigger>
                         <Trigger Property="IsKeyboardFocused" Value="True">
                             <Setter TargetName="border" Property="BorderBrush" Value="#9b442a" />
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
-
             </Setter.Value>
         </Setter>
     </Style>
@@ -84,9 +79,6 @@
         <Setter Property="MinHeight" Value="38" />
         <Setter Property="FontSize" Value="12" />
         <Setter Property="Padding" Value="10" />
-
-
-
 
         <Setter Property="VerticalAlignment" Value="Stretch" />
         <Setter Property="Template">
@@ -133,11 +125,8 @@
         <Setter Property="Background" Value="#D9C6B3" />
         <Setter Property="Foreground" Value="#844418" />
 
-
         <Setter Property="FontSize" Value="12" />
         <Setter Property="Padding" Value="10" />
-
-
 
         <Setter Property="MinWidth" Value="140" />
         <Setter Property="VerticalAlignment" Value="Center" />
@@ -156,15 +145,10 @@
                             HorizontalScrollBarVisibility="Hidden"
                             VerticalScrollBarVisibility="Hidden" />
                     </Border>
-
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
     </Style>
-
-
-
-
 
     <ControlTemplate x:Key="ErrorMessage">
 
@@ -183,30 +167,21 @@
                 Text="{Binding [0].ErrorContent}"
                 TextWrapping="Wrap" />
         </StackPanel>
-
-
-
     </ControlTemplate>
     <ControlTemplate x:Key="ErrorMessageReg">
 
         <StackPanel>
 
-
             <AdornedElementPlaceholder x:Name="textbox1" />
-
 
             <TextBlock
                 Width="{Binding ActualWidth, ElementName=textbox1}"
                 Foreground="Red"
                 Text="{Binding [0].ErrorContent}"
+                TextTrimming="CharacterEllipsis"
                 TextWrapping="Wrap" />
         </StackPanel>
-
-
-
     </ControlTemplate>
-
-
 
     <FontFamily x:Key="coffe">pack://application:,,,/Assets/Fonts/#Butter Chicken</FontFamily>
 </ResourceDictionary>

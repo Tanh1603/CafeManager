@@ -18,13 +18,12 @@ namespace CafeManager.WPF.ViewModels.AddViewModel
         [ObservableProperty]
         [NotifyPropertyChangedFor(nameof(CanSubmit))]
         [NotifyCanExecuteChangedFor(nameof(SubmitCommand))]
-        public FoodDTO _modifyFood;
+        public FoodDTO _modifyFood = new();
 
         [ObservableProperty]
         private FoodCategoryDTO? _selectedFoodCategory = new();
 
         [ObservableProperty]
-
         private ObservableCollection<FoodCategoryDTO> _listFoodCategory = [];
 
         public bool IsUpdating { get; set; } = false;
@@ -36,21 +35,12 @@ namespace CafeManager.WPF.ViewModels.AddViewModel
         {
             _provider = provider;
             _fileDialogService = _provider.GetRequiredService<FileDialogService>();
-            ModifyFood = new FoodDTO();
-            ModifyFood.ErrorsChanged += ModifyFood_ErrorsChanged;
-
-        }
-
-        private void ModifyFood_ErrorsChanged(object? sender, System.ComponentModel.DataErrorsChangedEventArgs e)
-        {
-            OnPropertyChanged(nameof(CanSubmit));
         }
 
         public void ReceiveFood(FoodDTO foodDTO)
         {
             ModifyFood = foodDTO.Clone();
-            SelectedFoodCategory
-                = ListFoodCategory.FirstOrDefault(x => x.Foodcategoryid == foodDTO.Foodcategoryid);
+            SelectedFoodCategory = ListFoodCategory.FirstOrDefault(x => x.Foodcategoryid == foodDTO.Foodcategoryid);
         }
 
         public void ReceiveListFoodCategory(List<FoodCategoryDTO> foodcategories) => ListFoodCategory = [.. foodcategories];
@@ -63,11 +53,12 @@ namespace CafeManager.WPF.ViewModels.AddViewModel
             IsUpdating = false;
         }
 
-        public bool CanSubmit => !ModifyFood.HasErrors;
+        public bool CanSubmit => !ModifyFood.GetErrors().Any();
 
         [RelayCommand(CanExecute = nameof(CanSubmit))]
         private void Submit()
         {
+            var a = ModifyFood.GetErrors();
             if (SelectedFoodCategory != null)
             {
                 ModifyFood.Foodcategoryid = SelectedFoodCategory.Foodcategoryid;

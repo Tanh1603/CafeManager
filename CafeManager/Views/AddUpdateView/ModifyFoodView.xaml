@@ -4,6 +4,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:adminviewmodels="clr-namespace:CafeManager.WPF.ViewModels.AdminViewModel"
     xmlns:adminviews="clr-namespace:CafeManager.WPF.Views.AdminView"
+    xmlns:converters="clr-namespace:CafeManager.WPF.Services.Converter"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
     xmlns:ma="http://metro.mahapps.com/winfx/xaml/iconpacks"
@@ -13,6 +14,10 @@
     Width="800"
     Height="450"
     mc:Ignorable="d">
+    <UserControl.Resources>
+        <converters:StringToDecimalConverter x:Key="StringToDecimalConverter" />
+    </UserControl.Resources>
+
     <Border BorderThickness="4" CornerRadius="10">
         <Border.Background>
             <LinearGradientBrush StartPoint="0,0.5" EndPoint="1,0.5">
@@ -142,7 +147,7 @@
                         Margin="0,10,0,20"
                         Hint="trà sữa, trà chanh,..."
                         Text="{Binding ModifyFood.Foodname, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
-                        Validation.ErrorTemplate="{StaticResource ErrorMessage}" />
+                        Validation.ErrorTemplate="{StaticResource ErrorMessageReg}" />
 
                     <Grid
                         Grid.Row="1"
@@ -175,15 +180,15 @@
                         Grid.Column="1"
                         Margin="0,0,0,20"
                         Hint="20000,..."
-                        Text="{Binding ModifyFood.Price, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
-                        Validation.ErrorTemplate="{StaticResource ErrorMessage}" />
+                        Text="{Binding ModifyFood.Price, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay, TargetNullValue='0', FallbackValue='0', ValidatesOnDataErrors=True, Converter={StaticResource StringToDecimalConverter}}"
+                        Validation.ErrorTemplate="{StaticResource ErrorMessageReg}" />
                     <uc:infoTextInput
                         Grid.Row="3"
                         Grid.Column="1"
                         Margin="0,0,0,20"
                         Hint="15%"
-                        Text="{Binding ModifyFood.Discountfood, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
-                        Validation.ErrorTemplate="{StaticResource ErrorMessage}" />
+                        Text="{Binding ModifyFood.Discountfood, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay, TargetNullValue='0', FallbackValue='0', ValidatesOnDataErrors=True, Converter={StaticResource StringToDecimalConverter}}"
+                        Validation.ErrorTemplate="{StaticResource ErrorMessageReg}" />
                 </Grid>
                 <Button
                     Grid.Row="3"

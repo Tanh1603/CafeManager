@@ -1,9 +1,6 @@
-﻿using System.ComponentModel;
-using System.Runtime.CompilerServices;
-using System.Windows.Media.Imaging;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
 using System.ComponentModel.DataAnnotations;
-using System.Windows.Controls;
-using CommunityToolkit.Mvvm.ComponentModel;
+using System.Windows.Media.Imaging;
 
 #nullable disable
 
@@ -31,7 +28,6 @@ namespace CafeManager.Core.DTOs
         private decimal _price;
 
         [ObservableProperty]
-
         [NotifyPropertyChangedFor(nameof(PriceDiscount))]
         private BitmapImage? _imagefood;
 

@@ -1,5 +1,6 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using System.Collections.ObjectModel;
+using System.ComponentModel.DataAnnotations;
 
 #nullable disable
 
@@ -11,9 +12,13 @@ namespace CafeManager.Core.DTOs
         private int materialid;
 
         [ObservableProperty]
+        [NotifyDataErrorInfo]
+        [Required(ErrorMessage = "Không được để trống")]
         private string materialname;
 
         [ObservableProperty]
+        [NotifyDataErrorInfo]
+        [Required(ErrorMessage = "Không được để trống")]
         private string unit;
 
         [ObservableProperty]

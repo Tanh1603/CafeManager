@@ -17,6 +17,7 @@
     <UserControl.Resources>
         <BooleanToVisibilityConverter x:Key="BoolToVis" />
         <converter:SeatingConverter x:Key="SeatingConverter" />
+        <converter:IntToStringConverter x:Key="IntToStringConverter" />
     </UserControl.Resources>
     <Grid>
         <Grid Margin="10,0">
@@ -119,7 +120,6 @@
                                                 RenderOptions.BitmapScalingMode="HighQuality"
                                                 Stretch="UniformToFill" />
                                         </Border.Background>
-
                                     </Border>
                                     <Grid Grid.Row="1" Margin="0,10,0,0">
                                         <Grid>
@@ -166,12 +166,9 @@
                                                     </StackPanel>
                                                 </materialDesign:PopupBox.PopupContent>
                                             </materialDesign:PopupBox>
-
                                         </Grid>
                                     </Grid>
-
                                 </Grid>
-
                             </Border>
                         </DataTemplate>
                     </ItemsControl.ItemTemplate>
@@ -239,7 +236,7 @@
                                 Grid.Row="0"
                                 Grid.Column="1"
                                 Margin="0,10,0,20"
-                                Text="{Binding Table.Tablenumber, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
+                                Text="{Binding Table.Tablenumber, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay, Converter={StaticResource IntToStringConverter}}"
                                 Validation.ErrorTemplate="{StaticResource ErrorMessage}" />
 
                             <TextBlock
@@ -288,9 +285,7 @@
                                     <Style BasedOn="{StaticResource ComboBoxItemStyle}" TargetType="ComboBoxItem">
                                         <Setter Property="Width" Value="{Binding ActualWidth, ElementName=cbstatus}" />
                                         <Setter Property="Height" Value="{Binding ActualHeight, ElementName=cbstatus}" />
-
                                     </Style>
-
                                 </ComboBox.ItemContainerStyle>
                                 <ComboBoxItem Content="Trống" />
                                 <ComboBoxItem Content="Đang sử dụng" />

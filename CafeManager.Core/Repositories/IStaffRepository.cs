@@ -14,5 +14,9 @@ namespace CafeManager.Core.Repositories
         Task<int> GetStaffFromTo(DateTime from, DateTime to, CancellationToken token = default);
 
         Task<decimal> GetTotalSalaryFromTo(DateTime from, DateTime to, CancellationToken token = default);
+
+        Task<List<decimal>> GetTotalSalaryByMonth(DateTime from, DateTime to, CancellationToken token = default);
+
+        Task<List<decimal>> GetTotalSalaryByYear(DateTime from, DateTime to, CancellationToken token = default);
     }
 }

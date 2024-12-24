@@ -16,6 +16,7 @@
         <converter:CurrencyConverter x:Key="CurrencyConverter" />
         <converter:DefaultAccountImageConverter x:Key="DefaultAccountImageConverter" />
         <converter:CornerRadiusClippingConverter x:Key="CornerRadiusClippingConverter" />
+        <converter:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
     </UserControl.Resources>
 
     <Grid>
@@ -263,39 +264,6 @@
                                 </Grid>
                             </Grid>
 
-                            <!--<Grid>
-                                <materialDesign:Card
-                                    Width="300"
-                                    Height="70"
-                                    Margin="20"
-                                    Padding="10"
-                                    Background="#844518"
-                                    UniformCornerRadius="15">
-                                    <ProgressBar
-                                        Width="40"
-                                        Height="40"
-                                        Foreground="#ffffff"
-                                        IsIndeterminate="True"
-                                        Style="{StaticResource MaterialDesignCircularProgressBar}"
-                                        Value="50" />
-                                </materialDesign:Card>
-
-                                <Button
-                                    Width="300"
-                                    Height="70"
-                                    Margin="20"
-                                    HorizontalAlignment="Center"
-                                    materialDesign:ButtonAssist.CornerRadius="15"
-                                    Background="#844518"
-                                    BorderBrush="Transparent"
-                                    Command="{Binding LoginCommand}"
-                                    Content="Đăng nhập"
-                                    FontSize="18"
-                                    FontWeight="Bold"
-                                    Foreground="#ffffff"
-                                    IsDefault="True"
-                                    Visibility="{Binding IsLoading, Converter={StaticResource BooleanToVisibilityConverter}}" />
-                            </Grid>-->
                             <Button
                                 Width="300"
                                 Height="70"
@@ -307,36 +275,14 @@
                                 Command="{Binding LoginCommand}"
                                 IsDefault="True">
                                 <Grid>
-                                    <Grid>
-                                        <Grid.Style>
-                                            <Style TargetType="Grid">
-                                                <Setter Property="Visibility" Value="Visible" />
-                                                <Style.Triggers>
-                                                    <DataTrigger Binding="{Binding IsLoading}" Value="True">
-                                                        <Setter Property="Visibility" Value="Collapsed" />
-                                                    </DataTrigger>
-                                                </Style.Triggers>
-                                            </Style>
-                                        </Grid.Style>
+                                    <Grid Visibility="{Binding IsLoading, Converter={StaticResource BooleanToVisibilityConverter}, ConverterParameter=Inverse}">
                                         <TextBlock
                                             FontSize="18"
                                             FontWeight="Bold"
                                             Foreground="#ffffff"
                                             Text="Đăng nhập" />
                                     </Grid>
-
-                                    <Grid>
-                                        <Grid.Style>
-                                            <Style TargetType="Grid">
-                                                <Setter Property="Visibility" Value="Collapsed" />
-                                                <Style.Triggers>
-                                                    <DataTrigger Binding="{Binding IsLoading}" Value="True">
-                                                        <Setter Property="Visibility" Value="Visible" />
-                                                    </DataTrigger>
-                                                </Style.Triggers>
-                                            </Style>
-                                        </Grid.Style>
-
+                                    <Grid Visibility="{Binding IsLoading, Converter={StaticResource BooleanToVisibilityConverter}}">
                                         <ProgressBar
                                             Width="40"
                                             Height="40"

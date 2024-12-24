@@ -7,5 +7,7 @@ namespace CafeManager.Core.Repositories
         Task<IEnumerable<Importdetail>> GetAllImportDetailAsync();
 
         Task<Importdetail> GetImportDetailByIdAsync(int id);
+
+
     }
 }

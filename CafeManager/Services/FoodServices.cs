@@ -1,4 +1,5 @@
 ﻿using CafeManager.Core.Data;
+using CafeManager.Core.DTOs;
 using CafeManager.Core.Services;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -117,6 +118,19 @@ namespace CafeManager.WPF.Services
             }
             catch (Exception)
             {
+                throw;
+            }
+        }
+
+        public async Task<List<FoodDTO>> GetMostSoldFoods(DateTime From, DateTime To, CancellationToken token = default)
+        {
+            try
+            {
+                return await _unitOfWork.FoodList.GetMostSoldFoods(From, To, token);
+            }
+            catch (Exception)
+            {
+
                 throw;
             }
         }

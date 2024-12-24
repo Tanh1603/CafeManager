@@ -2,6 +2,7 @@
 using CafeManager.Core.Repositories;
 using CafeManager.Infrastructure.Models;
 using Microsoft.EntityFrameworkCore;
+using System.Reflection.Metadata;
 
 namespace CafeManager.Infrastructure.Repositories
 {
@@ -110,6 +111,93 @@ namespace CafeManager.Infrastructure.Repositories
             }
             catch (Exception)
             {
+                throw;
+            }
+        }
+
+        public async Task<List<decimal>> GetTotalSalaryByMonth(DateTime from, DateTime to, CancellationToken token = default)
+        {
+            try
+            {
+               
+                DateOnly fromDO = new(from.Year, from.Month, from.Day);
+                DateOnly toDO = new(to.Year, to.Month, to.Day);
+
+                // Lấy tất cả lịch sử lương trong khoảng thời gian từ from đến to
+                var salaryHistory = await _cafeManagerContext.Staffsalaryhistories
+                    .Where(sh => sh.Effectivedate >= fromDO && sh.Effectivedate <= toDO && sh.Isdeleted == false)
+                    .ToListAsync(token);
+
+                // Tạo danh sách tất cả các tháng trong khoảng thời gian từ from đến to
+                var allMonths = Enumerable.Range(0, ((toDO.Year - fromDO.Year) * 12 + toDO.Month - fromDO.Month) + 1)
+                                          .Select(i => new DateTime(from.Year, from.Month, 1).AddMonths(i))
+                                          .ToList();
+
+                // Group by tháng và tính tổng lương cho mỗi tháng
+                var salaryGroupedByMonth = salaryHistory
+                    .GroupBy(sh => new DateTime(sh.Effectivedate.Year, sh.Effectivedate.Month, 1))  // Group by Year-Month
+                    .ToDictionary(
+                        g => g.Key, // Key is the month (DateTime representing the 1st day of the month)
+                        g => g.Sum(sh => sh.Salary) // Total salary for each month
+                    );
+
+                // Lấy tổng lương cho mỗi tháng, nếu không có thì trả về 0
+                var salaryList = allMonths.Select(month =>
+                {
+                    return salaryGroupedByMonth.ContainsKey(month) ? salaryGroupedByMonth[month] : 0;
+                }).ToList();
+
+                return salaryList;
+            }
+            catch (OperationCanceledException)
+            {
+                throw;
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+        }
+
+        public async Task<List<decimal>> GetTotalSalaryByYear(DateTime from, DateTime to, CancellationToken token = default)
+        {
+            try
+            {
+                DateOnly fromDO = new(from.Year, from.Month, from.Day);
+                DateOnly toDO = new(to.Year, to.Month, to.Day);
+
+                // Lấy tất cả lịch sử lương trong khoảng thời gian từ from đến to
+                var salaryHistory = await _cafeManagerContext.Staffsalaryhistories
+                    .Where(sh => sh.Effectivedate >= fromDO && sh.Effectivedate <= toDO && sh.Isdeleted == false)
+                    .ToListAsync(token);
+
+                // Tạo danh sách tất cả các năm trong khoảng thời gian từ from đến to
+                var allYears = Enumerable.Range(toDO.Year, to.Year - fromDO.Year + 1).ToList();
+
+                // Group by năm và tính tổng lương cho mỗi năm
+                var salaryGroupedByYear = salaryHistory
+                    .GroupBy(sh => new DateTime(sh.Effectivedate.Year, 1, 1))  // Group by Year
+                    .ToDictionary(
+                        g => g.Key.Year, // Key is the year
+                        g => g.Sum(sh => sh.Salary) // Total salary for each year
+                    );
+
+                // Lấy tổng lương cho mỗi năm, nếu không có thì trả về 0
+                var salaryList = allYears.Select(year =>
+                {
+                    return salaryGroupedByYear.ContainsKey(year) ? salaryGroupedByYear[year] : 0;
+                }).ToList();
+
+                return salaryList;
+            }
+            catch (OperationCanceledException)
+            {
+                throw;
+            }
+            catch (Exception)
+            {
+
                 throw;
             }
         }

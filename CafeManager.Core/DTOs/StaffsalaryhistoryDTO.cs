@@ -1,4 +1,5 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 
 namespace CafeManager.Core.DTOs
 {
@@ -11,9 +12,13 @@ namespace CafeManager.Core.DTOs
         private int _staffid;
 
         [ObservableProperty]
+        [NotifyDataErrorInfo]
+        [Required(ErrorMessage = "Lương không được trống")]
         private decimal _salary;
 
         [ObservableProperty]
+        [NotifyDataErrorInfo]
+        [Required(ErrorMessage = "Ngày có hiêu lực không được trống")]
         private DateOnly _effectivedate = DateOnly.FromDateTime(DateTime.Now);
 
         public StaffsalaryhistoryDTO Clone()

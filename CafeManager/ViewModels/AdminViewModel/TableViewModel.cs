@@ -62,6 +62,11 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
             }
             catch (OperationCanceledException)
             {
+                throw;
+            }
+            catch (Exception)
+            {
+                throw;
             }
             finally
             {
@@ -129,7 +134,7 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
 
         public bool CanSubmit => !Table.HasErrors;
 
-        [RelayCommand(CanExecute =nameof(CanSubmit))]
+        [RelayCommand(CanExecute = nameof(CanSubmit))]
         private async Task ModifyTable()
         {
             try

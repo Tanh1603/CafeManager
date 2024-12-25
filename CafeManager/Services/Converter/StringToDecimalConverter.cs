@@ -61,4 +61,26 @@ namespace CafeManager.WPF.Services.Converter
             return 0;
         }
     }
+
+    public class DecimalToPercentageConverter : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            if (value is decimal decimalValue)
+            {
+                return $"{decimalValue:0}%";
+            }
+            return "0%";
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            var stringValue = value?.ToString().Replace("%", "").Trim();
+            if (decimal.TryParse(stringValue, NumberStyles.Any, culture, out var result))
+            {
+                return result;
+            }
+            return 0;
+        }
+    }
 }

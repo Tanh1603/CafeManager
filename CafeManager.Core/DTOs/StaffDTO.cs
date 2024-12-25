@@ -1,6 +1,7 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 using System.Runtime.CompilerServices;
 
 #nullable disable
@@ -13,27 +14,56 @@ namespace CafeManager.Core.DTOs
         private int _staffid;
 
         [ObservableProperty]
+        [NotifyDataErrorInfo]
+        [Required(ErrorMessage = "Tên nhân viên không được trống")]
         private string _staffname;
 
         [ObservableProperty]
+        [NotifyDataErrorInfo]
+        [CustomValidation(typeof(StaffDTO), nameof(ValidatePhone))]
         private string _phone;
 
+        public static ValidationResult ValidatePhone(object phone, ValidationContext context)
+        {
+            if (string.IsNullOrWhiteSpace(phone.ToString()))
+            {
+                return new ValidationResult("Số điện thoại không được để trống");
+            }
+
+            if (!string.IsNullOrEmpty(phone.ToString()) && phone.ToString().All(char.IsLetter))
+            {
+                return new ValidationResult("Số điện thoại chỉ được chứa chữ cái");
+            }
+
+            return ValidationResult.Success;
+        }
+
         [ObservableProperty]
+        [NotifyDataErrorInfo]
+        [Required(ErrorMessage = "Sinh nhật không được trống")]
         private DateOnly _birthday = DateOnly.FromDateTime(DateTime.Now);
 
         [ObservableProperty]
+        [NotifyDataErrorInfo]
+        [Required(ErrorMessage = "Địa chỉ không được trống")]
         private string _address;
 
         [ObservableProperty]
+        [NotifyDataErrorInfo]
+        [Required(ErrorMessage = "Ngày vào làm không được trống")]
         private DateOnly _startworkingdate = DateOnly.FromDateTime(DateTime.Now);
 
         [ObservableProperty]
+        [NotifyDataErrorInfo]
+        [Required(ErrorMessage = "Giới tính không được trống")]
         private bool _sex;
 
         [ObservableProperty]
         private DateOnly? _endworkingdate = null;
 
         [ObservableProperty]
+        [NotifyDataErrorInfo]
+        [Required(ErrorMessage = "Vai trò không được trống")]
         private string _role;
 
         [ObservableProperty]

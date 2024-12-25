@@ -16,16 +16,22 @@ namespace CafeManager.WPF.Services.Converter
             {
                 return decimalValue.ToString("C0", CultureInfo.GetCultureInfo("vi-VN"));
             }
-            return value?.ToString();
+            return decimal.Zero.ToString("C0", CultureInfo.GetCultureInfo("vi-VN"));
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
         {
+            if (value == null || string.IsNullOrWhiteSpace(value.ToString()))
+            {
+                return decimal.Zero;
+            }
+
             if (decimal.TryParse(value.ToString(), NumberStyles.Currency, CultureInfo.GetCultureInfo("vi-VN"), out var result))
             {
                 return result;
             }
-            return value;
+
+            return decimal.Zero;
         }
     }
 }

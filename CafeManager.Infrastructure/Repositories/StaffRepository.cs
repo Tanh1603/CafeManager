@@ -119,13 +119,12 @@ namespace CafeManager.Infrastructure.Repositories
         {
             try
             {
-               
                 DateOnly fromDO = new(from.Year, from.Month, from.Day);
                 DateOnly toDO = new(to.Year, to.Month, to.Day);
 
                 // Lấy tất cả lịch sử lương trong khoảng thời gian từ from đến to
                 var salaryHistory = await _cafeManagerContext.Staffsalaryhistories
-                    .Where(sh => sh.Effectivedate >= fromDO && sh.Effectivedate <= toDO && sh.Isdeleted == false)
+                    .Where(sh => sh.Effectivedate >= fromDO && sh.Effectivedate <= toDO && sh.Isdeleted == false && sh.Staff.Isdeleted == false)
                     .ToListAsync(token);
 
                 // Tạo danh sách tất cả các tháng trong khoảng thời gian từ from đến to
@@ -155,7 +154,6 @@ namespace CafeManager.Infrastructure.Repositories
             }
             catch (Exception)
             {
-
                 throw;
             }
         }
@@ -197,7 +195,6 @@ namespace CafeManager.Infrastructure.Repositories
             }
             catch (Exception)
             {
-
                 throw;
             }
         }

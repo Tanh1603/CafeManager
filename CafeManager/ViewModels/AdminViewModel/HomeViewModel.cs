@@ -1,33 +1,15 @@
-﻿using CommunityToolkit.Mvvm.ComponentModel;
-
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Runtime.Serialization;
+﻿using CafeManager.Core.DTOs;
+using CafeManager.Core.Services;
+using CafeManager.WPF.Services;
+using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using LiveCharts;
-using PdfSharp.Charting;
-using System.DirectoryServices;
 using LiveCharts.Wpf;
-using SeriesCollection = LiveCharts.SeriesCollection;
-using System.Windows;
-using Newtonsoft.Json.Linq;
-using LiveCharts.Defaults;
-using System.Windows.Controls;
-using System.Windows.Controls.Primitives;
-using System.Windows.Media;
-using CafeManager.Core.Services;
 using Microsoft.Extensions.DependencyInjection;
-using CafeManager.WPF.Services;
-using LiveChartsCore.SkiaSharpView;
-using LiveChartsCore.Kernel.Sketches;
-using Microsoft.Identity.Client;
-using CafeManager.Core.DTOs;
-using System.ComponentModel;
 using System.Collections;
-using System.Reflection.Metadata.Ecma335;
+using System.ComponentModel;
+using System.Windows.Media;
+using SeriesCollection = LiveCharts.SeriesCollection;
 
 namespace CafeManager.WPF.ViewModels.AdminViewModel
 {
@@ -41,8 +23,8 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
         private readonly MaterialSupplierServices _materialSupplierServices;
         private readonly ErrorViewModel _errorViewModel;
 
-
         private CancellationToken _token = default;
+
         [ObservableProperty]
         private bool _isLoading;
 
@@ -73,17 +55,14 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
         [ObservableProperty]
         private List<decimal> _revenueYear;
 
-
         [ObservableProperty]
         private List<int> _invoiceMonth;
-
 
         [ObservableProperty]
         private List<int> _invoiceDay;
 
         [ObservableProperty]
         private List<int> _invoiceYear;
-
 
         [ObservableProperty]
         private List<decimal> _totalImportDay;
@@ -93,7 +72,6 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
 
         [ObservableProperty]
         private List<decimal> _totalImportYear;
-
 
         [ObservableProperty]
         private List<decimal> _totalSalaryMonth;
@@ -116,7 +94,6 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
         [ObservableProperty]
         private List<string> _labelChartZoom;
 
-
         [ObservableProperty]
         private List<string> _labelChartCol;
 
@@ -125,8 +102,6 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
 
         [ObservableProperty]
         private Func<double, string> _yFormatterChartZoom;
-
-
 
         [ObservableProperty]
         private Func<double, string> _xFormatterChartCol;
@@ -138,7 +113,6 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
         private string _selectedTimeChartCol = "Monthly";
 
         [ObservableProperty]
-
         private string _selectedTopic = "Revenue";
 
         private DateTime _from = new(DateTime.Now.Year, DateTime.Now.Month, 1);
@@ -158,23 +132,22 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
                 }
             }
         }
+
         private bool ValidateDates()
         {
             bool hasError = false;
             _errorViewModel.RemoveErrors(nameof(From));
             _errorViewModel.RemoveErrors(nameof(To));
 
-         
-          
-                if (From > To)
-                {
-                    _errorViewModel.AddError(nameof(From), "Ngày bắt đầu không được lớn hơn ngày kết thúc");
-                    _errorViewModel.AddError(nameof(To), "Ngày kết thúc không được nhỏ hơn ngày bắt đầu");
-                    hasError = true;
-                }
+            if (From > To)
+            {
+                _errorViewModel.AddError(nameof(From), "Ngày bắt đầu không được lớn hơn ngày kết thúc");
+                _errorViewModel.AddError(nameof(To), "Ngày kết thúc không được nhỏ hơn ngày bắt đầu");
+                hasError = true;
+            }
             return hasError;
-            
         }
+
         private DateTime _to = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1).AddMonths(1).AddDays(-1);
 
         public DateTime To
@@ -205,7 +178,6 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
         [ObservableProperty]
         private int _xMax;
 
-
         [ObservableProperty]
         private List<FoodDTO> _mostSoldFood;
 
@@ -222,7 +194,6 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
             _importServices = provider.GetRequiredService<ImportServices>();
             _errorViewModel = new ErrorViewModel();
             _errorViewModel.ErrorsChanged += _errorViewModel_ErrorsChanged;
-
         }
 
         private void _errorViewModel_ErrorsChanged(object? sender, DataErrorsChangedEventArgs e)
@@ -258,7 +229,6 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
                 await LoadChartZoom(From, To);
                 await LoadColumnSeries(To, From);
 
-
                 IsLoading = false;
             }
             catch (OperationCanceledException)
@@ -273,12 +243,10 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
 
         public async Task LoadChartZoom(DateTime from, DateTime to)
         {
-
             XMin = 0;
 
             if (ChartZoomCollection == null)
             {
-
                 ChartZoomCollection = new SeriesCollection()
             { new LineSeries()
             {
@@ -296,26 +264,14 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
                             {
                                 new GradientStop { Offset = 0.5, Color = (System.Windows.Media.Color)System.Windows.Media.ColorConverter.ConvertFromString("#d5b096") },
                                 new GradientStop { Offset = 1, Color = (System.Windows.Media.Color)System.Windows.Media.ColorConverter.ConvertFromString("#dcd1c3") }
-
-
                             }
                 },
                 LabelPoint = point => $" {point.Y:N0} VNĐ",
-
             }
-
             };
-
             }
-
-
-
-
-
 
             var lineSeries = _chartZoomCollection[0] as LineSeries;
-
-
 
             switch (SelectedTimeChartZoom)
             {
@@ -334,9 +290,6 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
                         lineSeries.Values = new ChartValues<decimal>(TotalImportDay);
                     }
                     OnPropertyChanged(nameof(ChartZoomCollection));
-
-
-
 
                     XMax = (to - from).Days;
 
@@ -374,10 +327,6 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
                     }
                     OnPropertyChanged(nameof(ChartZoomCollection));
 
-
-
-
-
                     XMax = (to.Month - from.Month) + (to.Year - from.Year) * 12;
                     XFormatterChartZoom = value =>
                     {
@@ -406,15 +355,13 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
                     }
                     OnPropertyChanged(nameof(ChartZoomCollection));
 
-
-                    XMax = to.Year - from.Year;     
+                    XMax = to.Year - from.Year;
                     XFormatterChartZoom = value =>
                     {
                         var year = from.Year + (int)value;
                         return year.ToString();
                     };
 
-                   
                     var years = Enumerable.Range(from.Year, (to.Year - from.Year) + 1)
                                            .Select(year => year.ToString())
                                            .ToList();
@@ -422,16 +369,9 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
                     break;
             }
 
-
-
-
             YFormatterChartZoom = value => value.ToString("N0");
             ZoomingMode = ZoomingOptions.X;
-
-
-
         }
-
 
         [RelayCommand]
         public void ChangeTimeChartZoom(string time)
@@ -443,7 +383,6 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
         [RelayCommand]
         public void ChangeTopic(string topic)
         {
-
             SelectedTopic = topic;
             var revenueSeries = ChartZoomCollection.FirstOrDefault(s => s.Title == "Doanh thu")
                            ?? new LineSeries
@@ -463,8 +402,6 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
                             {
                                 new GradientStop { Offset = 0.5, Color = (System.Windows.Media.Color)System.Windows.Media.ColorConverter.ConvertFromString("#d5b096") },
                                 new GradientStop { Offset = 1, Color = (System.Windows.Media.Color)System.Windows.Media.ColorConverter.ConvertFromString("#dcd1c3") }
-
-
                             }
                                },
                                LabelPoint = point => $" {point.Y:N0} VNĐ",
@@ -486,7 +423,6 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
                                                     {
                                                         new GradientStop { Offset = 0.5, Color = (System.Windows.Media.Color)System.Windows.Media.ColorConverter.ConvertFromString("#d5b096") },
                                                         new GradientStop { Offset = 1, Color = (System.Windows.Media.Color)System.Windows.Media.ColorConverter.ConvertFromString("#dcd1c3") }
-
                                                     }
                                      },
                                      LabelPoint = point => $" {point.Y:N0} Hóa đơn",
@@ -507,8 +443,6 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
                     {
                         new GradientStop { Offset = 0.5, Color = (System.Windows.Media.Color)System.Windows.Media.ColorConverter.ConvertFromString("#d5b096") },
                         new GradientStop { Offset = 1, Color = (System.Windows.Media.Color)System.Windows.Media.ColorConverter.ConvertFromString("#dcd1c3") }
-
-
                      }
                 },
                 LabelPoint = point => $" {point.Y:N0} đơn nhập",
@@ -534,7 +468,6 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
             }
             _ = LoadChartZoom(From, To);
         }
-
 
         public async Task LoadColumnSeries(DateTime from, DateTime to)
         {
@@ -580,7 +513,6 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
             {
                 case "Monthly":
 
-
                     columnSeries.Values = new ChartValues<decimal>(RevenueMonth);
                     columnSeries1.Values = new ChartValues<decimal>(TotalSalaryMonth);
                     columnSeries2.Values = new ChartValues<decimal>(TotalMaterialCostMonth);
@@ -614,18 +546,15 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
                         return year.ToString();
                     };
 
-
                     var years = Enumerable.Range(from.Year, (to.Year - from.Year) + 1)
                                            .Select(year => year.ToString())
                                            .ToList();
                     LabelChartCol = years;
 
-
-
-
                     break;
             }
         }
+
         [RelayCommand]
         public void ChangeTimeChartCol(string time)
         {

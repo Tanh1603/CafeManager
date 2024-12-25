@@ -84,6 +84,16 @@
                                 <Border.Style>
                                     <Style TargetType="Border">
 
+                                        <Setter Property="BorderBrush">
+                                            <Setter.Value>
+                                                <LinearGradientBrush StartPoint="0, 0.5">
+                                                    <GradientStop Offset="0" Color="#c69a5d" />
+                                                    <GradientStop Offset="0.5" Color="#cb925d" />
+
+                                                    <GradientStop Offset="1" Color="#d4b096" />
+                                                </LinearGradientBrush>
+                                            </Setter.Value>
+                                        </Setter>
                                         <Style.Triggers>
                                             <DataTrigger Binding="{Binding Isdeleted}" Value="true">
                                                 <Setter Property="BorderBrush" Value="Red" />
@@ -91,14 +101,6 @@
                                         </Style.Triggers>
                                     </Style>
                                 </Border.Style>
-                                <Border.BorderBrush>
-                                    <LinearGradientBrush StartPoint="0, 0.5">
-                                        <GradientStop Offset="0" Color="#c69a5d" />
-                                        <GradientStop Offset="0.5" Color="#cb925d" />
-
-                                        <GradientStop Offset="1" Color="#d4b096" />
-                                    </LinearGradientBrush>
-                                </Border.BorderBrush>
                                 <Border.Background>
                                     <LinearGradientBrush StartPoint="0,0.5" EndPoint="1,0.5">
                                         <GradientStop Offset="1" Color="#fee3d4" />
@@ -125,7 +127,7 @@
                                         <Grid>
                                             <Grid.ColumnDefinitions>
                                                 <ColumnDefinition Width="*" />
-                                                <ColumnDefinition Width="*" />
+                                                <ColumnDefinition Width="auto" />
                                             </Grid.ColumnDefinitions>
                                             <TextBlock
                                                 Margin="10,0,0,0"
@@ -254,7 +256,7 @@
                                 ItemsSource="{Binding TypeTable}"
                                 SelectedItem="{Binding Table.Seatingcapacity, Mode=TwoWay}"
                                 Style="{StaticResource ComboBoxStyle}"
-                                Validation.ErrorTemplate="{StaticResource ErrorMessage}">
+                                Validation.ErrorTemplate="{StaticResource ErrorMessageReg}">
                                 <ComboBox.ItemContainerStyle>
                                     <Style BasedOn="{StaticResource ComboBoxItemStyle}" TargetType="ComboBoxItem">
                                         <Setter Property="Width" Value="{Binding ActualWidth, ElementName=cbtabel}" />
@@ -280,7 +282,7 @@
                                 Margin="0,0,0,20"
                                 SelectedValue="{Binding Table.Statustable, Mode=TwoWay}"
                                 Style="{StaticResource ComboBoxStyle}"
-                                Validation.ErrorTemplate="{StaticResource ErrorMessage}">
+                                Validation.ErrorTemplate="{StaticResource ErrorMessageReg}">
                                 <ComboBox.ItemContainerStyle>
                                     <Style BasedOn="{StaticResource ComboBoxItemStyle}" TargetType="ComboBoxItem">
                                         <Setter Property="Width" Value="{Binding ActualWidth, ElementName=cbstatus}" />

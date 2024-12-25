@@ -4,28 +4,28 @@ using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Data;
 
 namespace CafeManager.WPF.Services.Converter
 {
-    public class DateOnlyToDateTimeConverter : IValueConverter
+    public class BooleanToVisibilityConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            if (value is DateOnly dateOnly)
+            bool isVisible = value is bool boolean && boolean;
+
+            if (parameter?.ToString() == "Inverse")
             {
-                return new DateTime(dateOnly.Year, dateOnly.Month, dateOnly.Day);
+                isVisible = !isVisible;
             }
-            return string.Empty;
+
+            return isVisible ? Visibility.Visible : Visibility.Collapsed;
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            if (value is DateTime dateTime)
-            {
-                return DateOnly.FromDateTime(dateTime);
-            }
-            return string.Empty;
+            throw new NotImplementedException();
         }
     }
 }

@@ -16,7 +16,6 @@
     xmlns:uc="clr-namespace:CafeManager.WPF.Assets.UsersControls"
     xmlns:view="clr-namespace:CafeManager.WPF.Views"
     xmlns:vm="clr-namespace:CafeManager.WPF.ViewModels.AddViewModel"
-    Width="940"
     Height="Auto"
     d:DataContext="{d:DesignInstance Type=addviewmodel:AddImportViewModel}"
     mc:Ignorable="d">
@@ -24,6 +23,7 @@
     <UserControl.Resources>
         <BooleanToVisibilityConverter x:Key="BoolToVis" />
         <service:RowIndexConverter x:Key="RowIndexConverter" />
+        <service:CurrencyConverter x:Key="CurrencyConverter" />
     </UserControl.Resources>
 
     <Grid>
@@ -313,7 +313,7 @@
                                         Foreground="#844418"
                                         Text="NSX: " />
                                     <DatePicker
-                                        Width="130"
+                                        Width="150"
                                         Margin="10,0,10,0"
                                         HorizontalAlignment="Left"
                                         materialDesign:HintAssist.Hint="Pick Date"
@@ -327,7 +327,7 @@
                                         Foreground="#844418"
                                         Text="HSD: " />
                                     <DatePicker
-                                        Width="130"
+                                        Width="150"
                                         Margin="10,0,0,0"
                                         HorizontalAlignment="Left"
                                         materialDesign:HintAssist.Hint="Pick Date"
@@ -345,6 +345,7 @@
                                         Text="Nhà sản xuất: " />
                                     <TextBox
                                         Width="140"
+                                        MinWidth="200"
                                         VerticalAlignment="Center"
                                         Style="{StaticResource textbox}"
                                         Text="{Binding CurrentImportDetail.Materialsupplier.Manufacturer, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" />
@@ -523,8 +524,15 @@
                 <!--  Tổng giá trị  -->
                 <Grid Margin="30,10,0,0">
                     <StackPanel Orientation="Horizontal">
-                        <TextBlock Text="Tổng giá trị: " FontSize="20" FontWeight="Bold" Foreground="#844418" />
-                        <TextBlock Text="{Binding ImportPrice, StringFormat={}{0:0}}" FontSize="20" FontWeight="Bold" />
+                        <TextBlock
+                            FontSize="20"
+                            FontWeight="Bold"
+                            Foreground="#844418"
+                            Text="Tổng giá trị: " />
+                        <TextBlock
+                            FontSize="20"
+                            FontWeight="Bold"
+                            Text="{Binding ImportPrice, StringFormat={}{0:0}, Converter={StaticResource CurrencyConverter}}" />
                     </StackPanel>
                 </Grid>
 

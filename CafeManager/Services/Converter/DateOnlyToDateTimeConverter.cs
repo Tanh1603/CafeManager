@@ -16,7 +16,7 @@ namespace CafeManager.WPF.Services.Converter
             {
                 return new DateTime(dateOnly.Year, dateOnly.Month, dateOnly.Day);
             }
-            return null;
+            return string.Empty;
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
@@ -25,7 +25,7 @@ namespace CafeManager.WPF.Services.Converter
             {
                 return DateOnly.FromDateTime(dateTime);
             }
-            return null;
+            return string.Empty;
         }
     }
 }

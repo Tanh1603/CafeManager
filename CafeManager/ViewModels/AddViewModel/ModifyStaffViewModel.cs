@@ -31,6 +31,8 @@ namespace CafeManager.WPF.ViewModels.AddViewModel
         private bool _isEnable = true;
 
         [ObservableProperty]
+        [NotifyPropertyChangedFor(nameof(CanSubmit))]
+        [NotifyCanExecuteChangedFor(nameof(SubmitModifyStaffCommand))]
         private StaffDTO _modifyStaff = new();
 
         [ObservableProperty]
@@ -135,7 +137,9 @@ namespace CafeManager.WPF.ViewModels.AddViewModel
 
         public event Action<StaffDTO>? StaffChanged;
 
-        [RelayCommand]
+        public bool CanSubmit => !ModifyStaff.GetErrors().Any();
+
+        [RelayCommand(CanExecute = nameof(CanSubmit))]
         private void SubmitModifyStaff()
         {
             if (IsAdding)

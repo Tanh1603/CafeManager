@@ -8,9 +8,6 @@ using CafeManager.WPF.Views.UserView;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.VisualBasic;
-using System.Buffers;
-using Microsoft.IdentityModel.Tokens;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Windows;
@@ -25,7 +22,7 @@ namespace CafeManager.WPF.ViewModels.UserViewModel
         private readonly InvoiceServices _invoiceServices;
         private readonly StaffServices _staffServices;
         private readonly IMapper _mapper;
-        private List<FoodDTO> _allFood = [];
+        private List<FoodDTO> _allFood;
 
         [ObservableProperty]
         private bool _isLoading;
@@ -36,9 +33,9 @@ namespace CafeManager.WPF.ViewModels.UserViewModel
         [ObservableProperty]
         private ObservableCollection<FoodCategoryDTO> _listFoodCategoryDTO = [];
 
-        private FoodCategoryDTO? _selectedFoodCategory;
+        private FoodCategoryDTO _selectedFoodCategory = new();
 
-        public FoodCategoryDTO? SelectedFoodCategory
+        public FoodCategoryDTO SelectedFoodCategory
         {
             get => _selectedFoodCategory;
             set
@@ -47,7 +44,6 @@ namespace CafeManager.WPF.ViewModels.UserViewModel
                 {
                     _selectedFoodCategory = value;
                     ListFoodDTO = value == null ? [.. _allFood] : [.. value.Foods.Where(x => x.Isdeleted == false) ?? []];
-                    OnPropertyChanged();
                 }
             }
         }
@@ -61,7 +57,7 @@ namespace CafeManager.WPF.ViewModels.UserViewModel
                 if (_listFoodDTO != value)
                 {
                     _listFoodDTO = value;
-                    OnPropertyChanged();
+                    OnPropertyChanged(nameof(ListFoodDTO));
                 }
             }
         }
@@ -106,10 +102,10 @@ namespace CafeManager.WPF.ViewModels.UserViewModel
             {
                 token.ThrowIfCancellationRequested();
                 IsLoading = true;
-                IEnumerable<Coffeetable> dbListCoffeeTable = (await _coffeTableServices.GetListExistCoffeeTable(token));
-                IEnumerable<Foodcategory> dbListFoodCategory = (await _foodCategoryServices.GetAllListExistFoodCategory(token));
-                IEnumerable<Staff> dbStaff = (await _staffServices.GetListExistStaff(token));
-                IEnumerable<Food> dbAllFood = (await _foodServices.GetAllExistFood(token));
+                var dbListCoffeeTable = (await _coffeTableServices.GetListCoffeTable(token)).Where(x => x.Isdeleted == false);
+                var dbListFoodCategory = (await _foodCategoryServices.GetAllListFoodCategory(token)).Where(x => x.Isdeleted == false);
+                var dbStaff = (await _staffServices.GetListStaff(token)).Where(x => x.Isdeleted == false);
+                var dbAllFood = (await _foodServices.GetAllFood(token)).Where(x => x.Isdeleted == false);
 
                 ListCoffeeTableDTO = [.. _mapper.Map<List<CoffeetableDTO>>(dbListCoffeeTable)];
                 ListFoodCategoryDTO = [.. _mapper.Map<List<FoodCategoryDTO>>(dbListFoodCategory)];
@@ -118,9 +114,10 @@ namespace CafeManager.WPF.ViewModels.UserViewModel
                 _allFood = [.. _mapper.Map<List<FoodDTO>>(dbAllFood)];
                 IsLoading = false;
             }
-            catch (OperationCanceledException)
+            catch (OperationCanceledException oe)
             {
-                throw new OperationCanceledException("LoadData của OrderViewModel bị hủy");
+                Debug.WriteLine(oe.Message);
+                throw;
             }
             finally
             {
@@ -138,7 +135,6 @@ namespace CafeManager.WPF.ViewModels.UserViewModel
                     MyMessageBox.ShowDialog($"Bạn muốn tạo hóa đơn cho {tableDTO.TableName} ?", MyMessageBox.Buttons.Yes_No, MyMessageBox.Icons.Question);
                 if (messageBox.Equals("1"))
                 {
-                    tableDTO.IsEmpty = false;
                     SelectedInvoiceDTO = new InvoiceDTO()
                     {
                         Coffeetableid = tableDTO.Coffeetableid,
@@ -230,11 +226,6 @@ namespace CafeManager.WPF.ViewModels.UserViewModel
                     MyMessageBox.Show("Vui lòng chọn người thanh toán");
                     return;
                 }
-                if (SelectedPaymentMethod.IsNullOrEmpty())
-                {
-                    MyMessageBox.ShowDialog("Vui lòng chọn phương thức thanh toán");
-                    return;
-                }
                 string messageBox = string.Empty;
                 if (SelectedInvoiceDTO.IsCustomer)
                 {
@@ -247,27 +238,27 @@ namespace CafeManager.WPF.ViewModels.UserViewModel
 
                 if (messageBox.Equals("1"))
                 {
+                    IsLoading = true;
                     var addInvoice = await AddInvoiceToDataBase("Hóa đơn đã thanh toán");
                     if (addInvoice != null)
                     {
-                        var tableDTO = ListCoffeeTableDTO.FirstOrDefault(x => x.Coffeetableid == SelectedInvoiceDTO.Coffeetableid);
-                        if (tableDTO != null)
-                        {
-                            tableDTO.IsEmpty = true;
-                        }
-
                         ListInvoiceDTO.Remove(SelectedInvoiceDTO);
                         MyMessageBox.ShowDialog("Thanh toán hóa đơn thành công", MyMessageBox.Buttons.OK, MyMessageBox.Icons.None);
                         SelectedInvoiceDTO = new();
                         var exportInvocie = _mapper.Map<InvoiceDTO>(addInvoice);
                         ShowInvoice(_mapper.Map<InvoiceDTO>(addInvoice));
                         OnPropertyChanged(nameof(ListCustomerInvoiceDTO));
+                        IsLoading = false;
                     }
                 }
             }
             catch (InvalidOperationException ioe)
             {
                 MyMessageBox.Show(ioe.Message);
+            }
+            finally
+            {
+                IsLoading = false;
             }
         }
 
@@ -307,24 +298,25 @@ namespace CafeManager.WPF.ViewModels.UserViewModel
 
                 if (messageBox.Equals("1"))
                 {
+                    IsLoading = true;
                     var cancelInvoice = await AddInvoiceToDataBase("Hóa đơn đã bị hủy");
                     if (cancelInvoice != null)
                     {
-                        var tableDTO = ListCoffeeTableDTO.FirstOrDefault(x => x.Coffeetableid == SelectedInvoiceDTO.Coffeetableid);
-                        if (tableDTO != null)
-                        {
-                            tableDTO.IsEmpty = true;
-                        }
                         ListInvoiceDTO.Remove(SelectedInvoiceDTO);
                         MyMessageBox.Show("Hủy hóa đơn thành công");
                         SelectedInvoiceDTO = new();
                         OnPropertyChanged(nameof(ListCustomerInvoiceDTO));
                     }
+                    IsLoading = false;
                 }
             }
             catch (InvalidOperationException ioe)
             {
                 MyMessageBox.Show(ioe.Message);
+            }
+            finally
+            {
+                IsLoading = false;
             }
         }
 
@@ -338,7 +330,7 @@ namespace CafeManager.WPF.ViewModels.UserViewModel
             }
             if (SelectedInvoiceDTO.Coffeetableid == null)
             {
-                MyMessageBox.ShowDialog("Đang chọn hóa đơn mang về vui lòng chọn bàn có hóa đơn");
+                MyMessageBox.ShowDialog("Đang chọn hóa đơn mang về vui lòng bàn có hóa đơn");
                 return;
             }
             if (SelectedInvoiceDTO.Coffeetableid == SelectedSwapTable.Coffeetableid)

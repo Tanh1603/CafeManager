@@ -29,14 +29,9 @@
     <Grid>
         <Border
             Height="auto"
+            Background="#dac5b4"
             BorderThickness="4"
             CornerRadius="10">
-            <Border.Background>
-                <LinearGradientBrush StartPoint="0,0.5" EndPoint="1,0.5">
-                    <GradientStop Offset="0" Color="#d4b096" />
-                    <GradientStop Offset="1" Color="#dac5b4" />
-                </LinearGradientBrush>
-            </Border.Background>
             <Border.BorderBrush>
                 <LinearGradientBrush StartPoint="0,0.5">
                     <GradientStop Offset="0" Color="#5e2313" />
@@ -130,51 +125,111 @@
                                     </Button>
                                 </StackPanel>
 
-                                <StackPanel Orientation="Horizontal">
+                                <Grid>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition />
+                                        <RowDefinition />
+                                        <RowDefinition />
+                                    </Grid.RowDefinitions>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="auto" />
+                                        <ColumnDefinition />
+                                        <ColumnDefinition Width="auto" />
+                                        <ColumnDefinition />
+                                    </Grid.ColumnDefinitions>
+
                                     <TextBlock
+                                        VerticalAlignment="Center"
+                                        FontWeight="Bold"
+                                        Foreground="#844418"
+                                        Text="Ngày giao: " />
+
+                                    <DatePicker
+                                        Grid.Column="1"
+                                        MinWidth="150"
+                                        Margin="5,0,5,0"
+                                        HorizontalAlignment="Left"
+                                        materialDesign:HintAssist.Hint="Pick Date"
+                                        materialDesign:TextFieldAssist.HasClearButton="True"
+                                        CalendarStyle="{StaticResource MaterialDesignCalendarPortrait}"
+                                        SelectedDate="{Binding ModifyImport.Receiveddate, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
+                                        Style="{StaticResource DatePicker}" />
+
+                                    <materialDesign:TimePicker
+                                        x:Name="PresetTimePicker"
+                                        Grid.Column="2"
+                                        Grid.ColumnSpan="2"
+                                        Width="100"
+                                        Margin="5,0,5,0"
+                                        Padding="0,10,0,0"
+                                        HorizontalAlignment="Left"
+                                        materialDesign:HintAssist.Hint="Pick Time"
+                                        materialDesign:TextFieldAssist.HasClearButton="True"
+                                        FontWeight="Bold"
+                                        Is24Hours="True"
+                                        SelectedTime="{Binding ModifyImport.Receiveddate, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" />
+                                    <TextBlock
+                                        Grid.Row="1"
                                         VerticalAlignment="Center"
                                         FontWeight="Bold"
                                         Foreground="#844418"
                                         Text="Người giao: " />
                                     <TextBox
+                                        Grid.Row="1"
+                                        Grid.Column="1"
                                         Width="150"
+                                        Margin="5,0,5,0"
+                                        HorizontalAlignment="Left"
                                         VerticalAlignment="Center"
                                         Style="{StaticResource textbox}"
                                         Text="{Binding ModifyImport.Deliveryperson, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" />
                                     <TextBlock
+                                        Grid.Row="1"
+                                        Grid.Column="2"
                                         VerticalAlignment="Center"
                                         FontWeight="Bold"
                                         Foreground="#844418"
                                         Text="Điện thoại: " />
                                     <TextBox
-                                        Width="130"
+                                        Grid.Row="1"
+                                        Grid.Column="3"
+                                        Width="150"
+                                        Margin="5,0,5,0"
+                                        HorizontalAlignment="Left"
                                         VerticalAlignment="Center"
                                         Style="{StaticResource textbox}"
                                         Text="{Binding ModifyImport.Phone, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" />
 
-                                </StackPanel>
-
-                                <StackPanel Margin="0,5,0,0" Orientation="Horizontal">
                                     <TextBlock
+                                        Grid.Row="2"
                                         VerticalAlignment="Center"
                                         FontWeight="Bold"
                                         Foreground="#844418"
                                         Text="Công ty giao: " />
                                     <TextBox
+                                        Grid.Row="2"
+                                        Grid.Column="1"
+                                        Width="150"
+                                        Margin="5,0,5,0"
+                                        HorizontalAlignment="Left"
                                         VerticalAlignment="Center"
                                         Style="{StaticResource textbox}"
                                         Text="{Binding ModifyImport.Shippingcompany, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" />
-                                </StackPanel>
 
-                                <StackPanel Orientation="Horizontal">
                                     <TextBlock
+                                        Grid.Row="2"
+                                        Grid.Column="2"
                                         VerticalAlignment="Center"
                                         FontWeight="Bold"
                                         Foreground="#844418"
                                         Text="Người nhận: " />
                                     <ComboBox
                                         x:Name="cbstaff"
-                                        Width="220"
+                                        Grid.Row="2"
+                                        Grid.Column="3"
+                                        Width="150"
+                                        Margin="5,0,5,0"
+                                        HorizontalAlignment="Left"
                                         DisplayMemberPath="Staffname"
                                         ItemsSource="{Binding ListStaff}"
                                         SelectedItem="{Binding ModifyImport.Staff, Mode=TwoWay}"
@@ -188,36 +243,7 @@
                                             </Style>
                                         </ComboBox.ItemContainerStyle>
                                     </ComboBox>
-
-                                </StackPanel>
-
-                                <StackPanel Margin="0,5,0,10" Orientation="Horizontal">
-                                    <TextBlock
-                                        VerticalAlignment="Center"
-                                        FontWeight="Bold"
-                                        Foreground="#844418"
-                                        Text="Ngày giao: " />
-                                    <DatePicker
-                                        Width="120"
-                                        Margin="10,0,0,0"
-                                        HorizontalAlignment="Left"
-                                        materialDesign:HintAssist.Hint="Pick Date"
-                                        materialDesign:TextFieldAssist.HasClearButton="True"
-                                        CalendarStyle="{StaticResource MaterialDesignCalendarPortrait}"
-                                        SelectedDate="{Binding ModifyImport.Receiveddate, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
-                                        Style="{StaticResource DatePicker}" />
-
-                                    <materialDesign:TimePicker
-                                        x:Name="PresetTimePicker"
-                                        Width="100"
-                                        Margin="20,0,0,0"
-                                        Padding="0,10,0,0"
-                                        materialDesign:HintAssist.Hint="Pick Time"
-                                        materialDesign:TextFieldAssist.HasClearButton="True"
-                                        FontWeight="Bold"
-                                        Is24Hours="True"
-                                        SelectedTime="{Binding ModifyImport.Receiveddate, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" />
-                                </StackPanel>
+                                </Grid>
 
                             </StackPanel>
                         </StackPanel>
@@ -245,22 +271,6 @@
                                     FontWeight="SemiBold"
                                     Foreground="#5f2414"
                                     Text="Thêm thông tin" />
-
-                                <Button
-                                    Grid.Column="1"
-                                    Width="15"
-                                    Height="15"
-                                    Margin="0,5,10,0"
-                                    HorizontalAlignment="Right"
-                                    Command="{Binding ClearAddImportDetailCommand}"
-                                    Style="{StaticResource closeButton}">
-
-                                    <ma:PackIconMaterial
-                                        Width="15"
-                                        Height="15"
-                                        Kind="Refresh"
-                                        Style="{StaticResource iconApp}" />
-                                </Button>
                             </Grid>
 
                             <!--  Nhà cung cấp và vật liệu  -->
@@ -305,88 +315,142 @@
                             </StackPanel>
 
                             <!--  Chi tiết đơn hàng  -->
-                            <StackPanel>
-                                <StackPanel Orientation="Horizontal">
-                                    <TextBlock
-                                        VerticalAlignment="Center"
-                                        FontWeight="Bold"
-                                        Foreground="#844418"
-                                        Text="NSX: " />
-                                    <DatePicker
-                                        Width="150"
-                                        Margin="10,0,10,0"
-                                        HorizontalAlignment="Left"
-                                        materialDesign:HintAssist.Hint="Pick Date"
-                                        materialDesign:TextFieldAssist.HasClearButton="True"
-                                        SelectedDate="{Binding CurrentImportDetail.Materialsupplier.Manufacturedate, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
-                                        Style="{StaticResource DatePicker}" />
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition />
+                                    <RowDefinition />
+                                    <RowDefinition />
+                                    <RowDefinition />
+                                </Grid.RowDefinitions>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="auto" />
+                                    <ColumnDefinition />
+                                    <ColumnDefinition Width="auto" />
+                                    <ColumnDefinition />
+                                </Grid.ColumnDefinitions>
 
-                                    <TextBlock
-                                        VerticalAlignment="Center"
-                                        FontWeight="Bold"
-                                        Foreground="#844418"
-                                        Text="HSD: " />
-                                    <DatePicker
-                                        Width="150"
-                                        Margin="10,0,0,0"
-                                        HorizontalAlignment="Left"
-                                        materialDesign:HintAssist.Hint="Pick Date"
-                                        materialDesign:TextFieldAssist.HasClearButton="True"
-                                        CalendarStyle="{StaticResource MaterialDesignCalendarPortrait}"
-                                        SelectedDate="{Binding CurrentImportDetail.Materialsupplier.Expirationdate, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
-                                        Style="{StaticResource DatePicker}" />
-                                </StackPanel>
+                                <TextBlock
+                                    VerticalAlignment="Center"
+                                    FontWeight="Bold"
+                                    Foreground="#844418"
+                                    Text="NSX: " />
+                                <DatePicker
+                                    Grid.Column="1"
+                                    MinWidth="150"
+                                    Margin="5,0,5,0"
+                                    HorizontalAlignment="Left"
+                                    materialDesign:HintAssist.Hint="Pick Date"
+                                    materialDesign:TextFieldAssist.HasClearButton="True"
+                                    CalendarStyle="{StaticResource MaterialDesignCalendarPortrait}"
+                                    SelectedDate="{Binding CurrentImportDetail.Materialsupplier.Manufacturedate, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
+                                    Style="{StaticResource DatePicker}" />
+                                <TextBlock
+                                    Grid.Column="2"
+                                    VerticalAlignment="Center"
+                                    FontWeight="Bold"
+                                    Foreground="#844418"
+                                    Text="HSD: " />
+                                <DatePicker
+                                    Grid.Column="3"
+                                    MinWidth="150"
+                                    Margin="5,0,5,0"
+                                    HorizontalAlignment="Left"
+                                    materialDesign:HintAssist.Hint="Pick Date"
+                                    materialDesign:TextFieldAssist.HasClearButton="True"
+                                    CalendarStyle="{StaticResource MaterialDesignCalendarPortrait}"
+                                    SelectedDate="{Binding CurrentImportDetail.Materialsupplier.Expirationdate, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
+                                    Style="{StaticResource DatePicker}" />
 
-                                <StackPanel Margin="0,5,0,0" Orientation="Horizontal">
-                                    <TextBlock
-                                        VerticalAlignment="Center"
-                                        FontWeight="Bold"
-                                        Foreground="#844418"
-                                        Text="Nhà sản xuất: " />
-                                    <TextBox
-                                        Width="140"
-                                        MinWidth="200"
-                                        VerticalAlignment="Center"
-                                        Style="{StaticResource textbox}"
-                                        Text="{Binding CurrentImportDetail.Materialsupplier.Manufacturer, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" />
+                                <TextBlock
+                                    Grid.Row="1"
+                                    VerticalAlignment="Center"
+                                    FontWeight="Bold"
+                                    Foreground="#844418"
+                                    Text="Nhà sản xuất: " />
+                                <TextBox
+                                    Grid.Row="1"
+                                    Grid.Column="1"
+                                    Width="150"
+                                    MinWidth="150"
+                                    Margin="5,0,5,0"
+                                    HorizontalAlignment="Left"
+                                    VerticalAlignment="Center"
+                                    Style="{StaticResource textbox}"
+                                    Text="{Binding CurrentImportDetail.Materialsupplier.Manufacturer, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" />
+                                <TextBlock
+                                    Grid.Row="1"
+                                    Grid.Column="2"
+                                    VerticalAlignment="Center"
+                                    FontWeight="Bold"
+                                    Foreground="#844418"
+                                    Text="Xuất xứ: " />
+                                <TextBox
+                                    Grid.Row="1"
+                                    Grid.Column="3"
+                                    Width="150"
+                                    Margin="5,0,5,0"
+                                    HorizontalAlignment="Left"
+                                    VerticalAlignment="Center"
+                                    Style="{StaticResource textbox}"
+                                    Text="{Binding CurrentImportDetail.Materialsupplier.Original, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" />
 
-                                    <TextBlock
-                                        VerticalAlignment="Center"
-                                        FontWeight="Bold"
-                                        Foreground="#844418"
-                                        Text="Xuất xứ: " />
-                                    <TextBox
-                                        Width="120"
-                                        VerticalAlignment="Center"
-                                        Style="{StaticResource textbox}"
-                                        Text="{Binding CurrentImportDetail.Materialsupplier.Original, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" />
-                                </StackPanel>
+                                <TextBlock
+                                    Grid.Row="2"
+                                    VerticalAlignment="Center"
+                                    FontWeight="Bold"
+                                    Foreground="#844418"
+                                    Text="Giá: " />
+                                <TextBox
+                                    Grid.Row="2"
+                                    Grid.Column="1"
+                                    Width="150"
+                                    Margin="5,0,5,0"
+                                    HorizontalAlignment="Left"
+                                    VerticalAlignment="Center"
+                                    Style="{StaticResource textbox}"
+                                    Text="{Binding CurrentImportDetail.Materialsupplier.Price, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" />
+                                <TextBlock
+                                    Grid.Row="2"
+                                    Grid.Column="2"
+                                    VerticalAlignment="Center"
+                                    FontWeight="Bold"
+                                    Foreground="#844418"
+                                    Text="Số lượng: " />
+                                <TextBox
+                                    Grid.Row="2"
+                                    Grid.Column="3"
+                                    Width="150"
+                                    Margin="5,0,5,0"
+                                    HorizontalAlignment="Left"
+                                    VerticalAlignment="Center"
+                                    Style="{StaticResource textbox}"
+                                    Text="{Binding CurrentImportDetail.Quantity, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay, StringFormat='F2'}" />
+                            </Grid>
 
-                                <StackPanel Margin="0,5,0,0" Orientation="Horizontal">
-                                    <TextBlock
-                                        VerticalAlignment="Center"
-                                        FontWeight="Bold"
-                                        Foreground="#844418"
-                                        Text="Giá: " />
-                                    <TextBox
-                                        Width="140"
-                                        VerticalAlignment="Center"
-                                        Style="{StaticResource textbox}"
-                                        Text="{Binding CurrentImportDetail.Materialsupplier.Price, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" />
-
-                                    <TextBlock
-                                        VerticalAlignment="Center"
-                                        FontWeight="Bold"
-                                        Foreground="#844418"
-                                        Text="Số lượng: " />
-                                    <TextBox
-                                        Width="140"
-                                        VerticalAlignment="Center"
-                                        Style="{StaticResource textbox}"
-                                        Text="{Binding CurrentImportDetail.Quantity, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay, StringFormat='F2'}" />
-                                </StackPanel>
-
+                            <StackPanel HorizontalAlignment="Right" Orientation="Horizontal">
                                 <Button
+                                    Grid.Row="3"
+                                    Grid.Column="1"
+                                    Width="80"
+                                    Height="25"
+                                    Margin="0,10,10,5"
+                                    HorizontalAlignment="Right"
+                                    VerticalAlignment="Center"
+                                    Command="{Binding ClearAddImportDetailCommand}"
+                                    Style="{StaticResource addButton}">
+                                    <StackPanel Orientation="Horizontal">
+                                        <ma:PackIconMaterial
+                                            Width="11"
+                                            Height="11"
+                                            Margin="0,1,5,0"
+                                            VerticalAlignment="Center"
+                                            Kind="Restart" />
+                                        <TextBlock FontSize="11" Text="Làm mới" />
+                                    </StackPanel>
+                                </Button>
+                                <Button
+                                    Grid.Row="3"
+                                    Grid.Column="1"
                                     Width="80"
                                     Height="25"
                                     Margin="0,10,10,5"

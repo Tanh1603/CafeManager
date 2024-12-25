@@ -722,5 +722,6 @@
                     Value="35" />
             </StackPanel>
         </Grid>
+        <uc:LoadingData Visibility="{Binding IsLoading, Converter={StaticResource BooleanToVisibilityConverter}}" />
     </Grid>
 </UserControl>

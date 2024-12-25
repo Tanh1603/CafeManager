@@ -186,11 +186,13 @@
 
                         <Grid x:Name="grid" RenderOptions.ClearTypeHint="Enabled">
 
-                            <ItemsPresenter
-                                x:Name="ItemsPresenter"
-                                Margin="0,1"
-                                KeyboardNavigation.DirectionalNavigation="Contained"
-                                SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
+                            <ScrollViewer HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto">
+                                <ItemsPresenter
+                                    x:Name="ItemsPresenter"
+                                    Margin="0,1"
+                                    KeyboardNavigation.DirectionalNavigation="Contained"
+                                    SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
+                            </ScrollViewer>
                         </Grid>
                     </Border>
                 </Popup>

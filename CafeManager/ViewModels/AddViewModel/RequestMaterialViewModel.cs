@@ -27,12 +27,6 @@ namespace CafeManager.WPF.ViewModels.AddViewModel
         [ObservableProperty]
         private ObservableCollection<ConsumedMaterialDTO> _consumedMaterialDTOs = [];
 
-        //[ObservableProperty]
-        //private SelectMaterialViewModel _selectMaterialVM;
-
-        //[ObservableProperty]
-        //private bool _isOpenSelectMaterialView;
-
         public event Action OpenSelectInventoryView;
         public event Action<List<ConsumedMaterialDTO>> Submit;
 
@@ -41,10 +35,7 @@ namespace CafeManager.WPF.ViewModels.AddViewModel
             var provider = scope.ServiceProvider;
             _materialSupplierServices = provider.GetRequiredService<MaterialSupplierServices>();
             _consumedMaterialServices = provider.GetRequiredService<ConsumedMaterialServices>();
-            //SelectMaterialVM = provider.GetRequiredService<SelectMaterialViewModel>();
             _mapper = provider.GetRequiredService<IMapper>();
-
-            //IsOpenSelectMaterialView = false;
         }
 
         public void ClearValue()

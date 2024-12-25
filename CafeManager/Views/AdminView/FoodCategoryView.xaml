@@ -39,7 +39,6 @@
                 <Grid.RowDefinitions>
                     <RowDefinition Height="auto" />
                     <RowDefinition Height="auto" />
-                    <RowDefinition Height="auto" />
                     <RowDefinition Height="*" />
                 </Grid.RowDefinitions>
 
@@ -57,7 +56,7 @@
                     HorizontalAlignment="Left"
                     FontSize="32"
                     FontWeight="SemiBold"
-                    Foreground="#ddd1c3"
+                    Foreground="#5f2414"
                     Text="Danh mục thực đơn" />
 
                 <!--  Add Button  -->
@@ -313,20 +312,7 @@
                 </materialDesign:DialogHost.DialogContent>
             </materialDesign:DialogHost>
 
-            <Grid
-                Background="White"
-                Opacity="0.3"
-                Visibility="{Binding IsLoading, Converter={StaticResource BooleanToVisibilityConverter}}">
-                <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
-                    <TextBlock Style="{StaticResource infoText}" Text="Đang tải tài nguyên.." />
-                    <ProgressBar
-                        Width="50"
-                        Height="50"
-                        IsIndeterminate="True"
-                        Style="{StaticResource MaterialDesignCircularProgressBar}"
-                        Value="35" />
-                </StackPanel>
-            </Grid>
+            <uc:LoadingData Visibility="{Binding IsLoading, Converter={StaticResource BooleanToVisibilityConverter}}" />
         </Grid>
     </Border>
 </UserControl>

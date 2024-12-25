@@ -79,11 +79,11 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
                         ListMaterial.Add(_mapper.Map<MaterialDTO>(addMaterial));
                         IsOpenModifyMaterial = false;
                         IsLoading = false;
-                        MyMessageBox.ShowDialog("Thêm vật tư cấp thành công");
+                        MyMessageBox.ShowDialog("Thêm vật liệu cấp thành công");
                     }
                     else
                     {
-                        MyMessageBox.Show("Thêm vật tư cấp thất bại");
+                        MyMessageBox.Show("Thêm vật liệu cấp thất bại");
                     }
                 }
                 if (ModifyMaterialVM.IsUpdating)
@@ -97,12 +97,12 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
                             _mapper.Map(res, updateSupplierDTO);
                             IsOpenModifyMaterial = false;
                             IsLoading = false;
-                            MyMessageBox.ShowDialog("Sửa vật tư cấp thành công");
+                            MyMessageBox.ShowDialog("Sửa vật liệu cấp thành công");
                         }
                     }
                     else
                     {
-                        MyMessageBox.ShowDialog("Sửa nhà cung cấp thất bại");
+                        MyMessageBox.ShowDialog("Sửa vật liệu thất bại");
                     }
                 }
                 ModifyMaterialVM.ClearValueOfFrom();

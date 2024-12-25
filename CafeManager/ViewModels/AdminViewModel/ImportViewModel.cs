@@ -249,8 +249,11 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
             {
                 MyMessageBox.Show(ivd.Message, MyMessageBox.Buttons.OK, MyMessageBox.Icons.Warning);
             }
-            await LoadImport();
-            IsLoading = false;
+            finally
+            {
+                await LoadImport();
+                IsLoading = false;
+            }
         }
 
         private async void ModifyImportVM_ImportChanged(ImportDTO import)
@@ -296,6 +299,10 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
             catch
             {
                 MyMessageBox.Show("Lỗi", MyMessageBox.Buttons.OK, MyMessageBox.Icons.Warning);
+            }
+            finally
+            {
+                IsLoading = false;
             }
         }
 

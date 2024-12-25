@@ -20,6 +20,7 @@
         <BooleanToVisibilityConverter x:Key="BoolToVis" />
         <service:RowIndexConverter x:Key="RowIndexConverter" />
         <service:DateTimeToDateOnlyConverter x:Key="DateTimeToDateOnlyConverter" />
+        <service:QuantityToEnabledConverter x:Key="QuantityToEnabledConverter" />
     </UserControl.Resources>
     <Border BorderThickness="4" CornerRadius="10">
         <Border.Background>
@@ -214,7 +215,8 @@
                                             <Button
                                                 Command="{Binding DataContext.ChooseItemCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
                                                 CommandParameter="{Binding}"
-                                                Style="{StaticResource gridEditButton}">
+                                                IsEnabled="{Binding TotalQuantity, Converter={StaticResource QuantityToEnabledConverter}}"
+                                                Style="{StaticResource DynamicButtonStyle}">
                                                 <TextBlock VerticalAlignment="Center" Text="Chọn" />
                                             </Button>
                                         </StackPanel>
@@ -248,7 +250,7 @@
                             VerticalAlignment="Center"
                             FontSize="16"
                             FontWeight="SemiBold"
-                            Foreground="#dac5b4"
+                            Foreground="#602414"
                             Text="{Binding PageUI}" />
 
                         <Button Command="{Binding NextPageCommand}">
@@ -261,6 +263,8 @@
                     </StackPanel>
                 </Grid>
             </Grid>
+
+            <uc:LoadingData Visibility="{Binding IsLoading, Converter={StaticResource BooleanToVisibilityConverter}}" />
         </Grid>
     </Border>
 </UserControl>

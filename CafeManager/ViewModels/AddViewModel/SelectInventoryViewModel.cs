@@ -25,6 +25,9 @@ namespace CafeManager.WPF.ViewModels.AddViewModel
         private readonly IMapper _mapper;
 
         [ObservableProperty]
+        private bool _isLoading;
+
+        [ObservableProperty]
         private List<MaterialSupplierDTO> _listInventoryDTO = [];
 
         [ObservableProperty]
@@ -49,7 +52,7 @@ namespace CafeManager.WPF.ViewModels.AddViewModel
                 {
                     _selectedMaterial = value;
                     OnPropertyChanged(nameof(SelectedMaterial));
-                    _ = FirstPage();
+                    FirstPageCommand.ExecuteAsync(null);
                 }
             }
         }
@@ -65,7 +68,7 @@ namespace CafeManager.WPF.ViewModels.AddViewModel
                 {
                     _selectedSupplier = value;
                     OnPropertyChanged(nameof(SelectedSupplier));
-                    _ = FirstPage();
+                    FirstPageCommand.ExecuteAsync(null);
                 }
             }
         }
@@ -88,12 +91,12 @@ namespace CafeManager.WPF.ViewModels.AddViewModel
                 Expression<Func<Materialsupplier, bool>> filter = inventory =>
                 (inventory.Isdeleted == false) &&
                 (SelectedMaterial == null || inventory.Materialid == SelectedMaterial.Materialid) &&
-                (SelectedSupplier == null || inventory.Supplierid == SelectedSupplier.Supplierid);
+                (SelectedSupplier == null || inventory.Supplierid == SelectedSupplier.Supplierid) &&
+                inventory.Expirationdate > DateTime.Now;
 
 
                 var dbListInventory = await _materialSupplierServices.GetSearchPaginateListMaterialsupplierAlter(filter, pageIndex, pageSize);
                 ListInventoryDTO = [.. _mapper.Map<List<MaterialSupplierDTO>>(dbListInventory.Item1)];
-                ListInventoryDTO = ListInventoryDTO.Where(x => x.TotalQuantity > 0 && x.Expirationdate > DateTime.Now).ToList();
                 totalPages = (dbListInventory.Item2 + pageSize - 1) / pageSize;
                 OnPropertyChanged(nameof(PageUI));
             }
@@ -142,8 +145,9 @@ namespace CafeManager.WPF.ViewModels.AddViewModel
         private async Task FirstPage()
         {
             pageIndex = 1;
-
+            IsLoading = true;
             await LoadData();
+            IsLoading = false;
         }
 
         [RelayCommand]
@@ -154,7 +158,9 @@ namespace CafeManager.WPF.ViewModels.AddViewModel
                 return;
             }
             pageIndex += 1;
+            IsLoading = true;
             await LoadData();
+            IsLoading = false;
         }
 
         [RelayCommand]
@@ -165,14 +171,18 @@ namespace CafeManager.WPF.ViewModels.AddViewModel
                 return;
             }
             pageIndex -= 1;
+            IsLoading = true;
             await LoadData();
+            IsLoading = false;
         }
 
         [RelayCommand]
         private async Task LastPage()
         {
             pageIndex = totalPages;
+            IsLoading = true;
             await LoadData();
+            IsLoading = false;
         }
         #endregion
 

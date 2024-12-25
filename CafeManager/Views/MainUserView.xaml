@@ -44,7 +44,12 @@
                                         <GradientStop Offset="1" Color="#844518" />
                                     </LinearGradientBrush>
                                 </Border.Background>
-                                <StackPanel HorizontalAlignment="Left" VerticalAlignment="Top">
+                                <Grid>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="auto" />
+                                        <RowDefinition />
+                                        <RowDefinition Height="auto" />
+                                    </Grid.RowDefinitions>
                                     <!--  username  -->
                                     <Grid Margin="10,0,0,5" HorizontalAlignment="Left">
 
@@ -124,58 +129,63 @@
                                     </Grid>
 
                                     <!--  menu buttons  -->
-                                    <RadioButton
-                                        MinWidth="200"
-                                        Command="{Binding ChangeCurrentViewModelCommand}"
-                                        CommandParameter="OrderFood"
-                                        IsChecked="True"
-                                        Style="{StaticResource menuButton}">
-                                        <StackPanel Orientation="Horizontal">
-                                            <fa:IconImage Icon="BowlFood" Style="{StaticResource menuButtonIcon}" />
-                                            <TextBlock Style="{StaticResource menuButtonText}" Text="Đặt món" />
-                                        </StackPanel>
-                                    </RadioButton>
+                                    <StackPanel Grid.Row="1" VerticalAlignment="Top">
+                                        <RadioButton
+                                            MinWidth="200"
+                                            Command="{Binding ChangeCurrentViewModelCommand}"
+                                            CommandParameter="OrderFood"
+                                            IsChecked="True"
+                                            Style="{StaticResource menuButton}">
+                                            <StackPanel Orientation="Horizontal">
+                                                <fa:IconImage Icon="BowlFood" Style="{StaticResource menuButtonIcon}" />
+                                                <TextBlock Style="{StaticResource menuButtonText}" Text="Đặt món" />
+                                            </StackPanel>
+                                        </RadioButton>
 
-                                    <RadioButton
-                                        MinWidth="200"
-                                        Command="{Binding ChangeCurrentViewModelCommand}"
-                                        CommandParameter="DistributionMaterial"
-                                        Style="{StaticResource menuButton}">
-                                        <StackPanel Orientation="Horizontal">
-                                            <fa:IconImage Icon="Marker" Style="{StaticResource menuButtonIcon}" />
-                                            <TextBlock Style="{StaticResource menuButtonText}" Text="Phân phối vật tư" />
-                                        </StackPanel>
-                                    </RadioButton>
+                                        <RadioButton
+                                            MinWidth="200"
+                                            Command="{Binding ChangeCurrentViewModelCommand}"
+                                            CommandParameter="DistributionMaterial"
+                                            Style="{StaticResource menuButton}">
+                                            <StackPanel Orientation="Horizontal">
+                                                <fa:IconImage Icon="Marker" Style="{StaticResource menuButtonIcon}" />
+                                                <TextBlock Style="{StaticResource menuButtonText}" Text="Phân phối vật tư" />
+                                            </StackPanel>
+                                        </RadioButton>
 
-                                    <RadioButton
-                                        MinWidth="200"
-                                        Command="{Binding ChangeCurrentViewModelCommand}"
-                                        CommandParameter="IncidentTable"
-                                        Style="{StaticResource menuButton}">
-                                        <StackPanel Orientation="Horizontal">
-                                            <fa:IconImage Icon="Table" Style="{StaticResource menuButtonIcon}" />
-                                            <TextBlock Style="{StaticResource menuButtonText}" Text="Báo có sự cố bàn" />
-                                        </StackPanel>
-                                    </RadioButton>
+                                        <RadioButton
+                                            MinWidth="200"
+                                            Command="{Binding ChangeCurrentViewModelCommand}"
+                                            CommandParameter="IncidentTable"
+                                            Style="{StaticResource menuButton}">
+                                            <StackPanel Orientation="Horizontal">
+                                                <fa:IconImage Icon="Table" Style="{StaticResource menuButtonIcon}" />
+                                                <TextBlock Style="{StaticResource menuButtonText}" Text="Báo cáo sự cố bàn" />
+                                            </StackPanel>
+                                        </RadioButton>
+                                    </StackPanel>
 
-                                    <RadioButton
-                                        Command="{Binding OpenSettingCommand}"
-                                        CommandParameter="Setting"
-                                        IsChecked="{Binding IsOpenSetting}"
-                                        Style="{StaticResource menuButton}">
-                                        <StackPanel Orientation="Horizontal">
-                                            <fa:IconImage Icon="Cog" Style="{StaticResource menuButtonIcon}" />
-                                            <TextBlock Style="{StaticResource menuButtonText}" Text="Cài đặt" />
-                                        </StackPanel>
-                                    </RadioButton>
+                                    <StackPanel Grid.Row="2" VerticalAlignment="Bottom">
+                                        <RadioButton
+                                            Command="{Binding OpenSettingCommand}"
+                                            CommandParameter="Setting"
+                                            IsChecked="{Binding IsOpenSetting}"
+                                            Style="{StaticResource menuButton}">
+                                            <StackPanel Orientation="Horizontal">
+                                                <fa:IconImage Icon="Cog" Style="{StaticResource menuButtonIcon}" />
+                                                <TextBlock Style="{StaticResource menuButtonText}" Text="Cài đặt" />
+                                            </StackPanel>
+                                        </RadioButton>
 
-                                    <RadioButton Command="{Binding SignOutCommand}" Style="{StaticResource menuButton}">
-                                        <StackPanel Orientation="Horizontal">
-                                            <fa:IconImage Icon="PowerOff" Style="{StaticResource menuButtonIcon}" />
-                                            <TextBlock Style="{StaticResource menuButtonText}" Text="Đăng xuất" />
-                                        </StackPanel>
-                                    </RadioButton>
-                                </StackPanel>
+                                        <RadioButton Command="{Binding SignOutCommand}" Style="{StaticResource menuButton}">
+                                            <StackPanel Orientation="Horizontal">
+                                                <fa:IconImage Icon="PowerOff" Style="{StaticResource menuButtonIcon}" />
+                                                <TextBlock Style="{StaticResource menuButtonText}" Text="Đăng xuất" />
+                                            </StackPanel>
+                                        </RadioButton>
+                                    </StackPanel>
+
+                                </Grid>
                             </Border>
                         </Grid>
                     </materialDesign:DrawerHost.LeftDrawerContent>

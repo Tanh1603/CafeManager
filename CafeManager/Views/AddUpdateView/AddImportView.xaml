@@ -129,9 +129,43 @@
                                         FontSize="13"
                                         FontWeight="SemiBold"
                                         Foreground="#602414"
+                                        Text="Người nhận: " />
+                                    <ComboBox
+                                        Width="150"
+                                        Margin="12,0,0,0"
+                                        DisplayMemberPath="Staffname"
+                                        ItemsSource="{Binding ListStaff}"
+                                        SelectedItem="{Binding ModifyImport.Staff, Mode=TwoWay}"
+                                        SelectedValue="{Binding ModifyImport.Staffid, Mode=TwoWay}"
+                                        SelectedValuePath="Staffid" />
+                                </StackPanel>
+
+
+
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock
+                                        VerticalAlignment="Center"
+                                        FontSize="13"
+                                        FontWeight="SemiBold"
+                                        Foreground="#602414"
+                                        Text="Công ty giao: " />
+                                    <TextBox
+                                        Width="150"
+                                        Margin="8,0,0,0"
+                                        VerticalAlignment="Center"
+                                        Text="{Binding ModifyImport.Shippingcompany, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" />
+                                </StackPanel>
+
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock
+                                        VerticalAlignment="Center"
+                                        FontSize="13"
+                                        FontWeight="SemiBold"
+                                        Foreground="#602414"
                                         Text="Người giao: " />
                                     <TextBox
                                         Width="150"
+                                        Margin="16,0,5,0"
                                         VerticalAlignment="Center"
                                         Text="{Binding ModifyImport.Deliveryperson, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" />
                                     <TextBlock
@@ -153,39 +187,10 @@
                                         FontSize="13"
                                         FontWeight="SemiBold"
                                         Foreground="#602414"
-                                        Text="Công ty giao: " />
-                                    <TextBox
-                                        Width="200"
-                                        VerticalAlignment="Center"
-                                        Text="{Binding ModifyImport.Shippingcompany, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" />
-                                </StackPanel>
-
-                                <StackPanel Orientation="Horizontal">
-                                    <TextBlock
-                                        VerticalAlignment="Center"
-                                        FontSize="13"
-                                        FontWeight="SemiBold"
-                                        Foreground="#602414"
-                                        Text="Người nhận: " />
-                                    <ComboBox
-                                        Width="150"
-                                        DisplayMemberPath="Staffname"
-                                        ItemsSource="{Binding ListStaff}"
-                                        SelectedItem="{Binding ModifyImport.Staff, Mode=TwoWay}"
-                                        SelectedValue="{Binding ModifyImport.Staffid, Mode=TwoWay}"
-                                        SelectedValuePath="Staffid" />
-                                </StackPanel>
-
-                                <StackPanel Orientation="Horizontal">
-                                    <TextBlock
-                                        VerticalAlignment="Center"
-                                        FontSize="13"
-                                        FontWeight="SemiBold"
-                                        Foreground="#602414"
                                         Text="Ngày giao: " />
                                     <DatePicker
                                         Width="100"
-                                        Margin="10,0,0,0"
+                                        Margin="20,0,0,0"
                                         HorizontalAlignment="Left"
                                         materialDesign:HintAssist.Hint="Chọn ngày"
                                         materialDesign:TextFieldAssist.HasClearButton="True"
@@ -276,7 +281,7 @@
                                         Text="NSX: " />
                                     <DatePicker
                                         Width="120"
-                                        Margin="10,0,10,0"
+                                        Margin="20,0,10,0"
                                         HorizontalAlignment="Left"
                                         materialDesign:HintAssist.Hint="Chọn ngày"
                                         materialDesign:TextFieldAssist.HasClearButton="True"
@@ -305,22 +310,23 @@
                                         FontSize="13"
                                         FontWeight="SemiBold"
                                         Foreground="#602414"
-                                        Text="Nhà sản xuất: " />
-                                    <TextBox
-                                        Width="140"
-                                        VerticalAlignment="Center"
-                                        Text="{Binding CurrentImportDetail.Materialsupplier.Manufacturer, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" />
-
-                                    <TextBlock
-                                        VerticalAlignment="Center"
-                                        FontSize="13"
-                                        FontWeight="SemiBold"
-                                        Foreground="#602414"
                                         Text="Xuất xứ: " />
                                     <TextBox
                                         Width="120"
                                         VerticalAlignment="Center"
                                         Text="{Binding CurrentImportDetail.Materialsupplier.Original, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" />
+
+                                    <TextBlock
+                                        Margin="10,0,0,0"
+                                        VerticalAlignment="Center"
+                                        FontSize="13"
+                                        FontWeight="SemiBold"
+                                        Foreground="#602414"
+                                        Text="Nhà sản xuất: " />
+                                    <TextBox
+                                        Width="120"
+                                        VerticalAlignment="Center"
+                                        Text="{Binding CurrentImportDetail.Materialsupplier.Manufacturer, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" />
                                 </StackPanel>
 
                                 <StackPanel Orientation="Horizontal">
@@ -331,18 +337,21 @@
                                         Foreground="#602414"
                                         Text="Giá: " />
                                     <TextBox
-                                        Width="140"
+                                        Width="120"
+                                        Margin="25,0,0,0"
                                         VerticalAlignment="Center"
                                         Text="{Binding CurrentImportDetail.Materialsupplier.Price, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" />
 
                                     <TextBlock
+                                        Margin="10,0,0,0"
                                         VerticalAlignment="Center"
                                         FontSize="13"
                                         FontWeight="SemiBold"
                                         Foreground="#602414"
                                         Text="Số lượng: " />
                                     <TextBox
-                                        Width="140"
+                                        Width="120"
+                                        Margin="24,0,0,0"
                                         VerticalAlignment="Center"
                                         Text="{Binding CurrentImportDetail.Quantity, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay, StringFormat='F2'}" />
                                 </StackPanel>
@@ -506,7 +515,7 @@
                             FontSize="13"
                             FontWeight="SemiBold"
                             Foreground="#602414"
-                            Text="{Binding ImportPrice, Converter={StaticResource CurrencyConverter}}"/>
+                            Text="{Binding ImportPrice, Converter={StaticResource CurrencyConverter}}" />
                     </StackPanel>
                 </Grid>
 

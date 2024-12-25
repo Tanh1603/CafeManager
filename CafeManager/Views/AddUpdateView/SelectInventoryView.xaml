@@ -20,6 +20,7 @@
         <BooleanToVisibilityConverter x:Key="BoolToVis" />
         <service:RowIndexConverter x:Key="RowIndexConverter" />
         <service:DateTimeToDateOnlyConverter x:Key="DateTimeToDateOnlyConverter" />
+        <service:QuantityToEnabledConverter x:Key="QuantityToEnabledConverter" />
     </UserControl.Resources>
     <Border BorderThickness="4" CornerRadius="10">
         <Border.Background>
@@ -205,7 +206,8 @@
                                             <Button
                                                 Command="{Binding DataContext.ChooseItemCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
                                                 CommandParameter="{Binding}"
-                                                Style="{StaticResource gridEditButton}">
+                                                IsEnabled="{Binding TotalQuantity, Converter={StaticResource QuantityToEnabledConverter}}"
+                                                Style="{StaticResource DynamicButtonStyle}">
                                                 <TextBlock VerticalAlignment="Center" Text="Chọn" />
                                             </Button>
                                         </StackPanel>

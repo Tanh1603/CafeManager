@@ -91,12 +91,12 @@ namespace CafeManager.WPF.ViewModels.AddViewModel
                 Expression<Func<Materialsupplier, bool>> filter = inventory =>
                 (inventory.Isdeleted == false) &&
                 (SelectedMaterial == null || inventory.Materialid == SelectedMaterial.Materialid) &&
-                (SelectedSupplier == null || inventory.Supplierid == SelectedSupplier.Supplierid);
+                (SelectedSupplier == null || inventory.Supplierid == SelectedSupplier.Supplierid) &&
+                inventory.Expirationdate > DateTime.Now;
 
 
                 var dbListInventory = await _materialSupplierServices.GetSearchPaginateListMaterialsupplierAlter(filter, pageIndex, pageSize);
                 ListInventoryDTO = [.. _mapper.Map<List<MaterialSupplierDTO>>(dbListInventory.Item1)];
-                ListInventoryDTO = ListInventoryDTO.Where(x => x.TotalQuantity > 0 && x.Expirationdate > DateTime.Now).ToList();
                 totalPages = (dbListInventory.Item2 + pageSize - 1) / pageSize;
                 OnPropertyChanged(nameof(PageUI));
             }

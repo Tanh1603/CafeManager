@@ -248,7 +248,7 @@
                             VerticalAlignment="Center"
                             FontSize="16"
                             FontWeight="SemiBold"
-                            Foreground="#dac5b4"
+                            Foreground="#5f2414"
                             Text="{Binding PageUI}" />
 
                         <Button Command="{Binding NextPageCommand}">

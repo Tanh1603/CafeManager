@@ -415,7 +415,11 @@
 
                                         <lvc:CartesianChart.AxisX>
 
-                                            <lvc:Axis Title="Doanh thu" Labels="{Binding LabelChartZoom}" />
+                                            <lvc:Axis Title="Doanh thu" Labels="{Binding LabelChartZoom}" >
+                                                <lvc:Axis.Separator>
+                                                    <lvc:Separator Step="1" />
+                                                </lvc:Axis.Separator>
+                                            </lvc:Axis>
                                         </lvc:CartesianChart.AxisX>
                                         <lvc:CartesianChart.AxisY>
                                             <lvc:Axis
@@ -449,7 +453,7 @@
 
                                     <lvc:CartesianChart
                                         Grid.Row="1"
-
+                                        Zoom="X"
                                         Series="{Binding ChartColumnCollection}">
                                         <lvc:CartesianChart.AxisX>
                                             <lvc:Axis Title="Quản lí thu - chi" Labels="{Binding LabelChartCol}" >

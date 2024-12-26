@@ -14,16 +14,8 @@ namespace CafeManager.Core.Repositories
 
         Task<decimal> GetTotalRevenueFromTo(DateTime from, DateTime to, CancellationToken token = default);
 
-        Task<List<decimal>> GetRevenueByDay(DateTime from, DateTime to, CancellationToken token = default);
+        Task<Dictionary<DateTime, Decimal>> GetRevenueByDay(DateTime from, DateTime to, CancellationToken token = default);
 
-        Task<List<decimal>> GetRevenueByMonth(DateTime from, DateTime to, CancellationToken token = default);
-
-        Task<List<decimal>> GetRevenueByYear(DateTime from, DateTime to, CancellationToken token = default);
-
-        Task<List<int>> GetTotalInvoiceByDay(DateTime from, DateTime to, CancellationToken token = default);
-
-        Task<List<int>> GetTotalInvoiceByMonth(DateTime from, DateTime to, CancellationToken token = default);
-
-        Task<List<int>> GetTotalInvoiceByYear(DateTime from, DateTime to, CancellationToken token = default);
+        Task<List<Decimal>> GetRevenueByMonth(DateTime from, DateTime to, CancellationToken token = default);
     }
 }

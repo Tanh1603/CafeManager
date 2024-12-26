@@ -98,46 +98,9 @@ namespace CafeManager.WPF.Services
         }
 
 
-        public async Task<List<decimal>> GetTotalMaterialByDay(DateTime from, DateTime to, CancellationToken token = default)
-        {
+       
 
-            try
-            {
-                return await _unitOfWork.ImportList.GetTotalMaterialByDay(from, to, token);
-            }
-            catch (Exception)
-            {
-
-                throw;
-            }
-        }
-
-        public async Task<List<decimal>> GetTotalMaterialByMonth(DateTime from, DateTime to, CancellationToken token = default)
-        {
-
-            try
-            {
-                return await _unitOfWork.ImportList.GetTotalMaterialByMonth(from, to, token);
-            }
-            catch (Exception)
-            {
-
-                throw;
-            }
-        }
-
-        public async Task<List<decimal>> GetTotalMaterialByYear(DateTime from, DateTime to, CancellationToken token = default)
-        {
-            try
-            {
-                return await _unitOfWork.ImportList.GetTotalMaterialByYear(from, to, token);    
-            }
-            catch (Exception)
-            {
-
-                throw;
-            }
-        }
+        
 
         public async Task<List<decimal>> GetTotalMaterialCostByMonth(DateTime from, DateTime to, CancellationToken token = default)
         {
@@ -152,17 +115,6 @@ namespace CafeManager.WPF.Services
             }
         }
 
-        public async Task<List<decimal>> GetTotalMaterialCostByYear(DateTime from, DateTime to, CancellationToken token = default)
-        {
-            try
-            {
-                return await _unitOfWork.ImportList.GetTotalMaterialCostByYear(from, to, token);
-            }
-            catch (Exception)
-            {
-
-                throw;
-            }
-        }
+        
     }
 }

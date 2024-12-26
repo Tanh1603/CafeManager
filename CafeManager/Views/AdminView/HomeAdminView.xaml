@@ -93,8 +93,9 @@
                                     CalendarStyle="{StaticResource MaterialDesignCalendarPortrait}"
                                     SelectedDate="{Binding From}"
                                     Style="{StaticResource DatePicker}"
-                                    Tag="Chọn ngày"
-                                    Validation.ErrorTemplate="{StaticResource ErrorMessage}" />
+                                    Tag="Visible"
+                                    Validation.ErrorTemplate="{StaticResource ErrorMessage}"
+                                     />
                             </Grid>
                             <Grid Grid.Column="1">
                                 <Grid.ColumnDefinitions>
@@ -110,8 +111,8 @@
                                     CalendarStyle="{StaticResource MaterialDesignCalendarPortrait}"
                                     SelectedDate="{Binding To}"
                                     Style="{StaticResource DatePicker}"
-                                    Tag="Chọn ngày"
-                                    Validation.ErrorTemplate="{StaticResource ErrorMessage}" />
+                                    Tag="Visible"
+                                    Validation.ErrorTemplate="{StaticResource ErrorMessage}"/>
                             </Grid>
                         </Grid>
                     </Border>

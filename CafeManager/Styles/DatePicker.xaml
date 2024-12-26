@@ -61,12 +61,10 @@
                                     x:Name="PART_TextBox"
                                     Grid.Column="0"
                                     Margin="5,0,0,0"
-                                   
                                     Padding="5"
                                     Background="Transparent"
                                     Style="{StaticResource txtBoxDatePicker}"
-                                    Text="{Binding SelectedDate, RelativeSource={RelativeSource TemplatedParent}, StringFormat='{}{0:dd/MM/yyyy}', Mode=TwoWay}"
-                                    />
+                                    Text="{Binding SelectedDate, RelativeSource={RelativeSource TemplatedParent}, StringFormat='{}{0:dd/MM/yyyy}', Mode=TwoWay, TargetNullValue='', FallbackValue=''}" />
                                 <Button
                                     x:Name="ClearBtn"
                                     Grid.Column="1"
@@ -74,7 +72,8 @@
                                     Margin="5,0,0,0"
                                     Command="{Binding DataContext.ClearDatePickerCommand, RelativeSource={RelativeSource AncestorType=Window}}"
                                     CommandParameter="{Binding RelativeSource={RelativeSource TemplatedParent}}"
-                                    Style="{StaticResource datePickerButton}">
+                                    Style="{StaticResource datePickerButton}"
+                                    Visibility="{TemplateBinding Tag}">
                                     <ma:PackIconMaterial
                                         Width="15"
                                         Height="15"
@@ -97,15 +96,15 @@
                                     PlacementTarget="{Binding ElementName=PART_TextBox}"
                                     StaysOpen="False" />
 
-                                <TextBlock
+                                <!--<TextBlock
                                     x:Name="Watermark"
                                     Margin="22,0,22,0"
                                     VerticalAlignment="Center"
                                     Panel.ZIndex="1"
                                     FontWeight="Bold"
                                     Foreground="#844418"
-                                    Text="{Binding Tag, RelativeSource={RelativeSource TemplatedParent}}"
-                                    Visibility="Collapsed" />
+
+                                    Visibility="Collapsed" />-->
                             </Grid>
                         </Border>
 
@@ -116,9 +115,9 @@
 
 
 
-                        <Trigger Property="Text" Value="">
+                        <!--<Trigger Property="Text" Value="">
                             <Setter TargetName="ClearBtn" Property="Visibility" Value="Collapsed" />
-                        </Trigger>
+                        </Trigger>-->
 
                         <Trigger Property="IsMouseOver" Value="True">
                             <Setter TargetName="Border" Property="BorderBrush" Value="#9e7555" />
@@ -128,14 +127,14 @@
                             <Setter TargetName="Border" Property="BorderBrush" Value="#9e7555" />
                         </Trigger>
 
-                        <MultiTrigger>
+                        <!--<MultiTrigger>
                             <MultiTrigger.Conditions>
                                 <Condition Property="Text" Value="" />
                                 <Condition Property="SelectedDate" Value="{x:Null}" />
                                 <Condition SourceName="PART_TextBox" Property="IsFocused" Value="False" />
                             </MultiTrigger.Conditions>
                             <Setter TargetName="Watermark" Property="Visibility" Value="Visible" />
-                        </MultiTrigger>
+                        </MultiTrigger>-->
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
             </Setter.Value>

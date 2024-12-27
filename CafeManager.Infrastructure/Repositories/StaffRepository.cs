@@ -52,7 +52,7 @@ namespace CafeManager.Infrastructure.Repositories
                 DateOnly fromDO = new(from.Year, from.Month, from.Day);
                 DateOnly toDO = new(to.Year, to.Month, to.Day);
 
-                return await _cafeManagerContext.Staff.Where(x => x.Isdeleted == false && x.Startworkingdate >= fromDO && x.Startworkingdate <= toDO).CountAsync(token);
+                return await _cafeManagerContext.Staff.Where(x => x.Isdeleted == false && x.Startworkingdate <= toDO && x.Startworkingdate <= toDO).CountAsync(token);
             }
             catch (OperationCanceledException)
             {
@@ -71,7 +71,7 @@ namespace CafeManager.Infrastructure.Repositories
                 DateOnly fromDO = new(from.Year, from.Month, from.Day);
                 DateOnly toDO = new(to.Year, to.Month, to.Day);
                 decimal sum = decimal.Zero;
-                var list = await _cafeManagerContext.Staff.Where(x => x.Isdeleted == false && x.Startworkingdate >= fromDO && x.Startworkingdate <= toDO).ToListAsync(token);
+                var list = await _cafeManagerContext.Staff.Where(x => x.Isdeleted == false && x.Startworkingdate <= toDO && x.Startworkingdate <= toDO).ToListAsync(token);
 
                 foreach (var staff in list)
                 {
@@ -115,38 +115,66 @@ namespace CafeManager.Infrastructure.Repositories
             }
         }
 
-        public async Task<List<decimal>> GetTotalSalaryByMonth(DateTime from, DateTime to, CancellationToken token = default)
+        public async Task<Dictionary<DateOnly, decimal>> GetTotalSalaryByMonth(DateTime from, DateTime to, CancellationToken token = default)
         {
             try
             {
-                DateOnly fromDO = new(from.Year, from.Month, from.Day);
-                DateOnly toDO = new(to.Year, to.Month, to.Day);
+                DateOnly fromDO = new(from.Year, from.Month, 1); // Bắt đầu từ đầu tháng
+                DateOnly toDO = new(to.Year, to.Month, DateTime.DaysInMonth(to.Year, to.Month)); // Cuối tháng của tháng cuối cùng
 
-                // Lấy tất cả lịch sử lương trong khoảng thời gian từ from đến to
-                var salaryHistory = await _cafeManagerContext.Staffsalaryhistories
-                    .Where(sh => sh.Effectivedate >= fromDO && sh.Effectivedate <= toDO && sh.Isdeleted == false && sh.Staff.Isdeleted == false)
+                // Khởi tạo kết quả
+                var salaryByMonth = new Dictionary<DateOnly, decimal>();
+
+                // Lấy danh sách nhân viên thỏa mãn điều kiện
+                var staffList = await _cafeManagerContext.Staff
+                    .Where(x => x.Isdeleted == false && x.Startworkingdate <= toDO)
+                    .Include(s => s.Staffsalaryhistories) // Tải lịch sử lương
                     .ToListAsync(token);
 
-                // Tạo danh sách tất cả các tháng trong khoảng thời gian từ from đến to
-                var allMonths = Enumerable.Range(0, ((toDO.Year - fromDO.Year) * 12 + toDO.Month - fromDO.Month) + 1)
-                                          .Select(i => new DateTime(from.Year, from.Month, 1).AddMonths(i))
-                                          .ToList();
-
-                // Group by tháng và tính tổng lương cho mỗi tháng
-                var salaryGroupedByMonth = salaryHistory
-                    .GroupBy(sh => new DateTime(sh.Effectivedate.Year, sh.Effectivedate.Month, 1))  // Group by Year-Month
-                    .ToDictionary(
-                        g => g.Key, // Key is the month (DateTime representing the 1st day of the month)
-                        g => g.Sum(sh => sh.Salary) // Total salary for each month
-                    );
-
-                // Lấy tổng lương cho mỗi tháng, nếu không có thì trả về 0
-                var salaryList = allMonths.Select(month =>
+                // Duyệt từng tháng trong khoảng thời gian
+                for (var month = fromDO; month <= toDO; month = month.AddMonths(1))
                 {
-                    return salaryGroupedByMonth.ContainsKey(month) ? salaryGroupedByMonth[month] : 0;
-                }).ToList();
+                    decimal monthlySum = 0;
 
-                return salaryList;
+                    foreach (var staff in staffList)
+                    {
+                        // Lấy lịch sử lương của nhân viên
+                        var salaryHistories = staff.Staffsalaryhistories
+                            .OrderBy(h => h.Effectivedate)
+                            .ToList();
+
+                        // Kiểm tra nếu có lương trong tháng hiện tại
+                        var currentSalary = salaryHistories
+                            .Where(h =>h.Isdeleted == false && h.Effectivedate.Month <= month.Month && h.Effectivedate.Year <= month.Year)
+                            .OrderByDescending(h => h.Effectivedate)
+                            .FirstOrDefault();
+                        
+
+                        if (currentSalary != null)
+                        {
+                            monthlySum += currentSalary.Salary;
+                        }
+                        else
+                        {
+                            // Nếu không có lương trong tháng, lấy mức lương của tháng trước đó
+                            var previousSalary = salaryHistories
+                                .Where(h => h.Effectivedate < month)
+                                .OrderByDescending(h => h.Effectivedate)
+                                .FirstOrDefault();
+
+                            if (previousSalary != null)
+                            {
+                                // Thêm lương của tháng trước đó vào tổng
+                                monthlySum += previousSalary.Salary;
+                            }
+                        }
+                    }
+
+                    // Thêm kết quả cho từng tháng vào dictionary
+                    salaryByMonth[month] = monthlySum;
+                }
+
+                return salaryByMonth;
             }
             catch (OperationCanceledException)
             {
@@ -158,45 +186,7 @@ namespace CafeManager.Infrastructure.Repositories
             }
         }
 
-        public async Task<List<decimal>> GetTotalSalaryByYear(DateTime from, DateTime to, CancellationToken token = default)
-        {
-            try
-            {
-                DateOnly fromDO = new(from.Year, from.Month, from.Day);
-                DateOnly toDO = new(to.Year, to.Month, to.Day);
 
-                // Lấy tất cả lịch sử lương trong khoảng thời gian từ from đến to
-                var salaryHistory = await _cafeManagerContext.Staffsalaryhistories
-                    .Where(sh => sh.Effectivedate >= fromDO && sh.Effectivedate <= toDO && sh.Isdeleted == false)
-                    .ToListAsync(token);
-
-                // Tạo danh sách tất cả các năm trong khoảng thời gian từ from đến to
-                var allYears = Enumerable.Range(toDO.Year, to.Year - fromDO.Year + 1).ToList();
-
-                // Group by năm và tính tổng lương cho mỗi năm
-                var salaryGroupedByYear = salaryHistory
-                    .GroupBy(sh => new DateTime(sh.Effectivedate.Year, 1, 1))  // Group by Year
-                    .ToDictionary(
-                        g => g.Key.Year, // Key is the year
-                        g => g.Sum(sh => sh.Salary) // Total salary for each year
-                    );
-
-                // Lấy tổng lương cho mỗi năm, nếu không có thì trả về 0
-                var salaryList = allYears.Select(year =>
-                {
-                    return salaryGroupedByYear.ContainsKey(year) ? salaryGroupedByYear[year] : 0;
-                }).ToList();
-
-                return salaryList;
-            }
-            catch (OperationCanceledException)
-            {
-                throw;
-            }
-            catch (Exception)
-            {
-                throw;
-            }
-        }
+        
     }
 }

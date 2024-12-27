@@ -40,6 +40,9 @@ namespace CafeManager.Core.DTOs
         [ObservableProperty]
         private FoodCategoryDTO _foodcategory;
 
+        [ObservableProperty]
+        private string _foodcategoryname;
+
         public decimal? PriceDiscount => Price * (100 - Discountfood) / 100;
 
         public FoodDTO Clone()
@@ -54,6 +57,7 @@ namespace CafeManager.Core.DTOs
                 Imagefood = Imagefood,
                 Discountfood = Discountfood,
                 Isdeleted = Isdeleted,
+                Foodcategoryname = Foodcategoryname
             };
         }
     }

@@ -142,31 +142,23 @@ namespace CafeManager.WPF.Services
                 throw;
             }
         }
-
-        public async Task<List<decimal>> GetTotalSalaryByMonth(DateTime from, DateTime to, CancellationToken token = default)
+        public async Task<Dictionary<DateOnly, decimal>> GetTotalSalaryByMonth(DateTime from, DateTime to, CancellationToken token = default)
         {
             try
             {
                 return await _unitOfWork.StaffList.GetTotalSalaryByMonth(from, to, token);
             }
+            catch (OperationCanceledException)
+            {
+                throw;
+            }
             catch (Exception)
             {
-
                 throw;
             }
         }
 
-        public async Task<List<decimal>> GetTotalSalaryByYear(DateTime from, DateTime to, CancellationToken token = default)
-        {
-            try
-            {
-                return await _unitOfWork.StaffList.GetTotalSalaryByYear(from, to, token);
-            }
-            catch (Exception)
-            {
 
-                throw;
-            }
-        }
+
     }
 }

@@ -52,7 +52,7 @@ namespace CafeManager.Infrastructure.Repositories
                 DateOnly fromDO = new(from.Year, from.Month, from.Day);
                 DateOnly toDO = new(to.Year, to.Month, to.Day);
 
-                return await _cafeManagerContext.Staff.Where(x => x.Isdeleted == false && x.Startworkingdate >= fromDO && x.Startworkingdate <= toDO).CountAsync(token);
+                return await _cafeManagerContext.Staff.Where(x => x.Isdeleted == false && x.Startworkingdate <= toDO && x.Startworkingdate <= toDO).CountAsync(token);
             }
             catch (OperationCanceledException)
             {
@@ -71,7 +71,7 @@ namespace CafeManager.Infrastructure.Repositories
                 DateOnly fromDO = new(from.Year, from.Month, from.Day);
                 DateOnly toDO = new(to.Year, to.Month, to.Day);
                 decimal sum = decimal.Zero;
-                var list = await _cafeManagerContext.Staff.Where(x => x.Isdeleted == false && x.Startworkingdate >= fromDO && x.Startworkingdate <= toDO).ToListAsync(token);
+                var list = await _cafeManagerContext.Staff.Where(x => x.Isdeleted == false && x.Startworkingdate <= toDO && x.Startworkingdate <= toDO).ToListAsync(token);
 
                 foreach (var staff in list)
                 {

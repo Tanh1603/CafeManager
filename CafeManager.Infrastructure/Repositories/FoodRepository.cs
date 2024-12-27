@@ -42,13 +42,14 @@ namespace CafeManager.Infrastructure.Repositories
 
                 // Lấy thông tin chi tiết các món ăn từ bảng Food
                 var foods = await _cafeManagerContext.Foods
-                    .Where(f => foodIds.Contains(f.Foodid))
+                    .Where(f => foodIds.Contains(f.Foodid)).Include(f => f.Foodcategory)
                     .ToListAsync(token);
 
                 // Ánh xạ sang FoodDTO và thêm thông tin TotalSold
                 var foodDTOs = foods.Select(f => new FoodDTO
                 {
                     Foodname = f.Foodname,
+                    Foodcategoryname = f.Foodcategory.Foodcategoryname,
                     Price = f.Price ?? 0 // Đảm bảo xử lý null
                 }).ToList();
 

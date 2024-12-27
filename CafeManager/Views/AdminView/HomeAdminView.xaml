@@ -20,6 +20,7 @@
     <UserControl.Resources>
         <converter:CurrencyConverter x:Key="CurrencyConverter" />
         <converter:EqualsConverter x:Key="EqualsConverter" />
+        <converter:IconConverter x:Key="IconConverter"/>
 
     </UserControl.Resources>
     <Grid>
@@ -415,11 +416,9 @@
 
                                         <lvc:CartesianChart.AxisX>
 
-                                            <lvc:Axis Title="Doanh thu" Labels="{Binding LabelChartZoom}" >
-                                                <lvc:Axis.Separator>
-                                                    <lvc:Separator Step="1" />
-                                                </lvc:Axis.Separator>
-                                            </lvc:Axis>
+                                            <lvc:Axis Title="Doanh thu" Labels="{Binding LabelChartZoom}" />
+
+
                                         </lvc:CartesianChart.AxisX>
                                         <lvc:CartesianChart.AxisY>
                                             <lvc:Axis
@@ -517,12 +516,12 @@
                                                     Height="45"
                                                     Margin="25,0,0,0">
                                                     <Border Background="#612e0f" CornerRadius="10" />
-                                                    <ma:PackIconMaterial
+                                                    <materialDesign:PackIcon
                                                         Width="25"
                                                         HorizontalAlignment="Center"
                                                         VerticalAlignment="Center"
                                                         Foreground="#dac5b4"
-                                                        Kind="Cake" />
+                                                        Kind="{Binding Foodcategoryname, Converter={StaticResource IconConverter}}" />
                                                 </Grid>
 
                                                 <Grid

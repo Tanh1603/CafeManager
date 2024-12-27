@@ -308,6 +308,7 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
                                         new GradientStop { Offset = 1, Color = (System.Windows.Media.Color)System.Windows.Media.ColorConverter.ConvertFromString("#7CE495") }
                                     }
                     },
+                    LabelPoint = point => $" {point.Y:N0} VNĐ",
                 };
                 var MaterialCostCol = new ColumnSeries()
                 {
@@ -325,6 +326,7 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
                                         new GradientStop { Offset = 1, Color = (System.Windows.Media.Color)System.Windows.Media.ColorConverter.ConvertFromString("#844518") }
                                     }
                     },
+                    LabelPoint = point => $" {point.Y:N0} VNĐ",
                 };
 
 

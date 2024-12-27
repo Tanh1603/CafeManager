@@ -22,8 +22,9 @@ namespace CafeManager.WPF.Services.Converter
                     case "cà phê":
                                return PackIconKind.LocalCafe;
                     case "sinh tố":
+                        return PackIconKind.GlassFlute;
                     case "trà sữa":
-                                 return PackIconKind.GlassMug;
+                                 return PackIconKind.GlassCocktail;
                     case "nước ép":
                         return PackIconKind.CupFull;
                     default:

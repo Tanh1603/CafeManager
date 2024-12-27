@@ -535,6 +535,7 @@
                                                         FontSize="14"
                                                         FontWeight="Bold"
                                                         Foreground="#dac5b4"
+                                                        TextTrimming="CharacterEllipsis"
                                                         Text="{Binding Foodname}" />
                                                 </Grid>
 

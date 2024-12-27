@@ -19,7 +19,7 @@ namespace CafeManager.WPF.Services.Converter
 
                 switch(foodCategory)
                 {
-                    case "cafe":
+                    case "cà phê":
                                return PackIconKind.LocalCafe;
                     case "sinh tố":
                     case "trà sữa":
@@ -27,11 +27,11 @@ namespace CafeManager.WPF.Services.Converter
                     case "nước ép":
                         return PackIconKind.CupFull;
                     default:
-                        return PackIconKind.Cake;
+                        return PackIconKind.Food;
 
                 }
             }
-            return PackIconKind.Cake; // Icon mặc định nếu không có dữ liệu
+            return PackIconKind.Food; // Icon mặc định nếu không có dữ liệu
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)

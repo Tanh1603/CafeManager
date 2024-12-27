@@ -36,7 +36,7 @@
             <!--  Page Title  -->
             <TextBlock
                 Grid.Row="0"
-                Margin="0 20 0 10"
+                Margin="0,20,0,10"
                 HorizontalAlignment="Left"
                 FontSize="32"
                 FontWeight="SemiBold"
@@ -47,7 +47,6 @@
                 Grid.Row="0"
                 Width="120"
                 Height="1"
-               
                 HorizontalAlignment="Left"
                 VerticalAlignment="Bottom"
                 Background="#f5f5f5" />
@@ -134,12 +133,10 @@
                 <DatePicker
                     Width="120"
                     VerticalAlignment="Center"
-                    
+                    CalendarStyle="{StaticResource MaterialDesignCalendarPortrait}"
                     SelectedDate="{Binding FilterManufacturedate, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
                     Style="{StaticResource DatePicker}"
-                    CalendarStyle="{StaticResource MaterialDesignCalendarPortrait}"
-                    
-                    />
+                    Tag="Visible" />
 
                 <TextBlock
                     Margin="10,0"
@@ -151,34 +148,35 @@
                 <DatePicker
                     Width="120"
                     VerticalAlignment="Center"
-                    
+                    CalendarStyle="{StaticResource MaterialDesignCalendarPortrait}"
                     SelectedDate="{Binding FilterExpirationdate, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
-                    Style="{StaticResource DatePicker}" />
+                    Style="{StaticResource DatePicker}"
+                    Tag="Visible" />
 
-                <StackPanel Orientation="Horizontal"
-                            Visibility="{Binding ConsumedPage, Converter={StaticResource BoolToVis}}">
+                <StackPanel Orientation="Horizontal" Visibility="{Binding ConsumedPage, Converter={StaticResource BoolToVis}}">
                     <TextBlock
-                    Margin="10,0"
-                    VerticalAlignment="Center"
-                    FontSize="13"
-                    FontWeight="SemiBold"
-                    Foreground="#602414"
-                    Text="Ngày sử dụng: " />
+                        Margin="10,0"
+                        VerticalAlignment="Center"
+                        FontSize="13"
+                        FontWeight="SemiBold"
+                        Foreground="#602414"
+                        Text="Ngày sử dụng: " />
 
                     <DatePicker
-                    Width="120"
-                    VerticalAlignment="Center"
-                  
-                    SelectedDate="{Binding SelectedUsageDate, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
-                    Style="{StaticResource DatePicker}" />
+                        Width="120"
+                        VerticalAlignment="Center"
+                        CalendarStyle="{StaticResource MaterialDesignCalendarPortrait}"
+                        SelectedDate="{Binding SelectedUsageDate, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
+                        Style="{StaticResource DatePicker}"
+                        Tag="Visible" />
                 </StackPanel>
                 <Button
-                    Visibility="{Binding InventoryPage, Converter={StaticResource BoolToVis}}"
                     Width="Auto"
                     Margin="10,0,0,0"
                     VerticalAlignment="Center"
                     Command="{Binding FilterExpiringCommand}"
-                    Style="{StaticResource DynamicButtonStyle}">
+                    Style="{StaticResource DynamicButtonStyle}"
+                    Visibility="{Binding InventoryPage, Converter={StaticResource BoolToVis}}">
                     <TextBlock Margin="5" Text="Sắp hết hạn" />
                 </Button>
 

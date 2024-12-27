@@ -85,7 +85,7 @@
                     Panel.ZIndex="1"
                     Foreground="#9c6d3f"
                     IsHitTestVisible="False"
-                    Text="Search in Members..."
+                    Text="Tìm kiếm..."
                     Visibility="{Binding ElementName=txtFilter, Path=Text.IsEmpty, Converter={StaticResource BoolToVis}}" />
                 <TextBox
                     x:Name="txtFilter"

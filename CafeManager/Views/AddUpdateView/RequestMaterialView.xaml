@@ -106,31 +106,69 @@
                                 </DataGridTextColumn.Binding>
                             </DataGridTextColumn>
 
-                            <DataGridTextColumn
+                            <DataGridTemplateColumn
                                 Width="*"
-                                Binding="{Binding Materialsupplier.Material.Materialname}"
                                 CanUserResize="False"
                                 Header="Tên vật tư"
-                                IsReadOnly="True" />
+                                IsReadOnly="True">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <Grid>
+                                            <TextBlock
+                                                HorizontalAlignment="Center"
+                                                FontSize="16"
+                                                Text="{Binding Materialsupplier.Material.Materialname}"
+                                                TextTrimming="CharacterEllipsis"
+                                                ToolTip="{Binding Materialsupplier.Material.Materialname}" />
+                                        </Grid>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                            <!--  Binding="{Binding Materialsupplier.Material.Materialname}"  -->
 
-                            <DataGridTextColumn
-                                Width="*"
-                                Binding="{Binding Materialsupplier.Supplier.Suppliername}"
+                            <DataGridTemplateColumn
+                                Width="1.2*"
                                 CanUserResize="False"
                                 Header="Nhà cung cấp"
-                                IsReadOnly="True" />
+                                IsReadOnly="True">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <Grid>
+                                            <TextBlock
+                                                HorizontalAlignment="Center"
+                                                FontSize="16"
+                                                Text="{Binding Materialsupplier.Supplier.Suppliername}"
+                                                TextTrimming="CharacterEllipsis"
+                                                ToolTip="{Binding Materialsupplier.Supplier.Suppliername}" />
+
+                                        </Grid>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
                             <!--<DataGridTextColumn
                                 Width="*"
                                 Binding="{Binding Manufacturedate, Converter={StaticResource DateTimeToDateOnlyConverter}}"
                                 CanUserResize="False"
                                 Header="Ngày sản xuất"
                                 IsReadOnly="True" />-->
-                            <DataGridTextColumn
-                                Width="*"
-                                Binding="{Binding Materialsupplier.Expirationdate, Converter={StaticResource DateTimeToDateOnlyConverter}}"
+                            <DataGridTemplateColumn
+                                Width="1.2*"
                                 CanUserResize="False"
                                 Header="Ngày hết hạn"
-                                IsReadOnly="True" />
+                                IsReadOnly="True">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <Grid>
+                                            <TextBlock
+                                                HorizontalAlignment="Center"
+                                                FontSize="16"
+                                                Text="{Binding Materialsupplier.Expirationdate, Converter={StaticResource DateTimeToDateOnlyConverter}}"
+                                                TextTrimming="CharacterEllipsis"
+                                                ToolTip="{Binding Materialsupplier.Expirationdate, Converter={StaticResource DateTimeToDateOnlyConverter}}" />
+                                        </Grid>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
                             <DataGridTextColumn
                                 Width="*"
                                 Binding="{Binding Materialsupplier.Original}"
@@ -138,14 +176,26 @@
                                 Header="Nguồn gốc"
                                 IsReadOnly="True" />
 
-                            <DataGridTextColumn
-                                Width="*"
-                                Binding="{Binding Materialsupplier.Manufacturer}"
+                            <DataGridTemplateColumn
+                                Width="1.2*"
                                 CanUserResize="False"
                                 Header="Nhà sản xuất"
-                                IsReadOnly="True" />
+                                IsReadOnly="True">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <Grid>
+                                            <TextBlock
+                                                HorizontalAlignment="Center"
+                                                FontSize="16"
+                                                Text="{Binding Materialsupplier.Manufacturer}"
+                                                TextTrimming="CharacterEllipsis"
+                                                ToolTip="{Binding Materialsupplier.Manufacturer}" />
+                                        </Grid>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
                             <DataGridTextColumn
-                                Width="*"
+                                Width="0.8*"
                                 Binding="{Binding Materialsupplier.Price}"
                                 CanUserResize="False"
                                 Header="Giá"

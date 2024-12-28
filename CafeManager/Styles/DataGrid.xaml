@@ -206,7 +206,9 @@
                                 HorizontalAlignment="Center"
                                 VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
                                 RecognizesAccessKey="True"
-                                SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
+                                SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"
+                                
+                                />
                         </theme:DataGridHeaderBorder>
                         <Thumb
                             x:Name="PART_LeftHeaderGripper"

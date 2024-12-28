@@ -155,25 +155,62 @@
                                 </DataGridTextColumn.Binding>
                             </DataGridTextColumn>
 
-                            <DataGridTextColumn
+                            <DataGridTemplateColumn
                                 Width="*"
-                                Binding="{Binding Material.Materialname}"
                                 CanUserResize="False"
                                 Header="Tên vật tư"
-                                IsReadOnly="True" />
+                                IsReadOnly="True">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <Grid>
+                                            <TextBlock
+                                                HorizontalAlignment="Center"
+                                                FontSize="16"
+                                                Text="{Binding Material.Materialname}"
+                                                TextTrimming="CharacterEllipsis"
+                                                ToolTip="{Binding Material.Materialname}" />
+                                        </Grid>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
 
-                            <DataGridTextColumn
-                                Width="*"
-                                Binding="{Binding Supplier.Suppliername}"
+                            <DataGridTemplateColumn
+                                Width="1.2*"
                                 CanUserResize="False"
                                 Header="Nhà cung cấp"
-                                IsReadOnly="True" />
-                            <DataGridTextColumn
-                                Width="*"
-                                Binding="{Binding Expirationdate, Converter={StaticResource DateTimeToDateOnlyConverter}}"
+                                IsReadOnly="True">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+
+                                        <Grid>
+                                            <TextBlock
+                                                HorizontalAlignment="Center"
+                                                FontSize="16"
+                                                Text="{Binding Supplier.Suppliername}"
+                                                TextTrimming="CharacterEllipsis"
+                                                ToolTip="{Binding Supplier.Suppliername}" />
+                                        </Grid>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                            <DataGridTemplateColumn
+                                Width="1.2*"
                                 CanUserResize="False"
                                 Header="Ngày hết hạn"
-                                IsReadOnly="True" />
+                                IsReadOnly="True">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <Grid>
+                                            <TextBlock
+                                                HorizontalAlignment="Center"
+                                                FontSize="16"
+                                                Text="{Binding Expirationdate, Converter={StaticResource DateTimeToDateOnlyConverter}}"
+                                                TextTrimming="CharacterEllipsis"
+                                                ToolTip="{Binding Expirationdate, Converter={StaticResource DateTimeToDateOnlyConverter}}" />
+                                        </Grid>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
                             <DataGridTextColumn
                                 Width="*"
                                 Binding="{Binding Original}"
@@ -181,14 +218,26 @@
                                 Header="Nguồn gốc"
                                 IsReadOnly="True" />
 
-                            <DataGridTextColumn
-                                Width="*"
-                                Binding="{Binding Manufacturer}"
+                            <DataGridTemplateColumn
+                                Width="1.2*"
                                 CanUserResize="False"
                                 Header="Nhà sản xuất"
-                                IsReadOnly="True" />
+                                IsReadOnly="True">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <Grid>
+                                            <TextBlock
+                                                HorizontalAlignment="Center"
+                                                FontSize="16"
+                                                Text="{Binding Manufacturer}"
+                                                TextTrimming="CharacterEllipsis"
+                                                ToolTip="{Binding Manufacturer}" />
+                                        </Grid>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
                             <DataGridTextColumn
-                                Width="*"
+                                Width="0.8*"
                                 Binding="{Binding Price}"
                                 CanUserResize="False"
                                 Header="Giá"

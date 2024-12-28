@@ -458,22 +458,25 @@
                                         </DataGridTextColumn.Binding>
                                     </DataGridTextColumn>
                                     <DataGridTemplateColumn
-                                        Width="*"
+                                        Width="1.2*"
                                         Header="Tên món ăn"
                                         IsReadOnly="True">
                                         <DataGridTemplateColumn.CellTemplate>
                                             <DataTemplate>
                                                 <Grid>
+                                                    
                                                     <TextBlock
                                                         HorizontalAlignment="Center"
                                                         FontSize="16"
-                                                        Text="{Binding Food.Foodname}" />
+                                                        Text="{Binding Food.Foodname}"
+                                                        TextTrimming="CharacterEllipsis"
+                                                        ToolTip="{Binding Food.Foodname}"/>
                                                 </Grid>
                                             </DataTemplate>
                                         </DataGridTemplateColumn.CellTemplate>
                                     </DataGridTemplateColumn>
 
-                                    <DataGridTemplateColumn Width="*" Header="Số lượng">
+                                    <DataGridTemplateColumn Width="2*" Header="Số lượng">
                                         <DataGridTemplateColumn.CellTemplate>
                                             <DataTemplate>
                                                 <Grid HorizontalAlignment="Center">

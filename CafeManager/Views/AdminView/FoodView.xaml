@@ -80,6 +80,7 @@
                     ItemsSource="{Binding ListFoodCategory}"
                     SelectedItem="{Binding SelectedFoodCategory}"
                     Style="{StaticResource ComboBoxStyle}"
+                    FontWeight="Bold"
                     Tag="Danh mục thực đơn">
                     <ComboBox.ItemContainerStyle>
                         <Style BasedOn="{StaticResource ComboBoxItemStyle}" TargetType="ComboBoxItem">

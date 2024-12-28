@@ -111,8 +111,9 @@
             <TabControl
                 Grid.Row="3"
                 HorizontalAlignment="Stretch"
-                VerticalAlignment="Stretch">
-                <TabItem Header="Đang hiển thị" Style="{DynamicResource tabItemStyle}">
+                VerticalAlignment="Stretch"
+                Style="{DynamicResource tabControlStyle}">
+                <TabItem Header="Đang làm việc" Style="{DynamicResource tabItemStyle}">
                     <DataGrid
                         VerticalAlignment="Top"
                         AlternationCount="{Binding ListExistedStaff.Count}"

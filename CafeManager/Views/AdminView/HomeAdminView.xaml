@@ -452,7 +452,7 @@
 
                                     <lvc:CartesianChart
                                         Grid.Row="1"
-                                        Zoom="X"
+                                        Zoom="x"
                                         Series="{Binding ChartColumnCollection}">
                                         <lvc:CartesianChart.AxisX>
                                             <lvc:Axis Title="Quản lí thu - chi" Labels="{Binding LabelChartCol}" >
@@ -536,6 +536,7 @@
                                                         FontWeight="Bold"
                                                         Foreground="#dac5b4"
                                                         TextTrimming="CharacterEllipsis"
+                                                        ToolTip="{Binding Foodname}"
                                                         Text="{Binding Foodname}" />
                                                 </Grid>
 

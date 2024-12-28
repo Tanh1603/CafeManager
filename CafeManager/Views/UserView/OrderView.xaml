@@ -74,7 +74,7 @@
 
                                                 <Border
                                                     Width="200"
-                                                    Margin="20"
+                                                    Margin="17"
                                                     Padding="20"
                                                     HorizontalAlignment="Left"
                                                     BorderThickness="3"

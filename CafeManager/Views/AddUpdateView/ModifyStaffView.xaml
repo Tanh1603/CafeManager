@@ -505,7 +505,8 @@
                                     HorizontalAlignment="Left"
                                     IsEnabled="{Binding IsEnable}"
                                     SelectedDate="{Binding CurrentStaffSalary.Effectivedate, Converter={StaticResource DateOnlyToDateTimeConverter}}"
-                                    Style="{StaticResource MaterialDesignOutlinedDatePicker}" />
+                                    Style="{StaticResource DatePicker}"
+                                    CalendarStyle="{StaticResource MaterialDesignCalendarPortrait}"/>
                             </Grid>
 
                             <Button

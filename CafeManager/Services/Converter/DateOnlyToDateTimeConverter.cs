@@ -12,11 +12,12 @@ namespace CafeManager.WPF.Services.Converter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
+           
             if (value is DateOnly dateOnly)
             {
                 return new DateTime(dateOnly.Year, dateOnly.Month, dateOnly.Day);
             }
-            return string.Empty;
+            return null;
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
@@ -25,7 +26,7 @@ namespace CafeManager.WPF.Services.Converter
             {
                 return DateOnly.FromDateTime(dateTime);
             }
-            return string.Empty;
+            return null;
         }
     }
 }

@@ -16,7 +16,7 @@
     xmlns:uc="clr-namespace:CafeManager.WPF.Assets.UsersControls"
     xmlns:viewmodels="clr-namespace:CafeManager.WPF.ViewModels"
     xmlns:views="clr-namespace:CafeManager.WPF.Views"
-    MinWidth="1000"
+    MinWidth="800"
     mc:Ignorable="d">
 
     <UserControl.Resources>
@@ -243,6 +243,7 @@
                                     MinWidth="140"
                                     Margin="5"
                                     HorizontalAlignment="Left"
+                                   
                                     CalendarStyle="{StaticResource MaterialDesignCalendarPortrait}"
                                     SelectedDate="{Binding ModifyStaff.Startworkingdate, Converter={StaticResource DateOnlyToDateTimeConverter}}"
                                     Style="{StaticResource DatePicker}"
@@ -256,6 +257,7 @@
                                     MinWidth="140"
                                     Margin="5"
                                     HorizontalAlignment="Left"
+                                               
                                     SelectedDate="{Binding ModifyStaff.Endworkingdate, Converter={StaticResource DateOnlyToDateTimeConverter}}"
                                     Style="{StaticResource DatePickerWithNullCollapseStyle}"
                                     Validation.ErrorTemplate="{StaticResource ErrorMessageReg}" />

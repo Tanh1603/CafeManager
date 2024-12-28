@@ -41,7 +41,7 @@
 
             <Separator
                 Grid.Row="0"
-                Width="120"
+                Width="260"
                 Height="1"
                 Margin="0,10,0,0"
                 HorizontalAlignment="Left"
@@ -65,7 +65,14 @@
                     ItemsSource="{Binding ListMaterialDTO}"
                     SelectedItem="{Binding SelectedMaterial}"
                     SelectedValuePath="Content"
-                    Style="{StaticResource MaterialDesignFilledComboBox}">
+                    Style="{StaticResource ComboBoxStyle}">
+                    <ComboBox.ItemContainerStyle>
+                        <Style BasedOn="{StaticResource ComboBoxItemStyle}" TargetType="ComboBoxItem">
+                            <Setter Property="Width" Value="{Binding ActualWidth, ElementName=cbFoodCategory}" />
+                            <Setter Property="Height" Value="{Binding ActualHeight, ElementName=cbFoodCategory}" />
+
+                        </Style>
+                    </ComboBox.ItemContainerStyle>
                     <ComboBox.ItemTemplate>
                         <DataTemplate>
                             <Grid>
@@ -88,12 +95,14 @@
                     Foreground="#602414"
                     Text="Ngày sử dụng: " />
                 <DatePicker
-                    Width="120"
+                    Width="150"
                     VerticalAlignment="Center"
                     materialDesign:HintAssist.Hint="Chọn ngày"
                     materialDesign:TextFieldAssist.HasClearButton="True"
+                    CalendarStyle="{StaticResource MaterialDesignCalendarPortrait}"
                     SelectedDate="{Binding FilterUseDate, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
-                    Style="{StaticResource MaterialDesignFloatingHintDatePicker}" />
+                    Style="{StaticResource DatePicker}"
+                    Tag="Visible" />
                 <Button
                     Grid.Column="1"
                     Width="140"

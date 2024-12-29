@@ -101,6 +101,12 @@ namespace CafeManager.WPF.ViewModels.AddViewModel
         [RelayCommand]
         private void SubmitModifySalaryHistory()
         {
+            if (ModifyStaff.Startworkingdate > CurrentStaffSalary.Effectivedate)
+            {
+                MyMessageBox.ShowDialog("Ngày bắt đầu của lịch sử lương không thể nhỏ hơn ngày vào làm.");
+                return;
+            }
+
             var existedHistory = ModifyStaff.Staffsalaryhistories
                 .FirstOrDefault(x => x.Isdeleted == false &&
                     x.Effectivedate.Month == CurrentStaffSalary.Effectivedate.Month && x.Effectivedate.Year == CurrentStaffSalary.Effectivedate.Year);

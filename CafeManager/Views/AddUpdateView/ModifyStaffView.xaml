@@ -16,13 +16,12 @@
     xmlns:uc="clr-namespace:CafeManager.WPF.Assets.UsersControls"
     xmlns:viewmodels="clr-namespace:CafeManager.WPF.ViewModels"
     xmlns:views="clr-namespace:CafeManager.WPF.Views"
-    MinWidth="1000"
     mc:Ignorable="d">
 
     <UserControl.Resources>
         <Style
             x:Key="DatePickerWithNullCollapseStyle"
-            BasedOn="{StaticResource MaterialDesignOutlinedDatePicker}"
+            BasedOn="{StaticResource DatePicker}"
             TargetType="DatePicker">
             <Setter Property="Visibility" Value="Visible" />
             <Style.Triggers>
@@ -50,7 +49,7 @@
         </Border.Background>
 
         <Grid>
-            <Grid>
+            <Grid HorizontalAlignment="Center">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="auto" />
                     <RowDefinition Height="*" />
@@ -69,21 +68,14 @@
                     </Button>
                 </Border>
 
-                <StackPanel
-                    Grid.Row="1"
-                    Margin="10,0"
-                    Orientation="Horizontal">
+                <Grid Grid.Row="1" Margin="10,0">
 
-                    <!--<Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*" MinWidth="400" />
+                    <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="auto" />
-                    </Grid.ColumnDefinitions>-->
+                        <ColumnDefinition Width="auto" />
+                    </Grid.ColumnDefinitions>
 
-                    <Border
-                        MinWidth="400"
-                        Margin="0,0,10,0"
-                        BorderThickness="2"
-                        CornerRadius="10">
+                    <Border BorderThickness="2" CornerRadius="10">
                         <Border.BorderBrush>
                             <LinearGradientBrush StartPoint="0,0.5">
                                 <GradientStop Offset="0" Color="#5e2313" />
@@ -93,15 +85,15 @@
                         </Border.BorderBrush>
                         <Border.Resources>
                             <Style TargetType="Border">
-                                <Setter Property="Visibility" Value="Visible" />
+                                <Setter Property="Margin" Value="0,0,10,0" />
                                 <Style.Triggers>
                                     <DataTrigger Binding="{Binding IsEnable}" Value="False">
-                                        <Setter Property="Visibility" Value="Collapsed" />
+                                        <Setter Property="Margin" Value="0,0,10,20" />
                                     </DataTrigger>
                                 </Style.Triggers>
                             </Style>
                         </Border.Resources>
-                        <StackPanel>
+                        <StackPanel Margin="10" HorizontalAlignment="Left">
                             <TextBlock
                                 Margin="10"
                                 HorizontalAlignment="Center"
@@ -275,6 +267,15 @@
                                 <GradientStop Offset="1" Color="#7c4e37" />
                             </LinearGradientBrush>
                         </Border.BorderBrush>
+                        <Border.Resources>
+                            <Style TargetType="Border">
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding IsEnable}" Value="False">
+                                        <Setter Property="Margin" Value="0,0,0,20" />
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Border.Resources>
                         <Grid>
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="auto" />
@@ -295,9 +296,51 @@
                                 ItemsSource="{Binding ListExisted}">
                                 <ListView.View>
                                     <GridView>
-                                        <GridViewColumn DisplayMemberBinding="{Binding Salary, Converter={StaticResource CurrencyConverter}}" Header="Lương cơ bản" />
-                                        <GridViewColumn DisplayMemberBinding="{Binding Effectivedate, StringFormat=dd/MM/yyyy}" Header="Ngày có hiệu lực" />
-                                        <GridViewColumn Header="Tùy chỉnh">
+                                        <GridViewColumn>
+                                            <GridViewColumn.Header>
+                                                <GridViewColumnHeader>
+                                                    <TextBlock
+                                                        FontSize="16"
+                                                        FontWeight="SemiBold"
+                                                        Foreground="#844418"
+                                                        Text="Lương cơ bản" />
+                                                </GridViewColumnHeader>
+                                            </GridViewColumn.Header>
+
+                                            <GridViewColumn.CellTemplate>
+                                                <DataTemplate>
+                                                    <TextBlock  Foreground="#844418" Text="{Binding Salary, Converter={StaticResource CurrencyConverter}}" />
+                                                </DataTemplate>
+                                            </GridViewColumn.CellTemplate>
+                                        </GridViewColumn>
+
+                                        <GridViewColumn>
+                                            <GridViewColumn.Header>
+                                                <GridViewColumnHeader>
+                                                    <TextBlock
+                                                        FontSize="16"
+                                                        FontWeight="SemiBold"
+                                                        Foreground="#844418"
+                                                        Text="Ngày có hiệu lực" />
+                                                </GridViewColumnHeader>
+                                            </GridViewColumn.Header>
+
+                                            <GridViewColumn.CellTemplate>
+                                                <DataTemplate>
+                                                    <TextBlock Foreground="#844418" Text="{Binding  Effectivedate, StringFormat=dd/MM/yyyy}" />
+                                                </DataTemplate>
+                                            </GridViewColumn.CellTemplate>
+                                        </GridViewColumn>
+                                        <GridViewColumn>
+                                            <GridViewColumn.Header>
+                                                <GridViewColumnHeader>
+                                                    <TextBlock
+                                                        FontSize="16"
+                                                        FontWeight="SemiBold"
+                                                        Foreground="#844418"
+                                                        Text="Tùy chỉnh" />
+                                                </GridViewColumnHeader>
+                                            </GridViewColumn.Header>
                                             <GridViewColumn.CellTemplate>
                                                 <DataTemplate>
                                                     <StackPanel Grid.Column="1" Orientation="Horizontal">
@@ -382,7 +425,8 @@
                             </Grid>
                         </Grid>
                     </Border>
-                </StackPanel>
+                </Grid>
+
                 <Grid Grid.Row="2">
                     <Grid.Resources>
                         <Style TargetType="Grid">

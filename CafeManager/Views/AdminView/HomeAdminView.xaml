@@ -94,7 +94,7 @@
                                     CalendarStyle="{StaticResource MaterialDesignCalendarPortrait}"
                                     SelectedDate="{Binding From}"
                                     Style="{StaticResource DatePicker}"
-                                    Tag="Visible"
+                                    Tag="Collapsed"
                                     Validation.ErrorTemplate="{StaticResource ErrorMessage}"
                                      />
                             </Grid>
@@ -112,7 +112,7 @@
                                     CalendarStyle="{StaticResource MaterialDesignCalendarPortrait}"
                                     SelectedDate="{Binding To}"
                                     Style="{StaticResource DatePicker}"
-                                    Tag="Visible"
+                                    Tag="Collapsed"
                                     Validation.ErrorTemplate="{StaticResource ErrorMessage}"/>
                             </Grid>
                         </Grid>

@@ -26,10 +26,10 @@
                 <StackPanel Margin="50" HorizontalAlignment="Center">
                     <TextBlock
                         HorizontalAlignment="Center"
+                        FontFamily="{StaticResource coffe}"
                         FontSize="42"
                         FontWeight="SemiBold"
                         Foreground="#ffffff"
-                        FontFamily="{StaticResource coffe}"
                         Text="Cafe Manager" />
                     <materialDesign:PackIcon
                         Width="100"
@@ -201,7 +201,6 @@
                                 Foreground="#9b442a"
                                 Kind="EmailAdd" />
                             <TextBox
-                                
                                 Grid.Column="1"
                                 MinHeight="50"
                                 Margin="10,0"

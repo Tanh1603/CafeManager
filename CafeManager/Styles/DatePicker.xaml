@@ -65,7 +65,8 @@
                                     Padding="5"
                                     Background="Transparent"
                                     Style="{StaticResource txtBoxDatePicker}"
-                                    Text="{Binding SelectedDate, RelativeSource={RelativeSource TemplatedParent}, StringFormat='{}{0:dd/MM/yyyy}', Mode=TwoWay, TargetNullValue='', FallbackValue=''}" />
+                                    Text="{Binding SelectedDate, RelativeSource={RelativeSource TemplatedParent}, StringFormat='{}{0:dd/MM/yyyy}', Mode=TwoWay, TargetNullValue='', FallbackValue=''}" 
+                                    IsReadOnly="True"/>
                                 <Button
                                     x:Name="ClearBtn"
                                     Grid.Column="1"

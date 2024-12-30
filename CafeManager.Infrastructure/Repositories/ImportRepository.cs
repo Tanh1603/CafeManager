@@ -128,10 +128,12 @@ namespace CafeManager.Infrastructure.Repositories
         {
             try
             {
-                // Truy vấn các import trong khoảng thời gian
+                from = from.Date; // Bắt đầu từ 00:00:00
+                to = to.Date.AddDays(1).AddTicks(-1); // Kết thúc vào 23:59:59.9999999
+
                 var imports = await _cafeManagerContext.Imports
                     .Where(x => x.Isdeleted == false && x.Receiveddate >= from && x.Receiveddate <= to)
-                    .Include(i => i.Importdetails) // Include Importdetails để tính tổng giá trị
+                    .Include(i => i.Importdetails.Where(d => d.Isdeleted == false)) // Include Importdetails để tính tổng giá trị
                     .ThenInclude(d => d.Materialsupplier) // Include Materialsupplier để lấy đơn giá (hoặc lấy thông tin giá từ Material)
                     .ToListAsync(token);
 

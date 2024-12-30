@@ -128,7 +128,7 @@ namespace CafeManager.Infrastructure.Repositories
                 // Lấy danh sách nhân viên thỏa mãn điều kiện
                 var staffList = await _cafeManagerContext.Staff
                     .Where(x => x.Isdeleted == false && x.Startworkingdate <= toDO)
-                    .Include(s => s.Staffsalaryhistories) // Tải lịch sử lương
+                    .Include(s => s.Staffsalaryhistories.Where(d=> d.Isdeleted == false)) // Tải lịch sử lương
                     .ToListAsync(token);
 
                 // Duyệt từng tháng trong khoảng thời gian

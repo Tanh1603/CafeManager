@@ -313,7 +313,7 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
                 var MaterialCostCol = new ColumnSeries()
                 {
                     Title = "Vật liệu",
-                    Values = new ChartValues<decimal>(TotalMaterialCostMonth),
+                    Values = new ChartValues<decimal>(),
                     Stroke = new System.Windows.Media.SolidColorBrush((System.Windows.Media.Color)System.Windows.Media.ColorConverter.ConvertFromString("#661618")),
                     StrokeThickness = 0,
                     Fill = new System.Windows.Media.LinearGradientBrush

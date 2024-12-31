@@ -60,6 +60,7 @@
                     Foreground="#602414"
                     Text="Vật liệu: " />
                 <ComboBox
+                    Name="cbFoodCategory"
                     Width="150"
                     materialDesign:TextFieldAssist.HasClearButton="True"
                     ItemsSource="{Binding ListMaterialDTO}"
@@ -70,7 +71,6 @@
                         <Style BasedOn="{StaticResource ComboBoxItemStyle}" TargetType="ComboBoxItem">
                             <Setter Property="Width" Value="{Binding ActualWidth, ElementName=cbFoodCategory}" />
                             <Setter Property="Height" Value="{Binding ActualHeight, ElementName=cbFoodCategory}" />
-
                         </Style>
                     </ComboBox.ItemContainerStyle>
                     <ComboBox.ItemTemplate>
@@ -335,7 +335,6 @@
                                 Width="140"
                                 VerticalAlignment="Center"
                                 Text="{Binding ReturnQuantity, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay, StringFormat='F2'}" />
-
                         </Grid>
 
                         <Button
@@ -386,7 +385,6 @@
             <materialDesign:DialogHost.DialogContent>
                 <ContentControl Content="{Binding SelectInventoryVM}" />
             </materialDesign:DialogHost.DialogContent>
-
         </materialDesign:DialogHost>
 
         <uc:LoadingData Visibility="{Binding IsLoading, Converter={StaticResource BooleanToVisibilityConverter}}" />

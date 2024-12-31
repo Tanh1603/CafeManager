@@ -163,8 +163,8 @@
         <Setter Property="Background" Value="#DEDEDE" />
         <Setter Property="Foreground" Value="#dac5b4" />
         <Setter Property="Margin" Value="7" />
-        <Setter Property="Height" Value="30"/>
-        <Setter Property="Width" Value="80"/>
+        <Setter Property="Height" Value="30" />
+        <Setter Property="Width" Value="80" />
         <Setter Property="FocusVisualStyle" Value="{x:Null}" />
         <Setter Property="BorderThickness" Value="0" />
         <Setter Property="Template">
@@ -462,14 +462,14 @@
                 </Setter>
             </Trigger>
             <Trigger Property="IsEnabled" Value="False">
-                <Setter Property="Background" Value="#D3D3D3"/>
-             
-                <Setter Property="Foreground" Value="Gray"/>
-                
-                <Setter Property="BorderBrush" Value="#A9A9A9"/>
-                
-                <Setter Property="Opacity" Value="0.7"/>
-               
+                <Setter Property="Background" Value="#D3D3D3" />
+
+                <Setter Property="Foreground" Value="Gray" />
+
+                <Setter Property="BorderBrush" Value="#A9A9A9" />
+
+                <Setter Property="Opacity" Value="0.7" />
+
             </Trigger>
         </Style.Triggers>
     </Style>
@@ -488,13 +488,13 @@
         <Setter Property="MinHeight" Value="45" />
         <Style.Triggers>
             <Trigger Property="IsEnabled" Value="False">
-                <Setter Property="Background" Value="#D3D3D3"/>
+                <Setter Property="Background" Value="#D3D3D3" />
 
-                <Setter Property="Foreground" Value="Gray"/>
+                <Setter Property="Foreground" Value="Gray" />
 
-                <Setter Property="BorderBrush" Value="#A9A9A9"/>
+                <Setter Property="BorderBrush" Value="#A9A9A9" />
 
-                <Setter Property="Opacity" Value="0.7"/>
+                <Setter Property="Opacity" Value="0.7" />
 
             </Trigger>
         </Style.Triggers>
@@ -735,8 +735,11 @@
         </Style.Triggers>
     </Style>
 
-    <Style x:Key="deleteFoodBtn" BasedOn="{StaticResource gridEditButton}" TargetType="Button">
-        
+    <Style
+        x:Key="deleteFoodBtn"
+        BasedOn="{StaticResource gridEditButton}"
+        TargetType="Button">
+
         <Setter Property="MinHeight" Value="35" />
         <Setter Property="MinWidth" Value="35" />
         <Setter Property="Background" Value="Transparent" />
@@ -779,9 +782,10 @@
         </Setter>
     </Style>
 
-    <Style x:Key="DynamicButtonStyle"
-           TargetType="Button" 
-           BasedOn="{StaticResource gridEditButton}">
+    <Style
+        x:Key="DynamicButtonStyle"
+        BasedOn="{StaticResource gridEditButton}"
+        TargetType="Button">
         <Style.Triggers>
             <Trigger Property="IsEnabled" Value="False">
                 <Setter Property="Opacity" Value="0.5" />

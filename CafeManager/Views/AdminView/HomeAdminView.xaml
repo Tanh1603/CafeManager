@@ -20,8 +20,7 @@
     <UserControl.Resources>
         <converter:CurrencyConverter x:Key="CurrencyConverter" />
         <converter:EqualsConverter x:Key="EqualsConverter" />
-        <converter:IconConverter x:Key="IconConverter"/>
-
+        <converter:IconConverter x:Key="IconConverter" />
     </UserControl.Resources>
     <Grid>
 
@@ -62,7 +61,6 @@
                             VerticalAlignment="Bottom"
                             Background="#f5f5f5" />
                     </StackPanel>
-
                 </Grid>
                 <Grid Grid.Row="1" Margin="0,20,0,0">
 
@@ -95,8 +93,7 @@
                                     SelectedDate="{Binding From}"
                                     Style="{StaticResource DatePicker}"
                                     Tag="Collapsed"
-                                    Validation.ErrorTemplate="{StaticResource ErrorMessage}"
-                                     />
+                                    Validation.ErrorTemplate="{StaticResource ErrorMessage}" />
                             </Grid>
                             <Grid Grid.Column="1">
                                 <Grid.ColumnDefinitions>
@@ -113,12 +110,11 @@
                                     SelectedDate="{Binding To}"
                                     Style="{StaticResource DatePicker}"
                                     Tag="Collapsed"
-                                    Validation.ErrorTemplate="{StaticResource ErrorMessage}"/>
+                                    Validation.ErrorTemplate="{StaticResource ErrorMessage}" />
                             </Grid>
                         </Grid>
                     </Border>
                 </Grid>
-
 
                 <Grid Grid.RowSpan="2" Grid.Column="1">
                     <Grid.ColumnDefinitions>
@@ -129,7 +125,6 @@
                     <Grid.RowDefinitions>
                         <RowDefinition Height="*" />
                         <RowDefinition Height="*" />
-
                     </Grid.RowDefinitions>
                     <Grid Margin="10,10,0,0">
                         <Border CornerRadius="10">
@@ -372,10 +367,6 @@
                         </Border>
                     </Grid>
                 </Grid>
-
-
-
-
             </Grid>
             <Grid Grid.Row="1">
                 <Grid.ColumnDefinitions>
@@ -410,19 +401,17 @@
                                     <lvc:CartesianChart
                                         Grid.Row="1"
                                         Grid.ColumnSpan="2"
-                                       
+
                                         Zoom="X"
                                         Series="{Binding ChartZoomCollection}">
 
                                         <lvc:CartesianChart.AxisX>
 
                                             <lvc:Axis Title="Doanh thu theo ngày" Labels="{Binding LabelChartZoom}" />
-
-
                                         </lvc:CartesianChart.AxisX>
                                         <lvc:CartesianChart.AxisY>
                                             <lvc:Axis
-                                                Title="Số lượng"
+                                                Title="VNĐ"
                                                 Foreground="#612e0f"
                                                 LabelFormatter="{Binding YFormatterChartZoom}"
                                                 MinValue="0" />
@@ -433,8 +422,6 @@
                         </Border>
                     </Grid>
                     <Grid Grid.Row="1">
-
-
 
                         <Grid Grid.Column="0" Margin="0,10,0,10">
                             <Border Padding="10" CornerRadius="10">
@@ -453,10 +440,10 @@
                                     <lvc:CartesianChart
                                         Grid.Row="1"
                                         Zoom="x"
-                                        
+
                                         Series="{Binding ChartColumnCollection}">
                                         <lvc:CartesianChart.AxisX>
-                                            <lvc:Axis Title="Quản lí thu - chi theo tháng" Labels="{Binding LabelChartCol}" >
+                                            <lvc:Axis Title="Quản lí thu - chi theo tháng" Labels="{Binding LabelChartCol}">
                                                 <lvc:Axis.Separator>
                                                     <lvc:Separator Step="1" />
                                                 </lvc:Axis.Separator>
@@ -464,8 +451,6 @@
                                         </lvc:CartesianChart.AxisX>
                                         <lvc:CartesianChart.AxisY>
                                             <lvc:Axis Title="VNĐ" Foreground="#612e0f" MinValue="0" />
-
-
                                         </lvc:CartesianChart.AxisY>
                                     </lvc:CartesianChart>
                                 </Grid>
@@ -495,10 +480,11 @@
                                     Text="Thực đơn yêu thích" />
                             </Grid>
                             <ListBox
+                                ScrollViewer.HorizontalScrollBarVisibility="Hidden"
+                                ScrollViewer.VerticalScrollBarVisibility="Hidden"
                                 x:Name="listbox"
                                 Grid.Row="1"
-                                ItemsSource="{Binding MostSoldFood}"
-                                >
+                                ItemsSource="{Binding MostSoldFood}">
 
                                 <ListBox.ItemTemplate>
 
@@ -557,10 +543,7 @@
                         </Grid>
                     </Border>
                 </Grid>
-
-
             </Grid>
-
         </Grid>
         <Grid
             Background="White"

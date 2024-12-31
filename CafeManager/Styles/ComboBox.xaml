@@ -186,7 +186,10 @@
 
                         <Grid x:Name="grid" RenderOptions.ClearTypeHint="Enabled">
 
-                            <ScrollViewer HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto">
+                            <ScrollViewer
+                                MaxHeight="350"
+                                HorizontalScrollBarVisibility="Disabled"
+                                VerticalScrollBarVisibility="Auto">
                                 <ItemsPresenter
                                     x:Name="ItemsPresenter"
                                     Margin="0,1"

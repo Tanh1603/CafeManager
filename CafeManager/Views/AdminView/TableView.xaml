@@ -63,12 +63,12 @@
             <ScrollViewer
                 Grid.Row="2"
                 VerticalAlignment="Top"
-                HorizontalScrollBarVisibility="Auto"
-                VerticalScrollBarVisibility="Auto">
+                HorizontalScrollBarVisibility="Hidden"
+                VerticalScrollBarVisibility="Hidden">
                 <ItemsControl ItemsSource="{Binding ListTable}">
                     <ItemsControl.ItemsPanel>
                         <ItemsPanelTemplate>
-                            <WrapPanel MinWidth="990" MaxWidth="1100" />
+                            <WrapPanel  MaxWidth="1460" />
                         </ItemsPanelTemplate>
                     </ItemsControl.ItemsPanel>
                     <ItemsControl.ItemTemplate>
@@ -76,7 +76,7 @@
 
                             <Border
                                 Width="225"
-                                Margin="20"
+                                Margin="7"
                                 Padding="20"
                                 HorizontalAlignment="Left"
                                 BorderThickness="3"

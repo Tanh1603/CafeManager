@@ -56,66 +56,14 @@
                 <ItemsControl ItemsSource="{Binding ListAppUserDTO}">
                     <ItemsControl.ItemsPanel>
                         <ItemsPanelTemplate>
-                            <WrapPanel MinWidth="990" MaxWidth="1100" />
+                            <WrapPanel MaxWidth="1460" />
                         </ItemsPanelTemplate>
                     </ItemsControl.ItemsPanel>
                     <ItemsControl.ItemTemplate>
                         <DataTemplate>
-                            <!--<Border
-                                Margin="10"
-                                Padding="10"
-                                BorderThickness="2"
-                                CornerRadius="10">
-                                <StackPanel Width="140">
-                                    <Border
-                                        Width="140"
-                                        Height="180"
-                                        ClipToBounds="True"
-                                        CornerRadius="10">
-                                        <Border.Background>
-                                            <ImageBrush ImageSource="{Binding Avatar}" />
-                                        </Border.Background>
-                                    </Border>
-                                    <Grid>
-                                        <Grid.ColumnDefinitions>
-                                            <ColumnDefinition Width="*" />
-                                            <ColumnDefinition Width="*" />
-                                        </Grid.ColumnDefinitions>
-
-                                        <TextBlock
-                                            Grid.Column="0"
-                                            HorizontalAlignment="Center"
-                                            VerticalAlignment="Center"
-                                            FontSize="16"
-                                            Text="{Binding Displayname}"
-                                            TextWrapping="WrapWithOverflow" />
-                                        <materialDesign:PopupBox
-                                            Grid.Column="1"
-                                            Padding="0"
-                                            HorizontalAlignment="Right"
-                                            PopupUniformCornerRadius="10"
-                                            StaysOpen="False">
-                                            <materialDesign:PopupBox.PopupContent>
-                                                <StackPanel Background="Wheat">
-                                                    <Button
-                                                        Command="{Binding DataContext.DeleteAppUserCommand, RelativeSource={RelativeSource AncestorType=local:AppUserView}}"
-                                                        CommandParameter="{Binding}"
-                                                        Content="Xoá tài khoản"
-                                                        Cursor="Hand" />
-                                                    <Button
-                                                        Command="{Binding DataContext.OpenUpdateAppUserCommand, RelativeSource={RelativeSource AncestorType=local:AppUserView}}"
-                                                        CommandParameter="{Binding}"
-                                                        Content="Sửa thông tin"
-                                                        Cursor="Hand" />
-                                                </StackPanel>
-                                            </materialDesign:PopupBox.PopupContent>
-                                        </materialDesign:PopupBox>
-                                    </Grid>
-                                </StackPanel>
-                            </Border>-->
                             <Border
                                 Width="225"
-                                Margin="20"
+                                Margin="0 5"
                                 Padding="20"
                                 BorderThickness="3"
                                 CornerRadius="10">
@@ -176,8 +124,8 @@
                                     <Grid Grid.Row="1" Margin="0,20,0,0">
                                         <Grid>
                                             <Grid.RowDefinitions>
-                                                <RowDefinition Height="auto"/>
-                                                <RowDefinition Height="auto"/>
+                                                <RowDefinition Height="auto" />
+                                                <RowDefinition Height="auto" />
                                             </Grid.RowDefinitions>
                                             <Grid HorizontalAlignment="Center" VerticalAlignment="Center">
 
@@ -186,10 +134,8 @@
                                                     FontWeight="Bold"
                                                     Foreground="#612e0f"
                                                     Text="{Binding Displayname}"
-                                                    TextWrapping="WrapWithOverflow"/>
+                                                    TextWrapping="WrapWithOverflow" />
                                             </Grid>
-
-
 
                                             <Grid Grid.Row="1">
                                                 <StackPanel Orientation="Horizontal" Margin="0 10 0 0" HorizontalAlignment="Center">
@@ -204,18 +150,14 @@
                                                         x:Name="BtnDelete"
                                                         Command="{Binding DataContext.DeleteAppUserCommand, RelativeSource={RelativeSource AncestorType=local:AppUserView}}"
                                                         CommandParameter="{Binding}"
-                                                        Style="{StaticResource deleteFoodBtn}" >
+                                                        Style="{StaticResource deleteFoodBtn}">
                                                         <ma:PackIconMaterial Kind="TrashCan" Style="{StaticResource infoFoodIcon}" />
                                                     </Button>
-
                                                 </StackPanel>
                                             </Grid>
-
                                         </Grid>
                                     </Grid>
-
                                 </Grid>
-
                             </Border>
                         </DataTemplate>
                     </ItemsControl.ItemTemplate>
@@ -241,6 +183,5 @@
         </materialDesign:DialogHost>
 
         <uc:LoadingData Visibility="{Binding IsLoading, Converter={StaticResource BooleanToVisibilityConverter}}" />
-
     </Grid>
 </UserControl>

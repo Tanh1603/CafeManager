@@ -14,8 +14,8 @@
     xmlns:service="clr-namespace:CafeManager.WPF.Services.Converter"
     xmlns:uc="clr-namespace:CafeManager.WPF.Assets.UsersControls"
     xmlns:view="clr-namespace:CafeManager.WPF.Views"
-    Width="780"
-    Height="500"
+    MinWidth="780"
+    Height="730"
     mc:Ignorable="d">
     <UserControl.Resources>
         <BooleanToVisibilityConverter x:Key="BoolToVis" />
@@ -85,7 +85,7 @@
                     Grid.Row="0"
                     Width="260"
                     Height="1"
-                   
+
                     HorizontalAlignment="Left"
                     VerticalAlignment="Bottom"
                     Background="#5f2414" />

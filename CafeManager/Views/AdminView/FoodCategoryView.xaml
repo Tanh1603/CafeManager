@@ -52,7 +52,7 @@
                 <!--  Page Title  -->
                 <TextBlock
                     Grid.Row="0"
-                    Margin="0 20 0 10"
+                    Margin="0,20,0,10"
                     HorizontalAlignment="Left"
                     FontSize="32"
                     FontWeight="SemiBold"
@@ -79,7 +79,6 @@
                     Grid.Row="0"
                     Width="280"
                     Height="1"
-                    
                     HorizontalAlignment="Left"
                     VerticalAlignment="Bottom"
                     Background="#5f2414" />

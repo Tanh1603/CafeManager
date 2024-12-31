@@ -33,7 +33,7 @@
                         FontSize="46"
                         FontWeight="SemiBold"
                         Foreground="#ffffff"
-                        Text="Cafe Manager"
+                        Text="Quản lí quán cafe"
                         TextAlignment="Center" />
                     <Border
                         Width="100"

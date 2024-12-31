@@ -2,12 +2,12 @@
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:ad="clr-namespace:CafeManager.WPF.ViewModels.AdminViewModel"
+    xmlns:converter="clr-namespace:CafeManager.WPF.Services.Converter"
     xmlns:ma="http://metro.mahapps.com/winfx/xaml/iconpacks"
-    xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
-    xmlns:converter="clr-namespace:CafeManager.WPF.Services.Converter">
+    xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes">
 
 
-    <converter:StringToVisibilityConverter x:Key="StringToVisibilityConverter"/>
+    <converter:StringToVisibilityConverter x:Key="StringToVisibilityConverter" />
 
 
     <Style x:Key="DatePickerCalender" TargetType="Calendar">
@@ -64,9 +64,9 @@
                                     Margin="5,0,0,0"
                                     Padding="5"
                                     Background="Transparent"
+                                    IsReadOnly="True"
                                     Style="{StaticResource txtBoxDatePicker}"
-                                    Text="{Binding SelectedDate, RelativeSource={RelativeSource TemplatedParent}, StringFormat='{}{0:dd/MM/yyyy}', Mode=TwoWay, TargetNullValue='', FallbackValue=''}" 
-                                    IsReadOnly="True"/>
+                                    Text="{Binding SelectedDate, RelativeSource={RelativeSource TemplatedParent}, StringFormat='{}{0:dd/MM/yyyy}', Mode=TwoWay, TargetNullValue='', FallbackValue=''}" />
                                 <Button
                                     x:Name="ClearBtn"
                                     Grid.Column="1"

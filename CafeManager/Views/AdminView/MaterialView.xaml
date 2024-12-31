@@ -88,7 +88,7 @@
                    
                     HorizontalAlignment="Left"
                     VerticalAlignment="Bottom"
-                    Background="#f5f5f5" />
+                    Background="#5f2414" />
 
                 <!--  FoodCategory Datagrid  -->
 

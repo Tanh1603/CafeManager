@@ -477,7 +477,7 @@
                 <Border
                     Grid.Row="2"
                     Width="auto"
-                    Height="250"
+                    Height="200"
                     Margin="20,10,20,0"
                     BorderBrush="#602414"
                     BorderThickness="2"

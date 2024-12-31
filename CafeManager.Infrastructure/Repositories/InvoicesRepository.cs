@@ -66,7 +66,9 @@ namespace CafeManager.Infrastructure.Repositories
         {
             try
             {
-              
+                from = from.Date; // Bắt đầu từ 00:00:00
+                to = to.Date.AddDays(1).AddTicks(-1); // Kết thúc vào 23:59:59.9999999
+
                 var invoices = await _cafeManagerContext.Invoices.Where(x => x.Isdeleted == false && x.Paymentstartdate >= from && x.Paymentstartdate <= to).ToListAsync(token);
 
 
@@ -78,7 +80,7 @@ namespace CafeManager.Infrastructure.Repositories
                     .GroupBy(invoice => invoice.Paymentstartdate.Date) // Nhóm theo ngày
                     .ToDictionary(
                         g => g.Key,  // Lấy ngày
-                        g => g.Sum(x => x.Invoicedetails.Sum(d => d.Quantity * d.Food.Price)) ?? 0  // Tính tổng doanh thu
+                         g => g.Sum(x => x.Invoicedetails.Sum(d => (d.Quantity ?? 0) * (d.Food?.Price ?? 0))) // Tính tổng doanh thu
                     );
                 var revenueList = allDates.ToDictionary(date => date,
                                                          date => revenueByDay.ContainsKey(date) ? revenueByDay[date] : 0m);
@@ -99,7 +101,8 @@ namespace CafeManager.Infrastructure.Repositories
         {
             try
             {
-
+                from = from.Date; // Bắt đầu từ 00:00:00
+                to = to.Date.AddDays(1).AddTicks(-1); // Kết thúc vào 23:59:59.9999999
                 var invoices = await _cafeManagerContext.Invoices.Where(x => x.Isdeleted == false && x.Paymentstartdate >= from && x.Paymentstartdate <= to).ToListAsync(token);
 
                 var allMonths = Enumerable.Range(0, ((to.Year - from.Year) * 12 + to.Month - from.Month) + 1)
@@ -112,7 +115,7 @@ namespace CafeManager.Infrastructure.Repositories
                     .GroupBy(invoice => new DateTime(invoice.Paymentstartdate.Year, invoice.Paymentstartdate.Month, 1)) 
                     .ToDictionary(
                         g => g.Key, 
-                        g => g.Sum(x => x.Invoicedetails.Sum(d => d.Quantity * d.Food.Price)) ?? 0 
+                        g => g.Sum(x => x.Invoicedetails.Sum(d => (d.Quantity ?? 0) * (d.Food?.Price ?? 0)))
                     );
 
 

@@ -94,7 +94,7 @@
                                     CalendarStyle="{StaticResource MaterialDesignCalendarPortrait}"
                                     SelectedDate="{Binding From}"
                                     Style="{StaticResource DatePicker}"
-                                    Tag="Visible"
+                                    Tag="Collapsed"
                                     Validation.ErrorTemplate="{StaticResource ErrorMessage}"
                                      />
                             </Grid>
@@ -112,7 +112,7 @@
                                     CalendarStyle="{StaticResource MaterialDesignCalendarPortrait}"
                                     SelectedDate="{Binding To}"
                                     Style="{StaticResource DatePicker}"
-                                    Tag="Visible"
+                                    Tag="Collapsed"
                                     Validation.ErrorTemplate="{StaticResource ErrorMessage}"/>
                             </Grid>
                         </Grid>
@@ -416,7 +416,7 @@
 
                                         <lvc:CartesianChart.AxisX>
 
-                                            <lvc:Axis Title="Doanh thu" Labels="{Binding LabelChartZoom}" />
+                                            <lvc:Axis Title="Doanh thu theo ngày" Labels="{Binding LabelChartZoom}" />
 
 
                                         </lvc:CartesianChart.AxisX>
@@ -452,10 +452,11 @@
 
                                     <lvc:CartesianChart
                                         Grid.Row="1"
-                                        Zoom="X"
+                                        Zoom="x"
+                                        
                                         Series="{Binding ChartColumnCollection}">
                                         <lvc:CartesianChart.AxisX>
-                                            <lvc:Axis Title="Quản lí thu - chi" Labels="{Binding LabelChartCol}" >
+                                            <lvc:Axis Title="Quản lí thu - chi theo tháng" Labels="{Binding LabelChartCol}" >
                                                 <lvc:Axis.Separator>
                                                     <lvc:Separator Step="1" />
                                                 </lvc:Axis.Separator>
@@ -536,6 +537,7 @@
                                                         FontWeight="Bold"
                                                         Foreground="#dac5b4"
                                                         TextTrimming="CharacterEllipsis"
+                                                        ToolTip="{Binding Foodname}"
                                                         Text="{Binding Foodname}" />
                                                 </Grid>
 

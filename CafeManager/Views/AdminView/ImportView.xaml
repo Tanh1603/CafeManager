@@ -151,7 +151,7 @@
                     CalendarStyle="{StaticResource MaterialDesignCalendarPortrait}"
                     SelectedDate="{Binding StartDate}"
                     Style="{StaticResource DatePicker}"
-                    Tag="Chọn ngày"
+                    Tag="Visible"
                      Validation.ErrorTemplate="{StaticResource ErrorMessage}"/>
 
                 <TextBlock
@@ -167,7 +167,7 @@
                     CalendarStyle="{StaticResource MaterialDesignCalendarPortrait}"
                     SelectedDate="{Binding EndDate}"
                     Style="{StaticResource DatePicker}"
-                    Tag="Chọn ngày"
+                    Tag="Visible"
                      Validation.ErrorTemplate="{StaticResource ErrorMessage}"/>
             </StackPanel>
 

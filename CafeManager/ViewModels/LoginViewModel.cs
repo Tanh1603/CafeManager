@@ -19,10 +19,10 @@ namespace CafeManager.WPF.ViewModels
 {
     public partial class LoginViewModel : ObservableObject
     {
-        private readonly IServiceProvider _provider;
         private readonly NavigationStore _navigationStore;
         private readonly AppUserServices _appUserServices;
         private readonly IMapper _mapper;
+        private IServiceProvider _provider;
 
         [ObservableProperty]
         private bool _isLoading;
@@ -52,12 +52,12 @@ namespace CafeManager.WPF.ViewModels
         [ObservableProperty]
         private bool _isRememberAccount;
 
-        public LoginViewModel(IServiceProvider provider)
+        public LoginViewModel(IServiceScope scope)
         {
-            _provider = provider;
+            _provider = scope.ServiceProvider;
             _navigationStore = _provider.GetRequiredService<NavigationStore>();
-            _appUserServices = provider.GetRequiredService<AppUserServices>();
-            _mapper = provider.GetRequiredService<IMapper>();
+            _appUserServices = _provider.GetRequiredService<AppUserServices>();
+            _mapper = _provider.GetRequiredService<IMapper>();
             if (Properties.Settings.Default.RememberAccount)
             {
                 Username = Properties.Settings.Default.UserName;

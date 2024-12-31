@@ -8,11 +8,12 @@ using CafeManager.WPF.Stores;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Microsoft.Extensions.DependencyInjection;
+using System.ComponentModel.DataAnnotations;
 using System.Windows.Media.Imaging;
 
 namespace CafeManager.WPF.ViewModels
 {
-    public partial class SettingAccountViewModel : ObservableObject
+    public partial class SettingAccountViewModel : ObservableValidator, IDisposable
     {
         private readonly AccountStore _accountStore;
         private readonly AppUserServices _appUserServices;
@@ -21,6 +22,8 @@ namespace CafeManager.WPF.ViewModels
         private readonly IMapper _mapper;
 
         [ObservableProperty]
+        [NotifyPropertyChangedFor(nameof(CanUpdateAccountExcute))]
+        [NotifyCanExecuteChangedFor(nameof(UpdateAccountCommand))]
         private AppUserDTO _account = new();
 
         public event Action? Close;
@@ -29,10 +32,29 @@ namespace CafeManager.WPF.ViewModels
         private string _oldPassword = string.Empty;
 
         [ObservableProperty]
+        [NotifyDataErrorInfo]
+        [MinLength(6, ErrorMessage = "Mật khẩu mới ít nhất 6 ký tự")]
+        [NotifyPropertyChangedFor(nameof(CanSubmitExcute))]
+        [NotifyCanExecuteChangedFor(nameof(SubmitChangePassWordCommand))]
         private string _newPassword = string.Empty;
 
         [ObservableProperty]
+        [NotifyDataErrorInfo]
+        [Required(ErrorMessage = "Xác nhận mật khẩu không được trống")]
+        [CustomValidation(typeof(SettingAccountViewModel), nameof(ValidateConfirmPassword))]
+        [NotifyPropertyChangedFor(nameof(CanSubmitExcute))]
+        [NotifyCanExecuteChangedFor(nameof(SubmitChangePassWordCommand))]
         private string _confirmPassword = string.Empty;
+
+        public static ValidationResult ValidateConfirmPassword(string confirmPassword, ValidationContext context)
+        {
+            var viewModel = context.ObjectInstance as SettingAccountViewModel;
+            if (!confirmPassword.Equals(viewModel?.NewPassword))
+            {
+                return new("Xác nhận mật khẩu không trùng mật khẩu mới");
+            }
+            return ValidationResult.Success;
+        }
 
         [ObservableProperty]
         private bool _isOpenChangePassWord = false;
@@ -53,7 +75,13 @@ namespace CafeManager.WPF.ViewModels
             if (_accountStore.Account != null)
             {
                 Account = _accountStore.Account.Clone();
+                Account.NotifyDataErrors += Account_NotifyDataErrors;
             }
+        }
+
+        private void Account_NotifyDataErrors()
+        {
+            OnPropertyChanged(nameof(CanUpdateAccountExcute));
         }
 
         [RelayCommand]
@@ -62,7 +90,7 @@ namespace CafeManager.WPF.ViewModels
             IsOpenChangePassWord = true;
         }
 
-        [RelayCommand]
+        [RelayCommand(CanExecute = nameof(CanUpdateAccountExcute))]
         private async Task UpdateAccount()
         {
             try
@@ -96,7 +124,9 @@ namespace CafeManager.WPF.ViewModels
             }
         }
 
-        [RelayCommand]
+        public bool CanUpdateAccountExcute => !Account.HasErrors;
+
+        [RelayCommand(CanExecute = nameof(CanSubmitExcute))]
         private async Task SubmitChangePassWord()
         {
             try
@@ -161,6 +191,8 @@ namespace CafeManager.WPF.ViewModels
             }
         }
 
+        public bool CanSubmitExcute => !HasErrors;
+
         [RelayCommand]
         private void OpenUploadImage()
         {
@@ -187,6 +219,11 @@ namespace CafeManager.WPF.ViewModels
         private void CloseUserControl()
         {
             Close?.Invoke();
+        }
+
+        public void Dispose()
+        {
+            Account.NotifyDataErrors -= Account_NotifyDataErrors;
         }
     }
 }

@@ -2,6 +2,8 @@
     x:Class="CafeManager.WPF.Views.AddUpdateView.UpdateAppUserView"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:adminviewmodels="clr-namespace:CafeManager.WPF.ViewModels.AdminViewModel"
+    xmlns:adminviews="clr-namespace:CafeManager.WPF.Views.AdminView"
     xmlns:coverter="clr-namespace:CafeManager.WPF.Services.Converter"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:local="clr-namespace:CafeManager.WPF.Views"
@@ -39,13 +41,11 @@
                     <RowDefinition Height="auto" />
                 </Grid.RowDefinitions>
 
-
-
                 <Button
                     Grid.Row="0"
                     Margin="0,10"
                     HorizontalAlignment="Right"
-                    Command="{Binding CloseUserControlCommand}"
+                    Command="{Binding DataContext.CloseUserControlCommand, RelativeSource={RelativeSource AncestorType=adminviews:AppUserView}}"
                     Style="{StaticResource closeButton}">
                     <ma:PackIconMaterial Kind="Close" Style="{StaticResource iconApp}" />
                 </Button>
@@ -148,185 +148,60 @@
                         <uc:infoTextInput
                             Grid.Row="0"
                             Grid.Column="1"
-                            Margin="0 0 0 10"
-                            Text="{Binding Account.Username, Mode=TwoWay}" />
+                            Margin="0,20"
+                            Text="{Binding Account.Username, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                            Validation.ErrorTemplate="{StaticResource ErrorMessageReg}" />
                         <uc:infoTextInput
                             Grid.Row="1"
                             Grid.Column="1"
-                            Margin="0 0 0 10"
-                            
-                            Text="{Binding Account.Displayname, Mode=TwoWay}" />
+                            Margin="0,20"
+                            Text="{Binding Account.Displayname, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                            Validation.ErrorTemplate="{StaticResource ErrorMessageReg}" />
                         <uc:infoTextInput
                             Grid.Row="2"
                             Grid.Column="1"
-                            Text="{Binding Account.Email, Mode=TwoWay}" />
-                        <!--<TextBlock
+                            Margin="0,20"
+                            Text="{Binding Account.Email, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                            Validation.ErrorTemplate="{StaticResource ErrorMessageReg}" />
+
+                        <Border
                             Grid.Row="3"
                             Grid.Column="1"
-                            FontWeight="bold"
-                            Style="{StaticResource infoText}"
-                            Text="{Binding Account.Password, Mode=TwoWay}" />-->
-                        <PasswordBox
-                            Grid.Row="3"
-                            Grid.Column="1"
-                            MinHeight="50"
-                            Margin="10,5 0 0"
-                            materialDesign:HintAssist.FloatingOffset="0, -18"
-                            materialDesign:HintAssist.Hint="Password"
-                            materialDesign:PasswordBoxAssist.Password="{Binding Path=Account.Password, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, ValidatesOnExceptions=True}"
-                            BorderBrush="Transparent"
-                            BorderThickness="0,0,0,1.5"
-                            FontSize="20"
-                            FontWeight="SemiBold"
-                            Foreground="#9b442a"
-                            Style="{StaticResource MaterialDesignFloatingHintRevealPasswordBox}" />
+                            Width="200"
+                            Height="35"
+                            Margin="0,20"
+                            Background="#d5b096"
+                            CornerRadius="5">
+                            <PasswordBox
+                                Margin="10,0"
+                                VerticalAlignment="Center"
+                                materialDesign:PasswordBoxAssist.Password="{Binding Path=Account.Password, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                BorderBrush="Transparent"
+                                FontSize="12"
+                                FontWeight="SemiBold"
+                                Foreground="#9b442a"
+                                Style="{StaticResource MaterialDesignFloatingHintRevealPasswordBox}"
+                                Validation.ErrorTemplate="{StaticResource ErrorMessageReg}" />
+                        </Border>
                     </Grid>
                 </Grid>
 
-                <StackPanel
+                <Button
                     Grid.Row="3"
-                    Margin="0,10,0,0"
-                    HorizontalAlignment="Center"
-                    Orientation="Horizontal">
-                    <Button
-                        Grid.Row="3"
-                        MinWidth="150"
-                        Margin="10,20"
-                        HorizontalAlignment="Right"
-                        VerticalAlignment="Bottom"
-                        Command="{Binding OpenChangePassWordCommand}"
-                        Style="{StaticResource confirmInfoButton}">
-                        <StackPanel HorizontalAlignment="Center" Orientation="Horizontal">
-                            <ma:PackIconMaterial VerticalAlignment="Center" Kind="Lock" />
-                            <TextBlock
-                                Margin="5,0,0,0"
-                                FontWeight="SemiBold"
-                                Text="Đổi mật khẩu" />
-                        </StackPanel>
-                    </Button>
-                    <Button
-                        Grid.Row="3"
-                        Margin="10,20"
-                        HorizontalAlignment="Right"
-                        VerticalAlignment="Bottom"
-                        Command="{Binding UpdateAccountCommand}"
-                        Style="{StaticResource confirmInfoButton}">
-                        <StackPanel HorizontalAlignment="Center" Orientation="Horizontal">
-                            <ma:PackIconMaterial VerticalAlignment="Center" Kind="Pencil" />
-                            <TextBlock
-                                Margin="10,0,0,0"
-                                FontWeight="SemiBold"
-                                Text="Cập nhật" />
-                        </StackPanel>
-                    </Button>
-                </StackPanel>
+                    Margin="10,20"
+                    HorizontalAlignment="Right"
+                    VerticalAlignment="Bottom"
+                    Command="{Binding UpdateAccountCommand}"
+                    Style="{StaticResource confirmInfoButton}">
+                    <StackPanel HorizontalAlignment="Center" Orientation="Horizontal">
+                        <ma:PackIconMaterial VerticalAlignment="Center" Kind="Pencil" />
+                        <TextBlock
+                            Margin="10,0,0,0"
+                            FontWeight="SemiBold"
+                            Text="Cập nhật" />
+                    </StackPanel>
+                </Button>
             </Grid>
-
-            <materialDesign:DialogHost
-                CloseOnClickAway="True"
-                DialogTheme="Inherit"
-                IsOpen="{Binding IsOpenChangePassWord}"
-                OverlayBackground="{DynamicResource PrimaryHueDarkBrush}"
-                Placement="Mouse"
-                Style="{StaticResource MaterialDesignEmbeddedDialogHost}">
-                <materialDesign:DialogHost.DialogBackground>
-                    <SolidColorBrush Color="Transparent" />
-                </materialDesign:DialogHost.DialogBackground>
-                <materialDesign:DialogHost.DialogContent>
-                    <Border
-                        Width="320"
-                        Padding="10"
-                        BorderThickness="4"
-                        CornerRadius="10">
-                        <Border.Background>
-                            <LinearGradientBrush StartPoint="0,0.5" EndPoint="1,0.5">
-                                <GradientStop Offset="0" Color="#d4b096" />
-                                <GradientStop Offset="1" Color="#dac5b4" />
-                            </LinearGradientBrush>
-                        </Border.Background>
-                        <Border.BorderBrush>
-                            <LinearGradientBrush StartPoint="0,0.5">
-                                <GradientStop Offset="0" Color="#5e2313" />
-                                <GradientStop Offset="0.5" Color="#65402e" />
-                                <GradientStop Offset="1" Color="#7c4e37" />
-                            </LinearGradientBrush>
-                        </Border.BorderBrush>
-                        <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
-                            <Button
-                                HorizontalAlignment="Right"
-                                Command="{Binding CloseChangePassWordCommand}"
-                                Style="{StaticResource closeButton}">
-                                <ma:PackIconMaterial Kind="Close" Style="{StaticResource iconApp}" />
-                            </Button>
-                            <Grid Margin="0,10">
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="auto" />
-                                    <ColumnDefinition Width="*" />
-                                </Grid.ColumnDefinitions>
-                                <materialDesign:PackIcon
-                                    MinWidth="30"
-                                    MinHeight="30"
-                                    HorizontalAlignment="Center"
-                                    VerticalAlignment="Center"
-                                    Foreground="#9b442a"
-                                    Kind="LockAdd" />
-                                <PasswordBox
-                                    Grid.Column="1"
-                                    MinHeight="50"
-                                    Margin="10,0"
-                                    materialDesign:HintAssist.FloatingOffset="0, -18"
-                                    materialDesign:HintAssist.Hint="Mật khẩu mới"
-                                    materialDesign:PasswordBoxAssist.Password="{Binding Path=NewPassword, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, ValidatesOnExceptions=True}"
-                                    BorderBrush="Transparent"
-                                    BorderThickness="0,0,0,1.5"
-                                    FontSize="20"
-                                    FontWeight="SemiBold"
-                                    Foreground="#9b442a"
-                                    Style="{StaticResource MaterialDesignFloatingHintRevealPasswordBox}" />
-                            </Grid>
-                            <Grid Margin="0,10">
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="auto" />
-                                    <ColumnDefinition Width="*" />
-                                </Grid.ColumnDefinitions>
-                                <materialDesign:PackIcon
-                                    MinWidth="30"
-                                    MinHeight="30"
-                                    HorizontalAlignment="Center"
-                                    VerticalAlignment="Center"
-                                    Foreground="#9b442a"
-                                    Kind="LockCheck" />
-                                <PasswordBox
-                                    Grid.Column="1"
-                                    MinHeight="50"
-                                    Margin="10,0"
-                                    materialDesign:HintAssist.FloatingOffset="0, -18"
-                                    materialDesign:HintAssist.Hint="Xác nhận mật khẩu mới"
-                                    materialDesign:PasswordBoxAssist.Password="{Binding Path=ConfirmPassword, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, ValidatesOnExceptions=True}"
-                                    BorderBrush="Transparent"
-                                    BorderThickness="0,0,0,1.5"
-                                    FontSize="20"
-                                    FontWeight="SemiBold"
-                                    Foreground="#9b442a"
-                                    Style="{StaticResource MaterialDesignFloatingHintRevealPasswordBox}" />
-                            </Grid>
-                            <Button
-                                Margin="10"
-                                HorizontalAlignment="Right"
-                                Command="{Binding SubmitChangePassWordCommand}"
-                                Style="{StaticResource confirmInfoButton}">
-                                <StackPanel HorizontalAlignment="Center" Orientation="Horizontal">
-                                    <ma:PackIconMaterial VerticalAlignment="Center" Kind="CheckBold" />
-                                    <TextBlock
-                                        Margin="10,0,0,0"
-                                        FontWeight="SemiBold"
-                                        Text="Xác nhận" />
-                                </StackPanel>
-                            </Button>
-                        </StackPanel>
-                    </Border>
-                </materialDesign:DialogHost.DialogContent>
-            </materialDesign:DialogHost>
         </Grid>
     </Border>
 </UserControl>

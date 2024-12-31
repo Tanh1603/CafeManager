@@ -22,7 +22,7 @@ namespace CafeManager.WPF.ViewModels
         private ObservableObject? _currentViewModel;
 
         [ObservableProperty]
-        private SettingAccountViewModel _openSettingAccountVM;
+        private SettingAccountViewModel? _openSettingAccountVM;
 
         [ObservableProperty]
         private AppUserDTO _adminAccount = new();
@@ -38,10 +38,8 @@ namespace CafeManager.WPF.ViewModels
             _navigationStore = _provider.GetRequiredService<NavigationStore>();
             _accountStore = provider.GetRequiredService<AccountStore>();
             ChangeCurrentViewModel("Home");
-            OpenSettingAccountVM = _provider.GetRequiredService<SettingAccountViewModel>();
-            OpenSettingAccountVM.Close += OpenSettingAccountVM_Close;
-            LoadAccount();
             _accountStore.ChangeAccount += _accountStore_ChangeAccount;
+            LoadAccount();
         }
 
         private void OpenSettingAccountVM_Close()
@@ -139,6 +137,10 @@ namespace CafeManager.WPF.ViewModels
                 _cts.Cancel();
                 _cts.Dispose();
             }
+            if (OpenSettingAccountVM != null)
+            {
+                OpenSettingAccountVM.Close -= OpenSettingAccountVM_Close;
+            }
         }
 
         [ObservableProperty]
@@ -150,6 +152,13 @@ namespace CafeManager.WPF.ViewModels
         [RelayCommand]
         private void OpenSetting()
         {
+            if (OpenSettingAccountVM != null)
+            {
+                OpenSettingAccountVM.Close -= OpenSettingAccountVM_Close;
+            }
+
+            OpenSettingAccountVM = _provider.GetRequiredService<SettingAccountViewModel>();
+            OpenSettingAccountVM.Close += OpenSettingAccountVM_Close;
             IsOpenSetting = true;
         }
     }

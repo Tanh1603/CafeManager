@@ -9,8 +9,7 @@
     xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:uc="clr-namespace:CafeManager.WPF.Assets.UsersControls"
-    xmlns:vm="clr-namespace:CafeManager.WPF.Views"
-    >
+    xmlns:vm="clr-namespace:CafeManager.WPF.Views">
     <UserControl.Resources>
         <BooleanToVisibilityConverter x:Key="BoolToVis" />
         <coverter:DefaultAccountImageConverter x:Key="DefaultAccountImageConverter" />
@@ -38,8 +37,6 @@
                     <RowDefinition Height="*" />
                     <RowDefinition Height="auto" />
                 </Grid.RowDefinitions>
-
-
 
                 <Button
                     Grid.Row="0"
@@ -142,18 +139,21 @@
                         <uc:infoTextInput
                             Grid.Row="0"
                             Grid.Column="1"
-                            Margin="0 0 0 10"
-                            Text="{Binding Account.Username, Mode=TwoWay}" />
+                            Margin="20"
+                            Text="{Binding Account.Username, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"
+                            Validation.ErrorTemplate="{StaticResource ErrorMessageReg}" />
                         <uc:infoTextInput
                             Grid.Row="1"
                             Grid.Column="1"
-                            Margin="0 0 0 10"
-                            
-                            Text="{Binding Account.Displayname, Mode=TwoWay}" />
+                            Margin="20"
+                            Text="{Binding Account.Displayname, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                            Validation.ErrorTemplate="{StaticResource ErrorMessageReg}" />
                         <uc:infoTextInput
                             Grid.Row="2"
+                            Margin="20"
                             Grid.Column="1"
-                            Text="{Binding Account.Email, Mode=TwoWay}" />
+                            Text="{Binding Account.Email, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                            Validation.ErrorTemplate="{StaticResource ErrorMessageReg}" />
                     </Grid>
                 </Grid>
 
@@ -183,7 +183,8 @@
                         Margin="10,20"
                         HorizontalAlignment="Right"
                         VerticalAlignment="Bottom"
-                        Command="{Binding UpdateAccountCommand}"
+                        Command="{Binding UpdateAccountCommand, UpdateSourceTrigger=PropertyChanged}"
+                        IsEnabled="{Binding CanUpdateAccountExcute, UpdateSourceTrigger=PropertyChanged, Mode=OneWay}"
                         Style="{StaticResource confirmInfoButton}">
                         <StackPanel HorizontalAlignment="Center" Orientation="Horizontal">
                             <ma:PackIconMaterial VerticalAlignment="Center" Kind="Pencil" />
@@ -256,7 +257,8 @@
                                     FontSize="20"
                                     FontWeight="SemiBold"
                                     Foreground="#9b442a"
-                                    Style="{StaticResource MaterialDesignFloatingHintRevealPasswordBox}" />
+                                    Style="{StaticResource MaterialDesignFloatingHintRevealPasswordBox}"
+                                    Validation.ErrorTemplate="{StaticResource ErrorMessageReg}" />
                             </Grid>
                             <Grid Margin="0,10">
                                 <Grid.ColumnDefinitions>
@@ -282,7 +284,8 @@
                                     FontSize="20"
                                     FontWeight="SemiBold"
                                     Foreground="#9b442a"
-                                    Style="{StaticResource MaterialDesignFloatingHintRevealPasswordBox}" />
+                                    Style="{StaticResource MaterialDesignFloatingHintRevealPasswordBox}"
+                                    Validation.ErrorTemplate="{StaticResource ErrorMessageReg}" />
                             </Grid>
                             <Grid Margin="0,10">
                                 <Grid.ColumnDefinitions>
@@ -308,12 +311,14 @@
                                     FontSize="20"
                                     FontWeight="SemiBold"
                                     Foreground="#9b442a"
-                                    Style="{StaticResource MaterialDesignFloatingHintRevealPasswordBox}" />
+                                    Style="{StaticResource MaterialDesignFloatingHintRevealPasswordBox}"
+                                    Validation.ErrorTemplate="{StaticResource ErrorMessageReg}" />
                             </Grid>
                             <Button
                                 Margin="10"
                                 HorizontalAlignment="Right"
                                 Command="{Binding SubmitChangePassWordCommand}"
+                                IsEnabled="{Binding CanSubmitExcute, UpdateSourceTrigger=PropertyChanged, Mode=OneWay}"
                                 Style="{StaticResource confirmInfoButton}">
                                 <StackPanel HorizontalAlignment="Center" Orientation="Horizontal">
                                     <ma:PackIconMaterial VerticalAlignment="Center" Kind="CheckBold" />

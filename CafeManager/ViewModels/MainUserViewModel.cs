@@ -17,14 +17,6 @@ namespace CafeManager.WPF.ViewModels
         private readonly AccountStore _accountStore;
         private CancellationTokenSource? _cts = default;
 
-        private Dictionary<string, ObservableObject> _lazyViews => new()
-        {
-            ["OrderFood"] = _provider.GetRequiredService<OrderViewModel>(),
-            ["Setting"] = _provider.GetRequiredService<SettingAccountViewModel>(),
-            ["DistributionMaterial"] = _provider.GetRequiredService<DistributionMaterialViewModel>(),
-            ["IncidentTable"] = _provider.GetRequiredService<IncidentTableViewModel>(),
-        };
-
         [ObservableProperty]
         private ObservableObject? _currentVM;
 
@@ -37,7 +29,7 @@ namespace CafeManager.WPF.ViewModels
         private string currentVM = string.Empty;
 
         [ObservableProperty]
-        private SettingAccountViewModel _openSettingAccountVM;
+        private SettingAccountViewModel? _openSettingAccountVM;
 
         public MainUserViewModel(IServiceProvider provider)
         {
@@ -45,10 +37,8 @@ namespace CafeManager.WPF.ViewModels
             _navigationStore = provider.GetRequiredService<NavigationStore>();
             _accountStore = provider.GetRequiredService<AccountStore>();
             ChangeCurrentViewModel("OrderFood");
-            LoadAccount();
-            OpenSettingAccountVM = _provider.GetRequiredService<SettingAccountViewModel>();
-            OpenSettingAccountVM.Close += OpenSettingAccountVM_Close;
             _accountStore.ChangeAccount += _accountStore_ChangeAccount;
+            LoadAccount();
         }
 
         private void OpenSettingAccountVM_Close()
@@ -135,6 +125,12 @@ namespace CafeManager.WPF.ViewModels
         [RelayCommand]
         private void OpenSetting()
         {
+            if (OpenSettingAccountVM != null)
+            {
+                OpenSettingAccountVM.Close -= OpenSettingAccountVM_Close;
+            }
+            OpenSettingAccountVM = _provider.GetRequiredService<SettingAccountViewModel>();
+            OpenSettingAccountVM.Close += OpenSettingAccountVM_Close;
             IsOpenSetting = true;
         }
 
@@ -149,6 +145,11 @@ namespace CafeManager.WPF.ViewModels
                 _cts.Cancel();
                 _cts.Dispose();
                 _cts = default;
+            }
+            if (OpenSettingAccountVM != null)
+            {
+                OpenSettingAccountVM = _provider.GetRequiredService<SettingAccountViewModel>();
+                OpenSettingAccountVM.Close -= OpenSettingAccountVM_Close;
             }
         }
     }

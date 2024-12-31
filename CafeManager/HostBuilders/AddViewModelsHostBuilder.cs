@@ -24,25 +24,25 @@ namespace CafeManager.WPF.HostBuilders
                 services.AddTransient<MainAdminViewModel>();
                 services.AddTransient<MainUserViewModel>();
 
-                services.AddTransient<AppUserViewModel>(provider => new AppUserViewModel(provider.CreateScope()));
-                services.AddTransient<FoodViewModel>(provider => new FoodViewModel(provider.CreateScope()));
-                services.AddTransient<FoodCategoryViewModel>(provider => new FoodCategoryViewModel(provider.CreateScope()));
-                services.AddTransient<HomeViewModel>(provider => new HomeViewModel(provider.CreateScope()));
-                services.AddTransient<MaterialViewModel>(provider => new MaterialViewModel(provider.CreateScope()));
-                services.AddTransient<ImportViewModel>(provider => new ImportViewModel(provider.CreateScope()));
-                services.AddTransient<InventoryViewModel>(provider => new InventoryViewModel(provider.CreateScope()));
-                services.AddTransient<InvoiceViewModel>(provider => new InvoiceViewModel(provider.CreateScope()));
-                services.AddTransient<StaffViewModel>(provider => new StaffViewModel(provider.CreateScope()));
-                services.AddTransient<SupplierViewModel>(provider => new SupplierViewModel(provider.CreateScope()));
-                services.AddTransient<TableViewModel>(provider => new TableViewModel(provider.CreateScope()));
+                services.AddTransient<AppUserViewModel>(provider => new(provider.CreateScope()));
+                services.AddTransient<FoodViewModel>(provider => new(provider.CreateScope()));
+                services.AddTransient<FoodCategoryViewModel>(provider => new(provider.CreateScope()));
+                services.AddTransient<HomeViewModel>(provider => new(provider.CreateScope()));
+                services.AddTransient<MaterialViewModel>(provider => new(provider.CreateScope()));
+                services.AddTransient<ImportViewModel>(provider => new(provider.CreateScope()));
+                services.AddTransient<InventoryViewModel>(provider => new(provider.CreateScope()));
+                services.AddTransient<InvoiceViewModel>(provider => new(provider.CreateScope()));
+                services.AddTransient<StaffViewModel>(provider => new(provider.CreateScope()));
+                services.AddTransient<SupplierViewModel>(provider => new(provider.CreateScope()));
+                services.AddTransient<TableViewModel>(provider => new(provider.CreateScope()));
 
-                services.AddTransient<LoginViewModel>();
-                services.AddTransient<RegisterViewModel>();
+                services.AddTransient<LoginViewModel>(provider => new(provider.CreateScope()));
+                services.AddTransient<RegisterViewModel>(provider => new(provider.CreateScope()));
                 services.AddTransient<SettingAccountViewModel>(provider => new(provider.CreateScope()));
-                services.AddTransient<OrderViewModel>(provider => new OrderViewModel(provider.CreateScope()));
-                services.AddTransient<DistributionMaterialViewModel>(provider => new DistributionMaterialViewModel(provider.CreateScope()));
-                services.AddTransient<RequestMaterialViewModel>(provider => new RequestMaterialViewModel(provider.CreateScope()));
-                services.AddTransient<SelectInventoryViewModel>(provider => new SelectInventoryViewModel(provider.CreateScope()));
+                services.AddTransient<OrderViewModel>(provider => new(provider.CreateScope()));
+                services.AddTransient<DistributionMaterialViewModel>(provider => new(provider.CreateScope()));
+                services.AddTransient<RequestMaterialViewModel>(provider => new(provider.CreateScope()));
+                services.AddTransient<SelectInventoryViewModel>(provider => new(provider.CreateScope()));
                 services.AddTransient<IncidentTableViewModel>(provider => new(provider.CreateScope()));
 
                 services.AddTransient<AddSuppierViewModel>();
@@ -56,7 +56,7 @@ namespace CafeManager.WPF.HostBuilders
                 services.AddSingleton<NavigationStore>();
                 services.AddSingleton<AccountStore>();
                 services.AddSingleton<WaitWindow>();
-                services.AddSingleton<MainWindow>(provider => new MainWindow()
+                services.AddSingleton<MainWindow>(provider => new()
                 {
                     DataContext = provider.GetRequiredService<MainViewModel>()
                 });

@@ -9,29 +9,31 @@
     xmlns:ma="http://metro.mahapps.com/winfx/xaml/iconpacks"
     xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:uc="clr-namespace:CafeManager.WPF.Assets.UsersControls"
     mc:Ignorable="d">
 
     <Grid>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="600" />
-            <ColumnDefinition Width="*" />
-        </Grid.ColumnDefinitions>
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="600" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
 
-        <Grid Grid.Column="0">
-            <Grid>
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="auto" />
-                    <RowDefinition Height="*" />
-                </Grid.RowDefinitions>
-                <StackPanel Margin="20" HorizontalAlignment="Center">
-                    <TextBlock
+            <Grid Grid.Column="0">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="auto" />
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
+                    <StackPanel Margin="20" HorizontalAlignment="Center">
+                        <TextBlock
                         HorizontalAlignment="Center"
                         FontFamily="{StaticResource coffe}"
                         FontSize="46"
                         FontWeight="SemiBold"
                         Foreground="#ffffff"
                         Text="Quản lí quán cafe" />
-                    <materialDesign:PackIcon
+                        <materialDesign:PackIcon
                         Width="120"
                         Height="120"
                         Margin="0,20,0,0"
@@ -39,34 +41,34 @@
                         Foreground="#d5b096"
                         Kind="UserCircle"
                         SnapsToDevicePixels="True" />
-                </StackPanel>
-                <Button
+                    </StackPanel>
+                    <Button
                     Grid.Row="1"
                     Width="100"
                     Margin="0,20,0,0"
                     Command="{Binding NavigateToLoginCommand}"
                     Style="{StaticResource backLoginBtn}">
 
-                    <fa:IconImage
+                        <fa:IconImage
                         Width="100"
                         Foreground="{Binding Foreground, RelativeSource={RelativeSource AncestorType=Button}}"
                         Icon="ArrowCircleLeft" />
-                </Button>
-            </Grid>
-            <Canvas>
-                <Polygon
+                    </Button>
+                </Grid>
+                <Canvas>
+                    <Polygon
                     Canvas.Left="-64"
                     Canvas.Top="180"
                     Fill="#d5b096"
                     Opacity="0.3"
                     Points="0,20  230,140 0,270" />
-                <Polygon
+                    <Polygon
                     Canvas.Left="250"
                     Canvas.Top="-20"
                     Fill="#d5b096"
                     Opacity="0.3"
                     Points="100,400  200,370 180,470" />
-                <Polygon
+                    <Polygon
                     Canvas.Left="102"
                     Canvas.Top="295"
                     HorizontalAlignment="Center"
@@ -75,16 +77,16 @@
                     Opacity="0.3"
                     Points="100,400  200,370 180,470"
                     RenderTransformOrigin="1.508,0.403">
-                    <Polygon.RenderTransform>
-                        <TransformGroup>
-                            <ScaleTransform />
-                            <SkewTransform AngleY="2.589" />
-                            <RotateTransform Angle="44.734" />
-                            <TranslateTransform X="-30.741" Y="118.668" />
-                        </TransformGroup>
-                    </Polygon.RenderTransform>
-                </Polygon>
-                <Ellipse
+                        <Polygon.RenderTransform>
+                            <TransformGroup>
+                                <ScaleTransform />
+                                <SkewTransform AngleY="2.589" />
+                                <RotateTransform Angle="44.734" />
+                                <TranslateTransform X="-30.741" Y="118.668" />
+                            </TransformGroup>
+                        </Polygon.RenderTransform>
+                    </Polygon>
+                    <Ellipse
                     Canvas.Left="371"
                     Canvas.Top="630"
                     Width="40"
@@ -92,57 +94,57 @@
                     Fill="#d5b096"
                     Opacity="0.3"
                     RenderTransformOrigin="0.05,-2.55" />
-                <Ellipse
+                    <Ellipse
                     Canvas.Left="51"
                     Canvas.Top="520"
                     Width="20"
                     Height="20"
                     Fill="#d5b096"
                     Opacity="0.3" />
-                <Ellipse
+                    <Ellipse
                     Canvas.Left="401"
                     Canvas.Top="215"
                     Width="20"
                     Height="20"
                     Fill="#d5b096"
                     Opacity="0.3" />
-            </Canvas>
-        </Grid>
+                </Canvas>
+            </Grid>
 
-        <Grid Grid.Column="1">
-            <Border Grid.Column="1" CornerRadius="10 0 10 0">
-                <Border.Background>
-                    <LinearGradientBrush StartPoint="0,0.5" EndPoint="1,0.5">
-                        <GradientStop Offset="1" Color="#fee3d4" />
-                        <GradientStop Offset="0" Color="#f2ccb7" />
-                    </LinearGradientBrush>
-                </Border.Background>
-                <Grid Margin="50">
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="auto" />
-                        <RowDefinition Height="*" />
-                    </Grid.RowDefinitions>
-                    <TextBlock
+            <Grid Grid.Column="1">
+                <Border Grid.Column="1" CornerRadius="10 0 10 0">
+                    <Border.Background>
+                        <LinearGradientBrush StartPoint="0,0.5" EndPoint="1,0.5">
+                            <GradientStop Offset="1" Color="#fee3d4" />
+                            <GradientStop Offset="0" Color="#f2ccb7" />
+                        </LinearGradientBrush>
+                    </Border.Background>
+                    <Grid Margin="50">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="auto" />
+                            <RowDefinition Height="*" />
+                        </Grid.RowDefinitions>
+                        <TextBlock
                         Grid.Row="0"
                         HorizontalAlignment="Center"
                         FontSize="32"
                         FontWeight="Bold"
                         Foreground="#cb925d"
                         Text="Đăng kí" />
-                    <StackPanel Grid.Row="1" Margin="0,20">
-                        <Grid Margin="0,15">
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="auto" />
-                                <ColumnDefinition Width="*" />
-                            </Grid.ColumnDefinitions>
-                            <materialDesign:PackIcon
+                        <StackPanel Grid.Row="1" Margin="0,20">
+                            <Grid Margin="0,15">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="auto" />
+                                    <ColumnDefinition Width="*" />
+                                </Grid.ColumnDefinitions>
+                                <materialDesign:PackIcon
                                 MinWidth="30"
                                 MinHeight="30"
                                 HorizontalAlignment="Center"
                                 VerticalAlignment="Center"
                                 Foreground="#9b442a"
                                 Kind="UserAdd" />
-                            <TextBox
+                                <TextBox
                                 Grid.Column="1"
                                 MinHeight="50"
                                 Margin="10,0"
@@ -154,28 +156,28 @@
                                 FontWeight="SemiBold"
                                 Foreground="#9b442a"
                                 Style="{StaticResource MaterialDesignFloatingHintTextBox}"
-                                Text="{Binding Username, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                Text="{Binding RegisterAccount.Username, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                                 Validation.ErrorTemplate="{StaticResource ErrorMessageReg}" />
-                        </Grid>
-                        <Grid Margin="0,15">
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="auto" />
-                                <ColumnDefinition Width="*" />
-                            </Grid.ColumnDefinitions>
-                            <materialDesign:PackIcon
+                            </Grid>
+                            <Grid Margin="0,15">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="auto" />
+                                    <ColumnDefinition Width="*" />
+                                </Grid.ColumnDefinitions>
+                                <materialDesign:PackIcon
                                 MinWidth="30"
                                 MinHeight="30"
                                 HorizontalAlignment="Center"
                                 VerticalAlignment="Center"
                                 Foreground="#9b442a"
                                 Kind="LockAdd" />
-                            <PasswordBox
+                                <PasswordBox
                                 Grid.Column="1"
                                 MinHeight="50"
                                 Margin="10,0"
                                 materialDesign:HintAssist.FloatingOffset="0, -18"
                                 materialDesign:HintAssist.Hint="Password"
-                                materialDesign:PasswordBoxAssist.Password="{Binding Path=Password, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                materialDesign:PasswordBoxAssist.Password="{Binding Path=RegisterAccount.Password, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                                 BorderBrush="Transparent"
                                 BorderThickness="0,0,0,1.5"
                                 FontSize="20"
@@ -183,21 +185,21 @@
                                 Foreground="#9b442a"
                                 Style="{StaticResource MaterialDesignFloatingHintRevealPasswordBox}"
                                 Validation.ErrorTemplate="{StaticResource ErrorMessageReg}" />
-                        </Grid>
+                            </Grid>
 
-                        <Grid Margin="0,15">
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="auto" />
-                                <ColumnDefinition Width="*" />
-                            </Grid.ColumnDefinitions>
-                            <materialDesign:PackIcon
+                            <Grid Margin="0,15">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="auto" />
+                                    <ColumnDefinition Width="*" />
+                                </Grid.ColumnDefinitions>
+                                <materialDesign:PackIcon
                                 MinWidth="30"
                                 MinHeight="30"
                                 HorizontalAlignment="Center"
                                 VerticalAlignment="Center"
                                 Foreground="#9b442a"
                                 Kind="EmailAdd" />
-                            <TextBox
+                                <TextBox
                                 Grid.Column="1"
                                 MinHeight="50"
                                 Margin="10,0"
@@ -209,23 +211,23 @@
                                 FontWeight="SemiBold"
                                 Foreground="#9b442a"
                                 Style="{StaticResource MaterialDesignFloatingHintTextBox}"
-                                Text="{Binding Email, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                Text="{Binding RegisterAccount.Email, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                                 Validation.ErrorTemplate="{StaticResource ErrorMessageReg}" />
-                        </Grid>
+                            </Grid>
 
-                        <Grid Margin="0,15">
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="auto" />
-                                <ColumnDefinition Width="*" />
-                            </Grid.ColumnDefinitions>
-                            <materialDesign:PackIcon
+                            <Grid Margin="0,15">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="auto" />
+                                    <ColumnDefinition Width="*" />
+                                </Grid.ColumnDefinitions>
+                                <materialDesign:PackIcon
                                 MinWidth="33"
                                 MinHeight="33"
                                 HorizontalAlignment="Center"
                                 VerticalAlignment="Center"
                                 Foreground="#9b442a"
                                 Kind="RenameBox" />
-                            <TextBox
+                                <TextBox
                                 Grid.Column="1"
                                 MinHeight="50"
                                 Margin="10,0"
@@ -237,11 +239,11 @@
                                 FontWeight="SemiBold"
                                 Foreground="#9b442a"
                                 Style="{StaticResource MaterialDesignFloatingHintTextBox}"
-                                Text="{Binding Displayname, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                Text="{Binding RegisterAccount.Displayname, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                                 Validation.ErrorTemplate="{StaticResource ErrorMessageReg}" />
-                        </Grid>
+                            </Grid>
 
-                        <Button
+                            <Button
                             Width="300"
                             Height="70"
                             Margin="50"
@@ -251,14 +253,15 @@
                             Background="#844518"
                             BorderBrush="Transparent"
                             Command="{Binding RegisterCommand}"
+                            IsEnabled="{Binding CanRegisterExcute,UpdateSourceTrigger=PropertyChanged, Mode=OneWay}"
                             Content="Đăng kí"
                             FontSize="18"
                             FontWeight="Bold"
                             Foreground="#ffffff" />
-                    </StackPanel>
-                </Grid>
-            </Border>
-            <materialDesign:DialogHost
+                        </StackPanel>
+                    </Grid>
+                </Border>
+                <materialDesign:DialogHost
                 Background="Transparent"
                 CloseOnClickAway="True"
                 DialogTheme="Inherit"
@@ -266,30 +269,30 @@
                 OverlayBackground="{DynamicResource PrimaryHueDarkBrush}"
                 Placement="Mouse"
                 Style="{StaticResource MaterialDesignEmbeddedDialogHost}">
-                <materialDesign:DialogHost.DialogBackground>
-                    <SolidColorBrush Color="Transparent" />
-                </materialDesign:DialogHost.DialogBackground>
-                <materialDesign:DialogHost.DialogContent>
-                    <Border
+                    <materialDesign:DialogHost.DialogBackground>
+                        <SolidColorBrush Color="Transparent" />
+                    </materialDesign:DialogHost.DialogBackground>
+                    <materialDesign:DialogHost.DialogContent>
+                        <Border
                         BorderBrush="#602414"
                         BorderThickness="4"
                         CornerRadius="10">
-                        <Border.Background>
-                            <LinearGradientBrush StartPoint="0,0.5" EndPoint="1,0.5">
-                                <GradientStop Offset="0" Color="#d4b096" />
-                                <GradientStop Offset="1" Color="#dac5b4" />
-                            </LinearGradientBrush>
-                        </Border.Background>
-                        <StackPanel>
-                            <Button
+                            <Border.Background>
+                                <LinearGradientBrush StartPoint="0,0.5" EndPoint="1,0.5">
+                                    <GradientStop Offset="0" Color="#d4b096" />
+                                    <GradientStop Offset="1" Color="#dac5b4" />
+                                </LinearGradientBrush>
+                            </Border.Background>
+                            <StackPanel>
+                                <Button
                                 Margin="10"
                                 HorizontalAlignment="Right"
                                 Command="{Binding CloseOpenVerificationEmailCommand}"
                                 Style="{StaticResource closeButton}">
-                                <ma:PackIconMaterial Kind="Close" Style="{StaticResource iconApp}" />
-                            </Button>
-                            <StackPanel Margin="10,10" Orientation="Horizontal">
-                                <TextBlock
+                                    <ma:PackIconMaterial Kind="Close" Style="{StaticResource iconApp}" />
+                                </Button>
+                                <StackPanel Margin="10,10" Orientation="Horizontal">
+                                    <TextBlock
                                     Margin="0,0,10,0"
                                     VerticalAlignment="Center"
                                     FontSize="20"
@@ -297,30 +300,32 @@
                                     Foreground="#9b442a"
                                     Text="Mã xác thực" />
 
-                                <TextBox
+                                    <TextBox
                                     Width="170"
                                     VerticalAlignment="Center"
                                     FontSize="20"
                                     Style="{StaticResource textbox}"
                                     Text="{Binding VertificationCode}" />
-                            </StackPanel>
-                            <Button
+                                </StackPanel>
+                                <Button
                                 Margin="10,20"
                                 HorizontalAlignment="Right"
                                 Command="{Binding SubmitRegisterCommand}"
                                 Style="{StaticResource adjustInfoButton}">
-                                <StackPanel HorizontalAlignment="Center" Orientation="Horizontal">
-                                    <ma:PackIconMaterial VerticalAlignment="Center" Kind="CheckBold" />
-                                    <TextBlock
+                                    <StackPanel HorizontalAlignment="Center" Orientation="Horizontal">
+                                        <ma:PackIconMaterial VerticalAlignment="Center" Kind="CheckBold" />
+                                        <TextBlock
                                         Margin="10,0,0,0"
                                         FontWeight="SemiBold"
                                         Text="Xác nhận" />
-                                </StackPanel>
-                            </Button>
-                        </StackPanel>
-                    </Border>
-                </materialDesign:DialogHost.DialogContent>
-            </materialDesign:DialogHost>
+                                    </StackPanel>
+                                </Button>
+                            </StackPanel>
+                        </Border>
+                    </materialDesign:DialogHost.DialogContent>
+                </materialDesign:DialogHost>
+            </Grid>
         </Grid>
+        <uc:LoadingData Visibility="{Binding IsLoading, Converter={StaticResource BooleanToVisibilityConverter}}" />
     </Grid>
 </UserControl>

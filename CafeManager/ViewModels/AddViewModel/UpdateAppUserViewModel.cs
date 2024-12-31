@@ -14,16 +14,10 @@ namespace CafeManager.WPF.ViewModels.AddViewModel
 {
     public partial class UpdateAppUserViewModel : ObservableObject
     {
-        private readonly AccountStore _accountStore;
-        private readonly AppUserServices _appUserServices;
-        private readonly EncryptionHelper _encryptionHelper;
         private readonly FileDialogService _fileDialogService;
-        private readonly IMapper _mapper;
 
         [ObservableProperty]
         private AppUserDTO _account = new();
-
-        public event Action? Close;
 
         [ObservableProperty]
         private string _newPassword = string.Empty;
@@ -34,14 +28,11 @@ namespace CafeManager.WPF.ViewModels.AddViewModel
         [ObservableProperty]
         private bool _isOpenChangePassWord = false;
 
+        public event Action<AppUserDTO>? ModifyAppUserChanged;
+
         public UpdateAppUserViewModel(IServiceScope scope)
         {
-            var provider = scope.ServiceProvider;
-            _accountStore = provider.GetRequiredService<AccountStore>();
-            _appUserServices = provider.GetRequiredService<AppUserServices>();
-            _encryptionHelper = provider.GetRequiredService<EncryptionHelper>();
-            _fileDialogService = provider.GetRequiredService<FileDialogService>();
-            _mapper = provider.GetRequiredService<IMapper>();
+            _fileDialogService = scope.ServiceProvider.CreateScope().ServiceProvider.GetRequiredService<FileDialogService>();
         }
 
         public void ReceiveAccount(AppUserDTO account)
@@ -56,77 +47,9 @@ namespace CafeManager.WPF.ViewModels.AddViewModel
         }
 
         [RelayCommand]
-        private async Task UpdateAccount()
+        private void UpdateAccount()
         {
-            try
-            {
-                if (Account != null)
-                {
-                    Appuser? appuser = await _appUserServices.GetAppUserByUserName(Account.Username);
-                    if (appuser == null)
-                    {
-                        return;
-                    }
-                    appuser.Username = Account.Username;
-                    appuser.Displayname = Account.Displayname;
-                    appuser.Email = Account.Email;
-                    appuser.Avatar = ConvertImageServices.BitmapImageToByteArray(Account.Avatar);
-                    Appuser? res = await _appUserServices.UpdateAppUser(appuser);
-                    if (res != null)
-                    {
-                        MyMessageBox.ShowDialog("Cập nhật tài khoản thành công");
-                        Properties.Settings.Default.UserName = string.Empty;
-                        Properties.Settings.Default.PassWord = string.Empty;
-                        Properties.Settings.Default.RememberAccount = false;
-                        Properties.Settings.Default.Save();
-                        _accountStore.SetAccount(_mapper.Map<AppUserDTO>(res));
-                    }
-                }
-            }
-            catch (InvalidOperationException ioe)
-            {
-                MyMessageBox.ShowDialog(ioe.Message);
-            }
-        }
-
-        [RelayCommand]
-        private async Task SubmitChangePassWord()
-        {
-            try
-            {
-                if (Account != null)
-                {
-                    if (string.IsNullOrEmpty(NewPassword))
-                    {
-                        MyMessageBox.ShowDialog("Mật khẩu không được để trống");
-                        return;
-                    }
-
-                    if (!ConfirmPassword.Equals(NewPassword))
-                    {
-                        MyMessageBox.ShowDialog("Mật khẩu mới và xác nhận mật khẩu mới không trùng");
-                        return;
-                    }
-
-                    Appuser? appuser = await _appUserServices.GetAppUserByUserName(Account.Username);
-                    if (appuser != null)
-                    {
-                        appuser.Password = _encryptionHelper.EncryptAES(NewPassword);
-                        var res = await _appUserServices.UpdateAppUser(appuser);
-                        if (res != null)
-                        {
-                            MyMessageBox.ShowDialog("Mật khẩu đổi thành công");
-                            IsOpenChangePassWord = false;
-                        }
-                    }
-                    NewPassword = string.Empty;
-                    ConfirmPassword = string.Empty;
-                }
-            }
-            catch (InvalidOperationException ioe)
-            {
-                MyMessageBox.Show(ioe.Message);
-            }
+            ModifyAppUserChanged?.Invoke(Account.Clone());
         }
 
         [RelayCommand]
@@ -140,20 +63,6 @@ namespace CafeManager.WPF.ViewModels.AddViewModel
                 Account.Avatar = new BitmapImage(new Uri(filePath));
                 OnPropertyChanged(nameof(Account));
             }
-        }
-
-        [RelayCommand]
-        private void CloseChangePassWord()
-        {
-            IsOpenChangePassWord = false;
-            NewPassword = string.Empty;
-            ConfirmPassword = string.Empty;
-        }
-
-        [RelayCommand]
-        private void CloseUserControl()
-        {
-            Close?.Invoke();
         }
     }
 }

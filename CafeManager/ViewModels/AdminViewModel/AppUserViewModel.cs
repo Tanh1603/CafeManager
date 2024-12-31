@@ -12,7 +12,7 @@ using Microsoft.Extensions.DependencyInjection;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Linq.Expressions;
-
+using static System.Windows.Forms.VisualStyles.VisualStyleElement.ToolTip;
 
 namespace CafeManager.WPF.ViewModels.AdminViewModel
 {
@@ -43,7 +43,7 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
             _encryptionHelper = provider.GetRequiredService<EncryptionHelper>();
             _mapper = provider.GetRequiredService<IMapper>();
 
-            UpdateAppUserVM.Close += UpdateAppUserVM_Close;
+            UpdateAppUserVM.ModifyAppUserChanged += UpdateAppUserVM_ModifyAppUserChanged;
             IsOpenUpdateAppUser = false;
         }
 
@@ -77,20 +77,34 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
             }
         }
 
-        private void DecryptPassword()
+        private async void UpdateAppUserVM_ModifyAppUserChanged(AppUserDTO obj)
         {
-            foreach(var item in ListAppUserDTO)
+            try
             {
-                item.Password = _encryptionHelper.DecryptAES(item.Password ?? string.Empty);
-            }    
+                IsLoading = true;
+                obj.Password = _encryptionHelper.EncryptAES(obj.Password);
+                Appuser? update = await _appUserServices.UpdateAppUser(_mapper.Map<Appuser>(obj));
+                if (update != null)
+                {
+                    _mapper.Map(update, ListAppUserDTO.FirstOrDefault(x => x.Appuserid == obj.Appuserid));
+                    DecryptPassword();
+                    IsOpenUpdateAppUser = false;
+                    IsLoading = false;
+                    MyMessageBox.Show("Sửa tài khoản thành công", MyMessageBox.Buttons.OK, MyMessageBox.Icons.Information);
+                }
+            }
+            catch (Exception)
+            {
+                throw;
+            }
         }
 
-        private void UpdateAppUserVM_Close()
+        private void DecryptPassword()
         {
-            IsOpenUpdateAppUser = false;
-            IsLoading = true;
-            _ = LoadData();
-            IsLoading = false;
+            foreach (var item in ListAppUserDTO)
+            {
+                item.Password = _encryptionHelper.DecryptAES(item.Password ?? string.Empty);
+            }
         }
 
         [RelayCommand]
@@ -98,6 +112,12 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
         {
             UpdateAppUserVM.ReceiveAccount(appUser.Clone());
             IsOpenUpdateAppUser = true;
+        }
+
+        [RelayCommand]
+        private void CloseUserControl()
+        {
+            IsOpenUpdateAppUser = false;
         }
 
         [RelayCommand]
@@ -127,7 +147,7 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
 
         public void Dispose()
         {
-            UpdateAppUserVM.Close -= UpdateAppUserVM_Close;
+            UpdateAppUserVM.ModifyAppUserChanged -= UpdateAppUserVM_ModifyAppUserChanged;
             GC.SuppressFinalize(this);
         }
 

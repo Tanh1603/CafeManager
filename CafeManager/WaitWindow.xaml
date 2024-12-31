@@ -1,0 +1,42 @@
+﻿<Window
+    x:Class="CafeManager.WPF.WaitWindow"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:converter="clr-namespace:CafeManager.WPF.Services.Converter"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="clr-namespace:CafeManager.WPF"
+    xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    Title="WaitWindow"
+    Width="800"
+    Height="450"
+    AllowsTransparency="True"
+    Background="Transparent"
+    WindowStartupLocation="CenterScreen"
+    WindowStyle="None"
+    mc:Ignorable="d">
+    <Window.Resources>
+        <converter:CornerRadiusClippingConverter x:Key="CornerRadiusClippingConverter" />
+    </Window.Resources>
+    <Border CornerRadius="10">
+        <Border.Background>
+            <LinearGradientBrush StartPoint="0.5,0" EndPoint="0.5,1">
+                <GradientStop Offset="0" Color="#824618" />
+                <GradientStop Offset="1" Color="#844518" />
+            </LinearGradientBrush>
+        </Border.Background>
+        <Border.Clip>
+            <MultiBinding Converter="{StaticResource CornerRadiusClippingConverter}">
+                <Binding Path="ActualWidth" RelativeSource="{RelativeSource AncestorType=Border}" />
+                <Binding Path="ActualHeight" RelativeSource="{RelativeSource AncestorType=Border}" />
+                <Binding Path="CornerRadius" RelativeSource="{RelativeSource self}" />
+            </MultiBinding>
+        </Border.Clip>
+        <TextBlock
+            HorizontalAlignment="Center"
+            VerticalAlignment="Center"
+            FontSize="70"
+            Foreground="#d3b7ff"
+            Text="Quản lí quán cafe" />
+    </Border>
+</Window>

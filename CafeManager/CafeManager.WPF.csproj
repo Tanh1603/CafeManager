@@ -6,6 +6,7 @@
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <UseWPF>true</UseWPF>
+    <ApplicationIcon>Assets\Images\Icon.ico</ApplicationIcon>
   </PropertyGroup>
 
   <ItemGroup>
@@ -29,6 +30,10 @@
     <None Remove="MessageBox\Icons\Warning.png" />
     <None Remove="Stores\email_template.html" />
     <None Remove="Stores\reset_email_template.html" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="Assets\Images\Icon.ico" />
   </ItemGroup>
 
   <ItemGroup>

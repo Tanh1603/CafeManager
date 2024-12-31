@@ -55,6 +55,7 @@ namespace CafeManager.WPF.HostBuilders
 
                 services.AddSingleton<NavigationStore>();
                 services.AddSingleton<AccountStore>();
+                services.AddSingleton<WaitWindow>();
                 services.AddSingleton<MainWindow>(provider => new MainWindow()
                 {
                     DataContext = provider.GetRequiredService<MainViewModel>()

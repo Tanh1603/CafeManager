@@ -15,7 +15,7 @@
     MinHeight="700"
     AllowsTransparency="True"
     Background="Transparent"
-    Icon="/Assets/Images/Icon.ico"
+    Icon="/Assets/Images/coffee.png"
     Style="{StaticResource MaterialDesignWindow}"
     WindowStartupLocation="CenterScreen"
     WindowStyle="none"

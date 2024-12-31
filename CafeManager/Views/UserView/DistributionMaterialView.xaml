@@ -235,7 +235,8 @@
                 Grid.Row="4"
                 Margin="10"
                 HorizontalAlignment="Center"
-                VerticalAlignment="Bottom">
+                VerticalAlignment="Bottom"
+                Visibility="{Binding PageVisibility, Converter={StaticResource BooleanToVisibilityConverter}}">
                 <StackPanel Orientation="Horizontal">
                     <StackPanel.Resources>
                         <Style BasedOn="{StaticResource MaterialDesignFlatDarkButton}" TargetType="Button">

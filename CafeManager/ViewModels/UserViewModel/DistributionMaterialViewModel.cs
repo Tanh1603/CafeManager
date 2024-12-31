@@ -151,7 +151,7 @@ namespace CafeManager.WPF.ViewModels.UserViewModel
                 IsLoading = true;
                 var dblistConsumedMaterial = await _consumedMaterialServices.GetSearchPaginateListConsumedMaterial(ConsumedMaterialFilter, pageIndex, pageSize, token);
                 ListConsumedMaterialDTO = [.. _mapper.Map<List<ConsumedMaterialDTO>>(dblistConsumedMaterial.Item1)];
-                totalPages = (dblistConsumedMaterial.Item2 + pageSize - 1) / pageSize;
+                TotalPages = (dblistConsumedMaterial.Item2 + pageSize - 1) / pageSize;
                 OnPropertyChanged(nameof(PageUI));
                 IsLoading = false;
             }
@@ -280,9 +280,13 @@ namespace CafeManager.WPF.ViewModels.UserViewModel
         private int pageIndex = 1;
 
         private int pageSize = 8;
+
+        [ObservableProperty]
+        [NotifyPropertyChangedFor(nameof(PageVisibility))]
         private int totalPages = 0;
 
-        public string PageUI => $"{pageIndex}/{totalPages}";
+        public bool PageVisibility => TotalPages > 0;
+        public string PageUI => $"{pageIndex}/{TotalPages}";
 
         [RelayCommand]
         private async Task FirstPage()
@@ -295,7 +299,7 @@ namespace CafeManager.WPF.ViewModels.UserViewModel
         [RelayCommand]
         private async Task NextPage()
         {
-            if (pageIndex == totalPages)
+            if (pageIndex == TotalPages)
             {
                 return;
             }
@@ -317,7 +321,7 @@ namespace CafeManager.WPF.ViewModels.UserViewModel
         [RelayCommand]
         private async Task LastPage()
         {
-            pageIndex = totalPages;
+            pageIndex = TotalPages;
             await LoadConsumedMaterial();
         }
 

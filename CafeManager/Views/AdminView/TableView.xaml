@@ -68,7 +68,7 @@
                 <ItemsControl ItemsSource="{Binding ListTable}">
                     <ItemsControl.ItemsPanel>
                         <ItemsPanelTemplate>
-                            <WrapPanel  MaxWidth="1460" />
+                            <WrapPanel MaxWidth="1460" />
                         </ItemsPanelTemplate>
                     </ItemsControl.ItemsPanel>
                     <ItemsControl.ItemTemplate>

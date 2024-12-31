@@ -195,7 +195,7 @@
                                     FontWeight="SemiBold"
                                     Foreground="#9b442a"
                                     Style="{StaticResource MaterialDesignFloatingHintTextBox}"
-                                    Text="{Binding Username}" />
+                                    Text="{Binding Username, UpdateSourceTrigger=PropertyChanged}" />
                             </Grid>
 
                             <Grid Margin="0,10">

@@ -59,7 +59,6 @@
                 Grid.Row="0"
                 Width="200"
                 Height="1"
-
                 HorizontalAlignment="Left"
                 VerticalAlignment="Bottom"
                 Background="#f5f5f5" />
@@ -77,10 +76,10 @@
                     Name="cbFoodCategory"
                     Grid.Column="0"
                     Width="200"
+                    FontWeight="Bold"
                     ItemsSource="{Binding ListFoodCategory}"
                     SelectedItem="{Binding SelectedFoodCategory}"
                     Style="{StaticResource ComboBoxStyle}"
-                    FontWeight="Bold"
                     Tag="Danh mục thực đơn">
                     <ComboBox.ItemContainerStyle>
                         <Style BasedOn="{StaticResource ComboBoxItemStyle}" TargetType="ComboBoxItem">

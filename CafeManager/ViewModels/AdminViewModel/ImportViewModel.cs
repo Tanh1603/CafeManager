@@ -56,8 +56,6 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
             }
         }
 
-
-
         private StaffDTO? _selectedStaff;
 
         public StaffDTO? SelectedStaff
@@ -92,9 +90,7 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
                         OnPropertyChanged();
                         //_ = FirstPage();
                         FirstPageCommand.ExecuteAsync(null);
-
                     }
-
                 }
             }
         }
@@ -118,6 +114,7 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
             }
             return hasError;
         }
+
         private DateTime? _endDate;
 
         public DateTime? EndDate
@@ -133,7 +130,6 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
                         OnPropertyChanged();
                         //_ = FirstPage();
                         FirstPageCommand.ExecuteAsync(null);
-
                     }
                 }
             }
@@ -200,7 +196,7 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
 
             var dbListImport = await _importServices.GetSearchPaginateListImport(filter, pageIndex, pageSize);
             ListImportDTO = [.. _mapper.Map<List<ImportDTO>>(dbListImport.Item1)];
-            totalPages = (dbListImport.Item2 + pageSize - 1) / pageSize;
+            TotalPages = (dbListImport.Item2 + pageSize - 1) / pageSize;
             OnPropertyChanged(nameof(PageUI));
         }
 
@@ -311,19 +307,22 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
             ModifyImportVM.ImportChanged -= ModifyImportVM_ImportChanged;
             GC.SuppressFinalize(this);
         }
-        
-        
 
         #region Phan trang
 
         private int pageIndex = 1;
 
         private int pageSize = 10;
+
+        [ObservableProperty]
+        [NotifyPropertyChangedFor(nameof(PageVisibility))]
         private int totalPages = 0;
+
+        public bool PageVisibility => TotalPages > 0;
 
         public event EventHandler<DataErrorsChangedEventArgs>? ErrorsChanged;
 
-        public string PageUI => $"{pageIndex}/{totalPages}";
+        public string PageUI => $"{pageIndex}/{TotalPages}";
 
         public bool HasErrors => _errorViewModel.HasErrors;
 
@@ -339,7 +338,7 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
         [RelayCommand]
         private async Task NextPage()
         {
-            if (pageIndex == totalPages)
+            if (pageIndex == TotalPages)
             {
                 return;
             }
@@ -365,7 +364,7 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
         [RelayCommand]
         private async Task LastPage()
         {
-            pageIndex = totalPages;
+            pageIndex = TotalPages;
             IsLoading = true;
             await LoadImport();
             IsLoading = false;

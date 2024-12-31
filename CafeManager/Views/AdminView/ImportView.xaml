@@ -15,7 +15,7 @@
     xmlns:uc="clr-namespace:CafeManager.WPF.Assets.UsersControls"
     xmlns:view="clr-namespace:CafeManager.WPF.Views"
     d:DesignHeight="450"
- 
+
     mc:Ignorable="d">
     <UserControl.Resources>
         <BooleanToVisibilityConverter x:Key="BoolToVis" />
@@ -152,7 +152,7 @@
                     SelectedDate="{Binding StartDate}"
                     Style="{StaticResource DatePicker}"
                     Tag="Visible"
-                     Validation.ErrorTemplate="{StaticResource ErrorMessage}"/>
+                     Validation.ErrorTemplate="{StaticResource ErrorMessage}" />
 
                 <TextBlock
                     Margin="10,0"
@@ -168,7 +168,7 @@
                     SelectedDate="{Binding EndDate}"
                     Style="{StaticResource DatePicker}"
                     Tag="Visible"
-                     Validation.ErrorTemplate="{StaticResource ErrorMessage}"/>
+                     Validation.ErrorTemplate="{StaticResource ErrorMessage}" />
             </StackPanel>
 
             <!--  Import Datagrid  -->
@@ -269,6 +269,7 @@
             </Border>
 
             <Grid
+                Visibility="{Binding PageVisibility, Converter={StaticResource BooleanToVisibilityConverter}}"
                 Grid.Row="3"
                 Margin="10"
                 HorizontalAlignment="Center">

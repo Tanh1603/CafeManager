@@ -527,7 +527,7 @@
                 </TabControl>
             </Border>
 
-            <Grid Grid.Row="3">
+            <Grid Grid.Row="3" Visibility="{Binding PageVisibility, Converter={StaticResource BooleanToVisibilityConverter}}">
                 <!--  ConsumedPage  -->
                 <Grid
                     Margin="10"
@@ -698,7 +698,7 @@
                 <ContentControl Content="{Binding MaterialVM}" />
             </materialDesign:DialogHost.DialogContent>
         </materialDesign:DialogHost>
-        
+
         <uc:LoadingData Visibility="{Binding IsLoading, Converter={StaticResource BooleanToVisibilityConverter}}" />
     </Grid>
 </UserControl>

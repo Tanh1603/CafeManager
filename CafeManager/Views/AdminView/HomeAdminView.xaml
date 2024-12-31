@@ -401,9 +401,8 @@
                                     <lvc:CartesianChart
                                         Grid.Row="1"
                                         Grid.ColumnSpan="2"
-
-                                        Zoom="X"
-                                        Series="{Binding ChartZoomCollection}">
+                                        Series="{Binding ChartZoomCollection}"
+                                        Zoom="X">
 
                                         <lvc:CartesianChart.AxisX>
 
@@ -439,9 +438,8 @@
 
                                     <lvc:CartesianChart
                                         Grid.Row="1"
-                                        Zoom="x"
-
-                                        Series="{Binding ChartColumnCollection}">
+                                        Series="{Binding ChartColumnCollection}"
+                                        Zoom="x">
                                         <lvc:CartesianChart.AxisX>
                                             <lvc:Axis Title="Quản lí thu - chi theo tháng" Labels="{Binding LabelChartCol}">
                                                 <lvc:Axis.Separator>
@@ -450,7 +448,10 @@
                                             </lvc:Axis>
                                         </lvc:CartesianChart.AxisX>
                                         <lvc:CartesianChart.AxisY>
-                                            <lvc:Axis Title="VNĐ" Foreground="#612e0f" MinValue="0" />
+                                            <lvc:Axis
+                                                Title="VNĐ"
+                                                Foreground="#612e0f"
+                                                MinValue="0" />
                                         </lvc:CartesianChart.AxisY>
                                     </lvc:CartesianChart>
                                 </Grid>
@@ -480,11 +481,11 @@
                                     Text="Thực đơn yêu thích" />
                             </Grid>
                             <ListBox
-                                ScrollViewer.HorizontalScrollBarVisibility="Hidden"
-                                ScrollViewer.VerticalScrollBarVisibility="Hidden"
                                 x:Name="listbox"
                                 Grid.Row="1"
-                                ItemsSource="{Binding MostSoldFood}">
+                                ItemsSource="{Binding MostSoldFood}"
+                                ScrollViewer.HorizontalScrollBarVisibility="Hidden"
+                                ScrollViewer.VerticalScrollBarVisibility="Hidden">
 
                                 <ListBox.ItemTemplate>
 
@@ -522,9 +523,9 @@
                                                         FontSize="14"
                                                         FontWeight="Bold"
                                                         Foreground="#dac5b4"
+                                                        Text="{Binding Foodname}"
                                                         TextTrimming="CharacterEllipsis"
-                                                        ToolTip="{Binding Foodname}"
-                                                        Text="{Binding Foodname}" />
+                                                        ToolTip="{Binding Foodname}" />
                                                 </Grid>
 
                                                 <Grid Grid.Column="2">

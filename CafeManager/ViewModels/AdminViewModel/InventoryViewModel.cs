@@ -32,6 +32,9 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
         [ObservableProperty]
         private bool _isLoading;
 
+        [ObservableProperty]
+        public bool _pageVisibility = false;
+
         public int SelectedTabIndex
         {
             get => _selectedTabIndex;
@@ -326,8 +329,16 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
                 IsLoading = true;
                 var dbListInventory = await _materialSupplierServices.GetSearchPaginateListMaterialsupplier(InventoryFilter, inventoryPageIndex, PageSize, token);
                 ListInventoryDTO = [.. _mapper.Map<List<MaterialSupplierDTO>>(dbListInventory.Item1)];
-                inventoryTotalPages = (dbListInventory.Item2 + PageSize - 1) / PageSize;
-                OnPropertyChanged(nameof(InventoryPageUI));
+                InventoryTotalPages = (dbListInventory.Item2 + PageSize - 1) / PageSize;
+                if (InventoryTotalPages > 0)
+                {
+                    PageVisibility = true;
+                    OnPropertyChanged(nameof(InventoryPageUI));
+                }
+                else
+                {
+                    PageVisibility = false;
+                }
                 IsLoading = false;
             }
             catch (OperationCanceledException oe)
@@ -348,8 +359,16 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
                 IsLoading = true;
                 var dbListConsumed = await _consumedMaterialServices.GetSearchPaginateListConsumedMaterial(ConsumedFilter, consumedPageIndex, PageSize, token);
                 ListConsumedMaterialDTO = [.. _mapper.Map<List<ConsumedMaterialDTO>>(dbListConsumed.Item1)];
-                consumedTotalPages = (dbListConsumed.Item2 + PageSize - 1) / PageSize;
-                OnPropertyChanged(nameof(ConsumedPageUI));
+                ConsumedTotalPages = (dbListConsumed.Item2 + PageSize - 1) / PageSize;
+                if (ConsumedTotalPages > 0)
+                {
+                    PageVisibility = true;
+                    OnPropertyChanged(nameof(ConsumedPageUI));
+                }
+                else
+                {
+                    PageVisibility = false;
+                }
                 IsLoading = false;
             }
             catch (OperationCanceledException)
@@ -371,7 +390,15 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
                 var dbListUsedUp = await _materialSupplierServices.GetSearchPaginateListMaterialsupplier(UsedUpFilter, usedUpPageIndex, PageSize, token);
                 ListUsedUp = [.. _mapper.Map<List<MaterialSupplierDTO>>(dbListUsedUp.Item1)];
                 usedUpTotalPages = (dbListUsedUp.Item2 + PageSize - 1) / PageSize;
-                OnPropertyChanged(nameof(UsedUpPageUI));
+                if (usedUpTotalPages > 0)
+                {
+                    PageVisibility = true;
+                    OnPropertyChanged(nameof(UsedUpPageUI));
+                }
+                else
+                {
+                    PageVisibility = false;
+                }
                 IsLoading = false;
             }
             catch (OperationCanceledException)
@@ -393,7 +420,15 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
                 var dbListExpired = await _materialSupplierServices.GetSearchPaginateListMaterialsupplier(ExpiredFilter, expiredPageIndex, PageSize, token);
                 ListExpriedDTO = [.. _mapper.Map<List<MaterialSupplierDTO>>(dbListExpired.Item1)];
                 expiredTotalPages = (dbListExpired.Item2 + PageSize - 1) / PageSize;
-                OnPropertyChanged(nameof(ExpiredPageUI));
+                if (expiredTotalPages > 0)
+                {
+                    PageVisibility = true;
+                    OnPropertyChanged(nameof(ExpiredPageUI));
+                }
+                else
+                {
+                    PageVisibility = false;
+                }
                 IsLoading = false;
             }
             catch (OperationCanceledException)
@@ -418,8 +453,16 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
 
             var dbListInventory = await _materialSupplierServices.GetSearchPaginateListMaterialsupplier(inventoryFilter, inventoryPageIndex, PageSize);
             ListInventoryDTO = [.. _mapper.Map<List<MaterialSupplierDTO>>(dbListInventory.Item1)];
-            inventoryTotalPages = (dbListInventory.Item2 + PageSize - 1) / PageSize;
-            OnPropertyChanged(nameof(InventoryPageUI));
+            InventoryTotalPages = (dbListInventory.Item2 + PageSize - 1) / PageSize;
+            if (InventoryTotalPages > 0)
+            {
+                PageVisibility = true;
+                OnPropertyChanged(nameof(InventoryPageUI));
+            }
+            else
+            {
+                PageVisibility = false;
+            }
             IsLoading = false;
         }
 
@@ -593,9 +636,11 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
         #region Phan Trang ConsumedMaterial
 
         private int consumedPageIndex = 1;
+
+        [ObservableProperty]
         private int consumedTotalPages = 0;
 
-        public string ConsumedPageUI => $"{consumedPageIndex}/{consumedTotalPages}";
+        public string ConsumedPageUI => $"{consumedPageIndex}/{ConsumedTotalPages}";
 
         [RelayCommand]
         private async Task ConsumedFirstPage()
@@ -608,7 +653,7 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
         [RelayCommand]
         private async Task ConsumedNextPage()
         {
-            if (consumedPageIndex == consumedTotalPages)
+            if (consumedPageIndex == ConsumedTotalPages)
             {
                 return;
             }
@@ -630,7 +675,7 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
         [RelayCommand]
         private async Task ConsumedLastPage()
         {
-            consumedPageIndex = consumedTotalPages;
+            consumedPageIndex = ConsumedTotalPages;
             await LoadConsumedMaterial(_token);
         }
 
@@ -639,9 +684,11 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
         #region Phan trang Inventory
 
         private int inventoryPageIndex = 1;
+
+        [ObservableProperty]
         private int inventoryTotalPages = 0;
 
-        public string InventoryPageUI => $"{inventoryPageIndex}/{inventoryTotalPages}";
+        public string InventoryPageUI => $"{inventoryPageIndex}/{InventoryTotalPages}";
 
         [RelayCommand]
         private async Task InventoryFirstPage()
@@ -654,7 +701,7 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
         [RelayCommand]
         private async Task InventoryNextPage()
         {
-            if (inventoryPageIndex == inventoryTotalPages)
+            if (inventoryPageIndex == InventoryTotalPages)
             {
                 return;
             }
@@ -676,7 +723,7 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
         [RelayCommand]
         private async Task InventoryLastPage()
         {
-            inventoryPageIndex = inventoryTotalPages;
+            inventoryPageIndex = InventoryTotalPages;
             await LoadInventory(_token);
         }
 

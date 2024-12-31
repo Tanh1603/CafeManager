@@ -154,7 +154,7 @@
                                 FontWeight="SemiBold"
                                 Foreground="#9b442a"
                                 Style="{StaticResource MaterialDesignFloatingHintTextBox}"
-                                Text="{Binding Username, Mode=TwoWay}"
+                                Text="{Binding Username, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                                 Validation.ErrorTemplate="{StaticResource ErrorMessageReg}" />
                         </Grid>
                         <Grid Margin="0,15">
@@ -175,7 +175,7 @@
                                 Margin="10,0"
                                 materialDesign:HintAssist.FloatingOffset="0, -18"
                                 materialDesign:HintAssist.Hint="Password"
-                                materialDesign:PasswordBoxAssist.Password="{Binding Path=Password, Mode=TwoWay}"
+                                materialDesign:PasswordBoxAssist.Password="{Binding Path=Password, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                                 BorderBrush="Transparent"
                                 BorderThickness="0,0,0,1.5"
                                 FontSize="20"
@@ -209,7 +209,7 @@
                                 FontWeight="SemiBold"
                                 Foreground="#9b442a"
                                 Style="{StaticResource MaterialDesignFloatingHintTextBox}"
-                                Text="{Binding Email, Mode=TwoWay}"
+                                Text="{Binding Email, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                                 Validation.ErrorTemplate="{StaticResource ErrorMessageReg}" />
                         </Grid>
 
@@ -237,7 +237,7 @@
                                 FontWeight="SemiBold"
                                 Foreground="#9b442a"
                                 Style="{StaticResource MaterialDesignFloatingHintTextBox}"
-                                Text="{Binding Displayname, Mode=TwoWay}"
+                                Text="{Binding Displayname, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                                 Validation.ErrorTemplate="{StaticResource ErrorMessageReg}" />
                         </Grid>
 

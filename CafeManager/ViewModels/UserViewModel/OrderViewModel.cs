@@ -27,6 +27,8 @@ namespace CafeManager.WPF.ViewModels.UserViewModel
         [ObservableProperty]
         private bool _isLoading;
 
+        private CoffeetableDTO _currentTableDTO = new();
+
         [ObservableProperty]
         private ObservableCollection<CoffeetableDTO> _listCoffeeTableDTO = [];
 
@@ -145,7 +147,8 @@ namespace CafeManager.WPF.ViewModels.UserViewModel
                 }
                 else return;
             }
-
+            tableDTO.IsEmpty = false;
+            _currentTableDTO = tableDTO;
             SelectedInvoiceDTO = ListInvoiceDTO.FirstOrDefault(x => x.Coffeetableid == tableDTO.Coffeetableid) ?? new();
             OnPropertyChanged(nameof(SelectedInvoiceDTO.Coffeetable.TableName));
         }
@@ -204,6 +207,7 @@ namespace CafeManager.WPF.ViewModels.UserViewModel
                 Invoice addInvoice = _mapper.Map<Invoice>(SelectedInvoiceDTO);
                 var res = await _invoiceServices.CreateInvoice(addInvoice);
                 IsLoading = false;
+                _currentTableDTO.IsEmpty = true;
                 return res;
             }
             catch (InvalidOperationException ioe)

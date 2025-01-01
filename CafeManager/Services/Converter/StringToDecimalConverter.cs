@@ -15,7 +15,7 @@ namespace CafeManager.WPF.Services.Converter
             // Chuyển đổi từ decimal sang string
             if (value is decimal decimalValue)
             {
-                return decimalValue.ToString(culture); // Sử dụng format mặc định của hệ thống
+                return decimalValue.ToString("F2", culture); // Sử dụng format mặc định của hệ thống
             }
             return string.Empty;
         }
@@ -27,7 +27,7 @@ namespace CafeManager.WPF.Services.Converter
             {
                 if (decimal.TryParse(stringValue, NumberStyles.Any, culture, out decimal result))
                 {
-                    return result;
+                    return Math.Round(result, 2);
                 }
             }
             // Trả về giá trị mặc định nếu chuỗi không hợp lệ

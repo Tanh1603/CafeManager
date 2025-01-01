@@ -24,6 +24,7 @@
         <BooleanToVisibilityConverter x:Key="BoolToVis" />
         <service:RowIndexConverter x:Key="RowIndexConverter" />
         <service:CurrencyConverter x:Key="CurrencyConverter" />
+        <service:StringToDecimalConverter x:Key="StringToDecimalConverter" />
     </UserControl.Resources>
 
     <Grid>
@@ -83,7 +84,6 @@
                                     Kind="PencilOutline"
                                     Style="{StaticResource gridButtonIcon}"
                                     Visibility="{Binding IsUpdating, Converter={StaticResource BoolToVis}}" />
-
                             </Grid>
 
                             <StackPanel Margin="5,0,5,0">
@@ -98,7 +98,8 @@
                                         SelectedValue="{Binding ModifyImport.Supplierid, Mode=TwoWay}"
                                         SelectedValuePath="Supplierid"
                                         Style="{StaticResource ComboBoxStyle}"
-                                        Tag="Nhà cung cấp">
+                                        Tag="Nhà cung cấp"
+                                        Validation.ErrorTemplate="{StaticResource ErrorMessage}">
                                         <ComboBox.ItemContainerStyle>
                                             <Style BasedOn="{StaticResource ComboBoxItemStyle}" TargetType="ComboBoxItem">
                                                 <Setter Property="Width" Value="{Binding ActualWidth, ElementName=cbsupplier}" />
@@ -147,27 +148,29 @@
                                     <DatePicker
                                         Grid.Column="1"
                                         MinWidth="150"
-                                        Margin="5,0,5,0"
+                                        Margin="0,10"
                                         HorizontalAlignment="Left"
                                         materialDesign:HintAssist.Hint="Pick Date"
                                         materialDesign:TextFieldAssist.HasClearButton="True"
                                         CalendarStyle="{StaticResource MaterialDesignCalendarPortrait}"
                                         SelectedDate="{Binding ModifyImport.Receiveddate, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
-                                        Style="{StaticResource DatePicker}" />
+                                        Style="{StaticResource DatePicker}"
+                                        Validation.ErrorTemplate="{StaticResource ErrorMessage}" />
 
                                     <materialDesign:TimePicker
                                         x:Name="PresetTimePicker"
                                         Grid.Column="2"
                                         Grid.ColumnSpan="2"
                                         Width="100"
-                                        Margin="5,0,5,0"
+                                        Margin="10"
                                         Padding="0,10,0,0"
                                         HorizontalAlignment="Left"
                                         materialDesign:HintAssist.Hint="Pick Time"
                                         materialDesign:TextFieldAssist.HasClearButton="True"
                                         FontWeight="Bold"
                                         Is24Hours="True"
-                                        SelectedTime="{Binding ModifyImport.Receiveddate, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" />
+                                        SelectedTime="{Binding ModifyImport.Receiveddate, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
+                                        Validation.ErrorTemplate="{StaticResource ErrorMessage}" />
                                     <TextBlock
                                         Grid.Row="1"
                                         VerticalAlignment="Center"
@@ -178,11 +181,11 @@
                                         Grid.Row="1"
                                         Grid.Column="1"
                                         Width="150"
-                                        Margin="5,0,5,0"
                                         HorizontalAlignment="Left"
                                         VerticalAlignment="Center"
                                         Style="{StaticResource textbox}"
-                                        Text="{Binding ModifyImport.Deliveryperson, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" />
+                                        Text="{Binding ModifyImport.Deliveryperson, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
+                                        Validation.ErrorTemplate="{StaticResource ErrorMessage}" />
                                     <TextBlock
                                         Grid.Row="1"
                                         Grid.Column="2"
@@ -194,27 +197,29 @@
                                         Grid.Row="1"
                                         Grid.Column="3"
                                         Width="150"
-                                        Margin="5,0,5,0"
+                                        Margin="0,10"
                                         HorizontalAlignment="Left"
                                         VerticalAlignment="Center"
                                         Style="{StaticResource textbox}"
-                                        Text="{Binding ModifyImport.Phone, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" />
+                                        Text="{Binding ModifyImport.Phone, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
+                                        Validation.ErrorTemplate="{StaticResource ErrorMessage}" />
 
                                     <TextBlock
                                         Grid.Row="2"
                                         VerticalAlignment="Center"
                                         FontWeight="Bold"
                                         Foreground="#844418"
-                                        Text="Công ty giao: " />
+                                        Text="Công ty giao: "
+                                        Validation.ErrorTemplate="{StaticResource ErrorMessage}" />
                                     <TextBox
                                         Grid.Row="2"
                                         Grid.Column="1"
                                         Width="150"
-                                        Margin="5,0,5,0"
                                         HorizontalAlignment="Left"
                                         VerticalAlignment="Center"
                                         Style="{StaticResource textbox}"
-                                        Text="{Binding ModifyImport.Shippingcompany, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" />
+                                        Text="{Binding ModifyImport.Shippingcompany, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
+                                        Validation.ErrorTemplate="{StaticResource ErrorMessage}" />
 
                                     <TextBlock
                                         Grid.Row="2"
@@ -228,14 +233,15 @@
                                         Grid.Row="2"
                                         Grid.Column="3"
                                         Width="150"
-                                        Margin="5,0,5,0"
+                                        Margin="0,10"
                                         HorizontalAlignment="Left"
                                         DisplayMemberPath="Staffname"
                                         ItemsSource="{Binding ListStaff}"
                                         SelectedItem="{Binding ModifyImport.Staff, Mode=TwoWay}"
                                         SelectedValue="{Binding ModifyImport.Staffid, Mode=TwoWay}"
                                         SelectedValuePath="Staffid"
-                                        Style="{StaticResource ComboBoxStyle}">
+                                        Style="{StaticResource ComboBoxStyle}"
+                                        Validation.ErrorTemplate="{StaticResource ErrorMessage}">
                                         <ComboBox.ItemContainerStyle>
                                             <Style BasedOn="{StaticResource ComboBoxItemStyle}" TargetType="ComboBoxItem">
                                                 <Setter Property="Width" Value="{Binding ActualWidth, ElementName=cbstaff}" />
@@ -244,7 +250,6 @@
                                         </ComboBox.ItemContainerStyle>
                                     </ComboBox>
                                 </Grid>
-
                             </StackPanel>
                         </StackPanel>
                     </Border>
@@ -284,12 +289,12 @@
                                     SelectedValue="{Binding CurrentImportDetail.Materialsupplier.Materialid, Mode=TwoWay}"
                                     SelectedValuePath="Materialid"
                                     Style="{StaticResource ComboBoxStyle}"
-                                    Tag="Vật liệu">
+                                    Tag="Vật liệu"
+                                    Validation.ErrorTemplate="{StaticResource ErrorMessage}">
                                     <ComboBox.ItemContainerStyle>
                                         <Style BasedOn="{StaticResource ComboBoxItemStyle}" TargetType="ComboBoxItem">
                                             <Setter Property="Width" Value="{Binding ActualWidth, ElementName=cbmaterial}" />
                                             <Setter Property="Height" Value="{Binding ActualHeight, ElementName=cbmaterial}" />
-
                                         </Style>
                                     </ComboBox.ItemContainerStyle>
                                 </ComboBox>
@@ -302,6 +307,7 @@
                                     VerticalAlignment="Center"
                                     Command="{Binding OpenAddMaterialCommand}"
                                     Style="{StaticResource addButton}">
+
                                     <StackPanel Orientation="Horizontal">
                                         <ma:PackIconMaterial
                                             Width="11"
@@ -337,13 +343,12 @@
                                 <DatePicker
                                     Grid.Column="1"
                                     MinWidth="150"
-                                    Margin="5,0,5,0"
                                     HorizontalAlignment="Left"
-                                    materialDesign:HintAssist.Hint="Pick Date"
-                                    materialDesign:TextFieldAssist.HasClearButton="True"
                                     CalendarStyle="{StaticResource MaterialDesignCalendarPortrait}"
                                     SelectedDate="{Binding CurrentImportDetail.Materialsupplier.Manufacturedate, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
-                                    Style="{StaticResource DatePicker}" />
+                                    Style="{StaticResource DatePicker}"
+                                    Tag="Collapsed"
+                                    Validation.ErrorTemplate="{StaticResource ErrorMessage}" />
                                 <TextBlock
                                     Grid.Column="2"
                                     VerticalAlignment="Center"
@@ -353,13 +358,13 @@
                                 <DatePicker
                                     Grid.Column="3"
                                     MinWidth="150"
-                                    Margin="5,0,5,0"
+                                    Margin="0,10"
                                     HorizontalAlignment="Left"
-                                    materialDesign:HintAssist.Hint="Pick Date"
-                                    materialDesign:TextFieldAssist.HasClearButton="True"
                                     CalendarStyle="{StaticResource MaterialDesignCalendarPortrait}"
                                     SelectedDate="{Binding CurrentImportDetail.Materialsupplier.Expirationdate, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
-                                    Style="{StaticResource DatePicker}" />
+                                    Style="{StaticResource DatePicker}"
+                                    Tag="Collapsed"
+                                    Validation.ErrorTemplate="{StaticResource ErrorMessage}" />
 
                                 <TextBlock
                                     Grid.Row="1"
@@ -372,11 +377,11 @@
                                     Grid.Column="1"
                                     Width="150"
                                     MinWidth="150"
-                                    Margin="5,0,5,0"
                                     HorizontalAlignment="Left"
                                     VerticalAlignment="Center"
                                     Style="{StaticResource textbox}"
-                                    Text="{Binding CurrentImportDetail.Materialsupplier.Manufacturer, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" />
+                                    Text="{Binding CurrentImportDetail.Materialsupplier.Manufacturer, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
+                                    Validation.ErrorTemplate="{StaticResource ErrorMessage}" />
                                 <TextBlock
                                     Grid.Row="1"
                                     Grid.Column="2"
@@ -388,11 +393,12 @@
                                     Grid.Row="1"
                                     Grid.Column="3"
                                     Width="150"
-                                    Margin="5,0,5,0"
+                                    Margin="0,10"
                                     HorizontalAlignment="Left"
                                     VerticalAlignment="Center"
                                     Style="{StaticResource textbox}"
-                                    Text="{Binding CurrentImportDetail.Materialsupplier.Original, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" />
+                                    Text="{Binding CurrentImportDetail.Materialsupplier.Original, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
+                                    Validation.ErrorTemplate="{StaticResource ErrorMessage}" />
 
                                 <TextBlock
                                     Grid.Row="2"
@@ -404,11 +410,11 @@
                                     Grid.Row="2"
                                     Grid.Column="1"
                                     Width="150"
-                                    Margin="5,0,5,0"
                                     HorizontalAlignment="Left"
                                     VerticalAlignment="Center"
                                     Style="{StaticResource textbox}"
-                                    Text="{Binding CurrentImportDetail.Materialsupplier.Price, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" />
+                                    Text="{Binding CurrentImportDetail.Materialsupplier.Price, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource CurrencyConverter}, Mode=TwoWay}"
+                                    Validation.ErrorTemplate="{StaticResource ErrorMessage}" />
                                 <TextBlock
                                     Grid.Row="2"
                                     Grid.Column="2"
@@ -420,11 +426,12 @@
                                     Grid.Row="2"
                                     Grid.Column="3"
                                     Width="150"
-                                    Margin="5,0,5,0"
+                                    Margin="0,10"
                                     HorizontalAlignment="Left"
                                     VerticalAlignment="Center"
                                     Style="{StaticResource textbox}"
-                                    Text="{Binding CurrentImportDetail.Quantity, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay, StringFormat='F2'}" />
+                                    Text="{Binding CurrentImportDetail.Quantity, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay, StringFormat='F2', Converter={StaticResource StringToDecimalConverter}}"
+                                    Validation.ErrorTemplate="{StaticResource ErrorMessage}" />
                             </Grid>
 
                             <StackPanel HorizontalAlignment="Right" Orientation="Horizontal">
@@ -457,6 +464,7 @@
                                     HorizontalAlignment="Right"
                                     VerticalAlignment="Center"
                                     Command="{Binding ModifyImportDetailCommand}"
+                                    IsEnabled="{Binding CanSubmitModifyImportDetail, UpdateSourceTrigger=PropertyChanged, NotifyOnSourceUpdated=True, NotifyOnTargetUpdated=True}"
                                     Style="{StaticResource addButton}">
                                     <StackPanel Orientation="Horizontal">
                                         <ma:PackIconMaterial
@@ -600,12 +608,12 @@
                     </StackPanel>
                 </Grid>
 
-
                 <Button
                     Margin="10"
                     HorizontalAlignment="Right"
                     VerticalAlignment="Bottom"
                     Command="{Binding SubmitModifyImportCommand}"
+                    IsEnabled="{Binding CanSubmitModifyImport, UpdateSourceTrigger=PropertyChanged, NotifyOnSourceUpdated=True, NotifyOnTargetUpdated=True}"
                     Style="{StaticResource confirmInfoButton}">
                     <StackPanel HorizontalAlignment="Center" Orientation="Horizontal">
                         <ma:PackIconMaterial VerticalAlignment="Center" Kind="CheckBold" />
@@ -617,7 +625,6 @@
                 </Button>
             </StackPanel>
         </Border>
-
 
         <materialDesign:DialogHost
             Grid.ColumnSpan="2"
@@ -634,7 +641,6 @@
             <materialDesign:DialogHost.DialogContent>
                 <ContentControl Content="{Binding SelectedViewModel}" />
             </materialDesign:DialogHost.DialogContent>
-
         </materialDesign:DialogHost>
     </Grid>
 </UserControl>

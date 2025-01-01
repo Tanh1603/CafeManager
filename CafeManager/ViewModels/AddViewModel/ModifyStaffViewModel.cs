@@ -122,6 +122,7 @@ namespace CafeManager.WPF.ViewModels.AddViewModel
                 {
                     MyMessageBox.Show("Sửa lịch sử lương thành công");
                     existedHistory.Salary = CurrentStaffSalary.Salary;
+                    existedHistory.Effectivedate = CurrentStaffSalary.Effectivedate;
                 }
             }
             else

@@ -49,10 +49,8 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
 
         public async Task LoadData(CancellationToken token = default)
         {
-            if (token == default)
-            {
-                _token = token;
-            }
+            _token = token;
+
             try
             {
                 token.ThrowIfCancellationRequested();

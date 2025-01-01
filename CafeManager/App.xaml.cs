@@ -33,18 +33,19 @@ namespace CafeManager.WPF
             try
             {
                 _host.Start();
-                Current.ShutdownMode = ShutdownMode.OnExplicitShutdown;
+                //Current.ShutdownMode = ShutdownMode.OnExplicitShutdown;
 
-                Current.MainWindow = _host.Services.GetRequiredService<WaitWindow>();
-                Current.MainWindow.Show();
-                Task.Run(() =>
-                {
-                    using (var dbContext = _host.Services.GetRequiredService<IDbContextFactory<CafeManagerContext>>().CreateDbContext())
-                    {
-                        dbContext.Database.OpenConnection();
-                    }
-                }).Wait();
-                Current.MainWindow.Close();
+                //Current.MainWindow = _host.Services.GetRequiredService<WaitWindow>();
+                //Current.MainWindow.Show();
+                //Task.Run(() =>
+                //{
+                //    using (var dbContext = _host.Services.GetRequiredService<IDbContextFactory<CafeManagerContext>>().CreateDbContext())
+                //    {
+                //        dbContext.Database.OpenConnection();
+                //        dbContext.Database.CloseConnection();
+                //    }
+                //}).Wait();
+                //Current.MainWindow.Close();
 
                 Current.MainWindow = _host.Services.GetRequiredService<MainWindow>();
                 Current.MainWindow.Show();

@@ -28,29 +28,28 @@ namespace CafeManager.WPF
                                                 .AddViewModels();
         }
 
-        protected override void OnStartup(StartupEventArgs e)
+        protected override async void OnStartup(StartupEventArgs e)
         {
             try
             {
                 _host.Start();
                 Current.ShutdownMode = ShutdownMode.OnExplicitShutdown;
-
                 Current.MainWindow = _host.Services.GetRequiredService<WaitWindow>();
+                Current.MainWindow.ShowInTaskbar = false;
                 Current.MainWindow.Show();
-                Task.Run(() =>
+                await Task.Run(() =>
                 {
                     using (var dbContext = _host.Services.GetRequiredService<IDbContextFactory<CafeManagerContext>>().CreateDbContext())
                     {
-                        dbContext.Database.Migrate();
+                        var db = dbContext.Appusers.FirstOrDefault();
                     }
-                }).Wait();
-                Current.MainWindow.Hide();
-
+                });
+                Current.MainWindow.Close();
                 Current.MainWindow = _host.Services.GetRequiredService<MainWindow>();
                 Current.MainWindow.Show();
                 base.OnStartup(e);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
                 MyMessageBox.ShowDialog("Vui lòng kiểm tra kết nối đường truyền mạng", MyMessageBox.Buttons.OK, MyMessageBox.Icons.Error);
                 Current.Shutdown();

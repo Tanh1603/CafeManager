@@ -35,6 +35,8 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
         [ObservableProperty]
         private UpdateAppUserViewModel _updateAppUserVM;
 
+        private Expression<Func<Appuser, bool>> _filter => appuser => (appuser.Isdeleted == false) && (appuser.Role == 0);
+
         public AppUserViewModel(IServiceScope scope)
         {
             var provider = scope.ServiceProvider;
@@ -55,12 +57,8 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
             {
                 token.ThrowIfCancellationRequested();
                 IsLoading = true;
-                Expression<Func<Appuser, bool>> filter = appuser =>
-                    (appuser.Isdeleted == false) &&
-                    (appuser.Role == 0);
-                var dbListAppuser = await _appUserServices.GetSearchPaginateListAppuser(filter, pageIndex, pageSize);
+                var dbListAppuser = await _appUserServices.GetSearchPaginateListAppuser(_filter, pageIndex, pageSize);
                 ListAppUserDTO = [.. _mapper.Map<List<AppUserDTO>>(dbListAppuser.Item1)];
-                DecryptPassword();
                 totalPages = (dbListAppuser.Item2 + pageSize - 1) / pageSize;
                 OnPropertyChanged(nameof(PageUI));
                 IsLoading = false;
@@ -85,7 +83,6 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
                 if (update != null)
                 {
                     _mapper.Map(update, ListAppUserDTO.FirstOrDefault(x => x.Appuserid == obj.Appuserid));
-                    DecryptPassword();
                     IsOpenUpdateAppUser = false;
                     IsLoading = false;
                     MyMessageBox.Show("Sửa tài khoản thành công", MyMessageBox.Buttons.OK, MyMessageBox.Icons.Information);
@@ -97,18 +94,12 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
             }
         }
 
-        private void DecryptPassword()
-        {
-            foreach (var item in ListAppUserDTO)
-            {
-                item.Password = _encryptionHelper.DecryptAES(item.Password ?? string.Empty);
-            }
-        }
-
         [RelayCommand]
         private void OpenUpdateAppUser(AppUserDTO appUser)
         {
-            UpdateAppUserVM.ReceiveAccount(appUser.Clone());
+            var send = appUser.Clone();
+            send.Password = _encryptionHelper.DecryptAES(send.Password);
+            UpdateAppUserVM.ReceiveAccount(send);
             IsOpenUpdateAppUser = true;
         }
 

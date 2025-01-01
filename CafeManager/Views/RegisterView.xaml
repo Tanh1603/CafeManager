@@ -27,56 +27,56 @@
                     </Grid.RowDefinitions>
                     <StackPanel Margin="20" HorizontalAlignment="Center">
                         <TextBlock
-                        HorizontalAlignment="Center"
-                        FontFamily="{StaticResource coffe}"
-                        FontSize="46"
-                        FontWeight="SemiBold"
-                        Foreground="#ffffff"
-                        Text="Quản lí quán cafe" />
+                            HorizontalAlignment="Center"
+                            FontFamily="{StaticResource coffe}"
+                            FontSize="46"
+                            FontWeight="SemiBold"
+                            Foreground="#ffffff"
+                            Text="Quản lí quán cafe" />
                         <materialDesign:PackIcon
-                        Width="120"
-                        Height="120"
-                        Margin="0,20,0,0"
-                        HorizontalAlignment="Center"
-                        Foreground="#d5b096"
-                        Kind="UserCircle"
-                        SnapsToDevicePixels="True" />
+                            Width="120"
+                            Height="120"
+                            Margin="0,20,0,0"
+                            HorizontalAlignment="Center"
+                            Foreground="#d5b096"
+                            Kind="UserCircle"
+                            SnapsToDevicePixels="True" />
                     </StackPanel>
                     <Button
-                    Grid.Row="1"
-                    Width="100"
-                    Margin="0,20,0,0"
-                    Command="{Binding NavigateToLoginCommand}"
-                    Style="{StaticResource backLoginBtn}">
+                        Grid.Row="1"
+                        Width="100"
+                        Margin="0,20,0,0"
+                        Command="{Binding NavigateToLoginCommand}"
+                        Style="{StaticResource backLoginBtn}">
 
                         <fa:IconImage
-                        Width="100"
-                        Foreground="{Binding Foreground, RelativeSource={RelativeSource AncestorType=Button}}"
-                        Icon="ArrowCircleLeft" />
+                            Width="100"
+                            Foreground="{Binding Foreground, RelativeSource={RelativeSource AncestorType=Button}}"
+                            Icon="ArrowCircleLeft" />
                     </Button>
                 </Grid>
                 <Canvas>
                     <Polygon
-                    Canvas.Left="-64"
-                    Canvas.Top="180"
-                    Fill="#d5b096"
-                    Opacity="0.3"
-                    Points="0,20  230,140 0,270" />
+                        Canvas.Left="-64"
+                        Canvas.Top="180"
+                        Fill="#d5b096"
+                        Opacity="0.3"
+                        Points="0,20  230,140 0,270" />
                     <Polygon
-                    Canvas.Left="250"
-                    Canvas.Top="-20"
-                    Fill="#d5b096"
-                    Opacity="0.3"
-                    Points="100,400  200,370 180,470" />
+                        Canvas.Left="250"
+                        Canvas.Top="-20"
+                        Fill="#d5b096"
+                        Opacity="0.3"
+                        Points="100,400  200,370 180,470" />
                     <Polygon
-                    Canvas.Left="102"
-                    Canvas.Top="295"
-                    HorizontalAlignment="Center"
-                    VerticalAlignment="Top"
-                    Fill="#d5b096"
-                    Opacity="0.3"
-                    Points="100,400  200,370 180,470"
-                    RenderTransformOrigin="1.508,0.403">
+                        Canvas.Left="102"
+                        Canvas.Top="295"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Top"
+                        Fill="#d5b096"
+                        Opacity="0.3"
+                        Points="100,400  200,370 180,470"
+                        RenderTransformOrigin="1.508,0.403">
                         <Polygon.RenderTransform>
                             <TransformGroup>
                                 <ScaleTransform />
@@ -87,27 +87,27 @@
                         </Polygon.RenderTransform>
                     </Polygon>
                     <Ellipse
-                    Canvas.Left="371"
-                    Canvas.Top="630"
-                    Width="40"
-                    Height="40"
-                    Fill="#d5b096"
-                    Opacity="0.3"
-                    RenderTransformOrigin="0.05,-2.55" />
+                        Canvas.Left="371"
+                        Canvas.Top="630"
+                        Width="40"
+                        Height="40"
+                        Fill="#d5b096"
+                        Opacity="0.3"
+                        RenderTransformOrigin="0.05,-2.55" />
                     <Ellipse
-                    Canvas.Left="51"
-                    Canvas.Top="520"
-                    Width="20"
-                    Height="20"
-                    Fill="#d5b096"
-                    Opacity="0.3" />
+                        Canvas.Left="51"
+                        Canvas.Top="520"
+                        Width="20"
+                        Height="20"
+                        Fill="#d5b096"
+                        Opacity="0.3" />
                     <Ellipse
-                    Canvas.Left="401"
-                    Canvas.Top="215"
-                    Width="20"
-                    Height="20"
-                    Fill="#d5b096"
-                    Opacity="0.3" />
+                        Canvas.Left="401"
+                        Canvas.Top="215"
+                        Width="20"
+                        Height="20"
+                        Fill="#d5b096"
+                        Opacity="0.3" />
                 </Canvas>
             </Grid>
 
@@ -125,12 +125,12 @@
                             <RowDefinition Height="*" />
                         </Grid.RowDefinitions>
                         <TextBlock
-                        Grid.Row="0"
-                        HorizontalAlignment="Center"
-                        FontSize="32"
-                        FontWeight="Bold"
-                        Foreground="#cb925d"
-                        Text="Đăng kí" />
+                            Grid.Row="0"
+                            HorizontalAlignment="Center"
+                            FontSize="32"
+                            FontWeight="Bold"
+                            Foreground="#cb925d"
+                            Text="Đăng kí" />
                         <StackPanel Grid.Row="1" Margin="0,20">
                             <Grid Margin="0,15">
                                 <Grid.ColumnDefinitions>
@@ -138,26 +138,26 @@
                                     <ColumnDefinition Width="*" />
                                 </Grid.ColumnDefinitions>
                                 <materialDesign:PackIcon
-                                MinWidth="30"
-                                MinHeight="30"
-                                HorizontalAlignment="Center"
-                                VerticalAlignment="Center"
-                                Foreground="#9b442a"
-                                Kind="UserAdd" />
+                                    MinWidth="30"
+                                    MinHeight="30"
+                                    HorizontalAlignment="Center"
+                                    VerticalAlignment="Center"
+                                    Foreground="#9b442a"
+                                    Kind="UserAdd" />
                                 <TextBox
-                                Grid.Column="1"
-                                MinHeight="50"
-                                Margin="10,0"
-                                materialDesign:HintAssist.FloatingOffset="0,-20"
-                                materialDesign:HintAssist.Hint="Tên đăng nhập"
-                                BorderBrush="Transparent"
-                                BorderThickness="0,0,0,1.5"
-                                FontSize="20"
-                                FontWeight="SemiBold"
-                                Foreground="#9b442a"
-                                Style="{StaticResource MaterialDesignFloatingHintTextBox}"
-                                Text="{Binding RegisterAccount.Username, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                                Validation.ErrorTemplate="{StaticResource ErrorMessageReg}" />
+                                    Grid.Column="1"
+                                    MinHeight="50"
+                                    Margin="10,0"
+                                    materialDesign:HintAssist.FloatingOffset="0,-20"
+                                    materialDesign:HintAssist.Hint="Tên đăng nhập"
+                                    BorderBrush="Transparent"
+                                    BorderThickness="0,0,0,1.5"
+                                    FontSize="20"
+                                    FontWeight="SemiBold"
+                                    Foreground="#9b442a"
+                                    Style="{StaticResource MaterialDesignFloatingHintTextBox}"
+                                    Text="{Binding RegisterAccount.Username, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                    Validation.ErrorTemplate="{StaticResource ErrorMessageReg}" />
                             </Grid>
                             <Grid Margin="0,15">
                                 <Grid.ColumnDefinitions>
@@ -165,26 +165,26 @@
                                     <ColumnDefinition Width="*" />
                                 </Grid.ColumnDefinitions>
                                 <materialDesign:PackIcon
-                                MinWidth="30"
-                                MinHeight="30"
-                                HorizontalAlignment="Center"
-                                VerticalAlignment="Center"
-                                Foreground="#9b442a"
-                                Kind="LockAdd" />
+                                    MinWidth="30"
+                                    MinHeight="30"
+                                    HorizontalAlignment="Center"
+                                    VerticalAlignment="Center"
+                                    Foreground="#9b442a"
+                                    Kind="LockAdd" />
                                 <PasswordBox
-                                Grid.Column="1"
-                                MinHeight="50"
-                                Margin="10,0"
-                                materialDesign:HintAssist.FloatingOffset="0, -18"
-                                materialDesign:HintAssist.Hint="Password"
-                                materialDesign:PasswordBoxAssist.Password="{Binding Path=RegisterAccount.Password, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                                BorderBrush="Transparent"
-                                BorderThickness="0,0,0,1.5"
-                                FontSize="20"
-                                FontWeight="SemiBold"
-                                Foreground="#9b442a"
-                                Style="{StaticResource MaterialDesignFloatingHintRevealPasswordBox}"
-                                Validation.ErrorTemplate="{StaticResource ErrorMessageReg}" />
+                                    Grid.Column="1"
+                                    MinHeight="50"
+                                    Margin="10,0"
+                                    materialDesign:HintAssist.FloatingOffset="0, -18"
+                                    materialDesign:HintAssist.Hint="Password"
+                                    materialDesign:PasswordBoxAssist.Password="{Binding Path=RegisterAccount.Password, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                    BorderBrush="Transparent"
+                                    BorderThickness="0,0,0,1.5"
+                                    FontSize="20"
+                                    FontWeight="SemiBold"
+                                    Foreground="#9b442a"
+                                    Style="{StaticResource MaterialDesignFloatingHintRevealPasswordBox}"
+                                    Validation.ErrorTemplate="{StaticResource ErrorMessageReg}" />
                             </Grid>
 
                             <Grid Margin="0,15">
@@ -193,26 +193,26 @@
                                     <ColumnDefinition Width="*" />
                                 </Grid.ColumnDefinitions>
                                 <materialDesign:PackIcon
-                                MinWidth="30"
-                                MinHeight="30"
-                                HorizontalAlignment="Center"
-                                VerticalAlignment="Center"
-                                Foreground="#9b442a"
-                                Kind="EmailAdd" />
+                                    MinWidth="30"
+                                    MinHeight="30"
+                                    HorizontalAlignment="Center"
+                                    VerticalAlignment="Center"
+                                    Foreground="#9b442a"
+                                    Kind="EmailAdd" />
                                 <TextBox
-                                Grid.Column="1"
-                                MinHeight="50"
-                                Margin="10,0"
-                                materialDesign:HintAssist.FloatingOffset="0,-20"
-                                materialDesign:HintAssist.Hint="Email"
-                                BorderBrush="Transparent"
-                                BorderThickness="0,0,0,1.5"
-                                FontSize="20"
-                                FontWeight="SemiBold"
-                                Foreground="#9b442a"
-                                Style="{StaticResource MaterialDesignFloatingHintTextBox}"
-                                Text="{Binding RegisterAccount.Email, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                                Validation.ErrorTemplate="{StaticResource ErrorMessageReg}" />
+                                    Grid.Column="1"
+                                    MinHeight="50"
+                                    Margin="10,0"
+                                    materialDesign:HintAssist.FloatingOffset="0,-20"
+                                    materialDesign:HintAssist.Hint="Email"
+                                    BorderBrush="Transparent"
+                                    BorderThickness="0,0,0,1.5"
+                                    FontSize="20"
+                                    FontWeight="SemiBold"
+                                    Foreground="#9b442a"
+                                    Style="{StaticResource MaterialDesignFloatingHintTextBox}"
+                                    Text="{Binding RegisterAccount.Email, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                    Validation.ErrorTemplate="{StaticResource ErrorMessageReg}" />
                             </Grid>
 
                             <Grid Margin="0,15">
@@ -221,62 +221,62 @@
                                     <ColumnDefinition Width="*" />
                                 </Grid.ColumnDefinitions>
                                 <materialDesign:PackIcon
-                                MinWidth="33"
-                                MinHeight="33"
-                                HorizontalAlignment="Center"
-                                VerticalAlignment="Center"
-                                Foreground="#9b442a"
-                                Kind="RenameBox" />
+                                    MinWidth="33"
+                                    MinHeight="33"
+                                    HorizontalAlignment="Center"
+                                    VerticalAlignment="Center"
+                                    Foreground="#9b442a"
+                                    Kind="RenameBox" />
                                 <TextBox
-                                Grid.Column="1"
-                                MinHeight="50"
-                                Margin="10,0"
-                                materialDesign:HintAssist.FloatingOffset="0,-20"
-                                materialDesign:HintAssist.Hint="Tên hiển thị"
-                                BorderBrush="Transparent"
-                                BorderThickness="0,0,0,1.5"
-                                FontSize="20"
-                                FontWeight="SemiBold"
-                                Foreground="#9b442a"
-                                Style="{StaticResource MaterialDesignFloatingHintTextBox}"
-                                Text="{Binding RegisterAccount.Displayname, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                                Validation.ErrorTemplate="{StaticResource ErrorMessageReg}" />
+                                    Grid.Column="1"
+                                    MinHeight="50"
+                                    Margin="10,0"
+                                    materialDesign:HintAssist.FloatingOffset="0,-20"
+                                    materialDesign:HintAssist.Hint="Tên hiển thị"
+                                    BorderBrush="Transparent"
+                                    BorderThickness="0,0,0,1.5"
+                                    FontSize="20"
+                                    FontWeight="SemiBold"
+                                    Foreground="#9b442a"
+                                    Style="{StaticResource MaterialDesignFloatingHintTextBox}"
+                                    Text="{Binding RegisterAccount.Displayname, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                    Validation.ErrorTemplate="{StaticResource ErrorMessageReg}" />
                             </Grid>
 
                             <Button
-                            Width="300"
-                            Height="70"
-                            Margin="50"
-                            HorizontalAlignment="Center"
-                            VerticalAlignment="Bottom"
-                            materialDesign:ButtonAssist.CornerRadius="15"
-                            Background="#844518"
-                            BorderBrush="Transparent"
-                            Command="{Binding RegisterCommand}"
-                            IsEnabled="{Binding CanRegisterExcute,UpdateSourceTrigger=PropertyChanged, Mode=OneWay}"
-                            Content="Đăng kí"
-                            FontSize="18"
-                            FontWeight="Bold"
-                            Foreground="#ffffff" />
+                                Width="300"
+                                Height="70"
+                                Margin="50"
+                                HorizontalAlignment="Center"
+                                VerticalAlignment="Bottom"
+                                materialDesign:ButtonAssist.CornerRadius="15"
+                                Background="#844518"
+                                BorderBrush="Transparent"
+                                Command="{Binding RegisterCommand}"
+                                Content="Đăng kí"
+                                FontSize="18"
+                                FontWeight="Bold"
+                                Foreground="#ffffff"
+                                IsEnabled="{Binding CanRegisterExcute, UpdateSourceTrigger=PropertyChanged, Mode=OneWay}" />
                         </StackPanel>
                     </Grid>
                 </Border>
                 <materialDesign:DialogHost
-                Background="Transparent"
-                CloseOnClickAway="True"
-                DialogTheme="Inherit"
-                IsOpen="{Binding IsOpenVerificationEmail}"
-                OverlayBackground="{DynamicResource PrimaryHueDarkBrush}"
-                Placement="Mouse"
-                Style="{StaticResource MaterialDesignEmbeddedDialogHost}">
+                    Background="Transparent"
+                    CloseOnClickAway="True"
+                    DialogTheme="Inherit"
+                    IsOpen="{Binding IsOpenVerificationEmail}"
+                    OverlayBackground="{DynamicResource PrimaryHueDarkBrush}"
+                    Placement="Mouse"
+                    Style="{StaticResource MaterialDesignEmbeddedDialogHost}">
                     <materialDesign:DialogHost.DialogBackground>
                         <SolidColorBrush Color="Transparent" />
                     </materialDesign:DialogHost.DialogBackground>
                     <materialDesign:DialogHost.DialogContent>
                         <Border
-                        BorderBrush="#602414"
-                        BorderThickness="4"
-                        CornerRadius="10">
+                            BorderBrush="#602414"
+                            BorderThickness="4"
+                            CornerRadius="10">
                             <Border.Background>
                                 <LinearGradientBrush StartPoint="0,0.5" EndPoint="1,0.5">
                                     <GradientStop Offset="0" Color="#d4b096" />
@@ -285,39 +285,47 @@
                             </Border.Background>
                             <StackPanel>
                                 <Button
-                                Margin="10"
-                                HorizontalAlignment="Right"
-                                Command="{Binding CloseOpenVerificationEmailCommand}"
-                                Style="{StaticResource closeButton}">
+                                    Margin="10"
+                                    HorizontalAlignment="Right"
+                                    Command="{Binding CloseOpenVerificationEmailCommand}"
+                                    Style="{StaticResource closeButton}">
                                     <ma:PackIconMaterial Kind="Close" Style="{StaticResource iconApp}" />
                                 </Button>
-                                <StackPanel Margin="10,10" Orientation="Horizontal">
-                                    <TextBlock
-                                    Margin="0,0,10,0"
+
+                                <TextBlock
+                                    HorizontalAlignment="Center"
                                     VerticalAlignment="Center"
-                                    FontSize="20"
+                                    FontSize="28"
                                     FontWeight="Bold"
                                     Foreground="#9b442a"
-                                    Text="Mã xác thực" />
+                                    Text="Vui lòng kiểm tra email" />
+                                <StackPanel Margin="10,10" Orientation="Horizontal">
+                                    <TextBlock
+                                        Margin="0,0,10,0"
+                                        VerticalAlignment="Center"
+                                        FontSize="20"
+                                        FontWeight="Bold"
+                                        Foreground="#9b442a"
+                                        Text="Mã xác thực" />
 
                                     <TextBox
-                                    Width="170"
-                                    VerticalAlignment="Center"
-                                    FontSize="20"
-                                    Style="{StaticResource textbox}"
-                                    Text="{Binding VertificationCode}" />
+                                        Width="170"
+                                        VerticalAlignment="Center"
+                                        FontSize="20"
+                                        Style="{StaticResource textbox}"
+                                        Text="{Binding VertificationCode}" />
                                 </StackPanel>
                                 <Button
-                                Margin="10,20"
-                                HorizontalAlignment="Right"
-                                Command="{Binding SubmitRegisterCommand}"
-                                Style="{StaticResource adjustInfoButton}">
+                                    Margin="10,20"
+                                    HorizontalAlignment="Right"
+                                    Command="{Binding SubmitRegisterCommand}"
+                                    Style="{StaticResource adjustInfoButton}">
                                     <StackPanel HorizontalAlignment="Center" Orientation="Horizontal">
                                         <ma:PackIconMaterial VerticalAlignment="Center" Kind="CheckBold" />
                                         <TextBlock
-                                        Margin="10,0,0,0"
-                                        FontWeight="SemiBold"
-                                        Text="Xác nhận" />
+                                            Margin="10,0,0,0"
+                                            FontWeight="SemiBold"
+                                            Text="Xác nhận" />
                                     </StackPanel>
                                 </Button>
                             </StackPanel>

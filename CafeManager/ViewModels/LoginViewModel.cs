@@ -123,7 +123,7 @@ namespace CafeManager.WPF.ViewModels
             }
             catch (InvalidOperationException ioe)
             {
-                MyMessageBox.ShowDialog(ioe.Message, MyMessageBox.Buttons.OK, MyMessageBox.Icons.Warning);
+                MyMessageBox.ShowDialog(ioe.Message, MyMessageBox.Buttons.OK, MyMessageBox.Icons.Error);
             }
             finally
             {

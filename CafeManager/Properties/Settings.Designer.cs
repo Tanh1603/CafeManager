@@ -58,53 +58,5 @@ namespace CafeManager.WPF.Properties {
                 this["RememberAccount"] = value;
             }
         }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("")]
-        public string Email {
-            get {
-                return ((string)(this["Email"]));
-            }
-            set {
-                this["Email"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("0")]
-        public int Role {
-            get {
-                return ((int)(this["Role"]));
-            }
-            set {
-                this["Role"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("")]
-        public string DisplayName {
-            get {
-                return ((string)(this["DisplayName"]));
-            }
-            set {
-                this["DisplayName"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("")]
-        public string Avatar {
-            get {
-                return ((string)(this["Avatar"]));
-            }
-            set {
-                this["Avatar"] = value;
-            }
-        }
     }
 }

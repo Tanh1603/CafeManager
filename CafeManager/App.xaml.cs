@@ -51,7 +51,7 @@ namespace CafeManager.WPF
             }
             catch (Exception ex)
             {
-                MyMessageBox.ShowDialog("Vui lòng kiểm tra kết nối đường truyền mạng", MyMessageBox.Buttons.OK, MyMessageBox.Icons.Error);
+                MyMessageBox.Show(ex.Message);
                 Current.Shutdown();
             }
         }

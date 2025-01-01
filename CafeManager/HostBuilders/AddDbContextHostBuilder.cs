@@ -6,6 +6,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -18,8 +19,12 @@ namespace CafeManager.WPF.HostBuilders
         {
             hostBuilder.ConfigureServices((context, services) =>
             {
-                string? connectionString = context.Configuration.GetConnectionString("postgreSql");
-                Action<DbContextOptionsBuilder> configureDbContext = o => o.UseNpgsql(connectionString);
+                //string? connectionString = context.Configuration.GetConnectionString("SqlLite");
+                //Action<DbContextOptionsBuilder> configureDbContext = o => o.UseSqlite(connectionString);
+
+                var path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "CafeManagerApp.db");
+                Action<DbContextOptionsBuilder> configureDbContext = o => o.UseSqlite($"Data Source={path}");
+
                 services.AddDbContextFactory<CafeManagerContext>(configureDbContext);
                 services.AddScoped<IUnitOfWork, UnitOfWork>();
             });

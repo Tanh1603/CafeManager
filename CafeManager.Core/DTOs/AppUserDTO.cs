@@ -16,7 +16,6 @@ namespace CafeManager.Core.DTOs
 
         private string _username;
 
-        [NotifyDataErrorInfo]
         [Required(ErrorMessage = "Tài khoản không được trống")]
         [CustomValidation(typeof(AppUserDTO), nameof(ValidateUserName))]
         public string Username
@@ -42,7 +41,6 @@ namespace CafeManager.Core.DTOs
 
         private string _password;
 
-        [NotifyDataErrorInfo]
         [MinLength(6, ErrorMessage = "Mật khẩu tối thiểu 6 ký tự")]
         public string Password
         {
@@ -56,7 +54,6 @@ namespace CafeManager.Core.DTOs
 
         private string _displayname;
 
-        [NotifyDataErrorInfo]
         [MinLength(10, ErrorMessage = "Tên hiển thị tối thiểu 10 ký tự")]
         public string Displayname
         {
@@ -70,7 +67,6 @@ namespace CafeManager.Core.DTOs
 
         private string _email;
 
-        [NotifyDataErrorInfo]
         [Required(ErrorMessage = "Email không được để trống.")]
         [CustomValidation(typeof(AppUserDTO), nameof(ValidateEmail))]
         public string Email

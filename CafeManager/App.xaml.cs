@@ -41,10 +41,10 @@ namespace CafeManager.WPF
                 {
                     using (var dbContext = _host.Services.GetRequiredService<IDbContextFactory<CafeManagerContext>>().CreateDbContext())
                     {
-                        dbContext.Database.OpenConnection();
+                        dbContext.Database.Migrate();
                     }
                 }).Wait();
-                Current.MainWindow.Close();
+                Current.MainWindow.Hide();
 
                 Current.MainWindow = _host.Services.GetRequiredService<MainWindow>();
                 Current.MainWindow.Show();

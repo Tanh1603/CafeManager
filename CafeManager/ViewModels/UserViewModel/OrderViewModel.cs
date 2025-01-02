@@ -45,7 +45,7 @@ namespace CafeManager.WPF.ViewModels.UserViewModel
                 if (_selectedFoodCategory != value)
                 {
                     _selectedFoodCategory = value;
-                    ListFoodDTO = value == null ? [.. _allFood] : [.. value.Foods.Where(x => x.Isdeleted == false) ?? []];
+                    ListFoodDTO = value == null ? [.. _allFood] : [.. _allFood.Where(x => x.Foodcategoryid == value.Foodcategoryid) ?? []];
                 }
             }
         }

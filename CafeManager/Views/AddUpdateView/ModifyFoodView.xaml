@@ -12,7 +12,6 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:uc="clr-namespace:CafeManager.WPF.Assets.UsersControls"
     Width="800"
-    Height="450"
     mc:Ignorable="d">
     <UserControl.Resources>
         <converters:StringToDecimalConverter x:Key="StringToDecimalConverter" />

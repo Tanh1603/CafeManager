@@ -150,7 +150,7 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
             {
                 if (TempDeleteStaff.Startworkingdate >= EndWorkingDate)
                 {
-                    MyMessageBox.ShowDialog("Ngày nghỉ việc phải lớn hơn ngày vào làm");
+                    MyMessageBox.ShowDialog("Ngày nghỉ việc phải lớn hơn ngày vào làm", MyMessageBox.Buttons.OK, MyMessageBox.Icons.Error);
                     return;
                 }
                 IsLoading = true;
@@ -163,13 +163,13 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
                         res.Isdeleted = true;
                         res.Endworkingdate = EndWorkingDate;
                         IsLoading = false;
-                        MyMessageBox.ShowDialog("Xóa nhân viên thành công (Nhân viên nghỉ việc)");
+                        MyMessageBox.ShowDialog("Xóa nhân viên thành công (Nhân viên nghỉ việc)", MyMessageBox.Buttons.OK, MyMessageBox.Icons.Information);
                         FilterStaff();
                     }
                 }
                 else
                 {
-                    MyMessageBox.ShowDialog("Xóa nhân viên thất bại (Nhân viên nghỉ việc)");
+                    MyMessageBox.ShowDialog("Xóa nhân viên thất bại (Nhân viên nghỉ việc)", MyMessageBox.Buttons.OK, MyMessageBox.Icons.Error);
                 }
                 IsOpenDeleteStaffView = false;
             }
@@ -192,12 +192,12 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
                     {
                         AllStaff.Add(_mapper.Map<StaffDTO>(addStaff));
                         IsLoading = false;
-                        MyMessageBox.ShowDialog("Thêm nhân viên thành công");
+                        MyMessageBox.ShowDialog("Thêm nhân viên thành công", MyMessageBox.Buttons.OK, MyMessageBox.Icons.Information);
                         IsOpenModifyStaffView = false;
                     }
                     else
                     {
-                        MyMessageBox.ShowDialog("Thêm nhân viên thất bại công");
+                        MyMessageBox.ShowDialog("Thêm nhân viên thất bại công", MyMessageBox.Buttons.OK, MyMessageBox.Icons.Error);
                     }
                 }
                 if (ModifyStaffVM.IsUpdating)
@@ -208,11 +208,11 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
                         var updateDTO = AllStaff.FirstOrDefault(x => x.Staffid == staff.Staffid);
                         _mapper.Map(res, updateDTO);
                         IsLoading = false;
-                        MyMessageBox.ShowDialog("Sửa nhân viên thành công");
+                        MyMessageBox.ShowDialog("Sửa nhân viên thành công", MyMessageBox.Buttons.OK, MyMessageBox.Icons.Information);
                     }
                     else
                     {
-                        MyMessageBox.ShowDialog("Sửa nhân viên thất bại");
+                        MyMessageBox.ShowDialog("Sửa nhân viên thất bại", MyMessageBox.Buttons.OK, MyMessageBox.Icons.Error);
                     }
                 }
                 IsOpenModifyStaffView = false;

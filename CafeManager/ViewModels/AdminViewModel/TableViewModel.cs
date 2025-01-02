@@ -110,7 +110,7 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
                 if (delete)
                 {
                     IsLoading = false;
-                    MyMessageBox.ShowDialog("Ẩn bàn thành công");
+                    MyMessageBox.ShowDialog("Ẩn bàn thành công", MyMessageBox.Buttons.OK, MyMessageBox.Icons.Information);
                 }
             }
         }
@@ -127,7 +127,7 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
                 if (show != null)
                 {
                     IsLoading = false;
-                    MyMessageBox.ShowDialog("Hiện bàn thành công");
+                    MyMessageBox.ShowDialog("Hiện bàn thành công", MyMessageBox.Buttons.OK, MyMessageBox.Icons.Information);
                 }
             }
         }
@@ -140,6 +140,11 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
             try
             {
                 IsLoading = true;
+                if (Table.Seatingcapacity <= 0)
+                {
+                    MyMessageBox.ShowDialog("Vui lòng chọn số chổ ngồi", MyMessageBox.Buttons.OK, MyMessageBox.Icons.Warning);
+                    return;
+                }
                 if (isAdding)
                 {
                     var tmp = _mapper.Map<Coffeetable>(Table);
@@ -147,7 +152,7 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
                     if (addTable != null)
                     {
                         IsLoading = false;
-                        MyMessageBox.ShowDialog("Thêm bàn thành công");
+                        MyMessageBox.ShowDialog("Thêm bàn thành công", MyMessageBox.Buttons.OK, MyMessageBox.Icons.Information);
                         ListTable.Add(_mapper.Map<CoffeetableDTO>(addTable));
                     }
                 }
@@ -161,7 +166,7 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
                         {
                             IsLoading = false;
                             _mapper.Map(updateTable, tmp);
-                            MyMessageBox.ShowDialog("Sửa bàn thành công");
+                            MyMessageBox.ShowDialog("Sửa bàn thành công", MyMessageBox.Buttons.OK, MyMessageBox.Icons.Information);
                         }
                     }
                 }

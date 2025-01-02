@@ -263,7 +263,7 @@
                                 Margin="0,0,0,20"
                                 HorizontalAlignment="Left"
                                 ItemsSource="{Binding TypeTable}"
-                                SelectedItem="{Binding Table.Seatingcapacity, Mode=TwoWay}"
+                                SelectedItem="{Binding Table.Seatingcapacity, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                                 Style="{StaticResource ComboBoxStyle}"
                                 Tag="Collapsed"
                                 Validation.ErrorTemplate="{StaticResource ErrorMessageReg}">
@@ -290,6 +290,7 @@
                                 Grid.Row="3"
                                 Grid.Column="1"
                                 Margin="0,0,0,20"
+                                SelectedIndex="0"
                                 SelectedValue="{Binding Table.Statustable, Mode=TwoWay}"
                                 Style="{StaticResource ComboBoxStyle}"
                                 Tag="Collapsed"
@@ -303,8 +304,8 @@
 
                                 <ComboBox.ItemsSource>
                                     <x:Array xmlns:sys="clr-namespace:System;assembly=mscorlib" Type="sys:String">
-                                        <sys:String>Đang bị hư</sys:String>
                                         <sys:String>Đang sử dụng</sys:String>
+                                        <sys:String>Đang bị hư</sys:String>
                                     </x:Array>
                                 </ComboBox.ItemsSource>
                             </ComboBox>

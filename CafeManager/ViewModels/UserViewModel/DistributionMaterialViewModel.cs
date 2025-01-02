@@ -211,7 +211,7 @@ namespace CafeManager.WPF.ViewModels.UserViewModel
                 {
                     Consumedmaterial? addConsumedMaterial = await _consumedMaterialServices.AddConsumedMaterial(_mapper.Map<Consumedmaterial>(addconsumed));
                 }
-                MyMessageBox.Show("Thêm chi tiết sử dụng vật liệu thành công", MyMessageBox.Buttons.OK, MyMessageBox.Icons.Information);
+                MyMessageBox.ShowDialog("Thêm chi tiết sử dụng vật liệu thành công", MyMessageBox.Buttons.OK, MyMessageBox.Icons.Information);
                 await LoadConsumedMaterial();
             }
             IsOpenRequestMaterialView = false;
@@ -251,12 +251,12 @@ namespace CafeManager.WPF.ViewModels.UserViewModel
                 var res = await _consumedMaterialServices.UpdateConsumedmaterial(_mapper.Map<Consumedmaterial>(ModifyConsumedMaterial));
                 if (res != null)
                 {
-                    MyMessageBox.ShowDialog("Hoàn trả vật liệu thành công");
+                    MyMessageBox.ShowDialog("Hoàn trả vật liệu thành công", MyMessageBox.Buttons.OK, MyMessageBox.Icons.Information);
                     await LoadConsumedMaterial();
                 }
                 else
                 {
-                    MyMessageBox.ShowDialog("Hoàn trả vật liệu thất bại");
+                    MyMessageBox.ShowDialog("Hoàn trả vật liệu thất bại", MyMessageBox.Buttons.OK, MyMessageBox.Icons.Error);
                 }
                 CloseReturnMaterial();
             }

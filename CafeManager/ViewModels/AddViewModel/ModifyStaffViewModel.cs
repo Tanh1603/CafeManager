@@ -78,7 +78,7 @@ namespace CafeManager.WPF.ViewModels.AddViewModel
                 if (deleted != null)
                 {
                     deleted.Isdeleted = true;
-                    MyMessageBox.Show("Xóa lịch sử lương thành công");
+                    MyMessageBox.ShowDialog("Xóa lịch sử lương thành công");
                     OnPropertyChanged(nameof(ModifyStaff));
                     OnPropertyChanged(nameof(ListExisted));
                 }
@@ -116,18 +116,18 @@ namespace CafeManager.WPF.ViewModels.AddViewModel
 
                 if (duplicated != null)
                 {
-                    MyMessageBox.Show("Lịch sử lương bị trùng tháng năm với đã có");
+                    MyMessageBox.ShowDialog("Lịch sử lương bị trùng tháng năm với đã có");
                 }
                 else
                 {
-                    MyMessageBox.Show("Sửa lịch sử lương thành công");
+                    MyMessageBox.ShowDialog("Sửa lịch sử lương thành công");
                     existedHistory.Salary = CurrentStaffSalary.Salary;
                     existedHistory.Effectivedate = CurrentStaffSalary.Effectivedate;
                 }
             }
             else
             {
-                MyMessageBox.Show("Thêm lịch sử lương thành công");
+                MyMessageBox.ShowDialog("Thêm lịch sử lương thành công");
                 ModifyStaff.Staffsalaryhistories.Add(CurrentStaffSalary);
             }
             IsOpenModifySalary = false;

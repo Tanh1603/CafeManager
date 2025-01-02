@@ -85,7 +85,7 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
                     _mapper.Map(update, ListAppUserDTO.FirstOrDefault(x => x.Appuserid == obj.Appuserid));
                     IsOpenUpdateAppUser = false;
                     IsLoading = false;
-                    MyMessageBox.Show("Sửa tài khoản thành công", MyMessageBox.Buttons.OK, MyMessageBox.Icons.Information);
+                    MyMessageBox.ShowDialog("Sửa tài khoản thành công", MyMessageBox.Buttons.OK, MyMessageBox.Icons.Information);
                 }
             }
             catch (Exception)
@@ -123,12 +123,12 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
                     {
                         ListAppUserDTO.Remove(appUser);
                     }
-                    MyMessageBox.Show("Xoá tài khoản thành công", MyMessageBox.Buttons.OK, MyMessageBox.Icons.Information);
+                    MyMessageBox.ShowDialog("Xoá tài khoản thành công", MyMessageBox.Buttons.OK, MyMessageBox.Icons.Information);
                 }
             }
             catch (InvalidOperationException ivd)
             {
-                MyMessageBox.Show(ivd.Message, MyMessageBox.Buttons.OK, MyMessageBox.Icons.Warning);
+                MyMessageBox.ShowDialog(ivd.Message, MyMessageBox.Buttons.OK, MyMessageBox.Icons.Warning);
             }
             //await LoadData();
             //IsLoading = false;

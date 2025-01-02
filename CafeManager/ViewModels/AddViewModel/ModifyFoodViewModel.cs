@@ -66,7 +66,7 @@ namespace CafeManager.WPF.ViewModels.AddViewModel
             }
             else
             {
-                MyMessageBox.Show("Vui lòng chọn danh mục");
+                MyMessageBox.ShowDialog("Vui lòng chọn danh mục");
             }
         }
 

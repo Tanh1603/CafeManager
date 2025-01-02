@@ -83,7 +83,7 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
                     }
                     else
                     {
-                        MyMessageBox.Show("Thêm vật liệu cấp thất bại");
+                        MyMessageBox.ShowDialog("Thêm vật liệu cấp thất bại");
                     }
                 }
                 if (ModifyMaterialVM.IsUpdating)

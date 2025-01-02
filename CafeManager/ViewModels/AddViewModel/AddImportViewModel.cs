@@ -186,13 +186,13 @@ namespace CafeManager.WPF.ViewModels.AddViewModel
                 ImportPrice += CurrentImportDetail.Quantity * CurrentImportDetail.Materialsupplier.Price;
                 if (existedMateirlasupplier != null)
                 {
-                    MyMessageBox.Show("Chi tiết đã tồn tại, đã thêm số lượng");
+                    MyMessageBox.ShowDialog("Chi tiết đã tồn tại, đã thêm số lượng");
                     existedMateirlasupplier.Quantity += CurrentImportDetail.Quantity;
                 }
                 else
                 {
                     CurrentImportDetail.Importid = ModifyImport.Importid;
-                    MyMessageBox.Show("Thêm chi tiết đơn hàng thành công");
+                    MyMessageBox.ShowDialog("Thêm chi tiết đơn hàng thành công");
                     ListExisted.Add(CurrentImportDetail.Clone());
                 }
             }
@@ -212,11 +212,11 @@ namespace CafeManager.WPF.ViewModels.AddViewModel
                     find.Materialsupplier.Manufacturedate = CurrentImportDetail.Materialsupplier.Manufacturedate;
                     find.Materialsupplier.Expirationdate = CurrentImportDetail.Materialsupplier.Expirationdate;
                     find.Quantity = CurrentImportDetail.Quantity;
-                    MyMessageBox.Show("Sửa chi tiết đơn hàng thành công", MyMessageBox.Buttons.OK, MyMessageBox.Icons.Information);
+                    MyMessageBox.ShowDialog("Sửa chi tiết đơn hàng thành công", MyMessageBox.Buttons.OK, MyMessageBox.Icons.Information);
                 }
                 else
                 {
-                    MyMessageBox.Show("Sửa chi tiết đơn hàng thất bại", MyMessageBox.Buttons.OK, MyMessageBox.Icons.Information);
+                    MyMessageBox.ShowDialog("Sửa chi tiết đơn hàng thất bại", MyMessageBox.Buttons.OK, MyMessageBox.Icons.Information);
                 }
             }
             ClearAddImportDetail();
@@ -240,7 +240,7 @@ namespace CafeManager.WPF.ViewModels.AddViewModel
                         listDeletedImportdetail.Add(deleted);
                     }
                     ListExisted.Remove(deleted);
-                    MyMessageBox.Show("Xoá chi tiết đơn hàng thành công", MyMessageBox.Buttons.OK, MyMessageBox.Icons.Information);
+                    MyMessageBox.ShowDialog("Xoá chi tiết đơn hàng thành công", MyMessageBox.Buttons.OK, MyMessageBox.Icons.Information);
                     OnPropertyChanged(nameof(ListExisted));
                 }
             }
@@ -276,7 +276,7 @@ namespace CafeManager.WPF.ViewModels.AddViewModel
             }
             else
             {
-                MyMessageBox.Show("Thêm nhà cung cấp thất bại");
+                MyMessageBox.ShowDialog("Thêm nhà cung cấp thất bại");
             }
         }
 
@@ -293,7 +293,7 @@ namespace CafeManager.WPF.ViewModels.AddViewModel
             }
             else
             {
-                MyMessageBox.Show("Thêm nhà cung cấp thất bại");
+                MyMessageBox.ShowDialog("Thêm nhà cung cấp thất bại");
             }
         }
 

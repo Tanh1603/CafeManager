@@ -87,7 +87,7 @@ namespace CafeManager.WPF.ViewModels.UserViewModel
                 {
                     _mapper.Map(update, ListCoffeeTable.FirstOrDefault(x => x.Coffeetableid == ModifyCoffeTable.Coffeetableid));
                     IsLoading = false;
-                    MyMessageBox.Show("Báo cáo sự cố thành công");
+                    MyMessageBox.ShowDialog("Báo cáo sự cố thành công", MyMessageBox.Buttons.OK, MyMessageBox.Icons.Information);
                     IsOpenDialog = false;
                 }
             }

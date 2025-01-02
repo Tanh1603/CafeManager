@@ -28,6 +28,7 @@ namespace CafeManager.WPF.ViewModels.AddViewModel
         private ObservableCollection<ConsumedMaterialDTO> _consumedMaterialDTOs = [];
 
         public event Action OpenSelectInventoryView;
+
         public event Action<List<ConsumedMaterialDTO>> Submit;
 
         public RequestMaterialViewModel(IServiceScope scope)
@@ -52,10 +53,10 @@ namespace CafeManager.WPF.ViewModels.AddViewModel
         public void AddConsumedMaterial(MaterialSupplierDTO inventory)
         {
             var res = ConsumedMaterialDTOs.FirstOrDefault(x => x.Materialsupplierid == inventory.Materialsupplierid);
-            if(res != null)
+            if (res != null)
             {
-                MyMessageBox.Show("Bạn đã chọn vật liệu này!", MyMessageBox.Buttons.OK, MyMessageBox.Icons.Information);
-            }   
+                MyMessageBox.ShowDialog("Bạn đã chọn vật liệu này!", MyMessageBox.Buttons.OK, MyMessageBox.Icons.Information);
+            }
             else
             {
                 ConsumedMaterialDTO addConsumedMaterial = new()
@@ -78,12 +79,12 @@ namespace CafeManager.WPF.ViewModels.AddViewModel
                 if (res.Equals("1"))
                 {
                     ConsumedMaterialDTOs.Remove(consuming);
-                    MyMessageBox.Show("Huỷ bỏ yêu cầu thành công", MyMessageBox.Buttons.OK, MyMessageBox.Icons.Information);
+                    MyMessageBox.ShowDialog("Huỷ bỏ yêu cầu thành công", MyMessageBox.Buttons.OK, MyMessageBox.Icons.Information);
                 }
             }
             catch (InvalidOperationException ivd)
             {
-                MyMessageBox.Show(ivd.Message, MyMessageBox.Buttons.OK, MyMessageBox.Icons.Warning);
+                MyMessageBox.ShowDialog(ivd.Message, MyMessageBox.Buttons.OK, MyMessageBox.Icons.Warning);
             }
         }
 
@@ -97,19 +98,19 @@ namespace CafeManager.WPF.ViewModels.AddViewModel
             }
             catch (InvalidOperationException ivd)
             {
-                MyMessageBox.Show(ivd.Message, MyMessageBox.Buttons.OK, MyMessageBox.Icons.Warning);
+                MyMessageBox.ShowDialog(ivd.Message, MyMessageBox.Buttons.OK, MyMessageBox.Icons.Warning);
             }
         }
 
         private void CheckValidData()
         {
-            foreach(var consumed in ConsumedMaterialDTOs)
+            foreach (var consumed in ConsumedMaterialDTOs)
             {
                 if (consumed.Materialsupplier.TotalQuantity < consumed.Quantity)
                     throw new InvalidOperationException($"Lỗi: {consumed.Materialsupplier.Material.Materialname} không đủ số lượng");
                 else if (consumed.Quantity == 0)
                     throw new InvalidOperationException($"Bạn chưa nhập số lượng của {consumed.Materialsupplier.Material.Materialname}");
-            }    
+            }
         }
 
         public void Dispose()

@@ -61,7 +61,6 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
             ModifySupplierVM.Close += ModifySupplierVM_Close;
         }
 
-
         public async Task LoadData(CancellationToken token = default)
         {
             try
@@ -119,7 +118,7 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
                     }
                     else
                     {
-                        MyMessageBox.Show("Thêm nhà cung cấp thất bại");
+                        MyMessageBox.ShowDialog("Thêm nhà cung cấp thất bại");
                     }
                 }
                 if (ModifySupplierVM.IsUpdating)
@@ -181,7 +180,6 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
             IsOpenAddSupplier = false;
             ModifySupplierVM.ClearValueOfFrom();
         }
-
 
         [RelayCommand]
         private async Task DeleteSupplier(SupplierDTO supplier)

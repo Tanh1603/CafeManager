@@ -77,11 +77,11 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
                         ListFoodCategory.Add(_mapper.Map<FoodCategoryDTO>(addFoodCategory));
                         IsOpenModifyFoodCategory = false;
                         IsLoading = false;
-                        MyMessageBox.ShowDialog("Thêm danh mục thực đơn thành công");
+                        MyMessageBox.ShowDialog("Thêm danh mục thực đơn thành công", MyMessageBox.Buttons.OK, MyMessageBox.Icons.Information);
                     }
                     else
                     {
-                        MyMessageBox.Show("Thêm danh mục thực đơn cấp thất bại");
+                        MyMessageBox.ShowDialog("Thêm danh mục thực đơn cấp thất bại", MyMessageBox.Buttons.OK, MyMessageBox.Icons.Error);
                     }
                 }
                 if (IsUpdating)
@@ -95,12 +95,12 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
                             _mapper.Map(res, updateFoodCategoryDTO);
                             IsOpenModifyFoodCategory = false;
                             IsLoading = false;
-                            MyMessageBox.ShowDialog("Sửa danh mục thực đơn thành công");
+                            MyMessageBox.ShowDialog("Sửa danh mục thực đơn thành công", MyMessageBox.Buttons.OK, MyMessageBox.Icons.Information);
                         }
                     }
                     else
                     {
-                        MyMessageBox.ShowDialog("Sửa danh mục thực đơn thất bại");
+                        MyMessageBox.ShowDialog("Sửa danh mục thực đơn thất bại", MyMessageBox.Buttons.OK, MyMessageBox.Icons.Error);
                     }
                 }
                 CloseModifyFoodCategory();
@@ -130,11 +130,11 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
                         ListDeletedFoodCategory.Add(foodCategory);
                         ListFoodCategory.Remove(foodCategory);
                         IsLoading = false;
-                        MyMessageBox.ShowDialog("Ẩn danh mục thanh công");
+                        MyMessageBox.ShowDialog("Ẩn danh mục thanh công", MyMessageBox.Buttons.OK, MyMessageBox.Icons.Information);
                     }
                     else
                     {
-                        MyMessageBox.ShowDialog("Ẩn danh mục thất bại");
+                        MyMessageBox.ShowDialog("Ẩn danh mục thất bại", MyMessageBox.Buttons.OK, MyMessageBox.Icons.Error);
                     }
                 }
             }

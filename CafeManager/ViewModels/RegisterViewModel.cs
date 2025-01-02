@@ -68,11 +68,11 @@ namespace CafeManager.WPF.ViewModels
             }
             catch (InvalidOperationException ioe)
             {
-                MyMessageBox.Show(ioe.Message, MyMessageBox.Buttons.OK, MyMessageBox.Icons.Error);
+                MyMessageBox.ShowDialog(ioe.Message, MyMessageBox.Buttons.OK, MyMessageBox.Icons.Error);
             }
             catch (Exception ex)
             {
-                MyMessageBox.Show(ex.Message, MyMessageBox.Buttons.OK, MyMessageBox.Icons.Error);
+                MyMessageBox.ShowDialog(ex.Message, MyMessageBox.Buttons.OK, MyMessageBox.Icons.Error);
             }
         }
 
@@ -91,20 +91,20 @@ namespace CafeManager.WPF.ViewModels
                     IsLoading = false;
                     if (res == null)
                     {
-                        MyMessageBox.Show("Đăng kí tài khoản thất bại", MyMessageBox.Buttons.OK, MyMessageBox.Icons.Error);
+                        MyMessageBox.ShowDialog("Đăng kí tài khoản thất bại", MyMessageBox.Buttons.OK, MyMessageBox.Icons.Error);
                     }
-                    MyMessageBox.Show("Đăng kí tài khoản thành công", MyMessageBox.Buttons.OK, MyMessageBox.Icons.Information);
+                    MyMessageBox.ShowDialog("Đăng kí tài khoản thành công", MyMessageBox.Buttons.OK, MyMessageBox.Icons.Information);
                     _navigationStore.Navigation = _provider.GetRequiredService<LoginViewModel>();
                 }
                 else
                 {
                     IsLoading = false;
-                    MyMessageBox.Show("Mã xác nhận nhập sai vui lòng nhập lại", MyMessageBox.Buttons.OK, MyMessageBox.Icons.Error);
+                    MyMessageBox.ShowDialog("Mã xác nhận nhập sai vui lòng nhập lại", MyMessageBox.Buttons.OK, MyMessageBox.Icons.Error);
                 }
             }
             catch (InvalidOperationException ioe)
             {
-                MyMessageBox.Show(ioe.Message, MyMessageBox.Buttons.OK, MyMessageBox.Icons.Warning);
+                MyMessageBox.ShowDialog(ioe.Message, MyMessageBox.Buttons.OK, MyMessageBox.Icons.Warning);
             }
             finally
             {

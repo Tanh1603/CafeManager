@@ -202,14 +202,14 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
                     if (isSuccessDeleted)
                     {
                         IsLoading = false;
-                        MyMessageBox.Show("Xóa hóa đơn thành công");
+                        MyMessageBox.ShowDialog("Xóa hóa đơn thành công");
                         await LoadData(_token);
                     }
                 }
             }
             catch (InvalidOperationException ioe)
             {
-                MyMessageBox.Show(ioe.Message);
+                MyMessageBox.ShowDialog(ioe.Message);
             }
         }
 

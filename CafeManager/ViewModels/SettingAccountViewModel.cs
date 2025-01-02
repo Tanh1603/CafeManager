@@ -187,7 +187,7 @@ namespace CafeManager.WPF.ViewModels
             }
             catch (InvalidOperationException ioe)
             {
-                MyMessageBox.Show(ioe.Message);
+                MyMessageBox.ShowDialog(ioe.Message);
             }
         }
 

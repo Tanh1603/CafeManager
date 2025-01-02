@@ -178,7 +178,7 @@ namespace CafeManager.WPF.ViewModels.UserViewModel
             }
             else
             {
-                MyMessageBox.Show("Vui lòng chọn bàn hoặc tạo hóa đơn mang về");
+                MyMessageBox.ShowDialog("Vui lòng chọn bàn hoặc tạo hóa đơn mang về", MyMessageBox.Buttons.OK, MyMessageBox.Icons.Warning);
             }
         }
 
@@ -227,7 +227,7 @@ namespace CafeManager.WPF.ViewModels.UserViewModel
             {
                 if (SelectedStaffDTO.Staffid == 0)
                 {
-                    MyMessageBox.Show("Vui lòng chọn người thanh toán");
+                    MyMessageBox.ShowDialog("Vui lòng chọn người thanh toán", MyMessageBox.Buttons.OK, MyMessageBox.Icons.Warning);
                     return;
                 }
                 string messageBox = string.Empty;
@@ -286,7 +286,7 @@ namespace CafeManager.WPF.ViewModels.UserViewModel
             {
                 if (SelectedStaffDTO.Staffid == 0)
                 {
-                    MyMessageBox.Show("Vui lòng chọn người hủy hóa đơn");
+                    MyMessageBox.ShowDialog("Vui lòng chọn người hủy hóa đơn", MyMessageBox.Buttons.OK, MyMessageBox.Icons.Warning);
                     return;
                 }
 
@@ -307,7 +307,7 @@ namespace CafeManager.WPF.ViewModels.UserViewModel
                     if (cancelInvoice != null)
                     {
                         ListInvoiceDTO.Remove(SelectedInvoiceDTO);
-                        MyMessageBox.Show("Hủy hóa đơn thành công");
+                        MyMessageBox.ShowDialog("Hủy hóa đơn thành công", MyMessageBox.Buttons.OK, MyMessageBox.Icons.Warning);
                         SelectedInvoiceDTO = new();
                         OnPropertyChanged(nameof(ListCustomerInvoiceDTO));
                     }

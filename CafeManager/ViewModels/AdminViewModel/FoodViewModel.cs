@@ -137,7 +137,7 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
                         FoodDTO addFoodDTO = _mapper.Map<FoodDTO>(addFood);
                         _allFood.Add(addFoodDTO);
                         IsLoading = false;
-                        MyMessageBox.Show("Thêm thức ăn thành công");
+                        MyMessageBox.Show("Thêm thức ăn thành công", MyMessageBox.Buttons.OK, MyMessageBox.Icons.Information);
                     }
                 }
                 if (ModifyFoodVM.IsUpdating)
@@ -147,7 +147,7 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
                     {
                         _mapper.Map(res, _allFood.Find(x => x.Foodid == res.Foodid));
                         IsLoading = false;
-                        MyMessageBox.Show("Sửa thức ăn thành công");
+                        MyMessageBox.Show("Sửa thức ăn thành công", MyMessageBox.Buttons.OK, MyMessageBox.Icons.Error);
                     }
                 }
                 IsOpenModifyFoodView = false;
@@ -204,7 +204,7 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
                             deletedFoodDTO.Isdeleted = true;
                         }
                         IsLoading = false;
-                        MyMessageBox.Show("Ẩn món ăn thành công");
+                        MyMessageBox.Show("Ẩn món ăn thành công", MyMessageBox.Buttons.OK, MyMessageBox.Icons.Information);
                         FilterListFood();
                     }
                 }
@@ -230,7 +230,7 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
                         showFood.Isdeleted = false;
                         await _foodServices.UpdatFood(_mapper.Map<Food>(showFood));
                         IsLoading = false;
-                        MyMessageBox.Show("Hiện món ăn thành công");
+                        MyMessageBox.ShowDialog("Hiện món ăn thành công", MyMessageBox.Buttons.OK, MyMessageBox.Icons.Information);
                         FilterListFood();
                     }
                 }

@@ -238,12 +238,12 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
                     {
                         ListImportDTO.Remove(import);
                     }
-                    MyMessageBox.Show("Xoá chi tiết đơn hàng thành công", MyMessageBox.Buttons.OK, MyMessageBox.Icons.Information);
+                    MyMessageBox.ShowDialog("Xoá chi tiết đơn hàng thành công", MyMessageBox.Buttons.OK, MyMessageBox.Icons.Information);
                 }
             }
             catch (InvalidOperationException ivd)
             {
-                MyMessageBox.Show(ivd.Message, MyMessageBox.Buttons.OK, MyMessageBox.Icons.Warning);
+                MyMessageBox.ShowDialog(ivd.Message, MyMessageBox.Buttons.OK, MyMessageBox.Icons.Warning);
             }
             finally
             {
@@ -266,11 +266,11 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
                         ListImportDTO.Add(_mapper.Map<ImportDTO>(addImport));
                         await LoadImport();
                         IsLoading = false;
-                        MyMessageBox.Show("Thêm thông tin phiếu nhập thành công", MyMessageBox.Buttons.OK, MyMessageBox.Icons.Information);
+                        MyMessageBox.ShowDialog("Thêm thông tin phiếu nhập thành công", MyMessageBox.Buttons.OK, MyMessageBox.Icons.Information);
                     }
                     else
                     {
-                        MyMessageBox.Show("Thêm thông tin phiếu nhập thất bại", MyMessageBox.Buttons.OK, MyMessageBox.Icons.Error);
+                        MyMessageBox.ShowDialog("Thêm thông tin phiếu nhập thất bại", MyMessageBox.Buttons.OK, MyMessageBox.Icons.Error);
                     }
                 }
                 if (ModifyImportVM.IsUpdating)
@@ -282,11 +282,11 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
                         _mapper.Map(updateImport, res);
                         await LoadImport();
                         IsLoading = false;
-                        MyMessageBox.Show("Sửa thông tin phiếu nhập thành công", MyMessageBox.Buttons.OK, MyMessageBox.Icons.Information);
+                        MyMessageBox.ShowDialog("Sửa thông tin phiếu nhập thành công", MyMessageBox.Buttons.OK, MyMessageBox.Icons.Information);
                     }
                     else
                     {
-                        MyMessageBox.Show("Sửa thông tin phiếu nhập thất bại", MyMessageBox.Buttons.OK, MyMessageBox.Icons.Error);
+                        MyMessageBox.ShowDialog("Sửa thông tin phiếu nhập thất bại", MyMessageBox.Buttons.OK, MyMessageBox.Icons.Error);
                     }
                 }
                 IsOpenModifyImportView = false;
@@ -294,7 +294,7 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
             }
             catch
             {
-                MyMessageBox.Show("Lỗi", MyMessageBox.Buttons.OK, MyMessageBox.Icons.Warning);
+                MyMessageBox.ShowDialog("Lỗi", MyMessageBox.Buttons.OK, MyMessageBox.Icons.Warning);
             }
             finally
             {

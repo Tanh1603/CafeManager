@@ -2,7 +2,7 @@
 + Create appsettings.jon
 {
   "ConnectionStrings": {
-    "postgreSql": "Your-Connection-String"
+    "Sqlite": "Your-Connection-String"
   },
   "Encryption_Key": "Your-Secret-Key",
   "Email": {
@@ -10,3 +10,7 @@
     "PassWord": "Your-Password"
   }
 }
+
+# Admin account
+- Account: `admin`
+- Password: `123456`

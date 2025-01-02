@@ -144,7 +144,7 @@
                     FontSize="12"
                     FontWeight="{TemplateBinding FontWeight}"
                     Foreground="#99703a"
-                    Text="{TemplateBinding Tag}"
+                    Text="{Binding SelectedValue, RelativeSource={RelativeSource TemplatedParent} }"
                     TextTrimming="CharacterEllipsis"
                     Visibility="Collapsed" />
 

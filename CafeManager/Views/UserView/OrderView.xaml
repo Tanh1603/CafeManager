@@ -60,20 +60,20 @@
                         </TabControl.ItemContainerStyle>
 
                         <TabItem Header="Bàn" Style="{StaticResource tabItemStyle}">
-                            <Grid Margin="10">
+                            <Grid Margin="20 10 10 10">
 
                                 <ScrollViewer HorizontalScrollBarVisibility="Hidden" VerticalScrollBarVisibility="Hidden">
                                     <ItemsControl ItemsSource="{Binding ListCoffeeTableDTO}">
                                         <ItemsControl.ItemsPanel>
                                             <ItemsPanelTemplate>
-                                                <WrapPanel MinWidth="600" MaxWidth="850" />
+                                                <WrapPanel Width="800"  />
                                             </ItemsPanelTemplate>
                                         </ItemsControl.ItemsPanel>
                                         <ItemsControl.ItemTemplate>
                                             <DataTemplate>
 
                                                 <Border
-                                                    Width="200"
+                                                    Width="220"
                                                     Margin="5"
                                                     Padding="5"
                                                     HorizontalAlignment="Left"

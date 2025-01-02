@@ -100,9 +100,9 @@
                     materialDesign:HintAssist.Hint="Chọn ngày"
                     materialDesign:TextFieldAssist.HasClearButton="True"
                     CalendarStyle="{StaticResource MaterialDesignCalendarPortrait}"
+                    Tag="Collapsed"
                     SelectedDate="{Binding FilterUseDate, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
-                    Style="{StaticResource DatePicker}"
-                    Tag="Visible" />
+                    Style="{StaticResource DatePicker}" />
                 <Button
                     Grid.Column="1"
                     Width="140"

@@ -40,6 +40,13 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
 
         private DateTime? _startDate;
 
+        private Expression<Func<Invoice, bool>> filter => invoice =>
+                (invoice.Isdeleted == false) &&
+                (StartDate == null || invoice.Paymentstartdate >= StartDate) &&
+                (EndDate == null || invoice.Paymentenddate <= EndDate) &&
+                (string.IsNullOrEmpty(Status) || invoice.Paymentstatus.Contains(Status)) &&
+                (string.IsNullOrEmpty(PaymentMethod) || invoice.Paymentmethod.Contains(PaymentMethod));
+
         public DateTime? StartDate
         {
             get => _startDate;
@@ -153,12 +160,6 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
                 token.ThrowIfCancellationRequested();
 
                 IsLoading = true;
-                Expression<Func<Invoice, bool>> filter = invoice =>
-                (invoice.Isdeleted == false) &&
-                (StartDate == null || invoice.Paymentstartdate >= StartDate) &&
-                (EndDate == null || invoice.Paymentenddate <= EndDate) &&
-                (string.IsNullOrEmpty(Status) || invoice.Paymentstatus.Contains(Status)) &&
-                (string.IsNullOrEmpty(PaymentMethod) || invoice.Paymentmethod.Contains(PaymentMethod));
 
                 var dbListInvoice = await _invoiceServices.GetSearchPaginateListInvoice(filter, pageIndex, pageSize, token);
                 ListInvoiceDTO = [.. _mapper.Map<List<InvoiceDTO>>(dbListInvoice.Item1)];

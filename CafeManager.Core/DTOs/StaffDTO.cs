@@ -51,7 +51,18 @@ namespace CafeManager.Core.DTOs
         [ObservableProperty]
         [NotifyDataErrorInfo]
         [Required(ErrorMessage = "Ngày vào làm không được trống")]
+        [CustomValidation(typeof(StaffDTO), nameof(ValidateStartDate))]
         private DateOnly _startworkingdate = DateOnly.FromDateTime(DateTime.Now);
+
+        public static ValidationResult ValidateStartDate(object startDate, ValidationContext context)
+        {
+            var obj = context.ObjectInstance as StaffDTO;
+            foreach (var item in obj.Staffsalaryhistories)
+            {
+                if (item.Isdeleted == false && item.Effectivedate < obj.Startworkingdate) return new("Không thể nhỏ hơn ngày hiệu lực lương bắt đầu");
+            }
+            return ValidationResult.Success;
+        }
 
         [ObservableProperty]
         [NotifyDataErrorInfo]

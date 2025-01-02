@@ -98,7 +98,8 @@ namespace CafeManager.WPF.ViewModels.UserViewModel
         private Expression<Func<Consumedmaterial, bool>> ConsumedMaterialFilter => consumedMaterial =>
             (consumedMaterial.Isdeleted == false) &&
             (SelectedMaterial == null || consumedMaterial.Materialsupplier.Materialid == SelectedMaterial.Materialid) &&
-            (FilterUseDate == null || FilterUseDate == consumedMaterial.Usagedate.ToDateTime(TimeOnly.MinValue));
+            (FilterUseDate == null ||
+            (FilterUseDate.Value.Day == consumedMaterial.Usagedate.Day && FilterUseDate.Value.Month == consumedMaterial.Usagedate.Month && FilterUseDate.Value.Year == consumedMaterial.Usagedate.Year));
 
         #endregion Filter Declare
 

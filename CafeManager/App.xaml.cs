@@ -28,33 +28,37 @@ namespace CafeManager.WPF
                                                 .AddViewModels();
         }
 
-        protected override void OnStartup(StartupEventArgs e)
+        private void InitialLoading()
+        {
+            using var dbContext = _host.Services.GetRequiredService<IDbContextFactory<CafeManagerContext>>().CreateDbContext();
+            dbContext.Database.EnsureCreated();
+            var db = dbContext.Appusers.FirstOrDefault();
+        }
+
+        protected override async void OnStartup(StartupEventArgs e)
         {
             try
             {
                 _host.Start();
-                //Current.ShutdownMode = ShutdownMode.OnExplicitShutdown;
+                Current.ShutdownMode = ShutdownMode.OnExplicitShutdown;
+                Current.MainWindow = _host.Services.GetRequiredService<WaitWindow>();
+                Current.MainWindow.ShowInTaskbar = false;
+                Current.MainWindow.Show();
 
-                //Current.MainWindow = _host.Services.GetRequiredService<WaitWindow>();
-                //Current.MainWindow.Show();
-                //Task.Run(() =>
-                //{
-                //    using (var dbContext = _host.Services.GetRequiredService<IDbContextFactory<CafeManagerContext>>().CreateDbContext())
-                //    {
-                //        dbContext.Database.OpenConnection();
-                //        dbContext.Database.CloseConnection();
-                //    }
-                //}).Wait();
-                //Current.MainWindow.Close();
+                await Task.Run(InitialLoading);
 
+                Current.MainWindow.Close();
                 Current.MainWindow = _host.Services.GetRequiredService<MainWindow>();
                 Current.MainWindow.Show();
                 base.OnStartup(e);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                MyMessageBox.ShowDialog("Vui lòng kiểm tra kết nối đường truyền mạng", MyMessageBox.Buttons.OK, MyMessageBox.Icons.Error);
-                Current.Shutdown();
+                string res = MyMessageBox.ShowDialog(ex.Message, MyMessageBox.Buttons.OK, MyMessageBox.Icons.Error);
+                if (res == "1")
+                {
+                    Current.Shutdown();
+                }
             }
         }
 

@@ -2,6 +2,7 @@
 using CommunityToolkit.Mvvm.ComponentModel;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 using System.Runtime.CompilerServices;
 
 #nullable disable
@@ -26,19 +27,29 @@ namespace CafeManager.Core.DTOs
         private DateTime _expirationdate;
 
         [ObservableProperty]
+        [NotifyDataErrorInfo]
+        [Required(ErrorMessage = "Không được trống")]
         private string _original;
 
         [ObservableProperty]
+        [NotifyDataErrorInfo]
+        [Required(ErrorMessage = "Không được trống")]
         private string _manufacturer;
 
         [ObservableProperty]
+        [NotifyDataErrorInfo]
+        [Required(ErrorMessage = "Không được trống")]
         private decimal _price;
 
         [ObservableProperty]
+        [NotifyDataErrorInfo]
+        [Required(ErrorMessage = "Không được trống")]
         [NotifyPropertyChangedFor(nameof(TotalQuantity))]
         private MaterialDTO _material;
 
         [ObservableProperty]
+        [NotifyDataErrorInfo]
+        [Required(ErrorMessage = "Không được trống")]
         [NotifyPropertyChangedFor(nameof(TotalQuantity))]
         private SupplierDTO _supplier;
 

@@ -4,7 +4,6 @@ using CafeManager.Infrastructure.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 #nullable disable
 
@@ -20,58 +19,53 @@ namespace CafeManager.Infrastructure.Migrations
                 .HasAnnotation("ProductVersion", "9.0.0")
                 .HasAnnotation("Proxies:ChangeTracking", false)
                 .HasAnnotation("Proxies:CheckEquality", false)
-                .HasAnnotation("Proxies:LazyLoading", true)
-                .HasAnnotation("Relational:MaxIdentifierLength", 63);
-
-            NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
+                .HasAnnotation("Proxies:LazyLoading", true);
 
             modelBuilder.Entity("CafeManager.Core.Data.Appuser", b =>
                 {
                     b.Property<int>("Appuserid")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
+                        .HasColumnType("INTEGER")
                         .HasColumnName("appuserid");
 
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Appuserid"));
-
                     b.Property<byte[]>("Avatar")
-                        .HasColumnType("bytea")
+                        .HasColumnType("BLOB")
                         .HasColumnName("avatar");
 
                     b.Property<string>("Displayname")
                         .ValueGeneratedOnAdd()
                         .HasMaxLength(100)
-                        .HasColumnType("character varying(100)")
+                        .HasColumnType("TEXT")
                         .HasColumnName("displayname")
-                        .HasDefaultValueSql("'Unkown'::character varying");
+                        .HasDefaultValueSql("'Unkown'");
 
                     b.Property<string>("Email")
                         .HasMaxLength(100)
-                        .HasColumnType("character varying(100)")
+                        .HasColumnType("TEXT")
                         .HasColumnName("email");
 
                     b.Property<bool?>("Isdeleted")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("boolean")
+                        .HasColumnType("INTEGER")
                         .HasDefaultValue(false)
                         .HasColumnName("isdeleted");
 
                     b.Property<string>("Password")
                         .IsRequired()
                         .HasMaxLength(255)
-                        .HasColumnType("character varying(255)")
+                        .HasColumnType("TEXT")
                         .HasColumnName("password");
 
                     b.Property<int?>("Role")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
+                        .HasColumnType("INTEGER")
                         .HasDefaultValue(0)
                         .HasColumnName("role");
 
                     b.Property<string>("Username")
                         .IsRequired()
                         .HasMaxLength(50)
-                        .HasColumnType("character varying(50)")
+                        .HasColumnType("TEXT")
                         .HasColumnName("username");
 
                     b.HasKey("Appuserid")
@@ -84,36 +78,34 @@ namespace CafeManager.Infrastructure.Migrations
                 {
                     b.Property<int>("Coffeetableid")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
+                        .HasColumnType("INTEGER")
                         .HasColumnName("coffeetableid");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Coffeetableid"));
 
                     b.Property<bool?>("Isdeleted")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("boolean")
+                        .HasColumnType("INTEGER")
                         .HasDefaultValue(false)
                         .HasColumnName("isdeleted");
 
                     b.Property<string>("Notes")
-                        .HasColumnType("text")
+                        .HasColumnType("TEXT")
                         .HasColumnName("notes");
 
                     b.Property<int?>("Seatingcapacity")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
+                        .HasColumnType("INTEGER")
                         .HasDefaultValue(4)
                         .HasColumnName("seatingcapacity");
 
                     b.Property<string>("Statustable")
                         .ValueGeneratedOnAdd()
                         .HasMaxLength(50)
-                        .HasColumnType("character varying(50)")
+                        .HasColumnType("TEXT")
                         .HasColumnName("statustable")
-                        .HasDefaultValueSql("'Đang sử dụng'::character varying");
+                        .HasDefaultValueSql("'Đang sử dụng'");
 
                     b.Property<int>("Tablenumber")
-                        .HasColumnType("integer")
+                        .HasColumnType("INTEGER")
                         .HasColumnName("tablenumber");
 
                     b.HasKey("Coffeetableid")
@@ -129,33 +121,31 @@ namespace CafeManager.Infrastructure.Migrations
                 {
                     b.Property<int>("Consumedmaterialid")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
+                        .HasColumnType("INTEGER")
                         .HasColumnName("consumedmaterialid");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Consumedmaterialid"));
 
                     b.Property<bool?>("Isdeleted")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("boolean")
+                        .HasColumnType("INTEGER")
                         .HasDefaultValue(false)
                         .HasColumnName("isdeleted");
 
                     b.Property<int?>("Materialsupplierid")
-                        .HasColumnType("integer")
+                        .HasColumnType("INTEGER")
                         .HasColumnName("materialsupplierid");
 
                     b.Property<decimal?>("Quantity")
                         .ValueGeneratedOnAdd()
                         .HasPrecision(10, 2)
-                        .HasColumnType("numeric(10,2)")
+                        .HasColumnType("TEXT")
                         .HasColumnName("quantity")
                         .HasDefaultValueSql("0");
 
                     b.Property<DateOnly>("Usagedate")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("date")
+                        .HasColumnType("TEXT")
                         .HasColumnName("usagedate")
-                        .HasDefaultValueSql("now()");
+                        .HasDefaultValueSql("CURRENT_TIMESTAMP");
 
                     b.HasKey("Consumedmaterialid")
                         .HasName("pk_consumedmaterials");
@@ -169,42 +159,40 @@ namespace CafeManager.Infrastructure.Migrations
                 {
                     b.Property<int>("Foodid")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
+                        .HasColumnType("INTEGER")
                         .HasColumnName("foodid");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Foodid"));
 
                     b.Property<decimal?>("Discountfood")
                         .ValueGeneratedOnAdd()
                         .HasPrecision(5, 2)
-                        .HasColumnType("numeric(5,2)")
+                        .HasColumnType("TEXT")
                         .HasColumnName("discountfood")
                         .HasDefaultValueSql("0");
 
                     b.Property<int>("Foodcategoryid")
-                        .HasColumnType("integer")
+                        .HasColumnType("INTEGER")
                         .HasColumnName("foodcategoryid");
 
                     b.Property<string>("Foodname")
                         .IsRequired()
                         .HasMaxLength(100)
-                        .HasColumnType("character varying(100)")
+                        .HasColumnType("TEXT")
                         .HasColumnName("foodname");
 
                     b.Property<byte[]>("Imagefood")
-                        .HasColumnType("bytea")
+                        .HasColumnType("BLOB")
                         .HasColumnName("imagefood");
 
                     b.Property<bool?>("Isdeleted")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("boolean")
+                        .HasColumnType("INTEGER")
                         .HasDefaultValue(false)
                         .HasColumnName("isdeleted");
 
                     b.Property<decimal?>("Price")
                         .ValueGeneratedOnAdd()
                         .HasPrecision(10, 2)
-                        .HasColumnType("numeric(10,2)")
+                        .HasColumnType("TEXT")
                         .HasColumnName("price")
                         .HasDefaultValueSql("0");
 
@@ -220,20 +208,18 @@ namespace CafeManager.Infrastructure.Migrations
                 {
                     b.Property<int>("Foodcategoryid")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
+                        .HasColumnType("INTEGER")
                         .HasColumnName("foodcategoryid");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Foodcategoryid"));
 
                     b.Property<string>("Foodcategoryname")
                         .IsRequired()
                         .HasMaxLength(100)
-                        .HasColumnType("character varying(100)")
+                        .HasColumnType("TEXT")
                         .HasColumnName("foodcategoryname");
 
                     b.Property<bool?>("Isdeleted")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("boolean")
+                        .HasColumnType("INTEGER")
                         .HasDefaultValue(false)
                         .HasColumnName("isdeleted");
 
@@ -247,44 +233,42 @@ namespace CafeManager.Infrastructure.Migrations
                 {
                     b.Property<int>("Importid")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
+                        .HasColumnType("INTEGER")
                         .HasColumnName("importid");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Importid"));
 
                     b.Property<string>("Deliveryperson")
                         .IsRequired()
                         .HasMaxLength(50)
-                        .HasColumnType("character varying(50)")
+                        .HasColumnType("TEXT")
                         .HasColumnName("deliveryperson");
 
                     b.Property<bool?>("Isdeleted")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("boolean")
+                        .HasColumnType("INTEGER")
                         .HasDefaultValue(false)
                         .HasColumnName("isdeleted");
 
                     b.Property<string>("Phone")
                         .IsRequired()
                         .HasMaxLength(20)
-                        .HasColumnType("character varying(20)")
+                        .HasColumnType("TEXT")
                         .HasColumnName("phone");
 
                     b.Property<DateTime>("Receiveddate")
-                        .HasColumnType("timestamp without time zone")
+                        .HasColumnType("Datetime")
                         .HasColumnName("receiveddate");
 
                     b.Property<string>("Shippingcompany")
                         .HasMaxLength(100)
-                        .HasColumnType("character varying(100)")
+                        .HasColumnType("TEXT")
                         .HasColumnName("shippingcompany");
 
                     b.Property<int>("Staffid")
-                        .HasColumnType("integer")
+                        .HasColumnType("INTEGER")
                         .HasColumnName("staffid");
 
                     b.Property<int>("Supplierid")
-                        .HasColumnType("integer")
+                        .HasColumnType("INTEGER")
                         .HasColumnName("supplierid");
 
                     b.HasKey("Importid")
@@ -301,30 +285,28 @@ namespace CafeManager.Infrastructure.Migrations
                 {
                     b.Property<int>("Importdetailid")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
+                        .HasColumnType("INTEGER")
                         .HasColumnName("importdetailid");
 
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Importdetailid"));
-
                     b.Property<int>("Importid")
-                        .HasColumnType("integer")
+                        .HasColumnType("INTEGER")
                         .HasColumnName("importid");
 
                     b.Property<bool?>("Isdeleted")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("boolean")
+                        .HasColumnType("INTEGER")
                         .HasDefaultValue(false)
                         .HasColumnName("isdeleted");
 
                     b.Property<int>("Materialsupplierid")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
+                        .HasColumnType("INTEGER")
                         .HasColumnName("materialsupplierid");
 
                     b.Property<decimal?>("Quantity")
                         .ValueGeneratedOnAdd()
                         .HasPrecision(10, 2)
-                        .HasColumnType("numeric(10,2)")
+                        .HasColumnType("TEXT")
                         .HasColumnName("quantity")
                         .HasDefaultValueSql("0");
 
@@ -342,52 +324,50 @@ namespace CafeManager.Infrastructure.Migrations
                 {
                     b.Property<int>("Invoiceid")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
+                        .HasColumnType("INTEGER")
                         .HasColumnName("invoiceid");
 
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Invoiceid"));
-
                     b.Property<int?>("Coffeetableid")
-                        .HasColumnType("integer")
+                        .HasColumnType("INTEGER")
                         .HasColumnName("coffeetableid");
 
                     b.Property<decimal?>("Discountinvoice")
                         .ValueGeneratedOnAdd()
                         .HasPrecision(5, 2)
-                        .HasColumnType("numeric(5,2)")
+                        .HasColumnType("TEXT")
                         .HasColumnName("discountinvoice")
                         .HasDefaultValueSql("0");
 
                     b.Property<bool?>("Isdeleted")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("boolean")
+                        .HasColumnType("INTEGER")
                         .HasDefaultValue(false)
                         .HasColumnName("isdeleted");
 
                     b.Property<DateTime?>("Paymentenddate")
-                        .HasColumnType("timestamp without time zone")
+                        .HasColumnType("Datetime")
                         .HasColumnName("paymentenddate");
 
                     b.Property<string>("Paymentmethod")
                         .ValueGeneratedOnAdd()
                         .HasMaxLength(50)
-                        .HasColumnType("character varying(50)")
+                        .HasColumnType("TEXT")
                         .HasColumnName("paymentmethod")
-                        .HasDefaultValueSql("'Thanh toán tiền mặt'::character varying");
+                        .HasDefaultValueSql("'Thanh toán tiền mặt'");
 
                     b.Property<DateTime>("Paymentstartdate")
-                        .HasColumnType("timestamp without time zone")
+                        .HasColumnType("Datetime")
                         .HasColumnName("paymentstartdate");
 
                     b.Property<string>("Paymentstatus")
                         .ValueGeneratedOnAdd()
                         .HasMaxLength(50)
-                        .HasColumnType("character varying(50)")
+                        .HasColumnType("TEXT")
                         .HasColumnName("paymentstatus")
-                        .HasDefaultValueSql("'Chưa thanh toán'::character varying");
+                        .HasDefaultValueSql("'Chưa thanh toán'");
 
                     b.Property<int>("Staffid")
-                        .HasColumnType("integer")
+                        .HasColumnType("INTEGER")
                         .HasColumnName("staffid");
 
                     b.HasKey("Invoiceid")
@@ -404,28 +384,26 @@ namespace CafeManager.Infrastructure.Migrations
                 {
                     b.Property<int>("Invoicedetailid")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
+                        .HasColumnType("INTEGER")
                         .HasColumnName("invoicedetailid");
 
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Invoicedetailid"));
-
                     b.Property<int>("Foodid")
-                        .HasColumnType("integer")
+                        .HasColumnType("INTEGER")
                         .HasColumnName("foodid");
 
                     b.Property<int?>("Invoiceid")
-                        .HasColumnType("integer")
+                        .HasColumnType("INTEGER")
                         .HasColumnName("invoiceid");
 
                     b.Property<bool?>("Isdeleted")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("boolean")
+                        .HasColumnType("INTEGER")
                         .HasDefaultValue(false)
                         .HasColumnName("isdeleted");
 
                     b.Property<int?>("Quantity")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
+                        .HasColumnType("INTEGER")
                         .HasDefaultValue(0)
                         .HasColumnName("quantity");
 
@@ -443,27 +421,25 @@ namespace CafeManager.Infrastructure.Migrations
                 {
                     b.Property<int>("Materialid")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
+                        .HasColumnType("INTEGER")
                         .HasColumnName("materialid");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Materialid"));
 
                     b.Property<bool?>("Isdeleted")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("boolean")
+                        .HasColumnType("INTEGER")
                         .HasDefaultValue(false)
                         .HasColumnName("isdeleted");
 
                     b.Property<string>("Materialname")
                         .IsRequired()
                         .HasMaxLength(100)
-                        .HasColumnType("character varying(100)")
+                        .HasColumnType("TEXT")
                         .HasColumnName("materialname");
 
                     b.Property<string>("Unit")
                         .IsRequired()
                         .HasMaxLength(50)
-                        .HasColumnType("character varying(50)")
+                        .HasColumnType("TEXT")
                         .HasColumnName("unit");
 
                     b.HasKey("Materialid")
@@ -479,50 +455,48 @@ namespace CafeManager.Infrastructure.Migrations
                 {
                     b.Property<int>("Materialsupplierid")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
+                        .HasColumnType("INTEGER")
                         .HasColumnName("materialsupplierid");
 
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Materialsupplierid"));
-
                     b.Property<DateTime>("Expirationdate")
-                        .HasColumnType("timestamp without time zone")
+                        .HasColumnType("Datetime")
                         .HasColumnName("expirationdate");
 
                     b.Property<bool?>("Isdeleted")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("boolean")
+                        .HasColumnType("INTEGER")
                         .HasDefaultValue(false)
                         .HasColumnName("isdeleted");
 
                     b.Property<DateTime>("Manufacturedate")
-                        .HasColumnType("timestamp without time zone")
+                        .HasColumnType("Datetime")
                         .HasColumnName("manufacturedate");
 
                     b.Property<string>("Manufacturer")
                         .IsRequired()
                         .HasMaxLength(50)
-                        .HasColumnType("character varying(50)")
+                        .HasColumnType("TEXT")
                         .HasColumnName("manufacturer");
 
                     b.Property<int>("Materialid")
-                        .HasColumnType("integer")
+                        .HasColumnType("INTEGER")
                         .HasColumnName("materialid");
 
                     b.Property<string>("Original")
                         .IsRequired()
                         .HasMaxLength(20)
-                        .HasColumnType("character varying(20)")
+                        .HasColumnType("TEXT")
                         .HasColumnName("original");
 
                     b.Property<decimal?>("Price")
                         .ValueGeneratedOnAdd()
                         .HasPrecision(10, 2)
-                        .HasColumnType("numeric(10,2)")
+                        .HasColumnType("TEXT")
                         .HasColumnName("price")
                         .HasDefaultValueSql("0");
 
                     b.Property<int>("Supplierid")
-                        .HasColumnType("integer")
+                        .HasColumnType("INTEGER")
                         .HasColumnName("supplierid");
 
                     b.HasKey("Materialsupplierid")
@@ -539,54 +513,52 @@ namespace CafeManager.Infrastructure.Migrations
                 {
                     b.Property<int>("Staffid")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
+                        .HasColumnType("INTEGER")
                         .HasColumnName("staffid");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Staffid"));
 
                     b.Property<string>("Address")
                         .IsRequired()
                         .HasMaxLength(50)
-                        .HasColumnType("character varying(50)")
+                        .HasColumnType("TEXT")
                         .HasColumnName("address");
 
                     b.Property<DateOnly>("Birthday")
-                        .HasColumnType("date")
+                        .HasColumnType("TEXT")
                         .HasColumnName("birthday");
 
                     b.Property<DateOnly?>("Endworkingdate")
-                        .HasColumnType("date")
+                        .HasColumnType("TEXT")
                         .HasColumnName("endworkingdate");
 
                     b.Property<bool?>("Isdeleted")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("boolean")
+                        .HasColumnType("INTEGER")
                         .HasDefaultValue(false)
                         .HasColumnName("isdeleted");
 
                     b.Property<string>("Phone")
                         .IsRequired()
                         .HasMaxLength(20)
-                        .HasColumnType("character varying(20)")
+                        .HasColumnType("TEXT")
                         .HasColumnName("phone");
 
                     b.Property<string>("Role")
                         .HasMaxLength(50)
-                        .HasColumnType("character varying(50)")
+                        .HasColumnType("TEXT")
                         .HasColumnName("role");
 
                     b.Property<bool?>("Sex")
-                        .HasColumnType("boolean")
+                        .HasColumnType("INTEGER")
                         .HasColumnName("sex");
 
                     b.Property<string>("Staffname")
                         .IsRequired()
                         .HasMaxLength(100)
-                        .HasColumnType("character varying(100)")
+                        .HasColumnType("TEXT")
                         .HasColumnName("staffname");
 
                     b.Property<DateOnly>("Startworkingdate")
-                        .HasColumnType("date")
+                        .HasColumnType("TEXT")
                         .HasColumnName("startworkingdate");
 
                     b.HasKey("Staffid")
@@ -599,28 +571,26 @@ namespace CafeManager.Infrastructure.Migrations
                 {
                     b.Property<int>("Staffsalaryhistoryid")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
+                        .HasColumnType("INTEGER")
                         .HasColumnName("staffsalaryhistoryid");
 
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Staffsalaryhistoryid"));
-
                     b.Property<DateOnly>("Effectivedate")
-                        .HasColumnType("date")
+                        .HasColumnType("TEXT")
                         .HasColumnName("effectivedate");
 
                     b.Property<bool?>("Isdeleted")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("boolean")
+                        .HasColumnType("INTEGER")
                         .HasDefaultValue(false)
                         .HasColumnName("isdeleted");
 
                     b.Property<decimal>("Salary")
                         .HasPrecision(10, 2)
-                        .HasColumnType("numeric(10,2)")
+                        .HasColumnType("TEXT")
                         .HasColumnName("salary");
 
                     b.Property<int>("Staffid")
-                        .HasColumnType("integer")
+                        .HasColumnType("INTEGER")
                         .HasColumnName("staffid");
 
                     b.HasKey("Staffsalaryhistoryid")
@@ -635,35 +605,33 @@ namespace CafeManager.Infrastructure.Migrations
                 {
                     b.Property<int>("Supplierid")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
+                        .HasColumnType("INTEGER")
                         .HasColumnName("supplierid");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Supplierid"));
 
                     b.Property<string>("Address")
                         .HasMaxLength(255)
-                        .HasColumnType("character varying(255)")
+                        .HasColumnType("TEXT")
                         .HasColumnName("address");
 
                     b.Property<string>("Email")
                         .HasMaxLength(100)
-                        .HasColumnType("character varying(100)")
+                        .HasColumnType("TEXT")
                         .HasColumnName("email");
 
                     b.Property<bool?>("Isdeleted")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("boolean")
+                        .HasColumnType("INTEGER")
                         .HasDefaultValue(false)
                         .HasColumnName("isdeleted");
 
                     b.Property<string>("Notes")
-                        .HasColumnType("text")
+                        .HasColumnType("TEXT")
                         .HasColumnName("notes");
 
                     b.Property<string>("Phone")
                         .IsRequired()
                         .HasMaxLength(20)
-                        .HasColumnType("character varying(20)")
+                        .HasColumnType("TEXT")
                         .HasColumnName("phone");
 
                     b.Property<string>("Representativesupplier")
@@ -674,7 +642,7 @@ namespace CafeManager.Infrastructure.Migrations
                     b.Property<string>("Suppliername")
                         .IsRequired()
                         .HasMaxLength(100)
-                        .HasColumnType("character varying(100)")
+                        .HasColumnType("TEXT")
                         .HasColumnName("suppliername");
 
                     b.HasKey("Supplierid")

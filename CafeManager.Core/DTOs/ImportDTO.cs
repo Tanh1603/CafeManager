@@ -13,7 +13,7 @@ namespace CafeManager.Core.DTOs
 
         [ObservableProperty]
         [NotifyDataErrorInfo]
-        [Required(ErrorMessage = "Không được trống")]
+        [Required(ErrorMessage = "Người giao hàng không được trống")]
         private string _deliveryperson;
 
         [ObservableProperty]
@@ -40,9 +40,13 @@ namespace CafeManager.Core.DTOs
         private int _supplierid;
 
         [ObservableProperty]
+        [NotifyDataErrorInfo]
+        [Required(ErrorMessage = "Nhà cung cấp không được trống")]
         private SupplierDTO _supplier;
 
         [ObservableProperty]
+        [NotifyDataErrorInfo]
+        [Required(ErrorMessage = "Nhân viên nhập hàng không được trống")]
         private StaffDTO _staff;
 
         [ObservableProperty]

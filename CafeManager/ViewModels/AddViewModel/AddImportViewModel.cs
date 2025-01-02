@@ -17,10 +17,11 @@ using System.Diagnostics;
 using System.Windows.Forms;
 using System.Runtime.CompilerServices;
 using AutoMapper;
+using System.ComponentModel.DataAnnotations;
 
 namespace CafeManager.WPF.ViewModels.AddViewModel
 {
-    public partial class AddImportViewModel : ObservableObject
+    public partial class AddImportViewModel : ObservableValidator
     {
         private readonly IServiceProvider _provider;
         private readonly ImportDetailServices _importdetailServices;
@@ -43,6 +44,8 @@ namespace CafeManager.WPF.ViewModels.AddViewModel
         public bool _isUpdatingImportDetail = false;
 
         [ObservableProperty]
+        [NotifyPropertyChangedFor(nameof(CanSubmitModifyImport))]
+        [NotifyCanExecuteChangedFor(nameof(SubmitModifyImportCommand))]
         private ImportDTO _modifyImport = new()
         {
             Receiveddate = DateTime.Now
@@ -52,6 +55,8 @@ namespace CafeManager.WPF.ViewModels.AddViewModel
         private decimal _importPrice = 0;
 
         [ObservableProperty]
+        [NotifyPropertyChangedFor(nameof(CanSubmitModifyImportDetail))]
+        [NotifyCanExecuteChangedFor(nameof(ModifyImportDetailCommand))]
         private ImportDetailDTO _currentImportDetail = new()
         {
             Materialsupplier = new()
@@ -165,7 +170,7 @@ namespace CafeManager.WPF.ViewModels.AddViewModel
             };
         }
 
-        [RelayCommand]
+        [RelayCommand(CanExecute = nameof(CanSubmitModifyImportDetail))]
         private void ModifyImportDetail()
         {
             if (IsAddingImportDetail)
@@ -217,6 +222,8 @@ namespace CafeManager.WPF.ViewModels.AddViewModel
             ClearAddImportDetail();
         }
 
+        public bool CanSubmitModifyImportDetail => !CurrentImportDetail.HasErrors && !CurrentImportDetail.Materialsupplier.HasErrors;
+
         [RelayCommand]
         private void DeleteImportDetail(ImportDetailDTO importDetail)
         {
@@ -250,10 +257,12 @@ namespace CafeManager.WPF.ViewModels.AddViewModel
         }
 
         #region Add Material/Supplier
+
         private void AddMaterialSupplierVM_Close()
         {
             IsOpenAddMaterialSupplier = false;
         }
+
         //Supplier
         private async void AddSupplierVM_ModifySupplierChanged(SupplierDTO obj)
         {
@@ -314,9 +323,9 @@ namespace CafeManager.WPF.ViewModels.AddViewModel
 
         #endregion Open View
 
-        #endregion
+        #endregion Add Material/Supplier
 
-        [RelayCommand]
+        [RelayCommand(CanExecute = nameof(CanSubmitModifyImport))]
         private void SubmitModifyImport()
         {
             ModifyImport.Importdetails = new ObservableCollection<ImportDetailDTO>(
@@ -348,5 +357,7 @@ namespace CafeManager.WPF.ViewModels.AddViewModel
             }
             listDeletedImportdetail.Clear();
         }
+
+        public bool CanSubmitModifyImport => !ModifyImport.HasErrors;
     }
 }

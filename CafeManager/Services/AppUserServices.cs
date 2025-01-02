@@ -25,23 +25,21 @@ namespace CafeManager.WPF.Services
             try
             {
                 await _unitOfWork.BeginTransactionAsync();
-
-                Appuser? exisiting = await _unitOfWork.AppUserList.GetAppUserByUserName(appuser.Username);
-                if (exisiting != null)
-                {
-                    throw new InvalidOperationException("Tài khoản đã tồn tại ");
-                }
                 appuser.Password = _encryptionHelper.EncryptAES(appuser.Password);
                 Appuser newAppuser = await _unitOfWork.AppUserList.Create(appuser);
                 await _unitOfWork.CompleteAsync();
                 await _unitOfWork.CommitTransactionAsync();
                 return newAppuser;
             }
+            catch (InvalidOperationException)
+            {
+                throw;
+            }
             catch (Exception)
             {
                 await _unitOfWork.RollbackTransactionAsync();
                 _unitOfWork.ClearChangeTracker();
-                throw new InvalidOperationException("Thêm tài khoản thất bại");
+                throw new Exception("Lỗi");
             }
         }
 
@@ -55,9 +53,17 @@ namespace CafeManager.WPF.Services
                     return (null, false, null);
                 }
                 bool isPasswordMatch = _encryptionHelper.DecryptAES(exisiting.Password ?? string.Empty)?.Equals(password) ?? false;
+                if (!isPasswordMatch)
+                {
+                    throw new InvalidOperationException("Mật khẩu sai");
+                }
                 return (exisiting, isPasswordMatch, exisiting?.Role);
             }
-            catch
+            catch (InvalidOperationException)
+            {
+                throw;
+            }
+            catch (Exception)
             {
                 throw new InvalidOperationException("Lỗi");
             }
@@ -77,6 +83,19 @@ namespace CafeManager.WPF.Services
             catch (Exception)
             {
                 throw new InvalidOperationException("Lỗi");
+            }
+        }
+
+        public async Task<bool> HasAppUserName(string userName)
+        {
+            try
+            {
+                _unitOfWork.ClearChangeTracker();
+                return (await _unitOfWork.AppUserList.GetAppUserByUserName(userName)) != null;
+            }
+            catch (Exception)
+            {
+                throw;
             }
         }
 

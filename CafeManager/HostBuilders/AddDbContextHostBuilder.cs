@@ -4,11 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.IO;
 
 namespace CafeManager.WPF.HostBuilders
 {
@@ -18,8 +14,11 @@ namespace CafeManager.WPF.HostBuilders
         {
             hostBuilder.ConfigureServices((context, services) =>
             {
-                string? connectionString = context.Configuration.GetConnectionString("postgreSql");
-                Action<DbContextOptionsBuilder> configureDbContext = o => o.UseNpgsql(connectionString);
+                //var path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, context.Configuration.GetConnectionString("SqlLite"));
+                //string connectionString = $"Data Source={path}";
+
+                string? connectionString = context.Configuration.GetConnectionString("SqlLite");
+                Action<DbContextOptionsBuilder> configureDbContext = o => o.UseSqlite(connectionString);
                 services.AddDbContextFactory<CafeManagerContext>(configureDbContext);
                 services.AddScoped<IUnitOfWork, UnitOfWork>();
             });

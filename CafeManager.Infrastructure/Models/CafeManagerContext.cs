@@ -54,7 +54,7 @@ public partial class CafeManagerContext : DbContext
             entity.Property(e => e.Avatar).HasColumnName("avatar");
             entity.Property(e => e.Displayname)
                 .HasMaxLength(100)
-                .HasDefaultValueSql("'Unkown'::character varying")
+                .HasDefaultValueSql("'Unkown'")
                 .HasColumnName("displayname");
             entity.Property(e => e.Email)
                 .HasMaxLength(100)
@@ -93,7 +93,7 @@ public partial class CafeManagerContext : DbContext
                 .HasColumnName("seatingcapacity");
             entity.Property(e => e.Statustable)
                 .HasMaxLength(50)
-                .HasDefaultValueSql("'Đang sử dụng'::character varying")
+                .HasDefaultValueSql("'Đang sử dụng'")
                 .HasColumnName("statustable");
             entity.Property(e => e.Tablenumber).HasColumnName("tablenumber");
         });
@@ -114,7 +114,7 @@ public partial class CafeManagerContext : DbContext
                 .HasDefaultValueSql("0")
                 .HasColumnName("quantity");
             entity.Property(e => e.Usagedate)
-                .HasDefaultValueSql("now()")
+                .HasDefaultValueSql("CURRENT_TIMESTAMP")
                 .HasColumnName("usagedate");
 
             entity.HasOne(d => d.Materialsupplier).WithMany(p => p.Consumedmaterials)
@@ -188,7 +188,7 @@ public partial class CafeManagerContext : DbContext
                 .HasMaxLength(20)
                 .HasColumnName("phone");
             entity.Property(e => e.Receiveddate)
-                .HasColumnType("timestamp without time zone")
+                .HasColumnType("Datetime")
                 .HasColumnName("receiveddate");
             entity.Property(e => e.Shippingcompany)
                 .HasMaxLength(100)
@@ -253,18 +253,18 @@ public partial class CafeManagerContext : DbContext
                 .HasDefaultValue(false)
                 .HasColumnName("isdeleted");
             entity.Property(e => e.Paymentenddate)
-                .HasColumnType("timestamp without time zone")
+                .HasColumnType("Datetime")
                 .HasColumnName("paymentenddate");
             entity.Property(e => e.Paymentmethod)
                 .HasMaxLength(50)
-                .HasDefaultValueSql("'Thanh toán tiền mặt'::character varying")
+                .HasDefaultValueSql("'Thanh toán tiền mặt'")
                 .HasColumnName("paymentmethod");
             entity.Property(e => e.Paymentstartdate)
-                .HasColumnType("timestamp without time zone")
+                .HasColumnType("Datetime")
                 .HasColumnName("paymentstartdate");
             entity.Property(e => e.Paymentstatus)
                 .HasMaxLength(50)
-                .HasDefaultValueSql("'Chưa thanh toán'::character varying")
+                .HasDefaultValueSql("'Chưa thanh toán'")
                 .HasColumnName("paymentstatus");
             entity.Property(e => e.Staffid).HasColumnName("staffid");
 
@@ -334,13 +334,13 @@ public partial class CafeManagerContext : DbContext
 
             entity.Property(e => e.Materialsupplierid).HasColumnName("materialsupplierid");
             entity.Property(e => e.Expirationdate)
-                .HasColumnType("timestamp without time zone")
+                .HasColumnType("Datetime")
                 .HasColumnName("expirationdate");
             entity.Property(e => e.Isdeleted)
                 .HasDefaultValue(false)
                 .HasColumnName("isdeleted");
             entity.Property(e => e.Manufacturedate)
-                .HasColumnType("timestamp without time zone")
+                .HasColumnType("Datetime")
                 .HasColumnName("manufacturedate");
             entity.Property(e => e.Manufacturer)
                 .IsRequired()

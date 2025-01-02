@@ -1,13 +1,12 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore.Migrations;
-using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 #nullable disable
 
 namespace CafeManager.Infrastructure.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialDb : Migration
+    public partial class Sqlite : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -16,15 +15,15 @@ namespace CafeManager.Infrastructure.Migrations
                 name: "appuser",
                 columns: table => new
                 {
-                    appuserid = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    username = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: false),
-                    displayname = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: true, defaultValueSql: "'Unkown'::character varying"),
-                    password = table.Column<string>(type: "character varying(255)", maxLength: 255, nullable: false),
-                    email = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: true),
-                    role = table.Column<int>(type: "integer", nullable: true, defaultValue: 0),
-                    avatar = table.Column<byte[]>(type: "bytea", nullable: true),
-                    isdeleted = table.Column<bool>(type: "boolean", nullable: true, defaultValue: false)
+                    appuserid = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    username = table.Column<string>(type: "TEXT", maxLength: 50, nullable: false),
+                    displayname = table.Column<string>(type: "TEXT", maxLength: 100, nullable: true, defaultValueSql: "'Unkown'"),
+                    password = table.Column<string>(type: "TEXT", maxLength: 255, nullable: false),
+                    email = table.Column<string>(type: "TEXT", maxLength: 100, nullable: true),
+                    role = table.Column<int>(type: "INTEGER", nullable: true, defaultValue: 0),
+                    avatar = table.Column<byte[]>(type: "BLOB", nullable: true),
+                    isdeleted = table.Column<bool>(type: "INTEGER", nullable: true, defaultValue: false)
                 },
                 constraints: table =>
                 {
@@ -35,13 +34,13 @@ namespace CafeManager.Infrastructure.Migrations
                 name: "coffeetable",
                 columns: table => new
                 {
-                    coffeetableid = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    tablenumber = table.Column<int>(type: "integer", nullable: false),
-                    seatingcapacity = table.Column<int>(type: "integer", nullable: true, defaultValue: 4),
-                    statustable = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: true, defaultValueSql: "'Đang sử dụng'::character varying"),
-                    notes = table.Column<string>(type: "text", nullable: true),
-                    isdeleted = table.Column<bool>(type: "boolean", nullable: true, defaultValue: false)
+                    coffeetableid = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    tablenumber = table.Column<int>(type: "INTEGER", nullable: false),
+                    seatingcapacity = table.Column<int>(type: "INTEGER", nullable: true, defaultValue: 4),
+                    statustable = table.Column<string>(type: "TEXT", maxLength: 50, nullable: true, defaultValueSql: "'Đang sử dụng'"),
+                    notes = table.Column<string>(type: "TEXT", nullable: true),
+                    isdeleted = table.Column<bool>(type: "INTEGER", nullable: true, defaultValue: false)
                 },
                 constraints: table =>
                 {
@@ -52,10 +51,10 @@ namespace CafeManager.Infrastructure.Migrations
                 name: "foodcategory",
                 columns: table => new
                 {
-                    foodcategoryid = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    foodcategoryname = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
-                    isdeleted = table.Column<bool>(type: "boolean", nullable: true, defaultValue: false)
+                    foodcategoryid = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    foodcategoryname = table.Column<string>(type: "TEXT", maxLength: 100, nullable: false),
+                    isdeleted = table.Column<bool>(type: "INTEGER", nullable: true, defaultValue: false)
                 },
                 constraints: table =>
                 {
@@ -66,11 +65,11 @@ namespace CafeManager.Infrastructure.Migrations
                 name: "material",
                 columns: table => new
                 {
-                    materialid = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    materialname = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
-                    unit = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: false),
-                    isdeleted = table.Column<bool>(type: "boolean", nullable: true, defaultValue: false)
+                    materialid = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    materialname = table.Column<string>(type: "TEXT", maxLength: 100, nullable: false),
+                    unit = table.Column<string>(type: "TEXT", maxLength: 50, nullable: false),
+                    isdeleted = table.Column<bool>(type: "INTEGER", nullable: true, defaultValue: false)
                 },
                 constraints: table =>
                 {
@@ -81,17 +80,17 @@ namespace CafeManager.Infrastructure.Migrations
                 name: "staff",
                 columns: table => new
                 {
-                    staffid = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    staffname = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
-                    phone = table.Column<string>(type: "character varying(20)", maxLength: 20, nullable: false),
-                    sex = table.Column<bool>(type: "boolean", nullable: true),
-                    birthday = table.Column<DateOnly>(type: "date", nullable: false),
-                    address = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: false),
-                    startworkingdate = table.Column<DateOnly>(type: "date", nullable: false),
-                    endworkingdate = table.Column<DateOnly>(type: "date", nullable: true),
-                    role = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: true),
-                    isdeleted = table.Column<bool>(type: "boolean", nullable: true, defaultValue: false)
+                    staffid = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    staffname = table.Column<string>(type: "TEXT", maxLength: 100, nullable: false),
+                    phone = table.Column<string>(type: "TEXT", maxLength: 20, nullable: false),
+                    sex = table.Column<bool>(type: "INTEGER", nullable: true),
+                    birthday = table.Column<DateOnly>(type: "TEXT", nullable: false),
+                    address = table.Column<string>(type: "TEXT", maxLength: 50, nullable: false),
+                    startworkingdate = table.Column<DateOnly>(type: "TEXT", nullable: false),
+                    endworkingdate = table.Column<DateOnly>(type: "TEXT", nullable: true),
+                    role = table.Column<string>(type: "TEXT", maxLength: 50, nullable: true),
+                    isdeleted = table.Column<bool>(type: "INTEGER", nullable: true, defaultValue: false)
                 },
                 constraints: table =>
                 {
@@ -102,15 +101,15 @@ namespace CafeManager.Infrastructure.Migrations
                 name: "supplier",
                 columns: table => new
                 {
-                    supplierid = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    suppliername = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
+                    supplierid = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    suppliername = table.Column<string>(type: "TEXT", maxLength: 100, nullable: false),
                     representativesupplier = table.Column<string>(type: "character varying", nullable: false),
-                    phone = table.Column<string>(type: "character varying(20)", maxLength: 20, nullable: false),
-                    email = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: true),
-                    address = table.Column<string>(type: "character varying(255)", maxLength: 255, nullable: true),
-                    notes = table.Column<string>(type: "text", nullable: true),
-                    isdeleted = table.Column<bool>(type: "boolean", nullable: true, defaultValue: false)
+                    phone = table.Column<string>(type: "TEXT", maxLength: 20, nullable: false),
+                    email = table.Column<string>(type: "TEXT", maxLength: 100, nullable: true),
+                    address = table.Column<string>(type: "TEXT", maxLength: 255, nullable: true),
+                    notes = table.Column<string>(type: "TEXT", nullable: true),
+                    isdeleted = table.Column<bool>(type: "INTEGER", nullable: true, defaultValue: false)
                 },
                 constraints: table =>
                 {
@@ -121,14 +120,14 @@ namespace CafeManager.Infrastructure.Migrations
                 name: "food",
                 columns: table => new
                 {
-                    foodid = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    foodname = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
-                    foodcategoryid = table.Column<int>(type: "integer", nullable: false),
-                    price = table.Column<decimal>(type: "numeric(10,2)", precision: 10, scale: 2, nullable: true, defaultValueSql: "0"),
-                    imagefood = table.Column<byte[]>(type: "bytea", nullable: true),
-                    discountfood = table.Column<decimal>(type: "numeric(5,2)", precision: 5, scale: 2, nullable: true, defaultValueSql: "0"),
-                    isdeleted = table.Column<bool>(type: "boolean", nullable: true, defaultValue: false)
+                    foodid = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    foodname = table.Column<string>(type: "TEXT", maxLength: 100, nullable: false),
+                    foodcategoryid = table.Column<int>(type: "INTEGER", nullable: false),
+                    price = table.Column<decimal>(type: "TEXT", precision: 10, scale: 2, nullable: true, defaultValueSql: "0"),
+                    imagefood = table.Column<byte[]>(type: "BLOB", nullable: true),
+                    discountfood = table.Column<decimal>(type: "TEXT", precision: 5, scale: 2, nullable: true, defaultValueSql: "0"),
+                    isdeleted = table.Column<bool>(type: "INTEGER", nullable: true, defaultValue: false)
                 },
                 constraints: table =>
                 {
@@ -144,16 +143,16 @@ namespace CafeManager.Infrastructure.Migrations
                 name: "invoices",
                 columns: table => new
                 {
-                    invoiceid = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    paymentstartdate = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
-                    paymentenddate = table.Column<DateTime>(type: "timestamp without time zone", nullable: true),
-                    paymentstatus = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: true, defaultValueSql: "'Chưa thanh toán'::character varying"),
-                    paymentmethod = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: true, defaultValueSql: "'Thanh toán tiền mặt'::character varying"),
-                    discountinvoice = table.Column<decimal>(type: "numeric(5,2)", precision: 5, scale: 2, nullable: true, defaultValueSql: "0"),
-                    coffeetableid = table.Column<int>(type: "integer", nullable: true),
-                    staffid = table.Column<int>(type: "integer", nullable: false),
-                    isdeleted = table.Column<bool>(type: "boolean", nullable: true, defaultValue: false)
+                    invoiceid = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    paymentstartdate = table.Column<DateTime>(type: "Datetime", nullable: false),
+                    paymentenddate = table.Column<DateTime>(type: "Datetime", nullable: true),
+                    paymentstatus = table.Column<string>(type: "TEXT", maxLength: 50, nullable: true, defaultValueSql: "'Chưa thanh toán'"),
+                    paymentmethod = table.Column<string>(type: "TEXT", maxLength: 50, nullable: true, defaultValueSql: "'Thanh toán tiền mặt'"),
+                    discountinvoice = table.Column<decimal>(type: "TEXT", precision: 5, scale: 2, nullable: true, defaultValueSql: "0"),
+                    coffeetableid = table.Column<int>(type: "INTEGER", nullable: true),
+                    staffid = table.Column<int>(type: "INTEGER", nullable: false),
+                    isdeleted = table.Column<bool>(type: "INTEGER", nullable: true, defaultValue: false)
                 },
                 constraints: table =>
                 {
@@ -174,12 +173,12 @@ namespace CafeManager.Infrastructure.Migrations
                 name: "staffsalaryhistory",
                 columns: table => new
                 {
-                    staffsalaryhistoryid = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    staffid = table.Column<int>(type: "integer", nullable: false),
-                    salary = table.Column<decimal>(type: "numeric(10,2)", precision: 10, scale: 2, nullable: false),
-                    effectivedate = table.Column<DateOnly>(type: "date", nullable: false),
-                    isdeleted = table.Column<bool>(type: "boolean", nullable: true, defaultValue: false)
+                    staffsalaryhistoryid = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    staffid = table.Column<int>(type: "INTEGER", nullable: false),
+                    salary = table.Column<decimal>(type: "TEXT", precision: 10, scale: 2, nullable: false),
+                    effectivedate = table.Column<DateOnly>(type: "TEXT", nullable: false),
+                    isdeleted = table.Column<bool>(type: "INTEGER", nullable: true, defaultValue: false)
                 },
                 constraints: table =>
                 {
@@ -195,15 +194,15 @@ namespace CafeManager.Infrastructure.Migrations
                 name: "imports",
                 columns: table => new
                 {
-                    importid = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    deliveryperson = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: false),
-                    phone = table.Column<string>(type: "character varying(20)", maxLength: 20, nullable: false),
-                    shippingcompany = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: true),
-                    receiveddate = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
-                    staffid = table.Column<int>(type: "integer", nullable: false),
-                    supplierid = table.Column<int>(type: "integer", nullable: false),
-                    isdeleted = table.Column<bool>(type: "boolean", nullable: true, defaultValue: false)
+                    importid = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    deliveryperson = table.Column<string>(type: "TEXT", maxLength: 50, nullable: false),
+                    phone = table.Column<string>(type: "TEXT", maxLength: 20, nullable: false),
+                    shippingcompany = table.Column<string>(type: "TEXT", maxLength: 100, nullable: true),
+                    receiveddate = table.Column<DateTime>(type: "Datetime", nullable: false),
+                    staffid = table.Column<int>(type: "INTEGER", nullable: false),
+                    supplierid = table.Column<int>(type: "INTEGER", nullable: false),
+                    isdeleted = table.Column<bool>(type: "INTEGER", nullable: true, defaultValue: false)
                 },
                 constraints: table =>
                 {
@@ -224,16 +223,16 @@ namespace CafeManager.Infrastructure.Migrations
                 name: "materialsupplier",
                 columns: table => new
                 {
-                    materialsupplierid = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    materialid = table.Column<int>(type: "integer", nullable: false),
-                    supplierid = table.Column<int>(type: "integer", nullable: false),
-                    manufacturedate = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
-                    expirationdate = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
-                    original = table.Column<string>(type: "character varying(20)", maxLength: 20, nullable: false),
-                    manufacturer = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: false),
-                    price = table.Column<decimal>(type: "numeric(10,2)", precision: 10, scale: 2, nullable: true, defaultValueSql: "0"),
-                    isdeleted = table.Column<bool>(type: "boolean", nullable: true, defaultValue: false)
+                    materialsupplierid = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    materialid = table.Column<int>(type: "INTEGER", nullable: false),
+                    supplierid = table.Column<int>(type: "INTEGER", nullable: false),
+                    manufacturedate = table.Column<DateTime>(type: "Datetime", nullable: false),
+                    expirationdate = table.Column<DateTime>(type: "Datetime", nullable: false),
+                    original = table.Column<string>(type: "TEXT", maxLength: 20, nullable: false),
+                    manufacturer = table.Column<string>(type: "TEXT", maxLength: 50, nullable: false),
+                    price = table.Column<decimal>(type: "TEXT", precision: 10, scale: 2, nullable: true, defaultValueSql: "0"),
+                    isdeleted = table.Column<bool>(type: "INTEGER", nullable: true, defaultValue: false)
                 },
                 constraints: table =>
                 {
@@ -254,12 +253,12 @@ namespace CafeManager.Infrastructure.Migrations
                 name: "invoicedetails",
                 columns: table => new
                 {
-                    invoicedetailid = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    invoiceid = table.Column<int>(type: "integer", nullable: true),
-                    foodid = table.Column<int>(type: "integer", nullable: false),
-                    quantity = table.Column<int>(type: "integer", nullable: true, defaultValue: 0),
-                    isdeleted = table.Column<bool>(type: "boolean", nullable: true, defaultValue: false)
+                    invoicedetailid = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    invoiceid = table.Column<int>(type: "INTEGER", nullable: true),
+                    foodid = table.Column<int>(type: "INTEGER", nullable: false),
+                    quantity = table.Column<int>(type: "INTEGER", nullable: true, defaultValue: 0),
+                    isdeleted = table.Column<bool>(type: "INTEGER", nullable: true, defaultValue: false)
                 },
                 constraints: table =>
                 {
@@ -280,11 +279,12 @@ namespace CafeManager.Infrastructure.Migrations
                 name: "consumedmaterials",
                 columns: table => new
                 {
-                    consumedmaterialid = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    materialsupplierid = table.Column<int>(type: "integer", nullable: true),
-                    quantity = table.Column<decimal>(type: "numeric(10,2)", precision: 10, scale: 2, nullable: true, defaultValueSql: "0"),
-                    isdeleted = table.Column<bool>(type: "boolean", nullable: true, defaultValue: false)
+                    consumedmaterialid = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    materialsupplierid = table.Column<int>(type: "INTEGER", nullable: true),
+                    quantity = table.Column<decimal>(type: "TEXT", precision: 10, scale: 2, nullable: true, defaultValueSql: "0"),
+                    isdeleted = table.Column<bool>(type: "INTEGER", nullable: true, defaultValue: false),
+                    usagedate = table.Column<DateOnly>(type: "TEXT", nullable: false, defaultValueSql: "CURRENT_TIMESTAMP")
                 },
                 constraints: table =>
                 {
@@ -300,12 +300,12 @@ namespace CafeManager.Infrastructure.Migrations
                 name: "importdetails",
                 columns: table => new
                 {
-                    importdetailid = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    importid = table.Column<int>(type: "integer", nullable: false),
-                    quantity = table.Column<decimal>(type: "numeric(10,2)", precision: 10, scale: 2, nullable: true, defaultValueSql: "0"),
-                    isdeleted = table.Column<bool>(type: "boolean", nullable: true, defaultValue: false),
-                    materialsupplierid = table.Column<int>(type: "integer", nullable: false)
+                    importdetailid = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    importid = table.Column<int>(type: "INTEGER", nullable: false),
+                    quantity = table.Column<decimal>(type: "TEXT", precision: 10, scale: 2, nullable: true, defaultValueSql: "0"),
+                    isdeleted = table.Column<bool>(type: "INTEGER", nullable: true, defaultValue: false),
+                    materialsupplierid = table.Column<int>(type: "INTEGER", nullable: false)
                 },
                 constraints: table =>
                 {

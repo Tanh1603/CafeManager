@@ -1,6 +1,7 @@
 ﻿using CafeManager.Core.Data;
 using CommunityToolkit.Mvvm.ComponentModel;
 using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 using System.Runtime.CompilerServices;
 
 #nullable disable
@@ -19,6 +20,8 @@ namespace CafeManager.Core.DTOs
         private int _materialsupplierid;
 
         [ObservableProperty]
+        [NotifyDataErrorInfo]
+        [Required(ErrorMessage = "Không được trống")]
         private MaterialSupplierDTO _materialsupplier;
 
         [ObservableProperty]

@@ -53,17 +53,26 @@ namespace CafeManager.WPF.ViewModels
         }
 
         [RelayCommand(CanExecute = nameof(CanRegisterExcute))]
-        private void Register()
+        private async Task Register()
         {
             try
             {
-                Task.Run(async () => await _appUserServices.SendVerificationEmail(RegisterAccount.Email, RegisterAccount.Username));
+                bool isExisting = await _appUserServices.HasAppUserName(RegisterAccount.Username);
+                if (isExisting)
+                {
+                    MyMessageBox.ShowDialog("Tài khoản đã tồn tại ", MyMessageBox.Buttons.OK, MyMessageBox.Icons.Error);
+                    return;
+                }
+                await _appUserServices.SendVerificationEmail(RegisterAccount.Email, RegisterAccount.Username);
                 IsOpenVerificationEmail = true;
-                MyMessageBox.Show("Kiểm tra tài khoản email", MyMessageBox.Buttons.OK, MyMessageBox.Icons.Information);
             }
             catch (InvalidOperationException ioe)
             {
-                MyMessageBox.Show(ioe.Message, MyMessageBox.Buttons.OK, MyMessageBox.Icons.Warning);
+                MyMessageBox.Show(ioe.Message, MyMessageBox.Buttons.OK, MyMessageBox.Icons.Error);
+            }
+            catch (Exception ex)
+            {
+                MyMessageBox.Show(ex.Message, MyMessageBox.Buttons.OK, MyMessageBox.Icons.Error);
             }
         }
 

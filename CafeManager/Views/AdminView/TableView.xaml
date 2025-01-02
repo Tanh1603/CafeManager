@@ -256,6 +256,7 @@
                                 ItemsSource="{Binding TypeTable}"
                                 SelectedItem="{Binding Table.Seatingcapacity, Mode=TwoWay}"
                                 Style="{StaticResource ComboBoxStyle}"
+                                Tag="Collapsed"
                                 Validation.ErrorTemplate="{StaticResource ErrorMessageReg}">
                                 <ComboBox.ItemContainerStyle>
                                     <Style BasedOn="{StaticResource ComboBoxItemStyle}" TargetType="ComboBoxItem">
@@ -281,14 +282,17 @@
                                 Grid.Column="1"
                                 Margin="0,0,0,20"
                                 SelectedValue="{Binding Table.Statustable, Mode=TwoWay}"
+                                SelectedValuePath="Content"
                                 Style="{StaticResource ComboBoxStyle}"
-                                Validation.ErrorTemplate="{StaticResource ErrorMessageReg}">
+                                Validation.ErrorTemplate="{StaticResource ErrorMessageReg}"
+                                Tag="Collapsed">
                                 <ComboBox.ItemContainerStyle>
                                     <Style BasedOn="{StaticResource ComboBoxItemStyle}" TargetType="ComboBoxItem">
                                         <Setter Property="Width" Value="{Binding ActualWidth, ElementName=cbstatus}" />
                                         <Setter Property="Height" Value="{Binding ActualHeight, ElementName=cbstatus}" />
                                     </Style>
                                 </ComboBox.ItemContainerStyle>
+                                
                                 <ComboBoxItem Content="Trống" />
                                 <ComboBoxItem Content="Đang sử dụng" />
                             </ComboBox>

@@ -67,7 +67,7 @@ namespace CafeManager.WPF.ViewModels.UserViewModel
         private void OpenDiaglogHost(CoffeetableDTO dTO)
         {
             IsOpenDialog = true;
-            ModifyCoffeTable = _mapper.Map<CoffeetableDTO>(dTO);
+            ModifyCoffeTable = dTO.Clone();
         }
 
         [RelayCommand]

@@ -237,7 +237,7 @@
                                 FontSize="24"
                                 FontWeight="SemiBold"
                                 Foreground="#5f2414"
-                                Text="Thông tin nhân viên" />
+                                Text="Thông tin bàn" />
                             <TextBlock
                                 Grid.Row="1"
                                 Grid.Column="0"
@@ -302,8 +302,8 @@
                                 </ComboBox.ItemContainerStyle>
 
                                 <ComboBox.ItemsSource>
-                                    <x:Array Type="sys:String" xmlns:sys="clr-namespace:System;assembly=mscorlib">
-                                        <sys:String>Đang bi hư</sys:String>
+                                    <x:Array xmlns:sys="clr-namespace:System;assembly=mscorlib" Type="sys:String">
+                                        <sys:String>Đang bị hư</sys:String>
                                         <sys:String>Đang sử dụng</sys:String>
                                     </x:Array>
                                 </ComboBox.ItemsSource>

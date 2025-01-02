@@ -1,9 +1,9 @@
 ﻿<ResourceDictionary
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:converter="clr-namespace:CafeManager.WPF.Services.Converter"
     xmlns:ma="http://metro.mahapps.com/winfx/xaml/iconpacks"
-    xmlns:theme="clr-namespace:Microsoft.Windows.Themes;assembly=PresentationFramework.AeroLite"
-    xmlns:converter="clr-namespace:CafeManager.WPF.Services.Converter">
+    xmlns:theme="clr-namespace:Microsoft.Windows.Themes;assembly=PresentationFramework.AeroLite">
     <converter:StringToVisibilityConverter x:Key="StringToVisibilityConverter" />
     <LinearGradientBrush x:Key="ComboBox.Static.Background" StartPoint="0,0" EndPoint="0,1">
         <GradientStop Offset="0.0" Color="#FFF0F0F0" />
@@ -160,7 +160,7 @@
                     Command="{Binding DataContext.ClearComboBoxCommand, RelativeSource={RelativeSource AncestorType=Window}}"
                     CommandParameter="{Binding RelativeSource={RelativeSource TemplatedParent}}"
                     Style="{StaticResource datePickerButton}"
-                     Visibility="{Binding Tag, RelativeSource={RelativeSource TemplatedParent}, Converter={StaticResource StringToVisibilityConverter}}">
+                    Visibility="{Binding Tag, RelativeSource={RelativeSource TemplatedParent}, Converter={StaticResource StringToVisibilityConverter}}">
                     <ma:PackIconMaterial
                         Width="15"
                         Height="15"

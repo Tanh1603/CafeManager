@@ -24,6 +24,7 @@
             MinWidth="200"
             IsReadOnly="{Binding ElementName=InfoTextInput, Path=IsReadOnly}"
             Style="{StaticResource textbox}"
+            TextWrapping="Wrap"
             Text="{Binding ElementName=InfoTextInput, Path=Text, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
     </Grid>
 </UserControl>

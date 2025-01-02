@@ -28,6 +28,13 @@ namespace CafeManager.WPF
                                                 .AddViewModels();
         }
 
+        private void InitialLoading()
+        {
+            using var dbContext = _host.Services.GetRequiredService<IDbContextFactory<CafeManagerContext>>().CreateDbContext();
+            dbContext.Database.EnsureCreated();
+            var db = dbContext.Appusers.FirstOrDefault();
+        }
+
         protected override async void OnStartup(StartupEventArgs e)
         {
             try
@@ -37,13 +44,9 @@ namespace CafeManager.WPF
                 Current.MainWindow = _host.Services.GetRequiredService<WaitWindow>();
                 Current.MainWindow.ShowInTaskbar = false;
                 Current.MainWindow.Show();
-                await Task.Run(() =>
-                {
-                    using (var dbContext = _host.Services.GetRequiredService<IDbContextFactory<CafeManagerContext>>().CreateDbContext())
-                    {
-                        var db = dbContext.Appusers.FirstOrDefault();
-                    }
-                });
+
+                await Task.Run(InitialLoading);
+
                 Current.MainWindow.Close();
                 Current.MainWindow = _host.Services.GetRequiredService<MainWindow>();
                 Current.MainWindow.Show();
@@ -51,8 +54,11 @@ namespace CafeManager.WPF
             }
             catch (Exception ex)
             {
-                MyMessageBox.Show(ex.Message);
-                Current.Shutdown();
+                string res = MyMessageBox.ShowDialog(ex.Message, MyMessageBox.Buttons.OK, MyMessageBox.Icons.Error);
+                if (res == "1")
+                {
+                    Current.Shutdown();
+                }
             }
         }
 

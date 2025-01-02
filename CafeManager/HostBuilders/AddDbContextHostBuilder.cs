@@ -14,8 +14,10 @@ namespace CafeManager.WPF.HostBuilders
         {
             hostBuilder.ConfigureServices((context, services) =>
             {
-                var path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, context.Configuration.GetConnectionString("SqlLite"));
-                string connectionString = $"Data Source={path}";
+                //var path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, context.Configuration.GetConnectionString("SqlLite"));
+                //string connectionString = $"Data Source={path}";
+
+                string? connectionString = context.Configuration.GetConnectionString("SqlLite");
                 Action<DbContextOptionsBuilder> configureDbContext = o => o.UseSqlite(connectionString);
                 services.AddDbContextFactory<CafeManagerContext>(configureDbContext);
                 services.AddScoped<IUnitOfWork, UnitOfWork>();

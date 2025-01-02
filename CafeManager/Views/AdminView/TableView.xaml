@@ -281,6 +281,7 @@
                                 Grid.Row="2"
                                 Grid.Column="1"
                                 Margin="0,0,0,20"
+                                Tag="Collapsed"
                                 SelectedValue="{Binding Table.Statustable, Mode=TwoWay}"
                                 SelectedValuePath="Content"
                                 Style="{StaticResource ComboBoxStyle}"
@@ -328,6 +329,5 @@
         </materialDesign:DialogHost>
 
         <uc:LoadingData Visibility="{Binding IsLoading, Converter={StaticResource BooleanToVisibilityConverter}}" />
-
     </Grid>
 </UserControl>

@@ -262,10 +262,10 @@
                                 Width="100"
                                 Margin="0,0,0,20"
                                 HorizontalAlignment="Left"
-                                Tag="Collapsed"
                                 ItemsSource="{Binding TypeTable}"
                                 SelectedItem="{Binding Table.Seatingcapacity, Mode=TwoWay}"
                                 Style="{StaticResource ComboBoxStyle}"
+                                Tag="Collapsed"
                                 Validation.ErrorTemplate="{StaticResource ErrorMessageReg}">
                                 <ComboBox.ItemContainerStyle>
                                     <Style BasedOn="{StaticResource ComboBoxItemStyle}" TargetType="ComboBoxItem">
@@ -290,10 +290,9 @@
                                 Grid.Row="3"
                                 Grid.Column="1"
                                 Margin="0,0,0,20"
-                                Tag="Collapsed"
                                 SelectedValue="{Binding Table.Statustable, Mode=TwoWay}"
-                                SelectedValuePath="Tag"
                                 Style="{StaticResource ComboBoxStyle}"
+                                Tag="Collapsed"
                                 Validation.ErrorTemplate="{StaticResource ErrorMessageReg}">
                                 <ComboBox.ItemContainerStyle>
                                     <Style BasedOn="{StaticResource ComboBoxItemStyle}" TargetType="ComboBoxItem">
@@ -302,8 +301,12 @@
                                     </Style>
                                 </ComboBox.ItemContainerStyle>
 
-                                <ComboBoxItem Content="Trống" />
-                                <ComboBoxItem Content="Đang sử dụng" />
+                                <ComboBox.ItemsSource>
+                                    <x:Array Type="sys:String" xmlns:sys="clr-namespace:System;assembly=mscorlib">
+                                        <sys:String>Đang bi hư</sys:String>
+                                        <sys:String>Đang sử dụng</sys:String>
+                                    </x:Array>
+                                </ComboBox.ItemsSource>
                             </ComboBox>
 
                             <TextBlock

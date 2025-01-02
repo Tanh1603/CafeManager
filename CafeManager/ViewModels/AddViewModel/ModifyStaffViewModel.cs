@@ -108,8 +108,8 @@ namespace CafeManager.WPF.ViewModels.AddViewModel
             }
 
             var existedHistory = ModifyStaff.Staffsalaryhistories
-                .FirstOrDefault(x => x.Isdeleted == false &&
-                    x.Effectivedate.Month == CurrentStaffSalary.Effectivedate.Month && x.Effectivedate.Year == CurrentStaffSalary.Effectivedate.Year);
+                .FirstOrDefault(x => x.Staffsalaryhistoryid == CurrentStaffSalary.Staffsalaryhistoryid || (x.Isdeleted == false &&
+                    x.Effectivedate.Month == CurrentStaffSalary.Effectivedate.Month && x.Effectivedate.Year == CurrentStaffSalary.Effectivedate.Year));
             if (existedHistory != null)
             {
                 var duplicated = ModifyStaff.Staffsalaryhistories.FirstOrDefault(x => x.Id != CurrentStaffSalary.Id && x.Effectivedate.Month == CurrentStaffSalary.Effectivedate.Month && x.Effectivedate.Year == CurrentStaffSalary.Effectivedate.Year && x.Isdeleted == false);

@@ -256,6 +256,7 @@
                                 ItemsSource="{Binding TypeTable}"
                                 SelectedItem="{Binding Table.Seatingcapacity, Mode=TwoWay}"
                                 Style="{StaticResource ComboBoxStyle}"
+                                Tag="Collapsed"
                                 Validation.ErrorTemplate="{StaticResource ErrorMessageReg}">
                                 <ComboBox.ItemContainerStyle>
                                     <Style BasedOn="{StaticResource ComboBoxItemStyle}" TargetType="ComboBoxItem">
@@ -280,6 +281,7 @@
                                 Grid.Row="2"
                                 Grid.Column="1"
                                 Margin="0,0,0,20"
+                                Tag="Collapsed"
                                 SelectedValue="{Binding Table.Statustable, Mode=TwoWay}"
                                 Style="{StaticResource ComboBoxStyle}"
                                 Validation.ErrorTemplate="{StaticResource ErrorMessageReg}">
@@ -289,8 +291,12 @@
                                         <Setter Property="Height" Value="{Binding ActualHeight, ElementName=cbstatus}" />
                                     </Style>
                                 </ComboBox.ItemContainerStyle>
-                                <ComboBoxItem Content="Trống" />
-                                <ComboBoxItem Content="Đang sử dụng" />
+                                <ComboBox.ItemsSource>
+                                    <x:Array xmlns:sys="clr-namespace:System;assembly=mscorlib" Type="sys:String">
+                                        <sys:String>Đang hư hỏng</sys:String>
+                                        <sys:String>Đang sử dụng</sys:String>
+                                    </x:Array>
+                                </ComboBox.ItemsSource>
                             </ComboBox>
 
                             <TextBlock
@@ -324,6 +330,5 @@
         </materialDesign:DialogHost>
 
         <uc:LoadingData Visibility="{Binding IsLoading, Converter={StaticResource BooleanToVisibilityConverter}}" />
-
     </Grid>
 </UserControl>

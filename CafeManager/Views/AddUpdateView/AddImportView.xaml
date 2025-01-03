@@ -148,6 +148,7 @@
                                         Grid.Column="1"
                                         MinWidth="150"
                                         Margin="0,10"
+                                        Tag="Collapsed"
                                         HorizontalAlignment="Left"
                                         materialDesign:HintAssist.Hint="Pick Date"
                                         materialDesign:TextFieldAssist.HasClearButton="True"

@@ -350,6 +350,17 @@ namespace CafeManager.WPF.ViewModels.AddViewModel
                     .Concat(listDeletedImportdetail)
             );
 
+            foreach (var item in ModifyImport.Importdetails)
+            {
+                var recieveDate = DateOnly.FromDateTime(ModifyImport.Receiveddate);
+                var manufactureDate = DateOnly.FromDateTime(item.Materialsupplier.Manufacturedate);
+                var expirationDate = DateOnly.FromDateTime(item.Materialsupplier.Expirationdate);
+                if (recieveDate < manufactureDate || recieveDate > expirationDate)
+                {
+                    MyMessageBox.ShowDialog("Ngày giao hàng không hợp lệ (Kiểm tra chi tiết nhập kho)", MyMessageBox.Buttons.OK, MyMessageBox.Icons.Information);
+                    return;
+                }
+            }
             ModifyImport.Supplierid = ModifyImport.Supplier.Supplierid;
             ModifyImport.Staffid = ModifyImport.Staff.Staffid;
 

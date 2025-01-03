@@ -21,10 +21,51 @@ namespace CafeManager.Core.DTOs
         private int supplierid;
 
         [ObservableProperty]
+        [NotifyDataErrorInfo]
+        [CustomValidation(typeof(MaterialSupplierDTO), nameof(ValidateManufactureDate))]
         private DateTime _manufacturedate = DateTime.Now;
 
+        public static ValidationResult ValidateManufactureDate(DateTime dateTime, ValidationContext context)
+        {
+            var dto = context.ObjectInstance as MaterialSupplierDTO;
+            if (dto != null)
+            {
+                var manufactureDate = DateOnly.FromDateTime(dto.Manufacturedate);
+                var expirationDate = DateOnly.FromDateTime(dto.Expirationdate);
+
+                if (manufactureDate <= expirationDate)
+                {
+                    return ValidationResult.Success;
+                }
+
+                return new ValidationResult("Ngày sản xuất không thể lớn hơn ngày hết hạn");
+            }
+
+            return new ValidationResult("Lỗi không xác định trong dữ liệu");
+        }
+
         [ObservableProperty]
+        [NotifyDataErrorInfo]
+        [CustomValidation(typeof(MaterialSupplierDTO), nameof(ValidateExpirationDate))]
         private DateTime _expirationdate = DateTime.Now;
+
+        public static ValidationResult ValidateExpirationDate(DateTime dateTime, ValidationContext context)
+        {
+            var dto = context.ObjectInstance as MaterialSupplierDTO;
+            if (dto != null)
+            {
+                var manufactureDate = DateOnly.FromDateTime(dto.Manufacturedate);
+                var expirationDate = DateOnly.FromDateTime(dto.Expirationdate);
+                if (expirationDate >= manufactureDate)
+                {
+                    return ValidationResult.Success;
+                }
+
+                return new ValidationResult("Ngày hết hạn không thể nhỏ hơn ngày sản xuất");
+            }
+
+            return new ValidationResult("Lỗi không xác định trong dữ liệu");
+        }
 
         [ObservableProperty]
         [NotifyDataErrorInfo]

@@ -94,8 +94,8 @@
                                         Width="220"
                                         materialDesign:HintAssist.Hint="Nhà cung cấp"
                                         DisplayMemberPath="Suppliername"
-                                        ItemsSource="{Binding ListSupplier, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
-                                        SelectedItem="{Binding ModifyImport.Supplier, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                        ItemsSource="{Binding ListSupplier}"
+                                        SelectedItem="{Binding SelectedSupplierDTO, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                                         Style="{StaticResource ComboBoxStyle}"
                                         Tag="Collapsed"
                                         Validation.ErrorTemplate="{StaticResource ErrorMessage}">
@@ -234,8 +234,8 @@
                                         Margin="0,10"
                                         HorizontalAlignment="Left"
                                         DisplayMemberPath="Staffname"
-                                        ItemsSource="{Binding ListStaff, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
-                                        SelectedItem="{Binding ModifyImport.Staff, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                        ItemsSource="{Binding ListStaff}"
+                                        SelectedItem="{Binding SelectedStaffDTO, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                                         Style="{StaticResource ComboBoxStyle}"
                                         Tag="Collapsed"
                                         Validation.ErrorTemplate="{StaticResource ErrorMessage}">
@@ -281,8 +281,8 @@
                                     x:Name="cbmaterial"
                                     Width="220"
                                     DisplayMemberPath="Materialname"
-                                    ItemsSource="{Binding ListMaterial, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
-                                    SelectedItem="{Binding CurrentImportDetail.Materialsupplier.Material, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                    ItemsSource="{Binding ListMaterial}"
+                                    SelectedItem="{Binding SelectedMaterialDTO, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                                     Style="{StaticResource ComboBoxStyle}"
                                     Tag="Collapsed"
                                     Validation.ErrorTemplate="{StaticResource ErrorMessage}">
@@ -536,13 +536,13 @@
                                 IsReadOnly="True" />
                             <DataGridTextColumn
                                 Width="*"
-                                Binding="{Binding Quantity}"
+                                Binding="{Binding Quantity, UpdateSourceTrigger=PropertyChanged}"
                                 CanUserResize="False"
                                 Header="Số lượng"
                                 IsReadOnly="True" />
                             <DataGridTextColumn
                                 Width="*"
-                                Binding="{Binding Materialsupplier.Material.Unit}"
+                                Binding="{Binding Materialsupplier.Material.Unit, UpdateSourceTrigger=PropertyChanged}"
                                 CanUserResize="False"
                                 Header="Đơn vị"
                                 IsReadOnly="True" />

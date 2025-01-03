@@ -53,6 +53,15 @@ namespace CafeManager.WPF.ViewModels.AddViewModel
         private decimal _importPrice = 0;
 
         [ObservableProperty]
+        private MaterialDTO? _selectedMaterialDTO;
+
+        [ObservableProperty]
+        private SupplierDTO? _selectedSupplierDTO;
+
+        [ObservableProperty]
+        private StaffDTO? _selectedStaffDTO;
+
+        [ObservableProperty]
         private ImportDetailDTO _currentImportDetail = new()
         {
             Materialsupplier = new()
@@ -108,32 +117,9 @@ namespace CafeManager.WPF.ViewModels.AddViewModel
         {
             ModifyImport = import;
             ImportPrice = import.TotalPrice;
-            // Clone danh sách ImportDetails và các tham chiếu liên quan
-            ListExisted = new ObservableCollection<ImportDetailDTO>(
-                ModifyImport.Importdetails.Where(x => !x.Isdeleted)
-                                          .Select(x => new ImportDetailDTO
-                                          {
-                                              Id = x.Id,
-                                              Importdetailid = x.Importdetailid,
-                                              Importid = x.Importid,
-                                              Materialsupplierid = x.Materialsupplierid,
-                                              Isdeleted = x.Isdeleted,
-                                              Quantity = x.Quantity,
-                                              Materialsupplier = new MaterialSupplierDTO
-                                              {
-                                                  Id = x.Id,
-                                                  Materialsupplierid = x.Materialsupplierid,
-                                                  Materialid = x.Materialsupplier.Materialid,
-                                                  Supplierid = x.Materialsupplier.Supplierid,
-                                                  Manufacturedate = x.Materialsupplier.Manufacturedate,
-                                                  Expirationdate = x.Materialsupplier.Expirationdate,
-                                                  Original = x.Materialsupplier.Original,
-                                                  Manufacturer = x.Materialsupplier.Manufacturer,
-                                                  Price = x.Materialsupplier.Price,
-                                                  Isdeleted = x.Materialsupplier.Isdeleted,
-                                                  Material = x.Materialsupplier.Material.Clone()
-                                              }
-                                          }));
+            ListExisted = [.. import.Importdetails];
+            SelectedSupplierDTO = ListSupplier.FirstOrDefault(x => x.Supplierid == import.Supplierid);
+            SelectedStaffDTO = ListStaff.FirstOrDefault(x => x.Staffid == import.Staffid);
         }
 
         public void ClearValueOfViewModel()
@@ -148,6 +134,10 @@ namespace CafeManager.WPF.ViewModels.AddViewModel
             ClearAddImportDetail();
             ListExisted.Clear();
             listDeletedImportdetail.Clear();
+            CurrentImportDetail = new();
+            SelectedMaterialDTO = null;
+            SelectedStaffDTO = null;
+            SelectedSupplierDTO = null;
         }
 
         [RelayCommand]
@@ -155,7 +145,7 @@ namespace CafeManager.WPF.ViewModels.AddViewModel
         {
             IsAddingImportDetail = true;
             IsUpdatingImportDetail = false;
-            CurrentImportDetail = null;
+            SelectedMaterialDTO = null;
             CurrentImportDetail = new();
         }
 
@@ -172,16 +162,16 @@ namespace CafeManager.WPF.ViewModels.AddViewModel
             {
                 return;
             }
-            if (CurrentImportDetail.Materialsupplier.Material.Materialid == 0)
+            if (SelectedMaterialDTO == null || SelectedMaterialDTO?.Materialid == 0)
             {
                 MyMessageBox.ShowDialog("Vui lòng chọn loại vật tư", MyMessageBox.Buttons.OK, MyMessageBox.Icons.Error);
                 return;
             }
-            if (IsAddingImportDetail)
+            if (IsAddingImportDetail && SelectedMaterialDTO != null)
             {
                 var existedMateirlasupplier = ListExisted
                     .FirstOrDefault(x => x.Isdeleted == false &&
-                    x.Materialsupplier.Material.Materialid == CurrentImportDetail.Materialsupplier.Material.Materialid &&
+                    x.Materialsupplier.Material.Materialid == SelectedMaterialDTO.Materialid &&
                     x.Materialsupplier.Price == CurrentImportDetail.Materialsupplier.Price &&
                     x.Materialsupplier.Original == CurrentImportDetail.Materialsupplier.Original &&
                     x.Materialsupplier.Manufacturer == CurrentImportDetail.Materialsupplier.Manufacturer &&
@@ -195,7 +185,8 @@ namespace CafeManager.WPF.ViewModels.AddViewModel
                 }
                 else
                 {
-                    CurrentImportDetail.Materialsupplier.Materialid = CurrentImportDetail.Materialsupplier.Material.Materialid;
+                    CurrentImportDetail.Materialsupplier.Materialid = SelectedMaterialDTO.Materialid;
+                    CurrentImportDetail.Materialsupplier.Material = SelectedMaterialDTO;
                     MyMessageBox.ShowDialog("Thêm chi tiết đơn hàng thành công", MyMessageBox.Buttons.OK, MyMessageBox.Icons.Information);
                     ListExisted.Add(CurrentImportDetail.Clone());
                 }
@@ -204,12 +195,13 @@ namespace CafeManager.WPF.ViewModels.AddViewModel
             {
                 var find = ListExisted.FirstOrDefault(x => x.Isdeleted == false && x.Id == CurrentImportDetail.Id);
 
-                if (find != null)
+                if (find != null && SelectedMaterialDTO != null)
                 {
                     ImportPrice += (CurrentImportDetail.Quantity * CurrentImportDetail.Materialsupplier.Price
                         - find.Quantity * find.Materialsupplier.Price);
-                    find.Materialsupplier.Materialid = CurrentImportDetail.Materialsupplier.Materialid;
-                    find.Materialsupplier.Material = CurrentImportDetail.Materialsupplier.Material;
+
+                    find.Materialsupplier.Materialid = SelectedMaterialDTO.Materialid;
+                    find.Materialsupplier.Material = SelectedMaterialDTO;
                     find.Materialsupplier.Price = CurrentImportDetail.Materialsupplier.Price;
                     find.Materialsupplier.Original = CurrentImportDetail.Materialsupplier.Original;
                     find.Materialsupplier.Manufacturer = CurrentImportDetail.Materialsupplier.Manufacturer;
@@ -254,8 +246,8 @@ namespace CafeManager.WPF.ViewModels.AddViewModel
             IsUpdatingImportDetail = true;
             IsAddingImportDetail = false;
             CurrentImportDetail = importDetail.Clone();
-            CurrentImportDetail.Materialsupplier = importDetail.Materialsupplier.Clone();
-            CurrentImportDetail.Materialsupplier.Material = importDetail.Materialsupplier.Material.Clone();
+            CurrentImportDetail.Materialsupplier = CurrentImportDetail.Materialsupplier.Clone();
+            SelectedMaterialDTO = ListMaterial.FirstOrDefault(x => x.Materialid == importDetail.Materialsupplier.Material.Materialid);
         }
 
         #region Add Material/Supplier
@@ -335,20 +327,17 @@ namespace CafeManager.WPF.ViewModels.AddViewModel
             {
                 return;
             }
-            else if (ModifyImport.Supplier == null || ModifyImport.Supplier.Supplierid == 0)
+            else if (SelectedSupplierDTO == null || SelectedSupplierDTO.Supplierid == 0)
             {
                 MyMessageBox.ShowDialog("Vui lòng chọn nhà cung cấp", MyMessageBox.Buttons.OK, MyMessageBox.Icons.Error);
                 return;
             }
-            else if (ModifyImport.Staff == null || ModifyImport.Staff.Staffid == 0)
+            else if (SelectedStaffDTO == null || SelectedStaffDTO.Staffid == 0)
             {
                 MyMessageBox.ShowDialog("Vui lòng chọn nhân viên nhập hàng", MyMessageBox.Buttons.OK, MyMessageBox.Icons.Error);
                 return;
             }
-            ModifyImport.Importdetails = new ObservableCollection<ImportDetailDTO>(
-                    ListExisted.Select(x => x.Clone())
-                    .Concat(listDeletedImportdetail)
-            );
+            ModifyImport.Importdetails = [.. ListExisted.Select(x => x.Clone()).Concat(listDeletedImportdetail)];
 
             foreach (var item in ModifyImport.Importdetails)
             {
@@ -361,14 +350,14 @@ namespace CafeManager.WPF.ViewModels.AddViewModel
                     return;
                 }
             }
-            ModifyImport.Supplierid = ModifyImport.Supplier.Supplierid;
-            ModifyImport.Staffid = ModifyImport.Staff.Staffid;
+            ModifyImport.Supplierid = SelectedSupplierDTO.Supplierid;
+            ModifyImport.Staffid = SelectedStaffDTO.Staffid;
 
             if (ModifyImport.Importdetails != null)
             {
                 foreach (var importDetail in ModifyImport.Importdetails)
                 {
-                    importDetail.Materialsupplier.Supplierid = ModifyImport.Supplier.Supplierid;
+                    importDetail.Materialsupplier.Supplierid = SelectedSupplierDTO.Supplierid;
                 }
             }
 

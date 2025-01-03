@@ -98,12 +98,18 @@ namespace CafeManager.WPF.ViewModels.UserViewModel
             _mapper = provider.GetRequiredService<IMapper>();
         }
 
+        private bool initialLoading;
+
         public async Task LoadData(CancellationToken token = default)
         {
             try
             {
                 token.ThrowIfCancellationRequested();
                 IsLoading = true;
+                if (initialLoading)
+                {
+                    return;
+                }
                 var dbListCoffeeTable = (await _coffeTableServices.GetListCoffeTable(token)).Where(x => x.Isdeleted == false);
                 var dbListFoodCategory = (await _foodCategoryServices.GetAllListFoodCategory(token)).Where(x => x.Isdeleted == false);
                 var dbStaff = (await _staffServices.GetListStaff(token)).Where(x => x.Isdeleted == false);
@@ -124,6 +130,7 @@ namespace CafeManager.WPF.ViewModels.UserViewModel
             finally
             {
                 IsLoading = false;
+                initialLoading = true;
             }
         }
 

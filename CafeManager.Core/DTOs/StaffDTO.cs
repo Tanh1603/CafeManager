@@ -41,7 +41,30 @@ namespace CafeManager.Core.DTOs
         [ObservableProperty]
         [NotifyDataErrorInfo]
         [Required(ErrorMessage = "Sinh nhật không được trống")]
+        [CustomValidation(typeof(StaffDTO), nameof(ValidateBirthday))]
         private DateOnly _birthday = DateOnly.FromDateTime(DateTime.Now);
+
+        public static ValidationResult ValidateBirthday(DateOnly birthday, ValidationContext context)
+        {
+            var dto = context.ObjectInstance as StaffDTO;
+            if (dto != null)
+            {
+                // Kiểm tra tuổi >= 18
+                var today = DateOnly.FromDateTime(DateTime.Now);
+                var age = today.Year - birthday.Year - (today < birthday.AddYears(today.Year - birthday.Year) ? 1 : 0);
+                if (age < 18)
+                {
+                    return new ValidationResult("Nhân viên phải từ 18 tuổi trở lên.");
+                }
+
+                // Kiểm tra ngày sinh không lớn hơn ngày vào làm
+                if (dto.Startworkingdate < birthday)
+                {
+                    return new ValidationResult("Ngày sinh không được lớn hơn ngày vào làm.");
+                }
+            }
+            return ValidationResult.Success;
+        }
 
         [ObservableProperty]
         [NotifyDataErrorInfo]

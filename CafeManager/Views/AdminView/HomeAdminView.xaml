@@ -93,7 +93,7 @@
                                     SelectedDate="{Binding From}"
                                     Style="{StaticResource DatePicker}"
                                     Tag="Collapsed"
-                                    Validation.ErrorTemplate="{StaticResource ErrorMessage}" />
+                                    Validation.ErrorTemplate="{StaticResource ErrorMessageReg}" />
                             </Grid>
                             <Grid Grid.Column="1">
                                 <Grid.ColumnDefinitions>
@@ -110,7 +110,7 @@
                                     SelectedDate="{Binding To}"
                                     Style="{StaticResource DatePicker}"
                                     Tag="Collapsed"
-                                    Validation.ErrorTemplate="{StaticResource ErrorMessage}" />
+                                    Validation.ErrorTemplate="{StaticResource ErrorMessageReg}" />
                             </Grid>
                         </Grid>
                     </Border>

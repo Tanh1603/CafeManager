@@ -106,7 +106,7 @@
                         <Trigger Property="Validation.HasError" Value="True">
                             <Setter TargetName="border" Property="BorderBrush" Value="Red" />
                             <Setter TargetName="border" Property="BorderThickness" Value="2" />
-                            <Setter TargetName="border" Property="ToolTip" Value="{Binding RelativeSource={RelativeSource Self}, Path=(Validation.Errors)[0].ErrorContent}" />
+
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
@@ -155,19 +155,12 @@
     <ControlTemplate x:Key="ErrorMessage">
 
         <StackPanel>
-            <Border
-                BorderBrush="Red"
-                BorderThickness="2"
-                CornerRadius="5">
+            <Border>
 
                 <AdornedElementPlaceholder x:Name="textbox" />
             </Border>
 
-            <TextBlock
-                Width="{Binding ActualWidth, ElementName=textbox}"
-                Foreground="Red"
-                Text="{Binding [0].ErrorContent}"
-                TextWrapping="Wrap" />
+            <TextBlock Foreground="Red" Text="{Binding [0].ErrorContent}" />
         </StackPanel>
     </ControlTemplate>
     <ControlTemplate x:Key="ErrorMessageReg">
@@ -180,7 +173,7 @@
                 Width="{Binding ActualWidth, ElementName=textbox1}"
                 Foreground="Red"
                 Text="{Binding [0].ErrorContent}"
-                TextTrimming="CharacterEllipsis"
+                
                 TextWrapping="Wrap" />
         </StackPanel>
     </ControlTemplate>

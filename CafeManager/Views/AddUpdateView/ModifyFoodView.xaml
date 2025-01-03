@@ -142,10 +142,12 @@
                         Style="{StaticResource infoText}"
                         Text="Mã giảm giá" />
 
-                    <uc:infoTextInput
+                    <TextBox
                         Grid.Row="0"
                         Grid.Column="1"
+                        Width="200"
                         Margin="0,10,0,20"
+                        Style="{StaticResource textbox}"
                         Text="{Binding ModifyFood.Foodname, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
                         Validation.ErrorTemplate="{StaticResource ErrorMessage}" />
 
@@ -159,7 +161,8 @@
                             ItemsSource="{Binding ListFoodCategory, UpdateSourceTrigger=PropertyChanged}"
                             SelectedItem="{Binding SelectedFoodCategory, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                             Style="{StaticResource ComboBoxStyle}"
-                            Tag="Danh mục thực đơn">
+                            Tag="Danh mục thực đơn"
+                            Validation.ErrorTemplate="{StaticResource ErrorMessage}">
                             <ComboBox.ItemContainerStyle>
                                 <Style BasedOn="{StaticResource ComboBoxItemStyle}" TargetType="ComboBoxItem">
                                     <Setter Property="Width" Value="{Binding ActualWidth, ElementName=cbFoodCategory}" />
@@ -175,16 +178,20 @@
                         </ComboBox>
                     </Grid>
 
-                    <uc:infoTextInput
+                    <TextBox
                         Grid.Row="2"
                         Grid.Column="1"
+                        Width="200"
                         Margin="0,0,0,20"
+                        Style="{StaticResource textbox}"
                         Text="{Binding ModifyFood.Price, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay, TargetNullValue='0', FallbackValue='0', ValidatesOnDataErrors=True, Converter={StaticResource CurrencyConverter}}"
                         Validation.ErrorTemplate="{StaticResource ErrorMessage}" />
-                    <uc:infoTextInput
+                    <TextBox
                         Grid.Row="3"
                         Grid.Column="1"
+                        Width="200"
                         Margin="0,0,0,20"
+                        Style="{StaticResource textbox}"
                         Text="{Binding ModifyFood.Discountfood, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay, TargetNullValue='0', FallbackValue='0', ValidatesOnDataErrors=True, Converter={StaticResource DecimalToPercentageConverter}}"
                         Validation.ErrorTemplate="{StaticResource ErrorMessage}" />
                 </Grid>

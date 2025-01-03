@@ -368,6 +368,8 @@
                                 FontWeight="SemiBold"
                                 Foreground="#9b442a"
                                 Style="{StaticResource MaterialDesignFloatingHintTextBox}"
+                                Validation.ErrorTemplate="{StaticResource ErrorMessageReg}"
+                                
                                 Text="{Binding ResetUser}" />
                         </Grid>
                         <Grid Margin="0,10">
@@ -394,6 +396,7 @@
                                 FontWeight="SemiBold"
                                 Foreground="#9b442a"
                                 Style="{StaticResource MaterialDesignFloatingHintTextBox}"
+                                Validation.ErrorTemplate="{StaticResource ErrorMessageReg}"
                                 Text="{Binding ResetEmail}" />
                         </Grid>
                         <Button

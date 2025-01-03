@@ -162,19 +162,23 @@
                                     Text="Ngày nghỉ việc:"
                                     Visibility="{Binding ElementName=EndworkingDatePicker, Path=SelectedDate, Converter={StaticResource NullToVisibilityConverter}}" />
 
-                                <uc:infoTextInput
+                                <TextBox
                                     Grid.Row="0"
                                     Grid.Column="1"
+                                    Width="200"
                                     Margin="0,10"
                                     HorizontalAlignment="Left"
+                                    Style="{StaticResource textbox}"
                                     Text="{Binding ModifyStaff.Staffname, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
                                     Validation.ErrorTemplate="{StaticResource ErrorMessage}" />
 
-                                <uc:infoTextInput
+                                <TextBox
                                     Grid.Row="1"
                                     Grid.Column="1"
+                                    Width="200"
                                     Margin="0,10"
                                     HorizontalAlignment="Left"
+                                    Style="{StaticResource textbox}"
                                     Text="{Binding ModifyStaff.Phone, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
                                     Validation.ErrorTemplate="{StaticResource ErrorMessage}" />
 
@@ -214,19 +218,23 @@
                                     Tag="Collapsed"
                                     Validation.ErrorTemplate="{StaticResource ErrorMessage}" />
 
-                                <uc:infoTextInput
+                                <TextBox
                                     Grid.Row="4"
                                     Grid.Column="1"
+                                    Width="200"
                                     Margin="0,10"
                                     HorizontalAlignment="Left"
+                                    Style="{StaticResource textbox}"
                                     Text="{Binding ModifyStaff.Role, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
                                     Validation.ErrorTemplate="{StaticResource ErrorMessage}" />
 
-                                <uc:infoTextInput
+                                <TextBox
                                     Grid.Row="5"
                                     Grid.Column="1"
+                                    Width="200"
                                     Margin="0,10"
                                     HorizontalAlignment="Left"
+                                    Style="{StaticResource textbox}"
                                     Text="{Binding ModifyStaff.Address, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
                                     Validation.ErrorTemplate="{StaticResource ErrorMessage}" />
 
@@ -530,12 +538,16 @@
                                     Grid.Column="0"
                                     Style="{StaticResource infoText}"
                                     Text="Lương cơ bản:" />
-                                <uc:infoTextInput
+                                <TextBox
                                     Grid.Row="0"
                                     Grid.Column="1"
+                                    Width="200"
                                     HorizontalAlignment="Left"
                                     IsEnabled="{Binding IsEnable}"
-                                    Text="{Binding CurrentStaffSalary.Salary, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay, Converter={StaticResource CurrencyConverter}}" />
+                                    Style="{StaticResource textbox}"
+                                    Text="{Binding CurrentStaffSalary.Salary, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay, Converter={StaticResource CurrencyConverter}}"
+                                    Validation.ErrorTemplate="{StaticResource ErrorMessage}" />
+
 
                                 <TextBlock
                                     Grid.Row="1"
@@ -553,7 +565,9 @@
                                     IsEnabled="{Binding IsEnable}"
                                     SelectedDate="{Binding CurrentStaffSalary.Effectivedate, Converter={StaticResource DateOnlyToDateTimeConverter}}"
                                     Style="{StaticResource DatePicker}"
-                                    Tag="Collapsed" />
+                                    Tag="Collapsed"
+                                    Validation.ErrorTemplate="{StaticResource ErrorMessage}" />
+
                             </Grid>
 
                             <Button

@@ -128,7 +128,11 @@
                         <Trigger Property="IsKeyboardFocused" Value="True">
                             <Setter TargetName="Border" Property="BorderBrush" Value="#9e7555" />
                         </Trigger>
-
+                        <Trigger Property="Validation.HasError" Value="True">
+                            <Setter TargetName="Border" Property="BorderBrush" Value="Red" />
+                            <Setter TargetName="Border" Property="BorderThickness" Value="2" />
+                            
+                        </Trigger>
                         <!--<MultiTrigger>
                             <MultiTrigger.Conditions>
                                 <Condition Property="Text" Value="" />

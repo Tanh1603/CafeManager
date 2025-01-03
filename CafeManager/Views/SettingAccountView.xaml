@@ -136,22 +136,28 @@
                             Style="{StaticResource infoText}"
                             Text="Email" />
 
-                        <uc:infoTextInput
+                        <TextBox
                             Grid.Row="0"
                             Grid.Column="1"
+                            Width="200"
                             Margin="20"
+                            Style="{StaticResource textbox}"
                             Text="{Binding Account.Username, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"
                             Validation.ErrorTemplate="{StaticResource ErrorMessageReg}" />
-                        <uc:infoTextInput
+                        <TextBox
                             Grid.Row="1"
                             Grid.Column="1"
+                            Width="200"
                             Margin="20"
+                            Style="{StaticResource textbox}"
                             Text="{Binding Account.Displayname, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                             Validation.ErrorTemplate="{StaticResource ErrorMessageReg}" />
-                        <uc:infoTextInput
+                        <TextBox
                             Grid.Row="2"
-                            Margin="20"
                             Grid.Column="1"
+                            Width="200"
+                            Margin="20"
+                            Style="{StaticResource textbox}"
                             Text="{Binding Account.Email, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                             Validation.ErrorTemplate="{StaticResource ErrorMessageReg}" />
                     </Grid>

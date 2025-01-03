@@ -252,6 +252,11 @@
             <Trigger Property="HasItems" Value="false">
                 <Setter TargetName="dropDownBorder" Property="Height" Value="95" />
             </Trigger>
+            <Trigger Property="Validation.HasError" Value="True">
+                <Setter TargetName="templateRoot" Property="BorderBrush" Value="Red" />
+                <Setter TargetName="templateRoot" Property="BorderThickness" Value="2" />
+              
+            </Trigger>
             <MultiTrigger>
                 <MultiTrigger.Conditions>
                     <Condition Property="IsGrouping" Value="true" />

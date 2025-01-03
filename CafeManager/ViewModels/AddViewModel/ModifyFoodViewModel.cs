@@ -58,7 +58,11 @@ namespace CafeManager.WPF.ViewModels.AddViewModel
         [RelayCommand(CanExecute = nameof(CanSubmit))]
         private void Submit()
         {
-            var a = ModifyFood.GetErrors();
+            ModifyFood.ValidateDTO();
+            if (ModifyFood.HasErrors)
+            {
+                return;
+            }
             if (SelectedFoodCategory != null)
             {
                 ModifyFood.Foodcategoryid = SelectedFoodCategory.Foodcategoryid;

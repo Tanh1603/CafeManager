@@ -94,11 +94,8 @@
                                         materialDesign:HintAssist.Hint="Nhà cung cấp"
                                         DisplayMemberPath="Suppliername"
                                         ItemsSource="{Binding ListSupplier}"
-                                        SelectedItem="{Binding ModifyImport.Supplier, Mode=TwoWay}"
-                                        SelectedValue="{Binding ModifyImport.Supplierid, Mode=TwoWay}"
-                                        SelectedValuePath="Supplierid"
+                                        SelectedItem="{Binding ModifyImport.Supplier, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                                         Style="{StaticResource ComboBoxStyle}"
-                                        Tag="Nhà cung cấp"
                                         Validation.ErrorTemplate="{StaticResource ErrorMessage}">
                                         <ComboBox.ItemContainerStyle>
                                             <Style BasedOn="{StaticResource ComboBoxItemStyle}" TargetType="ComboBoxItem">
@@ -237,9 +234,7 @@
                                         HorizontalAlignment="Left"
                                         DisplayMemberPath="Staffname"
                                         ItemsSource="{Binding ListStaff}"
-                                        SelectedItem="{Binding ModifyImport.Staff, Mode=TwoWay}"
-                                        SelectedValue="{Binding ModifyImport.Staffid, Mode=TwoWay}"
-                                        SelectedValuePath="Staffid"
+                                        SelectedItem="{Binding ModifyImport.Staff, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                                         Style="{StaticResource ComboBoxStyle}"
                                         Validation.ErrorTemplate="{StaticResource ErrorMessage}">
                                         <ComboBox.ItemContainerStyle>
@@ -285,11 +280,8 @@
                                     Width="220"
                                     DisplayMemberPath="Materialname"
                                     ItemsSource="{Binding ListMaterial}"
-                                    SelectedItem="{Binding CurrentImportDetail.Materialsupplier.Material, Mode=TwoWay}"
-                                    SelectedValue="{Binding CurrentImportDetail.Materialsupplier.Materialid, Mode=TwoWay}"
-                                    SelectedValuePath="Materialid"
+                                    SelectedItem="{Binding CurrentImportDetail.Materialsupplier.Material,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                                     Style="{StaticResource ComboBoxStyle}"
-                                    Tag="Vật liệu"
                                     Validation.ErrorTemplate="{StaticResource ErrorMessage}">
                                     <ComboBox.ItemContainerStyle>
                                         <Style BasedOn="{StaticResource ComboBoxItemStyle}" TargetType="ComboBoxItem">
@@ -464,7 +456,6 @@
                                     HorizontalAlignment="Right"
                                     VerticalAlignment="Center"
                                     Command="{Binding ModifyImportDetailCommand}"
-                                    IsEnabled="{Binding CanSubmitModifyImportDetail, UpdateSourceTrigger=PropertyChanged, NotifyOnSourceUpdated=True, NotifyOnTargetUpdated=True}"
                                     Style="{StaticResource addButton}">
                                     <StackPanel Orientation="Horizontal">
                                         <ma:PackIconMaterial
@@ -613,7 +604,6 @@
                     HorizontalAlignment="Right"
                     VerticalAlignment="Bottom"
                     Command="{Binding SubmitModifyImportCommand}"
-                    IsEnabled="{Binding CanSubmitModifyImport, UpdateSourceTrigger=PropertyChanged, NotifyOnSourceUpdated=True, NotifyOnTargetUpdated=True}"
                     Style="{StaticResource confirmInfoButton}">
                     <StackPanel HorizontalAlignment="Center" Orientation="Horizontal">
                         <ma:PackIconMaterial VerticalAlignment="Center" Kind="CheckBold" />

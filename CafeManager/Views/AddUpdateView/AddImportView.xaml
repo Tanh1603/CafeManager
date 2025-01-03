@@ -169,7 +169,7 @@
                                         FontWeight="Bold"
                                         Is24Hours="True"
                                         SelectedTime="{Binding ModifyImport.Receiveddate, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
-                                        Validation.ErrorTemplate="{StaticResource ErrorMessage}" />
+                                        Validation.ErrorTemplate="{StaticResource ErrorMessageReg}" />
                                     <TextBlock
                                         Grid.Row="1"
                                         VerticalAlignment="Center"
@@ -179,12 +179,12 @@
                                     <TextBox
                                         Grid.Row="1"
                                         Grid.Column="1"
-                                        Width="150"
+                                        Width="200"
                                         HorizontalAlignment="Left"
                                         VerticalAlignment="Center"
                                         Style="{StaticResource textbox}"
                                         Text="{Binding ModifyImport.Deliveryperson, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
-                                        Validation.ErrorTemplate="{StaticResource ErrorMessage}" />
+                                        Validation.ErrorTemplate="{StaticResource ErrorMessageReg}" />
                                     <TextBlock
                                         Grid.Row="1"
                                         Grid.Column="2"
@@ -195,21 +195,20 @@
                                     <TextBox
                                         Grid.Row="1"
                                         Grid.Column="3"
-                                        Width="150"
+                                        Width="200"
                                         Margin="0,10"
                                         HorizontalAlignment="Left"
                                         VerticalAlignment="Center"
                                         Style="{StaticResource textbox}"
                                         Text="{Binding ModifyImport.Phone, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
-                                        Validation.ErrorTemplate="{StaticResource ErrorMessage}" />
+                                        Validation.ErrorTemplate="{StaticResource ErrorMessageReg}" />
 
                                     <TextBlock
                                         Grid.Row="2"
                                         VerticalAlignment="Center"
                                         FontWeight="Bold"
                                         Foreground="#844418"
-                                        Text="Công ty giao: "
-                                        Validation.ErrorTemplate="{StaticResource ErrorMessage}" />
+                                        Text="Công ty giao: " />
                                     <TextBox
                                         Grid.Row="2"
                                         Grid.Column="1"
@@ -218,7 +217,7 @@
                                         VerticalAlignment="Center"
                                         Style="{StaticResource textbox}"
                                         Text="{Binding ModifyImport.Shippingcompany, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
-                                        Validation.ErrorTemplate="{StaticResource ErrorMessage}" />
+                                        Validation.ErrorTemplate="{StaticResource ErrorMessageReg}" />
 
                                     <TextBlock
                                         Grid.Row="2"
@@ -338,13 +337,13 @@
                                     Text="NSX: " />
                                 <DatePicker
                                     Grid.Column="1"
-                                    MinWidth="150"
+                                    MinWidth="500"
                                     HorizontalAlignment="Left"
                                     CalendarStyle="{StaticResource MaterialDesignCalendarPortrait}"
                                     SelectedDate="{Binding CurrentImportDetail.Materialsupplier.Manufacturedate, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
                                     Style="{StaticResource DatePicker}"
                                     Tag="Collapsed"
-                                    Validation.ErrorTemplate="{StaticResource ErrorMessage}" />
+                                    Validation.ErrorTemplate="{StaticResource ErrorMessageReg}" />
                                 <TextBlock
                                     Grid.Column="2"
                                     VerticalAlignment="Center"
@@ -353,14 +352,14 @@
                                     Text="HSD: " />
                                 <DatePicker
                                     Grid.Column="3"
-                                    MinWidth="150"
+                                    MinWidth="400"
                                     Margin="0,10"
                                     HorizontalAlignment="Left"
                                     CalendarStyle="{StaticResource MaterialDesignCalendarPortrait}"
                                     SelectedDate="{Binding CurrentImportDetail.Materialsupplier.Expirationdate, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
                                     Style="{StaticResource DatePicker}"
                                     Tag="Collapsed"
-                                    Validation.ErrorTemplate="{StaticResource ErrorMessage}" />
+                                    Validation.ErrorTemplate="{StaticResource ErrorMessageReg}" />
 
                                 <TextBlock
                                     Grid.Row="1"
@@ -372,12 +371,12 @@
                                     Grid.Row="1"
                                     Grid.Column="1"
                                     Width="150"
-                                    MinWidth="150"
+                                    MinWidth="200"
                                     HorizontalAlignment="Left"
                                     VerticalAlignment="Center"
                                     Style="{StaticResource textbox}"
                                     Text="{Binding CurrentImportDetail.Materialsupplier.Manufacturer, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
-                                    Validation.ErrorTemplate="{StaticResource ErrorMessage}" />
+                                    Validation.ErrorTemplate="{StaticResource ErrorMessageReg}" />
                                 <TextBlock
                                     Grid.Row="1"
                                     Grid.Column="2"
@@ -388,13 +387,13 @@
                                 <TextBox
                                     Grid.Row="1"
                                     Grid.Column="3"
-                                    Width="150"
+                                    Width="200"
                                     Margin="0,10"
                                     HorizontalAlignment="Left"
                                     VerticalAlignment="Center"
                                     Style="{StaticResource textbox}"
                                     Text="{Binding CurrentImportDetail.Materialsupplier.Original, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
-                                    Validation.ErrorTemplate="{StaticResource ErrorMessage}" />
+                                    Validation.ErrorTemplate="{StaticResource ErrorMessageReg}" />
 
                                 <TextBlock
                                     Grid.Row="2"

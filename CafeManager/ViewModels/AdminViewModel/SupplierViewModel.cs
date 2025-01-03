@@ -92,7 +92,7 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
                 x.Phone.Contains(SearchText) ||
                 x.Email.Contains(SearchText) ||
                 x.Address.Contains(SearchText) ||
-                x.Notes.Contains(SearchText)
+                (x.Notes == null || x.Notes.Contains(SearchText))
                 ).ToList();
             _filterSupplierList = [.. filtered];
             OnPropertyChanged(nameof(ListExistedSupplier));

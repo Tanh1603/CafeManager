@@ -22,26 +22,16 @@ namespace CafeManager.WPF.ViewModels.AddViewModel
         public bool IsAdding { get; set; } = false;
 
         [ObservableProperty]
-        [NotifyPropertyChangedFor(nameof(CanSubmit))]
-        [NotifyCanExecuteChangedFor(nameof(SubmitCommand))]
         private SupplierDTO _modifySupplier;
 
         public event Action<SupplierDTO>? ModifySupplierChanged;
 
         public event Action Close;
 
-
         public AddSuppierViewModel(IServiceProvider provider)
         {
             _provider = provider;
             ModifySupplier = new SupplierDTO();
-            ModifySupplier.ErrorsChanged += ModifySupplier_ErrorsChanged;
-           
-        }
-
-        private void ModifySupplier_ErrorsChanged(object? sender, DataErrorsChangedEventArgs e)
-        {
-            OnPropertyChanged(nameof(CanSubmit));
         }
 
         public void RecieveSupplierDTO(SupplierDTO supplier)
@@ -56,16 +46,14 @@ namespace CafeManager.WPF.ViewModels.AddViewModel
             IsUpdating = false;
         }
 
-
-        public bool CanSubmit => !ModifySupplier.HasErrors;
-
-
-
-
-
-        [RelayCommand(CanExecute =nameof(CanSubmit))]
+        [RelayCommand]
         private void Submit()
         {
+            ModifySupplier.ValidateDTO();
+            if (ModifySupplier.HasErrors)
+            {
+                return;
+            }
             ModifySupplierChanged?.Invoke(ModifySupplier.Clone());
             ClearValueOfFrom();
         }

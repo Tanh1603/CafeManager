@@ -71,23 +71,23 @@ namespace CafeManager.WPF.ViewModels
             try
             {
                 _cts.Token.ThrowIfCancellationRequested();
-                Application.Current.Dispatcher.InvokeAsync(() =>
-               {
-                   _cts.Token.ThrowIfCancellationRequested();
-                   CurrentVM = choice switch
-                   {
-                       "OrderFood" => _provider.GetRequiredService<OrderViewModel>(),
-                       "Setting" => _provider.GetRequiredService<SettingAccountViewModel>(),
-                       "DistributionMaterial" => _provider.GetRequiredService<DistributionMaterialViewModel>(),
-                       "IncidentTable" => _provider.GetRequiredService<IncidentTableViewModel>(),
-                       _ => throw new Exception("Lỗi")
-                   };
-                   currentVM = choice;
-                   if (CurrentVM is IDataViewModel dataVM)
-                   {
-                       dataVM.LoadData(_cts.Token);
-                   }
-               }, System.Windows.Threading.DispatcherPriority.Loaded, _cts.Token);
+                Task.Run(async () =>
+                {
+                    _cts.Token.ThrowIfCancellationRequested();
+                    CurrentVM = choice switch
+                    {
+                        "OrderFood" => _provider.GetRequiredService<OrderViewModel>(),
+                        "Setting" => _provider.GetRequiredService<SettingAccountViewModel>(),
+                        "DistributionMaterial" => _provider.GetRequiredService<DistributionMaterialViewModel>(),
+                        "IncidentTable" => _provider.GetRequiredService<IncidentTableViewModel>(),
+                        _ => throw new Exception("Lỗi")
+                    };
+                    currentVM = choice;
+                    if (CurrentVM is IDataViewModel dataVM)
+                    {
+                        await dataVM.LoadData(_cts.Token);
+                    }
+                }, _cts.Token);
             }
             catch (OperationCanceledException)
             {

@@ -95,7 +95,7 @@
                     FontSize="13"
                     FontWeight="SemiBold"
                     Foreground="#602414"
-                    Text="Nhà sản xuất: " />
+                    Text="Nhà cung cấp: " />
                 <ComboBox
                     x:Name="cbsupplier"
                     Width="150"
@@ -240,19 +240,26 @@
 
                                     <DataGridTextColumn
                                         Width="*"
+                                        Binding="{Binding Materialsupplier.Material.Unit}"
+                                        CanUserResize="False"
+                                        Header="Đơn vị"
+                                        IsReadOnly="True" />
+
+                                    <DataGridTextColumn
+                                        Width="*"
                                         Binding="{Binding Materialsupplier.Supplier.Suppliername}"
                                         CanUserResize="False"
                                         Header="Nhà cung cấp"
                                         IsReadOnly="True" />
                                     <DataGridTextColumn
                                         Width="*"
-                                        Binding="{Binding Materialsupplier.Manufacturedate, Converter={StaticResource DateTimeToDateOnlyConverter}}"
+                                        Binding="{Binding Materialsupplier.Manufacturedate, StringFormat=dd/MM/yyyy, Converter={StaticResource DateTimeToDateOnlyConverter}}"
                                         CanUserResize="False"
                                         Header="Ngày sản xuất"
                                         IsReadOnly="True" />
                                     <DataGridTextColumn
                                         Width="*"
-                                        Binding="{Binding Materialsupplier.Expirationdate, Converter={StaticResource DateTimeToDateOnlyConverter}}"
+                                        Binding="{Binding Materialsupplier.Expirationdate, StringFormat=dd/MM/yyyy, Converter={StaticResource DateTimeToDateOnlyConverter}}"
                                         CanUserResize="False"
                                         Header="Ngày hết hạn"
                                         IsReadOnly="True" />
@@ -324,19 +331,26 @@
 
                                 <DataGridTextColumn
                                     Width="*"
+                                    Binding="{Binding Material.Unit}"
+                                    CanUserResize="False"
+                                    Header="Đơn vị"
+                                    IsReadOnly="True" />
+
+                                <DataGridTextColumn
+                                    Width="*"
                                     Binding="{Binding Supplier.Suppliername}"
                                     CanUserResize="False"
                                     Header="Nhà cung cấp"
                                     IsReadOnly="True" />
                                 <DataGridTextColumn
                                     Width="*"
-                                    Binding="{Binding Manufacturedate, Converter={StaticResource DateTimeToDateOnlyConverter}}"
+                                    Binding="{Binding Manufacturedate, StringFormat=dd/MM/yyyy, Converter={StaticResource DateTimeToDateOnlyConverter}}"
                                     CanUserResize="False"
                                     Header="Ngày sản xuất"
                                     IsReadOnly="True" />
                                 <DataGridTextColumn
                                     Width="*"
-                                    Binding="{Binding Expirationdate, Converter={StaticResource DateTimeToDateOnlyConverter}}"
+                                    Binding="{Binding Expirationdate, StringFormat=dd/MM/yyyy, Converter={StaticResource DateTimeToDateOnlyConverter}}"
                                     CanUserResize="False"
                                     Header="Ngày hết hạn"
                                     IsReadOnly="True" />
@@ -401,19 +415,26 @@
 
                                 <DataGridTextColumn
                                     Width="*"
+                                    Binding="{Binding Material.Unit}"
+                                    CanUserResize="False"
+                                    Header="Đơn vị"
+                                    IsReadOnly="True" />
+
+                                <DataGridTextColumn
+                                    Width="*"
                                     Binding="{Binding Supplier.Suppliername}"
                                     CanUserResize="False"
                                     Header="Nhà cung cấp"
                                     IsReadOnly="True" />
                                 <DataGridTextColumn
                                     Width="*"
-                                    Binding="{Binding Manufacturedate, Converter={StaticResource DateTimeToDateOnlyConverter}}"
+                                    Binding="{Binding Manufacturedate, StringFormat=dd/MM/yyyy, Converter={StaticResource DateTimeToDateOnlyConverter}}"
                                     CanUserResize="False"
                                     Header="Ngày sản xuất"
                                     IsReadOnly="True" />
                                 <DataGridTextColumn
                                     Width="*"
-                                    Binding="{Binding Expirationdate, Converter={StaticResource DateTimeToDateOnlyConverter}}"
+                                    Binding="{Binding Expirationdate, StringFormat=dd/MM/yyyy, Converter={StaticResource DateTimeToDateOnlyConverter}}"
                                     CanUserResize="False"
                                     Header="Ngày hết hạn"
                                     IsReadOnly="True" />
@@ -479,19 +500,26 @@
 
                                 <DataGridTextColumn
                                     Width="*"
+                                    Binding="{Binding Material.Unit}"
+                                    CanUserResize="False"
+                                    Header="Đơn vị"
+                                    IsReadOnly="True" />
+
+                                <DataGridTextColumn
+                                    Width="*"
                                     Binding="{Binding Supplier.Suppliername}"
                                     CanUserResize="False"
                                     Header="Nhà cung cấp"
                                     IsReadOnly="True" />
                                 <DataGridTextColumn
                                     Width="*"
-                                    Binding="{Binding Manufacturedate, Converter={StaticResource DateTimeToDateOnlyConverter}}"
+                                    Binding="{Binding Manufacturedate, StringFormat=dd/MM/yyyy, Converter={StaticResource DateTimeToDateOnlyConverter}}"
                                     CanUserResize="False"
                                     Header="Ngày sản xuất"
                                     IsReadOnly="True" />
                                 <DataGridTextColumn
                                     Width="*"
-                                    Binding="{Binding Expirationdate, Converter={StaticResource DateTimeToDateOnlyConverter}}"
+                                    Binding="{Binding Expirationdate, StringFormat=dd/MM/yyyy, Converter={StaticResource DateTimeToDateOnlyConverter}}"
                                     CanUserResize="False"
                                     Foreground="Red"
                                     Header="Ngày hết hạn"

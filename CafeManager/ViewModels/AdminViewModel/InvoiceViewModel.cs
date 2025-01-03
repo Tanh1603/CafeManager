@@ -15,6 +15,7 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq.Expressions;
+using System.Windows;
 
 namespace CafeManager.WPF.ViewModels.AdminViewModel
 {
@@ -153,14 +154,9 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
         {
             try
             {
-                if (token == default)
-                {
-                    _token = token;
-                }
+                _token = token;
                 token.ThrowIfCancellationRequested();
-
                 IsLoading = true;
-
                 var dbListInvoice = await _invoiceServices.GetSearchPaginateListInvoice(filter, pageIndex, pageSize, token);
                 ListInvoiceDTO = [.. _mapper.Map<List<InvoiceDTO>>(dbListInvoice.Item1)];
                 TotalPages = (dbListInvoice.Item2 + pageSize - 1) / pageSize;
@@ -202,7 +198,7 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
                     if (isSuccessDeleted)
                     {
                         IsLoading = false;
-                        MyMessageBox.ShowDialog("Xóa hóa đơn thành công");
+                        MyMessageBox.ShowDialog("Xóa hóa đơn thành công", MyMessageBox.Buttons.OK, MyMessageBox.Icons.Information);
                         await LoadData(_token);
                     }
                 }

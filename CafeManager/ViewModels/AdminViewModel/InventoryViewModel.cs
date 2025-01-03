@@ -256,6 +256,14 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
                 (FilterExpirationdate == null || expired.Expirationdate == FilterExpirationdate) &&
                 (expired.Expirationdate < DateTime.Now);
 
+        private Expression<Func<Materialsupplier, bool>> inventoryFilter => inventory =>
+                (inventory.Isdeleted == false) &&
+                (SelectedMaterial == null || inventory.Material.Materialid == SelectedMaterial.Materialid) &&
+                (SelectedSupplier == null || inventory.Supplier.Supplierid == SelectedSupplier.Supplierid) &&
+                (FilterManufacturedate == null || inventory.Manufacturedate == FilterManufacturedate) &&
+                (inventory.Importdetails.Where(x => x.Isdeleted == false).Sum(x => x.Quantity) - inventory.Consumedmaterials.Where(x => x.Isdeleted == false).Sum(x => x.Quantity) > 0) &&
+                (inventory.Expirationdate <= DateTime.Now.AddDays(15));
+
         private async Task LoadTableControl()
         {
             if (ConsumedPage)
@@ -296,8 +304,8 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
             try
             {
                 _token = token;
-                IsLoading = true;
                 token.ThrowIfCancellationRequested();
+                IsLoading = true;
                 var dbMaterial = await _materialSupplierServices.GetListMaterial(token);
                 var dbSupplier = (await _materialSupplierServices.GetListSupplier(token)).Where(x => x.Isdeleted == false);
 
@@ -442,15 +450,6 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
         private async Task FilterExpiring()
         {
             IsLoading = true;
-            Expression<Func<Materialsupplier, bool>> inventoryFilter;
-            inventoryFilter = inventory =>
-                (inventory.Isdeleted == false) &&
-                (SelectedMaterial == null || inventory.Material.Materialid == SelectedMaterial.Materialid) &&
-                (SelectedSupplier == null || inventory.Supplier.Supplierid == SelectedSupplier.Supplierid) &&
-                (FilterManufacturedate == null || inventory.Manufacturedate == FilterManufacturedate) &&
-                (inventory.Importdetails.Where(x => x.Isdeleted == false).Sum(x => x.Quantity) - inventory.Consumedmaterials.Where(x => x.Isdeleted == false).Sum(x => x.Quantity) > 0) &&
-            ((inventory.Expirationdate - DateTime.Now).TotalDays <= 15);
-
             var dbListInventory = await _materialSupplierServices.GetSearchPaginateListMaterialsupplier(inventoryFilter, inventoryPageIndex, PageSize);
             ListInventoryDTO = [.. _mapper.Map<List<MaterialSupplierDTO>>(dbListInventory.Item1)];
             InventoryTotalPages = (dbListInventory.Item2 + PageSize - 1) / PageSize;

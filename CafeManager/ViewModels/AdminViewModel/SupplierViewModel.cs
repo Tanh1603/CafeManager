@@ -114,11 +114,11 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
                         ModifySupplierVM.ClearValueOfFrom();
                         IsOpenAddSupplier = false;
                         IsLoading = false;
-                        MyMessageBox.ShowDialog("Thêm nhà cung cấp thành công");
+                        MyMessageBox.ShowDialog("Thêm nhà cung cấp thành công", MyMessageBox.Buttons.OK, MyMessageBox.Icons.Information);
                     }
                     else
                     {
-                        MyMessageBox.ShowDialog("Thêm nhà cung cấp thất bại");
+                        MyMessageBox.ShowDialog("Thêm nhà cung cấp thất bại", MyMessageBox.Buttons.OK, MyMessageBox.Icons.Error);
                     }
                 }
                 if (ModifySupplierVM.IsUpdating)
@@ -134,12 +134,12 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
                             ModifySupplierVM.ClearValueOfFrom();
                             IsOpenAddSupplier = false;
                             IsLoading = false;
-                            MyMessageBox.ShowDialog("Sửa nhà cung cấp thành công");
+                            MyMessageBox.ShowDialog("Sửa nhà cung cấp thành công", MyMessageBox.Buttons.OK, MyMessageBox.Icons.Information);
                         }
                     }
                     else
                     {
-                        MyMessageBox.ShowDialog("Sửa nhà cung cấp thất bại");
+                        MyMessageBox.ShowDialog("Sửa nhà cung cấp thất bại", MyMessageBox.Buttons.OK, MyMessageBox.Icons.Error);
                     }
                 }
             }
@@ -168,13 +168,6 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
             ModifySupplierVM.RecieveSupplierDTO(supplier);
         }
 
-        //[RelayCommand]
-        //private void CloseModifySupplier()
-        //{
-        //    IsOpenAddSupplier = false;
-        //    ModifySupplierVM.ClearValueOfFrom();
-        //}
-
         private void ModifySupplierVM_Close()
         {
             IsOpenAddSupplier = false;
@@ -196,12 +189,12 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
                         var deleted = AllSupplier.First(x => x.Supplierid == supplier.Supplierid);
                         deleted.Isdeleted = true;
                         IsLoading = false;
-                        MyMessageBox.ShowDialog("Ẩn nhà cung cấp thanh công");
+                        MyMessageBox.ShowDialog("Ẩn nhà cung cấp thanh công", MyMessageBox.Buttons.OK, MyMessageBox.Icons.Information);
                         FilterSupplier();
                     }
                     else
                     {
-                        MyMessageBox.ShowDialog("Ẩn nhà cung cấp thất bại");
+                        MyMessageBox.ShowDialog("Ẩn nhà cung cấp thất bại", MyMessageBox.Buttons.OK, MyMessageBox.Icons.Error);
                     }
                 }
             }
@@ -231,12 +224,12 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
                         var restore = AllSupplier.First(x => x.Supplierid == supplier.Supplierid);
                         restore.Isdeleted = false;
                         IsLoading = false;
-                        MyMessageBox.ShowDialog("Hiển thị nhà cung cấp thành công");
+                        MyMessageBox.ShowDialog("Hiển thị nhà cung cấp thành công", MyMessageBox.Buttons.OK, MyMessageBox.Icons.Information);
                         FilterSupplier();
                     }
                     else
                     {
-                        MyMessageBox.ShowDialog("Hiển thị nhà cung cấp thất bại");
+                        MyMessageBox.ShowDialog("Hiển thị nhà cung cấp thất bại", MyMessageBox.Buttons.OK, MyMessageBox.Icons.Error);
                     }
                 }
             }

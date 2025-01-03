@@ -292,6 +292,8 @@
                                     Grid.Column="1"
                                     Width="140"
                                     VerticalAlignment="Center"
+                                    Margin="0 20"
+                                    Validation.ErrorTemplate="{StaticResource ErrorMessage}"
                                     Text="{Binding ModifyFoodCategory.Foodcategoryname, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" />
                             </Grid>
 

@@ -17,36 +17,34 @@ namespace CafeManager.Core.DTOs
 
         [ObservableProperty]
         [NotifyDataErrorInfo]
-        [Required(ErrorMessage = "Không được trống")]
+        [Required(ErrorMessage = "Nhà cung cấp không được trống")]
         private string _suppliername;
 
         [ObservableProperty]
         [NotifyDataErrorInfo]
-        [Required(ErrorMessage = "Không được trống")]
+        [Required(ErrorMessage = "Người đại diện được trống")]
         private string _representativesupplier;
 
         [ObservableProperty]
         [NotifyDataErrorInfo]
-        [Required(ErrorMessage = "Không được trống")]
+        [Required(ErrorMessage = "Số điện thoại được trống")]
         [RegularExpression(@"^0[0-9]{9,10}$",
         ErrorMessage = "SĐT không hợp lệ.")]
         private string _phone;
 
         [ObservableProperty]
         [NotifyDataErrorInfo]
-        [Required(ErrorMessage = "Không được trống")]
+        [Required(ErrorMessage = "Email được trống")]
         [RegularExpression(@"^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$",
         ErrorMessage = "Email không đúng định dạng")]
         private string _email;
 
         [ObservableProperty]
         [NotifyDataErrorInfo]
-        [Required(ErrorMessage = "Không được trống")]
+        [Required(ErrorMessage = "Địa chỉ được trống")]
         private string _address;
 
         [ObservableProperty]
-        [NotifyDataErrorInfo]
-        [Required(ErrorMessage = "Không được trống")]
         private string _notes;
 
         [ObservableProperty]

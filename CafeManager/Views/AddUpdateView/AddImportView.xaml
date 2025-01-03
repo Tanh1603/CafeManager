@@ -17,6 +17,7 @@
     xmlns:view="clr-namespace:CafeManager.WPF.Views"
     xmlns:vm="clr-namespace:CafeManager.WPF.ViewModels.AddViewModel"
     Height="Auto"
+    MinWidth="1000"
     d:DataContext="{d:DesignInstance Type=addviewmodel:AddImportViewModel}"
     mc:Ignorable="d">
 
@@ -93,12 +94,10 @@
                                         Width="220"
                                         materialDesign:HintAssist.Hint="Nhà cung cấp"
                                         DisplayMemberPath="Suppliername"
-                                        ItemsSource="{Binding ListSupplier}"
-                                        SelectedItem="{Binding ModifyImport.Supplier, Mode=TwoWay}"
-                                        SelectedValue="{Binding ModifyImport.Supplierid, Mode=TwoWay}"
-                                        SelectedValuePath="Supplierid"
+                                        ItemsSource="{Binding ListSupplier, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
+                                        SelectedItem="{Binding ModifyImport.Supplier, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                                         Style="{StaticResource ComboBoxStyle}"
-                                        Tag="Nhà cung cấp"
+                                        Tag="Collapsed"
                                         Validation.ErrorTemplate="{StaticResource ErrorMessage}">
                                         <ComboBox.ItemContainerStyle>
                                             <Style BasedOn="{StaticResource ComboBoxItemStyle}" TargetType="ComboBoxItem">
@@ -236,11 +235,10 @@
                                         Margin="0,10"
                                         HorizontalAlignment="Left"
                                         DisplayMemberPath="Staffname"
-                                        ItemsSource="{Binding ListStaff}"
-                                        SelectedItem="{Binding ModifyImport.Staff, Mode=TwoWay}"
-                                        SelectedValue="{Binding ModifyImport.Staffid, Mode=TwoWay}"
-                                        SelectedValuePath="Staffid"
+                                        ItemsSource="{Binding ListStaff, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
+                                        SelectedItem="{Binding ModifyImport.Staff, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                                         Style="{StaticResource ComboBoxStyle}"
+                                        Tag="Collapsed"
                                         Validation.ErrorTemplate="{StaticResource ErrorMessage}">
                                         <ComboBox.ItemContainerStyle>
                                             <Style BasedOn="{StaticResource ComboBoxItemStyle}" TargetType="ComboBoxItem">
@@ -284,12 +282,10 @@
                                     x:Name="cbmaterial"
                                     Width="220"
                                     DisplayMemberPath="Materialname"
-                                    ItemsSource="{Binding ListMaterial}"
-                                    SelectedItem="{Binding CurrentImportDetail.Materialsupplier.Material, Mode=TwoWay}"
-                                    SelectedValue="{Binding CurrentImportDetail.Materialsupplier.Materialid, Mode=TwoWay}"
-                                    SelectedValuePath="Materialid"
+                                    ItemsSource="{Binding ListMaterial, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
+                                    SelectedItem="{Binding CurrentImportDetail.Materialsupplier.Material, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                                     Style="{StaticResource ComboBoxStyle}"
-                                    Tag="Vật liệu"
+                                    Tag="Collapsed"
                                     Validation.ErrorTemplate="{StaticResource ErrorMessage}">
                                     <ComboBox.ItemContainerStyle>
                                         <Style BasedOn="{StaticResource ComboBoxItemStyle}" TargetType="ComboBoxItem">
@@ -464,7 +460,6 @@
                                     HorizontalAlignment="Right"
                                     VerticalAlignment="Center"
                                     Command="{Binding ModifyImportDetailCommand}"
-                                    IsEnabled="{Binding CanSubmitModifyImportDetail, UpdateSourceTrigger=PropertyChanged, NotifyOnSourceUpdated=True, NotifyOnTargetUpdated=True}"
                                     Style="{StaticResource addButton}">
                                     <StackPanel Orientation="Horizontal">
                                         <ma:PackIconMaterial
@@ -501,7 +496,7 @@
                         RowStyle="{DynamicResource DataGridRowStyle1}"
                         ScrollViewer.CanContentScroll="True"
                         ScrollViewer.HorizontalScrollBarVisibility="Hidden"
-                        ScrollViewer.VerticalScrollBarVisibility="Auto"
+                        ScrollViewer.VerticalScrollBarVisibility="Hidden"
                         Style="{DynamicResource DataGridStyle1}">
                         <DataGrid.Columns>
 
@@ -547,19 +542,19 @@
                                 Header="Số lượng"
                                 IsReadOnly="True" />
                             <DataGridTextColumn
-                                Width="auto"
+                                Width="*"
                                 Binding="{Binding Materialsupplier.Material.Unit}"
                                 CanUserResize="False"
                                 Header="Đơn vị"
                                 IsReadOnly="True" />
                             <DataGridTextColumn
-                                Width="auto"
+                                Width="*"
                                 Binding="{Binding Materialsupplier.Manufacturedate, StringFormat=\{0:dd/MM/yyyy\}}"
                                 CanUserResize="False"
                                 Header="NXS"
                                 IsReadOnly="True" />
                             <DataGridTextColumn
-                                Width="auto"
+                                Width="*"
                                 Binding="{Binding Materialsupplier.Expirationdate, StringFormat=\{0:dd/MM/yyyy\}}"
                                 CanUserResize="False"
                                 Header="HSD"
@@ -613,7 +608,6 @@
                     HorizontalAlignment="Right"
                     VerticalAlignment="Bottom"
                     Command="{Binding SubmitModifyImportCommand}"
-                    IsEnabled="{Binding CanSubmitModifyImport, UpdateSourceTrigger=PropertyChanged, NotifyOnSourceUpdated=True, NotifyOnTargetUpdated=True}"
                     Style="{StaticResource confirmInfoButton}">
                     <StackPanel HorizontalAlignment="Center" Orientation="Horizontal">
                         <ma:PackIconMaterial VerticalAlignment="Center" Kind="CheckBold" />

@@ -23,9 +23,9 @@ namespace CafeManager.Core.DTOs
         [CustomValidation(typeof(StaffDTO), nameof(ValidatePhone))]
         private string _phone;
 
-        public static ValidationResult ValidatePhone(object phone, ValidationContext context)
+        public static ValidationResult ValidatePhone(string phone, ValidationContext context)
         {
-            if (string.IsNullOrWhiteSpace(phone.ToString()))
+            if (string.IsNullOrWhiteSpace(phone))
             {
                 return new ValidationResult("Số điện thoại không được để trống");
             }

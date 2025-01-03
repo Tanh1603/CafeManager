@@ -9,11 +9,12 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Microsoft.Extensions.DependencyInjection;
 using System.Collections.ObjectModel;
+using System.ComponentModel.DataAnnotations;
 using System.Diagnostics;
 
 namespace CafeManager.WPF.ViewModels.AdminViewModel
 {
-    public partial class FoodCategoryViewModel : ObservableObject, IDisposable
+    public partial class FoodCategoryViewModel : ObservableValidator, IDisposable
     {
         private readonly FoodCategoryServices _foodcategoryServices;
         private IMapper _mapper;
@@ -69,6 +70,11 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
             try
             {
                 IsLoading = true;
+                ModifyFoodCategory.ValidateDTO();
+                if (ModifyFoodCategory.HasErrors)
+                {
+                    return;
+                }
                 if (IsAdding)
                 {
                     var addFoodCategory = await _foodcategoryServices.AddFoodCategory(_mapper.Map<Foodcategory>(ModifyFoodCategory));

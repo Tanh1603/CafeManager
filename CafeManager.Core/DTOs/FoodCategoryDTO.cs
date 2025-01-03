@@ -2,6 +2,7 @@
 using CommunityToolkit.Mvvm.ComponentModel;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 using System.Runtime.CompilerServices;
 
 #nullable disable
@@ -12,6 +13,8 @@ public partial class FoodCategoryDTO : BaseDTO
     private int _foodcategoryid;
 
     [ObservableProperty]
+    [NotifyDataErrorInfo]
+    [Required(ErrorMessage = "Tên danh mục không được trống")]
     private string _foodcategoryname;
 
     [ObservableProperty]

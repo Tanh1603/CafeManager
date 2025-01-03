@@ -79,11 +79,11 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
                         ListMaterial.Add(_mapper.Map<MaterialDTO>(addMaterial));
                         IsOpenModifyMaterial = false;
                         IsLoading = false;
-                        MyMessageBox.ShowDialog("Thêm vật liệu cấp thành công");
+                        MyMessageBox.ShowDialog("Thêm vật liệu cấp thành công", MyMessageBox.Buttons.OK, MyMessageBox.Icons.Information);
                     }
                     else
                     {
-                        MyMessageBox.ShowDialog("Thêm vật liệu cấp thất bại");
+                        MyMessageBox.ShowDialog("Thêm vật liệu cấp thất bại", MyMessageBox.Buttons.OK, MyMessageBox.Icons.Error);
                     }
                 }
                 if (ModifyMaterialVM.IsUpdating)
@@ -97,12 +97,12 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
                             _mapper.Map(res, updateSupplierDTO);
                             IsOpenModifyMaterial = false;
                             IsLoading = false;
-                            MyMessageBox.ShowDialog("Sửa vật liệu cấp thành công");
+                            MyMessageBox.ShowDialog("Sửa vật liệu cấp thành công", MyMessageBox.Buttons.OK, MyMessageBox.Icons.Information);
                         }
                     }
                     else
                     {
-                        MyMessageBox.ShowDialog("Sửa vật liệu thất bại");
+                        MyMessageBox.ShowDialog("Sửa vật liệu thất bại", MyMessageBox.Buttons.OK, MyMessageBox.Icons.Error);
                     }
                 }
                 ModifyMaterialVM.ClearValueOfFrom();
@@ -132,11 +132,11 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
                         ListDeletedMaterial.Add(material);
                         ListMaterial.Remove(material);
                         IsLoading = false;
-                        MyMessageBox.ShowDialog("Ẩn vật liệu thanh công");
+                        MyMessageBox.ShowDialog("Ẩn vật liệu thanh công", MyMessageBox.Buttons.OK, MyMessageBox.Icons.Information);
                     }
                     else
                     {
-                        MyMessageBox.ShowDialog("Ẩn vật liệu thất bại");
+                        MyMessageBox.ShowDialog("Ẩn vật liệu thất bại", MyMessageBox.Buttons.OK, MyMessageBox.Icons.Error);
                     }
                 }
             }
@@ -166,11 +166,11 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
                         ListMaterial.Add(_mapper.Map<MaterialDTO>(res));
                         ListDeletedMaterial.Remove(material);
                         IsLoading = false;
-                        MyMessageBox.ShowDialog("Hiển thị vật liệu thanh công");
+                        MyMessageBox.ShowDialog("Hiển thị vật liệu thanh công", MyMessageBox.Buttons.OK, MyMessageBox.Icons.Information);
                     }
                     else
                     {
-                        MyMessageBox.ShowDialog("Hiển thị vật liệu thất bại");
+                        MyMessageBox.ShowDialog("Hiển thị vật liệu thất bại", MyMessageBox.Buttons.OK, MyMessageBox.Icons.Error);
                     }
                 }
             }

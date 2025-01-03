@@ -10,5 +10,7 @@ namespace CafeManager.Core.DTOs
 
         [ObservableProperty]
         private bool _isdeleted;
+
+        public void ValidateDTO() => ValidateAllProperties();
     }
 }

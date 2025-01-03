@@ -89,7 +89,6 @@
                             <DataTemplate>
                                 <Grid>
                                     <TextBlock Text="{Binding Materialname}" TextTrimming="CharacterEllipsis" />
-
                                 </Grid>
                             </DataTemplate>
                         </ComboBox.ItemTemplate>
@@ -103,18 +102,16 @@
                         Foreground="#602414"
                         Text="Nhà sản xuất: " />
                     <ComboBox
-                        x:Name="cbsupplier"
+                        Name="cbsupplier"
                         Width="150"
                         materialDesign:TextFieldAssist.HasClearButton="True"
                         ItemsSource="{Binding ListSupplierDTO}"
                         SelectedItem="{Binding SelectedSupplier}"
-                        SelectedValuePath="Content"
                         Style="{StaticResource ComboBoxStyle}">
                         <ComboBox.ItemContainerStyle>
                             <Style BasedOn="{StaticResource ComboBoxItemStyle}" TargetType="ComboBoxItem">
                                 <Setter Property="Width" Value="{Binding ActualWidth, ElementName=cbsupplier}" />
                                 <Setter Property="Height" Value="{Binding ActualHeight, ElementName=cbsupplier}" />
-
                             </Style>
                         </ComboBox.ItemContainerStyle>
                         <ComboBox.ItemTemplate>

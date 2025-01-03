@@ -6,6 +6,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Microsoft.Extensions.DependencyInjection;
 using System.Collections.ObjectModel;
+using System.ComponentModel.DataAnnotations;
 using System.Windows.Media.Imaging;
 
 namespace CafeManager.WPF.ViewModels.AddViewModel
@@ -16,12 +17,10 @@ namespace CafeManager.WPF.ViewModels.AddViewModel
         private readonly FileDialogService _fileDialogService;
 
         [ObservableProperty]
-        [NotifyPropertyChangedFor(nameof(CanSubmit))]
-        [NotifyCanExecuteChangedFor(nameof(SubmitCommand))]
         public FoodDTO _modifyFood = new();
 
         [ObservableProperty]
-        private FoodCategoryDTO? _selectedFoodCategory = new();
+        private FoodCategoryDTO? _selectedFoodCategory;
 
         [ObservableProperty]
         private ObservableCollection<FoodCategoryDTO> _listFoodCategory = [];
@@ -53,20 +52,22 @@ namespace CafeManager.WPF.ViewModels.AddViewModel
             IsUpdating = false;
         }
 
-        public bool CanSubmit => !ModifyFood.GetErrors().Any();
-
-        [RelayCommand(CanExecute = nameof(CanSubmit))]
+        [RelayCommand]
         private void Submit()
         {
-            var a = ModifyFood.GetErrors();
-            if (SelectedFoodCategory != null)
+            ModifyFood.ValidateDTO();
+            if (ModifyFood.HasErrors)
+            {
+                return;
+            }
+            if (SelectedFoodCategory != null && SelectedFoodCategory.Foodcategoryid != 0)
             {
                 ModifyFood.Foodcategoryid = SelectedFoodCategory.Foodcategoryid;
                 ModifyFoodChanged?.Invoke(ModifyFood.Clone());
             }
             else
             {
-                MyMessageBox.ShowDialog("Vui lòng chọn danh mục");
+                MyMessageBox.ShowDialog("Vui lòng chọn danh mục", MyMessageBox.Buttons.OK, MyMessageBox.Icons.Error);
             }
         }
 

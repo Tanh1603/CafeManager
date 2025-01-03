@@ -163,13 +163,13 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
             {
                 token.ThrowIfCancellationRequested();
                 IsLoading = true;
-                var dbListStaff = await _staffServices.GetListStaff();
+                var dbListStaff = await _staffServices.GetListExistStaff(token);
                 ModifyImportVM.ListStaff = [.. _mapper.Map<List<StaffDTO>>(dbListStaff)];
 
-                var dbListSupplier = (await _materialSupplierServices.GetListSupplier()).Where(x => x.Isdeleted == false);
+                var dbListSupplier = (await _materialSupplierServices.GetListSupplier(token)).Where(x => x.Isdeleted == false);
                 ModifyImportVM.ListSupplier = [.. _mapper.Map<List<SupplierDTO>>(dbListSupplier)];
 
-                var dbListMaterial = (await _materialSupplierServices.GetListMaterial()).Where(x => x.Isdeleted == false);
+                var dbListMaterial = (await _materialSupplierServices.GetListMaterial(token)).Where(x => x.Isdeleted == false);
                 ModifyImportVM.ListMaterial = [.. _mapper.Map<List<MaterialDTO>>(dbListMaterial)];
 
                 await LoadImport();

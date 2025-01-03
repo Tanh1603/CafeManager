@@ -21,36 +21,33 @@ namespace CafeManager.Core.DTOs
         private int supplierid;
 
         [ObservableProperty]
-        private DateTime _manufacturedate;
+        private DateTime _manufacturedate = DateTime.Now;
 
         [ObservableProperty]
-        private DateTime _expirationdate;
+        private DateTime _expirationdate = DateTime.Now;
 
         [ObservableProperty]
         [NotifyDataErrorInfo]
-        [Required(ErrorMessage = "Không được trống")]
+        [Required(ErrorMessage = "Nguồn gốc không được trống")]
         private string _original;
 
         [ObservableProperty]
         [NotifyDataErrorInfo]
-        [Required(ErrorMessage = "Không được trống")]
+        [Required(ErrorMessage = "Nhà sản xuất không được trống")]
         private string _manufacturer;
 
         [ObservableProperty]
         [NotifyDataErrorInfo]
-        [Required(ErrorMessage = "Không được trống")]
+        [Required(ErrorMessage = "Giá không được trống")]
         private decimal _price;
 
         [ObservableProperty]
         [NotifyDataErrorInfo]
-        [Required(ErrorMessage = "Không được trống")]
+        [Required(ErrorMessage = "Vật tư không được trống")]
         [NotifyPropertyChangedFor(nameof(TotalQuantity))]
-        private MaterialDTO _material;
+        private MaterialDTO _material = new();
 
         [ObservableProperty]
-        [NotifyDataErrorInfo]
-        [Required(ErrorMessage = "Không được trống")]
-        [NotifyPropertyChangedFor(nameof(TotalQuantity))]
         private SupplierDTO _supplier;
 
         [ObservableProperty]

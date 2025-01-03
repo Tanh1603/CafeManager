@@ -14,7 +14,7 @@
     xmlns:service="clr-namespace:CafeManager.WPF.Services.Converter"
     xmlns:uc="clr-namespace:CafeManager.WPF.Assets.UsersControls"
     xmlns:view="clr-namespace:CafeManager.WPF.Views"
-    MinWidth="780"
+    Width="600"
     Height="730"
     mc:Ignorable="d">
     <UserControl.Resources>
@@ -58,7 +58,7 @@
                 <!--  Page Title  -->
                 <TextBlock
                     Grid.Row="0"
-                    Margin="0 20 0 10"
+                    Margin="0,20,0,10"
                     HorizontalAlignment="Left"
                     FontSize="32"
                     FontWeight="SemiBold"
@@ -85,7 +85,6 @@
                     Grid.Row="0"
                     Width="260"
                     Height="1"
-
                     HorizontalAlignment="Left"
                     VerticalAlignment="Bottom"
                     Background="#5f2414" />

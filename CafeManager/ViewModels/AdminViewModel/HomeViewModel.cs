@@ -11,6 +11,7 @@ using Newtonsoft.Json.Linq;
 using System.Collections;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
+using System.Windows;
 using System.Windows.Media;
 using SeriesCollection = LiveCharts.SeriesCollection;
 
@@ -61,8 +62,6 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
         [ObservableProperty]
         private List<decimal> _totalMaterialCostMonth;
 
-   
-
         [ObservableProperty]
         private SeriesCollection _chartZoomCollection;
 
@@ -84,8 +83,6 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
         [ObservableProperty]
         private Func<double, string> _xFormatterChartCol;
 
-   
-
         [ObservableProperty]
         private string _selectedTopic = "Revenue";
 
@@ -98,7 +95,7 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
                 if (_from != value)
                 {
                     _from = value;
-                    if (!ValidateFrom()  && !ValidateDates())
+                    if (!ValidateFrom() && !ValidateDates())
                     {
                         OnPropertyChanged();
                         _ = LoadData(_token);
@@ -106,23 +103,24 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
                 }
             }
         }
+
         private bool ValidateFrom()
         {
             bool hasError = false;
-            if(From == null)
+            if (From == null)
             {
-                _errorViewModel.AddError(nameof(From),"Không được trống");
+                _errorViewModel.AddError(nameof(From), "Không được trống");
                 hasError = true;
             }
             return hasError;
         }
+
         private bool ValidateDates()
         {
             bool hasError = false;
             _errorViewModel.RemoveErrors(nameof(From));
             _errorViewModel.RemoveErrors(nameof(To));
-            
-          
+
             if (From > To)
             {
                 _errorViewModel.AddError(nameof(From), "Ngày bắt đầu không được lớn hơn ngày kết thúc");
@@ -142,7 +140,7 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
                 {
                     _to = value;
 
-                    if (!ValidateTo() &&!ValidateDates())
+                    if (!ValidateTo() && !ValidateDates())
                     {
                         OnPropertyChanged();
                         _ = LoadData(_token);
@@ -206,11 +204,14 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
                 TotalInvoice = await _invoiceServices.GetTotalInvoice(From, To, token);
                 TotalFood = await _foodServices.GetTotalFood(token);
                 TotalMaterialSupplier = await _materialSupplierServices.GetTotalMaterialSuplier(token);
-                TotalTable = await _coffeTableServices.GetTotalTable(token);      
+                TotalTable = await _coffeTableServices.GetTotalTable(token);
                 MostSoldFood = await _foodServices.GetMostSoldFoods(From, To, token);
-             
-                await LoadChartZoom(From, To, token);
-                await LoadColumnSeries(To, From, token);
+
+                await Application.Current.Dispatcher.InvokeAsync(async () =>
+                {
+                    await LoadChartZoom(From, To, token);
+                    await LoadColumnSeries(To, From, token);
+                });
 
                 IsLoading = false;
             }
@@ -227,10 +228,7 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
 
         public async Task LoadChartZoom(DateTime from, DateTime to, CancellationToken token)
         {
-
             RevenueDay = await _invoiceServices.GetRevenueByDay(From, To, token);
-
-
 
             var lineSeries = new LineSeries()
             {
@@ -260,7 +258,7 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
                 LabelChartZoom.Add(item.Key.ToString("dd/MM/yyyy"));
             }
 
-              YFormatterChartZoom = value => value.ToString("N0");
+            YFormatterChartZoom = value => value.ToString("N0");
             ChartZoomCollection = new SeriesCollection { lineSeries };
         }
 
@@ -271,89 +269,81 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
             TotalSalaryMonth = await _staffServices.GetTotalSalaryByMonth(From, To, token);
 
             TotalMaterialCostMonth = await _importServices.GetTotalMaterialCostByMonth(From, To, token);
-          
 
-                var RevenueCol = new ColumnSeries()
+            var RevenueCol = new ColumnSeries()
+            {
+                Title = "Doanh thu",
+                Values = new ChartValues<decimal>(),
+                Fill = new System.Windows.Media.LinearGradientBrush
                 {
-                    Title = "Doanh thu",
-                    Values = new ChartValues<decimal>(),
-                    Fill = new System.Windows.Media.LinearGradientBrush
-                    {
-                        StartPoint = new System.Windows.Point(0, 0.5),
-                        EndPoint = new System.Windows.Point(1, 0.5),
-                        GradientStops =
+                    StartPoint = new System.Windows.Point(0, 0.5),
+                    EndPoint = new System.Windows.Point(1, 0.5),
+                    GradientStops =
                                     {
                                         new GradientStop { Offset = 0, Color = (System.Windows.Media.Color)System.Windows.Media.ColorConverter.ConvertFromString("#CFA944") },
                                         new GradientStop { Offset = 1, Color = (System.Windows.Media.Color)System.Windows.Media.ColorConverter.ConvertFromString("#FFDD3C") }
                                     }
-                    },
-                    Stroke = new System.Windows.Media.SolidColorBrush((System.Windows.Media.Color)System.Windows.Media.ColorConverter.ConvertFromString("#CFA944")),
-                    StrokeThickness = 0,
-                    LabelPoint = point => $" {point.Y:N0} VNĐ",
-                };
+                },
+                Stroke = new System.Windows.Media.SolidColorBrush((System.Windows.Media.Color)System.Windows.Media.ColorConverter.ConvertFromString("#CFA944")),
+                StrokeThickness = 0,
+                LabelPoint = point => $" {point.Y:N0} VNĐ",
+            };
 
-                var SalaryCol = new ColumnSeries()
+            var SalaryCol = new ColumnSeries()
+            {
+                Title = "Lương",
+                Values = new ChartValues<decimal>(),
+                Stroke = new System.Windows.Media.SolidColorBrush((System.Windows.Media.Color)System.Windows.Media.ColorConverter.ConvertFromString("#55C595")),
+                StrokeThickness = 0,
+                Fill = new System.Windows.Media.LinearGradientBrush
                 {
-                    Title = "Lương",
-                    Values = new ChartValues<decimal>(),
-                    Stroke = new System.Windows.Media.SolidColorBrush((System.Windows.Media.Color)System.Windows.Media.ColorConverter.ConvertFromString("#55C595")),
-                    StrokeThickness = 0,
-                    Fill = new System.Windows.Media.LinearGradientBrush
-                    {
-                        StartPoint = new System.Windows.Point(0, 0.5),
-                        EndPoint = new System.Windows.Point(1, 0.5),
-                        GradientStops =
+                    StartPoint = new System.Windows.Point(0, 0.5),
+                    EndPoint = new System.Windows.Point(1, 0.5),
+                    GradientStops =
                                     {
                                         new GradientStop { Offset = 0, Color = (System.Windows.Media.Color)System.Windows.Media.ColorConverter.ConvertFromString("#55C595") },
                                         new GradientStop { Offset = 1, Color = (System.Windows.Media.Color)System.Windows.Media.ColorConverter.ConvertFromString("#7CE495") }
                                     }
-                    },
-                    LabelPoint = point => $" {point.Y:N0} VNĐ",
-                };
-                var MaterialCostCol = new ColumnSeries()
+                },
+                LabelPoint = point => $" {point.Y:N0} VNĐ",
+            };
+            var MaterialCostCol = new ColumnSeries()
+            {
+                Title = "Vật liệu",
+                Values = new ChartValues<decimal>(),
+                Stroke = new System.Windows.Media.SolidColorBrush((System.Windows.Media.Color)System.Windows.Media.ColorConverter.ConvertFromString("#661618")),
+                StrokeThickness = 0,
+                Fill = new System.Windows.Media.LinearGradientBrush
                 {
-                    Title = "Vật liệu",
-                    Values = new ChartValues<decimal>(),
-                    Stroke = new System.Windows.Media.SolidColorBrush((System.Windows.Media.Color)System.Windows.Media.ColorConverter.ConvertFromString("#661618")),
-                    StrokeThickness = 0,
-                    Fill = new System.Windows.Media.LinearGradientBrush
-                    {
-                        StartPoint = new System.Windows.Point(0, 0.5),
-                        EndPoint = new System.Windows.Point(1.5, 0.5),
-                        GradientStops =
+                    StartPoint = new System.Windows.Point(0, 0.5),
+                    EndPoint = new System.Windows.Point(1.5, 0.5),
+                    GradientStops =
                                     {
                                         new GradientStop { Offset = 0, Color = (System.Windows.Media.Color)System.Windows.Media.ColorConverter.ConvertFromString("#661618") },
                                         new GradientStop { Offset = 1, Color = (System.Windows.Media.Color)System.Windows.Media.ColorConverter.ConvertFromString("#844518") }
                                     }
-                    },
-                    LabelPoint = point => $" {point.Y:N0} VNĐ",
-                };
-
+                },
+                LabelPoint = point => $" {point.Y:N0} VNĐ",
+            };
 
             LabelChartCol = new List<string>();
-            foreach(var item in RevenueMonth)
-            { 
+            foreach (var item in RevenueMonth)
+            {
                 RevenueCol.Values.Add(item);
-
             }
 
             foreach (var item in TotalSalaryMonth)
             {
                 SalaryCol.Values.Add(item.Value);
                 LabelChartCol.Add(item.Key.ToString("MM/yyyy"));
-
             }
 
             foreach (var item in TotalMaterialCostMonth)
             {
                 MaterialCostCol.Values.Add(item);
-
             }
             ChartColumnCollection = new SeriesCollection { RevenueCol, SalaryCol, MaterialCostCol };
-
         }
-
-       
 
         public IEnumerable GetErrors(string? propertyName)
         {

@@ -25,8 +25,6 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
         private ObservableCollection<CoffeetableDTO> _listTable = [];
 
         [ObservableProperty]
-        [NotifyPropertyChangedFor(nameof(CanSubmit))]
-        [NotifyCanExecuteChangedFor(nameof(ModifyTableCommand))]
         private CoffeetableDTO _table;
 
         private bool isAdding = false;
@@ -42,12 +40,6 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
             _coffeTableServices = provider.GetRequiredService<CoffeTableServices>();
             _mapper = provider.GetRequiredService<IMapper>();
             Table = new CoffeetableDTO();
-            Table.ErrorsChanged += Table_ErrorsChanged;
-        }
-
-        private void Table_ErrorsChanged(object? sender, System.ComponentModel.DataErrorsChangedEventArgs e)
-        {
-            OnPropertyChanged(nameof(CanSubmit));
         }
 
         public async Task LoadData(CancellationToken token = default)
@@ -132,18 +124,31 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
             }
         }
 
-        public bool CanSubmit => !Table.HasErrors;
-
-        [RelayCommand(CanExecute = nameof(CanSubmit))]
+        [RelayCommand]
         private async Task ModifyTable()
         {
             try
             {
                 IsLoading = true;
+                Table.ValidateDTO();
+                if (Table.HasErrors)
+                {
+                    return;
+                }
                 if (Table.Seatingcapacity <= 0)
                 {
+                    IsLoading = false;
                     MyMessageBox.ShowDialog("Vui lòng chọn số chổ ngồi", MyMessageBox.Buttons.OK, MyMessageBox.Icons.Warning);
                     return;
+                }
+                foreach (var item in ListTable)
+                {
+                    if (item.Tablenumber == Table.Tablenumber)
+                    {
+                        IsLoading = false;
+                        MyMessageBox.ShowDialog($"Đã có bàn số {Table.Tablenumber} vui lòng chọn nhập số bàn khác", MyMessageBox.Buttons.OK, MyMessageBox.Icons.Error);
+                        return;
+                    }
                 }
                 if (isAdding)
                 {
@@ -176,9 +181,9 @@ namespace CafeManager.WPF.ViewModels.AdminViewModel
                 isAdding = false;
                 IsOpenModifyTable = false;
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                throw;
+                MyMessageBox.ShowDialog(ex.Message, MyMessageBox.Buttons.OK, MyMessageBox.Icons.Error);
             }
             finally
             {

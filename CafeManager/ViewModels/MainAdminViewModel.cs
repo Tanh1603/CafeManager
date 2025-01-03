@@ -64,28 +64,28 @@ namespace CafeManager.WPF.ViewModels
             try
             {
                 _cts.Token.ThrowIfCancellationRequested();
-                Application.Current.Dispatcher.InvokeAsync(() =>
-                {
-                    CurrentViewModel = viewModel switch
-                    {
-                        "Home" => _provider.GetRequiredService<HomeViewModel>(),
-                        "Food" => _provider.GetRequiredService<FoodViewModel>(),
-                        "Invoice" => _provider.GetRequiredService<InvoiceViewModel>(),
-                        "Table" => _provider.GetRequiredService<TableViewModel>(),
-                        "Import" => _provider.GetRequiredService<ImportViewModel>(),
-                        "Inventory" => _provider.GetRequiredService<InventoryViewModel>(),
-                        "Supplier" => _provider.GetRequiredService<SupplierViewModel>(),
-                        "Staff" => _provider.GetRequiredService<StaffViewModel>(),
-                        "AppUser" => _provider.GetRequiredService<AppUserViewModel>(),
-                        "Setting" => _provider.GetRequiredService<SettingAccountViewModel>(),
-                        _ => throw new Exception("Lỗi")
-                    };
-                    currentVM = viewModel;
-                    if (CurrentViewModel is IDataViewModel dataViewModel)
-                    {
-                        dataViewModel.LoadData(_cts.Token);
-                    }
-                }, System.Windows.Threading.DispatcherPriority.Loaded, _cts.Token);
+                Task.Run(async () =>
+               {
+                   CurrentViewModel = viewModel switch
+                   {
+                       "Home" => _provider.GetRequiredService<HomeViewModel>(),
+                       "Food" => _provider.GetRequiredService<FoodViewModel>(),
+                       "Invoice" => _provider.GetRequiredService<InvoiceViewModel>(),
+                       "Table" => _provider.GetRequiredService<TableViewModel>(),
+                       "Import" => _provider.GetRequiredService<ImportViewModel>(),
+                       "Inventory" => _provider.GetRequiredService<InventoryViewModel>(),
+                       "Supplier" => _provider.GetRequiredService<SupplierViewModel>(),
+                       "Staff" => _provider.GetRequiredService<StaffViewModel>(),
+                       "AppUser" => _provider.GetRequiredService<AppUserViewModel>(),
+                       "Setting" => _provider.GetRequiredService<SettingAccountViewModel>(),
+                       _ => throw new Exception("Lỗi")
+                   };
+                   currentVM = viewModel;
+                   if (CurrentViewModel is IDataViewModel dataViewModel)
+                   {
+                       await dataViewModel.LoadData(_cts.Token);
+                   }
+               }, _cts.Token);
             }
             catch (OperationCanceledException oe)
             {

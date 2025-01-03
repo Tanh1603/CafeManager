@@ -63,6 +63,7 @@ namespace CafeManager.WPF.Services
             catch (Exception)
             {
                 await _unitOfWork.RollbackTransactionAsync();
+                _unitOfWork.ClearChangeTracker();
                 throw new InvalidOperationException("Thêm thức ăn thất bại.");
             }
         }
@@ -81,6 +82,7 @@ namespace CafeManager.WPF.Services
             catch (Exception)
             {
                 await _unitOfWork.RollbackTransactionAsync();
+                _unitOfWork.ClearChangeTracker();
                 throw new InvalidOperationException("Sửa thức ăn thất bại.");
             }
         }
@@ -102,6 +104,7 @@ namespace CafeManager.WPF.Services
             catch (Exception)
             {
                 await _unitOfWork.RollbackTransactionAsync();
+                _unitOfWork.ClearChangeTracker();
                 throw new InvalidOperationException("Xóa thức ăn thất bại.");
             }
         }
@@ -130,7 +133,6 @@ namespace CafeManager.WPF.Services
             }
             catch (Exception)
             {
-
                 throw;
             }
         }

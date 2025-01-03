@@ -21,36 +21,74 @@ namespace CafeManager.Core.DTOs
         private int supplierid;
 
         [ObservableProperty]
-        private DateTime _manufacturedate;
+        [NotifyDataErrorInfo]
+        [CustomValidation(typeof(MaterialSupplierDTO), nameof(ValidateManufactureDate))]
+        private DateTime _manufacturedate = DateTime.Now;
 
-        [ObservableProperty]
-        private DateTime _expirationdate;
+        public static ValidationResult ValidateManufactureDate(DateTime dateTime, ValidationContext context)
+        {
+            var dto = context.ObjectInstance as MaterialSupplierDTO;
+            if (dto != null)
+            {
+                var manufactureDate = DateOnly.FromDateTime(dto.Manufacturedate);
+                var expirationDate = DateOnly.FromDateTime(dto.Expirationdate);
+
+                if (manufactureDate <= expirationDate)
+                {
+                    return ValidationResult.Success;
+                }
+
+                return new ValidationResult("Ngày sản xuất không thể lớn hơn ngày hết hạn");
+            }
+
+            return new ValidationResult("Lỗi không xác định trong dữ liệu");
+        }
 
         [ObservableProperty]
         [NotifyDataErrorInfo]
-        [Required(ErrorMessage = "Không được trống")]
+        [CustomValidation(typeof(MaterialSupplierDTO), nameof(ValidateExpirationDate))]
+        private DateTime _expirationdate = DateTime.Now;
+
+        public static ValidationResult ValidateExpirationDate(DateTime dateTime, ValidationContext context)
+        {
+            var dto = context.ObjectInstance as MaterialSupplierDTO;
+            if (dto != null)
+            {
+                var manufactureDate = DateOnly.FromDateTime(dto.Manufacturedate);
+                var expirationDate = DateOnly.FromDateTime(dto.Expirationdate);
+                if (expirationDate >= manufactureDate)
+                {
+                    return ValidationResult.Success;
+                }
+
+                return new ValidationResult("Ngày hết hạn không thể nhỏ hơn ngày sản xuất");
+            }
+
+            return new ValidationResult("Lỗi không xác định trong dữ liệu");
+        }
+
+        [ObservableProperty]
+        [NotifyDataErrorInfo]
+        [Required(ErrorMessage = "Nguồn gốc không được trống")]
         private string _original;
 
         [ObservableProperty]
         [NotifyDataErrorInfo]
-        [Required(ErrorMessage = "Không được trống")]
+        [Required(ErrorMessage = "Nhà sản xuất không được trống")]
         private string _manufacturer;
 
         [ObservableProperty]
         [NotifyDataErrorInfo]
-        [Required(ErrorMessage = "Không được trống")]
+        [Required(ErrorMessage = "Giá không được trống")]
         private decimal _price;
 
         [ObservableProperty]
         [NotifyDataErrorInfo]
-        [Required(ErrorMessage = "Không được trống")]
+        [Required(ErrorMessage = "Vật tư không được trống")]
         [NotifyPropertyChangedFor(nameof(TotalQuantity))]
-        private MaterialDTO _material;
+        private MaterialDTO _material = new();
 
         [ObservableProperty]
-        [NotifyDataErrorInfo]
-        [Required(ErrorMessage = "Không được trống")]
-        [NotifyPropertyChangedFor(nameof(TotalQuantity))]
         private SupplierDTO _supplier;
 
         [ObservableProperty]

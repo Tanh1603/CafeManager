@@ -199,7 +199,7 @@
                         <ToggleButton
                             x:Name="btnMenu"
                             Height="37"
-                            Margin="10,0,0,0"
+                            Margin="10,10,0,0"
                             HorizontalAlignment="Left"
                             VerticalAlignment="Top"
                             Command="{Binding OpenMenuCommand}"

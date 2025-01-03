@@ -22,7 +22,7 @@ namespace CafeManager.Core.DTOs
         [ObservableProperty]
         [NotifyDataErrorInfo]
         [Required(ErrorMessage = "Không được trống")]
-        private MaterialSupplierDTO _materialsupplier;
+        private MaterialSupplierDTO _materialsupplier = new();
 
         [ObservableProperty]
         private ImportDTO _import;

@@ -98,48 +98,54 @@
                     Style="{StaticResource infoText}"
                     Text="Thông tin khác" />
 
-                <uc:infoTextInput
+                <TextBox
                     Grid.Row="0"
                     Grid.Column="1"
+                    Width="200"
                     Margin="0,10,0,20"
-                    Hint="CTY TNHH..."
+                    Style="{StaticResource textbox}"
                     Text="{Binding ModifySupplier.Suppliername, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
-                    Validation.ErrorTemplate="{StaticResource ErrorMessageReg}" />
-                <uc:infoTextInput
+                    Validation.ErrorTemplate="{StaticResource ErrorMessage}" />
+                <TextBox
                     Grid.Row="1"
                     Grid.Column="1"
+                    Width="200"
                     Margin="0,0,0,20"
-                    Hint="Nguyễn Văn A"
+                    Style="{StaticResource textbox}"
                     Text="{Binding ModifySupplier.Representativesupplier, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
-                    Validation.ErrorTemplate="{StaticResource ErrorMessageReg}" />
-                <uc:infoTextInput
+                    Validation.ErrorTemplate="{StaticResource ErrorMessage}" />
+                <TextBox
                     Grid.Row="2"
                     Grid.Column="1"
+                    Width="200"
                     Margin="0,0,0,20"
-                    Hint="0377929994"
+                    Style="{StaticResource textbox}"
                     Text="{Binding ModifySupplier.Phone, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
-                    Validation.ErrorTemplate="{StaticResource ErrorMessageReg}" />
-                <uc:infoTextInput
+                    Validation.ErrorTemplate="{StaticResource ErrorMessage}" />
+                <TextBox
                     Grid.Row="3"
                     Grid.Column="1"
+                    Width="200"
                     Margin="0,0,0,20"
-                    Hint="23520189@gmail.com"
+                    Style="{StaticResource textbox}"
                     Text="{Binding ModifySupplier.Email, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
-                    Validation.ErrorTemplate="{StaticResource ErrorMessageReg}" />
-                <uc:infoTextInput
+                    Validation.ErrorTemplate="{StaticResource ErrorMessage}" />
+                <TextBox
                     Grid.Row="4"
                     Grid.Column="1"
+                    Width="200"
                     Margin="0,0,0,20"
-                    Hint="Địa chỉ"
+                    Style="{StaticResource textbox}"
                     Text="{Binding ModifySupplier.Address, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
-                    Validation.ErrorTemplate="{StaticResource ErrorMessageReg}" />
-                <uc:infoTextInput
+                    Validation.ErrorTemplate="{StaticResource ErrorMessage}" />
+                <TextBox
                     Grid.Row="5"
                     Grid.Column="1"
+                    Width="200"
                     Margin="0,0,0,20"
-                    Hint="More..."
+                    Style="{StaticResource textbox}"
                     Text="{Binding ModifySupplier.Notes, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
-                    Validation.ErrorTemplate="{StaticResource ErrorMessageReg}" />
+                    Validation.ErrorTemplate="{StaticResource ErrorMessage}" />
             </Grid>
 
             <Button
@@ -148,6 +154,8 @@
                 HorizontalAlignment="Right"
                 VerticalAlignment="Bottom"
                 Command="{Binding SubmitCommand}"
+                
+                
                 Style="{StaticResource confirmInfoButton}">
                 <StackPanel HorizontalAlignment="Center" Orientation="Horizontal">
                     <ma:PackIconMaterial VerticalAlignment="Center" Kind="CheckBold" />

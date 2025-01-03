@@ -31,8 +31,6 @@ namespace CafeManager.WPF.ViewModels.AddViewModel
         private bool _isEnable = true;
 
         [ObservableProperty]
-        [NotifyPropertyChangedFor(nameof(CanSubmit))]
-        [NotifyCanExecuteChangedFor(nameof(SubmitModifyStaffCommand))]
         private StaffDTO _modifyStaff = new();
 
         [ObservableProperty]
@@ -78,7 +76,7 @@ namespace CafeManager.WPF.ViewModels.AddViewModel
                 if (deleted != null)
                 {
                     deleted.Isdeleted = true;
-                    MyMessageBox.ShowDialog("Xóa lịch sử lương thành công");
+                    MyMessageBox.ShowDialog("Xóa lịch sử lương thành công", MyMessageBox.Buttons.OK, MyMessageBox.Icons.Information);
                     OnPropertyChanged(nameof(ModifyStaff));
                     OnPropertyChanged(nameof(ListExisted));
                 }
@@ -103,7 +101,7 @@ namespace CafeManager.WPF.ViewModels.AddViewModel
         {
             if (ModifyStaff.Startworkingdate > CurrentStaffSalary.Effectivedate)
             {
-                MyMessageBox.ShowDialog("Ngày bắt đầu của lịch sử lương không thể nhỏ hơn ngày vào làm.");
+                MyMessageBox.ShowDialog("Ngày bắt đầu của lịch sử lương không thể nhỏ hơn ngày vào làm", MyMessageBox.Buttons.OK, MyMessageBox.Icons.Error);
                 return;
             }
 
@@ -116,18 +114,18 @@ namespace CafeManager.WPF.ViewModels.AddViewModel
 
                 if (duplicated != null)
                 {
-                    MyMessageBox.ShowDialog("Lịch sử lương bị trùng tháng năm với đã có");
+                    MyMessageBox.ShowDialog("Lịch sử lương bị trùng tháng năm với đã có", MyMessageBox.Buttons.OK, MyMessageBox.Icons.Error);
                 }
                 else
                 {
-                    MyMessageBox.ShowDialog("Sửa lịch sử lương thành công");
+                    MyMessageBox.ShowDialog("Sửa lịch sử lương thành công", MyMessageBox.Buttons.OK, MyMessageBox.Icons.Information);
                     existedHistory.Salary = CurrentStaffSalary.Salary;
                     existedHistory.Effectivedate = CurrentStaffSalary.Effectivedate;
                 }
             }
             else
             {
-                MyMessageBox.ShowDialog("Thêm lịch sử lương thành công");
+                MyMessageBox.ShowDialog("Thêm lịch sử lương thành công", MyMessageBox.Buttons.OK, MyMessageBox.Icons.Information);
                 ModifyStaff.Staffsalaryhistories.Add(CurrentStaffSalary);
             }
             IsOpenModifySalary = false;
@@ -144,11 +142,14 @@ namespace CafeManager.WPF.ViewModels.AddViewModel
 
         public event Action<StaffDTO>? StaffChanged;
 
-        public bool CanSubmit => !ModifyStaff.GetErrors().Any();
-
-        [RelayCommand(CanExecute = nameof(CanSubmit))]
+        [RelayCommand]
         private void SubmitModifyStaff()
         {
+            ModifyStaff.ValidateDTO();
+            if (ModifyStaff.HasErrors)
+            {
+                return;
+            }
             if (IsAdding)
             {
                 ModifyStaff.Staffsalaryhistories = [.. ModifyStaff.Staffsalaryhistories.Where(x => x.Isdeleted == false)];

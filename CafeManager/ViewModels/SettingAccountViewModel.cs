@@ -109,7 +109,7 @@ namespace CafeManager.WPF.ViewModels
                     Appuser? res = await _appUserServices.UpdateAppUser(appuser);
                     if (res != null)
                     {
-                        MyMessageBox.ShowDialog("Cập nhật tài khoản thành công");
+                        MyMessageBox.ShowDialog("Cập nhật tài khoản thành công", MyMessageBox.Buttons.OK, MyMessageBox.Icons.Information);
                         Properties.Settings.Default.UserName = string.Empty;
                         Properties.Settings.Default.PassWord = string.Empty;
                         Properties.Settings.Default.RememberAccount = false;
@@ -139,23 +139,23 @@ namespace CafeManager.WPF.ViewModels
                 || !ConvertImageServices.BitmapImageToByteArray(Account.Avatar).SequenceEqual(ConvertImageServices.BitmapImageToByteArray(_accountStore.Account.Avatar))
                 )
                     {
-                        MyMessageBox.ShowDialog("Vui lòng cập nhật tài khoản trước khi thay đổi mật khẩu");
+                        MyMessageBox.ShowDialog("Vui lòng cập nhật tài khoản trước khi thay đổi mật khẩu", MyMessageBox.Buttons.OK, MyMessageBox.Icons.Error);
                         return;
                     }
                     if (OldPassword.Equals(NewPassword))
                     {
-                        MyMessageBox.ShowDialog("Mật khẩu mới và cũ trùng nhau");
+                        MyMessageBox.ShowDialog("Mật khẩu mới và cũ trùng nhau", MyMessageBox.Buttons.OK, MyMessageBox.Icons.Error);
                         return;
                     }
                     if (string.IsNullOrEmpty(NewPassword) || string.IsNullOrEmpty(OldPassword))
                     {
-                        MyMessageBox.ShowDialog("Mật khẩu không được để trống");
+                        MyMessageBox.ShowDialog("Mật khẩu không được để trống", MyMessageBox.Buttons.OK, MyMessageBox.Icons.Error);
                         return;
                     }
 
                     if (!ConfirmPassword.Equals(NewPassword))
                     {
-                        MyMessageBox.ShowDialog("Mật khẩu mới và xác nhận mật khẩu mới không trùng");
+                        MyMessageBox.ShowDialog("Mật khẩu mới và xác nhận mật khẩu mới không trùng", MyMessageBox.Buttons.OK, MyMessageBox.Icons.Error);
                         return;
                     }
 
@@ -165,7 +165,7 @@ namespace CafeManager.WPF.ViewModels
                         string oldHash = _encryptionHelper.DecryptAES(appuser.Password);
                         if (!oldHash.Equals(OldPassword))
                         {
-                            MyMessageBox.ShowDialog("Mật khẩu cũ không khớp");
+                            MyMessageBox.ShowDialog("Mật khẩu cũ không khớp", MyMessageBox.Buttons.OK, MyMessageBox.Icons.Error);
                             return;
                         }
                         appuser.Password = _encryptionHelper.EncryptAES(NewPassword);
@@ -176,7 +176,7 @@ namespace CafeManager.WPF.ViewModels
                             Properties.Settings.Default.PassWord = string.Empty;
                             Properties.Settings.Default.RememberAccount = false;
                             Properties.Settings.Default.Save();
-                            MyMessageBox.ShowDialog("Mật khẩu đổi thành công");
+                            MyMessageBox.ShowDialog("Mật khẩu đổi thành công", MyMessageBox.Buttons.OK, MyMessageBox.Icons.Information);
                             IsOpenChangePassWord = false;
                         }
                     }

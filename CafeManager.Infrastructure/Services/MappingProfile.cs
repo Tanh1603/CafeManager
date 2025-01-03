@@ -8,7 +8,10 @@ public class MappingProfile : Profile
     public MappingProfile()
     {
         // Import <-> ImportDTO
-        CreateMap<Import, ImportDTO>().ReverseMap();
+        CreateMap<Import, ImportDTO>();
+        CreateMap<ImportDTO, Import>()
+            .ForMember(dest => dest.Staff, opt => opt.Ignore())
+            .ForMember(dest => dest.Supplier, opt => opt.Ignore());
 
         // ImportDetail <-> ImportDetailDTO
         CreateMap<Importdetail, ImportDetailDTO>().ReverseMap();
@@ -17,7 +20,12 @@ public class MappingProfile : Profile
         CreateMap<Material, MaterialDTO>().ReverseMap();
 
         // MaterialSupplier <-> MaterialSupplierDTO
-        CreateMap<Materialsupplier, MaterialSupplierDTO>().ReverseMap();
+        CreateMap<Materialsupplier, MaterialSupplierDTO>();
+        CreateMap<MaterialSupplierDTO, Materialsupplier>()
+            .ForMember(dest => dest.Supplier, opt => opt.Ignore())
+            .ForMember(dest => dest.Material, opt => opt.Ignore())
+            .ForMember(dest => dest.Importdetails, opt => opt.Ignore())
+            .ForMember(dest => dest.Consumedmaterials, opt => opt.Ignore());
 
         // Supplier <-> SupplierDTO
         CreateMap<Supplier, SupplierDTO>().ReverseMap();

@@ -71,20 +71,20 @@
                     Style="{StaticResource infoText}"
                     Text="Đơn vị" />
 
-                <uc:infoTextInput
+                <TextBox
                     Grid.Row="0"
                     Grid.Column="1"
-                    Margin="0,10"
-                    Hint="đường, sữa,..."
+                    Margin="0, 10"
+                    Style="{StaticResource textbox}"
                     Text="{Binding ModifyMaterial.Materialname, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
-                    Validation.ErrorTemplate="{StaticResource ErrorMessageReg}" />
-                <uc:infoTextInput
+                    Validation.ErrorTemplate="{StaticResource ErrorMessage}" />
+                <TextBox
                     Grid.Row="1"
                     Grid.Column="1"
                     Margin="0,10"
-                    Hint="kg, gói"
+                    Style="{StaticResource textbox}"
                     Text="{Binding ModifyMaterial.Unit, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
-                    Validation.ErrorTemplate="{StaticResource ErrorMessageReg}" />
+                    Validation.ErrorTemplate="{StaticResource ErrorMessage}" />
             </Grid>
 
             <Button

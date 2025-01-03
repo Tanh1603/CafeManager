@@ -177,10 +177,12 @@
                                 Style="{StaticResource infoText}"
                                 Text="Báo cáo bàn:" />
 
-                            <uc:infoTextInput
+                            <TextBox
                                 Grid.Column="1"
-                                MinHeight="150"
+                                Height="150"
                                 Margin="0,20"
+                                TextWrapping="Wrap"
+                                Style="{StaticResource textbox}"
                                 Text="{Binding ModifyCoffeTable.Notes, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" />
                         </Grid>
 

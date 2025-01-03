@@ -18,19 +18,19 @@ namespace CafeManager.Core.DTOs
 
         [ObservableProperty]
         [NotifyDataErrorInfo]
-        [Required(ErrorMessage = "Không được trống")]
+        [Required(ErrorMessage = "Số điện thoại không được trống")]
         [RegularExpression(@"^0[0-9]{9,10}$",
         ErrorMessage = "SĐT không hợp lệ.")]
         private string _phone;
 
         [ObservableProperty]
         [NotifyDataErrorInfo]
-        [Required(ErrorMessage = "Không được trống")]
+        [Required(ErrorMessage = "Công ty giao hàng không được trống")]
         private string _shippingcompany;
 
         [ObservableProperty]
         [NotifyDataErrorInfo]
-        [Required(ErrorMessage = "Không được trống")]
+        [Required(ErrorMessage = "Ngày nhận hàng không được trống")]
         private DateTime _receiveddate;
 
         [ObservableProperty]
@@ -40,13 +40,9 @@ namespace CafeManager.Core.DTOs
         private int _supplierid;
 
         [ObservableProperty]
-        [NotifyDataErrorInfo]
-        [Required(ErrorMessage = "Nhà cung cấp không được trống")]
         private SupplierDTO _supplier;
 
         [ObservableProperty]
-        [NotifyDataErrorInfo]
-        [Required(ErrorMessage = "Nhân viên nhập hàng không được trống")]
         private StaffDTO _staff;
 
         [ObservableProperty]
